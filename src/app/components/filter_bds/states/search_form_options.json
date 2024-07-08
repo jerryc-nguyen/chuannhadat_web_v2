@@ -1,0 +1,942 @@
+{
+  "business_types": [
+    {
+      "params": {
+        "business_type": "sell"
+      },
+      "text": "Bán",
+      "group": 1
+    },
+    {
+      "params": {
+        "business_type": "rent"
+      },
+      "text": "Cho thuê",
+      "group": 1
+    }
+  ],
+  "sell_prices": [
+    {
+      "params": {
+        "min_price": 100000000,
+        "max_price": 300000000
+      },
+      "text": "100-300 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 300000000,
+        "max_price": 500000000
+      },
+      "text": "300-500 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 500000000,
+        "max_price": 800000000
+      },
+      "text": "500-800 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 800000000,
+        "max_price": 999000000
+      },
+      "text": "800-999 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 1000000000,
+        "max_price": 2000000000
+      },
+      "text": "1-2 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 2000000000,
+        "max_price": 3000000000
+      },
+      "text": "2-3 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 3000000000,
+        "max_price": 4000000000
+      },
+      "text": "3-4 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 4000000000,
+        "max_price": 5000000000
+      },
+      "text": "4-5 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 5000000000,
+        "max_price": 6000000000
+      },
+      "text": "5-6 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 6000000000,
+        "max_price": 7000000000
+      },
+      "text": "6-7 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 7000000000,
+        "max_price": 8000000000
+      },
+      "text": "7-8 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 8000000000,
+        "max_price": 10000000000
+      },
+      "text": "8-10 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 10000000000,
+        "max_price": 12000000000
+      },
+      "text": "10-12 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 12000000000,
+        "max_price": 15000000000
+      },
+      "text": "12-15 tỷ",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 15000000000,
+        "max_price": 20000000000
+      },
+      "text": "15-20 tỷ",
+      "group": 1
+    }
+  ],
+  "rent_prices": [
+    {
+      "params": {
+        "min_price": 1000000,
+        "max_price": 3000000
+      },
+      "text": "1-3 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 3000000,
+        "max_price": 5000000
+      },
+      "text": "3-5 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 5000000,
+        "max_price": 7000000
+      },
+      "text": "5-7 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 7000000,
+        "max_price": 9000000
+      },
+      "text": "7-9 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 90000000,
+        "max_price": 11000000
+      },
+      "text": "90-11 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 11000000,
+        "max_price": 13000000
+      },
+      "text": "11-13 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 13000000,
+        "max_price": 15000000
+      },
+      "text": "13-15 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 15000000,
+        "max_price": 17000000
+      },
+      "text": "15-17 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 17000000,
+        "max_price": 20000000
+      },
+      "text": "17-20 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 20000000,
+        "max_price": 25000000
+      },
+      "text": "20-25 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 25000000,
+        "max_price": 30000000
+      },
+      "text": "25-30 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 30000000,
+        "max_price": 35000000
+      },
+      "text": "30-35 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 35000000,
+        "max_price": 40000000
+      },
+      "text": "35-40 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 40000000,
+        "max_price": 45000000
+      },
+      "text": "40-45 triệu",
+      "group": 1
+    },
+    {
+      "params": {
+        "min_price": 45000000,
+        "max_price": 50000000
+      },
+      "text": "45-50 triệu",
+      "group": 1
+    }
+  ],
+  "beds_rooms": [
+    {
+      "params": {
+        "beds_count": 1
+      },
+      "text": "1",
+      "group": 1
+    },
+    {
+      "params": {
+        "beds_count": 2
+      },
+      "text": "2",
+      "group": 1
+    },
+    {
+      "params": {
+        "beds_count": 3
+      },
+      "text": "3",
+      "group": 1
+    },
+    {
+      "params": {
+        "beds_count": 4
+      },
+      "text": "4",
+      "group": 1
+    },
+    {
+      "params": {
+        "beds_count": 5
+      },
+      "text": "5",
+      "group": 1
+    },
+    {
+      "params": {
+        "beds_count": 6
+      },
+      "text": "6",
+      "group": 1
+    }
+  ],
+  "baths_rooms": [
+    {
+      "params": {
+        "baths_count": 1
+      },
+      "text": "1",
+      "group": 1
+    },
+    {
+      "params": {
+        "baths_count": 2
+      },
+      "text": "2",
+      "group": 1
+    },
+    {
+      "params": {
+        "baths_count": 3
+      },
+      "text": "3",
+      "group": 1
+    },
+    {
+      "params": {
+        "baths_count": 4
+      },
+      "text": "4",
+      "group": 1
+    },
+    {
+      "params": {
+        "baths_count": 5
+      },
+      "text": "5",
+      "group": 1
+    },
+    {
+      "params": {
+        "baths_count": 6
+      },
+      "text": "6",
+      "group": 1
+    }
+  ],
+  "locations": {
+    "cities": [
+      {
+        "params": {
+          "city_id": 1
+        },
+        "text": "Hồ Chí Minh",
+        "city_id": 1,
+        "count": 4954,
+        "group": 1
+      }
+    ],
+    "districts": [
+      {
+        "params": {
+          "district_id": 72
+        },
+        "text": "Quận Tân Phú",
+        "district_id": 72,
+        "count": 1952,
+        "group": 1
+      },
+      {
+        "params": {
+          "district_id": 67
+        },
+        "text": "Quận Bình Tân",
+        "district_id": 67,
+        "count": 1594,
+        "group": 1
+      },
+      {
+        "params": {
+          "district_id": 71
+        },
+        "text": "Quận Tân Bình",
+        "district_id": 71,
+        "count": 1408,
+        "group": 1
+      }
+    ],
+    "wards": [
+      {
+        "params": {
+          "ward_id": 199
+        },
+        "text": "Phường Tân Quý",
+        "ward_id": 199,
+        "count": 356,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8876
+        },
+        "text": "Phường Bình Trị Đông A",
+        "ward_id": 8876,
+        "count": 245,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8874
+        },
+        "text": "Phường Bình Hưng Hòa B",
+        "ward_id": 8874,
+        "count": 244,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8875
+        },
+        "text": "Phường Bình Trị Đông",
+        "ward_id": 8875,
+        "count": 242,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8873
+        },
+        "text": "Phường Bình Hưng Hòa A",
+        "ward_id": 8873,
+        "count": 241,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 202
+        },
+        "text": "Phường Phú Thạnh",
+        "ward_id": 202,
+        "count": 229,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 200
+        },
+        "text": "Phường Tân Thành",
+        "ward_id": 200,
+        "count": 228,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 197
+        },
+        "text": "Phường Tây Thạnh",
+        "ward_id": 197,
+        "count": 224,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 201
+        },
+        "text": "Phường Phú Thọ Hòa",
+        "ward_id": 201,
+        "count": 205,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8870
+        },
+        "text": "Phường An Lạc",
+        "ward_id": 8870,
+        "count": 194,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8994
+        },
+        "text": "Phường 14",
+        "ward_id": 8994,
+        "count": 182,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8991
+        },
+        "text": "Phường 12",
+        "ward_id": 8991,
+        "count": 175,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8980
+        },
+        "text": "Phường 2",
+        "ward_id": 8980,
+        "count": 174,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 196
+        },
+        "text": "Phường Tân Sơn Nhì",
+        "ward_id": 196,
+        "count": 170,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8872
+        },
+        "text": "Phường Bình Hưng Hòa",
+        "ward_id": 8872,
+        "count": 161,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 205
+        },
+        "text": "Phường Hiệp Tân",
+        "ward_id": 205,
+        "count": 158,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8989
+        },
+        "text": "Phường 10",
+        "ward_id": 8989,
+        "count": 153,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8995
+        },
+        "text": "Phường 15",
+        "ward_id": 8995,
+        "count": 151,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 198
+        },
+        "text": "Phường Sơn Kỳ",
+        "ward_id": 198,
+        "count": 141,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8993
+        },
+        "text": "Phường 13",
+        "ward_id": 8993,
+        "count": 137,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8877
+        },
+        "text": "Phường Bình Trị Đông B",
+        "ward_id": 8877,
+        "count": 110,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8982
+        },
+        "text": "Phường 4",
+        "ward_id": 8982,
+        "count": 103,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8879
+        },
+        "text": "Phường Tân Tạo A",
+        "ward_id": 8879,
+        "count": 97,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 204
+        },
+        "text": "Phường Hòa Thạnh",
+        "ward_id": 204,
+        "count": 82,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 203
+        },
+        "text": "Phường Phú Trung",
+        "ward_id": 203,
+        "count": 78,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 207
+        },
+        "text": "Phường Tân Thới Hòa",
+        "ward_id": 207,
+        "count": 78,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8990
+        },
+        "text": "Phường 11",
+        "ward_id": 8990,
+        "count": 58,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8988
+        },
+        "text": "Phường 9",
+        "ward_id": 8988,
+        "count": 52,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8871
+        },
+        "text": "Phường An Lạc A",
+        "ward_id": 8871,
+        "count": 46,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8986
+        },
+        "text": "Phường 7",
+        "ward_id": 8986,
+        "count": 43,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8979
+        },
+        "text": "Phường 1",
+        "ward_id": 8979,
+        "count": 40,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8983
+        },
+        "text": "Phường 5",
+        "ward_id": 8983,
+        "count": 39,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8981
+        },
+        "text": "Phường 3",
+        "ward_id": 8981,
+        "count": 34,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8987
+        },
+        "text": "Phường 8",
+        "ward_id": 8987,
+        "count": 33,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 8984
+        },
+        "text": "Phường 6",
+        "ward_id": 8984,
+        "count": 32,
+        "group": 1
+      },
+      {
+        "params": {
+          "ward_id": 12014
+        },
+        "text": "Phường Tân Tạo",
+        "ward_id": 12014,
+        "count": 13,
+        "group": 1
+      }
+    ]
+  },
+  "property_types": [
+    {
+      "params": {
+        "property_type": "nha_rieng"
+      },
+      "text": "Nhà riêng",
+      "count": 4039,
+      "group": 1
+    },
+    {
+      "params": {
+        "property_type": "nha_mat_pho"
+      },
+      "text": "Nhà mặt phố",
+      "count": 548,
+      "group": 1
+    },
+    {
+      "params": {
+        "property_type": "dat"
+      },
+      "text": "Đất",
+      "count": 223,
+      "group": 1
+    },
+    {
+      "params": {
+        "property_type": "can_ho_chung_cu"
+      },
+      "text": "Căn hộ chung cư",
+      "count": 144,
+      "group": 1
+    }
+  ],
+  "directions": [
+    {
+      "params": {
+        "direction": "south"
+      },
+      "text": "Hướng Nam",
+      "count": 651,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "east_north"
+      },
+      "text": "Hướng Đông Bắc",
+      "count": 645,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "west_north"
+      },
+      "text": "Hướng Tây Bắc",
+      "count": 637,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "west"
+      },
+      "text": "Hướng Tây",
+      "count": 636,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "east_south"
+      },
+      "text": "Hướng Đông Nam",
+      "count": 630,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "north"
+      },
+      "text": "Hướng Bắc",
+      "count": 605,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "east"
+      },
+      "text": "Hướng Đông",
+      "count": 588,
+      "group": 1
+    },
+    {
+      "params": {
+        "direction": "west_south"
+      },
+      "text": "Hướng Tây Nam",
+      "count": 562,
+      "group": 1
+    }
+  ],
+  "facades": [
+    {
+      "params": {
+        "mat_tien": "3-4 m"
+      },
+      "text": "3-4 m",
+      "count": 245,
+      "group": 1
+    },
+    {
+      "params": {
+        "mat_tien": "4-4.5 m"
+      },
+      "text": "4-4.5 m",
+      "count": 2513,
+      "group": 1
+    },
+    {
+      "params": {
+        "mat_tien": "4.5-5 m"
+      },
+      "text": "4.5-5 m",
+      "count": 291,
+      "group": 1
+    },
+    {
+      "params": {
+        "mat_tien": "5-6 m"
+      },
+      "text": "5-6 m",
+      "count": 612,
+      "group": 1
+    },
+    {
+      "params": {
+        "mat_tien": "6-8 m"
+      },
+      "text": "6-8 m",
+      "count": 343,
+      "group": 1
+    },
+    {
+      "params": {
+        "mat_tien": "8-10 m"
+      },
+      "text": "8-10 m",
+      "count": 248,
+      "group": 1
+    }
+  ],
+  "areas": [
+    {
+      "params": {
+        "min_area": 0,
+        "max_area": 30
+      },
+      "text": "< 30 m2",
+      "count": 8,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 30,
+        "max_area": 50
+      },
+      "text": "30-50 m2",
+      "count": 1005,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 50,
+        "max_area": 60
+      },
+      "text": "50-60 m2",
+      "count": 740,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 60,
+        "max_area": 70
+      },
+      "text": "60-70 m2",
+      "count": 872,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 70,
+        "max_area": 80
+      },
+      "text": "70-80 m2",
+      "count": 576,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 80,
+        "max_area": 100
+      },
+      "text": "80-100 m2",
+      "count": 736,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 100,
+        "max_area": 120
+      },
+      "text": "100-120 m2",
+      "count": 305,
+      "group": 1
+    },
+    {
+      "params": {
+        "min_area": 120,
+        "max_area": 150
+      },
+      "text": "120-150 m2",
+      "count": 228,
+      "group": 1
+    }
+  ]
+}

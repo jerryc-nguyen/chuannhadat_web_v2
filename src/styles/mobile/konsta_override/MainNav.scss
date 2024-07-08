@@ -1,0 +1,19 @@
+.c-mainNav {
+  .is-searchTop {
+    &__search {
+      width: calc(100% - (100px));
+    }
+  }
+
+  &.isSearchSub {
+    height: 3.5rem;
+    padding-top: 0.5rem;
+  }
+}
+
+.c-mainNav__sub {
+  &.isSearchSub {
+    height: 3.5rem;
+    padding-bottom: 0.5rem;
+  }
+}

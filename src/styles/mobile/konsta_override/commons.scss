@@ -1,0 +1,17 @@
+.c-mobileApp {
+  .bg-black.bg-opacity-50 {
+    --tw-bg-opacity: 0.5;
+  }
+}
+
+.c-bottomSheetFilter {
+  &__body {
+    max-height: 50vh;
+    min-height: 30vh;
+    overflow-y: scroll;
+
+    &.is-locations {
+      min-height: 70vh;
+    }
+  }
+}
