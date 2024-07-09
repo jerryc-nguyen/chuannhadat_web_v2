@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
   App,
@@ -27,9 +27,17 @@ import { useAtom } from 'jotai';
 import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@app/components/filter_bds/states';
 import FilterModal from '@app/components/filter_bds/mobile/FilterModal';
+import { BottomSheet } from 'react-spring-bottom-sheet';
+import { openModalAtom } from '@app/components/mobile/modals/states';
+import Modals from '@app/components/mobile/modals';
 
 export default function Mobile() {
-  const [_, setIsOpen] = useAtom(openFilterModalAtom);
+  const [, setIsOpen] = useAtom(openFilterModalAtom);
+  const [, openModal] = useAtom(openModalAtom);
+
+  const onClick = () => {
+    openModal({ id: 'test_modal' });
+  };
 
   return (
     <App theme='ios'>
@@ -47,11 +55,12 @@ export default function Mobile() {
         </List>
 
         <Block strong className='flex space-x-4'>
-          <Button onClick={() => {}}>Button 1</Button>
+          <Button onClick={onClick}>Open Bottom Sheet</Button>
           <Button>Button 2</Button>
         </Block>
 
         <FilterModal />
+        <Modals />
       </Page>
     </App>
   );
