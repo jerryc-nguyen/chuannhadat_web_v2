@@ -14,7 +14,7 @@ import {
 import {
   FilterOption,
   FilterFieldName,
-} from '@app/components/filter_bds/types';
+} from '@mbcom/filter_bds/types';
 
 import ListOptions from './ListOptions';
 import {
@@ -23,7 +23,7 @@ import {
   defaultFilterOption,
   applyFieldBtsFilterAtom,
   clearFieldBtsFilterAtom,
-} from '@app/components/filter_bds/states';
+} from '@mbcom/filter_bds/states';
 import BottomActions from './BottomActions';
 
 export default function BedBts() {
@@ -43,7 +43,7 @@ export default function BedBts() {
     >
       <Toolbar top>
         <div className='left'>
-          <strong>Phòng ngủ</strong>
+          <strong>Phòng tắm</strong>
         </div>
         <div className='right'>
           <Link toolbar onClick={() => setIsOpen(false)}>
@@ -54,7 +54,7 @@ export default function BedBts() {
 
       <div className='c-bottomSheetFilter__body'>
         <ListOptions
-          options={filterState.bedOptions}
+          options={filterState.bathOptions}
           onSelect={(option: FilterOption) => {
             setSelectedOption(option);
           }}
@@ -62,7 +62,7 @@ export default function BedBts() {
       </div>
 
       <BottomActions
-        fieldName={FilterFieldName.beds}
+        fieldName={FilterFieldName.baths}
         selectedOption={selectedOption}
       />
     </Sheet>

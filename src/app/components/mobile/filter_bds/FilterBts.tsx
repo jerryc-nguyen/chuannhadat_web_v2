@@ -1,8 +1,11 @@
 import { useAtom } from 'jotai';
 
-import { openBottomSheetFilterAtom, curBottomSheetFieldAtom } from '../states';
+import {
+  openBottomSheetFilterAtom,
+  curBottomSheetFieldAtom,
+} from './states';
 
-import { FilterFieldName } from '../types';
+import { FilterFieldName } from './types';
 
 import PriceBts from './bts/PriceBts';
 import AreaBts from './bts/AreaBts';
@@ -18,7 +21,9 @@ export default function FilterBts() {
 
   return (
     <>
-      {isOpen && filterField == FilterFieldName.locations && <LocationBts />}
+      {isOpen && filterField == FilterFieldName.locations && (
+        <LocationBts />
+      )}
       {isOpen && filterField == FilterFieldName.propertyType && (
         <PropertyTypeBts />
       )}
@@ -26,7 +31,9 @@ export default function FilterBts() {
       {isOpen && filterField == FilterFieldName.area && <AreaBts />}
       {isOpen && filterField == FilterFieldName.beds && <BedBts />}
       {isOpen && filterField == FilterFieldName.baths && <BathBts />}
-      {isOpen && filterField == FilterFieldName.direction && <DirectionBts />}
+      {isOpen && filterField == FilterFieldName.direction && (
+        <DirectionBts />
+      )}
     </>
   );
 }

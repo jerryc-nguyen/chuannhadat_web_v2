@@ -21,7 +21,9 @@
     "paths": {
       "@app/*": ["src/app/*"],
       "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@desktopcom/*": ["src/app/components/desktop/*"],
+      "@mbcom/*": ["src/app/components/mobile/*"]
     }
   },
   "include": [

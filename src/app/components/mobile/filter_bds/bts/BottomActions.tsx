@@ -1,11 +1,14 @@
 import { Button, Toolbar } from 'konsta/react';
-import { FilterFieldName, FilterOption } from '../../types';
+import { FilterFieldName, FilterOption } from '../types';
 import { useAtom } from 'jotai';
-import { applyFieldBtsFilterAtom, clearFieldBtsFilterAtom } from '../../states';
+import {
+  applyFieldBtsFilterAtom,
+  clearFieldBtsFilterAtom,
+} from '../states';
 
 export default function BottomActions({
   fieldName,
-  selectedOption
+  selectedOption,
 }: {
   fieldName: FilterFieldName;
   selectedOption: FilterOption;
@@ -18,7 +21,7 @@ export default function BottomActions({
       <Button
         onClick={() => {
           clearSelectedField({
-            fieldName: fieldName
+            fieldName: fieldName,
           });
         }}
       >
@@ -28,7 +31,7 @@ export default function BottomActions({
         onClick={() => {
           applySelectedField({
             fieldName: fieldName,
-            option: selectedOption
+            option: selectedOption,
           });
         }}
       >

@@ -1,10 +1,10 @@
 import { List, ListItem } from 'konsta/react';
-import { FilterOption } from '../../types';
+import { FilterOption } from '../types';
 import { ReactElement } from 'react';
 
 const ListOptions = ({
   options,
-  onSelect = () => {}
+  onSelect = () => {},
 }: {
   options: FilterOption[];
   onSelect?: Function;

@@ -13,19 +13,19 @@ import {
   Checkbox,
   Segmented,
   SegmentedButton,
-  Toolbar
+  Toolbar,
 } from 'konsta/react';
 import { useAtom } from 'jotai';
 
 import {
   openFilterModalAtom,
   openBtsFilterAtom,
-  filterStateAtom
-} from '../states';
+  filterStateAtom,
+} from './states';
 
 import FilterBts from './FilterBts';
-import { FilterFieldName } from '../types';
-import { selectedFilterText } from '../helpers';
+import { FilterFieldName } from './types';
+import { selectedFilterText } from './helpers';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -44,7 +44,7 @@ const FilterModal = () => {
       >
         <Page>
           <Navbar
-            title="Tìm BĐS"
+            title='Tìm BĐS'
             right={
               <Link
                 navbar
@@ -58,7 +58,7 @@ const FilterModal = () => {
           />
 
           <BlockTitle>Loại tin</BlockTitle>
-          <Block strongIos outlineIos className="space-y-4">
+          <Block strongIos outlineIos className='space-y-4'>
             <Segmented outline>
               <SegmentedButton
                 active={activeSegmented === 1}
@@ -80,14 +80,14 @@ const FilterModal = () => {
           <List strongIos outlineIos>
             <ListItem
               link
-              title="Khu vực"
+              title='Khu vực'
               onClick={() => {
                 openBtsFilter(FilterFieldName.locations);
               }}
             />
             <ListItem
               link
-              title="Loại BĐS"
+              title='Loại BĐS'
               onClick={() => {
                 openBtsFilter(FilterFieldName.propertyType);
               }}
@@ -103,50 +103,68 @@ const FilterModal = () => {
           <List strongIos outlineIos>
             <ListItem
               link
-              title="Mức giá"
+              title='Mức giá'
               onClick={() => {
                 openBtsFilter(FilterFieldName.price);
               }}
-              after={selectedFilterText(filterState, FilterFieldName.price)}
+              after={selectedFilterText(
+                filterState,
+                FilterFieldName.price
+              )}
             />
             <ListItem
               link
-              title="Diện tích"
+              title='Diện tích'
               onClick={() => {
                 openBtsFilter(FilterFieldName.area);
               }}
-              after={selectedFilterText(filterState, FilterFieldName.area)}
+              after={selectedFilterText(
+                filterState,
+                FilterFieldName.area
+              )}
             />
             <ListItem
               link
-              title="Phòng ngủ"
+              title='Phòng ngủ'
               onClick={() => {
                 openBtsFilter(FilterFieldName.beds);
               }}
-              after={selectedFilterText(filterState, FilterFieldName.beds)}
+              after={selectedFilterText(
+                filterState,
+                FilterFieldName.beds
+              )}
             />
             <ListItem
               link
-              title="Phòng tắm"
+              title='Phòng tắm'
               onClick={() => {
                 openBtsFilter(FilterFieldName.baths);
               }}
-              after={selectedFilterText(filterState, FilterFieldName.baths)}
+              after={selectedFilterText(
+                filterState,
+                FilterFieldName.baths
+              )}
             />
             <ListItem
               link
-              title="Hướng"
+              title='Hướng'
               onClick={() => {
                 openBtsFilter(FilterFieldName.direction);
               }}
-              after={selectedFilterText(filterState, FilterFieldName.direction)}
+              after={selectedFilterText(
+                filterState,
+                FilterFieldName.direction
+              )}
             />
           </List>
 
           <br />
           <br />
 
-          <Toolbar top={false} className={`left-0 bottom-0 fixed w-full`}>
+          <Toolbar
+            top={false}
+            className={`left-0 bottom-0 fixed w-full`}
+          >
             <Button>Xem 1000 tin</Button>
           </Toolbar>
         </Page>

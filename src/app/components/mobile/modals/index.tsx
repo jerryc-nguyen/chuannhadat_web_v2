@@ -10,7 +10,7 @@ import {
   Portal,
 } from 'react-sheet-slide';
 
-export default function Modals() {
+export default function ModalFactory() {
   const btsRef = useRef(null);
   const [modal, setModal] = useAtom(openModalAtom);
   const [_, setBtsRef] = useAtom(btsRefAtom);
@@ -42,7 +42,7 @@ export default function Modals() {
           className='rss-header'
           scrolledClassName='rss-header-scrolled'
         >
-          Title
+          Title 2
         </Header>
         <Content className='rss-content'>
           <div style={{ padding: '54px 16px 24px' }}>

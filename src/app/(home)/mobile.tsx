@@ -25,11 +25,11 @@ import MainNav from '@app/components/header/mobile/MainNav';
 import { useAtom } from 'jotai';
 
 import '@styles/pages/mobile/home.scss';
-import { openFilterModalAtom } from '@app/components/filter_bds/states';
-import FilterModal from '@app/components/filter_bds/mobile/FilterModal';
+import { openFilterModalAtom } from '@mbcom/filter_bds/states';
+import FilterModal from '@mbcom/filter_bds/FilterModal';
 import { BottomSheet } from 'react-spring-bottom-sheet';
-import { openModalAtom } from '@app/components/mobile/modals/states';
-import Modals from '@app/components/mobile/modals';
+import { openModalAtom } from '@mbcom/modals/states';
+import ModalFactory from '@mbcom/modals';
 
 export default function Mobile() {
   const [, setIsOpen] = useAtom(openFilterModalAtom);
@@ -60,7 +60,7 @@ export default function Mobile() {
         </Block>
 
         <FilterModal />
-        <Modals />
+        <ModalFactory />
       </Page>
     </App>
   );

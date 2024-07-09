@@ -7,18 +7,18 @@ import { Sheet, Toolbar, Link } from 'konsta/react';
 import {
   FilterOption,
   FilterFieldName,
-} from '@app/components/filter_bds/types';
+} from '@mbcom/filter_bds/types';
 
 import ListOptions from './ListOptions';
 import {
   openBottomSheetFilterAtom,
   filterStateAtom,
   defaultFilterOption,
-} from '@app/components/filter_bds/states';
+} from '@mbcom/filter_bds/states';
 import BottomActions from './BottomActions';
 
-import searchFormOptions from '@app/components/filter_bds/states/search_form_options.json';
-import { formattedReactSelectOptions } from '@app/components/filter_bds/helpers';
+import searchFormOptions from '@mbcom/filter_bds/states/search_form_options.json';
+import { formattedReactSelectOptions } from '@mbcom/filter_bds/helpers';
 
 export default function LocationBts() {
   const [isOpen, setIsOpen] = useAtom(openBottomSheetFilterAtom);

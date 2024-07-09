@@ -1,29 +1,19 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
 
-import {
-  Sheet,
-  Button,
-  Toolbar,
-  Link,
-  List,
-  ListInput,
-  BlockTitle,
-} from 'konsta/react';
+import { Sheet, Button, Toolbar, Link } from 'konsta/react';
 
 import {
   FilterOption,
   FilterFieldName,
-} from '@app/components/filter_bds/types';
+} from '@mbcom/filter_bds/types';
 
 import ListOptions from './ListOptions';
 import {
   openBottomSheetFilterAtom,
   filterStateAtom,
   defaultFilterOption,
-  applyFieldBtsFilterAtom,
-  clearFieldBtsFilterAtom,
-} from '@app/components/filter_bds/states';
+} from '@mbcom/filter_bds/states';
 import BottomActions from './BottomActions';
 
 export default function BedBts() {
@@ -32,8 +22,6 @@ export default function BedBts() {
   const [selectedOption, setSelectedOption] = useState<FilterOption>(
     defaultFilterOption
   );
-  const [, applySelectedField] = useAtom(applyFieldBtsFilterAtom);
-  const [, clearSelectedField] = useAtom(clearFieldBtsFilterAtom);
 
   return (
     <Sheet
@@ -43,7 +31,7 @@ export default function BedBts() {
     >
       <Toolbar top>
         <div className='left'>
-          <strong>Phòng tắm</strong>
+          <strong>Hướng</strong>
         </div>
         <div className='right'>
           <Link toolbar onClick={() => setIsOpen(false)}>
@@ -54,7 +42,7 @@ export default function BedBts() {
 
       <div className='c-bottomSheetFilter__body'>
         <ListOptions
-          options={filterState.bathOptions}
+          options={filterState.directionOptions}
           onSelect={(option: FilterOption) => {
             setSelectedOption(option);
           }}
@@ -62,7 +50,7 @@ export default function BedBts() {
       </div>
 
       <BottomActions
-        fieldName={FilterFieldName.baths}
+        fieldName={FilterFieldName.direction}
         selectedOption={selectedOption}
       />
     </Sheet>
