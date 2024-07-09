@@ -28,15 +28,15 @@ import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@mbcom/filter_bds/states';
 import FilterModal from '@mbcom/filter_bds/FilterModal';
 import { BottomSheet } from 'react-spring-bottom-sheet';
-import { openModalAtom } from '@mbcom/modals/states';
+import { modalFactoryAtom } from '@mbcom/modals/states';
 import ModalFactory from '@mbcom/modals';
 
 export default function Mobile() {
   const [, setIsOpen] = useAtom(openFilterModalAtom);
-  const [, openModal] = useAtom(openModalAtom);
+  const [, openModal] = useAtom(modalFactoryAtom);
 
   const onClick = () => {
-    openModal({ id: 'test_modal' });
+    openModal({ name: 'test_modal' });
   };
 
   return (

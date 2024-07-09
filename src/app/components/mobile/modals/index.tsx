@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
-import { btsRefAtom, openModalAtom } from './states';
+import { btsRefAtom, modalFactoryAtom } from './states';
 import {
   Sheet,
   Header,
@@ -12,7 +12,7 @@ import {
 
 export default function ModalFactory() {
   const btsRef = useRef(null);
-  const [modal, setModal] = useAtom(openModalAtom);
+  const [modal, setModal] = useAtom(modalFactoryAtom);
   const [_, setBtsRef] = useAtom(btsRefAtom);
 
   useEffect(() => {
