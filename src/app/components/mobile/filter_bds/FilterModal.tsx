@@ -117,7 +117,13 @@ const FilterModal = () => {
             <ListItem
               link
               title='Phòng ngủ'
-              onClick={() => {}}
+              onClick={() => {
+                openModal({
+                  name: 'bts_bed',
+                  title: 'Phòng ngủ',
+                  content: 'Phòng ngủ',
+                });
+              }}
               after={selectedFilterText(
                 filterState,
                 FilterFieldName.bed

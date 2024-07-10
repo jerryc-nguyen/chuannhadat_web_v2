@@ -6,7 +6,6 @@ export interface DefaultModal {
   title?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;
-  snapPoints?: Array<string> | Array<number>;
   btsProps?: SheetProps;
 }
 
