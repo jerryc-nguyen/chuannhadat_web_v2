@@ -28,12 +28,12 @@ import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@mbcom/filter_bds/states';
 import FilterModal from '@mbcom/filter_bds/FilterModal';
 import { BottomSheet } from 'react-spring-bottom-sheet';
-import { modalFactoryAtom } from '@mbcom/modals/states';
-import ModalFactory from '@mbcom/modals';
+import { btsModalAtom } from '@mbcom/modals/states';
+import ModalsFactory from '@mbcom/modals';
 
 export default function Mobile() {
   const [, setIsOpen] = useAtom(openFilterModalAtom);
-  const [, openModal] = useAtom(modalFactoryAtom);
+  const [, openModal] = useAtom(btsModalAtom);
 
   const onClick = () => {
     openModal({ name: 'test_modal' });
@@ -60,7 +60,7 @@ export default function Mobile() {
         </Block>
 
         <FilterModal />
-        <ModalFactory />
+        <ModalsFactory />
       </Page>
     </App>
   );

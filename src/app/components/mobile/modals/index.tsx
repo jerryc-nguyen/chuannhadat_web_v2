@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
-import { btsRefAtom, modalFactoryAtom } from './states';
+import { btsRefAtom, btsModalAtom } from './states';
 import {
   Sheet,
   Header,
@@ -9,15 +9,18 @@ import {
   detents,
   Portal,
 } from 'react-sheet-slide';
+import useModalBuilder from './hooks';
 
-export default function ModalFactory() {
+export default function BtsModals() {
   const btsRef = useRef(null);
-  const [modal, setModal] = useAtom(modalFactoryAtom);
+  const [modal, setModal] = useAtom(btsModalAtom);
   const [_, setBtsRef] = useAtom(btsRefAtom);
 
   useEffect(() => {
     setBtsRef(btsRef);
   }, []);
+
+  const footerClassName = modal?.footer ? 'rss-footer' : 'hidden';
 
   return (
     <Portal>
@@ -30,11 +33,10 @@ export default function ModalFactory() {
         }}
         useDarkMode={false}
         useModal={false}
-        scrollingExpands={true}
+        scrollingExpands={false}
         detents={(props) => [
           detents.large(props),
           detents.medium(props),
-          // detents.fit(props),
         ]}
         backdropClassName='c-btsModal__defaultBackdrop ss-sheet-backdrop'
       >
@@ -42,31 +44,15 @@ export default function ModalFactory() {
           className='rss-header'
           scrolledClassName='rss-header-scrolled'
         >
-          Title 2
+          {modal?.title || 'Missing title'}
         </Header>
         <Content className='rss-content'>
-          <div style={{ padding: '54px 16px 24px' }}>
-            <div>Add more storage to keep everything on online</div>
-            <div>
-              Online includes plenty of storage to keep all your data
-              safe and features to protect your privacy.
-            </div>
-            <div>Learn More About Online</div>
-          </div>
-          <div style={{ padding: '54px 16px 24px' }}>
-            <div>Add more storage to keep everything on online</div>
-            <div>
-              Online includes plenty of storage to keep all your data
-              safe and features to protect your privacy.
-            </div>
-            <div>Learn More About Online</div>
+          <div style={{ paddingTop: '54px' }}>
+            {modal?.content || 'Missing content'}
           </div>
         </Content>
-        <Footer className='rss-footer'>
-          <button type='button' onClick={() => setModal(undefined)}>
-            Close
-          </button>
-        </Footer>
+
+        <Footer className={footerClassName}>{modal?.footer}</Footer>
       </Sheet>
     </Portal>
   );

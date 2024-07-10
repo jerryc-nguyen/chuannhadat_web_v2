@@ -26,6 +26,8 @@ import {
 import FilterBts from './FilterBts';
 import { FilterFieldName } from './types';
 import { selectedFilterText } from './helpers';
+import { btsModalAtom } from '../modals/states';
+import Area from '../filter_bds/bts/Area';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -33,6 +35,7 @@ const FilterModal = () => {
 
   const [activeSegmented, setActiveSegmented] = useState(1);
   const [filterState] = useAtom(filterStateAtom);
+  const [, openModal] = useAtom(btsModalAtom);
 
   return (
     <>
@@ -82,7 +85,12 @@ const FilterModal = () => {
               link
               title='Khu vực'
               onClick={() => {
-                openBtsFilter(FilterFieldName.locations);
+                // openBtsFilter(FilterFieldName.locations);
+                openModal({
+                  name: 'Test',
+                  title: 'Khu vực',
+                  content: <Area />,
+                });
               }}
             />
             <ListItem
