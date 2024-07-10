@@ -17,13 +17,8 @@ import {
 } from 'konsta/react';
 import { useAtom } from 'jotai';
 
-import {
-  openFilterModalAtom,
-  openBtsFilterAtom,
-  filterStateAtom,
-} from './states';
+import { openFilterModalAtom, filterStateAtom } from './states';
 
-import FilterBts from './FilterBts';
 import { FilterFieldName } from './types';
 import { selectedFilterText } from './helpers';
 import { btsModalAtom } from '../modals/states';
@@ -31,7 +26,6 @@ import Area from '../filter_bds/bts/Area';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
-  const [, openBtsFilter] = useAtom(openBtsFilterAtom);
 
   const [activeSegmented, setActiveSegmented] = useState(1);
   const [filterState] = useAtom(filterStateAtom);
@@ -81,27 +75,14 @@ const FilterModal = () => {
           <BlockTitle>Thông tin cơ bản</BlockTitle>
 
           <List strongIos outlineIos>
-            <ListItem
-              link
-              title='Khu vực'
-              onClick={() => {
-                // openBtsFilter(FilterFieldName.locations);
-                openModal({
-                  name: 'Test',
-                  title: 'Khu vực',
-                  content: <Area />,
-                });
-              }}
-            />
+            <ListItem link title='Khu vực' onClick={() => {}} />
             <ListItem
               link
               title='Loại BĐS'
-              onClick={() => {
-                openBtsFilter(FilterFieldName.propertyType);
-              }}
+              onClick={() => {}}
               after={selectedFilterText(
                 filterState,
-                FilterFieldName.propertyType
+                FilterFieldName.categoryType
               )}
             />
           </List>
@@ -112,9 +93,7 @@ const FilterModal = () => {
             <ListItem
               link
               title='Mức giá'
-              onClick={() => {
-                openBtsFilter(FilterFieldName.price);
-              }}
+              onClick={() => {}}
               after={selectedFilterText(
                 filterState,
                 FilterFieldName.price
@@ -124,7 +103,11 @@ const FilterModal = () => {
               link
               title='Diện tích'
               onClick={() => {
-                openBtsFilter(FilterFieldName.area);
+                openModal({
+                  name: 'bts_area',
+                  title: 'Diện tích',
+                  content: <Area />,
+                });
               }}
               after={selectedFilterText(
                 filterState,
@@ -134,31 +117,25 @@ const FilterModal = () => {
             <ListItem
               link
               title='Phòng ngủ'
-              onClick={() => {
-                openBtsFilter(FilterFieldName.beds);
-              }}
+              onClick={() => {}}
               after={selectedFilterText(
                 filterState,
-                FilterFieldName.beds
+                FilterFieldName.bed
               )}
             />
             <ListItem
               link
               title='Phòng tắm'
-              onClick={() => {
-                openBtsFilter(FilterFieldName.baths);
-              }}
+              onClick={() => {}}
               after={selectedFilterText(
                 filterState,
-                FilterFieldName.baths
+                FilterFieldName.bath
               )}
             />
             <ListItem
               link
               title='Hướng'
-              onClick={() => {
-                openBtsFilter(FilterFieldName.direction);
-              }}
+              onClick={() => {}}
               after={selectedFilterText(
                 filterState,
                 FilterFieldName.direction
@@ -177,8 +154,6 @@ const FilterModal = () => {
           </Toolbar>
         </Page>
       </Popup>
-
-      <FilterBts />
     </>
   );
 };

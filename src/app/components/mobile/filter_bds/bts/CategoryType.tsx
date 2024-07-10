@@ -21,7 +21,7 @@ export default function Area() {
   return (
     <>
       <ListCheckOptions
-        options={filterState.areaOptions!}
+        options={filterState.categoryTypeOptions!}
         onSelect={(option: FilterOption) => {
           setSelectedOption(option);
         }}

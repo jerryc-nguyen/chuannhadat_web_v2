@@ -9,7 +9,6 @@ import {
   detents,
   Portal,
 } from 'react-sheet-slide';
-import useModalBuilder from './hooks';
 
 export default function BtsModals() {
   const btsRef = useRef(null);
