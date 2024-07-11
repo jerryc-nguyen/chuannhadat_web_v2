@@ -4,13 +4,13 @@ import { useAtom } from 'jotai';
 import {
   FilterOption,
   FilterFieldName,
-} from '@mbcom/filter_bds/types';
+} from '@mobile/filter_bds/types';
 
 import ListCheckOptions from './ListCheckOptions';
 import {
   filterStateAtom,
   defaultFilterOption,
-} from '@mbcom/filter_bds/states';
+} from '@mobile/filter_bds/states';
 
 export default function Area() {
   const [filterState] = useAtom(filterStateAtom);
@@ -21,7 +21,7 @@ export default function Area() {
   return (
     <>
       <ListCheckOptions
-        options={filterState.areaOptions!}
+        options={filterState.categoryTypeOptions!}
         onSelect={(option: FilterOption) => {
           setSelectedOption(option);
         }}

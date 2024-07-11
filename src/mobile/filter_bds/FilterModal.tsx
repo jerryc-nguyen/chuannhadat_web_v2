@@ -22,7 +22,7 @@ import { openFilterModalAtom, filterStateAtom } from './states';
 import { FilterFieldName } from './types';
 import { selectedFilterText } from './helpers';
 import { btsModalAtom } from '../modals/states';
-import Area from '../filter_bds/bts/Area';
+import Area from './bts/Area';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);

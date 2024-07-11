@@ -22,8 +22,8 @@
       "@app/*": ["src/app/*"],
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
-      "@desktopcom/*": ["src/app/components/desktop/*"],
-      "@mbcom/*": ["src/app/components/mobile/*"]
+      "@desktop/*": ["src/desktop/*"],
+      "@mobile/*": ["src/mobile/*"]
     }
   },
   "include": [

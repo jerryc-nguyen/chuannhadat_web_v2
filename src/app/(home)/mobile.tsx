@@ -21,15 +21,15 @@ import {
   MdToday,
   MdFileUpload,
 } from 'react-icons/md';
-import MainNav from '@app/components/header/mobile/MainNav';
+import MainNav from '@mobile/header/MainNav';
 import { useAtom } from 'jotai';
 
 import '@styles/pages/mobile/home.scss';
-import { openFilterModalAtom } from '@mbcom/filter_bds/states';
-import FilterModal from '@mbcom/filter_bds/FilterModal';
+import { openFilterModalAtom } from '@mobile/filter_bds/states';
+import FilterModal from '@mobile/filter_bds/FilterModal';
 import { BottomSheet } from 'react-spring-bottom-sheet';
-import { btsModalAtom } from '@mbcom/modals/states';
-import ModalsFactory from '@mbcom/modals';
+import { btsModalAtom } from '@mobile/modals/states';
+import ModalsFactory from '@mobile/modals';
 
 export default function Mobile() {
   const [, setIsOpen] = useAtom(openFilterModalAtom);
