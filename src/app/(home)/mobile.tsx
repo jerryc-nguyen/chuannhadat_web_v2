@@ -30,6 +30,7 @@ import FilterModal from '@mobile/filter_bds/FilterModal';
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import { btsModalAtom } from '@mobile/modals/states';
 import ModalsFactory from '@mobile/modals';
+import FilterChips from '@mobile/filter_bds/FilterChips';
 
 export default function Mobile() {
   const [, setIsOpen] = useAtom(openFilterModalAtom);
@@ -47,6 +48,7 @@ export default function Mobile() {
           onSearchClick={() => setIsOpen(true)}
         />
 
+        <FilterChips />
         <BlockTitle>Navigation 3</BlockTitle>
 
         <List strongIos>

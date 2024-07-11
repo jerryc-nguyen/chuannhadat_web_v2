@@ -17,19 +17,32 @@ import {
 } from 'konsta/react';
 import { useAtom } from 'jotai';
 
-import { openFilterModalAtom, filterStateAtom } from './states';
+import {
+  openFilterModalAtom,
+  filterStateAtom,
+  localFilterStateAtom,
+} from './states';
 
 import { FilterFieldName } from './types';
 import { selectedFilterText } from './helpers';
 import { btsModalAtom } from '../modals/states';
 import Area from './bts/Area';
+import Price from './bts/Price';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
-
   const [activeSegmented, setActiveSegmented] = useState(1);
-  const [filterState] = useAtom(filterStateAtom);
+
   const [, openModal] = useAtom(btsModalAtom);
+
+  const [filterState, setFilterState] = useAtom(filterStateAtom);
+  const [localFilterState, setLocalFilterState] = useAtom(
+    localFilterStateAtom
+  );
+
+  const applySelectedFilters = () => {
+    setFilterState({ ...filterState, ...localFilterState });
+  };
 
   return (
     <>
@@ -53,7 +66,7 @@ const FilterModal = () => {
               </Link>
             }
           />
-
+          {JSON.stringify(filterState.price)}
           <BlockTitle>Loại tin</BlockTitle>
           <Block strongIos outlineIos className='space-y-4'>
             <Segmented outline>
@@ -93,11 +106,14 @@ const FilterModal = () => {
             <ListItem
               link
               title='Mức giá'
-              onClick={() => {}}
-              after={selectedFilterText(
-                filterState,
-                FilterFieldName.price
-              )}
+              onClick={() => {
+                openModal({
+                  name: 'bts_price',
+                  title: 'Mức giá',
+                  content: <Price />,
+                });
+              }}
+              after={localFilterState.price?.text}
             />
             <ListItem
               link
@@ -109,10 +125,7 @@ const FilterModal = () => {
                   content: <Area />,
                 });
               }}
-              after={selectedFilterText(
-                filterState,
-                FilterFieldName.area
-              )}
+              after={localFilterState.area?.text}
             />
             <ListItem
               link
@@ -156,7 +169,9 @@ const FilterModal = () => {
             top={false}
             className={`left-0 bottom-0 fixed w-full`}
           >
-            <Button>Xem 1000 tin</Button>
+            <Button onClick={applySelectedFilters}>
+              Xem 1000 tin
+            </Button>
           </Toolbar>
         </Page>
       </Popup>

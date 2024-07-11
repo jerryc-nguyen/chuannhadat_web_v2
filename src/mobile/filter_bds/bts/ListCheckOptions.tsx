@@ -4,9 +4,11 @@ import { ReactElement } from 'react';
 
 const ListOptions = ({
   options,
+  selectedOption,
   onSelect = () => {},
 }: {
   options: FilterOption[];
+  selectedOption?: FilterOption;
   onSelect?: Function;
 }): ReactElement => {
   return (
@@ -23,7 +25,7 @@ const ListOptions = ({
                 <Checkbox
                   component='div'
                   name='demo-checkbox'
-                  checked={false}
+                  checked={selectedOption?.text == item.text}
                   onChange={() => {}}
                 />
               }

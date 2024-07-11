@@ -13,10 +13,14 @@ import {
   localFilterStateAtom,
 } from '@mobile/filter_bds/states';
 
-export default function Area() {
+export default function Price() {
   const [filterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
+  );
+
+  const [selectedOption, setSelectedOption] = useState<FilterOption>(
+    defaultFilterOption
   );
 
   return (
@@ -24,10 +28,10 @@ export default function Area() {
       {JSON.stringify(localFilterState)}
 
       <ListCheckOptions
-        options={filterState.areaOptions!}
-        selectedOption={localFilterState.area}
+        options={filterState.priceOptions!}
+        selectedOption={localFilterState.price}
         onSelect={(option: FilterOption) => {
-          setLocalFilterState({ ...localFilterState, area: option });
+          setLocalFilterState({ ...localFilterState, price: option });
         }}
       ></ListCheckOptions>
     </>

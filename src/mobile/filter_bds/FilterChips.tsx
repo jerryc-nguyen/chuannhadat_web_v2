@@ -1,0 +1,90 @@
+import { Block, Button, Chip } from 'konsta/react';
+import React, { useState } from 'react';
+import { filterStateAtom, localFilterStateAtom } from './states';
+import { useAtom } from 'jotai';
+import { FilterOption } from './types';
+import { btsModalAtom } from '@mobile/modals/states';
+import Price from './bts/Price';
+import Area from './bts/Area';
+import FooterBtsButton from './FooterBtsButton';
+
+export interface FilterChipOption {
+  id: string;
+  text: string;
+}
+
+const FILTER_ITEMS: Array<FilterChipOption> = [
+  {
+    id: 'filterOverview',
+    text: 'Bộ Lọc',
+  },
+  {
+    id: 'businessType',
+    text: 'Loại tin',
+  },
+  { id: 'categoryType', text: 'Loại nhà đất' },
+  {
+    id: 'price',
+    text: 'Mức giá',
+  },
+  {
+    id: 'area',
+    text: 'Diện tích',
+  },
+  {
+    id: 'room',
+    text: 'Số Phòng',
+  },
+  {
+    id: 'direction',
+    text: 'Hướng',
+  },
+];
+
+export default function FilterChips() {
+  const [filterState, setFilterState] = useAtom(filterStateAtom);
+  const [localFilterState, setLocalFilterState] = useAtom(
+    localFilterStateAtom
+  );
+  const [, openModal] = useAtom(btsModalAtom);
+  const selectedFilterText = (filterOption: FilterChipOption) => {
+    return filterState[filterOption.id]?.text ?? filterOption.text;
+  };
+
+  const buildContent = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
+      case 'price':
+        return <Price />;
+      case 'area':
+        return <Area />;
+      default:
+        return undefined;
+    }
+  };
+
+  const showFilterBts = (filterOption: FilterChipOption) => {
+    openModal({
+      name: filterOption.id,
+      title: filterOption.text,
+      content: buildContent(filterOption),
+      footer: <FooterBtsButton filterOption={filterOption} />,
+    });
+  };
+
+  return (
+    <Block strongIos outlineIos>
+      {JSON.stringify(localFilterState)}
+      {FILTER_ITEMS.map((item) => (
+        <Chip
+          key={item.id}
+          className='m-0.5'
+          onClick={() => {
+            showFilterBts(item);
+          }}
+        >
+          {selectedFilterText(item)}
+        </Chip>
+      ))}
+    </Block>
+  );
+}
