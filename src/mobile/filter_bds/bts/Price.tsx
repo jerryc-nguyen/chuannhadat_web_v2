@@ -9,7 +9,6 @@ import {
 import ListCheckOptions from './ListCheckOptions';
 import {
   filterStateAtom,
-  defaultFilterOption,
   localFilterStateAtom,
 } from '@mobile/filter_bds/states';
 
@@ -17,10 +16,6 @@ export default function Price() {
   const [filterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
-  );
-
-  const [selectedOption, setSelectedOption] = useState<FilterOption>(
-    defaultFilterOption
   );
 
   return (

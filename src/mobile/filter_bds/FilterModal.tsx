@@ -29,6 +29,7 @@ import { btsModalAtom } from '../modals/states';
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './BusinessTypeButtons';
+import CategoryType from './bts/Category';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -87,11 +88,14 @@ const FilterModal = () => {
             <ListItem
               link
               title='Loại BĐS'
-              onClick={() => {}}
-              after={selectedFilterText(
-                filterState,
-                FilterFieldName.categoryType
-              )}
+              onClick={() => {
+                openModal({
+                  name: FilterFieldName.categoryType.toString(),
+                  title: 'Loại BĐS',
+                  content: <CategoryType />,
+                });
+              }}
+              after={localFilterState.categoryType?.text}
             />
           </List>
 

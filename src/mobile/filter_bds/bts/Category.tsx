@@ -10,20 +10,25 @@ import ListCheckOptions from './ListCheckOptions';
 import {
   filterStateAtom,
   defaultFilterOption,
+  localFilterStateAtom,
 } from '@mobile/filter_bds/states';
 
-export default function Area() {
+export default function CategoryType() {
   const [filterState] = useAtom(filterStateAtom);
-  const [selectedOption, setSelectedOption] = useState<FilterOption>(
-    defaultFilterOption
+  const [localFilterState, setLocalFilterState] = useAtom(
+    localFilterStateAtom
   );
 
   return (
     <>
       <ListCheckOptions
         options={filterState.categoryTypeOptions!}
+        selectedOption={localFilterState.categoryType}
         onSelect={(option: FilterOption) => {
-          setSelectedOption(option);
+          setLocalFilterState({
+            ...localFilterState,
+            categoryType: option,
+          });
         }}
       ></ListCheckOptions>
     </>

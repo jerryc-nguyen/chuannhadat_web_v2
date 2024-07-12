@@ -16,11 +16,10 @@ export default function FooterBtsButton({
   );
 
   const onApplyFilter = (filterOption: FilterChipOption) => {
-    console.log('localFilterState', localFilterState);
     const localValue = {
+      // @ts-ignore
       [filterOption.id]: localFilterState[filterOption.id],
     };
-    console.log('localValue', localValue);
     setFilterState({ ...filterState, ...localValue });
     closeModal();
   };

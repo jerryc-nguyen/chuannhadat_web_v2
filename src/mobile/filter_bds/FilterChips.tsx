@@ -48,6 +48,7 @@ export default function FilterChips() {
   );
   const [, openModal] = useAtom(btsModalAtom);
   const selectedFilterText = (filterOption: FilterChipOption) => {
+    // @ts-ignore
     return filterState[filterOption.id]?.text ?? filterOption.text;
   };
 
