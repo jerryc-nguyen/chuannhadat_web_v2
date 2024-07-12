@@ -28,6 +28,7 @@ import { selectedFilterText } from './helpers';
 import { btsModalAtom } from '../modals/states';
 import Area from './bts/Area';
 import Price from './bts/Price';
+import BusinessTypeButtons from './BusinessTypeButtons';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -42,10 +43,16 @@ const FilterModal = () => {
 
   const applySelectedFilters = () => {
     setFilterState({ ...filterState, ...localFilterState });
+    setIsModalOpen(false);
   };
 
   console.log('filterState', filterState);
   console.log('localFilterState', localFilterState);
+
+  const BUSINESS_TYPES_TEXTS = {
+    sell: 'Tin Bán',
+    rent: 'Tin Cho Thuê',
+  };
 
   return (
     <>
@@ -71,22 +78,7 @@ const FilterModal = () => {
           />
 
           <BlockTitle>Loại tin</BlockTitle>
-          <Block strongIos outlineIos className='space-y-4'>
-            <Segmented outline>
-              <SegmentedButton
-                active={activeSegmented === 1}
-                onClick={() => setActiveSegmented(1)}
-              >
-                Tin Bán
-              </SegmentedButton>
-              <SegmentedButton
-                active={activeSegmented === 2}
-                onClick={() => setActiveSegmented(2)}
-              >
-                Tin Cho Thuê
-              </SegmentedButton>
-            </Segmented>
-          </Block>
+          <BusinessTypeButtons />
 
           <BlockTitle>Thông tin cơ bản</BlockTitle>
 

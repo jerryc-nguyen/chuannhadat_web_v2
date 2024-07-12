@@ -11,12 +11,13 @@ export const openFilterModalAtom = atom(false);
 import searchFormOptions from './search_form_options.json';
 
 export interface FilterState {
+  businessTypeOptions?: FilterOption[];
+  categoryTypeOptions?: FilterOption[];
   bedOptions?: FilterOption[];
   bathOptions?: FilterOption[];
   priceOptions?: FilterOption[];
   areaOptions?: FilterOption[];
   directionOptions?: FilterOption[];
-  categoryTypeOptions?: FilterOption[];
   businessType?: FilterOption;
   categoryType?: FilterOption;
   bed?: FilterOption;
@@ -30,12 +31,13 @@ export interface FilterState {
 }
 
 export const filterStateAtom = atom<FilterState>({
+  businessTypeOptions: searchFormOptions.business_types,
+  categoryTypeOptions: searchFormOptions.property_types,
   bedOptions: searchFormOptions.beds_rooms,
   bathOptions: searchFormOptions.baths_rooms,
   priceOptions: searchFormOptions.sell_prices,
   areaOptions: searchFormOptions.areas,
   directionOptions: searchFormOptions.directions,
-  categoryTypeOptions: searchFormOptions.property_types,
   businessType: undefined,
   categoryType: undefined,
   bed: undefined,
