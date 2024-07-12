@@ -2,12 +2,14 @@ import { useAtom } from 'jotai';
 import { Button } from 'konsta/react';
 import { filterStateAtom, localFilterStateAtom } from './states';
 import { FilterChipOption } from './FilterChips';
+import useModals from '@mobile/modals/hooks';
 
 export default function FooterBtsButton({
   filterOption,
 }: {
   filterOption: FilterChipOption;
 }) {
+  const { closeModal } = useModals();
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
@@ -20,6 +22,7 @@ export default function FooterBtsButton({
     };
     console.log('localValue', localValue);
     setFilterState({ ...filterState, ...localValue });
+    closeModal();
   };
 
   return (

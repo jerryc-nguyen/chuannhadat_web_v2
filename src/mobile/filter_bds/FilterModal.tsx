@@ -44,6 +44,9 @@ const FilterModal = () => {
     setFilterState({ ...filterState, ...localFilterState });
   };
 
+  console.log('filterState', filterState);
+  console.log('localFilterState', localFilterState);
+
   return (
     <>
       <Popup
@@ -66,7 +69,7 @@ const FilterModal = () => {
               </Link>
             }
           />
-          {JSON.stringify(filterState.price)}
+
           <BlockTitle>Loại tin</BlockTitle>
           <Block strongIos outlineIos className='space-y-4'>
             <Segmented outline>

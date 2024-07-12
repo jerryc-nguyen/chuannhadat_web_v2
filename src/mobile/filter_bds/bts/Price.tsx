@@ -25,8 +25,6 @@ export default function Price() {
 
   return (
     <>
-      {JSON.stringify(localFilterState)}
-
       <ListCheckOptions
         options={filterState.priceOptions!}
         selectedOption={localFilterState.price}

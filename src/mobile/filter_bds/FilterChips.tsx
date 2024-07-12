@@ -73,7 +73,6 @@ export default function FilterChips() {
 
   return (
     <Block strongIos outlineIos>
-      {JSON.stringify(localFilterState)}
       {FILTER_ITEMS.map((item) => (
         <Chip
           key={item.id}

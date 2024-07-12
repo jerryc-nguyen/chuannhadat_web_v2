@@ -27,7 +27,6 @@ import { useAtom } from 'jotai';
 import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@mobile/filter_bds/states';
 import FilterModal from '@mobile/filter_bds/FilterModal';
-import { BottomSheet } from 'react-spring-bottom-sheet';
 import { btsModalAtom } from '@mobile/modals/states';
 import ModalsFactory from '@mobile/modals';
 import FilterChips from '@mobile/filter_bds/FilterChips';

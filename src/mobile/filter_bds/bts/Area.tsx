@@ -21,8 +21,6 @@ export default function Area() {
 
   return (
     <>
-      {JSON.stringify(localFilterState)}
-
       <ListCheckOptions
         options={filterState.areaOptions!}
         selectedOption={localFilterState.area}
