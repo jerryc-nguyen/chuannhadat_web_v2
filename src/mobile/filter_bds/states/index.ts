@@ -18,6 +18,9 @@ export interface FilterState {
   priceOptions?: FilterOption[];
   areaOptions?: FilterOption[];
   directionOptions?: FilterOption[];
+  cityOptions?: FilterOption[];
+  districtOptions?: FilterOption[];
+  wardOptions?: FilterOption[];
   businessType?: FilterOption;
   categoryType?: FilterOption;
   bed?: FilterOption;
@@ -30,6 +33,10 @@ export interface FilterState {
   ward?: FilterOption;
 }
 
+export interface LocalFilterState extends FilterState {
+  innerViewLocationType?: string;
+}
+
 export const filterStateAtom = atom<FilterState>({
   businessTypeOptions: searchFormOptions.business_types,
   categoryTypeOptions: searchFormOptions.property_types,
@@ -38,6 +45,9 @@ export const filterStateAtom = atom<FilterState>({
   priceOptions: searchFormOptions.sell_prices,
   areaOptions: searchFormOptions.areas,
   directionOptions: searchFormOptions.directions,
+  cityOptions: searchFormOptions.locations.cities,
+  districtOptions: searchFormOptions.locations.districts,
+  wardOptions: searchFormOptions.locations.wards,
   businessType: undefined,
   categoryType: undefined,
   bed: undefined,
@@ -50,7 +60,7 @@ export const filterStateAtom = atom<FilterState>({
   ward: undefined,
 });
 
-export const localFilterStateAtom = atom<FilterState>({
+export const localFilterStateAtom = atom<LocalFilterState>({
   businessType: undefined,
   categoryType: undefined,
   bed: undefined,
@@ -61,4 +71,5 @@ export const localFilterStateAtom = atom<FilterState>({
   city: undefined,
   district: undefined,
   ward: undefined,
+  innerViewLocationType: undefined,
 });

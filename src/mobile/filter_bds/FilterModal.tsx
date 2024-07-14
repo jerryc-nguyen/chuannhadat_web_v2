@@ -30,6 +30,7 @@ import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import CategoryType from './bts/Category';
+import Locations from './bts/Locations';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -84,7 +85,17 @@ const FilterModal = () => {
           <BlockTitle>Thông tin cơ bản</BlockTitle>
 
           <List strongIos outlineIos>
-            <ListItem link title='Khu vực' onClick={() => {}} />
+            <ListItem
+              link
+              title='Khu vực'
+              onClick={() => {
+                openModal({
+                  name: FilterFieldName.locations.toString(),
+                  title: 'Khu vực',
+                  content: <Locations />,
+                });
+              }}
+            />
             <ListItem
               link
               title='Loại BĐS'
