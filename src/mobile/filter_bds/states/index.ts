@@ -7,6 +7,7 @@ export const defaultFilterOption: FilterOption = {
 };
 
 export const openFilterModalAtom = atom(false);
+export const locationsAtom = atom(false);
 
 import searchFormOptions from './search_form_options.json';
 
@@ -45,9 +46,9 @@ export const filterStateAtom = atom<FilterState>({
   priceOptions: searchFormOptions.sell_prices,
   areaOptions: searchFormOptions.areas,
   directionOptions: searchFormOptions.directions,
-  cityOptions: searchFormOptions.locations.cities,
-  districtOptions: searchFormOptions.locations.districts,
-  wardOptions: searchFormOptions.locations.wards,
+  cityOptions: [],
+  districtOptions: [],
+  wardOptions: [],
   businessType: undefined,
   categoryType: undefined,
   bed: undefined,
@@ -72,4 +73,8 @@ export const localFilterStateAtom = atom<LocalFilterState>({
   district: undefined,
   ward: undefined,
   innerViewLocationType: undefined,
+});
+
+export const closeInnerViewLocation = atom(null, (get, set) => {
+  let state = get(localFilterStateAtom);
 });

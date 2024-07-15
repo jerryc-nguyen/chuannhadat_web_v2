@@ -25,8 +25,11 @@ import CityOptions from './CityOptions';
 import DistrictOptions from './DistrictOptions';
 import WardOptions from './WardOptions';
 import ListItemOptionPicker from '@mobile/ui/ListItemOptionPicker';
+import useLocations from '@mobile/locations/hooks';
 
 export default function Locations() {
+  useLocations();
+
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );

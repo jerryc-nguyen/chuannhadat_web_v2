@@ -93,6 +93,7 @@ const FilterModal = () => {
                   name: FilterFieldName.locations.toString(),
                   title: 'Khu vực',
                   content: <Locations />,
+                  onAfterClose: () => {},
                 });
               }}
             />

@@ -19,6 +19,13 @@ export default function BtsModals() {
     setBtsRef(btsRef);
   }, []);
 
+  const onClose = () => {
+    if (modal?.onAfterClose) {
+      modal.onAfterClose();
+    }
+    setModal(undefined);
+  };
+
   const footerClassName = modal?.footer ? 'rss-footer' : 'hidden';
 
   return (
@@ -26,10 +33,7 @@ export default function BtsModals() {
       <Sheet
         ref={btsRef}
         open={modal != undefined}
-        onDismiss={() => setModal(undefined)}
-        onClose={() => {
-          console.log('Component unmounted');
-        }}
+        onDismiss={() => onClose()}
         useDarkMode={false}
         useModal={false}
         scrollingExpands={false}

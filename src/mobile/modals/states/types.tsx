@@ -7,6 +7,7 @@ export interface DefaultModal {
   content?: ReactElement | string;
   footer?: ReactElement | string;
   btsProps?: SheetProps;
+  onAfterClose?: () => void;
 }
 
 export type Modal = DefaultModal;
