@@ -22,6 +22,7 @@ import {
 import { IoChevronDownOutline } from 'react-icons/io5';
 import InnerModal from '@mobile/modals/InnerModal';
 import City from './City';
+import ListItemOptionPicker from '@mobile/ui/ListItemOptionPicker';
 export default function Locations() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
@@ -30,16 +31,9 @@ export default function Locations() {
   return (
     <div>
       <List strongIos>
-        <ListItem
-          link
-          title='Thành phố'
-          after={
-            <>
-              Hồ chí minh
-              <IoChevronDownOutline />
-            </>
-          }
-          chevron={false}
+        <ListItemOptionPicker
+          placeholder='Thành Phố'
+          value={localFilterState.city?.text}
           onClick={() => {
             setLocalFilterState({
               ...localFilterState,
@@ -48,16 +42,9 @@ export default function Locations() {
           }}
         />
 
-        <ListItem
-          link
-          title='Quận / Huyện'
-          after={
-            <>
-              Tân phú
-              <IoChevronDownOutline />
-            </>
-          }
-          chevron={false}
+        <ListItemOptionPicker
+          placeholder='Quận / Huyện'
+          value={localFilterState.district?.text}
           onClick={() => {
             setLocalFilterState({
               ...localFilterState,
@@ -66,16 +53,9 @@ export default function Locations() {
           }}
         />
 
-        <ListItem
-          link
-          title='Phường / Xã'
-          after={
-            <>
-              Tân Sơn Nhì
-              <IoChevronDownOutline />
-            </>
-          }
-          chevron={false}
+        <ListItemOptionPicker
+          placeholder='Phường / Xã'
+          value={localFilterState.ward?.text}
           onClick={() => {
             setLocalFilterState({
               ...localFilterState,
@@ -84,6 +64,7 @@ export default function Locations() {
           }}
         />
       </List>
+
       {localFilterState.innerViewLocationType && (
         <div className='innerView'>
           <InnerModal
