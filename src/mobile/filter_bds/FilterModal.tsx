@@ -24,7 +24,7 @@ import {
 } from './states';
 
 import { FilterFieldName } from './types';
-import { selectedFilterText } from './helpers';
+
 import { btsModalAtom } from '../modals/states';
 import Area from './bts/Area';
 import Price from './bts/Price';
@@ -147,28 +147,19 @@ const FilterModal = () => {
                   content: 'Phòng ngủ',
                 });
               }}
-              after={selectedFilterText(
-                filterState,
-                FilterFieldName.bed
-              )}
+              after={''}
             />
             <ListItem
               link
               title='Phòng tắm'
               onClick={() => {}}
-              after={selectedFilterText(
-                filterState,
-                FilterFieldName.bath
-              )}
+              after={''}
             />
             <ListItem
               link
               title='Hướng'
               onClick={() => {}}
-              after={selectedFilterText(
-                filterState,
-                FilterFieldName.direction
-              )}
+              after={''}
             />
           </List>
 

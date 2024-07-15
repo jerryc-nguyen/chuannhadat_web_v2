@@ -13,7 +13,7 @@ import {
   localFilterStateAtom,
 } from '@mobile/filter_bds/states';
 
-export default function City() {
+export default function DistrictOptions() {
   const [filterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
@@ -22,10 +22,13 @@ export default function City() {
   return (
     <>
       <ListCheckOptions
-        options={filterState.cityOptions!}
-        selectedOption={localFilterState.city}
+        options={filterState.districtOptions!}
+        selectedOption={localFilterState.district}
         onSelect={(option: FilterOption) => {
-          setLocalFilterState({ ...localFilterState, city: option });
+          setLocalFilterState({
+            ...localFilterState,
+            district: option,
+          });
         }}
       ></ListCheckOptions>
     </>

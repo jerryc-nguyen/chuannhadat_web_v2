@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useAtom } from 'jotai';
 
 import {
@@ -21,12 +21,39 @@ import {
 } from 'konsta/react';
 import { IoChevronDownOutline } from 'react-icons/io5';
 import InnerModal from '@mobile/modals/InnerModal';
-import City from './City';
+import CityOptions from './CityOptions';
+import DistrictOptions from './DistrictOptions';
+import WardOptions from './WardOptions';
 import ListItemOptionPicker from '@mobile/ui/ListItemOptionPicker';
+
 export default function Locations() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
+
+  const buildInnerViewContent = () => {
+    if (localFilterState.innerViewLocationType == 'city') {
+      return <CityOptions />;
+    } else if (localFilterState.innerViewLocationType == 'district') {
+      return <DistrictOptions />;
+    } else if (localFilterState.innerViewLocationType == 'ward') {
+      return <WardOptions />;
+    } else {
+      ('');
+    }
+  };
+
+  const buildInnerViewTitle = () => {
+    if (localFilterState.innerViewLocationType == 'city') {
+      return 'Thành Phố';
+    } else if (localFilterState.innerViewLocationType == 'district') {
+      return 'Quận / Huyện';
+    } else if (localFilterState.innerViewLocationType == 'ward') {
+      return 'Phường / Xã';
+    } else {
+      ('');
+    }
+  };
 
   return (
     <div>
@@ -74,8 +101,8 @@ export default function Locations() {
                 innerViewLocationType: undefined,
               });
             }}
-            title='Thành phố'
-            content={<City />}
+            title={buildInnerViewTitle()}
+            content={buildInnerViewContent()}
           />
         </div>
       )}
