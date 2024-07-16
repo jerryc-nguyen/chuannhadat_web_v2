@@ -26,6 +26,10 @@ import DistrictOptions from './DistrictOptions';
 import WardOptions from './WardOptions';
 import ListItemOptionPicker from '@mobile/ui/ListItemOptionPicker';
 import useLocations from '@mobile/locations/hooks';
+import {
+  innerBtsLocationAtom,
+  InnerBtsEnum,
+} from '@mobile/modals/states/inner_view';
 
 export default function Locations() {
   useLocations();
@@ -34,12 +38,16 @@ export default function Locations() {
     localFilterStateAtom
   );
 
+  const [innerBtsLocation, setInnerBtsType] = useAtom(
+    innerBtsLocationAtom
+  );
+
   const buildInnerViewContent = () => {
-    if (localFilterState.innerViewLocationType == 'city') {
+    if (innerBtsLocation == InnerBtsEnum.city) {
       return <CityOptions />;
-    } else if (localFilterState.innerViewLocationType == 'district') {
+    } else if (innerBtsLocation == InnerBtsEnum.district) {
       return <DistrictOptions />;
-    } else if (localFilterState.innerViewLocationType == 'ward') {
+    } else if (innerBtsLocation == InnerBtsEnum.ward) {
       return <WardOptions />;
     } else {
       ('');
@@ -47,11 +55,11 @@ export default function Locations() {
   };
 
   const buildInnerViewTitle = () => {
-    if (localFilterState.innerViewLocationType == 'city') {
+    if (innerBtsLocation == InnerBtsEnum.city) {
       return 'Thành Phố';
-    } else if (localFilterState.innerViewLocationType == 'district') {
+    } else if (innerBtsLocation == InnerBtsEnum.district) {
       return 'Quận / Huyện';
-    } else if (localFilterState.innerViewLocationType == 'ward') {
+    } else if (innerBtsLocation == InnerBtsEnum.ward) {
       return 'Phường / Xã';
     } else {
       ('');
@@ -65,10 +73,7 @@ export default function Locations() {
           placeholder='Thành Phố'
           value={localFilterState.city?.text}
           onClick={() => {
-            setLocalFilterState({
-              ...localFilterState,
-              innerViewLocationType: 'city',
-            });
+            setInnerBtsType(InnerBtsEnum.city);
           }}
         />
 
@@ -76,10 +81,7 @@ export default function Locations() {
           placeholder='Quận / Huyện'
           value={localFilterState.district?.text}
           onClick={() => {
-            setLocalFilterState({
-              ...localFilterState,
-              innerViewLocationType: 'district',
-            });
+            setInnerBtsType(InnerBtsEnum.district);
           }}
         />
 
@@ -87,22 +89,16 @@ export default function Locations() {
           placeholder='Phường / Xã'
           value={localFilterState.ward?.text}
           onClick={() => {
-            setLocalFilterState({
-              ...localFilterState,
-              innerViewLocationType: 'ward',
-            });
+            setInnerBtsType(InnerBtsEnum.ward);
           }}
         />
       </List>
 
-      {localFilterState.innerViewLocationType && (
+      {innerBtsLocation != undefined && (
         <div className='innerView'>
           <InnerModal
             onClose={() => {
-              setLocalFilterState({
-                ...localFilterState,
-                innerViewLocationType: undefined,
-              });
+              setInnerBtsType(undefined);
             }}
             title={buildInnerViewTitle()}
             content={buildInnerViewContent()}

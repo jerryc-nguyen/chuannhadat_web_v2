@@ -20,8 +20,8 @@ export default function BtsModals() {
   }, []);
 
   const onClose = () => {
-    if (modal?.onAfterClose) {
-      modal.onAfterClose();
+    if (modal?.onClosed) {
+      modal.onClosed();
     }
     setModal(undefined);
   };

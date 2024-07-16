@@ -16,10 +16,21 @@ export default function FooterBtsButton({
   );
 
   const onApplyFilter = (filterOption: FilterChipOption) => {
-    const localValue = {
-      // @ts-ignore
-      [filterOption.id]: localFilterState[filterOption.id],
-    };
+    let localValue = {};
+
+    if (filterOption.id == 'locations') {
+      localValue = {
+        city: localFilterState.city,
+        district: localFilterState.district,
+        ward: localFilterState.ward,
+      };
+    } else {
+      localValue = {
+        // @ts-ignore
+        [filterOption.id]: localFilterState[filterOption.id],
+      };
+    }
+
     setFilterState({ ...filterState, ...localValue });
     closeModal();
   };

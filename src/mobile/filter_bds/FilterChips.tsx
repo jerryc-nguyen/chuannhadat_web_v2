@@ -7,6 +7,7 @@ import { btsModalAtom } from '@mobile/modals/states';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
+import Locations from './bts/Locations';
 
 export interface FilterChipOption {
   id: string;
@@ -23,6 +24,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     text: 'Loại tin',
   },
   { id: 'categoryType', text: 'Loại nhà đất' },
+  { id: 'locations', text: 'Khu vực' },
   {
     id: 'price',
     text: 'Mức giá',
@@ -58,6 +60,8 @@ export default function FilterChips() {
         return <Price />;
       case 'area':
         return <Area />;
+      case 'locations':
+        return <Locations />;
       default:
         return undefined;
     }

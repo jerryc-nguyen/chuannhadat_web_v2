@@ -34,10 +34,6 @@ export interface FilterState {
   ward?: FilterOption;
 }
 
-export interface LocalFilterState extends FilterState {
-  innerViewLocationType?: string;
-}
-
 export const filterStateAtom = atom<FilterState>({
   businessTypeOptions: searchFormOptions.business_types,
   categoryTypeOptions: searchFormOptions.property_types,
@@ -61,7 +57,7 @@ export const filterStateAtom = atom<FilterState>({
   ward: undefined,
 });
 
-export const localFilterStateAtom = atom<LocalFilterState>({
+export const localFilterStateAtom = atom<FilterState>({
   businessType: undefined,
   categoryType: undefined,
   bed: undefined,
@@ -72,9 +68,4 @@ export const localFilterStateAtom = atom<LocalFilterState>({
   city: undefined,
   district: undefined,
   ward: undefined,
-  innerViewLocationType: undefined,
-});
-
-export const closeInnerViewLocation = atom(null, (get, set) => {
-  let state = get(localFilterStateAtom);
 });

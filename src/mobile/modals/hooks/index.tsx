@@ -4,8 +4,8 @@ import { btsModalAtom } from '../states';
 export default function useModals() {
   const [modal, setModal] = useAtom(btsModalAtom);
   const closeModal = () => {
-    if (modal?.onAfterClose) {
-      modal.onAfterClose();
+    if (modal?.onClosed) {
+      modal.onClosed();
     }
     setModal(undefined);
   };

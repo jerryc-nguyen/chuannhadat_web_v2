@@ -31,6 +31,7 @@ import Price from './bts/Price';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import CategoryType from './bts/Category';
 import Locations from './bts/Locations';
+import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -42,6 +43,8 @@ const FilterModal = () => {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
+
+  const [, setInnerBtsType] = useAtom(innerBtsLocationAtom);
 
   const applySelectedFilters = () => {
     setFilterState({ ...filterState, ...localFilterState });
@@ -93,7 +96,9 @@ const FilterModal = () => {
                   name: FilterFieldName.locations.toString(),
                   title: 'Khu vực',
                   content: <Locations />,
-                  onAfterClose: () => {},
+                  onClosed: () => {
+                    setInnerBtsType(undefined);
+                  },
                 });
               }}
             />
