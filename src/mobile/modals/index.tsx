@@ -12,20 +12,18 @@ export default function BtsModals() {
 
   useEffect(() => {
     setBtsRef(btsRef);
-  }, []);
+  }, [setBtsRef]);
 
   const onClose = () => {
-    // if (modal?.onClosed) {
-    //   modal.onClosed();
-    // }
+    if (modal?.onClosed) {
+      modal.onClosed();
+    }
     setModal(undefined);
   };
 
-  const footerClassName = modal?.footer ? 'rss-footer' : 'hidden';
-
   return (
     <BottomSheet
-      blocking={false}
+      ref={btsRef}
       open={modal != undefined}
       onDismiss={() => onClose()}
       defaultSnap={({ snapPoints, lastSnap }) =>
@@ -37,18 +35,8 @@ export default function BtsModals() {
       ]}
       header={modal?.title || 'Missing title'}
       footer={modal?.footer}
-      sibling={
-        <div
-          data-rsbs-backdrop='true'
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onClose();
-          }}
-        />
-      }
     >
-      {modal?.content || 'Missing content'}
+      <div>{modal?.content || 'Missing content'}</div>
     </BottomSheet>
   );
 }
