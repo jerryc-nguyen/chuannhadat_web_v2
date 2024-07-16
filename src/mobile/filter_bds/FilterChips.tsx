@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { filterStateAtom, localFilterStateAtom } from './states';
 import { useAtom } from 'jotai';
 import { FilterOption } from './types';
-import { btsModalAtom } from '@mobile/modals/states';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
+import useModals from '@mobile/modals/hooks';
 
 export interface FilterChipOption {
   id: string;
@@ -49,7 +49,8 @@ export default function FilterChips() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
-  const [, openModal] = useAtom(btsModalAtom);
+  const { openModal } = useModals();
+
   const selectedFilterText = (filterOption: FilterChipOption) => {
     // @ts-ignore
     return filterState[filterOption.id]?.text ?? filterOption.text;

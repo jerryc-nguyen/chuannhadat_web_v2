@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.innerView {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
+:root {
+  --rsbs-backdrop-bg: rgba(0, 0, 0, 0.6);
+  --rsbs-bg: #fff;
+  --rsbs-handle-bg: hsla(0, 0%, 0%, 0.14);
+  --rsbs-max-w: auto;
+  --rsbs-ml: env(safe-area-inset-left);
+  --rsbs-mr: env(safe-area-inset-right);
+  --rsbs-overlay-rounded: 16px;
 }

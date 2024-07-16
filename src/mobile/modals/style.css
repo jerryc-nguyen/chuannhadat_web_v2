@@ -1,0 +1,15 @@
+[data-rsbs-backdrop] {
+  z-index: 999 !important;
+}
+
+[data-rsbs-overlay] {
+  z-index: 999 !important;
+}
+
+.innerView {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}

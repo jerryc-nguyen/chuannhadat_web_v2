@@ -6,12 +6,12 @@ import { Navbar, Searchbar, Icon } from 'konsta/react';
 import {
   IoMenuOutline,
   IoHeartOutline,
-  IoNotificationsOutline
+  IoNotificationsOutline,
 } from 'react-icons/io5';
 
 export default function MainNav({
   type,
-  onSearchClick = () => {}
+  onSearchClick = () => {},
 }: {
   type: string | null;
   onSearchClick?: Function;
@@ -20,28 +20,31 @@ export default function MainNav({
 
   const LeftItems = () => {
     return (
-      <img src="https://chuannhadat.com/images/logo_mobile@2x.png" width="40" />
+      <img
+        src='https://chuannhadat.com/images/logo_mobile@2x.png'
+        width='40'
+      />
     );
   };
 
   const RightItems = () => {
     return (
       <>
-        <span className="flex items-center justify-center border rounded-full p-2 mr-2">
+        <span className='flex items-center justify-center border rounded-full p-2 mr-2'>
           <Icon
-            ios={<IoNotificationsOutline className="w-5 h-5" />}
+            ios={<IoNotificationsOutline className='w-5 h-5' />}
             badgeColors={{ bg: 'bg-red-500' }}
           />
         </span>
-        <span className="flex items-center justify-center border rounded-full p-2 mr-2">
+        <span className='flex items-center justify-center border rounded-full p-2 mr-2'>
           <Icon
-            ios={<IoHeartOutline className="w-5 h-5" />}
+            ios={<IoHeartOutline className='w-5 h-5' />}
             badgeColors={{ bg: 'bg-red-500' }}
           />
         </span>
-        <span className="flex items-center justify-center border rounded-full p-2 mr-2">
+        <span className='flex items-center justify-center border rounded-full p-2 mr-2'>
           <Icon
-            ios={<IoMenuOutline className="w-5 h-5" />}
+            ios={<IoMenuOutline className='w-5 h-5' />}
             badgeColors={{ bg: 'bg-red-500' }}
           />
         </span>

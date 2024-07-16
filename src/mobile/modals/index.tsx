@@ -1,14 +1,9 @@
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { btsRefAtom, btsModalAtom } from './states';
-import {
-  Sheet,
-  Header,
-  Content,
-  Footer,
-  detents,
-  Portal,
-} from 'react-sheet-slide';
+import { BottomSheet } from 'react-spring-bottom-sheet';
+import 'react-spring-bottom-sheet/dist/style.css';
+import './style.css';
 
 export default function BtsModals() {
   const btsRef = useRef(null);
@@ -20,43 +15,40 @@ export default function BtsModals() {
   }, []);
 
   const onClose = () => {
-    if (modal?.onClosed) {
-      modal.onClosed();
-    }
+    // if (modal?.onClosed) {
+    //   modal.onClosed();
+    // }
     setModal(undefined);
   };
 
   const footerClassName = modal?.footer ? 'rss-footer' : 'hidden';
 
   return (
-    <Portal>
-      <Sheet
-        ref={btsRef}
-        open={modal != undefined}
-        onDismiss={() => onClose()}
-        useDarkMode={false}
-        useModal={false}
-        scrollingExpands={false}
-        detents={(props) => [
-          detents.large(props),
-          detents.medium(props),
-        ]}
-        backdropClassName='c-btsModal__defaultBackdrop ss-sheet-backdrop'
-      >
-        <Header
-          className='rss-header'
-          scrolledClassName='rss-header-scrolled'
-        >
-          {modal?.title || 'Missing title'}
-        </Header>
-        <Content className='rss-content'>
-          <div style={{ paddingTop: '54px' }}>
-            {modal?.content || 'Missing content'}
-          </div>
-        </Content>
-
-        <Footer className={footerClassName}>{modal?.footer}</Footer>
-      </Sheet>
-    </Portal>
+    <BottomSheet
+      blocking={false}
+      open={modal != undefined}
+      onDismiss={() => onClose()}
+      defaultSnap={({ snapPoints, lastSnap }) =>
+        lastSnap ?? Math.min(...snapPoints)
+      }
+      snapPoints={({ maxHeight }) => [
+        maxHeight - maxHeight / 5,
+        maxHeight * 0.6,
+      ]}
+      header={modal?.title || 'Missing title'}
+      footer={modal?.footer}
+      sibling={
+        <div
+          data-rsbs-backdrop='true'
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onClose();
+          }}
+        />
+      }
+    >
+      {modal?.content || 'Missing content'}
+    </BottomSheet>
   );
 }

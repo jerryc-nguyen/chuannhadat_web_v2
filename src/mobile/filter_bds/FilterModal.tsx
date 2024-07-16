@@ -25,19 +25,19 @@ import {
 
 import { FilterFieldName } from './types';
 
-import { btsModalAtom } from '../modals/states';
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import CategoryType from './bts/Category';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
+import useModals from '@mobile/modals/hooks';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
   const [activeSegmented, setActiveSegmented] = useState(1);
 
-  const [, openModal] = useAtom(btsModalAtom);
+  const { openModal } = useModals();
 
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
