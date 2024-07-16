@@ -8,6 +8,7 @@ import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
+import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 
 export interface FilterChipOption {
   id: string;
@@ -53,6 +54,7 @@ export default function FilterChips() {
     // @ts-ignore
     return filterState[filterOption.id]?.text ?? filterOption.text;
   };
+  const [, setInnerBtsLocation] = useAtom(innerBtsLocationAtom);
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
@@ -73,6 +75,9 @@ export default function FilterChips() {
       title: filterOption.text,
       content: buildContent(filterOption),
       footer: <FooterBtsButton filterOption={filterOption} />,
+      onClosed: () => {
+        setInnerBtsLocation(undefined);
+      },
     });
   };
 
