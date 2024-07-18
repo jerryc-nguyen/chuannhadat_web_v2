@@ -5,7 +5,7 @@ export interface DefaultModal {
   title?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;
-  snapPoints?: Array<number>;
+  maxHeightPercent?: number;
   closeThreshold?: number;
   btsProps?: any;
   onClosed?: () => void;

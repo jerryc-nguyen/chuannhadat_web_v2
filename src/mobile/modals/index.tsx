@@ -4,6 +4,8 @@ import { btsModal2Atom, btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
+import { Modal } from './states/types';
+import { getViewportSize } from '@utils/useViewportSize';
 
 export function BtsModals1() {
   const [modal, setModal] = useAtom(btsModalAtom);
@@ -27,7 +29,6 @@ export function BtsModals1() {
       open={modal != undefined}
       onOpenChange={onOpenChange}
       onClose={onClose}
-      {...(modal ?? {})}
     >
       <Drawer.Portal>
         <Drawer.Overlay className='fixed inset-0 bg-black/40' />
@@ -40,7 +41,13 @@ export function BtsModals1() {
               <IoCloseOutline size={30} />
             </button>
           </div>
-          <div data-vaul-no-drag className='c-bts__content'>
+          <div
+            data-vaul-no-drag
+            className='c-bts__content'
+            style={{
+              ...buildContentStyle(modal),
+            }}
+          >
             {modal?.content}
           </div>
           {modal?.footer && (
@@ -53,6 +60,19 @@ export function BtsModals1() {
     </Drawer.Root>
   );
 }
+
+const buildContentStyle = (modal?: Modal) => {
+  if (!modal) {
+    return {};
+  }
+  const headerHeight = 50;
+  const footerHeight = modal?.footer ? 50 : 0;
+  const viewportSizes = getViewportSize();
+  const maxHeightPercent = modal.maxHeightPercent ?? 0.6;
+  const contentHeight =
+    viewportSizes[1] * maxHeightPercent - headerHeight - footerHeight;
+  return { height: contentHeight + 'px' };
+};
 
 export function BtsModals2() {
   const [modal, setModal] = useAtom(btsModal2Atom);
@@ -75,7 +95,6 @@ export function BtsModals2() {
       open={modal != undefined}
       onOpenChange={onOpenChange}
       onClose={onClose}
-      {...modal}
     >
       <Drawer.Portal>
         <Drawer.Overlay className='fixed inset-0 bg-black/40' />
@@ -88,7 +107,13 @@ export function BtsModals2() {
               <IoCloseOutline size={30} />
             </button>
           </div>
-          <div data-vaul-no-drag className='c-bts__content'>
+          <div
+            data-vaul-no-drag
+            className='c-bts__content'
+            style={{
+              ...buildContentStyle(modal),
+            }}
+          >
             {modal?.content}
           </div>
           {modal?.footer && (

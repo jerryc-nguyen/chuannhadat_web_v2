@@ -40,7 +40,7 @@ export default function Mobile() {
       name: 'filter_modal',
       title: 'Lọc',
       content: <FilterModal />,
-      snapPoints: [0.8],
+      maxHeightPercent: 0.8,
     });
   };
   return (
