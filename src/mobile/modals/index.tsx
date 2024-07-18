@@ -1,20 +1,11 @@
 import { useAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
-import { btsRefAtom, btsModalAtom, openBtsModalAtom } from './states';
-// import { BottomSheet } from 'react-spring-bottom-sheet';
-// import 'react-spring-bottom-sheet/dist/style.css';
+
+import { btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
-// import { Toolbar } from 'konsta/react';
 
 export default function BtsModals() {
-  const btsRef = useRef(null);
   const [modal, setModal] = useAtom(btsModalAtom);
-  const [_, setBtsRef] = useAtom(btsRefAtom);
-
-  useEffect(() => {
-    setBtsRef(btsRef);
-  }, [setBtsRef]);
 
   const onClose = () => {
     if (modal?.onClosed) {
