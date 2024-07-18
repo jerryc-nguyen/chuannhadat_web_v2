@@ -9,6 +9,13 @@
     height: 3.5rem;
     padding-top: 0.5rem;
   }
+  &__mask {
+    position: absolute;
+    height: 40px;
+    width: 100vw;
+    top: 5px;
+    left: 0;
+  }
 }
 
 .c-mainNav__sub {

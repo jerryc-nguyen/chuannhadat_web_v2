@@ -62,10 +62,13 @@ export default function MainNav({
       right={<RightItems />}
       subnavbarClassName={`c-mainNav__sub ${utilClass}`}
       subnavbar={
-        <Searchbar
-          inputStyle={{ borderRadius: '30px' }}
-          onClick={() => onSearchClick()}
-        />
+        <div style={{ display: 'block', width: '100%' }}>
+          <Searchbar inputStyle={{ borderRadius: '30px' }} />
+          <div
+            className='c-mainNav__mask'
+            onClick={() => onSearchClick()}
+          ></div>
+        </div>
       }
     />
   );

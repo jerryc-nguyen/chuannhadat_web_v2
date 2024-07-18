@@ -32,23 +32,22 @@
     margin-right: -0.5em;
   }
   &__header {
-    background-color: #f2f2f6;
+    background-color: #eee;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    box-shadow: 0 1px 0 #dbdbde;
-    padding: 1em;
+    padding: 0.8em 1em;
   }
 
   &__content {
-    max-height: 60vh;
-    height: 60vh;
+    // max-height: 60vh;
+    // height: 60vh;
     overflow-y: scroll;
     background-color: #fff;
   }
 
   &__footer {
-    background-color: #f2f2f6;
-    padding: 1em;
+    background-color: #eee;
+    padding: 0.8em 1em;
   }
 }
 

@@ -28,18 +28,27 @@ import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@mobile/filter_bds/states';
 import FilterModal from '@mobile/filter_bds/FilterModal';
 
-import ModalsFactory from '@mobile/modals';
+import { BtsModals1, BtsModals2 } from '@mobile/modals';
 import FilterChips from '@mobile/filter_bds/FilterChips';
+import useModals from '@mobile/modals/hooks';
 
 export default function Mobile() {
-  const [, setIsOpen] = useAtom(openFilterModalAtom);
+  const { openModal2 } = useModals();
 
+  const openFilterModal = () => {
+    openModal2({
+      name: 'filter_modal',
+      title: 'Lọc',
+      content: <FilterModal />,
+      snapPoints: [0.8],
+    });
+  };
   return (
     <App theme='ios'>
       <Page>
         <MainNav
           type='SearchInSub'
-          onSearchClick={() => setIsOpen(true)}
+          onSearchClick={() => openFilterModal()}
         />
 
         <FilterChips />
@@ -54,9 +63,8 @@ export default function Mobile() {
           <Button onClick={() => {}}>Open Bottom Sheet</Button>
           <Button>Button 2</Button>
         </Block>
-
-        <ModalsFactory />
-        <FilterModal />
+        <BtsModals2 />
+        <BtsModals1 />
       </Page>
     </App>
   );
