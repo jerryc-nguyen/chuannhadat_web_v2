@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { getUserAgentInfo } from '@utils/ssrUserAgent';
 
 import './globals.css';
 // import './react-slide.css';
@@ -15,9 +16,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isMobile } = getUserAgentInfo();
+  const mobileClass = isMobile ? 'isMobile' : '';
+
   return (
     <html lang='en'>
-      <body className={inter.className + ' modal-root'}>
+      <body className={inter.className + ` ${mobileClass} `}>
         {children}
       </body>
     </html>

@@ -1,9 +1,11 @@
 import { useAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
-import { btsRefAtom, btsModalAtom } from './states';
-import { BottomSheet } from 'react-spring-bottom-sheet';
-import 'react-spring-bottom-sheet/dist/style.css';
-import './style.css';
+import { btsRefAtom, btsModalAtom, openBtsModalAtom } from './states';
+// import { BottomSheet } from 'react-spring-bottom-sheet';
+// import 'react-spring-bottom-sheet/dist/style.css';
+import './style.scss';
+import { Drawer } from 'vaul';
+// import { Toolbar } from 'konsta/react';
 
 export default function BtsModals() {
   const btsRef = useRef(null);
@@ -21,22 +23,29 @@ export default function BtsModals() {
     setModal(undefined);
   };
 
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
+
   return (
-    <BottomSheet
-      ref={btsRef}
+    <Drawer.Root
+      shouldScaleBackground
       open={modal != undefined}
-      onDismiss={() => onClose()}
-      defaultSnap={({ snapPoints, lastSnap }) =>
-        lastSnap ?? Math.min(...snapPoints)
-      }
-      snapPoints={({ maxHeight }) => [
-        maxHeight - maxHeight / 5,
-        maxHeight * 0.6,
-      ]}
-      header={modal?.title || 'Missing title'}
-      footer={modal?.footer}
+      onOpenChange={onOpenChange}
+      onClose={onClose}
     >
-      <div>{modal?.content || 'Missing content'}</div>
-    </BottomSheet>
+      <Drawer.Portal>
+        <Drawer.Overlay className='fixed inset-0 bg-black/40' />
+        <Drawer.Content className='bg-zinc-100 flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
+          <Drawer.Title className='font-medium mb-4'>
+            {modal?.title}
+          </Drawer.Title>
+          <div className='c-bts__content'>{modal?.content}</div>
+          <div className='c-bts__footer'>{modal?.footer}</div>
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
   );
 }

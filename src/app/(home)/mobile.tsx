@@ -27,17 +27,12 @@ import { useAtom } from 'jotai';
 import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@mobile/filter_bds/states';
 import FilterModal from '@mobile/filter_bds/FilterModal';
-import { btsModalAtom } from '@mobile/modals/states';
+
 import ModalsFactory from '@mobile/modals';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 
 export default function Mobile() {
   const [, setIsOpen] = useAtom(openFilterModalAtom);
-  const [, openModal] = useAtom(btsModalAtom);
-
-  const onClick = () => {
-    openModal({ name: 'test_modal' });
-  };
 
   return (
     <App theme='ios'>
@@ -56,12 +51,12 @@ export default function Mobile() {
         </List>
 
         <Block strong className='flex space-x-4'>
-          <Button onClick={onClick}>Open Bottom Sheet</Button>
+          <Button onClick={() => {}}>Open Bottom Sheet</Button>
           <Button>Button 2</Button>
         </Block>
 
-        <FilterModal />
         <ModalsFactory />
+        <FilterModal />
       </Page>
     </App>
   );
