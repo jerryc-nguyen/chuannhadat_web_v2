@@ -6,6 +6,11 @@ import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
 import { Modal } from './states/types';
 import { getViewportSize } from '@utils/useViewportSize';
+import { useMemo } from 'react';
+
+export const HEADER_HEIGHT = 58.59;
+export const FOOTER_HEIGHT = 54.59;
+export const DEFAULT_HEIGHT_PERCENT = 0.6;
 
 export function BtsModals1() {
   const [modal, setModal] = useAtom(btsModalAtom);
@@ -23,6 +28,10 @@ export function BtsModals1() {
     }
   };
 
+  const headerClass = useMemo(() => {
+    return buildHeaderClass(modal);
+  }, [modal]);
+
   return (
     <Drawer.Root
       shouldScaleBackground
@@ -31,9 +40,11 @@ export function BtsModals1() {
       onClose={onClose}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className='fixed inset-0 bg-black/40' />
+        <Drawer.Overlay className='c-bts__overlay1 fixed inset-0 bg-black/40' />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
-          <div className='c-bts__header flex justify-between items-center'>
+          <div
+            className={`c-bts__header flex justify-between items-center ${headerClass}`}
+          >
             <Drawer.Title className='c-bts__title'>
               {modal?.title}
             </Drawer.Title>
@@ -65,13 +76,23 @@ const buildContentStyle = (modal?: Modal) => {
   if (!modal) {
     return {};
   }
-  const headerHeight = 50;
-  const footerHeight = modal?.footer ? 50 : 0;
+
   const viewportSizes = getViewportSize();
-  const maxHeightPercent = modal.maxHeightPercent ?? 0.6;
+  const maxHeightPercent =
+    modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
+  const footerHeight = modal?.footer ? FOOTER_HEIGHT : 0;
   const contentHeight =
-    viewportSizes[1] * maxHeightPercent - headerHeight - footerHeight;
+    viewportSizes[1] * maxHeightPercent -
+    HEADER_HEIGHT -
+    footerHeight;
   return { height: contentHeight + 'px' };
+};
+
+const buildHeaderClass = (modal?: Modal) => {
+  if (!modal) {
+    return '';
+  }
+  return modal.maxHeightPercent == 1 ? 'isFull' : '';
 };
 
 export function BtsModals2() {
@@ -90,6 +111,10 @@ export function BtsModals2() {
     }
   };
 
+  const headerClass = useMemo(() => {
+    return buildHeaderClass(modal);
+  }, [modal]);
+
   return (
     <Drawer.Root
       open={modal != undefined}
@@ -97,9 +122,11 @@ export function BtsModals2() {
       onClose={onClose}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className='fixed inset-0 bg-black/40' />
+        <Drawer.Overlay className='c-bts__overlay2 fixed inset-0 bg-black/40' />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
-          <div className='c-bts__header flex justify-between items-center'>
+          <div
+            className={`c-bts__header flex justify-between items-center ${headerClass}`}
+          >
             <Drawer.Title className='c-bts__title'>
               {modal?.title}
             </Drawer.Title>

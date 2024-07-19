@@ -40,7 +40,7 @@ export default function Mobile() {
       name: 'filter_modal',
       title: 'Lọc',
       content: <FilterModal />,
-      maxHeightPercent: 0.8,
+      maxHeightPercent: 1,
     });
   };
   return (
