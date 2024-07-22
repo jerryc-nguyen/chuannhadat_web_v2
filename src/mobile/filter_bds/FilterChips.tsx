@@ -9,9 +9,10 @@ import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
+import { ModalNames } from '@mobile/modals/states/types';
 
 export interface FilterChipOption {
-  id: string;
+  id: string | ModalNames;
   text: string;
 }
 
@@ -25,7 +26,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     text: 'Loại tin',
   },
   { id: 'categoryType', text: 'Loại nhà đất' },
-  { id: 'locations', text: 'Khu vực' },
+  { id: ModalNames.locations, text: 'Khu vực' },
   {
     id: 'price',
     text: 'Mức giá',
@@ -63,7 +64,7 @@ export default function FilterChips() {
         return <Price />;
       case 'area':
         return <Area />;
-      case 'locations':
+      case ModalNames.locations:
         return <Locations />;
       default:
         return undefined;

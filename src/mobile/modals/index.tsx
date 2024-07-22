@@ -4,7 +4,7 @@ import { btsModal2Atom, btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
-import { Modal } from './states/types';
+import { Modal, ModalNames } from './states/types';
 import { getViewportSize } from '@utils/useViewportSize';
 import { useMemo } from 'react';
 
@@ -85,7 +85,22 @@ const buildContentStyle = (modal?: Modal) => {
     viewportSizes[1] * maxHeightPercent -
     HEADER_HEIGHT -
     footerHeight;
-  return { height: contentHeight + 'px' };
+  const defaultHeight = buildDefaultContentHeight(modal);
+  const heights = [contentHeight];
+  if (defaultHeight) {
+    heights.push(defaultHeight);
+  }
+  const selectedHeight = Math.min(...heights);
+  return { height: selectedHeight + 'px' };
+};
+
+const buildDefaultContentHeight = (modal: Modal) => {
+  switch (modal.name) {
+    case ModalNames.locations:
+      return 220;
+    default:
+      return undefined;
+  }
 };
 
 const buildHeaderClass = (modal?: Modal) => {

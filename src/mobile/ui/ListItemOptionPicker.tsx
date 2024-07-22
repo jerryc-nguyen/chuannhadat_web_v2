@@ -16,7 +16,7 @@ const ListItemOptionPicker = ({
       {!value && (
         <ListItem
           link
-          title={`Chọn ${placeholder}`}
+          title={placeholder}
           after=''
           onClick={onClick}
         />

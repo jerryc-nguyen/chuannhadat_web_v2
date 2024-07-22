@@ -69,42 +69,27 @@ export default function Locations() {
   return (
     <div>
       <List strongIos>
-        <ListItemOptionPicker
-          placeholder='Thành Phố'
-          value={localFilterState.city?.text}
-          onClick={() => {
-            setInnerBtsType(InnerBtsEnum.city);
-          }}
+        <ListItem
+          link
+          title='Thành Phố'
+          after=''
+          onClick={() => {}}
         />
 
-        <ListItemOptionPicker
-          placeholder='Quận / Huyện'
-          value={localFilterState.district?.text}
-          onClick={() => {
-            setInnerBtsType(InnerBtsEnum.district);
-          }}
+        <ListItem
+          link
+          title='Quận / Huyện'
+          after=''
+          onClick={() => {}}
         />
 
-        <ListItemOptionPicker
-          placeholder='Phường / Xã'
-          value={localFilterState.ward?.text}
-          onClick={() => {
-            setInnerBtsType(InnerBtsEnum.ward);
-          }}
+        <ListItem
+          link
+          title='Phường / Xã'
+          after=''
+          onClick={() => {}}
         />
       </List>
-
-      {innerBtsLocation != undefined && (
-        <div className='innerView'>
-          <InnerModal
-            onClose={() => {
-              setInnerBtsType(undefined);
-            }}
-            title={buildInnerViewTitle()}
-            content={buildInnerViewContent()}
-          />
-        </div>
-      )}
     </div>
   );
 }
