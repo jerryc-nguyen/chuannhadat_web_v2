@@ -1,16 +1,18 @@
 import { BlockTitle, Checkbox, List, ListItem } from 'konsta/react';
-import { FilterOption } from '../types';
-import { ReactElement } from 'react';
+import { FilterOption, LocationOption } from '../types';
+import { ReactElement, useState } from 'react';
 
 const ListOptions = ({
   options,
   selectedOption,
   onSelect = () => {},
 }: {
-  options: FilterOption[];
-  selectedOption?: FilterOption;
+  options: FilterOption[] | any[];
+  selectedOption?: FilterOption | any;
   onSelect?: Function;
 }): ReactElement => {
+  const [curOption, setCurOption] = useState(selectedOption);
+
   return (
     <>
       <List strongIos outlineIos margin='my-0'>
@@ -25,13 +27,14 @@ const ListOptions = ({
                 <Checkbox
                   component='div'
                   name='demo-checkbox'
-                  checked={selectedOption?.text == item.text}
+                  checked={curOption?.text == item.text}
                   onChange={() => {}}
                 />
               }
               onClick={() => {
                 if (onSelect) {
                   onSelect(item);
+                  setCurOption(item);
                 }
               }}
             ></ListItem>

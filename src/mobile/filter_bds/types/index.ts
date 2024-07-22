@@ -4,6 +4,11 @@ export interface FilterOption {
   count?: number;
 }
 
+export interface LocationOption {
+  id?: string | number;
+  text?: string;
+}
+
 export enum FilterFieldName {
   none,
   locations,

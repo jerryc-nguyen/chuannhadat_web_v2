@@ -4,34 +4,24 @@ import { useAtom } from 'jotai';
 import {
   FilterOption,
   FilterFieldName,
+  LocationOption,
 } from '@mobile/filter_bds/types';
 
-import ListCheckOptions from './ListCheckOptions';
 import {
   filterStateAtom,
   defaultFilterOption,
   localFilterStateAtom,
 } from '@mobile/filter_bds/states';
-import {
-  Button,
-  Icon,
-  List,
-  ListInput,
-  ListItem,
-} from 'konsta/react';
-import { IoChevronDownOutline } from 'react-icons/io5';
-import InnerModal from '@mobile/modals/InnerModal';
-import CityOptions from './CityOptions';
-import DistrictOptions from './DistrictOptions';
-import WardOptions from './WardOptions';
-import ListItemOptionPicker from '@mobile/ui/ListItemOptionPicker';
+import { List, ListItem } from 'konsta/react';
+
+import OptionPicker from '@mobile/ui/OptionPicker';
 import useLocations from '@mobile/locations/hooks';
-import {
-  innerBtsLocationAtom,
-  InnerBtsEnum,
-} from '@mobile/modals/states/inner_view';
+
 import useModals from '@mobile/modals/hooks';
 import { ModalNames } from '@mobile/modals/states/types';
+import cities from 'src/configs/locations/cities.json';
+import citiesDistricts from 'src/configs/locations/cities_districts.json';
+import districtWards from 'src/configs/locations/districts_wards.json';
 
 export default function Locations() {
   useLocations();
@@ -40,33 +30,41 @@ export default function Locations() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
-
-  const [innerBtsLocation, setInnerBtsType] = useAtom(
-    innerBtsLocationAtom
-  );
-
-  const buildInnerViewContent = () => {
-    if (innerBtsLocation == InnerBtsEnum.city) {
-      return <CityOptions />;
-    } else if (innerBtsLocation == InnerBtsEnum.district) {
-      return <DistrictOptions />;
-    } else if (innerBtsLocation == InnerBtsEnum.ward) {
-      return <WardOptions />;
-    } else {
-      ('');
-    }
+  const currentCity = {
+    id: localFilterState.city?.params?.city_id,
+    text: localFilterState.city?.text,
+  };
+  const currentDistrict = {
+    id: localFilterState.district?.params?.district_id,
+    text: localFilterState.district?.text,
   };
 
-  const buildInnerViewTitle = () => {
-    if (innerBtsLocation == InnerBtsEnum.city) {
-      return 'Thành Phố';
-    } else if (innerBtsLocation == InnerBtsEnum.district) {
-      return 'Quận / Huyện';
-    } else if (innerBtsLocation == InnerBtsEnum.ward) {
-      return 'Phường / Xã';
-    } else {
-      ('');
-    }
+  const currentWard = {
+    id: localFilterState.ward?.params?.ward_id,
+    text: localFilterState.ward?.text,
+  };
+
+  const [city, setCity] = useState<LocationOption>(currentCity);
+  const [district, setDistrict] =
+    useState<LocationOption>(currentDistrict);
+  const [ward, setWard] = useState<LocationOption>(currentWard);
+  const [districtOptions, setDistrictOptions] = useState([]);
+  const [wardOptions, setWardOptions] = useState([]);
+
+  const onSelectCity = (city: LocationOption) => {
+    setCity(city);
+    //@ts-ignore
+    setDistrictOptions(citiesDistricts[city?.id + ''] || []);
+  };
+
+  const onSelectDistrict = (district: LocationOption) => {
+    setDistrict(district);
+    //@ts-ignore
+    setWardOptions(districtWards[district?.id + ''] || []);
+  };
+
+  const onSelectWard = (ward: LocationOption) => {
+    setWard(ward);
   };
 
   return (
@@ -75,12 +73,19 @@ export default function Locations() {
         <ListItem
           link
           title='Thành Phố'
-          after=''
+          after={city?.text}
           onClick={() => {
             openModal3({
               name: ModalNames.city,
               title: 'Thành Phố',
-              content: <CityOptions />,
+              content: (
+                <OptionPicker
+                  searchable
+                  options={cities}
+                  value={city}
+                  onSelect={onSelectCity}
+                />
+              ),
               maxHeightPercent: 0.8,
             });
           }}
@@ -89,11 +94,18 @@ export default function Locations() {
         <ListItem
           link
           title='Quận / Huyện'
-          after=''
+          after={district?.text}
           onClick={() => {
             openModal3({
               name: ModalNames.district,
               title: 'Quận / Huyện',
+              content: (
+                <OptionPicker
+                  options={districtOptions}
+                  value={district}
+                  onSelect={onSelectDistrict}
+                />
+              ),
               maxHeightPercent: 0.8,
             });
           }}
@@ -102,11 +114,18 @@ export default function Locations() {
         <ListItem
           link
           title='Phường / Xã'
-          after=''
+          after={ward?.text}
           onClick={() => {
             openModal3({
               name: ModalNames.ward,
               title: 'Phường / Xã',
+              content: (
+                <OptionPicker
+                  options={wardOptions}
+                  value={ward}
+                  onSelect={onSelectWard}
+                />
+              ),
               maxHeightPercent: 0.8,
             });
           }}
