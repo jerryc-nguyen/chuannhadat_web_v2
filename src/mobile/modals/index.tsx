@@ -32,10 +32,6 @@ export function BtsModals1() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  const overlayClass = useMemo(() => {
-    return buildOverlayClassName(modal);
-  }, [modal]);
-
   return (
     <Drawer.Root
       shouldScaleBackground
@@ -44,9 +40,7 @@ export function BtsModals1() {
       onClose={onClose}
     >
       <Drawer.Portal>
-        <Drawer.Overlay
-          className={`fixed inset-0 bg-black/40 ${overlayClass}`}
-        />
+        <Drawer.Overlay className='fixed inset-0 bg-black/40 c-bts__overlay1' />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
           <div
             className={`c-bts__header flex justify-between items-center ${headerClass}`}
@@ -77,15 +71,6 @@ export function BtsModals1() {
     </Drawer.Root>
   );
 }
-
-const buildOverlayClassName = (modal?: Modal) => {
-  if (!modal) {
-    return {};
-  }
-  const defaultIndex = 1;
-  const selectedIndex = modal.index ?? defaultIndex;
-  return 'c-bts__overlay' + selectedIndex;
-};
 
 const buildContentStyle = (modal?: Modal) => {
   if (!modal) {
@@ -145,10 +130,6 @@ export function BtsModals2() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  const overlayClass = useMemo(() => {
-    return buildOverlayClassName(modal);
-  }, [modal]);
-
   return (
     <Drawer.Root
       open={modal != undefined}
@@ -157,7 +138,7 @@ export function BtsModals2() {
     >
       <Drawer.Portal>
         <Drawer.Overlay
-          className={`fixed inset-0 bg-black/40 ${overlayClass}`}
+          className={`fixed inset-0 bg-black/40 c-bts__overlay2`}
         />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
           <div
@@ -210,10 +191,6 @@ export function BtsModals3() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  const overlayClass = useMemo(() => {
-    return buildOverlayClassName(modal);
-  }, [modal]);
-
   return (
     <Drawer.Root
       open={modal != undefined}
@@ -222,7 +199,7 @@ export function BtsModals3() {
     >
       <Drawer.Portal>
         <Drawer.Overlay
-          className={`fixed inset-0 bg-black/40 ${overlayClass}`}
+          className={`fixed inset-0 bg-black/40 c-bts__overlay3`}
         />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
           <div

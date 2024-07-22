@@ -38,7 +38,7 @@ const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
   const [activeSegmented, setActiveSegmented] = useState(1);
 
-  const { openModal } = useModals();
+  const { openModal2 } = useModals();
 
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
@@ -72,7 +72,7 @@ const FilterModal = () => {
           link
           title='Khu vực'
           onClick={() => {
-            openModal({
+            openModal2({
               name: ModalNames.locations,
               title: 'Khu vực',
               content: <Locations />,
@@ -83,7 +83,7 @@ const FilterModal = () => {
           link
           title='Loại BĐS'
           onClick={() => {
-            openModal({
+            openModal2({
               name: FilterFieldName.categoryType.toString(),
               title: 'Loại BĐS',
               content: <CategoryType />,
@@ -100,7 +100,7 @@ const FilterModal = () => {
           link
           title='Mức giá'
           onClick={() => {
-            openModal({
+            openModal2({
               name: 'bts_price',
               title: 'Mức giá',
               content: <Price />,
@@ -112,7 +112,7 @@ const FilterModal = () => {
           link
           title='Diện tích'
           onClick={() => {
-            openModal({
+            openModal2({
               name: 'bts_area',
               title: 'Diện tích',
               content: <Area />,
@@ -124,7 +124,7 @@ const FilterModal = () => {
           link
           title='Phòng ngủ'
           onClick={() => {
-            openModal({
+            openModal2({
               name: 'bts_bed',
               title: 'Phòng ngủ',
               content: 'Phòng ngủ',

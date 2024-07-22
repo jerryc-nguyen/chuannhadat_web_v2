@@ -7,11 +7,13 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 900;
   }
   [vaul-drawer] {
     z-index: 999;
     width: 100vw;
   }
+
   .c-bts__overlay1,
   .c-bts__overlay1 + [vaul-drawer] {
     z-index: 999;
@@ -58,8 +60,6 @@
   }
 
   &__content {
-    // max-height: 60vh;
-    // height: 60vh;
     overflow-y: scroll;
     background-color: #fff;
   }

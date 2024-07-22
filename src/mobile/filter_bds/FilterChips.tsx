@@ -50,7 +50,7 @@ export default function FilterChips() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
-  const { openModal } = useModals();
+  const { openModal2 } = useModals();
 
   const selectedFilterText = (filterOption: FilterChipOption) => {
     // @ts-ignore
@@ -72,7 +72,7 @@ export default function FilterChips() {
   };
 
   const showFilterBts = (filterOption: FilterChipOption) => {
-    openModal({
+    openModal2({
       name: filterOption.id,
       title: filterOption.text,
       content: buildContent(filterOption),

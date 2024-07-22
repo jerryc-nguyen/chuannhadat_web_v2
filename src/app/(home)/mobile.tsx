@@ -33,10 +33,10 @@ import FilterChips from '@mobile/filter_bds/FilterChips';
 import useModals from '@mobile/modals/hooks';
 
 export default function Mobile() {
-  const { openModal2 } = useModals();
+  const { openModal } = useModals();
 
   const openFilterModal = () => {
-    openModal2({
+    openModal({
       name: 'filter_modal',
       title: 'Lọc',
       content: <FilterModal />,
