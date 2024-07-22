@@ -2,6 +2,9 @@ import { ReactElement } from 'react';
 
 export enum ModalNames {
   locations,
+  city,
+  district,
+  ward,
 }
 export interface DefaultModal {
   name: String | ModalNames;
@@ -12,6 +15,7 @@ export interface DefaultModal {
   defaultContentHeight?: number;
   closeThreshold?: number;
   btsProps?: any;
+  index?: number;
   onClosed?: () => void;
 }
 

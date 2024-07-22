@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 
-import { btsModal2Atom, btsModalAtom } from './states';
+import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -32,6 +32,10 @@ export function BtsModals1() {
     return buildHeaderClass(modal);
   }, [modal]);
 
+  const overlayClass = useMemo(() => {
+    return buildOverlayClassName(modal);
+  }, [modal]);
+
   return (
     <Drawer.Root
       shouldScaleBackground
@@ -40,7 +44,9 @@ export function BtsModals1() {
       onClose={onClose}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className='c-bts__overlay1 fixed inset-0 bg-black/40' />
+        <Drawer.Overlay
+          className={`fixed inset-0 bg-black/40 ${overlayClass}`}
+        />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
           <div
             className={`c-bts__header flex justify-between items-center ${headerClass}`}
@@ -71,6 +77,15 @@ export function BtsModals1() {
     </Drawer.Root>
   );
 }
+
+const buildOverlayClassName = (modal?: Modal) => {
+  if (!modal) {
+    return {};
+  }
+  const defaultIndex = 1;
+  const selectedIndex = modal.index ?? defaultIndex;
+  return 'c-bts__overlay' + selectedIndex;
+};
 
 const buildContentStyle = (modal?: Modal) => {
   if (!modal) {
@@ -130,6 +145,10 @@ export function BtsModals2() {
     return buildHeaderClass(modal);
   }, [modal]);
 
+  const overlayClass = useMemo(() => {
+    return buildOverlayClassName(modal);
+  }, [modal]);
+
   return (
     <Drawer.Root
       open={modal != undefined}
@@ -137,7 +156,74 @@ export function BtsModals2() {
       onClose={onClose}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className='c-bts__overlay2 fixed inset-0 bg-black/40' />
+        <Drawer.Overlay
+          className={`fixed inset-0 bg-black/40 ${overlayClass}`}
+        />
+        <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
+          <div
+            className={`c-bts__header flex justify-between items-center ${headerClass}`}
+          >
+            <Drawer.Title className='c-bts__title'>
+              {modal?.title}
+            </Drawer.Title>
+            <button onClick={onClose} className='c-bts__close'>
+              <IoCloseOutline size={30} />
+            </button>
+          </div>
+          <div
+            data-vaul-no-drag
+            className='c-bts__content'
+            style={{
+              ...buildContentStyle(modal),
+            }}
+          >
+            {modal?.content}
+          </div>
+          {modal?.footer && (
+            <div data-vaul-no-drag className='c-bts__footer'>
+              {modal?.footer}
+            </div>
+          )}
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
+  );
+}
+
+export function BtsModals3() {
+  const [modal, setModal] = useAtom(btsModal3Atom);
+
+  const onClose = () => {
+    if (modal?.onClosed) {
+      modal.onClosed();
+    }
+    setModal(undefined);
+  };
+
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
+
+  const headerClass = useMemo(() => {
+    return buildHeaderClass(modal);
+  }, [modal]);
+
+  const overlayClass = useMemo(() => {
+    return buildOverlayClassName(modal);
+  }, [modal]);
+
+  return (
+    <Drawer.Root
+      open={modal != undefined}
+      onOpenChange={onOpenChange}
+      onClose={onClose}
+    >
+      <Drawer.Portal>
+        <Drawer.Overlay
+          className={`fixed inset-0 bg-black/40 ${overlayClass}`}
+        />
         <Drawer.Content className='flex flex-col rounded-t-[10px] h-[96%] mt-24 fixed bottom-0 left-0 right-0'>
           <div
             className={`c-bts__header flex justify-between items-center ${headerClass}`}

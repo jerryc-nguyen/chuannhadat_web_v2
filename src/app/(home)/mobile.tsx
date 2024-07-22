@@ -28,7 +28,7 @@ import '@styles/pages/mobile/home.scss';
 import { openFilterModalAtom } from '@mobile/filter_bds/states';
 import FilterModal from '@mobile/filter_bds/FilterModal';
 
-import { BtsModals1, BtsModals2 } from '@mobile/modals';
+import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 import useModals from '@mobile/modals/hooks';
 
@@ -63,8 +63,10 @@ export default function Mobile() {
           <Button onClick={() => {}}>Open Bottom Sheet</Button>
           <Button>Button 2</Button>
         </Block>
-        <BtsModals2 />
+
         <BtsModals1 />
+        <BtsModals2 />
+        <BtsModals3 />
       </Page>
     </App>
   );

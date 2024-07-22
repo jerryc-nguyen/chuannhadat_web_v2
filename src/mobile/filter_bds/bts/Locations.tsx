@@ -30,9 +30,12 @@ import {
   innerBtsLocationAtom,
   InnerBtsEnum,
 } from '@mobile/modals/states/inner_view';
+import useModals from '@mobile/modals/hooks';
+import { ModalNames } from '@mobile/modals/states/types';
 
 export default function Locations() {
   useLocations();
+  const { openModal3 } = useModals();
 
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
@@ -73,21 +76,40 @@ export default function Locations() {
           link
           title='Thành Phố'
           after=''
-          onClick={() => {}}
+          onClick={() => {
+            openModal3({
+              name: ModalNames.city,
+              title: 'Thành Phố',
+              content: <CityOptions />,
+              maxHeightPercent: 0.8,
+            });
+          }}
         />
 
         <ListItem
           link
           title='Quận / Huyện'
           after=''
-          onClick={() => {}}
+          onClick={() => {
+            openModal3({
+              name: ModalNames.district,
+              title: 'Quận / Huyện',
+              maxHeightPercent: 0.8,
+            });
+          }}
         />
 
         <ListItem
           link
           title='Phường / Xã'
           after=''
-          onClick={() => {}}
+          onClick={() => {
+            openModal3({
+              name: ModalNames.ward,
+              title: 'Phường / Xã',
+              maxHeightPercent: 0.8,
+            });
+          }}
         />
       </List>
     </div>

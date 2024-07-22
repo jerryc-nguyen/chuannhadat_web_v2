@@ -32,6 +32,7 @@ import CategoryType from './bts/Category';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
+import { ModalNames } from '@mobile/modals/states/types';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -72,12 +73,9 @@ const FilterModal = () => {
           title='Khu vực'
           onClick={() => {
             openModal({
-              name: FilterFieldName.locations.toString(),
+              name: ModalNames.locations,
               title: 'Khu vực',
               content: <Locations />,
-              onClosed: () => {
-                setInnerBtsType(undefined);
-              },
             });
           }}
         />
