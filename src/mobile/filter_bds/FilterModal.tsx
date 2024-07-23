@@ -63,22 +63,13 @@ const FilterModal = () => {
   return (
     <>
       <BlockTitle>Loại tin</BlockTitle>
+      <br />
+
       <BusinessTypeButtons />
 
-      <BlockTitle>Thông tin cơ bản</BlockTitle>
+      <BlockTitle>Loại bất động sản</BlockTitle>
 
-      <List strongIos outlineIos>
-        <ListItem
-          link
-          title='Khu vực'
-          onClick={() => {
-            openModal2({
-              name: ModalNames.locations,
-              title: 'Khu vực',
-              content: <Locations />,
-            });
-          }}
-        />
+      <List strongIos>
         <ListItem
           link
           title='Loại BĐS'
@@ -92,6 +83,10 @@ const FilterModal = () => {
           after={localFilterState.categoryType?.text}
         />
       </List>
+
+      <BlockTitle>Khu vực</BlockTitle>
+
+      <Locations />
 
       <BlockTitle>Thông tin chi tiết</BlockTitle>
 
