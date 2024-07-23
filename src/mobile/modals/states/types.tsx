@@ -1,3 +1,4 @@
+import { FilterFieldName } from '@mobile/filter_bds/types';
 import { ReactElement } from 'react';
 
 export enum ModalNames {
@@ -7,7 +8,7 @@ export enum ModalNames {
   ward,
 }
 export interface DefaultModal {
-  name: String | ModalNames;
+  name: String | ModalNames | FilterFieldName;
   title?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;

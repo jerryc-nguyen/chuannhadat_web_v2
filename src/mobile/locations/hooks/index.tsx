@@ -3,42 +3,34 @@ import citiesDistricts from 'src/configs/locations/cities_districts.json';
 
 import { BasicOption } from '@app/types';
 import { FilterOption } from '@mobile/filter_bds/types';
-import { useEffect } from 'react';
-import { filterStateAtom } from '@mobile/filter_bds/states';
+import { useEffect, useMemo } from 'react';
+import {
+  filterStateAtom,
+  localFilterStateAtom,
+} from '@mobile/filter_bds/states';
 import { useAtom } from 'jotai';
 
-export default function useLocations() {
-  const [filterState, setFilterState] = useAtom(filterStateAtom);
+export function useFilterLocations() {
+  const [filterState] = useAtom(filterStateAtom);
+  const [localFilterState] = useAtom(localFilterStateAtom);
 
-  const buildLocationOptions = (
-    type: string,
-    options: Array<BasicOption>
-  ): Array<FilterOption> => {
-    return options.map((item) => {
-      return {
-        text: item.text,
-        params: {
-          [type]: item.id,
-        },
-      };
-    });
-  };
+  const selectedLocationText = useMemo((): string | undefined => {
+    return (
+      filterState.ward?.text ??
+      filterState.district?.text ??
+      filterState.city?.text
+    );
+  }, [filterState.city, filterState.district, filterState.ward]);
 
-  useEffect(() => {
-    const cityOptions = cities.map((item: any) => {
-      return {
-        text: item.text,
-        params: {
-          city_id: item.id,
-        },
-      };
-    });
-    filterState.cityOptions = cityOptions;
-
-    setFilterState(filterState);
-  }, [filterState, setFilterState]);
+  const currentCity = localFilterState.city ?? filterState.city;
+  const currentDistrict =
+    localFilterState.district ?? filterState.district;
+  const currentWard = localFilterState.ward ?? filterState.ward;
 
   return {
-    buildLocationOptions: buildLocationOptions,
+    selectedLocationText: selectedLocationText,
+    currentCity: currentCity,
+    currentDistrict: currentDistrict,
+    currentWard: currentWard,
   };
 }

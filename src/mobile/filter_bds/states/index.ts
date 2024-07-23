@@ -1,5 +1,9 @@
 import { atom } from 'jotai';
-import { FilterOption, FilterFieldName } from '../types';
+import {
+  FilterOption,
+  FilterFieldName,
+  LocationOption,
+} from '../types';
 
 export const defaultFilterOption: FilterOption = {
   text: '',
@@ -29,9 +33,9 @@ export interface FilterState {
   price?: FilterOption;
   area?: FilterOption;
   direction?: FilterOption;
-  city?: FilterOption;
-  district?: FilterOption;
-  ward?: FilterOption;
+  city?: LocationOption;
+  district?: LocationOption;
+  ward?: LocationOption;
 }
 
 export const filterStateAtom = atom<FilterState>({

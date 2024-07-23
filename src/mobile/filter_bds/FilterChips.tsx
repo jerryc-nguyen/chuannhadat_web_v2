@@ -2,17 +2,17 @@ import { Block, Button, Chip } from 'konsta/react';
 import React, { useState } from 'react';
 import { filterStateAtom, localFilterStateAtom } from './states';
 import { useAtom } from 'jotai';
-import { FilterOption } from './types';
+import { FilterFieldName, FilterOption } from './types';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
-import { ModalNames } from '@mobile/modals/states/types';
+import { useFilterLocations } from '@mobile/locations/hooks';
 
 export interface FilterChipOption {
-  id: string | ModalNames;
+  id: string | FilterFieldName;
   text: string;
 }
 
@@ -26,7 +26,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     text: 'Loại tin',
   },
   { id: 'categoryType', text: 'Loại nhà đất' },
-  { id: ModalNames.locations, text: 'Khu vực' },
+  { id: FilterFieldName.locations, text: 'Khu vực' },
   {
     id: 'price',
     text: 'Mức giá',
@@ -51,10 +51,14 @@ export default function FilterChips() {
     localFilterStateAtom
   );
   const { openModal2 } = useModals();
-
+  const { selectedLocationText } = useFilterLocations();
   const selectedFilterText = (filterOption: FilterChipOption) => {
-    // @ts-ignore
-    return filterState[filterOption.id]?.text ?? filterOption.text;
+    if (filterOption.id == FilterFieldName.locations) {
+      return selectedLocationText ?? 'Khu vực';
+    } else {
+      //@ts-ignore
+      return filterState[filterOption.id]?.text ?? filterOption.text;
+    }
   };
   const [, setInnerBtsLocation] = useAtom(innerBtsLocationAtom);
 
@@ -64,7 +68,7 @@ export default function FilterChips() {
         return <Price />;
       case 'area':
         return <Area />;
-      case ModalNames.locations:
+      case FilterFieldName.locations:
         return <Locations />;
       default:
         return undefined;

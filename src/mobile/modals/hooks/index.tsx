@@ -47,6 +47,12 @@ export default function useModals() {
     setModal3(undefined);
   };
 
+  const closeModals = () => {
+    closeModal();
+    closeModal2();
+    closeModal3();
+  };
+
   return {
     openModal,
     closeModal,
@@ -54,5 +60,6 @@ export default function useModals() {
     closeModal2,
     openModal3,
     closeModal3,
+    closeModals,
   };
 }

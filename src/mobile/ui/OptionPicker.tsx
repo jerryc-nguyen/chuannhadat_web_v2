@@ -13,7 +13,7 @@ export default function OptionPicker({
   onSelect,
 }: {
   options: Array<OptionProps>;
-  value: OptionProps;
+  value?: OptionProps;
   onSelect: (option: OptionProps) => void;
   searchable?: boolean;
 }) {
