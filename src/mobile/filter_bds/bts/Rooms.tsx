@@ -36,6 +36,18 @@ export const ROOMS = [
     id: 5,
     text: '5',
   },
+  {
+    id: 6,
+    text: '6',
+  },
+  {
+    id: 7,
+    text: '7',
+  },
+  {
+    id: 8,
+    text: '8',
+  },
 ];
 
 export default function Rooms() {
@@ -55,24 +67,20 @@ export default function Rooms() {
     <>
       <BlockTitle>Phòng ngủ</BlockTitle>
       <Block>
-        <div className='hidden-scrollbar'>
-          <ListChips
-            options={ROOMS}
-            onSelect={onSelectBed}
-            value={localFilterState.bed ?? filterState.bed}
-          />
-        </div>
+        <ListChips
+          options={ROOMS}
+          onSelect={onSelectBed}
+          value={localFilterState.bed ?? filterState.bed}
+        />
       </Block>
 
       <BlockTitle>Nhà tắm</BlockTitle>
       <Block>
-        <div className='hidden-scrollbar'>
-          <ListChips
-            options={ROOMS}
-            onSelect={onSelectBath}
-            value={localFilterState.bath ?? filterState.bath}
-          />
-        </div>
+        <ListChips
+          options={ROOMS}
+          onSelect={onSelectBath}
+          value={localFilterState.bath ?? filterState.bath}
+        />
       </Block>
     </>
   );
