@@ -14,6 +14,7 @@ export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);
 
 import searchFormOptions from './search_form_options.json';
+import { BasicOption } from '@app/types';
 
 export interface FilterState {
   businessTypeOptions?: FilterOption[];
@@ -28,8 +29,8 @@ export interface FilterState {
   wardOptions?: FilterOption[];
   businessType?: FilterOption;
   categoryType?: FilterOption;
-  bed?: FilterOption;
-  bath?: FilterOption;
+  bed?: BasicOption;
+  bath?: BasicOption;
   price?: FilterOption;
   area?: FilterOption;
   direction?: FilterOption;

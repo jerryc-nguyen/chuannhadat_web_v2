@@ -28,11 +28,15 @@ import { FilterFieldName } from './types';
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './BusinessTypeButtons';
-import CategoryType from './bts/Category';
+import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
-import { ModalNames } from '@mobile/modals/states/types';
+
+export const DEFAULT_MODAL_HEIGHTS = {
+  [FilterFieldName.rooms]: 270,
+  [FilterFieldName.businessType]: 80,
+};
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
@@ -130,7 +134,13 @@ const FilterModal = () => {
         <ListItem
           link
           title='Phòng tắm'
-          onClick={() => {}}
+          onClick={() => {
+            openModal2({
+              name: 'bts_bath',
+              title: 'Phòng tắm',
+              content: 'Phòng tắm',
+            });
+          }}
           after={''}
         />
         <ListItem link title='Hướng' onClick={() => {}} after={''} />

@@ -1,0 +1,19 @@
+.c-listChip {
+  &__item {
+    margin-right: 10px;
+    white-space: nowrap;
+  }
+
+  &.is-circle {
+    height: 52px;
+
+    .c-listChip__item {
+      height: 50px;
+      width: 52px;
+      text-align: center;
+      line-height: 50px;
+      flex-shrink: 0;
+      border-radius: 100%;
+    }
+  }
+}

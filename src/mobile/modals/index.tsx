@@ -4,7 +4,7 @@ import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
-import { Modal, ModalNames } from './states/types';
+import { Modal } from './states/types';
 import { getViewportSize } from '@utils/useViewportSize';
 import { useMemo } from 'react';
 
@@ -81,26 +81,16 @@ const buildContentStyle = (modal?: Modal) => {
   const maxHeightPercent =
     modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
   const footerHeight = modal?.footer ? FOOTER_HEIGHT : 0;
-  const contentHeight =
-    viewportSizes[1] * maxHeightPercent -
-    HEADER_HEIGHT -
-    footerHeight;
-  const defaultHeight = buildDefaultContentHeight(modal);
-  const heights = [contentHeight];
-  if (defaultHeight) {
-    heights.push(defaultHeight);
-  }
-  const selectedHeight = Math.min(...heights);
-  return { height: selectedHeight + 'px' };
-};
+  let contentHeight = modal.defaultContentHeight;
 
-const buildDefaultContentHeight = (modal: Modal) => {
-  switch (modal.name) {
-    case ModalNames.locations:
-      return 220;
-    default:
-      return undefined;
+  if (!modal.defaultContentHeight) {
+    contentHeight =
+      viewportSizes[1] * maxHeightPercent -
+      HEADER_HEIGHT -
+      footerHeight;
   }
+
+  return { height: contentHeight + 'px' };
 };
 
 const buildHeaderClass = (modal?: Modal) => {
@@ -117,6 +107,7 @@ export function BtsModals2() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
+
     setModal(undefined);
   };
 

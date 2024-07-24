@@ -10,6 +10,12 @@ import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
+import FilterModal from './FilterModal';
+import FooterOverviewBtsButton from './FooterOverviewBtsButton';
+import BusinessTypeButtons from './BusinessTypeButtons';
+import CategoryType from './bts/CategoryType';
+import Rooms from './bts/Rooms';
+import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -18,25 +24,25 @@ export interface FilterChipOption {
 
 const FILTER_ITEMS: Array<FilterChipOption> = [
   {
-    id: 'filterOverview',
+    id: FilterFieldName.filterOverview,
     text: 'Bộ Lọc',
   },
   {
-    id: 'businessType',
+    id: FilterFieldName.businessType,
     text: 'Loại tin',
   },
-  { id: 'categoryType', text: 'Loại nhà đất' },
+  { id: FilterFieldName.categoryType, text: 'Loại nhà đất' },
   { id: FilterFieldName.locations, text: 'Khu vực' },
   {
-    id: 'price',
+    id: FilterFieldName.price,
     text: 'Mức giá',
   },
   {
-    id: 'area',
+    id: FilterFieldName.area,
     text: 'Diện tích',
   },
   {
-    id: 'room',
+    id: FilterFieldName.rooms,
     text: 'Số Phòng',
   },
   {
@@ -50,11 +56,25 @@ export default function FilterChips() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
-  const { openModal2 } = useModals();
+  const { openModal } = useModals();
   const { selectedLocationText } = useFilterLocations();
+  const selectedRoomText = (): string => {
+    const results = [];
+    if (filterState.bed) {
+      results.push(`${filterState.bed.text} PN`);
+    }
+    if (filterState.bath) {
+      results.push(`${filterState.bath.text} WC`);
+    }
+
+    return results.join(' / ');
+  };
+
   const selectedFilterText = (filterOption: FilterChipOption) => {
     if (filterOption.id == FilterFieldName.locations) {
       return selectedLocationText ?? 'Khu vực';
+    } else if (filterOption.id == FilterFieldName.rooms) {
+      return selectedRoomText() || 'Số phòng';
     } else {
       //@ts-ignore
       return filterState[filterOption.id]?.text ?? filterOption.text;
@@ -64,26 +84,54 @@ export default function FilterChips() {
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
-      case 'price':
+      case FilterFieldName.businessType:
+        return <BusinessTypeButtons />;
+      case FilterFieldName.categoryType:
+        return <CategoryType />;
+      case FilterFieldName.price:
         return <Price />;
-      case 'area':
+      case FilterFieldName.area:
         return <Area />;
+      case FilterFieldName.filterOverview:
+        return <FilterModal />;
       case FilterFieldName.locations:
         return <Locations />;
+      case FilterFieldName.rooms:
+        return <Rooms />;
       default:
         return undefined;
     }
   };
 
+  const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
+      case FilterFieldName.filterOverview:
+        return 1;
+
+      default:
+        return undefined;
+    }
+  };
+
+  const buildBtsFooter = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
+      case FilterFieldName.filterOverview:
+        return <FooterOverviewBtsButton />;
+      default:
+        return <FooterBtsButton filterOption={filterOption} />;
+    }
+  };
+
   const showFilterBts = (filterOption: FilterChipOption) => {
-    openModal2({
+    setLocalFilterState({});
+    openModal({
       name: filterOption.id,
       title: filterOption.text,
       content: buildContent(filterOption),
-      footer: <FooterBtsButton filterOption={filterOption} />,
-      onClosed: () => {
-        setInnerBtsLocation(undefined);
-      },
+      footer: buildBtsFooter(filterOption),
+      maxHeightPercent: buildMaxHeightPercent(filterOption),
+      // @ts-ignore
+      defaultContentHeight: DEFAULT_MODAL_HEIGHTS[filterOption.id],
     });
   };
 
