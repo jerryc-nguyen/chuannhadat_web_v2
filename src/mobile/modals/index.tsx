@@ -95,9 +95,11 @@ const buildContentStyle = (modal?: Modal) => {
 };
 
 const buildDefaultContentHeight = (modal: Modal) => {
+  return undefined;
+
   switch (modal.name) {
     case ModalNames.locations:
-      return 220;
+      return 270;
     default:
       return undefined;
   }

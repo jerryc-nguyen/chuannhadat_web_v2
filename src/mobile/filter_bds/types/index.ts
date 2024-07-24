@@ -11,6 +11,7 @@ export interface LocationOption {
 
 export enum FilterFieldName {
   none,
+  filterOverview,
   locations,
   categoryType,
   price,

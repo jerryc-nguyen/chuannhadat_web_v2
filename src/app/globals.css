@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* https://tailwindcss.com/docs/text-color */
 .text-gray {
   color: rgb(156 163 175);
 }

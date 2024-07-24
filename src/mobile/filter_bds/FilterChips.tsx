@@ -10,6 +10,8 @@ import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
+import FilterModal from './FilterModal';
+import FooterOverviewBtsButton from './FooterOverviewBtsButton';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -18,7 +20,7 @@ export interface FilterChipOption {
 
 const FILTER_ITEMS: Array<FilterChipOption> = [
   {
-    id: 'filterOverview',
+    id: FilterFieldName.filterOverview,
     text: 'Bộ Lọc',
   },
   {
@@ -50,7 +52,7 @@ export default function FilterChips() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
-  const { openModal2 } = useModals();
+  const { openModal } = useModals();
   const { selectedLocationText } = useFilterLocations();
   const selectedFilterText = (filterOption: FilterChipOption) => {
     if (filterOption.id == FilterFieldName.locations) {
@@ -68,6 +70,8 @@ export default function FilterChips() {
         return <Price />;
       case 'area':
         return <Area />;
+      case FilterFieldName.filterOverview:
+        return <FilterModal />;
       case FilterFieldName.locations:
         return <Locations />;
       default:
@@ -75,15 +79,32 @@ export default function FilterChips() {
     }
   };
 
+  const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
+      case FilterFieldName.filterOverview:
+        return 1;
+
+      default:
+        return undefined;
+    }
+  };
+
+  const buildBtsFooter = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
+      case FilterFieldName.filterOverview:
+        return <FooterOverviewBtsButton />;
+      default:
+        return <FooterBtsButton filterOption={filterOption} />;
+    }
+  };
+
   const showFilterBts = (filterOption: FilterChipOption) => {
-    openModal2({
+    openModal({
       name: filterOption.id,
       title: filterOption.text,
       content: buildContent(filterOption),
-      footer: <FooterBtsButton filterOption={filterOption} />,
-      onClosed: () => {
-        setInnerBtsLocation(undefined);
-      },
+      footer: buildBtsFooter(filterOption),
+      maxHeightPercent: buildMaxHeightPercent(filterOption),
     });
   };
 
