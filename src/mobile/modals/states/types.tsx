@@ -7,6 +7,7 @@ export enum ModalNames {
   district,
   ward,
 }
+
 export interface DefaultModal {
   name: String | ModalNames | FilterFieldName;
   title?: ReactElement | string;

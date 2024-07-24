@@ -3,8 +3,12 @@
     margin-right: 10px;
     white-space: nowrap;
     background-color: white;
+  }
 
-    &.is-circle {
+  &.is-circle {
+    height: 52px;
+
+    .c-listChip__item {
       height: 50px;
       width: 52px;
       text-align: center;

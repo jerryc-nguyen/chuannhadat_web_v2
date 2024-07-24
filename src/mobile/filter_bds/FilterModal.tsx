@@ -32,7 +32,11 @@ import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
-import { ModalNames } from '@mobile/modals/states/types';
+
+export const DEFAULT_MODAL_HEIGHTS = {
+  [FilterFieldName.rooms]: 270,
+  [FilterFieldName.businessType]: 80,
+};
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);

@@ -15,6 +15,7 @@ import FooterOverviewBtsButton from './FooterOverviewBtsButton';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Rooms from './bts/Rooms';
+import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -114,6 +115,8 @@ export default function FilterChips() {
       content: buildContent(filterOption),
       footer: buildBtsFooter(filterOption),
       maxHeightPercent: buildMaxHeightPercent(filterOption),
+      // @ts-ignore
+      defaultContentHeight: DEFAULT_MODAL_HEIGHTS[filterOption.id],
     });
   };
 

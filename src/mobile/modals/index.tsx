@@ -7,6 +7,7 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { Modal, ModalNames } from './states/types';
 import { getViewportSize } from '@utils/useViewportSize';
 import { useMemo } from 'react';
+import { FilterFieldName } from '@mobile/filter_bds/types';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -81,24 +82,21 @@ const buildContentStyle = (modal?: Modal) => {
   const maxHeightPercent =
     modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
   const footerHeight = modal?.footer ? FOOTER_HEIGHT : 0;
-  const contentHeight =
-    viewportSizes[1] * maxHeightPercent -
-    HEADER_HEIGHT -
-    footerHeight;
-  const defaultHeight = buildDefaultContentHeight(modal);
-  const heights = [contentHeight];
-  if (defaultHeight) {
-    heights.push(defaultHeight);
+  let contentHeight = modal.defaultContentHeight;
+
+  if (!modal.defaultContentHeight) {
+    contentHeight =
+      viewportSizes[1] * maxHeightPercent -
+      HEADER_HEIGHT -
+      footerHeight;
   }
-  const selectedHeight = Math.min(...heights);
-  return { height: selectedHeight + 'px' };
+
+  return { height: contentHeight + 'px' };
 };
 
 const buildDefaultContentHeight = (modal: Modal) => {
-  return undefined;
-
   switch (modal.name) {
-    case ModalNames.locations:
+    case FilterFieldName.rooms:
       return 270;
     default:
       return undefined;
