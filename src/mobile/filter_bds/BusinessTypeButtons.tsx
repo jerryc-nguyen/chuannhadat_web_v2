@@ -9,7 +9,7 @@ export default function BusinessTypeButtons() {
   );
 
   return (
-    <Block strongIos outlineIos className='space-y-4'>
+    <Block strongIos margin='my-0 mt-2'>
       <Segmented outline>
         {filterState.businessTypeOptions?.map((option) => {
           return (

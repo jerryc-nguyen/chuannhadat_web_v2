@@ -1,6 +1,6 @@
 import { Button } from 'konsta/react';
 import { ReactNode } from 'react';
-import { IoChevronBackCircleOutline } from 'react-icons/io5';
+import { IoCloseOutline } from 'react-icons/io5';
 
 export default function InnerModal({
   title,
@@ -14,22 +14,14 @@ export default function InnerModal({
   onClose?: () => void;
 }) {
   return (
-    <div className='_8eLsd _KVwkC'>
-      <div className='_7vsRM _-rIgv rss-header'>
-        <div className='flex items-center'>
-          <span style={{ marginRight: '5px' }}>
-            <IoChevronBackCircleOutline onClick={onClose} />
-          </span>
-
-          <div>{title}</div>
-        </div>
+    <>
+      <div className='c-bts__header flex justify-between items-center'>
+        <div className='c-bts__title'>{title}</div>
+        <button onClick={onClose} className='c-bts__close'>
+          <IoCloseOutline size={30} />
+        </button>
       </div>
-      <div className='_QLjfS rss-content'>
-        <div className='_2Ejye'>
-          <div style={{ paddingTop: 45 + 'px' }}>{content}</div>
-        </div>
-      </div>
-      <div className='_xlcmb hidden'>{footer}</div>
-    </div>
+      <div className='c-bts__content'>{content}</div>
+    </>
   );
 }

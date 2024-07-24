@@ -32,12 +32,13 @@ import CategoryType from './bts/Category';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
+import { ModalNames } from '@mobile/modals/states/types';
 
 const FilterModal = () => {
   const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
   const [activeSegmented, setActiveSegmented] = useState(1);
 
-  const { openModal } = useModals();
+  const { openModal2 } = useModals();
 
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
@@ -61,127 +62,79 @@ const FilterModal = () => {
 
   return (
     <>
-      <Popup
-        opened={isModalOpen}
-        onBackdropClick={() => {
-          setIsModalOpen(false);
-        }}
-      >
-        <Page>
-          <Navbar
-            title='Tìm BĐS'
-            right={
-              <Link
-                navbar
-                onClick={() => {
-                  setIsModalOpen(false);
-                }}
-              >
-                Close
-              </Link>
-            }
-          />
+      <BlockTitle>Loại tin</BlockTitle>
+      <br />
 
-          <BlockTitle>Loại tin</BlockTitle>
-          <BusinessTypeButtons />
+      <BusinessTypeButtons />
 
-          <BlockTitle>Thông tin cơ bản</BlockTitle>
+      <BlockTitle>Loại bất động sản</BlockTitle>
 
-          <List strongIos outlineIos>
-            <ListItem
-              link
-              title='Khu vực'
-              onClick={() => {
-                openModal({
-                  name: FilterFieldName.locations.toString(),
-                  title: 'Khu vực',
-                  content: <Locations />,
-                  onClosed: () => {
-                    setInnerBtsType(undefined);
-                  },
-                });
-              }}
-            />
-            <ListItem
-              link
-              title='Loại BĐS'
-              onClick={() => {
-                openModal({
-                  name: FilterFieldName.categoryType.toString(),
-                  title: 'Loại BĐS',
-                  content: <CategoryType />,
-                });
-              }}
-              after={localFilterState.categoryType?.text}
-            />
-          </List>
+      <List strongIos>
+        <ListItem
+          link
+          title='Loại BĐS'
+          onClick={() => {
+            openModal2({
+              name: FilterFieldName.categoryType.toString(),
+              title: 'Loại BĐS',
+              content: <CategoryType />,
+            });
+          }}
+          after={localFilterState.categoryType?.text}
+        />
+      </List>
 
-          <BlockTitle>Thông tin chi tiết</BlockTitle>
+      <BlockTitle>Khu vực</BlockTitle>
 
-          <List strongIos outlineIos>
-            <ListItem
-              link
-              title='Mức giá'
-              onClick={() => {
-                openModal({
-                  name: 'bts_price',
-                  title: 'Mức giá',
-                  content: <Price />,
-                });
-              }}
-              after={localFilterState.price?.text}
-            />
-            <ListItem
-              link
-              title='Diện tích'
-              onClick={() => {
-                openModal({
-                  name: 'bts_area',
-                  title: 'Diện tích',
-                  content: <Area />,
-                });
-              }}
-              after={localFilterState.area?.text}
-            />
-            <ListItem
-              link
-              title='Phòng ngủ'
-              onClick={() => {
-                openModal({
-                  name: 'bts_bed',
-                  title: 'Phòng ngủ',
-                  content: 'Phòng ngủ',
-                });
-              }}
-              after={''}
-            />
-            <ListItem
-              link
-              title='Phòng tắm'
-              onClick={() => {}}
-              after={''}
-            />
-            <ListItem
-              link
-              title='Hướng'
-              onClick={() => {}}
-              after={''}
-            />
-          </List>
+      <Locations />
 
-          <br />
-          <br />
+      <BlockTitle>Thông tin chi tiết</BlockTitle>
 
-          <Toolbar
-            top={false}
-            className={`left-0 bottom-0 fixed w-full`}
-          >
-            <Button onClick={applySelectedFilters}>
-              Xem 1000 tin
-            </Button>
-          </Toolbar>
-        </Page>
-      </Popup>
+      <List strongIos outlineIos>
+        <ListItem
+          link
+          title='Mức giá'
+          onClick={() => {
+            openModal2({
+              name: 'bts_price',
+              title: 'Mức giá',
+              content: <Price />,
+            });
+          }}
+          after={localFilterState.price?.text}
+        />
+        <ListItem
+          link
+          title='Diện tích'
+          onClick={() => {
+            openModal2({
+              name: 'bts_area',
+              title: 'Diện tích',
+              content: <Area />,
+            });
+          }}
+          after={localFilterState.area?.text}
+        />
+        <ListItem
+          link
+          title='Phòng ngủ'
+          onClick={() => {
+            openModal2({
+              name: 'bts_bed',
+              title: 'Phòng ngủ',
+              content: 'Phòng ngủ',
+            });
+          }}
+          after={''}
+        />
+        <ListItem
+          link
+          title='Phòng tắm'
+          onClick={() => {}}
+          after={''}
+        />
+        <ListItem link title='Hướng' onClick={() => {}} after={''} />
+      </List>
     </>
   );
 };

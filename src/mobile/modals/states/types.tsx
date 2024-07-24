@@ -1,12 +1,22 @@
+import { FilterFieldName } from '@mobile/filter_bds/types';
 import { ReactElement } from 'react';
-import { SheetProps } from 'react-sheet-slide';
 
+export enum ModalNames {
+  locations,
+  city,
+  district,
+  ward,
+}
 export interface DefaultModal {
-  name: String;
+  name: String | ModalNames | FilterFieldName;
   title?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;
-  btsProps?: SheetProps;
+  maxHeightPercent?: number;
+  defaultContentHeight?: number;
+  closeThreshold?: number;
+  btsProps?: any;
+  index?: number;
   onClosed?: () => void;
 }
 
