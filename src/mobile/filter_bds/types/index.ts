@@ -12,11 +12,13 @@ export interface LocationOption {
 export enum FilterFieldName {
   none,
   filterOverview,
-  locations,
+  businessType,
   categoryType,
+  locations,
   price,
   area,
   bed,
+  rooms,
   bath,
   direction,
 }

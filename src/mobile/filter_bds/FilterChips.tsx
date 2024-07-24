@@ -12,6 +12,9 @@ import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
 import FooterOverviewBtsButton from './FooterOverviewBtsButton';
+import BusinessTypeButtons from './BusinessTypeButtons';
+import CategoryType from './bts/CategoryType';
+import Rooms from './bts/Rooms';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -24,21 +27,21 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     text: 'Bộ Lọc',
   },
   {
-    id: 'businessType',
+    id: FilterFieldName.businessType,
     text: 'Loại tin',
   },
-  { id: 'categoryType', text: 'Loại nhà đất' },
+  { id: FilterFieldName.categoryType, text: 'Loại nhà đất' },
   { id: FilterFieldName.locations, text: 'Khu vực' },
   {
-    id: 'price',
+    id: FilterFieldName.price,
     text: 'Mức giá',
   },
   {
-    id: 'area',
+    id: FilterFieldName.area,
     text: 'Diện tích',
   },
   {
-    id: 'room',
+    id: FilterFieldName.rooms,
     text: 'Số Phòng',
   },
   {
@@ -66,14 +69,20 @@ export default function FilterChips() {
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
-      case 'price':
+      case FilterFieldName.businessType:
+        return <BusinessTypeButtons />;
+      case FilterFieldName.categoryType:
+        return <CategoryType />;
+      case FilterFieldName.price:
         return <Price />;
-      case 'area':
+      case FilterFieldName.area:
         return <Area />;
       case FilterFieldName.filterOverview:
         return <FilterModal />;
       case FilterFieldName.locations:
         return <Locations />;
+      case FilterFieldName.rooms:
+        return <Rooms />;
       default:
         return undefined;
     }

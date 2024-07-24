@@ -10,10 +10,11 @@ export default function BusinessTypeButtons() {
 
   return (
     <Block strongIos margin='my-0 mt-2'>
-      <Segmented outline>
+      <Segmented strong>
         {filterState.businessTypeOptions?.map((option) => {
           return (
             <SegmentedButton
+              strong
               key={option.text}
               active={
                 option.text == localFilterState.businessType?.text
