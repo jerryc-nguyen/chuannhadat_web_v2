@@ -35,7 +35,7 @@ export const selectOptiontToFilterOption = (
   };
 };
 export default function Locations() {
-  const { openModal3 } = useModals();
+  const { openModal3, closeModal3 } = useModals();
 
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
@@ -84,6 +84,7 @@ export default function Locations() {
     setDistrictOptions(citiesDistricts[city?.id + ''] || []);
     localFilterState.city = city;
     setLocalFilterState(localFilterState);
+    closeModal3();
   };
 
   const onSelectDistrict = (district?: LocationOption) => {
@@ -94,12 +95,14 @@ export default function Locations() {
     setLocalFilterState(localFilterState);
     resetWard();
     setDistrict(district);
+    closeModal3();
   };
 
   const onSelectWard = (ward?: LocationOption) => {
     setWard(ward);
     localFilterState.ward = ward;
     setLocalFilterState(localFilterState);
+    closeModal3();
   };
 
   useEffect(() => {
@@ -125,7 +128,7 @@ export default function Locations() {
                   onSelect={onSelectCity}
                 />
               ),
-              maxHeightPercent: 0.8,
+              maxHeightPercent: 0.5,
             });
           }}
         />
@@ -140,12 +143,13 @@ export default function Locations() {
               title: 'Quận / Huyện',
               content: (
                 <OptionPicker
+                  searchable
                   options={districtOptions}
                   value={district}
                   onSelect={onSelectDistrict}
                 />
               ),
-              maxHeightPercent: 0.8,
+              maxHeightPercent: 0.5,
             });
           }}
         />
@@ -160,12 +164,13 @@ export default function Locations() {
               title: 'Phường / Xã',
               content: (
                 <OptionPicker
+                  searchable
                   options={wardOptions}
                   value={ward}
                   onSelect={onSelectWard}
                 />
               ),
-              maxHeightPercent: 0.8,
+              maxHeightPercent: 0.5,
             });
           }}
         />

@@ -47,6 +47,7 @@ export default function Mobile() {
     setFilterState({ ...filterState, ...localFilterState });
     closeModals();
   };
+
   const openFilterModal = () => {
     openModal({
       name: 'filter_modal',
