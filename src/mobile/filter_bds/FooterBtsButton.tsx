@@ -17,7 +17,7 @@ export default function FooterBtsButton({
   );
 
   const onApplyFilter = (filterOption: FilterChipOption) => {
-    let localValue = {};
+    let localValue: Record<string, any> = {};
 
     if (filterOption.id == FilterFieldName.locations) {
       localValue = {
@@ -25,7 +25,13 @@ export default function FooterBtsButton({
         district: localFilterState.district,
         ward: localFilterState.ward,
       };
-      console.log('localValue', localValue);
+    } else if (filterOption.id == FilterFieldName.rooms) {
+      if (localFilterState.bed) {
+        localValue.bed = localFilterState.bed;
+      }
+      if (localFilterState.bath) {
+        localValue.bath = localFilterState.bath;
+      }
     } else {
       localValue = {
         // @ts-ignore

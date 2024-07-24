@@ -58,9 +58,23 @@ export default function FilterChips() {
   );
   const { openModal } = useModals();
   const { selectedLocationText } = useFilterLocations();
+  const selectedRoomText = (): string => {
+    const results = [];
+    if (filterState.bed) {
+      results.push(`${filterState.bed.text} PN`);
+    }
+    if (filterState.bath) {
+      results.push(`${filterState.bath.text} WC`);
+    }
+
+    return results.join(' / ');
+  };
+
   const selectedFilterText = (filterOption: FilterChipOption) => {
     if (filterOption.id == FilterFieldName.locations) {
       return selectedLocationText ?? 'Khu vực';
+    } else if (filterOption.id == FilterFieldName.rooms) {
+      return selectedRoomText() || 'Số phòng';
     } else {
       //@ts-ignore
       return filterState[filterOption.id]?.text ?? filterOption.text;
@@ -109,6 +123,7 @@ export default function FilterChips() {
   };
 
   const showFilterBts = (filterOption: FilterChipOption) => {
+    setLocalFilterState({});
     openModal({
       name: filterOption.id,
       title: filterOption.text,

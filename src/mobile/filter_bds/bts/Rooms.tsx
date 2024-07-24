@@ -13,6 +13,7 @@ import {
 } from '@mobile/filter_bds/states';
 import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
+import { BasicOption } from '@app/types';
 
 export const ROOMS = [
   {
@@ -42,20 +43,35 @@ export default function Rooms() {
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
+  const onSelectBed = (item: BasicOption) => {
+    setLocalFilterState({ ...localFilterState, bed: item });
+  };
+
+  const onSelectBath = (item: BasicOption) => {
+    setLocalFilterState({ ...localFilterState, bath: item });
+  };
 
   return (
     <>
       <BlockTitle>Phòng ngủ</BlockTitle>
       <Block>
         <div className='hidden-scrollbar'>
-          <ListChips options={ROOMS} />
+          <ListChips
+            options={ROOMS}
+            onSelect={onSelectBed}
+            value={localFilterState.bed ?? filterState.bed}
+          />
         </div>
       </Block>
 
       <BlockTitle>Nhà tắm</BlockTitle>
       <Block>
         <div className='hidden-scrollbar'>
-          <ListChips options={ROOMS} />
+          <ListChips
+            options={ROOMS}
+            onSelect={onSelectBath}
+            value={localFilterState.bath ?? filterState.bath}
+          />
         </div>
       </Block>
     </>
