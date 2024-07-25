@@ -1,52 +1,27 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React from 'react';
 
 import {
   App,
   Page,
-  Navbar,
   Block,
   Button,
   List,
   ListItem,
-  Link,
   BlockTitle,
-  Searchbar,
-  Icon,
 } from 'konsta/react';
-import {
-  MdPerson,
-  MdEmail,
-  MdToday,
-  MdFileUpload,
-} from 'react-icons/md';
+
 import MainNav from '@mobile/header/MainNav';
-import { useAtom } from 'jotai';
-
 import '@styles/pages/mobile/home.scss';
-import {
-  filterStateAtom,
-  localFilterStateAtom,
-  openFilterModalAtom,
-} from '@mobile/filter_bds/states';
 import FilterModal from '@mobile/filter_bds/FilterModal';
-
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 import useModals from '@mobile/modals/hooks';
-import FooterBtsButton from '@mobile/filter_bds/FooterBtsButton';
-export default function Mobile() {
-  const { openModal, closeModals } = useModals();
-  const [filterState, setFilterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+import FooterOverviewBtsButton from '@mobile/filter_bds/FooterOverviewBtsButton';
 
-  const onApplyFilter = () => {
-    setFilterState({ ...filterState, ...localFilterState });
-    closeModals();
-  };
+export default function Mobile() {
+  const { openModal } = useModals();
 
   const openFilterModal = () => {
     openModal({
@@ -54,11 +29,7 @@ export default function Mobile() {
       title: 'Lọc',
       content: <FilterModal />,
       maxHeightPercent: 1,
-      footer: (
-        <>
-          <Button onClick={onApplyFilter}>Xem kết quả</Button>
-        </>
-      ),
+      footer: <FooterOverviewBtsButton />,
     });
   };
   return (

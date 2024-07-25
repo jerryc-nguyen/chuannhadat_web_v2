@@ -1,5 +1,5 @@
-import { BlockTitle, Checkbox, List, ListItem } from 'konsta/react';
-import { FilterOption, LocationOption } from '../types';
+import { Checkbox, List, ListItem } from 'konsta/react';
+import { FilterOption } from '../types';
 import { ReactElement, useState } from 'react';
 
 const ListOptions = ({

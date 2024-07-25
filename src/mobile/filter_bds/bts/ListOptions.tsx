@@ -1,4 +1,4 @@
-import { BlockTitle, List, ListItem } from 'konsta/react';
+import { List, ListItem } from 'konsta/react';
 import { FilterOption } from '../types';
 import { ReactElement } from 'react';
 

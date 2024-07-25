@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useAtom } from 'jotai';
 
 import {
@@ -7,10 +6,7 @@ import {
 } from '@mobile/filter_bds/types';
 
 import ListCheckOptions from './ListCheckOptions';
-import {
-  filterStateAtom,
-  localFilterStateAtom,
-} from '@mobile/filter_bds/states';
+import { filterStateAtom } from '@mobile/filter_bds/states';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Price() {

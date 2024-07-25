@@ -32,6 +32,9 @@ import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
+import useFilterState from './hooks/useFilterState';
+import Rooms from './bts/Rooms';
+import Direction from './bts/Direction';
 
 export const DEFAULT_MODAL_HEIGHTS = {
   [FilterFieldName.rooms]: 270,
@@ -39,29 +42,25 @@ export const DEFAULT_MODAL_HEIGHTS = {
 };
 
 const FilterModal = () => {
-  const [isModalOpen, setIsModalOpen] = useAtom(openFilterModalAtom);
-  const [activeSegmented, setActiveSegmented] = useState(1);
-
   const { openModal2 } = useModals();
+  const { getFieldValue } = useFilterState();
+  const area = getFieldValue(FilterFieldName.area);
+  const categoryType = getFieldValue(FilterFieldName.categoryType);
+  const price = getFieldValue(FilterFieldName.price);
+  const direction = getFieldValue(FilterFieldName.direction);
+  const bed = getFieldValue(FilterFieldName.bed);
+  const bath = getFieldValue(FilterFieldName.bath);
 
-  const [filterState, setFilterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const roomsText = (): string => {
+    const results = [];
+    if (bed) {
+      results.push(`${bed.text} PN`);
+    }
+    if (bath) {
+      results.push(`${bath.text} WC`);
+    }
 
-  const [, setInnerBtsType] = useAtom(innerBtsLocationAtom);
-
-  const applySelectedFilters = () => {
-    setFilterState({ ...filterState, ...localFilterState });
-    setIsModalOpen(false);
-  };
-
-  console.log('filterState', filterState);
-  console.log('localFilterState', localFilterState);
-
-  const BUSINESS_TYPES_TEXTS = {
-    sell: 'Tin Bán',
-    rent: 'Tin Cho Thuê',
+    return results.join(' / ');
   };
 
   return (
@@ -79,12 +78,12 @@ const FilterModal = () => {
           title='Loại BĐS'
           onClick={() => {
             openModal2({
-              name: FilterFieldName.categoryType.toString(),
+              name: FilterFieldName.categoryType,
               title: 'Loại BĐS',
               content: <CategoryType />,
             });
           }}
-          after={localFilterState.categoryType?.text}
+          after={categoryType?.text}
         />
       </List>
 
@@ -100,12 +99,12 @@ const FilterModal = () => {
           title='Mức giá'
           onClick={() => {
             openModal2({
-              name: 'bts_price',
+              name: FilterFieldName.price,
               title: 'Mức giá',
               content: <Price />,
             });
           }}
-          after={localFilterState.price?.text}
+          after={price?.text}
         />
         <ListItem
           link
@@ -117,33 +116,33 @@ const FilterModal = () => {
               content: <Area />,
             });
           }}
-          after={localFilterState.area?.text}
+          after={area?.text}
         />
         <ListItem
           link
-          title='Phòng ngủ'
+          title='Số phòng'
           onClick={() => {
             openModal2({
-              name: 'bts_bed',
-              title: 'Phòng ngủ',
-              content: 'Phòng ngủ',
+              name: FilterFieldName.rooms,
+              title: 'Số phòng',
+              content: <Rooms />,
             });
           }}
-          after={''}
+          after={roomsText()}
         />
+
         <ListItem
           link
-          title='Phòng tắm'
+          title='Hướng'
           onClick={() => {
             openModal2({
-              name: 'bts_bath',
-              title: 'Phòng tắm',
-              content: 'Phòng tắm',
+              name: FilterFieldName.direction,
+              title: 'Hướng',
+              content: <Direction />,
             });
           }}
-          after={''}
+          after={direction?.text}
         />
-        <ListItem link title='Hướng' onClick={() => {}} after={''} />
       </List>
     </>
   );

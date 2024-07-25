@@ -1,16 +1,5 @@
-import { useState } from 'react';
-import { useAtom } from 'jotai';
+import { FilterFieldName } from '@mobile/filter_bds/types';
 
-import {
-  FilterOption,
-  FilterFieldName,
-} from '@mobile/filter_bds/types';
-
-import ListCheckOptions from './ListCheckOptions';
-import {
-  filterStateAtom,
-  localFilterStateAtom,
-} from '@mobile/filter_bds/states';
 import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
 import { BasicOption } from '@app/types';
@@ -52,7 +41,6 @@ export const ROOMS = [
 ];
 
 export default function Rooms() {
-  const [filterState] = useAtom(filterStateAtom);
   const { getFieldValue, setLocalFieldValue } = useFilterState();
   const curBed = getFieldValue(FilterFieldName.bed);
   const curBath = getFieldValue(FilterFieldName.bath);

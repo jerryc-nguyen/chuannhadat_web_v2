@@ -1,4 +1,4 @@
-import { List, ListItem, Searchbar, Toolbar } from 'konsta/react';
+import { Searchbar } from 'konsta/react';
 import ListCheckOptions from '../filter_bds/bts/ListCheckOptions';
 import { useState } from 'react';
 import { stringToSlug } from '@utils/string';

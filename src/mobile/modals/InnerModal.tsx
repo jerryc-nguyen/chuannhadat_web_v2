@@ -1,4 +1,3 @@
-import { Button } from 'konsta/react';
 import { ReactNode } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 

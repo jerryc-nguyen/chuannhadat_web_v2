@@ -1,17 +1,9 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 
-import {
-  FilterOption,
-  FilterFieldName,
-  LocationOption,
-} from '@mobile/filter_bds/types';
+import { LocationOption } from '@mobile/filter_bds/types';
 
-import {
-  filterStateAtom,
-  defaultFilterOption,
-  localFilterStateAtom,
-} from '@mobile/filter_bds/states';
+import { localFilterStateAtom } from '@mobile/filter_bds/states';
 import { List, ListItem } from 'konsta/react';
 
 import OptionPicker, { OptionProps } from '@mobile/ui/OptionPicker';

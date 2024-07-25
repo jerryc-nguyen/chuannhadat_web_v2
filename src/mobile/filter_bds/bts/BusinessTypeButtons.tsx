@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { Block, Segmented, SegmentedButton } from 'konsta/react';
-import { filterStateAtom, localFilterStateAtom } from '../states';
+import { filterStateAtom } from '../states';
 import { FilterFieldName } from '../types';
 import useFilterState from '../hooks/useFilterState';
 

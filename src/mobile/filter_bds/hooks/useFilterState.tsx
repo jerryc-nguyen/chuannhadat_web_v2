@@ -4,7 +4,7 @@ import { FilterFieldName, FilterOption } from '../types';
 import { BasicOption } from '@app/types';
 
 export default function useFilterState() {
-  const [filterState] = useAtom(filterStateAtom);
+  const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
   );
@@ -27,8 +27,16 @@ export default function useFilterState() {
     });
   };
 
+  const applyAllFilters = (filters?: {}) => {
+    setFilterState({
+      ...filterState,
+      ...filters,
+    });
+  };
+
   return {
     getFieldValue: getFieldValue,
     setLocalFieldValue: setLocalFieldValue,
+    applyAllFilters: applyAllFilters,
   };
 }

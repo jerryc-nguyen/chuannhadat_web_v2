@@ -1,17 +1,15 @@
 import { useAtom } from 'jotai';
 import { Button } from 'konsta/react';
-import { filterStateAtom, localFilterStateAtom } from './states';
+import { localFilterStateAtom } from './states';
 import useModals from '@mobile/modals/hooks';
+import useFilterState from './hooks/useFilterState';
 
 export default function FooterOverviewBtsButton() {
   const { closeModals } = useModals();
-  const [filterState, setFilterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
-
+  const [localFilterState] = useAtom(localFilterStateAtom);
+  const { applyAllFilters } = useFilterState();
   const onApplyFilter = () => {
-    setFilterState({ ...filterState, ...localFilterState });
+    applyAllFilters({ ...localFilterState });
     closeModals();
   };
 

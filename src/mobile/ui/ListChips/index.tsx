@@ -1,5 +1,3 @@
-import { BlockTitle, List, ListItem, Chip } from 'konsta/react';
-
 import { ReactElement } from 'react';
 import { BasicOption } from '@app/types';
 import './style.scss';

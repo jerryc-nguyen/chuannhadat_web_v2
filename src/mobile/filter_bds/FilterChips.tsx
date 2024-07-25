@@ -1,13 +1,13 @@
-import { Block, Button, Chip } from 'konsta/react';
-import React, { useState } from 'react';
+import { Block, Chip } from 'konsta/react';
+import React from 'react';
 import { filterStateAtom, localFilterStateAtom } from './states';
 import { useAtom } from 'jotai';
-import { FilterFieldName, FilterOption } from './types';
+import { FilterFieldName } from './types';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
-import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
+
 import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
@@ -59,6 +59,7 @@ export default function FilterChips() {
   );
   const { openModal } = useModals();
   const { selectedLocationText } = useFilterLocations();
+
   const selectedRoomText = (): string => {
     const results = [];
     if (filterState.bed) {
