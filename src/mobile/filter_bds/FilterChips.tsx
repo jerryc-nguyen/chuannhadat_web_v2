@@ -71,16 +71,19 @@ export default function FilterChips() {
   };
 
   const selectedFilterText = (filterOption: FilterChipOption) => {
+    const fieldName =
+      //@ts-ignore
+      FilterFieldName[filterOption.id] || filterOption.id;
+
     if (filterOption.id == FilterFieldName.locations) {
       return selectedLocationText ?? 'Khu vực';
     } else if (filterOption.id == FilterFieldName.rooms) {
       return selectedRoomText() || 'Số phòng';
     } else {
       //@ts-ignore
-      return filterState[filterOption.id]?.text ?? filterOption.text;
+      return filterState[fieldName]?.text ?? filterOption.text;
     }
   };
-  const [, setInnerBtsLocation] = useAtom(innerBtsLocationAtom);
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {

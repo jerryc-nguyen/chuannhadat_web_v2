@@ -33,9 +33,12 @@ export default function FooterBtsButton({
         localValue.bath = localFilterState.bath;
       }
     } else {
+      // @ts-ignore
+      const fieldName = FilterFieldName[filterOption.id];
+
       localValue = {
         // @ts-ignore
-        [filterOption.id]: localFilterState[filterOption.id],
+        [fieldName]: localFilterState[fieldName],
       };
     }
 
