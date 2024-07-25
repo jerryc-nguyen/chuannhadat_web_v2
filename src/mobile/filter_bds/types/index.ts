@@ -21,4 +21,7 @@ export enum FilterFieldName {
   rooms,
   bath,
   direction,
+  city,
+  district,
+  ward,
 }

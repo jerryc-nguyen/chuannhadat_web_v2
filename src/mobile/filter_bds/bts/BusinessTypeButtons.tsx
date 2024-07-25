@@ -1,12 +1,13 @@
 import { useAtom } from 'jotai';
 import { Block, Segmented, SegmentedButton } from 'konsta/react';
-import { filterStateAtom, localFilterStateAtom } from './states';
+import { filterStateAtom, localFilterStateAtom } from '../states';
+import { FilterFieldName } from '../types';
+import useFilterState from '../hooks/useFilterState';
 
 export default function BusinessTypeButtons() {
   const [filterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getFieldValue(FilterFieldName.businessType);
 
   return (
     <Block strongIos margin='my-0 mt-2'>
@@ -16,14 +17,12 @@ export default function BusinessTypeButtons() {
             <SegmentedButton
               strong
               key={option.text}
-              active={
-                option.text == localFilterState.businessType?.text
-              }
+              active={option.text == value?.text}
               onClick={() => {
-                setLocalFilterState({
-                  ...localFilterState,
-                  businessType: option,
-                });
+                setLocalFieldValue(
+                  FilterFieldName.businessType,
+                  option
+                );
               }}
             >
               {option.text}

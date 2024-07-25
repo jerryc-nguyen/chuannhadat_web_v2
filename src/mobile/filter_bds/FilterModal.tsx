@@ -27,7 +27,7 @@ import { FilterFieldName } from './types';
 
 import Area from './bts/Area';
 import Price from './bts/Price';
-import BusinessTypeButtons from './BusinessTypeButtons';
+import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
 import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';

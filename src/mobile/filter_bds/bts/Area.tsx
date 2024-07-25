@@ -7,25 +7,21 @@ import {
 } from '@mobile/filter_bds/types';
 
 import ListCheckOptions from './ListCheckOptions';
-import {
-  filterStateAtom,
-  defaultFilterOption,
-  localFilterStateAtom,
-} from '@mobile/filter_bds/states';
+import { filterStateAtom } from '@mobile/filter_bds/states';
+import useFilterState from '../hooks/useFilterState';
 
 export default function Area() {
   const [filterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getFieldValue(FilterFieldName.area);
 
   return (
     <>
       <ListCheckOptions
         options={filterState.areaOptions!}
-        selectedOption={localFilterState.area}
+        selectedOption={value}
         onSelect={(option: FilterOption) => {
-          setLocalFilterState({ ...localFilterState, area: option });
+          setLocalFieldValue(FilterFieldName.area, option);
         }}
       ></ListCheckOptions>
     </>

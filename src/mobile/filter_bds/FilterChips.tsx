@@ -12,10 +12,11 @@ import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
 import FooterOverviewBtsButton from './FooterOverviewBtsButton';
-import BusinessTypeButtons from './BusinessTypeButtons';
+import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Rooms from './bts/Rooms';
 import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
+import Direction from './bts/Direction';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -46,7 +47,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     text: 'Số Phòng',
   },
   {
-    id: 'direction',
+    id: FilterFieldName.direction,
     text: 'Hướng',
   },
 ];
@@ -101,6 +102,8 @@ export default function FilterChips() {
         return <Locations />;
       case FilterFieldName.rooms:
         return <Rooms />;
+      case FilterFieldName.direction:
+        return <Direction />;
       default:
         return undefined;
     }

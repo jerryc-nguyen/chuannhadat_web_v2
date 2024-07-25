@@ -1,18 +1,12 @@
-import cities from 'src/configs/locations/cities.json';
-import citiesDistricts from 'src/configs/locations/cities_districts.json';
-
-import { BasicOption } from '@app/types';
-import { FilterOption } from '@mobile/filter_bds/types';
-import { useEffect, useMemo } from 'react';
-import {
-  filterStateAtom,
-  localFilterStateAtom,
-} from '@mobile/filter_bds/states';
+import { FilterFieldName } from '@mobile/filter_bds/types';
+import { useMemo } from 'react';
+import { filterStateAtom } from '@mobile/filter_bds/states';
 import { useAtom } from 'jotai';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 export function useFilterLocations() {
   const [filterState] = useAtom(filterStateAtom);
-  const [localFilterState] = useAtom(localFilterStateAtom);
+  const { getFieldValue } = useFilterState();
 
   const selectedLocationText = useMemo((): string | undefined => {
     return (
@@ -22,10 +16,9 @@ export function useFilterLocations() {
     );
   }, [filterState.city, filterState.district, filterState.ward]);
 
-  const currentCity = localFilterState.city ?? filterState.city;
-  const currentDistrict =
-    localFilterState.district ?? filterState.district;
-  const currentWard = localFilterState.ward ?? filterState.ward;
+  const currentCity = getFieldValue(FilterFieldName.city);
+  const currentDistrict = getFieldValue(FilterFieldName.district);
+  const currentWard = getFieldValue(FilterFieldName.ward);
 
   return {
     selectedLocationText: selectedLocationText,

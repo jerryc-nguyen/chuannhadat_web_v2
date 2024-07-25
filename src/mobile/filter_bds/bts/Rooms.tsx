@@ -14,6 +14,7 @@ import {
 import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
 import { BasicOption } from '@app/types';
+import useFilterState from '../hooks/useFilterState';
 
 export const ROOMS = [
   {
@@ -52,15 +53,16 @@ export const ROOMS = [
 
 export default function Rooms() {
   const [filterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const curBed = getFieldValue(FilterFieldName.bed);
+  const curBath = getFieldValue(FilterFieldName.bath);
+
   const onSelectBed = (item: BasicOption) => {
-    setLocalFilterState({ ...localFilterState, bed: item });
+    setLocalFieldValue(FilterFieldName.bed, item);
   };
 
   const onSelectBath = (item: BasicOption) => {
-    setLocalFilterState({ ...localFilterState, bath: item });
+    setLocalFieldValue(FilterFieldName.bath, item);
   };
 
   return (
@@ -70,7 +72,7 @@ export default function Rooms() {
         <ListChips
           options={ROOMS}
           onSelect={onSelectBed}
-          value={localFilterState.bed ?? filterState.bed}
+          value={curBed}
         />
       </Block>
 
@@ -79,7 +81,7 @@ export default function Rooms() {
         <ListChips
           options={ROOMS}
           onSelect={onSelectBath}
-          value={localFilterState.bath ?? filterState.bath}
+          value={curBath}
         />
       </Block>
     </>

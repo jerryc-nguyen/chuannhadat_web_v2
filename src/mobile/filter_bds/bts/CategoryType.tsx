@@ -12,23 +12,20 @@ import {
   defaultFilterOption,
   localFilterStateAtom,
 } from '@mobile/filter_bds/states';
+import useFilterState from '../hooks/useFilterState';
 
 export default function CategoryType() {
   const [filterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getFieldValue(FilterFieldName.categoryType);
 
   return (
     <>
       <ListCheckOptions
         options={filterState.categoryTypeOptions!}
-        selectedOption={localFilterState.categoryType}
+        selectedOption={value}
         onSelect={(option: FilterOption) => {
-          setLocalFilterState({
-            ...localFilterState,
-            categoryType: option,
-          });
+          setLocalFieldValue(FilterFieldName.categoryType, option);
         }}
       ></ListCheckOptions>
     </>
