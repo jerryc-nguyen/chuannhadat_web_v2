@@ -9,7 +9,11 @@ import ListCheckOptions from './ListCheckOptions';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import useFilterState from '../hooks/useFilterState';
 
-export default function Direction() {
+export default function Direction({
+  onSelect,
+}: {
+  onSelect?: Function;
+}) {
   const [filterState] = useAtom(filterStateAtom);
   const { getFieldValue, setLocalFieldValue } = useFilterState();
   const value = getFieldValue(FilterFieldName.direction);
@@ -21,6 +25,9 @@ export default function Direction() {
         selectedOption={value}
         onSelect={(option: FilterOption) => {
           setLocalFieldValue(FilterFieldName.direction, option);
+          if (onSelect) {
+            onSelect(option);
+          }
         }}
       ></ListCheckOptions>
     </>

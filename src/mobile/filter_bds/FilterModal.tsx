@@ -35,6 +35,8 @@ import useModals from '@mobile/modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import Rooms from './bts/Rooms';
 import Direction from './bts/Direction';
+import Bed from './bts/Bed';
+import Bath from './bts/Bath';
 
 export const DEFAULT_MODAL_HEIGHTS = {
   [FilterFieldName.rooms]: 270,
@@ -42,7 +44,7 @@ export const DEFAULT_MODAL_HEIGHTS = {
 };
 
 const FilterModal = () => {
-  const { openModal2 } = useModals();
+  const { openModal2, closeModal2 } = useModals();
   const { getFieldValue } = useFilterState();
   const area = getFieldValue(FilterFieldName.area);
   const categoryType = getFieldValue(FilterFieldName.categoryType);
@@ -51,16 +53,19 @@ const FilterModal = () => {
   const bed = getFieldValue(FilterFieldName.bed);
   const bath = getFieldValue(FilterFieldName.bath);
 
-  const roomsText = (): string => {
-    const results = [];
+  const bedText = (): string => {
     if (bed) {
-      results.push(`${bed.text} PN`);
+      return `${bed.text} PN`;
+    } else {
+      return '';
     }
+  };
+  const bathText = (): string => {
     if (bath) {
-      results.push(`${bath.text} WC`);
+      return `${bath.text} WC`;
+    } else {
+      return '';
     }
-
-    return results.join(' / ');
   };
 
   return (
@@ -80,7 +85,9 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.categoryType,
               title: 'Loại BĐS',
-              content: <CategoryType />,
+              content: (
+                <CategoryType onSelect={() => closeModal2()} />
+              ),
             });
           }}
           after={categoryType?.text}
@@ -101,7 +108,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.price,
               title: 'Mức giá',
-              content: <Price />,
+              content: <Price onSelect={() => closeModal2()} />,
             });
           }}
           after={price?.text}
@@ -113,22 +120,35 @@ const FilterModal = () => {
             openModal2({
               name: 'bts_area',
               title: 'Diện tích',
-              content: <Area />,
+              content: <Area onSelect={() => closeModal2()} />,
             });
           }}
           after={area?.text}
         />
         <ListItem
           link
-          title='Số phòng'
+          title='Số phòng ngủ'
           onClick={() => {
             openModal2({
-              name: FilterFieldName.rooms,
-              title: 'Số phòng',
-              content: <Rooms />,
+              name: FilterFieldName.bed,
+              title: 'Số phòng ngủ',
+              content: <Bed onSelect={() => closeModal2()} />,
             });
           }}
-          after={roomsText()}
+          after={bedText()}
+        />
+
+        <ListItem
+          link
+          title='Số phòng tắm'
+          onClick={() => {
+            openModal2({
+              name: FilterFieldName.bath,
+              title: 'Số phòng tắm',
+              content: <Bath onSelect={() => closeModal2()} />,
+            });
+          }}
+          after={bathText()}
         />
 
         <ListItem
@@ -138,7 +158,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.direction,
               title: 'Hướng',
-              content: <Direction />,
+              content: <Direction onSelect={() => closeModal2()} />,
             });
           }}
           after={direction?.text}

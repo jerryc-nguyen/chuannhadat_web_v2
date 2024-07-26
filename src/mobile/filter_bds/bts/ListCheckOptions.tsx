@@ -5,7 +5,7 @@ import { ReactElement, useState } from 'react';
 const ListOptions = ({
   options,
   selectedOption,
-  onSelect = () => {},
+  onSelect,
 }: {
   options: FilterOption[] | any[];
   selectedOption?: FilterOption | any;
