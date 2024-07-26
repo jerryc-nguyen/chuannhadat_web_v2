@@ -11,7 +11,6 @@ import useFilterState from './hooks/useFilterState';
 import Direction from './bts/Direction';
 import Bed from './bts/Bed';
 import Bath from './bts/Bath';
-import { ALL_TEXT } from '@app/constants';
 
 export const DEFAULT_MODAL_HEIGHTS = {
   [FilterFieldName.rooms]: 270,
@@ -66,7 +65,7 @@ const FilterModal = () => {
               ),
             });
           }}
-          after={categoryType?.text ?? ALL_TEXT}
+          after={categoryType?.text}
         />
       </List>
 
@@ -87,7 +86,7 @@ const FilterModal = () => {
               content: <Price onSelect={() => closeModal2()} />,
             });
           }}
-          after={price?.text ?? ALL_TEXT}
+          after={price?.text}
         />
         <ListItem
           link
@@ -99,7 +98,7 @@ const FilterModal = () => {
               content: <Area onSelect={() => closeModal2()} />,
             });
           }}
-          after={area?.text ?? ALL_TEXT}
+          after={area?.text}
         />
         <ListItem
           link
@@ -137,7 +136,7 @@ const FilterModal = () => {
               content: <Direction onSelect={() => closeModal2()} />,
             });
           }}
-          after={direction?.text ?? ALL_TEXT}
+          after={direction?.text}
         />
       </List>
     </>

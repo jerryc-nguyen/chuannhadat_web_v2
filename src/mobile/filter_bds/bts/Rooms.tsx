@@ -3,10 +3,10 @@ import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
 import { OptionForSelect } from '@app/types';
 import useFilterState from '../hooks/useFilterState';
-import { ROOMS } from '@app/constants';
 
 export default function Rooms() {
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const { getFieldValue, setLocalFieldValue, filterState } =
+    useFilterState();
   const curBed = getFieldValue(FilterFieldName.bed);
   const curBath = getFieldValue(FilterFieldName.bath);
 
@@ -23,7 +23,7 @@ export default function Rooms() {
       <BlockTitle>Phòng ngủ</BlockTitle>
       <Block>
         <ListChips
-          options={ROOMS}
+          options={filterState.roomOptions || []}
           onSelect={onSelectBed}
           value={curBed}
         />
@@ -32,7 +32,7 @@ export default function Rooms() {
       <BlockTitle>Nhà tắm</BlockTitle>
       <Block>
         <ListChips
-          options={ROOMS}
+          options={filterState.roomOptions || []}
           onSelect={onSelectBath}
           value={curBath}
         />

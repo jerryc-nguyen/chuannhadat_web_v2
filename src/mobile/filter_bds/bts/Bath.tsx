@@ -4,10 +4,10 @@ import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
 
 import useFilterState from '../hooks/useFilterState';
-import { ROOMS } from '@app/constants';
 
 export default function Bath({ onSelect }: { onSelect?: Function }) {
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const { getFieldValue, setLocalFieldValue, filterState } =
+    useFilterState();
   const value = getFieldValue(FilterFieldName.bath);
 
   const onSelectOption = (item: OptionForSelect) => {
@@ -21,7 +21,7 @@ export default function Bath({ onSelect }: { onSelect?: Function }) {
     <>
       <Block>
         <ListChips
-          options={ROOMS}
+          options={filterState.roomOptions || []}
           onSelect={onSelectOption}
           value={value}
         />

@@ -16,6 +16,7 @@ export interface FilterState {
   priceOptions?: OptionForSelect[];
   areaOptions?: OptionForSelect[];
   directionOptions?: OptionForSelect[];
+  roomOptions?: OptionForSelect[];
   cityOptions?: OptionForSelect[];
   districtOptions?: OptionForSelect[];
   wardOptions?: OptionForSelect[];
@@ -33,13 +34,20 @@ export interface FilterState {
 
 export const filterStateAtom = atom<FilterState>({
   // @ts-ignore
-  businessTypeOptions: searchFormOptions.business_types,
-  categoryTypeOptions: searchFormOptions.category_types,
-  bedOptions: searchFormOptions.rooms,
-  bathOptions: searchFormOptions.rooms,
-  priceOptions: searchFormOptions.sell_prices,
-  areaOptions: searchFormOptions.areas,
-  directionOptions: searchFormOptions.directions,
+  businessTypeOptions: [
+    ALL_OPTION,
+    ...searchFormOptions.business_types,
+  ],
+  categoryTypeOptions: [
+    ALL_OPTION,
+    ...searchFormOptions.category_types,
+  ],
+  bedOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  bathOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  priceOptions: [ALL_OPTION, ...searchFormOptions.sell_prices],
+  areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
+  directionOptions: [ALL_OPTION, ...searchFormOptions.directions],
+  roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
   cityOptions: [],
   districtOptions: [],
   wardOptions: [],

@@ -36,6 +36,8 @@ export default function useFilterState() {
   };
 
   return {
+    filterState: filterState,
+    localFilterState: localFilterState,
     getFieldValue: getFieldValue,
     setLocalFieldValue: setLocalFieldValue,
     applyAllFilters: applyAllFilters,
