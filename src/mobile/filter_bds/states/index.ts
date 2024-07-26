@@ -6,7 +6,10 @@ export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);
 
 import searchFormOptions from './search_form_options.json';
-import { ALL_OPTION } from '@app/constants';
+import {
+  ALL_OPTION,
+  DEFAULT_BUSINESS_TYPE_OPTION,
+} from '@app/constants';
 
 export interface FilterState {
   businessTypeOptions?: OptionForSelect[];
@@ -17,9 +20,6 @@ export interface FilterState {
   areaOptions?: OptionForSelect[];
   directionOptions?: OptionForSelect[];
   roomOptions?: OptionForSelect[];
-  cityOptions?: OptionForSelect[];
-  districtOptions?: OptionForSelect[];
-  wardOptions?: OptionForSelect[];
   businessType?: OptionForSelect;
   categoryType?: OptionForSelect;
   bed?: OptionForSelect;
@@ -34,10 +34,7 @@ export interface FilterState {
 
 export const filterStateAtom = atom<FilterState>({
   // @ts-ignore
-  businessTypeOptions: [
-    ALL_OPTION,
-    ...searchFormOptions.business_types,
-  ],
+  businessTypeOptions: searchFormOptions.business_types,
   categoryTypeOptions: [
     ALL_OPTION,
     ...searchFormOptions.category_types,
@@ -48,10 +45,7 @@ export const filterStateAtom = atom<FilterState>({
   areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
   directionOptions: [ALL_OPTION, ...searchFormOptions.directions],
   roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
-  cityOptions: [],
-  districtOptions: [],
-  wardOptions: [],
-  businessType: undefined,
+  businessType: DEFAULT_BUSINESS_TYPE_OPTION,
   categoryType: undefined,
   bed: undefined,
   bath: undefined,

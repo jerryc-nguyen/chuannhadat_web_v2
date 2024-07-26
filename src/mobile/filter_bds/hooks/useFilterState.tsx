@@ -18,13 +18,15 @@ export default function useFilterState() {
 
   const setLocalFieldValue = (
     fieldId: FilterFieldName,
-    option: FilterOption | OptionForSelect | undefined
+    option: OptionForSelect | undefined
   ) => {
     const fieldName = FilterFieldName[fieldId];
+    const finalOption = option?.value != 'all' ? option : undefined;
+
     // @ts-ignore
     setLocalFilterState({
       ...localFilterState,
-      [fieldName]: option,
+      [fieldName]: finalOption,
     });
   };
 

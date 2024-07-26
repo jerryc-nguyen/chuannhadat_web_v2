@@ -6,3 +6,7 @@ export const ALL_FILTER_OPTION = {
   text: ALL_TEXT,
   params: {},
 };
+export const DEFAULT_BUSINESS_TYPE_OPTION = {
+  value: 'sell',
+  text: 'Bán',
+};

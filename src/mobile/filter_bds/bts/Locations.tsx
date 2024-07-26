@@ -1,48 +1,32 @@
 import { useEffect, useState } from 'react';
-import { useAtom } from 'jotai';
-
-import { LocationOption } from '@mobile/filter_bds/types';
-
-import { localFilterStateAtom } from '@mobile/filter_bds/states';
 import { List, ListItem } from 'konsta/react';
 
-import OptionPicker, {
-  OptionForSelect,
-} from '@mobile/ui/OptionPicker';
 import { useFilterLocations } from '@mobile/locations/hooks';
-
+import { ALL_OPTION } from '@app/constants';
 import useModals from '@mobile/modals/hooks';
 import { ModalNames } from '@mobile/modals/states/types';
 import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
 import districtWards from 'src/configs/locations/districts_wards.json';
+import useFilterState from '../hooks/useFilterState';
+import { FilterFieldName, OptionForSelect } from '@app/types';
+import OptionPicker from '@mobile/ui/OptionPicker';
 
-type LocationOptionForSelect = LocationOption | undefined;
+type LocationProps = OptionForSelect | undefined;
 
-export const selectOptiontToFilterOption = (
-  option: OptionForSelect,
-  field_name: string
-) => {
-  return {
-    text: option.text,
-    params: { [field_name]: option.id },
-  };
-};
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
 
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const { getFieldValue, setLocalFieldValue, filterState } =
+    useFilterState();
+
   const { currentCity, currentDistrict, currentWard } =
     useFilterLocations();
 
-  const [city, setCity] =
-    useState<LocationOptionForSelect>(currentCity);
+  const [city, setCity] = useState<LocationProps>(currentCity);
   const [district, setDistrict] =
-    useState<LocationOptionForSelect>(currentDistrict);
-  const [ward, setWard] =
-    useState<LocationOptionForSelect>(currentWard);
+    useState<LocationProps>(currentDistrict);
+  const [ward, setWard] = useState<LocationProps>(currentWard);
 
   const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
@@ -50,14 +34,12 @@ export default function Locations() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
     setDistrict(undefined);
-    localFilterState.district = undefined;
-    setLocalFilterState(localFilterState);
+    setLocalFieldValue(FilterFieldName.district, undefined);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetWard = () => {
     setWard(undefined);
-    localFilterState.ward = undefined;
-    setLocalFilterState(localFilterState);
+    setLocalFieldValue(FilterFieldName.ward, undefined);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,32 +58,38 @@ export default function Locations() {
     }
   };
 
-  const onSelectCity = (city?: LocationOption) => {
-    setCity(city);
+  const onSelectCity = (city?: OptionForSelect) => {
+    const finalOption = city?.value != 'all' ? city : undefined;
+
+    setCity(finalOption);
     resetDistrict();
     resetWard();
-    //@ts-ignore
-    setDistrictOptions(citiesDistricts[city?.value + '']);
-    localFilterState.city = city;
-    setLocalFilterState(localFilterState);
+
+    setDistrictOptions(
+      //@ts-ignore
+      citiesDistricts[finalOption?.value + ''] || []
+    );
+    setLocalFieldValue(FilterFieldName.city, finalOption);
     closeModal3();
   };
 
-  const onSelectDistrict = (district?: LocationOption) => {
-    localFilterState.district = district;
+  const onSelectDistrict = (district?: OptionForSelect) => {
+    const finalOption =
+      district?.value != 'all' ? district : undefined;
 
     //@ts-ignore
-    setWardOptions(districtWards[district?.value + ''] || []);
-    setLocalFilterState(localFilterState);
+    setWardOptions(districtWards[finalOption?.value + ''] || []);
+    setLocalFieldValue(FilterFieldName.district, finalOption);
     resetWard();
-    setDistrict(district);
+    setDistrict(finalOption);
     closeModal3();
   };
 
-  const onSelectWard = (ward?: LocationOption) => {
-    setWard(ward);
-    localFilterState.ward = ward;
-    setLocalFilterState(localFilterState);
+  const onSelectWard = (ward?: OptionForSelect) => {
+    const finalOption = ward?.value != 'all' ? ward : undefined;
+
+    setWard(finalOption);
+    setLocalFieldValue(FilterFieldName.ward, finalOption);
     closeModal3();
   };
 
@@ -123,7 +111,7 @@ export default function Locations() {
               content: (
                 <OptionPicker
                   searchable
-                  options={cities}
+                  options={[ALL_OPTION, ...cities]}
                   value={city}
                   onSelect={onSelectCity}
                 />
@@ -144,9 +132,10 @@ export default function Locations() {
               content: (
                 <OptionPicker
                   searchable
-                  options={districtOptions}
+                  options={[ALL_OPTION, ...districtOptions]}
                   value={district}
                   onSelect={onSelectDistrict}
+                  emptyMessage='Vui lòng chọn trước Tỉnh / Thành Phố'
                 />
               ),
               maxHeightPercent: 0.5,
@@ -165,9 +154,10 @@ export default function Locations() {
               content: (
                 <OptionPicker
                   searchable
-                  options={wardOptions}
+                  options={[ALL_OPTION, ...wardOptions]}
                   value={ward}
                   onSelect={onSelectWard}
+                  emptyMessage='Vui lòng chọn trước Quận / Huyện'
                 />
               ),
               maxHeightPercent: 0.5,
