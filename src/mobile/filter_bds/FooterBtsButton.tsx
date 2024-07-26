@@ -3,7 +3,7 @@ import { Button } from 'konsta/react';
 import { filterStateAtom, localFilterStateAtom } from './states';
 import { FilterChipOption } from './FilterChips';
 import useModals from '@mobile/modals/hooks';
-import { FilterFieldName } from './types';
+import { FilterFieldName } from '@app/types';
 
 export default function FooterBtsButton({
   filterOption,

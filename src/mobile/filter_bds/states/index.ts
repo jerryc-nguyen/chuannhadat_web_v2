@@ -1,56 +1,51 @@
 import { atom } from 'jotai';
-import {
-  FilterOption,
-  FilterFieldName,
-  LocationOption,
-} from '../types';
-
-export const defaultFilterOption: FilterOption = {
-  text: '',
-  params: {},
-};
+import { LocationOption } from '../types';
+import { OptionForSelect } from '@app/types';
 
 export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);
 
 import searchFormOptions from './search_form_options.json';
-import { BasicOption } from '@app/types';
+import {
+  ALL_OPTION,
+  DEFAULT_BUSINESS_TYPE_OPTION,
+} from '@app/constants';
 
 export interface FilterState {
-  businessTypeOptions?: FilterOption[];
-  categoryTypeOptions?: FilterOption[];
-  bedOptions?: FilterOption[];
-  bathOptions?: FilterOption[];
-  priceOptions?: FilterOption[];
-  areaOptions?: FilterOption[];
-  directionOptions?: FilterOption[];
-  cityOptions?: FilterOption[];
-  districtOptions?: FilterOption[];
-  wardOptions?: FilterOption[];
-  businessType?: FilterOption;
-  categoryType?: FilterOption;
-  bed?: BasicOption;
-  bath?: BasicOption;
-  price?: FilterOption;
-  area?: FilterOption;
-  direction?: FilterOption;
+  businessTypeOptions?: OptionForSelect[];
+  categoryTypeOptions?: OptionForSelect[];
+  bedOptions?: OptionForSelect[];
+  bathOptions?: OptionForSelect[];
+  priceOptions?: OptionForSelect[];
+  areaOptions?: OptionForSelect[];
+  directionOptions?: OptionForSelect[];
+  roomOptions?: OptionForSelect[];
+  businessType?: OptionForSelect;
+  categoryType?: OptionForSelect;
+  bed?: OptionForSelect;
+  bath?: OptionForSelect;
+  price?: OptionForSelect;
+  area?: OptionForSelect;
+  direction?: OptionForSelect;
   city?: LocationOption;
   district?: LocationOption;
   ward?: LocationOption;
 }
 
 export const filterStateAtom = atom<FilterState>({
+  // @ts-ignore
   businessTypeOptions: searchFormOptions.business_types,
-  categoryTypeOptions: searchFormOptions.property_types,
-  bedOptions: searchFormOptions.beds_rooms,
-  bathOptions: searchFormOptions.baths_rooms,
-  priceOptions: searchFormOptions.sell_prices,
-  areaOptions: searchFormOptions.areas,
-  directionOptions: searchFormOptions.directions,
-  cityOptions: [],
-  districtOptions: [],
-  wardOptions: [],
-  businessType: undefined,
+  categoryTypeOptions: [
+    ALL_OPTION,
+    ...searchFormOptions.category_types,
+  ],
+  bedOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  bathOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  priceOptions: [ALL_OPTION, ...searchFormOptions.sell_prices],
+  areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
+  directionOptions: [ALL_OPTION, ...searchFormOptions.directions],
+  roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  businessType: DEFAULT_BUSINESS_TYPE_OPTION,
   categoryType: undefined,
   bed: undefined,
   bath: undefined,

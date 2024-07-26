@@ -1,17 +1,11 @@
-import { useAtom } from 'jotai';
-
-import {
-  FilterOption,
-  FilterFieldName,
-} from '@mobile/filter_bds/types';
+import { FilterFieldName, OptionForSelect } from '@app/types';
 
 import ListCheckOptions from './ListCheckOptions';
-import { filterStateAtom } from '@mobile/filter_bds/states';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Area({ onSelect }: { onSelect?: Function }) {
-  const [filterState] = useAtom(filterStateAtom);
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
+  const { getFieldValue, setLocalFieldValue, filterState } =
+    useFilterState();
   const value = getFieldValue(FilterFieldName.area);
 
   return (
@@ -19,7 +13,7 @@ export default function Area({ onSelect }: { onSelect?: Function }) {
       <ListCheckOptions
         options={filterState.areaOptions!}
         selectedOption={value}
-        onSelect={(option: FilterOption) => {
+        onSelect={(option: OptionForSelect) => {
           setLocalFieldValue(FilterFieldName.area, option);
           if (onSelect) {
             onSelect(option);

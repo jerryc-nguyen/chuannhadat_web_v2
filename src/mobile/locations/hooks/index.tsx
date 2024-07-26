@@ -1,8 +1,8 @@
-import { FilterFieldName } from '@mobile/filter_bds/types';
 import { useMemo } from 'react';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import { useAtom } from 'jotai';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import { FilterFieldName } from '@app/types';
 
 export function useFilterLocations() {
   const [filterState] = useAtom(filterStateAtom);

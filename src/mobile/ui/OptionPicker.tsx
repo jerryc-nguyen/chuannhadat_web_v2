@@ -1,13 +1,9 @@
 import { Searchbar } from 'konsta/react';
 import ListCheckOptions from '../filter_bds/bts/ListCheckOptions';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { stringToSlug } from '@utils/string';
 import { IoFileTrayOutline } from 'react-icons/io5';
-
-export interface OptionProps {
-  id?: string | number;
-  text?: string;
-}
+import { OptionForSelect } from '@app/types';
 
 export default function OptionPicker({
   options,
@@ -15,12 +11,14 @@ export default function OptionPicker({
   searchable,
   onSelect,
   searchPlaceHolder,
+  emptyMessage,
 }: {
-  options: Array<OptionProps>;
-  value?: OptionProps;
-  onSelect: (option: OptionProps) => void;
+  options: Array<OptionForSelect>;
+  value?: OptionForSelect;
+  onSelect: (option: OptionForSelect) => void;
   searchable?: boolean;
   searchPlaceHolder?: string;
+  emptyMessage?: string;
 }) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -37,6 +35,14 @@ export default function OptionPicker({
       )
     : options;
 
+  const isEmptyList = useMemo((): boolean => {
+    return (
+      (filteredItems[0]?.value == 'all' &&
+        filteredItems.length === 1) ||
+      filteredItems.length === 0
+    );
+  }, [filteredItems]);
+
   return (
     <>
       {searchable && (
@@ -51,16 +57,19 @@ export default function OptionPicker({
         </div>
       )}
 
-      {filteredItems.length === 0 ? (
+      {isEmptyList ? (
         <div className='flex items-center flex-col mt-4'>
           <IoFileTrayOutline color='rgb(156 163 175)' size={25} />
-          <p className='text-gray'> Không tìm thấy</p>
+          <p className='text-gray'>
+            {' '}
+            {emptyMessage ?? 'Không tìm thấy'}
+          </p>
         </div>
       ) : (
         <ListCheckOptions
           options={filteredItems}
           selectedOption={value}
-          onSelect={(option: OptionProps) => {
+          onSelect={(option: OptionForSelect) => {
             onSelect(option);
           }}
         ></ListCheckOptions>

@@ -1,4 +1,4 @@
-import { FilterFieldName } from '@mobile/filter_bds/types';
+import { FilterFieldName } from '@app/types';
 import { ReactElement } from 'react';
 
 export enum ModalNames {

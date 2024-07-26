@@ -1,15 +1,15 @@
 import { ReactElement } from 'react';
-import { BasicOption } from '@app/types';
+import { OptionForSelect } from '@app/types';
 import './style.scss';
 import HorizontalScroller from '../HorizontalScroller';
 
 const ListChips = ({
   options,
   value,
-  onSelect = (item: BasicOption) => {},
+  onSelect = (item: OptionForSelect) => {},
 }: {
-  value?: BasicOption;
-  options: Array<BasicOption>;
+  value?: OptionForSelect;
+  options: Array<OptionForSelect>;
   onSelect?: Function;
   horizontalScroll?: boolean;
 }): ReactElement => {
@@ -25,7 +25,7 @@ const ListChips = ({
             return (
               <button
                 className={`c-listChip__item border border-black rounded-full border-opacity-20 bg-white ${selectedClass}`}
-                key={item.id}
+                key={item.text}
                 onClick={() => onSelect(item)}
               >
                 {item.text}
