@@ -1,42 +1,17 @@
-import React, { useState } from 'react';
-
-import {
-  Page,
-  Navbar,
-  Popup,
-  List,
-  ListItem,
-  Link,
-  Button,
-  Block,
-  BlockTitle,
-  Checkbox,
-  Segmented,
-  SegmentedButton,
-  Toolbar,
-} from 'konsta/react';
-import { useAtom } from 'jotai';
-
-import {
-  openFilterModalAtom,
-  filterStateAtom,
-  localFilterStateAtom,
-} from './states';
-
+import React from 'react';
+import { BlockTitle, Chip, List, ListItem } from 'konsta/react';
 import { FilterFieldName } from './types';
-
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
-import { innerBtsLocationAtom } from '@mobile/modals/states/inner_view';
 import useModals from '@mobile/modals/hooks';
 import useFilterState from './hooks/useFilterState';
-import Rooms from './bts/Rooms';
 import Direction from './bts/Direction';
 import Bed from './bts/Bed';
 import Bath from './bts/Bath';
+import { ALL_TEXT } from '@app/constants';
 
 export const DEFAULT_MODAL_HEIGHTS = {
   [FilterFieldName.rooms]: 270,
@@ -60,6 +35,7 @@ const FilterModal = () => {
       return '';
     }
   };
+
   const bathText = (): string => {
     if (bath) {
       return `${bath.text} WC`;
@@ -90,7 +66,7 @@ const FilterModal = () => {
               ),
             });
           }}
-          after={categoryType?.text}
+          after={categoryType?.text ?? ALL_TEXT}
         />
       </List>
 
@@ -111,7 +87,7 @@ const FilterModal = () => {
               content: <Price onSelect={() => closeModal2()} />,
             });
           }}
-          after={price?.text}
+          after={price?.text ?? ALL_TEXT}
         />
         <ListItem
           link
@@ -123,7 +99,7 @@ const FilterModal = () => {
               content: <Area onSelect={() => closeModal2()} />,
             });
           }}
-          after={area?.text}
+          after={area?.text ?? ALL_TEXT}
         />
         <ListItem
           link
@@ -161,7 +137,7 @@ const FilterModal = () => {
               content: <Direction onSelect={() => closeModal2()} />,
             });
           }}
-          after={direction?.text}
+          after={direction?.text ?? ALL_TEXT}
         />
       </List>
     </>

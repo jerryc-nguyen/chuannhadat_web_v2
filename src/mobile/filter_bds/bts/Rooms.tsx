@@ -4,41 +4,7 @@ import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
 import { BasicOption } from '@app/types';
 import useFilterState from '../hooks/useFilterState';
-
-export const ROOMS = [
-  {
-    id: 1,
-    text: '1',
-  },
-  {
-    id: 2,
-    text: '2',
-  },
-  {
-    id: 3,
-    text: '3',
-  },
-  {
-    id: 4,
-    text: '4',
-  },
-  {
-    id: 5,
-    text: '5',
-  },
-  {
-    id: 6,
-    text: '6',
-  },
-  {
-    id: 7,
-    text: '7',
-  },
-  {
-    id: 8,
-    text: '8',
-  },
-];
+import { ROOMS } from '@app/constants';
 
 export default function Rooms() {
   const { getFieldValue, setLocalFieldValue } = useFilterState();

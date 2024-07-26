@@ -4,7 +4,7 @@ import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
 import { BasicOption } from '@app/types';
 import useFilterState from '../hooks/useFilterState';
-import { ROOMS } from './Rooms';
+import { ROOMS } from '@app/constants';
 
 export default function Bed({ onSelect }: { onSelect?: Function }) {
   const { getFieldValue, setLocalFieldValue } = useFilterState();

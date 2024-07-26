@@ -17,7 +17,7 @@ export default function useFilterState() {
 
   const setLocalFieldValue = (
     fieldId: FilterFieldName,
-    option: FilterOption | BasicOption
+    option: FilterOption | BasicOption | undefined
   ) => {
     const fieldName = FilterFieldName[fieldId];
     // @ts-ignore

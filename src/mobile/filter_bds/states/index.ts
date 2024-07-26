@@ -15,6 +15,7 @@ export const locationsAtom = atom(false);
 
 import searchFormOptions from './search_form_options.json';
 import { BasicOption } from '@app/types';
+import { ALL_OPTION } from '@app/constants';
 
 export interface FilterState {
   businessTypeOptions?: FilterOption[];
