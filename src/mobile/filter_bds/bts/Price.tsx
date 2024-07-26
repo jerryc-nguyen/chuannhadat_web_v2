@@ -1,11 +1,9 @@
 import { useAtom } from 'jotai';
 
-import { FilterOption } from '@mobile/filter_bds/types';
-
-import ListCheckOptions from './ListCheckOptions';
+import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName } from '@app/types';
+import { FilterFieldName, OptionForSelect } from '@app/types';
 
 export default function Price({ onSelect }: { onSelect?: Function }) {
   const [filterState] = useAtom(filterStateAtom);
@@ -17,7 +15,7 @@ export default function Price({ onSelect }: { onSelect?: Function }) {
       <ListCheckOptions
         options={filterState.priceOptions!}
         selectedOption={value}
-        onSelect={(option: FilterOption) => {
+        onSelect={(option: OptionForSelect) => {
           setLocalFieldValue(FilterFieldName.price, option);
           if (onSelect) {
             onSelect(option);
