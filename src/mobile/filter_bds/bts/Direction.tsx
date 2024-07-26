@@ -1,13 +1,11 @@
 import { useAtom } from 'jotai';
 
-import {
-  FilterOption,
-  FilterFieldName,
-} from '@mobile/filter_bds/types';
+import { FilterOption } from '@mobile/filter_bds/types';
 
 import ListCheckOptions from './ListCheckOptions';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import useFilterState from '../hooks/useFilterState';
+import { FilterFieldName } from '@app/types';
 
 export default function Direction({
   onSelect,

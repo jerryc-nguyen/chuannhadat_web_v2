@@ -1,50 +1,42 @@
 import { atom } from 'jotai';
-import {
-  FilterOption,
-  FilterFieldName,
-  LocationOption,
-} from '../types';
-
-export const defaultFilterOption: FilterOption = {
-  text: '',
-  params: {},
-};
+import { LocationOption } from '../types';
+import { OptionForSelect } from '@app/types';
 
 export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);
 
 import searchFormOptions from './search_form_options.json';
-import { BasicOption } from '@app/types';
 import { ALL_OPTION } from '@app/constants';
 
 export interface FilterState {
-  businessTypeOptions?: FilterOption[];
-  categoryTypeOptions?: FilterOption[];
-  bedOptions?: FilterOption[];
-  bathOptions?: FilterOption[];
-  priceOptions?: FilterOption[];
-  areaOptions?: FilterOption[];
-  directionOptions?: FilterOption[];
-  cityOptions?: FilterOption[];
-  districtOptions?: FilterOption[];
-  wardOptions?: FilterOption[];
-  businessType?: FilterOption;
-  categoryType?: FilterOption;
-  bed?: BasicOption;
-  bath?: BasicOption;
-  price?: FilterOption;
-  area?: FilterOption;
-  direction?: FilterOption;
+  businessTypeOptions?: OptionForSelect[];
+  categoryTypeOptions?: OptionForSelect[];
+  bedOptions?: OptionForSelect[];
+  bathOptions?: OptionForSelect[];
+  priceOptions?: OptionForSelect[];
+  areaOptions?: OptionForSelect[];
+  directionOptions?: OptionForSelect[];
+  cityOptions?: OptionForSelect[];
+  districtOptions?: OptionForSelect[];
+  wardOptions?: OptionForSelect[];
+  businessType?: OptionForSelect;
+  categoryType?: OptionForSelect;
+  bed?: OptionForSelect;
+  bath?: OptionForSelect;
+  price?: OptionForSelect;
+  area?: OptionForSelect;
+  direction?: OptionForSelect;
   city?: LocationOption;
   district?: LocationOption;
   ward?: LocationOption;
 }
 
 export const filterStateAtom = atom<FilterState>({
+  // @ts-ignore
   businessTypeOptions: searchFormOptions.business_types,
-  categoryTypeOptions: searchFormOptions.property_types,
-  bedOptions: searchFormOptions.beds_rooms,
-  bathOptions: searchFormOptions.baths_rooms,
+  categoryTypeOptions: searchFormOptions.category_types,
+  bedOptions: searchFormOptions.rooms,
+  bathOptions: searchFormOptions.rooms,
   priceOptions: searchFormOptions.sell_prices,
   areaOptions: searchFormOptions.areas,
   directionOptions: searchFormOptions.directions,

@@ -6,7 +6,9 @@ import { LocationOption } from '@mobile/filter_bds/types';
 import { localFilterStateAtom } from '@mobile/filter_bds/states';
 import { List, ListItem } from 'konsta/react';
 
-import OptionPicker, { OptionProps } from '@mobile/ui/OptionPicker';
+import OptionPicker, {
+  OptionForSelect,
+} from '@mobile/ui/OptionPicker';
 import { useFilterLocations } from '@mobile/locations/hooks';
 
 import useModals from '@mobile/modals/hooks';
@@ -15,10 +17,10 @@ import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
 import districtWards from 'src/configs/locations/districts_wards.json';
 
-type LocationOptionProps = LocationOption | undefined;
+type LocationOptionForSelect = LocationOption | undefined;
 
 export const selectOptiontToFilterOption = (
-  option: OptionProps,
+  option: OptionForSelect,
   field_name: string
 ) => {
   return {
@@ -35,10 +37,12 @@ export default function Locations() {
   const { currentCity, currentDistrict, currentWard } =
     useFilterLocations();
 
-  const [city, setCity] = useState<LocationOptionProps>(currentCity);
+  const [city, setCity] =
+    useState<LocationOptionForSelect>(currentCity);
   const [district, setDistrict] =
-    useState<LocationOptionProps>(currentDistrict);
-  const [ward, setWard] = useState<LocationOptionProps>(currentWard);
+    useState<LocationOptionForSelect>(currentDistrict);
+  const [ward, setWard] =
+    useState<LocationOptionForSelect>(currentWard);
 
   const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
@@ -59,12 +63,16 @@ export default function Locations() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const populateOptions = () => {
     if (currentCity) {
-      //@ts-ignore
-      setDistrictOptions(citiesDistricts[currentCity?.id + ''] || []);
+      setDistrictOptions(
+        //@ts-ignore
+        citiesDistricts[currentCity?.value + '']
+      );
     }
     if (currentDistrict) {
-      //@ts-ignore
-      setWardOptions(districtWards[currentDistrict?.id + ''] || []);
+      setWardOptions(
+        //@ts-ignore
+        districtWards[currentDistrict?.value + '']
+      );
     }
   };
 
@@ -73,7 +81,7 @@ export default function Locations() {
     resetDistrict();
     resetWard();
     //@ts-ignore
-    setDistrictOptions(citiesDistricts[city?.id + ''] || []);
+    setDistrictOptions(citiesDistricts[city?.value + '']);
     localFilterState.city = city;
     setLocalFilterState(localFilterState);
     closeModal3();
@@ -83,7 +91,7 @@ export default function Locations() {
     localFilterState.district = district;
 
     //@ts-ignore
-    setWardOptions(districtWards[district?.id + ''] || []);
+    setWardOptions(districtWards[district?.value + ''] || []);
     setLocalFilterState(localFilterState);
     resetWard();
     setDistrict(district);

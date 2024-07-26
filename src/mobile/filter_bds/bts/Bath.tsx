@@ -1,8 +1,8 @@
-import { FilterFieldName } from '@mobile/filter_bds/types';
+import { FilterFieldName, OptionForSelect } from '@app/types';
 
 import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
-import { BasicOption } from '@app/types';
+
 import useFilterState from '../hooks/useFilterState';
 import { ROOMS } from '@app/constants';
 
@@ -10,7 +10,7 @@ export default function Bath({ onSelect }: { onSelect?: Function }) {
   const { getFieldValue, setLocalFieldValue } = useFilterState();
   const value = getFieldValue(FilterFieldName.bath);
 
-  const onSelectOption = (item: BasicOption) => {
+  const onSelectOption = (item: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.bath, item);
     if (onSelect) {
       onSelect(item);

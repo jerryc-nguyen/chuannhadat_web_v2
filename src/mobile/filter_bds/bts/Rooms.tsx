@@ -1,8 +1,7 @@
-import { FilterFieldName } from '@mobile/filter_bds/types';
-
+import { FilterFieldName } from '@app/types';
 import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
-import { BasicOption } from '@app/types';
+import { OptionForSelect } from '@app/types';
 import useFilterState from '../hooks/useFilterState';
 import { ROOMS } from '@app/constants';
 
@@ -11,11 +10,11 @@ export default function Rooms() {
   const curBed = getFieldValue(FilterFieldName.bed);
   const curBath = getFieldValue(FilterFieldName.bath);
 
-  const onSelectBed = (item: BasicOption) => {
+  const onSelectBed = (item: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.bed, item);
   };
 
-  const onSelectBath = (item: BasicOption) => {
+  const onSelectBath = (item: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.bath, item);
   };
 

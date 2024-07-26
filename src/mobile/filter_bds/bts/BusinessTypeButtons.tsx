@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { Block, Segmented, SegmentedButton } from 'konsta/react';
 import { filterStateAtom } from '../states';
-import { FilterFieldName } from '../types';
+import { FilterFieldName, OptionForSelect } from '@app/types';
 import useFilterState from '../hooks/useFilterState';
 
 export default function BusinessTypeButtons() {

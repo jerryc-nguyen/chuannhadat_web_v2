@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { stringToSlug } from '@utils/string';
 import { IoFileTrayOutline } from 'react-icons/io5';
 
-export interface OptionProps {
+export interface OptionForSelect {
   id?: string | number;
   text?: string;
 }
@@ -16,9 +16,9 @@ export default function OptionPicker({
   onSelect,
   searchPlaceHolder,
 }: {
-  options: Array<OptionProps>;
-  value?: OptionProps;
-  onSelect: (option: OptionProps) => void;
+  options: Array<OptionForSelect>;
+  value?: OptionForSelect;
+  onSelect: (option: OptionForSelect) => void;
   searchable?: boolean;
   searchPlaceHolder?: string;
 }) {
@@ -60,7 +60,7 @@ export default function OptionPicker({
         <ListCheckOptions
           options={filteredItems}
           selectedOption={value}
-          onSelect={(option: OptionProps) => {
+          onSelect={(option: OptionForSelect) => {
             onSelect(option);
           }}
         ></ListCheckOptions>

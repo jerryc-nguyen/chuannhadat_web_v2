@@ -1,7 +1,8 @@
 import { useAtom } from 'jotai';
 import { filterStateAtom, localFilterStateAtom } from '../states';
-import { FilterFieldName, FilterOption } from '../types';
-import { BasicOption } from '@app/types';
+import { FilterOption } from '../types';
+import { OptionForSelect } from '@app/types';
+import { FilterFieldName } from '@app/types';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -17,7 +18,7 @@ export default function useFilterState() {
 
   const setLocalFieldValue = (
     fieldId: FilterFieldName,
-    option: FilterOption | BasicOption | undefined
+    option: FilterOption | OptionForSelect | undefined
   ) => {
     const fieldName = FilterFieldName[fieldId];
     // @ts-ignore

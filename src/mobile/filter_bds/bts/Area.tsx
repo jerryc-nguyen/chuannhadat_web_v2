@@ -1,9 +1,6 @@
 import { useAtom } from 'jotai';
 
-import {
-  FilterOption,
-  FilterFieldName,
-} from '@mobile/filter_bds/types';
+import { FilterFieldName, OptionForSelect } from '@app/types';
 
 import ListCheckOptions from './ListCheckOptions';
 import { filterStateAtom } from '@mobile/filter_bds/states';
@@ -19,7 +16,7 @@ export default function Area({ onSelect }: { onSelect?: Function }) {
       <ListCheckOptions
         options={filterState.areaOptions!}
         selectedOption={value}
-        onSelect={(option: FilterOption) => {
+        onSelect={(option: OptionForSelect) => {
           setLocalFieldValue(FilterFieldName.area, option);
           if (onSelect) {
             onSelect(option);

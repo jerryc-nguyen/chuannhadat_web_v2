@@ -1,6 +1,6 @@
 import React from 'react';
 import { BlockTitle, Chip, List, ListItem } from 'konsta/react';
-import { FilterFieldName } from './types';
+import { FilterFieldName } from '@app/types';
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
