@@ -1,6 +1,6 @@
 import { FilterFieldName, OptionForSelect } from '@app/types';
 
-import ListCheckOptions from './ListCheckOptions';
+import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Area({ onSelect }: { onSelect?: Function }) {

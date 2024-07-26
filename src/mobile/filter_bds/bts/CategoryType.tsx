@@ -1,11 +1,8 @@
 import { useAtom } from 'jotai';
-
-import { FilterOption } from '@mobile/filter_bds/types';
-
-import ListCheckOptions from './ListCheckOptions';
+import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName } from '@app/types';
+import { FilterFieldName, OptionForSelect } from '@app/types';
 
 export default function CategoryType({
   onSelect,
@@ -21,7 +18,7 @@ export default function CategoryType({
       <ListCheckOptions
         options={filterState.categoryTypeOptions!}
         selectedOption={value}
-        onSelect={(option: FilterOption) => {
+        onSelect={(option: OptionForSelect) => {
           setLocalFieldValue(FilterFieldName.categoryType, option);
           if (onSelect) {
             onSelect(option);

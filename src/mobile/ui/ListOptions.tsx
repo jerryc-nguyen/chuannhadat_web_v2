@@ -1,12 +1,12 @@
+import { OptionForSelect } from '@app/types';
 import { List, ListItem } from 'konsta/react';
-import { FilterOption } from '../types';
 import { ReactElement } from 'react';
 
 const ListOptions = ({
   options,
   onSelect = () => {},
 }: {
-  options: FilterOption[] | undefined;
+  options: OptionForSelect[] | undefined;
   onSelect?: Function;
 }): ReactElement => {
   return (

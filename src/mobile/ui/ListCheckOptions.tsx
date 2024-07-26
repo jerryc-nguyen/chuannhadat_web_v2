@@ -1,14 +1,14 @@
 import { Checkbox, List, ListItem } from 'konsta/react';
-import { FilterOption } from '../types';
 import { ReactElement, useState } from 'react';
+import { OptionForSelect } from '@app/types';
 
 const ListOptions = ({
   options,
   selectedOption,
   onSelect,
 }: {
-  options: FilterOption[] | any[];
-  selectedOption?: FilterOption | any;
+  options: OptionForSelect[] | any[];
+  selectedOption?: OptionForSelect | any;
   onSelect?: Function;
 }): ReactElement => {
   const [curOption, setCurOption] = useState(selectedOption);
@@ -26,7 +26,6 @@ const ListOptions = ({
               media={
                 <Checkbox
                   component='div'
-                  name='demo-checkbox'
                   checked={curOption?.text == item.text}
                   onChange={() => {}}
                 />

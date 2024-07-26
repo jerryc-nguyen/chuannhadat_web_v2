@@ -1,5 +1,5 @@
 import { Searchbar } from 'konsta/react';
-import ListCheckOptions from '../filter_bds/bts/ListCheckOptions';
+import ListCheckOptions from './ListCheckOptions';
 import { useMemo, useState } from 'react';
 import { stringToSlug } from '@utils/string';
 import { IoFileTrayOutline } from 'react-icons/io5';
