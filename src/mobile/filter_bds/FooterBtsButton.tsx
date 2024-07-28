@@ -4,6 +4,7 @@ import { filterStateAtom, localFilterStateAtom } from './states';
 import { FilterChipOption } from './FilterChips';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@app/types';
+import useFilterState from './hooks/useFilterState';
 
 export default function FooterBtsButton({
   filterOption,
@@ -11,38 +12,10 @@ export default function FooterBtsButton({
   filterOption: FilterChipOption;
 }) {
   const { closeModals } = useModals();
-  const [filterState, setFilterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const { applySingleFilter } = useFilterState();
 
   const onApplyFilter = (filterOption: FilterChipOption) => {
-    let localValue: Record<string, any> = {};
-
-    if (filterOption.id == FilterFieldName.locations) {
-      localValue = {
-        city: localFilterState.city,
-        district: localFilterState.district,
-        ward: localFilterState.ward,
-      };
-    } else if (filterOption.id == FilterFieldName.rooms) {
-      if (localFilterState.bed) {
-        localValue.bed = localFilterState.bed;
-      }
-      if (localFilterState.bath) {
-        localValue.bath = localFilterState.bath;
-      }
-    } else {
-      // @ts-ignore
-      const fieldName = FilterFieldName[filterOption.id];
-
-      localValue = {
-        // @ts-ignore
-        [fieldName]: localFilterState[fieldName],
-      };
-    }
-
-    setFilterState({ ...filterState, ...localValue });
+    applySingleFilter(filterOption);
     closeModals();
   };
 

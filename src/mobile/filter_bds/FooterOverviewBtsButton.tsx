@@ -6,10 +6,10 @@ import useFilterState from './hooks/useFilterState';
 
 export default function FooterOverviewBtsButton() {
   const { closeModals } = useModals();
-  const [localFilterState] = useAtom(localFilterStateAtom);
   const { applyAllFilters } = useFilterState();
   const onApplyFilter = () => {
-    applyAllFilters({ ...localFilterState });
+    applyAllFilters();
+
     closeModals();
   };
 

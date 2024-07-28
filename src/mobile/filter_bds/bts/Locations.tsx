@@ -76,12 +76,11 @@ export default function Locations() {
   const onSelectDistrict = (district?: OptionForSelect) => {
     const finalOption =
       district?.value != 'all' ? district : undefined;
-
+    setDistrict(finalOption);
+    resetWard();
     //@ts-ignore
     setWardOptions(districtWards[finalOption?.value + ''] || []);
     setLocalFieldValue(FilterFieldName.district, finalOption);
-    resetWard();
-    setDistrict(finalOption);
     closeModal3();
   };
 
