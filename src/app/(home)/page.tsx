@@ -1,8 +1,14 @@
 import React from 'react';
 import Mobile from './mobile';
 import Desktop from './desktop';
-import { Provider as JotaiProvider } from 'jotai';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { getUserAgentInfo } from '@utils/ssrUserAgent';
+import { Provider as JotaiProvider } from 'jotai';
+
+import QueryProvider from '@utils/QueryProvider';
 
 export default function Home() {
   const { isMobile } = getUserAgentInfo();
@@ -21,7 +27,9 @@ export default function Home() {
 
   return (
     <JotaiProvider>
-      <App />
+      <QueryProvider>
+        <App />
+      </QueryProvider>
     </JotaiProvider>
   );
 }
