@@ -12,48 +12,39 @@ import useFilterState from '../hooks/useFilterState';
 import { FilterFieldName, OptionForSelect } from '@app/types';
 import OptionPicker from '@mobile/ui/OptionPicker';
 
-type LocationProps = OptionForSelect | undefined;
-
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
 
-  const { getLocalFieldValue, setLocalFieldValue, filterState } =
-    useFilterState();
+  const { setLocalFieldValue, localFilterState } = useFilterState();
 
-  const { currentCity, currentDistrict, currentWard } =
-    useFilterLocations();
-
-  const [city, setCity] = useState<LocationProps>(currentCity);
-  const [district, setDistrict] =
-    useState<LocationProps>(currentDistrict);
-  const [ward, setWard] = useState<LocationProps>(currentWard);
+  const city = localFilterState.city;
+  const district = localFilterState.district;
+  const ward = localFilterState.ward;
 
   const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
-    setDistrict(undefined);
     setLocalFieldValue(FilterFieldName.district, undefined);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetWard = () => {
-    setWard(undefined);
     setLocalFieldValue(FilterFieldName.ward, undefined);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const populateOptions = () => {
-    if (currentCity) {
+    if (city) {
       setDistrictOptions(
         //@ts-ignore
-        citiesDistricts[currentCity?.value + '']
+        citiesDistricts[city.value + '']
       );
     }
-    if (currentDistrict) {
+    if (district) {
       setWardOptions(
         //@ts-ignore
-        districtWards[currentDistrict?.value + '']
+        districtWards[district.value + '']
       );
     }
   };
@@ -61,7 +52,6 @@ export default function Locations() {
   const onSelectCity = (city?: OptionForSelect) => {
     const finalOption = city?.value != 'all' ? city : undefined;
 
-    setCity(finalOption);
     resetDistrict();
     resetWard();
 
@@ -76,7 +66,7 @@ export default function Locations() {
   const onSelectDistrict = (district?: OptionForSelect) => {
     const finalOption =
       district?.value != 'all' ? district : undefined;
-    setDistrict(finalOption);
+
     resetWard();
     //@ts-ignore
     setWardOptions(districtWards[finalOption?.value + ''] || []);
@@ -86,8 +76,6 @@ export default function Locations() {
 
   const onSelectWard = (ward?: OptionForSelect) => {
     const finalOption = ward?.value != 'all' ? ward : undefined;
-
-    setWard(finalOption);
     setLocalFieldValue(FilterFieldName.ward, finalOption);
     closeModal3();
   };

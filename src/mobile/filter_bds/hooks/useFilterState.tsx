@@ -14,18 +14,37 @@ export default function useFilterState() {
     localFilterStateAtom
   );
 
+  const copyFilterStatesToLocalByFieldId = (
+    fieldIds: Array<FilterFieldName>
+  ) => {
+    let values: Record<string, any> = {};
+    fieldIds?.forEach((fieldId) => {
+      const fieldName = FilterFieldName[fieldId];
+      if (fieldId == FilterFieldName.locations) {
+        values = {
+          city: filterState.city,
+          district: filterState.district,
+          ward: filterState.ward,
+        };
+      } else if (fieldId == FilterFieldName.rooms) {
+        values = {
+          bath: filterState.bath,
+          bed: filterState.bed,
+        };
+      } else {
+        values[fieldName] = (filterState as Record<string, any>)[
+          fieldName
+        ];
+      }
+    });
+    setLocalFilterState({ ...values });
+  };
+
   const copyFilterStatesToLocal = (
     fieldIds: Array<FilterFieldName> = []
   ) => {
     if (fieldIds.length > 0) {
-      const values: Record<string, any> = {};
-      fieldIds?.forEach((fieldId) => {
-        const fieldName = FilterFieldName[fieldId];
-        values[fieldName] = (filterState as Record<string, any>)[
-          fieldName
-        ];
-      });
-      setLocalFilterState({ ...values });
+      copyFilterStatesToLocalByFieldId(fieldIds);
     } else {
       setLocalFilterState({ ...filterState });
     }
