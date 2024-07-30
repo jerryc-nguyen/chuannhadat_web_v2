@@ -1,5 +1,4 @@
 import { atom } from 'jotai';
-import { LocationOption } from '../types';
 import { OptionForSelect } from '@app/types';
 
 export const openFilterModalAtom = atom(false);
@@ -27,24 +26,23 @@ export interface FilterState {
   price?: OptionForSelect;
   area?: OptionForSelect;
   direction?: OptionForSelect;
-  city?: LocationOption;
-  district?: LocationOption;
-  ward?: LocationOption;
+  city?: OptionForSelect;
+  district?: OptionForSelect;
+  ward?: OptionForSelect;
+}
+
+export interface FilterFieldOptions {
+  businessTypeOptions?: OptionForSelect[];
+  categoryTypeOptions?: OptionForSelect[];
+  bedOptions?: OptionForSelect[];
+  bathOptions?: OptionForSelect[];
+  priceOptions?: OptionForSelect[];
+  areaOptions?: OptionForSelect[];
+  directionOptions?: OptionForSelect[];
+  roomOptions?: OptionForSelect[];
 }
 
 export const filterStateAtom = atom<FilterState>({
-  // @ts-ignore
-  businessTypeOptions: searchFormOptions.business_types,
-  categoryTypeOptions: [
-    ALL_OPTION,
-    ...searchFormOptions.category_types,
-  ],
-  bedOptions: [ALL_OPTION, ...searchFormOptions.rooms],
-  bathOptions: [ALL_OPTION, ...searchFormOptions.rooms],
-  priceOptions: [ALL_OPTION, ...searchFormOptions.sell_prices],
-  areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
-  directionOptions: [ALL_OPTION, ...searchFormOptions.directions],
-  roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
   businessType: DEFAULT_BUSINESS_TYPE_OPTION,
   categoryType: undefined,
   bed: undefined,
@@ -57,15 +55,19 @@ export const filterStateAtom = atom<FilterState>({
   ward: undefined,
 });
 
-export const localFilterStateAtom = atom<FilterState>({
-  businessType: undefined,
-  categoryType: undefined,
-  bed: undefined,
-  bath: undefined,
-  price: undefined,
-  area: undefined,
-  direction: undefined,
-  city: undefined,
-  district: undefined,
-  ward: undefined,
+export const localFilterStateAtom = atom<FilterState>({});
+
+export const filterFieldOptionsAtom = atom<FilterFieldOptions>({
+  // @ts-ignore
+  businessTypeOptions: searchFormOptions.business_types,
+  categoryTypeOptions: [
+    ALL_OPTION,
+    ...searchFormOptions.category_types,
+  ],
+  bedOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  bathOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  priceOptions: [ALL_OPTION, ...searchFormOptions.sell_prices],
+  areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
+  directionOptions: [ALL_OPTION, ...searchFormOptions.directions],
+  roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
 });

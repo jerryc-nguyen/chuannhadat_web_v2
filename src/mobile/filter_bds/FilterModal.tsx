@@ -19,13 +19,13 @@ export const DEFAULT_MODAL_HEIGHTS = {
 
 const FilterModal = () => {
   const { openModal2, closeModal2 } = useModals();
-  const { getFieldValue } = useFilterState();
-  const area = getFieldValue(FilterFieldName.area);
-  const categoryType = getFieldValue(FilterFieldName.categoryType);
-  const price = getFieldValue(FilterFieldName.price);
-  const direction = getFieldValue(FilterFieldName.direction);
-  const bed = getFieldValue(FilterFieldName.bed);
-  const bath = getFieldValue(FilterFieldName.bath);
+  const { localFilterState } = useFilterState();
+  const area = localFilterState.area;
+  const categoryType = localFilterState.categoryType;
+  const price = localFilterState.price;
+  const direction = localFilterState.direction;
+  const bed = localFilterState.bed;
+  const bath = localFilterState.bath;
 
   const bedText = (): string => {
     if (bed) {

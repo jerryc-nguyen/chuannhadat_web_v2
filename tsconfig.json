@@ -23,7 +23,8 @@
       "@styles/*": ["src/styles/*"],
       "@utils/*": ["src/utils/*"],
       "@desktop/*": ["src/desktop/*"],
-      "@mobile/*": ["src/mobile/*"]
+      "@mobile/*": ["src/mobile/*"],
+      "@api/*": ["src/api/*"]
     }
   },
   "include": [
