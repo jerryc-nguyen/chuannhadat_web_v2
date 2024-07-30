@@ -1,5 +1,9 @@
 import { useAtom } from 'jotai';
-import { filterStateAtom, localFilterStateAtom } from '../states';
+import {
+  filterFieldOptionsAtom,
+  filterStateAtom,
+  localFilterStateAtom,
+} from '../states';
 import { OptionForSelect } from '@app/types';
 import {
   FilterFieldName,
@@ -12,6 +16,9 @@ export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
+  );
+  const [filterFieldOptions, setFilterFieldOptions] = useAtom(
+    filterFieldOptionsAtom
   );
 
   const copyFilterStatesToLocalByFieldId = (
@@ -136,6 +143,7 @@ export default function useFilterState() {
   return {
     filterState: filterState,
     localFilterState: localFilterState,
+    filterFieldOptions: filterFieldOptions,
     getLocalFieldValue: getLocalFieldValue,
     setLocalFieldValue: setLocalFieldValue,
     applyAllFilters: applyAllFilters,

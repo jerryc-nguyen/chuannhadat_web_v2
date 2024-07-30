@@ -1,5 +1,5 @@
 export const baseUrl =
-  process.env.REACT_APP_API_PATH ?? 'http://localhost:3003';
+  process.env.REACT_APP_API_PATH ?? 'http://192.168.5.129:3003';
 export const currentUserKey = 'current_user';
 
 export function getCurrentUser() {

@@ -6,8 +6,11 @@ import { Block } from 'konsta/react';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Bath({ onSelect }: { onSelect?: Function }) {
-  const { getLocalFieldValue, setLocalFieldValue, filterState } =
-    useFilterState();
+  const {
+    getLocalFieldValue,
+    setLocalFieldValue,
+    filterFieldOptions,
+  } = useFilterState();
   const value = getLocalFieldValue(FilterFieldName.bath);
 
   const onSelectOption = (item: OptionForSelect) => {
@@ -21,7 +24,7 @@ export default function Bath({ onSelect }: { onSelect?: Function }) {
     <>
       <Block>
         <ListChips
-          options={filterState.roomOptions || []}
+          options={filterFieldOptions.roomOptions || []}
           onSelect={onSelectOption}
           value={value}
         />
