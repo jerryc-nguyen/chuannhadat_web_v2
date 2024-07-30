@@ -17,7 +17,7 @@ type LocationProps = OptionForSelect | undefined;
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
 
-  const { getFieldValue, setLocalFieldValue, filterState } =
+  const { getLocalFieldValue, setLocalFieldValue, filterState } =
     useFilterState();
 
   const { currentCity, currentDistrict, currentWard } =

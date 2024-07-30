@@ -5,9 +5,9 @@ import { Block } from 'konsta/react';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Bed({ onSelect }: { onSelect?: Function }) {
-  const { getFieldValue, setLocalFieldValue, filterState } =
+  const { getLocalFieldValue, setLocalFieldValue, filterState } =
     useFilterState();
-  const value = getFieldValue(FilterFieldName.bed);
+  const value = getLocalFieldValue(FilterFieldName.bed);
 
   const onSelectOption = (item: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.bed, item);

@@ -7,8 +7,8 @@ import { FilterFieldName, OptionForSelect } from '@app/types';
 
 export default function Price({ onSelect }: { onSelect?: Function }) {
   const [filterState] = useAtom(filterStateAtom);
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
-  const value = getFieldValue(FilterFieldName.price);
+  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.price);
 
   return (
     <>

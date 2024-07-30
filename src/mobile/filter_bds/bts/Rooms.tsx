@@ -5,10 +5,10 @@ import { OptionForSelect } from '@app/types';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Rooms() {
-  const { getFieldValue, setLocalFieldValue, filterState } =
+  const { getLocalFieldValue, setLocalFieldValue, filterState } =
     useFilterState();
-  const curBed = getFieldValue(FilterFieldName.bed);
-  const curBath = getFieldValue(FilterFieldName.bath);
+  const curBed = getLocalFieldValue(FilterFieldName.bed);
+  const curBath = getLocalFieldValue(FilterFieldName.bath);
 
   const onSelectBed = (item: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.bed, item);

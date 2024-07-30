@@ -4,9 +4,9 @@ import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Area({ onSelect }: { onSelect?: Function }) {
-  const { getFieldValue, setLocalFieldValue, filterState } =
+  const { getLocalFieldValue, setLocalFieldValue, filterState } =
     useFilterState();
-  const value = getFieldValue(FilterFieldName.area);
+  const value = getLocalFieldValue(FilterFieldName.area);
 
   return (
     <>

@@ -6,7 +6,7 @@ import { FilterFieldName } from '@app/types';
 
 export function useFilterLocations() {
   const [filterState] = useAtom(filterStateAtom);
-  const { getFieldValue } = useFilterState();
+  const { getLocalFieldValue } = useFilterState();
 
   const selectedLocationText = useMemo((): string | undefined => {
     return (
@@ -16,9 +16,11 @@ export function useFilterLocations() {
     );
   }, [filterState.city, filterState.district, filterState.ward]);
 
-  const currentCity = getFieldValue(FilterFieldName.city);
-  const currentDistrict = getFieldValue(FilterFieldName.district);
-  const currentWard = getFieldValue(FilterFieldName.ward);
+  const currentCity = getLocalFieldValue(FilterFieldName.city);
+  const currentDistrict = getLocalFieldValue(
+    FilterFieldName.district
+  );
+  const currentWard = getLocalFieldValue(FilterFieldName.ward);
 
   return {
     selectedLocationText: selectedLocationText,

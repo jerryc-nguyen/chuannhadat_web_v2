@@ -17,6 +17,7 @@ import CategoryType from './bts/CategoryType';
 import Rooms from './bts/Rooms';
 import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
 import Direction from './bts/Direction';
+import useFilterState from './hooks/useFilterState';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -53,10 +54,9 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
 ];
 
 export default function FilterChips() {
-  const [filterState, setFilterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const [filterState] = useAtom(filterStateAtom);
+  const { copyFilterStatesToLocal } = useFilterState();
+
   const { openModal } = useModals();
   const { selectedLocationText } = useFilterLocations();
 
@@ -130,7 +130,7 @@ export default function FilterChips() {
   };
 
   const showFilterBts = (filterOption: FilterChipOption) => {
-    setLocalFilterState({});
+    copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     openModal({
       name: filterOption.id,
       title: filterOption.text,

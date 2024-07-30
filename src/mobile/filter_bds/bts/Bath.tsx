@@ -6,9 +6,9 @@ import { Block } from 'konsta/react';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Bath({ onSelect }: { onSelect?: Function }) {
-  const { getFieldValue, setLocalFieldValue, filterState } =
+  const { getLocalFieldValue, setLocalFieldValue, filterState } =
     useFilterState();
-  const value = getFieldValue(FilterFieldName.bath);
+  const value = getLocalFieldValue(FilterFieldName.bath);
 
   const onSelectOption = (item: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.bath, item);

@@ -6,8 +6,8 @@ import useFilterState from '../hooks/useFilterState';
 
 export default function BusinessTypeButtons() {
   const [filterState] = useAtom(filterStateAtom);
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
-  const value = getFieldValue(FilterFieldName.businessType);
+  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.businessType);
 
   return (
     <Block strongIos margin='my-0 mt-2'>

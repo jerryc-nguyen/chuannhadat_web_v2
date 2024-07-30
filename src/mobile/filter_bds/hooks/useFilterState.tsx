@@ -7,7 +7,6 @@ import {
   FILTER_FIELDS_PARAMS_MAP,
 } from '@app/types';
 import { FilterChipOption } from '../FilterChips';
-import { useMemo } from 'react';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -15,10 +14,27 @@ export default function useFilterState() {
     localFilterStateAtom
   );
 
-  const getFieldValue = (fieldId: FilterFieldName) => {
+  const copyFilterStatesToLocal = (
+    fieldIds: Array<FilterFieldName> = []
+  ) => {
+    if (fieldIds.length > 0) {
+      const values: Record<string, any> = {};
+      fieldIds?.forEach((fieldId) => {
+        const fieldName = FilterFieldName[fieldId];
+        values[fieldName] = (filterState as Record<string, any>)[
+          fieldName
+        ];
+      });
+      setLocalFilterState({ ...values });
+    } else {
+      setLocalFilterState({ ...filterState });
+    }
+  };
+
+  const getLocalFieldValue = (fieldId: FilterFieldName) => {
     const fieldName = FilterFieldName[fieldId];
     // @ts-ignore
-    return localFilterState[fieldName] ?? filterState[fieldName];
+    return localFilterState[fieldName];
   };
 
   const setLocalFieldValue = (
@@ -36,9 +52,9 @@ export default function useFilterState() {
   };
 
   const applyAllFilters = (filters?: {}) => {
-    console.log('currentLocalFilters', currentLocalFilters);
+    console.log('localFilterState', localFilterState);
     setFilterState({
-      ...currentLocalFilters,
+      ...localFilterState,
       ...filters,
     });
 
@@ -71,28 +87,21 @@ export default function useFilterState() {
     return results;
   };
 
-  const currentLocalFilters = useMemo(() => {
-    return {
-      ...filterState,
-      ...localFilterState,
-    };
-  }, [filterState, localFilterState]);
-
   const applySingleFilter = (filterOption: FilterChipOption) => {
     let localValue: Record<string, any> = {};
 
     if (filterOption.id == FilterFieldName.locations) {
       localValue = {
-        city: currentLocalFilters.city,
-        district: currentLocalFilters.district,
-        ward: currentLocalFilters.ward,
+        city: localFilterState.city,
+        district: localFilterState.district,
+        ward: localFilterState.ward,
       };
     } else if (filterOption.id == FilterFieldName.rooms) {
-      if (currentLocalFilters.bed) {
-        localValue.bed = currentLocalFilters.bed;
+      if (localFilterState.bed) {
+        localValue.bed = localFilterState.bed;
       }
-      if (currentLocalFilters.bath) {
-        localValue.bath = currentLocalFilters.bath;
+      if (localFilterState.bath) {
+        localValue.bath = localFilterState.bath;
       }
     } else {
       // @ts-ignore
@@ -100,7 +109,7 @@ export default function useFilterState() {
 
       localValue = {
         // @ts-ignore
-        [fieldName]: currentLocalFilters[fieldName],
+        [fieldName]: localFilterState[fieldName],
       };
     }
 
@@ -110,11 +119,11 @@ export default function useFilterState() {
   return {
     filterState: filterState,
     localFilterState: localFilterState,
-    getFieldValue: getFieldValue,
+    getLocalFieldValue: getLocalFieldValue,
     setLocalFieldValue: setLocalFieldValue,
     applyAllFilters: applyAllFilters,
     filterParams: filterParams,
     applySingleFilter: applySingleFilter,
-    currentLocalFilters: currentLocalFilters,
+    copyFilterStatesToLocal: copyFilterStatesToLocal,
   };
 }

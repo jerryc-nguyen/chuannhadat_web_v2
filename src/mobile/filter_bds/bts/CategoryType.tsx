@@ -10,8 +10,8 @@ export default function CategoryType({
   onSelect?: Function;
 }) {
   const [filterState] = useAtom(filterStateAtom);
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
-  const value = getFieldValue(FilterFieldName.categoryType);
+  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.categoryType);
 
   return (
     <>

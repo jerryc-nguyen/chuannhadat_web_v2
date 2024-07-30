@@ -19,11 +19,14 @@ import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 import useModals from '@mobile/modals/hooks';
 import FooterOverviewBtsButton from '@mobile/filter_bds/FooterOverviewBtsButton';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 export default function Mobile() {
   const { openModal } = useModals();
+  const { copyFilterStatesToLocal } = useFilterState();
 
   const openFilterModal = () => {
+    copyFilterStatesToLocal();
     openModal({
       name: 'filter_modal',
       title: 'Lọc',

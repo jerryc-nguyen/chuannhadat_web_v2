@@ -10,8 +10,8 @@ export default function Direction({
   onSelect?: Function;
 }) {
   const [filterState] = useAtom(filterStateAtom);
-  const { getFieldValue, setLocalFieldValue } = useFilterState();
-  const value = getFieldValue(FilterFieldName.direction);
+  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.direction);
 
   return (
     <>
