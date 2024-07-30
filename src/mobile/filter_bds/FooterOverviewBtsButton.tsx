@@ -6,13 +6,13 @@ import searchApis from '@api/searchApi';
 
 export default function FooterOverviewBtsButton() {
   const { closeModals } = useModals();
-  const { applyAllFilters, filterParams } = useFilterState();
-  const params = filterParams();
+  const { applyAllFilters, buildFilterParams } = useFilterState();
+  const filterParams = buildFilterParams();
 
   const { isLoading, data } = useQuery({
-    queryKey: ['searchs', params],
+    queryKey: ['searchs', filterParams],
     queryFn: async () => {
-      const response = await searchApis.searchs(params);
+      const response = await searchApis.searchs(filterParams);
       return await response.json();
     },
   });

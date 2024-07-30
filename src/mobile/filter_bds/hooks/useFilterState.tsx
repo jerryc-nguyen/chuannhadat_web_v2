@@ -77,10 +77,10 @@ export default function useFilterState() {
       ...filters,
     });
 
-    console.log('filterParams', filterParams());
+    console.log('buildFilterParams', buildFilterParams());
   };
 
-  const filterParams = (): Record<string, any> => {
+  const buildFilterParams = (): Record<string, any> => {
     const results: Record<string, any> = {};
     const allCurrentFilters: Record<string, any> = {
       ...filterState,
@@ -116,12 +116,10 @@ export default function useFilterState() {
         ward: localFilterState.ward,
       };
     } else if (filterOption.id == FilterFieldName.rooms) {
-      if (localFilterState.bed) {
-        localValue.bed = localFilterState.bed;
-      }
-      if (localFilterState.bath) {
-        localValue.bath = localFilterState.bath;
-      }
+      localValue = {
+        bed: localFilterState.bed,
+        bath: localFilterState.bath,
+      };
     } else {
       // @ts-ignore
       const fieldName = FilterFieldName[filterOption.id];
@@ -141,7 +139,7 @@ export default function useFilterState() {
     getLocalFieldValue: getLocalFieldValue,
     setLocalFieldValue: setLocalFieldValue,
     applyAllFilters: applyAllFilters,
-    filterParams: filterParams,
+    buildFilterParams: buildFilterParams,
     applySingleFilter: applySingleFilter,
     copyFilterStatesToLocal: copyFilterStatesToLocal,
   };

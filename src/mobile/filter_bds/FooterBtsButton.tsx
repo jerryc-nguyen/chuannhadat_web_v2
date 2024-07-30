@@ -1,10 +1,9 @@
-import { useAtom } from 'jotai';
-import { Button } from 'konsta/react';
-import { filterStateAtom, localFilterStateAtom } from './states';
+import { Button, Preloader } from 'konsta/react';
 import { FilterChipOption } from './FilterChips';
 import useModals from '@mobile/modals/hooks';
-import { FilterFieldName } from '@app/types';
 import useFilterState from './hooks/useFilterState';
+import { useQuery } from '@tanstack/react-query';
+import searchApis from '@api/searchApi';
 
 export default function FooterBtsButton({
   filterOption,
@@ -12,7 +11,16 @@ export default function FooterBtsButton({
   filterOption: FilterChipOption;
 }) {
   const { closeModals } = useModals();
-  const { applySingleFilter } = useFilterState();
+  const { applySingleFilter, buildFilterParams } = useFilterState();
+  const filterParams = buildFilterParams();
+
+  const { isLoading, data } = useQuery({
+    queryKey: ['searchs', filterParams],
+    queryFn: async () => {
+      const response = await searchApis.searchs(filterParams);
+      return await response.json();
+    },
+  });
 
   const onApplyFilter = (filterOption: FilterChipOption) => {
     applySingleFilter(filterOption);
@@ -21,7 +29,10 @@ export default function FooterBtsButton({
 
   return (
     <Button onClick={() => onApplyFilter(filterOption)}>
-      Xem kết quả
+      Xem {data?.pagination?.total_count} kết quả
+      {isLoading && (
+        <Preloader className='text-white small' size='w-5 h-5' />
+      )}
     </Button>
   );
 }

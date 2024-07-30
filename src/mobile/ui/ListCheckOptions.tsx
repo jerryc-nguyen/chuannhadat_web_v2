@@ -2,7 +2,7 @@ import { Checkbox, List, ListItem } from 'konsta/react';
 import { ReactElement, useState } from 'react';
 import { OptionForSelect } from '@app/types';
 
-const ListOptions = ({
+const ListCheckOptions = ({
   options,
   selectedOption,
   onSelect,
@@ -44,4 +44,4 @@ const ListOptions = ({
   );
 };
 
-export default ListOptions;
+export default ListCheckOptions;
