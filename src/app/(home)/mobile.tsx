@@ -20,6 +20,7 @@ import FilterChips from '@mobile/filter_bds/FilterChips';
 import useModals from '@mobile/modals/hooks';
 import FooterOverviewBtsButton from '@mobile/filter_bds/FooterOverviewBtsButton';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import PostList from '@mobile/searchs/PostList';
 
 export default function Mobile() {
   const { openModal } = useModals();
@@ -44,18 +45,7 @@ export default function Mobile() {
         />
 
         <FilterChips />
-        <BlockTitle>Navigation 3</BlockTitle>
-
-        <List strongIos>
-          <ListItem title='About' />
-          <ListItem title='Form' />
-        </List>
-
-        <Block strong className='flex space-x-4'>
-          <Button onClick={() => {}}>Open Bottom Sheet</Button>
-          <Button>Button 2</Button>
-        </Block>
-
+        <PostList />
         <BtsModals1 />
         <BtsModals2 />
         <BtsModals3 />
