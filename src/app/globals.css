@@ -1,6 +1,6 @@
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
+@tailwind components;
 
 .hidden-scrollbar {
   -ms-overflow-style: none !important;
@@ -18,7 +18,7 @@
 }
 
 /* https://tailwindcss.com/docs/text-color */
-.text-gray {
+/* .text-gray {
   color: rgb(156 163 175);
 }
 .mr-2 {
@@ -27,4 +27,4 @@
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
+} */

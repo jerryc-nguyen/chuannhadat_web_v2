@@ -21,10 +21,10 @@ const ListChips = ({
             const selectedClass =
               value?.text == item.text
                 ? 'is-selected bg-blue-500 text-white border-none'
-                : '';
+                : 'bg-white';
             return (
               <button
-                className={`c-listChip__item border border-black rounded-full border-opacity-20 bg-white ${selectedClass}`}
+                className={`c-listChip__item border border-black border-opacity-20 rounded-full text-center shrink-0 ${selectedClass}`}
                 key={item.text}
                 onClick={() => onSelect(item)}
               >

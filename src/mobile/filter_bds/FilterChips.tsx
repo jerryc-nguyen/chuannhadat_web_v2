@@ -130,7 +130,12 @@ export default function FilterChips() {
   };
 
   const showFilterBts = (filterOption: FilterChipOption) => {
-    copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
+    if (filterOption.id == FilterFieldName.filterOverview) {
+      copyFilterStatesToLocal();
+    } else {
+      copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
+    }
+
     openModal({
       name: filterOption.id,
       title: filterOption.text,
