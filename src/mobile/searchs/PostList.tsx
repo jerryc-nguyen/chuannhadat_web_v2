@@ -1,20 +1,29 @@
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useQuery } from '@tanstack/react-query';
-import searchApis from '@api/searchApi';
+import {
+  useQuery,
+  useSuspenseQuery,
+  isServer,
+} from '@tanstack/react-query';
+import { searchApi } from '@api/searchApi';
 import ProductCard from './ProductCard';
+import { homeApiOptions } from '@app/(home)/apis';
 
 export default function PostList() {
   const { buildFilterParams } = useFilterState();
   const filterParams = buildFilterParams();
   filterParams.per_page = 12;
+  console.log('filterParams', filterParams);
 
-  const { isLoading, data } = useQuery({
-    queryKey: ['searchs-products', filterParams],
-    queryFn: async () => {
-      const response = await searchApis.searchs(filterParams);
-      return await response.json();
-    },
-  });
+  const { data } = useSuspenseQuery(homeApiOptions);
+
+  // const clientData = useQuery({
+  //   queryKey: ['searchs-products', filterParams],
+  //   queryFn: async () => {
+  //     const response = await searchApi(filterParams);
+  //     return await response.json();
+  //   },
+  // });
+
   return (
     <div className='w-full pt-4 relative mx-auto px-4 bg-white'>
       <div className='text-secondary-600'>

@@ -21,8 +21,15 @@ import useModals from '@mobile/modals/hooks';
 import FooterOverviewBtsButton from '@mobile/filter_bds/FooterOverviewBtsButton';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import PostList from '@mobile/searchs/PostList';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getQueryClient } from '@app/get-query-client.ts';
+import { homeApiOptions } from './apis';
 
 export default function Mobile() {
+  const queryClient = getQueryClient();
+
+  void queryClient.prefetchQuery(homeApiOptions);
+
   const { openModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -36,6 +43,7 @@ export default function Mobile() {
       footer: <FooterOverviewBtsButton />,
     });
   };
+
   return (
     <App theme='ios'>
       <Page>
@@ -45,7 +53,10 @@ export default function Mobile() {
         />
 
         <FilterChips />
-        <PostList />
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <PostList />
+        </HydrationBoundary>
+
         <BtsModals1 />
         <BtsModals2 />
         <BtsModals3 />
