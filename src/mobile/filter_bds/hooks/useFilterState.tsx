@@ -87,12 +87,19 @@ export default function useFilterState() {
     console.log('buildFilterParams', buildFilterParams());
   };
 
-  const buildFilterParams = (): Record<string, any> => {
+  const buildFilterParams = ({
+    withLocal = true,
+  }: { withLocal?: boolean } = {}): Record<string, any> => {
     const results: Record<string, any> = {};
-    const allCurrentFilters: Record<string, any> = {
+    let allCurrentFilters: Record<string, any> = {
       ...filterState,
-      ...localFilterState,
     };
+    if (withLocal) {
+      allCurrentFilters = {
+        ...allCurrentFilters,
+        ...localFilterState,
+      };
+    }
 
     FILTER_FIELDS_TO_PARAMS.forEach((fieldName: string) => {
       const paramName = FILTER_FIELDS_PARAMS_MAP[fieldName];

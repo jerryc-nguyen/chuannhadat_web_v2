@@ -2,13 +2,14 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import {
   useSuspenseQuery,
   queryOptions,
+  isServer,
 } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import ProductCard from './ProductCard';
 
 export default function PostList() {
   const { buildFilterParams } = useFilterState();
-  const filterParams = buildFilterParams();
+  const filterParams = buildFilterParams({ withLocal: false });
   filterParams.per_page = 12;
   console.log('filterParams', filterParams);
 
@@ -22,6 +23,10 @@ export default function PostList() {
       },
     })
   );
+
+  if (!isServer) {
+    window.history.pushState({}, '', data?.listing_url);
+  }
 
   return (
     <div className='w-full pt-4 relative mx-auto bg-white'>

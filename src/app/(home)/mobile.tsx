@@ -28,7 +28,7 @@ import { homeApiOptions } from './apis';
 export default function Mobile() {
   const queryClient = getQueryClient();
 
-  void queryClient.prefetchQuery(homeApiOptions);
+  // void queryClient.prefetchQuery(homeApiOptions);
 
   const { openModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();

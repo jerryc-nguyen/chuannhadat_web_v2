@@ -15,7 +15,7 @@ export default function Home() {
         </div>
       );
     } else {
-      return <Desktop />;
+      return <Mobile />;
     }
   };
 

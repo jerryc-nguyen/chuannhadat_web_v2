@@ -1,10 +1,6 @@
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
-import {
-  IoCloseOutline,
-  IoImage,
-  IoPlayCircleOutline,
-} from 'react-icons/io5';
+import { IoImage } from 'react-icons/io5';
 
 const styles: any = {
   imagesCountWrapper: {
@@ -96,8 +92,12 @@ export default function ProductCard({ product }: { product: any }) {
           </div>
         </div>
         <div className='flex flex-row items-center justify-between mt-3'>
-          <div className='text-slate-600'>Quận tân phú</div>
-          <div className='text-slate-600'>Hôm nay</div>
+          <div className='text-slate-600'>
+            {product?.short_location_name}
+          </div>
+          <div className='text-slate-600'>
+            {product?.formatted_publish_at}
+          </div>
         </div>
       </div>
     </div>
