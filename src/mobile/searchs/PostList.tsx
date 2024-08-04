@@ -24,10 +24,6 @@ export default function PostList() {
     })
   );
 
-  if (!isServer) {
-    window.history.pushState({}, '', data?.listing_url);
-  }
-
   return (
     <div className='w-full pt-4 relative mx-auto bg-white'>
       <div className='text-secondary-600 px-4'>

@@ -11,6 +11,7 @@ import {
   FILTER_FIELDS_PARAMS_MAP,
 } from '@app/types';
 import { FilterChipOption } from '../FilterChips';
+import { searchApi } from '@api/searchApi';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -83,7 +84,7 @@ export default function useFilterState() {
       ...localFilterState,
       ...filters,
     });
-
+    syncSelectedParamsToUrl();
     console.log('buildFilterParams', buildFilterParams());
   };
 
@@ -145,6 +146,21 @@ export default function useFilterState() {
     }
 
     setFilterState({ ...filterState, ...localValue });
+    syncSelectedParamsToUrl();
+  };
+
+  const syncSelectedParamsToUrl = () => {
+    const filterParams = buildFilterParams();
+    filterParams.only_url = true;
+    searchApi(filterParams)
+      .then((response) => response.json())
+      .then((response) => {
+        const { listing_url } = response;
+        if (listing_url) {
+          console.log(listing_url);
+          window.history.pushState({}, '', listing_url);
+        }
+      });
   };
 
   return {
