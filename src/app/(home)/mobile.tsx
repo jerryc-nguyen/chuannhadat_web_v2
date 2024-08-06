@@ -24,11 +24,14 @@ import PostList from '@mobile/searchs/PostList';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@app/get-query-client.ts';
 import { homeApiOptions } from './apis';
+import { useSyncParamsToState } from '@utils/useSyncParamsToState';
 
 export default function Mobile() {
+  console.log('rerender Mobile');
   const queryClient = getQueryClient();
 
-  // void queryClient.prefetchQuery(homeApiOptions);
+  const { syncSearchParamsToState } = useSyncParamsToState();
+  syncSearchParamsToState();
 
   const { openModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();

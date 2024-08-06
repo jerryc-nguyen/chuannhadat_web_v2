@@ -11,9 +11,23 @@ import {
   FILTER_FIELDS_PARAMS_MAP,
 } from '@app/types';
 import { FilterChipOption } from '../FilterChips';
-import { searchApi } from '@api/searchApi';
+import { searchApi, toParamsApi } from '@api/searchApi';
+import { useHydrateAtoms } from 'jotai/utils';
+
+const DefaultState = {
+  businessType: {
+    value: 'sell',
+    text: 'Bán',
+  },
+  categoryType: {
+    value: 'dat',
+    text: 'Đất',
+  },
+};
 
 export default function useFilterState() {
+  console.log('calling in server');
+
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
