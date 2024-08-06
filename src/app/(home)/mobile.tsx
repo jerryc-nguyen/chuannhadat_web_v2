@@ -2,15 +2,7 @@
 
 import React from 'react';
 
-import {
-  App,
-  Page,
-  Block,
-  Button,
-  List,
-  ListItem,
-  BlockTitle,
-} from 'konsta/react';
+import { App, Page } from 'konsta/react';
 
 import MainNav from '@mobile/header/MainNav';
 import '@styles/pages/mobile/home.scss';
@@ -23,15 +15,13 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import PostList from '@mobile/searchs/PostList';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@app/get-query-client.ts';
-import { homeApiOptions } from './apis';
 import { useSyncParamsToState } from '@utils/useSyncParamsToState';
 
 export default function Mobile() {
   console.log('rerender Mobile');
   const queryClient = getQueryClient();
 
-  const { syncSearchParamsToState } = useSyncParamsToState();
-  syncSearchParamsToState();
+  useSyncParamsToState();
 
   const { openModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();
