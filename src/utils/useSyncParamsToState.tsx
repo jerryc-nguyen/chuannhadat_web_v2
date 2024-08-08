@@ -1,7 +1,11 @@
 'use client';
 
 import { toParamsApi } from '@api/searchApi';
-import { usePathname } from 'next/navigation';
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useSearchParams,
+} from 'next/navigation';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import { useHydrateAtoms } from 'jotai/utils';
 
@@ -12,7 +16,9 @@ import {
 
 function useSyncParamsToState() {
   const currentPage = usePathname();
-  const params = { path: currentPage };
+  const queryParams = useSearchParams() as ReadonlyURLSearchParams;
+
+  const params = { path: currentPage + '?' + queryParams.toString() };
 
   console.log('currentPage', currentPage);
 

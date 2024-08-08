@@ -14,44 +14,26 @@ export const DEFAULT_BUSINESS_TYPE_OPTION = {
 export const SORT_OPTIONS = [
   {
     text: 'Tin mới nhất',
-    params: {
-      sort_by: 'published_at',
-      sort_direction: 'desc',
-    },
+    value: 'published_at_desc',
   },
   {
     text: 'Giá theo m² thấp đến cao',
-    params: {
-      sort_by: 'price_per_m2',
-      sort_direction: 'asc',
-    },
+    value: 'price_per_m2_asc',
   },
   {
     text: 'Giá thấp đến cao',
-    params: {
-      sort_by: 'price',
-      sort_direction: 'asc',
-    },
+    value: 'price_asc',
   },
   {
     text: 'Giá cao đến thấp',
-    params: {
-      sort_by: 'price',
-      sort_direction: 'desc',
-    },
+    value: 'price_desc',
   },
   {
     text: 'Diện tích bé đến lớn',
-    params: {
-      sort_by: 'area',
-      sort_direction: 'asc',
-    },
+    value: 'area_asc',
   },
   {
     text: 'Diện tích lớn đến bé',
-    params: {
-      sort_by: 'area',
-      sort_direction: 'desc',
-    },
+    value: 'area_desc',
   },
 ];

@@ -10,10 +10,15 @@ import { IoChevronDown } from 'react-icons/io5';
 import useModals from '@mobile/modals/hooks';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import FooterSortBtsButton from '@mobile/filter_bds/FooterSortBtsButton';
+import { FilterFieldName } from '@app/types';
 
 export default function PostList() {
   const { openModal3 } = useModals();
-  const { buildFilterParams, selectedSortText } = useFilterState();
+  const {
+    buildFilterParams,
+    selectedSortText,
+    copyFilterStatesToLocal,
+  } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: false });
   filterParams.per_page = 12;
   console.log('filterParams', filterParams);
@@ -30,6 +35,7 @@ export default function PostList() {
   );
 
   const onShowSortOptions = () => {
+    copyFilterStatesToLocal([FilterFieldName.sort]);
     openModal3({
       name: 'sort_bts',
       title: 'Sắp xếp theo',

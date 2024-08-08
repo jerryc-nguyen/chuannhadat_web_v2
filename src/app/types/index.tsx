@@ -20,6 +20,7 @@ export const PARAM_DIRECTION = 'direction';
 export const PARAM_CITY = 'city_id';
 export const PARAM_DISTRICT = 'district_id';
 export const PARAM_WARD = 'ward_id';
+export const PARAM_SORT = 'sort';
 
 export enum FilterFieldName {
   none,
@@ -64,4 +65,5 @@ export const FILTER_FIELDS_PARAMS_MAP: Record<string, any> = {
   city: PARAM_CITY,
   district: PARAM_DISTRICT,
   ward: PARAM_WARD,
+  sort: PARAM_SORT,
 };
