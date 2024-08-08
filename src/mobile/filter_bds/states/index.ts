@@ -29,6 +29,7 @@ export interface FilterState {
   city?: OptionForSelect;
   district?: OptionForSelect;
   ward?: OptionForSelect;
+  sort?: OptionForSelect;
 }
 
 export interface FilterFieldOptions {
@@ -53,6 +54,7 @@ export const filterStateAtom = atom<FilterState>({
   city: undefined,
   district: undefined,
   ward: undefined,
+  sort: undefined,
 });
 
 export const localFilterStateAtom = atom<FilterState>({});

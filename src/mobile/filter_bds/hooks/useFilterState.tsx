@@ -11,19 +11,8 @@ import {
   FILTER_FIELDS_PARAMS_MAP,
 } from '@app/types';
 import { FilterChipOption } from '../FilterChips';
-import { searchApi, toParamsApi } from '@api/searchApi';
-import { useHydrateAtoms } from 'jotai/utils';
-
-const DefaultState = {
-  businessType: {
-    value: 'sell',
-    text: 'Bán',
-  },
-  categoryType: {
-    value: 'dat',
-    text: 'Đất',
-  },
-};
+import { searchApi } from '@api/searchApi';
+import { useMemo } from 'react';
 
 export default function useFilterState() {
   console.log('calling in server');
@@ -177,6 +166,14 @@ export default function useFilterState() {
       });
   };
 
+  const applySort = () => {
+    setFilterState({ ...filterState, sort: localFilterState.sort });
+  };
+
+  const selectedSortText = useMemo((): string => {
+    return filterState.sort?.text || 'Sắp xếp';
+  }, [filterState]);
+
   return {
     filterState: filterState,
     localFilterState: localFilterState,
@@ -187,5 +184,7 @@ export default function useFilterState() {
     buildFilterParams: buildFilterParams,
     applySingleFilter: applySingleFilter,
     copyFilterStatesToLocal: copyFilterStatesToLocal,
+    applySort: applySort,
+    selectedSortText: selectedSortText,
   };
 }
