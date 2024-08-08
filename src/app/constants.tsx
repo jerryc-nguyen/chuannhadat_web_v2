@@ -22,21 +22,21 @@ export const SORT_OPTIONS = [
   {
     text: 'Giá theo m² thấp đến cao',
     params: {
-      sort_by: 'price_per_m2_in_d',
+      sort_by: 'price_per_m2',
       sort_direction: 'asc',
     },
   },
   {
     text: 'Giá thấp đến cao',
     params: {
-      sort_by: 'price_in_d',
+      sort_by: 'price',
       sort_direction: 'asc',
     },
   },
   {
     text: 'Giá cao đến thấp',
     params: {
-      sort_by: 'price_in_d',
+      sort_by: 'price',
       sort_direction: 'desc',
     },
   },

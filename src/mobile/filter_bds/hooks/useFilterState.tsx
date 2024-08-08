@@ -94,7 +94,7 @@ export default function useFilterState() {
   const buildFilterParams = ({
     withLocal = true,
   }: { withLocal?: boolean } = {}): Record<string, any> => {
-    const results: Record<string, any> = {};
+    let results: Record<string, any> = {};
     let allCurrentFilters: Record<string, any> = {
       ...filterState,
     };
@@ -109,10 +109,12 @@ export default function useFilterState() {
       const paramName = FILTER_FIELDS_PARAMS_MAP[fieldName];
       const option = allCurrentFilters[fieldName] as OptionForSelect;
 
-      if (!option?.value && !option?.range) {
+      if (!option?.value && !option?.range && !option?.params) {
         return;
       } else if (option.value) {
         results[paramName] = option.value;
+      } else if (option.params) {
+        results = { ...results, ...option.params };
       } else {
         results[paramName] = [
           option?.range?.min,
@@ -168,6 +170,7 @@ export default function useFilterState() {
 
   const applySort = () => {
     setFilterState({ ...filterState, sort: localFilterState.sort });
+    syncSelectedParamsToUrl();
   };
 
   const selectedSortText = useMemo((): string => {
