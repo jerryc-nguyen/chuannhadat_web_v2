@@ -11,8 +11,12 @@ import {
   FILTER_FIELDS_PARAMS_MAP,
 } from '@app/types';
 import { FilterChipOption } from '../FilterChips';
+import { searchApi } from '@api/searchApi';
+import { useMemo } from 'react';
 
 export default function useFilterState() {
+  console.log('calling in server');
+
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(
     localFilterStateAtom
@@ -83,25 +87,34 @@ export default function useFilterState() {
       ...localFilterState,
       ...filters,
     });
-
+    syncSelectedParamsToUrl();
     console.log('buildFilterParams', buildFilterParams());
   };
 
-  const buildFilterParams = (): Record<string, any> => {
-    const results: Record<string, any> = {};
-    const allCurrentFilters: Record<string, any> = {
+  const buildFilterParams = ({
+    withLocal = true,
+  }: { withLocal?: boolean } = {}): Record<string, any> => {
+    let results: Record<string, any> = {};
+    let allCurrentFilters: Record<string, any> = {
       ...filterState,
-      ...localFilterState,
     };
+    if (withLocal) {
+      allCurrentFilters = {
+        ...allCurrentFilters,
+        ...localFilterState,
+      };
+    }
 
     FILTER_FIELDS_TO_PARAMS.forEach((fieldName: string) => {
       const paramName = FILTER_FIELDS_PARAMS_MAP[fieldName];
       const option = allCurrentFilters[fieldName] as OptionForSelect;
 
-      if (!option?.value && !option?.range) {
+      if (!option?.value && !option?.range && !option?.params) {
         return;
       } else if (option.value) {
         results[paramName] = option.value;
+      } else if (option.params) {
+        results = { ...results, ...option.params };
       } else {
         results[paramName] = [
           option?.range?.min,
@@ -138,7 +151,31 @@ export default function useFilterState() {
     }
 
     setFilterState({ ...filterState, ...localValue });
+    syncSelectedParamsToUrl();
   };
+
+  const syncSelectedParamsToUrl = () => {
+    const filterParams = buildFilterParams();
+    filterParams.only_url = true;
+    searchApi(filterParams)
+      .then((response) => response.json())
+      .then((response) => {
+        const { listing_url } = response;
+        if (listing_url) {
+          console.log(listing_url);
+          window.history.pushState({}, '', listing_url);
+        }
+      });
+  };
+
+  const applySort = () => {
+    setFilterState({ ...filterState, sort: localFilterState.sort });
+    syncSelectedParamsToUrl();
+  };
+
+  const selectedSortText = useMemo((): string => {
+    return filterState.sort?.text || 'Sắp xếp';
+  }, [filterState]);
 
   return {
     filterState: filterState,
@@ -150,5 +187,7 @@ export default function useFilterState() {
     buildFilterParams: buildFilterParams,
     applySingleFilter: applySingleFilter,
     copyFilterStatesToLocal: copyFilterStatesToLocal,
+    applySort: applySort,
+    selectedSortText: selectedSortText,
   };
 }

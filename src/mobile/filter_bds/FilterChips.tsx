@@ -25,10 +25,10 @@ export interface FilterChipOption {
 }
 
 const FILTER_ITEMS: Array<FilterChipOption> = [
-  {
-    id: FilterFieldName.filterOverview,
-    text: 'Bộ Lọc',
-  },
+  // {
+  //   id: FilterFieldName.filterOverview,
+  //   text: 'Bộ Lọc',
+  // },
   {
     id: FilterFieldName.businessType,
     text: 'Loại tin',

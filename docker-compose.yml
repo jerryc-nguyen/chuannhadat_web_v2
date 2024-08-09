@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  chuannhadat_next:
+    restart: always
+    image: registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next
+    container_name: chuannhadat_next
+    ports:
+      - '3400:3000'
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://46.250.233.174:3300
+      - VIRTUAL_HOST=api.chuannhadat.com
+      - VIRTUAL_NETWORK=nginx-proxy
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=api.chuannhadat.com
+      - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
+    command: 'node server.js'

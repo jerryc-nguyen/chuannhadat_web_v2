@@ -10,11 +10,11 @@ export function useFilterLocations() {
 
   const selectedLocationText = useMemo((): string | undefined => {
     return (
-      filterState.ward?.text ??
-      filterState.district?.text ??
-      filterState.city?.text
+      filterState?.ward?.text ??
+      filterState?.district?.text ??
+      filterState?.city?.text
     );
-  }, [filterState.city, filterState.district, filterState.ward]);
+  }, [filterState?.city, filterState?.district, filterState?.ward]);
 
   const currentCity = getLocalFieldValue(FilterFieldName.city);
   const currentDistrict = getLocalFieldValue(

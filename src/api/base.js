@@ -1,6 +1,8 @@
-export const baseUrl =
-  process.env.REACT_APP_API_PATH ?? 'http://192.168.5.129:3003';
+export const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const currentUserKey = 'current_user';
+
+// export const baseApiUrl = publicRuntimeConfig.baseApiUrl;
 
 export function getCurrentUser() {
   try {

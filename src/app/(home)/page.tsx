@@ -1,16 +1,12 @@
 import React from 'react';
 import Mobile from './mobile';
-import Desktop from './desktop';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+
 import { getUserAgentInfo } from '@utils/ssrUserAgent';
 import { Provider as JotaiProvider } from 'jotai';
-
-import QueryProvider from '@utils/QueryProvider';
+import { useSyncParamsToState } from '@utils/useSyncParamsToState';
 
 export default function Home() {
+  console.log('render Home');
   const { isMobile } = getUserAgentInfo();
 
   const App = () => {
@@ -21,15 +17,13 @@ export default function Home() {
         </div>
       );
     } else {
-      return <Desktop />;
+      return <Mobile />;
     }
   };
 
   return (
     <JotaiProvider>
-      <QueryProvider>
-        <App />
-      </QueryProvider>
+      <App />
     </JotaiProvider>
   );
 }

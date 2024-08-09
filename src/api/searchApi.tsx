@@ -1,17 +1,22 @@
-import { apiFetch, baseUrl } from './base';
+import { apiFetch, apiBaseUrl } from './base';
+
 import { removeEmpty } from '@utils/hash';
 import queryString from 'query-string';
 
-async function searchs(params = {}): Promise<any> {
-  const path = `${baseUrl}/api/v1/searchs?${queryString.stringify(
+export async function searchApi(params = {}): Promise<any> {
+  const path = `${apiBaseUrl}/api/v1/searchs?${queryString.stringify(
     removeEmpty(params)
   )}`;
-
   return apiFetch(path, {
     method: 'GET',
   });
 }
 
-const postApis = { searchs };
-
-export default postApis;
+export async function toParamsApi(params = {}): Promise<any> {
+  const path = `${apiBaseUrl}/api/v1/searchs/to_params?${queryString.stringify(
+    removeEmpty(params)
+  )}`;
+  return apiFetch(path, {
+    method: 'GET',
+  });
+}

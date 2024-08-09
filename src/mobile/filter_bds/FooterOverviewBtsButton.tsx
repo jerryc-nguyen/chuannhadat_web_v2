@@ -2,7 +2,7 @@ import { Button, Preloader } from 'konsta/react';
 import useModals from '@mobile/modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
-import searchApis from '@api/searchApi';
+import { searchApi } from '@api/searchApi';
 
 export default function FooterOverviewBtsButton() {
   const { closeModals } = useModals();
@@ -12,7 +12,7 @@ export default function FooterOverviewBtsButton() {
   const { isLoading, data } = useQuery({
     queryKey: ['searchs', filterParams],
     queryFn: async () => {
-      const response = await searchApis.searchs(filterParams);
+      const response = await searchApi(filterParams);
       return await response.json();
     },
   });

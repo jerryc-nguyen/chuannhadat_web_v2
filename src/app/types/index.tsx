@@ -7,6 +7,7 @@ export type OptionForSelect = {
   value: number | string;
   text: string;
   range?: Range;
+  params?: Record<string, any>;
 };
 
 export const PARAM_BUSINESS_TYPE = 'business_type';
@@ -19,6 +20,7 @@ export const PARAM_DIRECTION = 'direction';
 export const PARAM_CITY = 'city_id';
 export const PARAM_DISTRICT = 'district_id';
 export const PARAM_WARD = 'ward_id';
+export const PARAM_SORT = 'sort';
 
 export enum FilterFieldName {
   none,
@@ -35,6 +37,7 @@ export enum FilterFieldName {
   city,
   district,
   ward,
+  sort,
 }
 
 export const FILTER_FIELDS_TO_PARAMS = [
@@ -48,6 +51,7 @@ export const FILTER_FIELDS_TO_PARAMS = [
   'city',
   'district',
   'ward',
+  'sort',
 ];
 
 export const FILTER_FIELDS_PARAMS_MAP: Record<string, any> = {
@@ -61,4 +65,5 @@ export const FILTER_FIELDS_PARAMS_MAP: Record<string, any> = {
   city: PARAM_CITY,
   district: PARAM_DISTRICT,
   ward: PARAM_WARD,
+  sort: PARAM_SORT,
 };

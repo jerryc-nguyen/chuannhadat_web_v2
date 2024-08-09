@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Navbar, Searchbar, Icon } from 'konsta/react';
 
