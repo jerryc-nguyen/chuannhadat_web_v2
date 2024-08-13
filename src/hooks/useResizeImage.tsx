@@ -1,5 +1,4 @@
 import { getViewportSize } from '@utils/useViewportSize';
-export const MAX_THUMB_WIDTH = 480;
 import { isServer } from '@tanstack/react-query';
 import queryString from 'query-string';
 
@@ -12,11 +11,14 @@ const CDN_MAPS: Record<string, any> = {
     's3-images-dev.b-cdn.net',
 };
 
+export const MAX_THUMB_WIDTH = 480;
+const DEFAULT_RATIO = 16 / 9;
+
 export default function useResizeImage() {
   let screenWidth = MAX_THUMB_WIDTH;
 
   if (!isServer) {
-    let [screenWidth] = getViewportSize();
+    [screenWidth] = getViewportSize();
   }
 
   const resize = ({
@@ -35,7 +37,7 @@ export default function useResizeImage() {
     if (sizes['clear'] == true) {
       newSize = {};
     } else {
-      newSize = { ...url.searchParams, ...sizes };
+      newSize = { ...url.searchParams, ...sizes, crop: true };
     }
 
     newUrl.search = queryString.stringify(newSize);
@@ -44,14 +46,16 @@ export default function useResizeImage() {
 
   const buildThumbnailUrl = ({
     imageUrl,
+    width,
     ratio,
   }: {
     imageUrl: string;
+    width?: number;
     ratio?: number;
   }): string => {
-    let width = thresholdWidth(screenWidth);
+    width = width ?? thresholdWidth(screenWidth);
     width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
-    const curRatio = ratio ?? 4 / 3;
+    const curRatio = ratio ?? DEFAULT_RATIO;
 
     const height = Math.ceil(width / curRatio);
     if (!imageUrl || imageUrl.length == 0) {
