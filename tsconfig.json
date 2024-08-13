@@ -24,7 +24,8 @@
       "@utils/*": ["src/utils/*"],
       "@desktop/*": ["src/desktop/*"],
       "@mobile/*": ["src/mobile/*"],
-      "@api/*": ["src/api/*"]
+      "@api/*": ["src/api/*"],
+      "@hooks/*": ["src/hooks/*"]
     }
   },
   "include": [

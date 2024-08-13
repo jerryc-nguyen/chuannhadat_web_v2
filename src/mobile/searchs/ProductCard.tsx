@@ -1,6 +1,7 @@
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
 import { IoImage } from 'react-icons/io5';
+import useResizeImage from '@hooks/useResizeImage';
 
 const styles: any = {
   imagesCountWrapper: {
@@ -17,12 +18,15 @@ const styles: any = {
 };
 
 export default function ProductCard({ product }: { product: any }) {
+  const { buildThumbnailUrl } = useResizeImage();
   return (
     <div className='m-4 overflow-hidden rounded-lg bg-white dark:bg-slate-800 shadow-md'>
       <AspectRatio.Root ratio={16 / 9}>
         <img
           className='Image'
-          src={product?.featured_image_url}
+          src={buildThumbnailUrl({
+            imageUrl: product?.featured_image_url,
+          })}
           alt={product?.name}
         />
 
