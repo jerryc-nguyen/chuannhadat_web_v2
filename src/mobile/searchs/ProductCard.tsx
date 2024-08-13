@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
 import { IoImage } from 'react-icons/io5';

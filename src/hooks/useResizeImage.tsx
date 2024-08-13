@@ -1,5 +1,7 @@
 import { getViewportSize } from '@utils/useViewportSize';
 export const MAX_THUMB_WIDTH = 480;
+import { isServer } from '@tanstack/react-query';
+import queryString from 'query-string';
 
 const CDN_MAPS: Record<string, any> = {
   'chuannhadat-assets.sgp1.digitaloceanspaces.com':
@@ -11,7 +13,11 @@ const CDN_MAPS: Record<string, any> = {
 };
 
 export default function useResizeImage() {
-  const [screenWidth] = getViewportSize();
+  let screenWidth = MAX_THUMB_WIDTH;
+
+  if (!isServer) {
+    let [screenWidth] = getViewportSize();
+  }
 
   const resize = ({
     imageUrl,
@@ -31,8 +37,8 @@ export default function useResizeImage() {
     } else {
       newSize = { ...url.searchParams, ...sizes };
     }
-    newUrl.search = new URLSearchParams(newSize).toString();
-    console.log('newUrl.search', newUrl.search);
+
+    newUrl.search = queryString.stringify(newSize);
     return newUrl.toString();
   };
 
@@ -80,7 +86,7 @@ export default function useResizeImage() {
   };
 
   return {
-    resizeBy: resizeBy,
+    resize: resize,
     thresholdWidth: thresholdWidth,
     buildThumbnailUrl: buildThumbnailUrl,
   };
