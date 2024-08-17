@@ -1,26 +1,24 @@
-import { useAtom } from 'jotai';
+import { useAtom } from "jotai";
 import {
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
-} from '../states';
-import { OptionForSelect } from '@app/types';
+} from "../states";
+import { OptionForSelect } from "src/types";
 import {
   FilterFieldName,
   FILTER_FIELDS_TO_PARAMS,
   FILTER_FIELDS_PARAMS_MAP,
-} from '@app/types';
-import { FilterChipOption } from '../FilterChips';
-import { searchApi } from '@api/searchApi';
-import { useMemo } from 'react';
+} from "src/types";
+import { FilterChipOption } from "../FilterChips";
+import { searchApi } from "@api/searchApi";
+import { useMemo } from "react";
 
 export default function useFilterState() {
-  console.log('calling in server');
+  console.log("calling in server");
 
   const [filterState, setFilterState] = useAtom(filterStateAtom);
-  const [localFilterState, setLocalFilterState] = useAtom(
-    localFilterStateAtom
-  );
+  const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const [filterFieldOptions, setFilterFieldOptions] = useAtom(
     filterFieldOptionsAtom
   );
@@ -43,17 +41,13 @@ export default function useFilterState() {
           bed: filterState.bed,
         };
       } else {
-        values[fieldName] = (filterState as Record<string, any>)[
-          fieldName
-        ];
+        values[fieldName] = (filterState as Record<string, any>)[fieldName];
       }
     });
     setLocalFilterState({ ...values });
   };
 
-  const copyFilterStatesToLocal = (
-    fieldIds: Array<FilterFieldName> = []
-  ) => {
+  const copyFilterStatesToLocal = (fieldIds: Array<FilterFieldName> = []) => {
     if (fieldIds.length > 0) {
       copyFilterStatesToLocalByFieldId(fieldIds);
     } else {
@@ -72,7 +66,7 @@ export default function useFilterState() {
     option: OptionForSelect | undefined
   ) => {
     const fieldName = FilterFieldName[fieldId];
-    const finalOption = option?.value != 'all' ? option : undefined;
+    const finalOption = option?.value != "all" ? option : undefined;
 
     // @ts-ignore
     setLocalFilterState({
@@ -82,13 +76,13 @@ export default function useFilterState() {
   };
 
   const applyAllFilters = (filters?: {}) => {
-    console.log('localFilterState', localFilterState);
+    console.log("localFilterState", localFilterState);
     setFilterState({
       ...localFilterState,
       ...filters,
     });
     syncSelectedParamsToUrl();
-    console.log('buildFilterParams', buildFilterParams());
+    console.log("buildFilterParams", buildFilterParams());
   };
 
   const buildFilterParams = ({
@@ -116,10 +110,7 @@ export default function useFilterState() {
       } else if (option.params) {
         results = { ...results, ...option.params };
       } else {
-        results[paramName] = [
-          option?.range?.min,
-          option?.range?.max,
-        ].join(',');
+        results[paramName] = [option?.range?.min, option?.range?.max].join(",");
       }
     });
 
@@ -154,18 +145,14 @@ export default function useFilterState() {
     syncSelectedParamsToUrl();
   };
 
-  const syncSelectedParamsToUrl = () => {
+  const syncSelectedParamsToUrl = async () => {
     const filterParams = buildFilterParams();
     filterParams.only_url = true;
-    searchApi(filterParams)
-      .then((response) => response.json())
-      .then((response) => {
-        const { listing_url } = response;
-        if (listing_url) {
-          console.log(listing_url);
-          window.history.pushState({}, '', listing_url);
-        }
-      });
+
+    const response = await searchApi(filterParams);
+    
+    const { listing_url } = response;
+    window.history.pushState({}, "", listing_url);
   };
 
   const applySort = () => {
@@ -174,7 +161,7 @@ export default function useFilterState() {
   };
 
   const selectedSortText = useMemo((): string => {
-    return filterState.sort?.text || 'Sắp xếp';
+    return filterState.sort?.text || "Sắp xếp";
   }, [filterState]);
 
   return {

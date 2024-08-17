@@ -1,13 +1,8 @@
-import { FilterFieldName, OptionForSelect } from '@app/types';
-import ListCheckOptions from '@mobile/ui/ListCheckOptions';
-import useFilterState from '../hooks/useFilterState';
-import { SORT_OPTIONS } from '@app/constants';
-
-export default function SortOptions({
-  onSelect,
-}: {
-  onSelect?: Function;
-}) {
+import { FilterFieldName, OptionForSelect } from "src/types";
+import ListCheckOptions from "@mobile/ui/ListCheckOptions";
+import useFilterState from "../hooks/useFilterState";
+import { SORT_OPTIONS } from "src/consts";
+export default function SortOptions({ onSelect }: { onSelect?: Function }) {
   const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
   const value = getLocalFieldValue(FilterFieldName.sort);
 

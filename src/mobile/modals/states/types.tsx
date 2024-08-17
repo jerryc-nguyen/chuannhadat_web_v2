@@ -1,4 +1,4 @@
-import { FilterFieldName } from '@app/types';
+import { FilterFieldName } from 'src/types';
 import { ReactElement } from 'react';
 
 export enum ModalNames {

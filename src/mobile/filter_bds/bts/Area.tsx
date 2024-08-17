@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@app/types';
+import { FilterFieldName, OptionForSelect } from 'src/types';
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
 

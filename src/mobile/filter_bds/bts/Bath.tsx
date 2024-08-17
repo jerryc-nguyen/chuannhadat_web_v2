@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@app/types';
+import { FilterFieldName, OptionForSelect } from 'src/types';
 
 import ListChips from '@mobile/ui/ListChips';
 import { Block } from 'konsta/react';

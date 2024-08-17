@@ -1,23 +1,23 @@
-import { Block, Chip } from 'konsta/react';
-import React from 'react';
-import { filterStateAtom, localFilterStateAtom } from './states';
-import { useAtom } from 'jotai';
-import { FilterFieldName } from '@app/types';
-import Price from './bts/Price';
-import Area from './bts/Area';
-import FooterBtsButton from './FooterBtsButton';
-import Locations from './bts/Locations';
+import { Block, Chip } from "konsta/react";
+import React from "react";
+import { filterStateAtom, localFilterStateAtom } from "./states";
+import { useAtom } from "jotai";
+import { FilterFieldName } from 'src/types';
+import Price from "./bts/Price";
+import Area from "./bts/Area";
+import FooterBtsButton from "./FooterBtsButton";
+import Locations from "./bts/Locations";
 
-import useModals from '@mobile/modals/hooks';
-import { useFilterLocations } from '@mobile/locations/hooks';
-import FilterModal from './FilterModal';
-import FooterOverviewBtsButton from './FooterOverviewBtsButton';
-import BusinessTypeButtons from './bts/BusinessTypeButtons';
-import CategoryType from './bts/CategoryType';
-import Rooms from './bts/Rooms';
-import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
-import Direction from './bts/Direction';
-import useFilterState from './hooks/useFilterState';
+import useModals from "@mobile/modals/hooks";
+import { useFilterLocations } from "@mobile/locations/hooks";
+import FilterModal from "./FilterModal";
+import FooterOverviewBtsButton from "./FooterOverviewBtsButton";
+import BusinessTypeButtons from "./bts/BusinessTypeButtons";
+import CategoryType from "./bts/CategoryType";
+import Rooms from "./bts/Rooms";
+import { DEFAULT_MODAL_HEIGHTS } from "./FilterModal";
+import Direction from "./bts/Direction";
+import useFilterState from "./hooks/useFilterState";
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -31,25 +31,25 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
   // },
   {
     id: FilterFieldName.businessType,
-    text: 'Loại tin',
+    text: "Loại tin",
   },
-  { id: FilterFieldName.categoryType, text: 'Loại nhà đất' },
-  { id: FilterFieldName.locations, text: 'Khu vực' },
+  { id: FilterFieldName.categoryType, text: "Loại nhà đất" },
+  { id: FilterFieldName.locations, text: "Khu vực" },
   {
     id: FilterFieldName.price,
-    text: 'Mức giá',
+    text: "Mức giá",
   },
   {
     id: FilterFieldName.area,
-    text: 'Diện tích',
+    text: "Diện tích",
   },
   {
     id: FilterFieldName.rooms,
-    text: 'Số Phòng',
+    text: "Số Phòng",
   },
   {
     id: FilterFieldName.direction,
-    text: 'Hướng',
+    text: "Hướng",
   },
 ];
 
@@ -69,7 +69,7 @@ export default function FilterChips() {
       results.push(`${filterState.bath.text} WC`);
     }
 
-    return results.join(' / ');
+    return results.join(" / ");
   };
 
   const selectedFilterText = (filterOption: FilterChipOption) => {
@@ -78,9 +78,9 @@ export default function FilterChips() {
       FilterFieldName[filterOption.id] || filterOption.id;
 
     if (filterOption.id == FilterFieldName.locations) {
-      return selectedLocationText ?? 'Khu vực';
+      return selectedLocationText ?? "Khu vực";
     } else if (filterOption.id == FilterFieldName.rooms) {
-      return selectedRoomText() || 'Số phòng';
+      return selectedRoomText() || "Số phòng";
     } else {
       //@ts-ignore
       return filterState[fieldName]?.text ?? filterOption.text;
@@ -152,7 +152,7 @@ export default function FilterChips() {
       {FILTER_ITEMS.map((item) => (
         <Chip
           key={item.id}
-          className='m-0.5'
+          className="m-0.5"
           onClick={() => {
             showFilterBts(item);
           }}

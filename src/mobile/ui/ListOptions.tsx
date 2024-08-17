@@ -1,4 +1,4 @@
-import { OptionForSelect } from '@app/types';
+import { OptionForSelect } from 'src/types';
 import { List, ListItem } from 'konsta/react';
 import { ReactElement } from 'react';
 
