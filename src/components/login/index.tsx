@@ -12,10 +12,17 @@ import ic_google from "@styles/images/icon/ic_google.svg";
 import ic_qr from "@styles/images/icon/ic_qr.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { IFormPropsLogin } from "src/common/inteface";
+import {
+  IFormPropsLogin,
+  IFormResponse,
+  ILoginResponse,
+} from "src/common/inteface";
+import { useLogin } from "@api/auth";
+import { useRouter } from "next/navigation";
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
-
+  const { login, isLogin } = useLogin();
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -25,8 +32,26 @@ export default function Login() {
   });
 
   const onSubmit = (data: IFormPropsLogin) => {
-    console.log(data);
-    // Handle login logic here
+    login(
+      {
+        phone: data.phone,
+        password: data.password,
+      },
+      {
+        onSuccess: (data: { data: IFormResponse<ILoginResponse> }) => {
+          if (data.data.status) {
+            alert("Đăng nhập thành công");
+            router.push("/");
+          } else {
+            alert("Mật khẩu hoặc tài khoản không chính xác");
+          }
+        },
+        onError: (err) => {
+          alert("Lỗi server");
+          console.log("In ra loi", err);
+        },
+      }
+    );
   };
 
   const togglePasswordVisibility = () => {
@@ -57,13 +82,13 @@ export default function Login() {
           }}
         >
           <Controller
-            name="emailOrPhone"
+            name="phone"
             control={control}
             defaultValue=""
             render={({ field }) => (
               <div>
                 <label
-                  htmlFor="emailOrPhone"
+                  htmlFor="phone"
                   className="block text-sm font-medium mb-2"
                   style={{
                     color: "#374151",
@@ -74,13 +99,13 @@ export default function Login() {
                 <div className="relative">
                   <input
                     {...field}
-                    id="emailOrPhone"
+                    id="phone"
                     type="text"
                     style={{
                       paddingLeft: "36px",
                     }}
                     className={`mt-1 block w-full  py-2 border ${
-                      errors.emailOrPhone ? "border-red-500" : "border-gray-300"
+                      errors.phone ? "border-red-500" : "border-gray-300"
                     } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                     placeholder="Nhập số điện thoại/ Email"
                   />
@@ -99,14 +124,14 @@ export default function Login() {
                   </div>
                 </div>
 
-                {errors.emailOrPhone && (
+                {errors.phone && (
                   <p
                     style={{
                       color: "#EF4444",
                     }}
                     className="mt-2 text-sm text-red-600"
                   >
-                    {errors.emailOrPhone.message}
+                    {errors.phone.message}
                   </p>
                 )}
               </div>
