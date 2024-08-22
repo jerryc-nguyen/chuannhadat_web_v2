@@ -3,7 +3,7 @@ import { searchApi } from '@api/searchApi';
 
 export const homeApiOptions = queryOptions({
   queryKey: ['home'],
-  queryFn: async (params: any) => {
+  queryFn: async (params: A) => {
     const response = await searchApi(params);
 
     // return response.json();

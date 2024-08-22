@@ -1,16 +1,16 @@
-import { AuthUtils } from "@utils/auth";
+import { AuthUtils } from '@common/auth';
 import axios, {
   AxiosError,
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from "axios";
+} from 'axios';
 
 const DEFAULT_AXIOS_TIMEOUT = 60 * 1000; // 60S
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const API_KEY = "";
+const API_KEY = '';
 
 const ENDPOINTS_NEED_TO_USE_HEADER: string[] = [];
 
@@ -19,13 +19,13 @@ const privateAxios: AxiosInstance = axios.create({
   timeout: DEFAULT_AXIOS_TIMEOUT,
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 privateAxios.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    config.headers["X-Api-Key"] = API_KEY;
+    config.headers['X-Api-Key'] = API_KEY;
 
     // Inject token to request header
     const token = AuthUtils.getAccessToken();
@@ -37,7 +37,7 @@ privateAxios.interceptors.request.use(
   },
   (error: AxiosError) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 privateAxios.interceptors.response.use(
@@ -47,7 +47,8 @@ privateAxios.interceptors.response.use(
     if (
       ENDPOINTS_NEED_TO_USE_HEADER.some(
         (resUrl) =>
-          `${resUrl}`.toLocaleLowerCase() === requestUrl?.toLocaleLowerCase()
+          `${resUrl}`.toLocaleLowerCase() ===
+          requestUrl?.toLocaleLowerCase(),
       )
     ) {
       return response;
@@ -58,7 +59,7 @@ privateAxios.interceptors.response.use(
   async (error: AxiosError) => {
     // Handle common errors when necessary such as 401, 403, 404
     return Promise.reject(error);
-  }
+  },
 );
 
 export { privateAxios };

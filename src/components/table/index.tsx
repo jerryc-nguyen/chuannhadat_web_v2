@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 interface DataType {
-  [key: string]: any;
+  [key: string]: A;
 }
 
 interface Column {
@@ -10,18 +10,29 @@ interface Column {
   dataIndex: string;
   width?: number;
   fixed?: 'left' | 'right' | 'center';
-  render?: (value: any, row: DataType, rowIndex: number) => React.ReactNode;
+  render?: (
+    value: A,
+    row: DataType,
+    rowIndex: number,
+  ) => React.ReactNode;
 }
 
 interface TableComponentProps {
-  data: any[];
+  data: A[];
   columns: Column[];
   title?: string;
   footer?: React.ReactNode;
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, footer }) => {
-  const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 450);
+const TableComponent: React.FC<TableComponentProps> = ({
+  columns,
+  data,
+  title,
+  footer,
+}) => {
+  const [isWideScreen, setIsWideScreen] = useState(
+    window.innerWidth > 450,
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,7 +40,8 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, f
     };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () =>
+      window.removeEventListener('resize', handleResize);
   }, []);
 
   const containerStyle: React.CSSProperties = {
@@ -52,25 +64,40 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, f
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4 text-center">{title}</h2>
+      <h2 className="mb-4 text-center text-2xl font-bold">
+        {title}
+      </h2>
       <div style={containerStyle}>
-        <table style={tableStyle} className="divide-y divide-gray-200 border border-gray-300">
+        <table
+          style={tableStyle}
+          className="divide-y divide-gray-200 border border-gray-300"
+        >
           <thead className="bg-gray-50">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  style={{ width: col.width, padding: '12px', textAlign: 'left', fontSize: '0.75rem', fontWeight: '600', color: '#6b7280' }}
+                  style={{
+                    width: col.width,
+                    padding: '12px',
+                    textAlign: 'left',
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    color: '#6b7280',
+                  }}
                 >
                   {col.title}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 bg-white">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} style={noDataStyle}>
+                <td
+                  colSpan={columns.length}
+                  style={noDataStyle}
+                >
                   Không có dữ liệu
                 </td>
               </tr>
@@ -80,9 +107,22 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, f
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      style={{ width: col.width, padding: '12px', textAlign: 'left', fontSize: '0.875rem', fontWeight: '500', color: '#111827' }}
+                      style={{
+                        width: col.width,
+                        padding: '12px',
+                        textAlign: 'left',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#111827',
+                      }}
                     >
-                      {col.render ? col.render(row[col.dataIndex], row, rowIndex) : row[col.dataIndex]}
+                      {col.render
+                        ? col.render(
+                            row[col.dataIndex],
+                            row,
+                            rowIndex,
+                          )
+                        : row[col.dataIndex]}
                     </td>
                   ))}
                 </tr>
@@ -92,7 +132,16 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, f
           {footer && (
             <tfoot className="bg-gray-50">
               <tr>
-                <td colSpan={columns.length} style={{ padding: '12px', textAlign: 'center', fontSize: '0.875rem', fontWeight: '500', color: '#6b7280' }}>
+                <td
+                  colSpan={columns.length}
+                  style={{
+                    padding: '12px',
+                    textAlign: 'center',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    color: '#6b7280',
+                  }}
+                >
                   {footer}
                 </td>
               </tr>

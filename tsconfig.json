@@ -19,15 +19,15 @@
       }
     ],
     "paths": {
+      "@*": ["./src/*"],
       "@app/*": ["src/app/*"],
       "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/utils/*"],
+      "@utils/*": ["src/services/*"],
       "@desktop/*": ["src/desktop/*"],
       "@mobile/*": ["src/mobile/*"],
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@components/*": ["src/components/*"],
-      "@common/*": ["src/common/*"]
+      "@components/*": ["src/components/*"]
     }
   },
   "include": [

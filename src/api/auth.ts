@@ -1,11 +1,7 @@
-import {
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axiosInstance from './axiosInstance';
 
-import { AxiosError } from 'axios';
-import { setCookie } from '@utils/cookies';
+import { setCookie } from '@common/cookies';
 import {
   IFormPropsLogin,
   IFormPropsRegister,
@@ -14,12 +10,9 @@ import {
   IRegisterResponse,
 } from '@mobile/auth/states';
 import { toast } from 'react-toastify';
-import { saveToStorage } from '@utils/localstorage';
+import { saveToStorage } from '@common/localstorage';
 import { API_ROUTES } from '@common/router';
-import {
-  TOKEN,
-  userLocalStorage,
-} from 'src/common/constants';
+import { TOKEN, userLocalStorage } from '@common/constants';
 
 export function useLogin() {
   const { mutate: login, isPending: isLogin } = useMutation(
@@ -42,7 +35,7 @@ export function useLogin() {
           );
         }
       },
-      onError: (err: AxiosError<any>) => {
+      onError: () => {
         toast.error('Lỗi server vui lòng đăng nhập lại');
       },
     },
@@ -72,7 +65,7 @@ export function useRegister() {
           toast.error(data.message ?? 'Lỗi đăng ký');
         }
       },
-      onError: (err: AxiosError<any>) => {
+      onError: () => {
         toast.error('Lỗi server vui lòng đăng nhập lại');
       },
     });
