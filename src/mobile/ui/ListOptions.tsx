@@ -1,13 +1,13 @@
-import { OptionForSelect } from 'src/types';
+import { OptionForSelect } from '@models';
 import { List, ListItem } from 'konsta/react';
 import { ReactElement } from 'react';
 
 const ListOptions = ({
   options,
-  onSelect = () => {},
+  onSelect = () => null,
 }: {
   options: OptionForSelect[] | undefined;
-  onSelect?: (item: any) => void;
+  onSelect?: (item: A) => void;
 }): ReactElement => {
   return (
     <>

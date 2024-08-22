@@ -1,6 +1,4 @@
 import { type ClassValue, clsx } from 'clsx';
-import { headers } from 'next/headers';
-import { getSelectorsByUserAgent } from 'react-device-detect';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -27,12 +25,6 @@ export function stringToSlug(str?: string) {
 
   return str;
 }
-
-export const getUserAgentInfo = () => {
-  const headersList = headers();
-  const userAgent = headersList.get('User-Agent') || '';
-  return getSelectorsByUserAgent(userAgent);
-};
 
 export const removeEmpty = (obj: Record<A, A>) =>
   Object.fromEntries(

@@ -1,9 +1,6 @@
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import {
-  FilterFieldName,
-  OptionForSelect,
-} from 'src/types';
+import { FilterFieldName, OptionForSelect } from '@models';
 
 export default function CategoryType({
   onSelect,

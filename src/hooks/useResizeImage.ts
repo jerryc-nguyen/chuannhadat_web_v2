@@ -1,8 +1,8 @@
-import { getViewportSize } from '@utils/useViewportSize';
+import { getViewportSize } from '@hooks/useViewportSize';
 import { isServer } from '@tanstack/react-query';
 import queryString from 'query-string';
 
-const CDN_MAPS: Record<string, any> = {
+const CDN_MAPS: Record<string, A> = {
   'chuannhadat-assets.sgp1.digitaloceanspaces.com':
     'images.chuannhadat.com',
   'chuannhadat-assets.sgp1.cdn.digitaloceanspaces.com':
@@ -26,7 +26,7 @@ export default function useResizeImage() {
     sizes,
   }: {
     imageUrl: string;
-    sizes: Record<string, any>;
+    sizes: Record<string, A>;
   }): string => {
     const updatedCdnUrl = applyCdnUrlFor(imageUrl);
     const url = new URL(updatedCdnUrl);
@@ -37,7 +37,11 @@ export default function useResizeImage() {
     if (sizes['clear'] == true) {
       newSize = {};
     } else {
-      newSize = { ...url.searchParams, ...sizes, crop: true };
+      newSize = {
+        ...url.searchParams,
+        ...sizes,
+        crop: true,
+      };
     }
 
     newUrl.search = queryString.stringify(newSize);
@@ -54,7 +58,8 @@ export default function useResizeImage() {
     ratio?: number;
   }): string => {
     width = width ?? thresholdWidth(screenWidth);
-    width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
+    width =
+      width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
 
     const height = Math.ceil(width / curRatio);

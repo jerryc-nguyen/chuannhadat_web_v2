@@ -1,27 +1,30 @@
-import { useEffect, useState } from "react";
-import { List, ListItem } from "konsta/react";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useEffect, useState } from 'react';
+import { List, ListItem } from 'konsta/react';
 
-import { useFilterLocations } from "@mobile/locations/hooks";
-import useModals from "@mobile/modals/hooks";
-import { ModalNames } from "@mobile/modals/states/types";
-import cities from "src/configs/locations/cities.json";
-import citiesDistricts from "src/configs/locations/cities_districts.json";
-import districtWards from "src/configs/locations/districts_wards.json";
-import useFilterState from "../hooks/useFilterState";
-import { FilterFieldName, OptionForSelect } from "src/types";
-import OptionPicker from "@mobile/ui/OptionPicker";
-import { ALL_OPTION } from "src/consts";
+import useModals from '@mobile/modals/hooks';
+import { ModalNames } from '@mobile/modals/states/types';
+import cities from 'src/configs/locations/cities.json';
+import citiesDistricts from 'src/configs/locations/cities_districts.json';
+import districtWards from 'src/configs/locations/districts_wards.json';
+import useFilterState from '../hooks/useFilterState';
+import { FilterFieldName, OptionForSelect } from '@models';
+import OptionPicker from '@mobile/ui/OptionPicker';
+import { ALL_OPTION } from '@common/constants';
 
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
 
-  const { setLocalFieldValue, localFilterState } = useFilterState();
+  const { setLocalFieldValue, localFilterState } =
+    useFilterState();
 
   const city = localFilterState.city;
   const district = localFilterState.district;
   const ward = localFilterState.ward;
 
-  const [districtOptions, setDistrictOptions] = useState([]);
+  const [districtOptions, setDistrictOptions] = useState(
+    [],
+  );
   const [wardOptions, setWardOptions] = useState([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,43 +41,51 @@ export default function Locations() {
     if (city) {
       setDistrictOptions(
         //@ts-ignore
-        citiesDistricts[city.value + ""]
+        citiesDistricts[city.value + ''],
       );
     }
     if (district) {
       setWardOptions(
         //@ts-ignore
-        districtWards[district.value + ""]
+        districtWards[district.value + ''],
       );
     }
   };
 
   const onSelectCity = (city?: OptionForSelect) => {
-    const finalOption = city?.value != "all" ? city : undefined;
+    const finalOption =
+      city?.value != 'all' ? city : undefined;
 
     resetDistrict();
     resetWard();
 
     setDistrictOptions(
       //@ts-ignore
-      citiesDistricts[finalOption?.value + ""] || []
+      citiesDistricts[finalOption?.value + ''] || [],
     );
     setLocalFieldValue(FilterFieldName.city, finalOption);
     closeModal3();
   };
 
   const onSelectDistrict = (district?: OptionForSelect) => {
-    const finalOption = district?.value != "all" ? district : undefined;
+    const finalOption =
+      district?.value != 'all' ? district : undefined;
 
     resetWard();
-    //@ts-ignore
-    setWardOptions(districtWards[finalOption?.value + ""] || []);
-    setLocalFieldValue(FilterFieldName.district, finalOption);
+    setWardOptions(
+      //@ts-ignore
+      districtWards[finalOption?.value + ''] || [],
+    );
+    setLocalFieldValue(
+      FilterFieldName.district,
+      finalOption,
+    );
     closeModal3();
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
-    const finalOption = ward?.value != "all" ? ward : undefined;
+    const finalOption =
+      ward?.value != 'all' ? ward : undefined;
     setLocalFieldValue(FilterFieldName.ward, finalOption);
     closeModal3();
   };
@@ -93,7 +104,7 @@ export default function Locations() {
           onClick={() => {
             openModal3({
               name: ModalNames.city,
-              title: "Thành Phố",
+              title: 'Thành Phố',
               content: (
                 <OptionPicker
                   searchable
@@ -114,7 +125,7 @@ export default function Locations() {
           onClick={() => {
             openModal3({
               name: ModalNames.district,
-              title: "Quận / Huyện",
+              title: 'Quận / Huyện',
               content: (
                 <OptionPicker
                   searchable
@@ -136,7 +147,7 @@ export default function Locations() {
           onClick={() => {
             openModal3({
               name: ModalNames.ward,
-              title: "Phường / Xã",
+              title: 'Phường / Xã',
               content: (
                 <OptionPicker
                   searchable

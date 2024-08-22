@@ -8,7 +8,7 @@ import {
 const useBrowserLayoutEffect =
   typeof window !== 'undefined'
     ? useLayoutEffect
-    : () => {};
+    : () => null;
 
 type Width = number;
 type Height = number;

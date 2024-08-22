@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import { QueryClientProvider } from "@tanstack/react-query";
-import { getQueryClient } from "@utils/react-query";
-import { PropsWithChildren } from "react";
+import { QueryClientProvider } from '@tanstack/react-query';
+import { getQueryClient } from '@api/react-query';
+import { PropsWithChildren } from 'react';
 
 type QueryProviderProps = PropsWithChildren;
 
-const QueryProvider = ({ children }: QueryProviderProps) => {
+const QueryProvider = ({
+  children,
+}: QueryProviderProps) => {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -14,7 +16,9 @@ const QueryProvider = ({ children }: QueryProviderProps) => {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
   );
 };
 
