@@ -10,9 +10,11 @@ import {
 export default function MainNav({
   type,
   onSearchClick = () => {},
+  isShowSearch = true
 }: {
   type: string | null;
   onSearchClick?: Function;
+  isShowSearch?: boolean
 }) {
   const utilClass = type == 'SearchInSub' ? 'isSearchSub' : '';
 
@@ -60,7 +62,7 @@ export default function MainNav({
       right={<RightItems />}
       subnavbarClassName={`c-mainNav__sub ${utilClass}`}
       subnavbar={
-        <div style={{ display: 'block', width: '100%' }}>
+        isShowSearch && <div style={{ display: 'block', width: '100%' }}>
           <Searchbar inputStyle={{ borderRadius: '30px' }} />
           <div
             className='c-mainNav__mask'

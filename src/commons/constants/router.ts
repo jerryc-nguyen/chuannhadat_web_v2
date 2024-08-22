@@ -7,4 +7,9 @@ export const API_ROUTES = {
     CHANGE_PASSWORD: "auth/reset-password",
     LOGOUT: "auth/logout",
   },
+  BALANCE: {
+    OVERVIEW: "api/v1/balances/overviews",
+    TRANSACTION: "api/v1/balances/transactions",
+    HISTORY: "api/v1/balances/deposit_histories"
+  }
 };
