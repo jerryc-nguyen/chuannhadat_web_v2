@@ -4,7 +4,7 @@ import {
   IFormPropsLogin,
   IFormResponse,
   ILoginResponse,
-} from 'src/common/inteface';
+} from '@commons/interfaces';
 import { API_ROUTES } from '@commons/constants/router';
 import { AxiosError } from 'axios';
 import { setCookie } from '@utils/cookies';
