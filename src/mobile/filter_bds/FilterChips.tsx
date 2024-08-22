@@ -1,11 +1,8 @@
 import { Block, Chip } from 'konsta/react';
 import React from 'react';
-import {
-  filterStateAtom,
-  localFilterStateAtom,
-} from './states';
+import { filterStateAtom } from './states';
 import { useAtom } from 'jotai';
-import { FilterFieldName } from 'src/types';
+import { FilterFieldName } from '@models';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
@@ -82,15 +79,14 @@ export default function FilterChips() {
     filterOption: FilterChipOption,
   ) => {
     const fieldName =
-      //@ts-ignore
-      FilterFieldName[filterOption.id] || filterOption.id;
+      FilterFieldName[filterOption.id as A] ||
+      filterOption.id;
 
     if (filterOption.id == FilterFieldName.locations) {
       return selectedLocationText ?? 'Khu vực';
     } else if (filterOption.id == FilterFieldName.rooms) {
       return selectedRoomText() || 'Số phòng';
     } else {
-      //@ts-ignore
       return (
         filterState[fieldName]?.text ?? filterOption.text
       );
@@ -162,7 +158,6 @@ export default function FilterChips() {
       content: buildContent(filterOption),
       footer: buildBtsFooter(filterOption),
       maxHeightPercent: buildMaxHeightPercent(filterOption),
-      // @ts-ignore
       defaultContentHeight:
         DEFAULT_MODAL_HEIGHTS[filterOption.id],
     });

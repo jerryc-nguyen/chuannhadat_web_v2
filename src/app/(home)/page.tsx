@@ -1,12 +1,12 @@
-import React from "react";
-import Mobile from "./mobile";
+import React from 'react';
+import Mobile from './mobile';
 
-import { getUserAgentInfo } from "@utils/ssrUserAgent";
-import { Provider as JotaiProvider } from "jotai";
+import { Provider as JotaiProvider } from 'jotai';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 export default function Home() {
-  console.log("render Home");
-  const { isMobile } = getUserAgentInfo();
+  console.log('render Home');
+  const { isMobile } = useGetUserAgentInfo();
 
   const App = () => {
     if (isMobile) {

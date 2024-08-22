@@ -1,16 +1,16 @@
 // Next Imports
-import type { Metadata } from "next";
-import { Provider as JotaiProvider } from "jotai";
-import { getUserAgentInfo } from "@utils/ssrUserAgent";
-import HistoryView from "@mobile/main-financial-management/history";
+import type { Metadata } from 'next';
+import { Provider as JotaiProvider } from 'jotai';
+import HistoryView from '@mobile/main-financial-management/history';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 export const metadata: Metadata = {
-  title: "Lịch sử nạp tiền",
-  description: "Chuẩn Nhà Đất",
+  title: 'Lịch sử nạp tiền',
+  description: 'Chuẩn Nhà Đất',
 };
 
 const Page = () => {
-  const { isMobile } = getUserAgentInfo();
+  const { isMobile } = useGetUserAgentInfo();
 
   return (
     <JotaiProvider>

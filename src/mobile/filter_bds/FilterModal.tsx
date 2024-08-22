@@ -1,6 +1,6 @@
 import React from 'react';
-import { BlockTitle, Chip, List, ListItem } from 'konsta/react';
-import { FilterFieldName } from 'src/types';
+import { BlockTitle, List, ListItem } from 'konsta/react';
+import { FilterFieldName } from '@models';
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
@@ -55,13 +55,15 @@ const FilterModal = () => {
       <List strongIos>
         <ListItem
           link
-          title='Loại BĐS'
+          title="Loại BĐS"
           onClick={() => {
             openModal2({
               name: FilterFieldName.categoryType,
               title: 'Loại BĐS',
               content: (
-                <CategoryType onSelect={() => closeModal2()} />
+                <CategoryType
+                  onSelect={() => closeModal2()}
+                />
               ),
             });
           }}
@@ -78,36 +80,42 @@ const FilterModal = () => {
       <List strongIos outlineIos>
         <ListItem
           link
-          title='Mức giá'
+          title="Mức giá"
           onClick={() => {
             openModal2({
               name: FilterFieldName.price,
               title: 'Mức giá',
-              content: <Price onSelect={() => closeModal2()} />,
+              content: (
+                <Price onSelect={() => closeModal2()} />
+              ),
             });
           }}
           after={price?.text}
         />
         <ListItem
           link
-          title='Diện tích'
+          title="Diện tích"
           onClick={() => {
             openModal2({
               name: 'bts_area',
               title: 'Diện tích',
-              content: <Area onSelect={() => closeModal2()} />,
+              content: (
+                <Area onSelect={() => closeModal2()} />
+              ),
             });
           }}
           after={area?.text}
         />
         <ListItem
           link
-          title='Số phòng ngủ'
+          title="Số phòng ngủ"
           onClick={() => {
             openModal2({
               name: FilterFieldName.bed,
               title: 'Số phòng ngủ',
-              content: <Bed onSelect={() => closeModal2()} />,
+              content: (
+                <Bed onSelect={() => closeModal2()} />
+              ),
             });
           }}
           after={bedText()}
@@ -115,12 +123,14 @@ const FilterModal = () => {
 
         <ListItem
           link
-          title='Số phòng tắm'
+          title="Số phòng tắm"
           onClick={() => {
             openModal2({
               name: FilterFieldName.bath,
               title: 'Số phòng tắm',
-              content: <Bath onSelect={() => closeModal2()} />,
+              content: (
+                <Bath onSelect={() => closeModal2()} />
+              ),
             });
           }}
           after={bathText()}
@@ -128,12 +138,14 @@ const FilterModal = () => {
 
         <ListItem
           link
-          title='Hướng'
+          title="Hướng"
           onClick={() => {
             openModal2({
               name: FilterFieldName.direction,
               title: 'Hướng',
-              content: <Direction onSelect={() => closeModal2()} />,
+              content: (
+                <Direction onSelect={() => closeModal2()} />
+              ),
             });
           }}
           after={direction?.text}
