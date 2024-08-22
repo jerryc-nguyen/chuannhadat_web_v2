@@ -5,7 +5,7 @@ import axios, {
 } from 'axios';
 import { set, get } from 'lodash-es';
 import { getCookie } from '@utils/cookies';
-import { CookieKeys } from '@commons/enviroment/cookie';
+import { CookieKeys } from 'src/common/cookie';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
