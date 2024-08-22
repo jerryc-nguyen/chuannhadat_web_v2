@@ -1,8 +1,15 @@
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from 'src/types';
+import {
+  FilterFieldName,
+  OptionForSelect,
+} from 'src/types';
 
-export default function Price({ onSelect }: { onSelect?: Function }) {
+export default function Price({
+  onSelect,
+}: {
+  onSelect?: (option: OptionForSelect) => void;
+}) {
   const {
     getLocalFieldValue,
     setLocalFieldValue,

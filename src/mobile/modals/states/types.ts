@@ -9,7 +9,7 @@ export enum ModalNames {
 }
 
 export interface DefaultModal {
-  name: String | ModalNames | FilterFieldName;
+  name: string | ModalNames | FilterFieldName;
   title?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;

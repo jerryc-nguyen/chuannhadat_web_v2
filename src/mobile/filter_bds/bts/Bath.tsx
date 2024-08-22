@@ -1,11 +1,17 @@
-import { FilterFieldName, OptionForSelect } from 'src/types';
+import {
+  FilterFieldName,
+  OptionForSelect,
+} from 'src/types';
 
+import useFilterState from '../hooks/useFilterState';
 import ListChips from '@mobile/ui/ListChips';
 import { Block } from 'konsta/react';
 
-import useFilterState from '../hooks/useFilterState';
-
-export default function Bath({ onSelect }: { onSelect?: Function }) {
+export default function Bath({
+  onSelect,
+}: {
+  onSelect?: (option: OptionForSelect) => void;
+}) {
   const {
     getLocalFieldValue,
     setLocalFieldValue,

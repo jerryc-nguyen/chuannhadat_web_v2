@@ -7,11 +7,11 @@ const ListOptions = ({
   onSelect = () => {},
 }: {
   options: OptionForSelect[] | undefined;
-  onSelect?: Function;
+  onSelect?: (item: any) => void;
 }): ReactElement => {
   return (
     <>
-      <List strongIos outlineIos margin='my-0'>
+      <List strongIos outlineIos margin="my-0">
         {options!.map((item) => {
           return (
             <ListItem

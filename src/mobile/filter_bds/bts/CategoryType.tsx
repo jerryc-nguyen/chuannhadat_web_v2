@@ -1,18 +1,23 @@
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from 'src/types';
+import {
+  FilterFieldName,
+  OptionForSelect,
+} from 'src/types';
 
 export default function CategoryType({
   onSelect,
 }: {
-  onSelect?: Function;
+  onSelect?: (option: OptionForSelect) => void;
 }) {
   const {
     getLocalFieldValue,
     setLocalFieldValue,
     filterFieldOptions,
   } = useFilterState();
-  const value = getLocalFieldValue(FilterFieldName.categoryType);
+  const value = getLocalFieldValue(
+    FilterFieldName.categoryType,
+  );
 
   return (
     <>
@@ -20,7 +25,10 @@ export default function CategoryType({
         options={filterFieldOptions.categoryTypeOptions!}
         selectedOption={value}
         onSelect={(option: OptionForSelect) => {
-          setLocalFieldValue(FilterFieldName.categoryType, option);
+          setLocalFieldValue(
+            FilterFieldName.categoryType,
+            option,
+          );
           if (onSelect) {
             onSelect(option);
           }
