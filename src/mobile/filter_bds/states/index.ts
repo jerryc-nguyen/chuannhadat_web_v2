@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { OptionForSelect } from '@app/types';
+import { OptionForSelect } from '@commons/interfaces';
 
 export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);
@@ -8,7 +8,7 @@ import searchFormOptions from './search_form_options.json';
 import {
   ALL_OPTION,
   DEFAULT_BUSINESS_TYPE_OPTION,
-} from '@app/constants';
+} from '@commons/constants/searchs';
 
 export interface FilterState {
   businessTypeOptions?: OptionForSelect[];

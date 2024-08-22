@@ -4,12 +4,12 @@ import {
   filterStateAtom,
   localFilterStateAtom,
 } from '../states';
-import { OptionForSelect } from '@app/types';
 import {
   FilterFieldName,
   FILTER_FIELDS_TO_PARAMS,
   FILTER_FIELDS_PARAMS_MAP,
-} from '@app/types';
+} from '@commons/interfaces/searchs';
+import { OptionForSelect } from '@commons/interfaces';
 import { FilterChipOption } from '../FilterChips';
 import { searchApi } from '@api/searchApi';
 import { useMemo } from 'react';

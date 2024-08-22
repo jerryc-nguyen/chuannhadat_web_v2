@@ -1,6 +1,7 @@
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from '@app/types';
+import { OptionForSelect } from '@commons/interfaces';
+import { FilterFieldName } from '@commons/interfaces/searchs';
 
 export default function CategoryType({
   onSelect,

@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { List, ListItem } from 'konsta/react';
 
-import { useFilterLocations } from '@mobile/locations/hooks';
-import { ALL_OPTION } from '@app/constants';
+import { ALL_OPTION } from '@commons/constants/searchs';
 import useModals from '@mobile/modals/hooks';
 import { ModalNames } from '@mobile/modals/states/types';
 import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
 import districtWards from 'src/configs/locations/districts_wards.json';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from '@app/types';
+import { OptionForSelect } from '@commons/interfaces';
+import { FilterFieldName } from '@commons/interfaces/searchs';
+
 import OptionPicker from '@mobile/ui/OptionPicker';
 
 export default function Locations() {

@@ -1,5 +1,5 @@
 import { Block, Segmented, SegmentedButton } from 'konsta/react';
-import { FilterFieldName } from '@app/types';
+import { FilterFieldName } from '@commons/interfaces/searchs';
 import useFilterState from '../hooks/useFilterState';
 
 export default function BusinessTypeButtons() {

@@ -1,15 +1,3 @@
-export type Range = {
-  min?: number;
-  max?: number;
-};
-
-export type OptionForSelect = {
-  value: number | string;
-  text: string;
-  range?: Range;
-  params?: Record<string, any>;
-};
-
 export const PARAM_BUSINESS_TYPE = 'business_type';
 export const PARAM_CATEGORY_TYPE = 'category_type';
 export const PARAM_PRICE = 'price';

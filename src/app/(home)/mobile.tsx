@@ -14,7 +14,7 @@ import FooterOverviewBtsButton from '@mobile/filter_bds/FooterOverviewBtsButton'
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import PostList from '@mobile/searchs/PostList';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@app/get-query-client.ts';
+import { getQueryClient } from '@utils/get-query-client.ts';
 import { useSyncParamsToState } from '@utils/useSyncParamsToState';
 
 export default function Mobile() {

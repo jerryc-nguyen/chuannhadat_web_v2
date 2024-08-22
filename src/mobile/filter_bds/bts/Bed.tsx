@@ -1,5 +1,5 @@
-import { FilterFieldName, OptionForSelect } from '@app/types';
-
+import { OptionForSelect } from '@commons/interfaces';
+import { FilterFieldName } from '@commons/interfaces/searchs';
 import ListChips from '@mobile/ui/ListChips';
 import { Block } from 'konsta/react';
 import useFilterState from '../hooks/useFilterState';

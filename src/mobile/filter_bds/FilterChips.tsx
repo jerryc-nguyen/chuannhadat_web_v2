@@ -2,7 +2,7 @@ import { Block, Chip } from 'konsta/react';
 import React from 'react';
 import { filterStateAtom, localFilterStateAtom } from './states';
 import { useAtom } from 'jotai';
-import { FilterFieldName } from '@app/types';
+import { FilterFieldName } from '@commons/interfaces/searchs';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';

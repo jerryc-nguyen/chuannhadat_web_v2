@@ -10,7 +10,7 @@ import { IoChevronDown } from 'react-icons/io5';
 import useModals from '@mobile/modals/hooks';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import FooterSortBtsButton from '@mobile/filter_bds/FooterSortBtsButton';
-import { FilterFieldName } from '@app/types';
+import { FilterFieldName } from '@commons/interfaces/searchs';
 
 export default function PostList() {
   const { openModal3 } = useModals();
