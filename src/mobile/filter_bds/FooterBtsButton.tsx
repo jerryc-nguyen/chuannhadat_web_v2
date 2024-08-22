@@ -18,7 +18,8 @@ export default function FooterBtsButton({
     queryKey: ['searchs', filterParams],
     queryFn: async () => {
       const response = await searchApi(filterParams);
-      return await response.json();
+      // return await response.json();
+      return response;
     },
   });
 

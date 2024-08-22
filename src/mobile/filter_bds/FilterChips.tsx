@@ -1,8 +1,11 @@
 import { Block, Chip } from 'konsta/react';
 import React from 'react';
-import { filterStateAtom, localFilterStateAtom } from './states';
+import {
+  filterStateAtom,
+  localFilterStateAtom,
+} from './states';
 import { useAtom } from 'jotai';
-import { FilterFieldName } from '@commons/interfaces/searchs';
+import { FilterFieldName } from 'src/types';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
@@ -33,7 +36,10 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     id: FilterFieldName.businessType,
     text: 'Loại tin',
   },
-  { id: FilterFieldName.categoryType, text: 'Loại nhà đất' },
+  {
+    id: FilterFieldName.categoryType,
+    text: 'Loại nhà đất',
+  },
   { id: FilterFieldName.locations, text: 'Khu vực' },
   {
     id: FilterFieldName.price,
@@ -72,7 +78,9 @@ export default function FilterChips() {
     return results.join(' / ');
   };
 
-  const selectedFilterText = (filterOption: FilterChipOption) => {
+  const selectedFilterText = (
+    filterOption: FilterChipOption,
+  ) => {
     const fieldName =
       //@ts-ignore
       FilterFieldName[filterOption.id] || filterOption.id;
@@ -83,7 +91,9 @@ export default function FilterChips() {
       return selectedRoomText() || 'Số phòng';
     } else {
       //@ts-ignore
-      return filterState[fieldName]?.text ?? filterOption.text;
+      return (
+        filterState[fieldName]?.text ?? filterOption.text
+      );
     }
   };
 
@@ -110,7 +120,9 @@ export default function FilterChips() {
     }
   };
 
-  const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
+  const buildMaxHeightPercent = (
+    filterOption: FilterChipOption,
+  ) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
         return 1;
@@ -120,20 +132,28 @@ export default function FilterChips() {
     }
   };
 
-  const buildBtsFooter = (filterOption: FilterChipOption) => {
+  const buildBtsFooter = (
+    filterOption: FilterChipOption,
+  ) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
         return <FooterOverviewBtsButton />;
       default:
-        return <FooterBtsButton filterOption={filterOption} />;
+        return (
+          <FooterBtsButton filterOption={filterOption} />
+        );
     }
   };
 
-  const showFilterBts = (filterOption: FilterChipOption) => {
+  const showFilterBts = (
+    filterOption: FilterChipOption,
+  ) => {
     if (filterOption.id == FilterFieldName.filterOverview) {
       copyFilterStatesToLocal();
     } else {
-      copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
+      copyFilterStatesToLocal([
+        filterOption.id as FilterFieldName,
+      ]);
     }
 
     openModal({
@@ -143,7 +163,8 @@ export default function FilterChips() {
       footer: buildBtsFooter(filterOption),
       maxHeightPercent: buildMaxHeightPercent(filterOption),
       // @ts-ignore
-      defaultContentHeight: DEFAULT_MODAL_HEIGHTS[filterOption.id],
+      defaultContentHeight:
+        DEFAULT_MODAL_HEIGHTS[filterOption.id],
     });
   };
 
@@ -152,7 +173,7 @@ export default function FilterChips() {
       {FILTER_ITEMS.map((item) => (
         <Chip
           key={item.id}
-          className='m-0.5'
+          className="m-0.5"
           onClick={() => {
             showFilterBts(item);
           }}

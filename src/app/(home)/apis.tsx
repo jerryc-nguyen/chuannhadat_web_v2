@@ -6,6 +6,7 @@ export const homeApiOptions = queryOptions({
   queryFn: async (params: any) => {
     const response = await searchApi(params);
 
-    return response.json();
+    // return response.json();
+    return response;
   },
 });

@@ -1,19 +1,23 @@
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { OptionForSelect } from '@commons/interfaces';
-import { FilterFieldName } from '@commons/interfaces/searchs';
+import {
+  FilterFieldName,
+  OptionForSelect,
+} from 'src/types';
 
 export default function Direction({
   onSelect,
 }: {
-  onSelect?: Function;
+  onSelect?: (option: OptionForSelect) => void;
 }) {
   const {
     getLocalFieldValue,
     setLocalFieldValue,
     filterFieldOptions,
   } = useFilterState();
-  const value = getLocalFieldValue(FilterFieldName.direction);
+  const value = getLocalFieldValue(
+    FilterFieldName.direction,
+  );
 
   return (
     <>
@@ -21,7 +25,10 @@ export default function Direction({
         options={filterFieldOptions.directionOptions!}
         selectedOption={value}
         onSelect={(option: OptionForSelect) => {
-          setLocalFieldValue(FilterFieldName.direction, option);
+          setLocalFieldValue(
+            FilterFieldName.direction,
+            option,
+          );
           if (onSelect) {
             onSelect(option);
           }

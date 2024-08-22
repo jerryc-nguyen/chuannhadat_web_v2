@@ -1,4 +1,4 @@
-import { OptionForSelect } from '@commons/interfaces';
+import { OptionForSelect } from 'src/types';
 import { List, ListItem } from 'konsta/react';
 import { ReactElement } from 'react';
 
@@ -7,11 +7,11 @@ const ListOptions = ({
   onSelect = () => {},
 }: {
   options: OptionForSelect[] | undefined;
-  onSelect?: Function;
+  onSelect?: (item: any) => void;
 }): ReactElement => {
   return (
     <>
-      <List strongIos outlineIos margin='my-0'>
+      <List strongIos outlineIos margin="my-0">
         {options!.map((item) => {
           return (
             <ListItem

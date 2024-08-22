@@ -1,9 +1,15 @@
+import {
+  FilterFieldName,
+  OptionForSelect,
+} from 'src/types';
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { OptionForSelect } from '@commons/interfaces';
-import { FilterFieldName } from '@commons/interfaces/searchs';
 
-export default function Area({ onSelect }: { onSelect?: Function }) {
+export default function Area({
+  onSelect,
+}: {
+  onSelect?: (option: OptionForSelect) => void;
+}) {
   const {
     getLocalFieldValue,
     setLocalFieldValue,

@@ -3,7 +3,7 @@ import ListCheckOptions from './ListCheckOptions';
 import { useMemo, useState } from 'react';
 import { stringToSlug } from '@utils/string';
 import { IoFileTrayOutline } from 'react-icons/io5';
-import { OptionForSelect } from '@commons/interfaces';
+import { OptionForSelect } from 'src/types';
 
 export default function OptionPicker({
   options,

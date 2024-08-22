@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { OptionForSelect } from '@commons/interfaces';
+import { OptionForSelect } from 'src/types';
 
 export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);
@@ -8,7 +8,7 @@ import searchFormOptions from './search_form_options.json';
 import {
   ALL_OPTION,
   DEFAULT_BUSINESS_TYPE_OPTION,
-} from '@commons/constants/searchs';
+} from 'src/consts';
 
 export interface FilterState {
   businessTypeOptions?: OptionForSelect[];
@@ -59,17 +59,24 @@ export const filterStateAtom = atom<FilterState>({
 
 export const localFilterStateAtom = atom<FilterState>({});
 
-export const filterFieldOptionsAtom = atom<FilterFieldOptions>({
-  // @ts-ignore
-  businessTypeOptions: searchFormOptions.business_types,
-  categoryTypeOptions: [
-    ALL_OPTION,
-    ...searchFormOptions.category_types,
-  ],
-  bedOptions: [ALL_OPTION, ...searchFormOptions.rooms],
-  bathOptions: [ALL_OPTION, ...searchFormOptions.rooms],
-  priceOptions: [ALL_OPTION, ...searchFormOptions.sell_prices],
-  areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
-  directionOptions: [ALL_OPTION, ...searchFormOptions.directions],
-  roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
-});
+export const filterFieldOptionsAtom =
+  atom<FilterFieldOptions>({
+    // @ts-ignore
+    businessTypeOptions: searchFormOptions.business_types,
+    categoryTypeOptions: [
+      ALL_OPTION,
+      ...searchFormOptions.category_types,
+    ],
+    bedOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+    bathOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+    priceOptions: [
+      ALL_OPTION,
+      ...searchFormOptions.sell_prices,
+    ],
+    areaOptions: [ALL_OPTION, ...searchFormOptions.areas],
+    directionOptions: [
+      ALL_OPTION,
+      ...searchFormOptions.directions,
+    ],
+    roomOptions: [ALL_OPTION, ...searchFormOptions.rooms],
+  });

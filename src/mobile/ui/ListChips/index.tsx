@@ -1,21 +1,21 @@
 import { ReactElement } from 'react';
-import { OptionForSelect } from '@commons/interfaces';
+import { OptionForSelect } from 'src/types';
 import './style.scss';
 import HorizontalScroller from '../HorizontalScroller';
 
 const ListChips = ({
   options,
   value,
-  onSelect = (item: OptionForSelect) => {},
+  onSelect = () => {},
 }: {
   value?: OptionForSelect;
   options: Array<OptionForSelect>;
-  onSelect?: Function;
+  onSelect?: (item: OptionForSelect) => void;
   horizontalScroll?: boolean;
 }): ReactElement => {
   return (
     <>
-      <div className='c-listChip is-circle'>
+      <div className="c-listChip is-circle">
         <HorizontalScroller>
           {options.map((item) => {
             const selectedClass =

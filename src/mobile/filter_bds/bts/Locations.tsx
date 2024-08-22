@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
-import { List, ListItem } from 'konsta/react';
+import { useEffect, useState } from "react";
+import { List, ListItem } from "konsta/react";
 
-import { ALL_OPTION } from '@commons/constants/searchs';
-import useModals from '@mobile/modals/hooks';
-import { ModalNames } from '@mobile/modals/states/types';
-import cities from 'src/configs/locations/cities.json';
-import citiesDistricts from 'src/configs/locations/cities_districts.json';
-import districtWards from 'src/configs/locations/districts_wards.json';
-import useFilterState from '../hooks/useFilterState';
-import { OptionForSelect } from '@commons/interfaces';
-import { FilterFieldName } from '@commons/interfaces/searchs';
-
-import OptionPicker from '@mobile/ui/OptionPicker';
+import { useFilterLocations } from "@mobile/locations/hooks";
+import useModals from "@mobile/modals/hooks";
+import { ModalNames } from "@mobile/modals/states/types";
+import cities from "src/configs/locations/cities.json";
+import citiesDistricts from "src/configs/locations/cities_districts.json";
+import districtWards from "src/configs/locations/districts_wards.json";
+import useFilterState from "../hooks/useFilterState";
+import { FilterFieldName, OptionForSelect } from "src/types";
+import OptionPicker from "@mobile/ui/OptionPicker";
+import { ALL_OPTION } from "src/consts";
 
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
@@ -39,44 +38,43 @@ export default function Locations() {
     if (city) {
       setDistrictOptions(
         //@ts-ignore
-        citiesDistricts[city.value + '']
+        citiesDistricts[city.value + ""]
       );
     }
     if (district) {
       setWardOptions(
         //@ts-ignore
-        districtWards[district.value + '']
+        districtWards[district.value + ""]
       );
     }
   };
 
   const onSelectCity = (city?: OptionForSelect) => {
-    const finalOption = city?.value != 'all' ? city : undefined;
+    const finalOption = city?.value != "all" ? city : undefined;
 
     resetDistrict();
     resetWard();
 
     setDistrictOptions(
       //@ts-ignore
-      citiesDistricts[finalOption?.value + ''] || []
+      citiesDistricts[finalOption?.value + ""] || []
     );
     setLocalFieldValue(FilterFieldName.city, finalOption);
     closeModal3();
   };
 
   const onSelectDistrict = (district?: OptionForSelect) => {
-    const finalOption =
-      district?.value != 'all' ? district : undefined;
+    const finalOption = district?.value != "all" ? district : undefined;
 
     resetWard();
     //@ts-ignore
-    setWardOptions(districtWards[finalOption?.value + ''] || []);
+    setWardOptions(districtWards[finalOption?.value + ""] || []);
     setLocalFieldValue(FilterFieldName.district, finalOption);
     closeModal3();
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
-    const finalOption = ward?.value != 'all' ? ward : undefined;
+    const finalOption = ward?.value != "all" ? ward : undefined;
     setLocalFieldValue(FilterFieldName.ward, finalOption);
     closeModal3();
   };
@@ -90,12 +88,12 @@ export default function Locations() {
       <List strongIos>
         <ListItem
           link
-          title='Thành Phố'
+          title="Thành Phố"
           after={city?.text}
           onClick={() => {
             openModal3({
               name: ModalNames.city,
-              title: 'Thành Phố',
+              title: "Thành Phố",
               content: (
                 <OptionPicker
                   searchable
@@ -111,19 +109,19 @@ export default function Locations() {
 
         <ListItem
           link
-          title='Quận / Huyện'
+          title="Quận / Huyện"
           after={district?.text}
           onClick={() => {
             openModal3({
               name: ModalNames.district,
-              title: 'Quận / Huyện',
+              title: "Quận / Huyện",
               content: (
                 <OptionPicker
                   searchable
                   options={[ALL_OPTION, ...districtOptions]}
                   value={district}
                   onSelect={onSelectDistrict}
-                  emptyMessage='Vui lòng chọn trước Tỉnh / Thành Phố'
+                  emptyMessage="Vui lòng chọn trước Tỉnh / Thành Phố"
                 />
               ),
               maxHeightPercent: 0.5,
@@ -133,19 +131,19 @@ export default function Locations() {
 
         <ListItem
           link
-          title='Phường / Xã'
+          title="Phường / Xã"
           after={ward?.text}
           onClick={() => {
             openModal3({
               name: ModalNames.ward,
-              title: 'Phường / Xã',
+              title: "Phường / Xã",
               content: (
                 <OptionPicker
                   searchable
                   options={[ALL_OPTION, ...wardOptions]}
                   value={ward}
                   onSelect={onSelectWard}
-                  emptyMessage='Vui lòng chọn trước Quận / Huyện'
+                  emptyMessage="Vui lòng chọn trước Quận / Huyện"
                 />
               ),
               maxHeightPercent: 0.5,

@@ -1,4 +1,4 @@
-import { FilterFieldName } from '@commons/interfaces/searchs';
+import { FilterFieldName } from 'src/types';
 import { ReactElement } from 'react';
 
 export enum ModalNames {
@@ -9,7 +9,7 @@ export enum ModalNames {
 }
 
 export interface DefaultModal {
-  name: String | ModalNames | FilterFieldName;
+  name: string | ModalNames | FilterFieldName;
   title?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;

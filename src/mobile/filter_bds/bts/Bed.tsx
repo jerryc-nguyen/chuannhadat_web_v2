@@ -1,10 +1,17 @@
-import { OptionForSelect } from '@commons/interfaces';
-import { FilterFieldName } from '@commons/interfaces/searchs';
+import {
+  FilterFieldName,
+  OptionForSelect,
+} from 'src/types';
+
 import ListChips from '@mobile/ui/ListChips';
 import { Block } from 'konsta/react';
 import useFilterState from '../hooks/useFilterState';
 
-export default function Bed({ onSelect }: { onSelect?: Function }) {
+export default function Bed({
+  onSelect,
+}: {
+  onSelect?: (option: OptionForSelect) => void;
+}) {
   const {
     getLocalFieldValue,
     setLocalFieldValue,
