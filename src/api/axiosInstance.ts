@@ -3,8 +3,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
-import set from 'lodash/set';
-import get from 'lodash/get';
+import { set, get } from 'lodash-es';
 import { getCookie } from '@utils/cookies';
 import { CookieKeys } from '@commons/enviroment/cookie';
 
@@ -28,13 +27,17 @@ axiosInstance.interceptors.request.use(
     if (!token) {
       return request;
     }
-    set(request, 'headers.Authorization', `Bearer ${token}`);
+    set(
+      request,
+      'headers.Authorization',
+      `Bearer ${token}`,
+    );
     return request;
   },
   (_error: any) => {
     console.log(
       '🚀 ~ axiosInstance.interceptors.request.use ~ _error:',
-      _error
+      _error,
     );
     const errorResponse = {
       status: null,
@@ -42,7 +45,7 @@ axiosInstance.interceptors.request.use(
       errors: null,
     };
     return Promise.reject(errorResponse);
-  }
+  },
 );
 
 axiosInstance.interceptors.response.use(
@@ -56,7 +59,7 @@ axiosInstance.interceptors.response.use(
       errors: get(error, 'response.data.errors', null),
     };
     return Promise.reject(errorResponse);
-  }
+  },
 );
 
 export default axiosInstance;
