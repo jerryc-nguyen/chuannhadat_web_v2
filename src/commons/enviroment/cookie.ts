@@ -1,5 +1,5 @@
 export const CookieKeys = {
-  Token: "Token",
+  Token: "token",
   RefreshToken: "RefreshToken",
 };
 

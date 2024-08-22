@@ -26,7 +26,8 @@
       "@mobile/*": ["src/mobile/*"],
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@commons/*": ["src/commons/*"]
+      "@commons/*": ["src/commons/*"],
+      "@components/*": ["src/components/*"]
     }
   },
   "include": [
