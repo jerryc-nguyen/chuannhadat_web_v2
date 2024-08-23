@@ -12,9 +12,11 @@ import ModalHeader from './ModalHeader';
 export default function MainNav({
   type,
   onSearchClick = () => {},
+  isShowSearch = true,
 }: {
   type: string | null;
   onSearchClick?: Function;
+  isShowSearch?: boolean;
 }) {
   const [rightPanelOpened, setRightPanelOpened] =
     useState(false);
