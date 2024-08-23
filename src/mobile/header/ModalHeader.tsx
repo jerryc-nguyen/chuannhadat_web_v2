@@ -9,7 +9,7 @@ import {
   Panel,
 } from 'konsta/react';
 import React from 'react';
-import ModalSelectRegisterOrLogin from './ModalSelectRegisterOrLogin';
+import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 
 export default function ModalHeader({
   rightPanelOpened,
@@ -18,14 +18,15 @@ export default function ModalHeader({
   rightPanelOpened: boolean;
   setRightPanelOpened: (value: boolean) => void;
 }) {
-  const { openModal } = useModals();
+  const { openModal, closeModal } = useModals();
 
   const handleShowModalLoginAndRegister = () => {
     setRightPanelOpened(false);
     openModal({
       name: 'loginAndRegister',
-      content: <ModalSelectRegisterOrLogin />,
-      title: 'Đăng nhập/Đăng ký',
+      content: <ModalSelectRegisterOrLogin onClose={closeModal}/>,
+      title: 'Đăng nhập / Đăng ký',
+      maxHeightPercent: 0.9,
     });
   };
   return (

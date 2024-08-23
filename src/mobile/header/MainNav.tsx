@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
 import { Navbar, Searchbar, Icon } from 'konsta/react';
 
-import {
-  IoMenuOutline,
-  IoHeartOutline,
-  IoNotificationsOutline,
-} from 'react-icons/io5';
 import RightItem from './RightItem';
 import ModalHeader from './ModalHeader';
 
 export default function MainNav({
   type,
-  onSearchClick = () => {},
+  onSearchClick = () => undefined,
   isShowSearch = true,
 }: {
   type: string | null;
-  onSearchClick?: Function;
+  onSearchClick?: () => void;
   isShowSearch?: boolean;
 }) {
   const [rightPanelOpened, setRightPanelOpened] =
@@ -48,7 +43,7 @@ export default function MainNav({
         }
         subnavbarClassName={`c-mainNav__sub ${utilClass}`}
         subnavbar={
-          <div style={{ display: 'block', width: '100%' }}>
+          isShowSearch && (<div style={{ display: 'block', width: '100%' }}>
             <Searchbar
               inputStyle={{ borderRadius: '30px' }}
             />
@@ -56,7 +51,7 @@ export default function MainNav({
               className="c-mainNav__mask"
               onClick={() => onSearchClick()}
             ></div>
-          </div>
+          </div>)
         }
       />
       <ModalHeader

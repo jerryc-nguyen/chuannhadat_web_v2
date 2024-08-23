@@ -6,7 +6,7 @@ import HorizontalScroller from '../HorizontalScroller';
 const ListChips = ({
   options,
   value,
-  onSelect = () => {},
+  onSelect = () => undefined,
 }: {
   value?: OptionForSelect;
   options: Array<OptionForSelect>;
