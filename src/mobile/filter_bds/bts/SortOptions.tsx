@@ -1,10 +1,7 @@
-import {
-  FilterFieldName,
-  OptionForSelect,
-} from 'src/types';
+import { FilterFieldName, OptionForSelect } from '@models';
 import ListCheckOptions from '@mobile/ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { SORT_OPTIONS } from 'src/consts';
+import { SORT_OPTIONS } from '@common/constants';
 export default function SortOptions({
   onSelect,
 }: {

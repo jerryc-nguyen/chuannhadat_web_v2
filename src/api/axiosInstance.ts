@@ -1,11 +1,11 @@
+import { CookieKeys } from '@common/cookie';
+import { getCookie } from '@common/cookies';
 import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
 import { set, get } from 'lodash-es';
-import { getCookie } from '@utils/cookies';
-import { CookieKeys } from '@commons/enviroment/cookie';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -22,7 +22,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (request: InternalAxiosRequestConfig<any>) => {
+  (request: InternalAxiosRequestConfig<A>) => {
     const token = getCookie(CookieKeys.Token);
     if (!token) {
       return request;
@@ -34,7 +34,7 @@ axiosInstance.interceptors.request.use(
     );
     return request;
   },
-  (_error: any) => {
+  (_error: A) => {
     console.log(
       '🚀 ~ axiosInstance.interceptors.request.use ~ _error:',
       _error,

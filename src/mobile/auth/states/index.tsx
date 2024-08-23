@@ -3,7 +3,8 @@ export interface IFormPropsLogin {
   password: string;
 }
 
-export interface IFormPropsRegister extends IFormPropsLogin {
+export interface IFormPropsRegister
+  extends IFormPropsLogin {
   confirmPassword: string;
 }
 
@@ -31,4 +32,4 @@ export interface ILoginResponse {
   profile_tags: string[];
   slug: string;
 }
-export interface IRegisterResponse extends ILoginResponse {}
+export type IRegisterResponse = ILoginResponse;

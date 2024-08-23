@@ -1,7 +1,4 @@
-import {
-  FilterFieldName,
-  OptionForSelect,
-} from 'src/types';
+import { FilterFieldName, OptionForSelect } from '@models';
 
 import ListChips from '@mobile/ui/ListChips';
 import { Block } from 'konsta/react';

@@ -1,21 +1,22 @@
 import { Checkbox, List, ListItem } from 'konsta/react';
 import { ReactElement, useState } from 'react';
-import { OptionForSelect } from 'src/types';
+import { OptionForSelect } from '@models';
 
 const ListCheckOptions = ({
   options,
   selectedOption,
   onSelect,
 }: {
-  options: OptionForSelect[] | any[];
-  selectedOption?: OptionForSelect | any;
-  onSelect?: Function;
+  options: OptionForSelect[] | A[];
+  selectedOption?: OptionForSelect | A;
+  onSelect?: (arg: A) => void;
 }): ReactElement => {
-  const [curOption, setCurOption] = useState(selectedOption);
+  const [curOption, setCurOption] =
+    useState(selectedOption);
 
   return (
     <>
-      <List strongIos outlineIos margin='my-0'>
+      <List strongIos outlineIos margin="my-0">
         {options.map((item) => {
           return (
             <ListItem
@@ -25,9 +26,9 @@ const ListCheckOptions = ({
               chevron={false}
               media={
                 <Checkbox
-                  component='div'
+                  component="div"
                   checked={curOption?.text == item.text}
-                  onChange={() => {}}
+                  onChange={() => null}
                 />
               }
               onClick={() => {

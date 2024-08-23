@@ -1,11 +1,15 @@
 import { useAtom } from 'jotai';
 
-import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
+import {
+  btsModal2Atom,
+  btsModal3Atom,
+  btsModalAtom,
+} from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
 import { Modal } from './states/types';
-import { getViewportSize } from '@utils/useViewportSize';
+import { getViewportSize } from '@hooks/useViewportSize';
 import { useMemo } from 'react';
 
 export const HEADER_HEIGHT = 58.59;
@@ -40,21 +44,24 @@ export function BtsModals1() {
       onClose={onClose}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className='fixed inset-0 bg-black/40 c-bts__overlay1' />
-        <Drawer.Content className='flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0'>
+        <Drawer.Overlay className="fixed inset-0 bg-black/40 c-bts__overlay1" />
+        <Drawer.Content className="flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
           <div
             className={`c-bts__header flex justify-between items-center ${headerClass}`}
           >
-            <Drawer.Title className='c-bts__title'>
+            <Drawer.Title className="c-bts__title">
               {modal?.title}
             </Drawer.Title>
-            <button onClick={onClose} className='c-bts__close'>
+            <button
+              onClick={onClose}
+              className="c-bts__close"
+            >
               <IoCloseOutline size={30} />
             </button>
           </div>
           <div
             data-vaul-no-drag
-            className='c-bts__content'
+            className="c-bts__content"
             style={{
               ...buildContentStyle(modal),
             }}
@@ -62,7 +69,10 @@ export function BtsModals1() {
             {modal?.content}
           </div>
           {modal?.footer && (
-            <div data-vaul-no-drag className='c-bts__footer'>
+            <div
+              data-vaul-no-drag
+              className="c-bts__footer"
+            >
               {modal?.footer}
             </div>
           )}
@@ -131,20 +141,23 @@ export function BtsModals2() {
         <Drawer.Overlay
           className={`fixed inset-0 bg-black/40 c-bts__overlay2`}
         />
-        <Drawer.Content className='flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0'>
+        <Drawer.Content className="flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
           <div
             className={`c-bts__header flex justify-between items-center ${headerClass}`}
           >
-            <Drawer.Title className='c-bts__title'>
+            <Drawer.Title className="c-bts__title">
               {modal?.title}
             </Drawer.Title>
-            <button onClick={onClose} className='c-bts__close'>
+            <button
+              onClick={onClose}
+              className="c-bts__close"
+            >
               <IoCloseOutline size={30} />
             </button>
           </div>
           <div
             data-vaul-no-drag
-            className='c-bts__content'
+            className="c-bts__content"
             style={{
               ...buildContentStyle(modal),
             }}
@@ -152,7 +165,10 @@ export function BtsModals2() {
             {modal?.content}
           </div>
           {modal?.footer && (
-            <div data-vaul-no-drag className='c-bts__footer'>
+            <div
+              data-vaul-no-drag
+              className="c-bts__footer"
+            >
               {modal?.footer}
             </div>
           )}
@@ -192,20 +208,23 @@ export function BtsModals3() {
         <Drawer.Overlay
           className={`fixed inset-0 bg-black/40 c-bts__overlay3`}
         />
-        <Drawer.Content className='flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0'>
+        <Drawer.Content className="flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
           <div
             className={`c-bts__header flex justify-between items-center ${headerClass}`}
           >
-            <Drawer.Title className='c-bts__title'>
+            <Drawer.Title className="c-bts__title">
               {modal?.title}
             </Drawer.Title>
-            <button onClick={onClose} className='c-bts__close'>
+            <button
+              onClick={onClose}
+              className="c-bts__close"
+            >
               <IoCloseOutline size={30} />
             </button>
           </div>
           <div
             data-vaul-no-drag
-            className='c-bts__content'
+            className="c-bts__content"
             style={{
               ...buildContentStyle(modal),
             }}
@@ -213,7 +232,10 @@ export function BtsModals3() {
             {modal?.content}
           </div>
           {modal?.footer && (
-            <div data-vaul-no-drag className='c-bts__footer'>
+            <div
+              data-vaul-no-drag
+              className="c-bts__footer"
+            >
               {modal?.footer}
             </div>
           )}

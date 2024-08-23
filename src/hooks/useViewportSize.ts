@@ -6,7 +6,9 @@ import {
 } from 'react';
 
 const useBrowserLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : () => {};
+  typeof window !== 'undefined'
+    ? useLayoutEffect
+    : () => null;
 
 type Width = number;
 type Height = number;
@@ -61,7 +63,9 @@ const useViewportSize = () => {
       return viewportSize;
     });
   }, []);
-  useBrowserLayoutEffect(updateViewportSize, [updateViewportSize]);
+  useBrowserLayoutEffect(updateViewportSize, [
+    updateViewportSize,
+  ]);
 
   useEffect(() => {
     const effectTwice = () => {
@@ -74,18 +78,27 @@ const useViewportSize = () => {
     window.addEventListener('resize', effectTwice);
     // From the top of my head this used to be required for older browsers since
     // this didn't trigger a resize event. Keeping it in to be safe.
-    window.addEventListener('orientationchange', effectTwice);
+    window.addEventListener(
+      'orientationchange',
+      effectTwice,
+    );
     // This is needed on iOS to resize the viewport when the Virtual/OnScreen
-    // Keyboard opens. This does not trigger any other event, or the standard
+    // Keyboard opens. This does not trigger A other event, or the standard
     // resize event.
-    window.visualViewport?.addEventListener('resize', effectTwice);
+    window.visualViewport?.addEventListener(
+      'resize',
+      effectTwice,
+    );
 
     return () => {
       window.removeEventListener('resize', effectTwice);
-      window.removeEventListener('orientationchange', effectTwice);
+      window.removeEventListener(
+        'orientationchange',
+        effectTwice,
+      );
       window.visualViewport?.removeEventListener(
         'resize',
-        effectTwice
+        effectTwice,
       );
     };
   }, [updateViewportSize]);
