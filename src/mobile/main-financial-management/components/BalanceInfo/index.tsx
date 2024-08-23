@@ -4,7 +4,7 @@ import { Block, BlockTitle } from 'konsta/react';
 import { FC, useEffect, useState } from 'react';
 
 const BalanceInfo: FC<{ title: string }> = ({ title }) => {
-  const { fetchBalance, isSuccessBalance } = useBalance();
+  const { fetchBalance } = useBalance();
 
   const [balanceData, setBalanceData] =
     useState<IBalanceResponse>({

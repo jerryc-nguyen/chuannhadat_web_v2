@@ -30,7 +30,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   title,
   footer,
 }) => {
-  const [isWideScreen, setIsWideScreen] = useState(
+  const [, setIsWideScreen] = useState(
     window.innerWidth > 450,
   );
 

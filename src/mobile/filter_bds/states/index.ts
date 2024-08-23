@@ -61,7 +61,7 @@ export const localFilterStateAtom = atom<FilterState>({});
 
 export const filterFieldOptionsAtom =
   atom<FilterFieldOptions>({
-    // @ts-ignore
+    // @ts-ignore: ingore
     businessTypeOptions: searchFormOptions.business_types,
     categoryTypeOptions: [
       ALL_OPTION,
