@@ -3,13 +3,13 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from './resolver';
-import ic_eyy_off from '@styles/images/icon/eye-off.svg';
-import ic_eyy_show from '@styles/images/icon/eye-show.svg';
-import ic_phone from '@styles/images/icon/ic-phone.svg';
-import ic_password from '@styles/images/icon/ic_password.svg';
-import ic_facebook from '@styles/images/icon/ic_fb.svg';
-import ic_google from '@styles/images/icon/ic_google.svg';
-import ic_qr from '@styles/images/icon/ic_qr.svg';
+import ic_eyy_off from '@assets/icons/eye-off.svg';
+import ic_eyy_show from '@assets/icons/eye-show.svg';
+import ic_phone from '@assets/icons/ic-phone.svg';
+import ic_password from '@assets/icons/ic_password.svg';
+import ic_facebook from '@assets/icons/ic_fb.svg';
+import ic_google from '@assets/icons/ic_google.svg';
+import ic_qr from '@assets/icons/ic_qr.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLogin } from '@api/auth';
@@ -25,7 +25,7 @@ export default function LoginForm({
   onLoginError,
 }: {
   onLoginSuccess?: (response: Record<string, any>) => void;
-  onLoginError?: () => void
+  onLoginError?: () => void;
 }) {
   const [showPassword, setShowPassword] =
     React.useState(false);
@@ -49,9 +49,13 @@ export default function LoginForm({
           data: IFormResponse<ILoginResponse>;
         }) => {
           if (data.data.status) {
-            if (onLoginSuccess) { onLoginSuccess(data.data.data) }
+            if (onLoginSuccess) {
+              onLoginSuccess(data.data.data);
+            }
           } else {
-            if (onLoginError) { onLoginError() }
+            if (onLoginError) {
+              onLoginError();
+            }
           }
         },
       },
@@ -77,7 +81,7 @@ export default function LoginForm({
             <div>
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium mb-2"
+                className="mb-2 block text-sm font-medium"
                 style={{
                   color: '#374151',
                 }}
@@ -92,11 +96,11 @@ export default function LoginForm({
                   style={{
                     paddingLeft: '36px',
                   }}
-                  className={`mt-1 block w-full  py-2 border ${
+                  className={`mt-1 block w-full border py-2 ${
                     errors.phone
                       ? 'border-red-500'
                       : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                   placeholder="Nhập số điện thoại/ Email"
                 />
                 <div
@@ -137,7 +141,7 @@ export default function LoginForm({
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium mb-2"
+                className="mb-2 block text-sm font-medium"
                 style={{
                   color: '#374151',
                 }}
@@ -151,14 +155,12 @@ export default function LoginForm({
                   }}
                   {...field}
                   id="password"
-                  type={
-                    showPassword ? 'text' : 'password'
-                  }
-                  className={`mt-1 block w-full py-2 border ${
+                  type={showPassword ? 'text' : 'password'}
+                  className={`mt-1 block w-full border py-2 ${
                     errors.password
                       ? 'border-red-500'
                       : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                   placeholder="Nhập mật khẩu"
                 />
                 <div
@@ -180,7 +182,7 @@ export default function LoginForm({
                   style={{
                     right: '16px',
                   }}
-                  className="absolute top-1/2 -translate-y-1/2 flex items-center text-sm leading-5"
+                  className="absolute top-1/2 flex -translate-y-1/2 items-center text-sm leading-5"
                 >
                   {showPassword ? (
                     <Image
@@ -214,7 +216,7 @@ export default function LoginForm({
         />
       </div>
 
-      <div className="flex justify-end mb-4">
+      <div className="mb-4 flex justify-end">
         <Link
           style={{
             color: '#2563EB',
@@ -235,13 +237,13 @@ export default function LoginForm({
           marginBottom: '32px',
           marginTop: '32px',
         }}
-        className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
         Đăng nhập
       </button>
 
       <div className="text-center">
-        <span className="text-sm pr-1">
+        <span className="pr-1 text-sm">
           {' '}
           Bạn chưa có tài khoản?
         </span>
@@ -260,17 +262,17 @@ export default function LoginForm({
         style={{
           marginTop: '32px',
         }}
-        className="w-full flex justify-center space-x-4"
+        className="flex w-full justify-center space-x-4"
       >
-        <div className="flex items-center justify-center w-full my-6">
+        <div className="my-6 flex w-full items-center justify-center">
           <div
             style={{
               borderTop: '1px solid #E5E7EB',
               width: '40%',
             }}
-            className="border-t border-gray-300 flex-grow"
+            className="flex-grow border-t border-gray-300"
           ></div>
-          <span className="mx-4 w-full text-center px-2 text-sm text-gray-500">
+          <span className="mx-4 w-full px-2 text-center text-sm text-gray-500">
             Hoặc đăng nhập bằng
           </span>
           <div
@@ -278,19 +280,19 @@ export default function LoginForm({
               borderTop: '1px solid #E5E7EB',
               width: '40%',
             }}
-            className="border-t border-gray-300 flex-grow"
+            className="flex-grow border-t border-gray-300"
           ></div>
         </div>
       </div>
       <div
-        className="flex gap-4 items-center justify-center"
+        className="flex items-center justify-center gap-4"
         style={{
           gap: '24px',
           marginTop: '32px',
         }}
       >
         <div
-          className="flex justify-center items-center cursor-pointer"
+          className="flex cursor-pointer items-center justify-center"
           style={{
             width: '46px',
             height: '46px',
@@ -306,7 +308,7 @@ export default function LoginForm({
           />
         </div>
         <div
-          className="flex justify-center items-center cursor-pointer"
+          className="flex cursor-pointer items-center justify-center"
           style={{
             width: '46px',
             height: '46px',
@@ -322,7 +324,7 @@ export default function LoginForm({
           />
         </div>
         <div
-          className="flex justify-center items-center cursor-pointer"
+          className="flex cursor-pointer items-center justify-center"
           style={{
             width: '46px',
             height: '46px',
@@ -339,6 +341,5 @@ export default function LoginForm({
         </div>
       </div>
     </form>
- 
   );
 }

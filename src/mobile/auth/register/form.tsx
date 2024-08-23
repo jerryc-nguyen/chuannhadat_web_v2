@@ -2,10 +2,10 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ic_eyy_off from '@styles/images/icon/eye-off.svg';
-import ic_eyy_show from '@styles/images/icon/eye-show.svg';
-import ic_phone from '@styles/images/icon/ic-phone.svg';
-import ic_password from '@styles/images/icon/ic_password.svg';
+import ic_eyy_off from '@assets/icons/eye-off.svg';
+import ic_eyy_show from '@assets/icons/eye-show.svg';
+import ic_phone from '@assets/icons/ic-phone.svg';
+import ic_password from '@assets/icons/ic_password.svg';
 import Image from 'next/image';
 
 import { useRegister } from '@api/auth';
@@ -21,7 +21,7 @@ export default function RegisterForm({
   onRegisterError,
 }: {
   onRegisterSuccess?: () => void;
-  onRegisterError?: () => void
+  onRegisterError?: () => void;
 }) {
   const [showPassword, setShowPassword] =
     React.useState(false);
@@ -45,9 +45,13 @@ export default function RegisterForm({
           data: IFormResponse<IRegisterResponse>;
         }) => {
           if (data.data.status) {
-            if (onRegisterSuccess) { onRegisterSuccess(); }
+            if (onRegisterSuccess) {
+              onRegisterSuccess();
+            }
           } else {
-            if (onRegisterError) { onRegisterError(); }
+            if (onRegisterError) {
+              onRegisterError();
+            }
           }
         },
       },
@@ -73,7 +77,7 @@ export default function RegisterForm({
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium mb-2"
+                  className="mb-2 block text-sm font-medium"
                   style={{
                     color: '#374151',
                   }}
@@ -88,11 +92,11 @@ export default function RegisterForm({
                     style={{
                       paddingLeft: '36px',
                     }}
-                    className={`mt-1 block w-full  py-2 border ${
+                    className={`mt-1 block w-full border py-2 ${
                       errors.phone
                         ? 'border-red-500'
                         : 'border-gray-300'
-                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                     placeholder="Nhập số điện thoại/ Email"
                   />
                   <div
@@ -133,7 +137,7 @@ export default function RegisterForm({
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium mb-2"
+                  className="mb-2 block text-sm font-medium"
                   style={{
                     color: '#374151',
                   }}
@@ -150,11 +154,11 @@ export default function RegisterForm({
                     type={
                       showPassword ? 'text' : 'password'
                     }
-                    className={`mt-1 block w-full py-2 border ${
+                    className={`mt-1 block w-full border py-2 ${
                       errors.password
                         ? 'border-red-500'
                         : 'border-gray-300'
-                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                     placeholder="Nhập mật khẩu"
                   />
                   <div
@@ -176,7 +180,7 @@ export default function RegisterForm({
                     style={{
                       right: '16px',
                     }}
-                    className="absolute top-1/2 -translate-y-1/2 flex items-center text-sm leading-5"
+                    className="absolute top-1/2 flex -translate-y-1/2 items-center text-sm leading-5"
                   >
                     {showPassword ? (
                       <Image
@@ -218,7 +222,7 @@ export default function RegisterForm({
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-sm font-medium mb-2"
+                  className="mb-2 block text-sm font-medium"
                   style={{ color: '#374151' }}
                 >
                   Nhập lại mật khẩu
@@ -231,11 +235,11 @@ export default function RegisterForm({
                     type={
                       showPassword ? 'text' : 'password'
                     }
-                    className={`mt-1 block w-full py-2 border ${
+                    className={`mt-1 block w-full border py-2 ${
                       errors.confirmPassword
                         ? 'border-red-500'
                         : 'border-gray-300'
-                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                     placeholder="Nhập lại mật khẩu"
                   />
                   <div
@@ -272,7 +276,7 @@ export default function RegisterForm({
             marginBottom: '32px',
             marginTop: '32px',
           }}
-          className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           Đăng ký
         </button>
