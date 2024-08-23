@@ -8,7 +8,8 @@ import {
   IFormResponse,
   ILoginResponse,
   IRegisterResponse,
-} from '@mobile/auth/states';
+} from '@mobile/auth/types';
+
 import { toast } from 'react-toastify';
 import { saveToStorage } from '@common/localstorage';
 import { API_ROUTES } from '@common/router';

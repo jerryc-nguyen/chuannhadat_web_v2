@@ -1,21 +1,21 @@
-import React from 'react';
-import { Navbar, Searchbar, Icon } from 'konsta/react';
+import React, { useState } from 'react';
+import { Navbar, Searchbar } from 'konsta/react';
 
-import {
-  IoMenuOutline,
-  IoHeartOutline,
-  IoNotificationsOutline,
-} from 'react-icons/io5';
+import RightItem from './RightItem';
+import ModalHeader from './ModalHeader';
 
 export default function MainNav({
   type,
-  onSearchClick = () => null,
+  onSearchClick = () => undefined,
   isShowSearch = true,
 }: {
   type: string | null;
-  onSearchClick?: IFunction;
+  onSearchClick?: () => void;
   isShowSearch?: boolean;
 }) {
+  const [rightPanelOpened, setRightPanelOpened] =
+    useState(false);
+
   const utilClass =
     type == 'SearchInSub' ? 'isSearchSub' : '';
 
@@ -28,55 +28,40 @@ export default function MainNav({
     );
   };
 
-  const RightItems = () => {
-    return (
-      <>
-        <span className="mr-2 flex items-center justify-center rounded-full border p-2">
-          <Icon
-            ios={
-              <IoNotificationsOutline className="h-5 w-5" />
-            }
-            badgeColors={{ bg: 'bg-red-500' }}
-          />
-        </span>
-        <span className="mr-2 flex items-center justify-center rounded-full border p-2">
-          <Icon
-            ios={<IoHeartOutline className="h-5 w-5" />}
-            badgeColors={{ bg: 'bg-red-500' }}
-          />
-        </span>
-        <span className="mr-2 flex items-center justify-center rounded-full border p-2">
-          <Icon
-            ios={<IoMenuOutline className="h-5 w-5" />}
-            badgeColors={{ bg: 'bg-red-500' }}
-          />
-        </span>
-      </>
-    );
-  };
-
   return (
-    <Navbar
-      innerClassName={`c-mainNav ${utilClass}`}
-      leftClassName={'c-mainNav__left'}
-      titleClassName={'c-mainNav__title'}
-      rightClassName={'c-mainNav__right'}
-      left={<LeftItems />}
-      right={<RightItems />}
-      subnavbarClassName={`c-mainNav__sub ${utilClass}`}
-      subnavbar={
-        isShowSearch && (
-          <div style={{ display: 'block', width: '100%' }}>
-            <Searchbar
-              inputStyle={{ borderRadius: '30px' }}
-            />
+    <>
+      <Navbar
+        innerClassName={`c-mainNav ${utilClass}`}
+        leftClassName={'c-mainNav__left'}
+        titleClassName={'c-mainNav__title'}
+        rightClassName={'c-mainNav__right'}
+        left={<LeftItems />}
+        right={
+          <RightItem
+            setRightPanelOpened={setRightPanelOpened}
+          />
+        }
+        subnavbarClassName={`c-mainNav__sub ${utilClass}`}
+        subnavbar={
+          isShowSearch && (
             <div
-              className="c-mainNav__mask"
-              onClick={() => onSearchClick()}
-            ></div>
-          </div>
-        )
-      }
-    />
+              style={{ display: 'block', width: '100%' }}
+            >
+              <Searchbar
+                inputStyle={{ borderRadius: '30px' }}
+              />
+              <div
+                className="c-mainNav__mask"
+                onClick={() => onSearchClick()}
+              ></div>
+            </div>
+          )
+        }
+      />
+      <ModalHeader
+        rightPanelOpened={rightPanelOpened}
+        setRightPanelOpened={setRightPanelOpened}
+      />
+    </>
   );
 }

@@ -32,4 +32,8 @@ export interface ILoginResponse {
   profile_tags: string[];
   slug: string;
 }
-export type IRegisterResponse = ILoginResponse;
+export interface IRegisterResponse extends ILoginResponse {}
+export enum ILoginAndRegisterModalType {
+  LOGIN = 'login',
+  REGISTER = 'register',
+}
