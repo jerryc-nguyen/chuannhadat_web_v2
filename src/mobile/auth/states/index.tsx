@@ -3,7 +3,8 @@ export interface IFormPropsLogin {
   password: string;
 }
 
-export interface IFormPropsRegister extends IFormPropsLogin {
+export interface IFormPropsRegister
+  extends IFormPropsLogin {
   confirmPassword: string;
 }
 
@@ -32,3 +33,7 @@ export interface ILoginResponse {
   slug: string;
 }
 export interface IRegisterResponse extends ILoginResponse {}
+export enum ILoginAndRegisterModalType {
+  LOGIN = 'login',
+  REGISTER = 'register',
+}

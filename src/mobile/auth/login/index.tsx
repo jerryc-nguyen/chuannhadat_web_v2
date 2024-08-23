@@ -1,24 +1,33 @@
-"use client";
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import loginSchema from "./resolver";
-import ic_eyy_off from "@styles/images/icon/eye-off.svg";
-import ic_eyy_show from "@styles/images/icon/eye-show.svg";
-import ic_phone from "@styles/images/icon/ic-phone.svg";
-import ic_password from "@styles/images/icon/ic_password.svg";
-import ic_facebook from "@styles/images/icon/ic_fb.svg";
-import ic_google from "@styles/images/icon/ic_google.svg";
-import ic_qr from "@styles/images/icon/ic_qr.svg";
-import Image from "next/image";
-import Link from "next/link";
+'use client';
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import loginSchema from './resolver';
+import ic_eyy_off from '@styles/images/icon/eye-off.svg';
+import ic_eyy_show from '@styles/images/icon/eye-show.svg';
+import ic_phone from '@styles/images/icon/ic-phone.svg';
+import ic_password from '@styles/images/icon/ic_password.svg';
+import ic_facebook from '@styles/images/icon/ic_fb.svg';
+import ic_google from '@styles/images/icon/ic_google.svg';
+import ic_qr from '@styles/images/icon/ic_qr.svg';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { useLogin } from "@api/auth";
-import { useRouter } from "next/navigation";
-import { IFormPropsLogin, IFormResponse, ILoginResponse } from "../states";
-import { toast } from "react-toastify";
-export default function Login() {
-  const [showPassword, setShowPassword] = React.useState(false);
+import { useLogin } from '@api/auth';
+import { useRouter } from 'next/navigation';
+import {
+  IFormPropsLogin,
+  IFormResponse,
+  ILoginResponse,
+} from '../states';
+import { toast } from 'react-toastify';
+export default function Login({
+  closeModal3,
+}: {
+  closeModal3: () => void;
+}) {
+  const [showPassword, setShowPassword] =
+    React.useState(false);
   const { login, isLogin } = useLogin();
   const router = useRouter();
   const {
@@ -36,15 +45,20 @@ export default function Login() {
         password: data.password,
       },
       {
-        onSuccess: (data: { data: IFormResponse<ILoginResponse> }) => {
+        onSuccess: (data: {
+          data: IFormResponse<ILoginResponse>;
+        }) => {
           if (data.data.status) {
-            toast.success("Đăng nhập thành công");
-            router.push("/");
+            toast.success('Đăng nhập thành công');
+            closeModal3();
           } else {
-            toast.error("Mật khẩu hoặc tài khoản không chính xác");
+            toast.error(
+              'Mật khẩu hoặc tài khoản không chính xác',
+            );
+            closeModal3();
           }
         },
-      }
+      },
     );
   };
 
@@ -54,17 +68,17 @@ export default function Login() {
   return (
     <div
       style={{
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
-        paddingTop: "32px",
-        paddingBottom: "32px",
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
+        paddingTop: '32px',
+        paddingBottom: '32px',
       }}
       className="max-w-md mx-auto mt-8 p-4"
     >
       <h2
         className="text-center font-bold"
         style={{
-          fontSize: "20px",
-          marginBottom: "16px",
+          fontSize: '20px',
+          marginBottom: '16px',
         }}
       >
         Đăng nhập
@@ -72,7 +86,7 @@ export default function Login() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div
           style={{
-            marginBottom: "16px",
+            marginBottom: '16px',
           }}
         >
           <Controller
@@ -85,7 +99,7 @@ export default function Login() {
                   htmlFor="phone"
                   className="block text-sm font-medium mb-2"
                   style={{
-                    color: "#374151",
+                    color: '#374151',
                   }}
                 >
                   Số điện thoại/ Email
@@ -96,17 +110,19 @@ export default function Login() {
                     id="phone"
                     type="text"
                     style={{
-                      paddingLeft: "36px",
+                      paddingLeft: '36px',
                     }}
                     className={`mt-1 block w-full  py-2 border ${
-                      errors.phone ? "border-red-500" : "border-gray-300"
+                      errors.phone
+                        ? 'border-red-500'
+                        : 'border-gray-300'
                     } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                     placeholder="Nhập số điện thoại/ Email"
                   />
                   <div
                     className="absolute top-1/2 -translate-y-1/2"
                     style={{
-                      left: "8px",
+                      left: '8px',
                     }}
                   >
                     <Image
@@ -121,7 +137,7 @@ export default function Login() {
                 {errors.phone && (
                   <p
                     style={{
-                      color: "#EF4444",
+                      color: '#EF4444',
                     }}
                     className="mt-2 text-sm text-red-600"
                   >
@@ -143,7 +159,7 @@ export default function Login() {
                   htmlFor="password"
                   className="block text-sm font-medium mb-2"
                   style={{
-                    color: "#374151",
+                    color: '#374151',
                   }}
                 >
                   Mật khẩu
@@ -151,20 +167,24 @@ export default function Login() {
                 <div className="relative">
                   <input
                     style={{
-                      paddingLeft: "36px",
+                      paddingLeft: '36px',
                     }}
                     {...field}
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword ? 'text' : 'password'
+                    }
                     className={`mt-1 block w-full py-2 border ${
-                      errors.password ? "border-red-500" : "border-gray-300"
+                      errors.password
+                        ? 'border-red-500'
+                        : 'border-gray-300'
                     } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                     placeholder="Nhập mật khẩu"
                   />
                   <div
                     className="absolute top-1/2 -translate-y-1/2"
                     style={{
-                      left: "8px",
+                      left: '8px',
                     }}
                   >
                     <Image
@@ -178,7 +198,7 @@ export default function Login() {
                     type="button"
                     onClick={togglePasswordVisibility}
                     style={{
-                      right: "16px",
+                      right: '16px',
                     }}
                     className="absolute top-1/2 -translate-y-1/2 flex items-center text-sm leading-5"
                   >
@@ -202,7 +222,7 @@ export default function Login() {
                 {errors.password && (
                   <p
                     style={{
-                      color: "#EF4444",
+                      color: '#EF4444',
                     }}
                     className="mt-2 text-sm text-red-600"
                   >
@@ -217,8 +237,8 @@ export default function Login() {
         <div className="flex justify-end mb-4">
           <Link
             style={{
-              color: "#2563EB",
-              marginTop: "16px",
+              color: '#2563EB',
+              marginTop: '16px',
             }}
             href="/"
             className="text-sm"
@@ -230,10 +250,10 @@ export default function Login() {
         <button
           type="submit"
           style={{
-            backgroundColor: "#2563EB",
-            color: "#fff",
-            marginBottom: "32px",
-            marginTop: "32px",
+            backgroundColor: '#2563EB',
+            color: '#fff',
+            marginBottom: '32px',
+            marginTop: '32px',
           }}
           className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
@@ -241,10 +261,13 @@ export default function Login() {
         </button>
 
         <div className="text-center">
-          <span className="text-sm pr-1"> Bạn chưa có tài khoản?</span>
+          <span className="text-sm pr-1">
+            {' '}
+            Bạn chưa có tài khoản?
+          </span>
           <Link
             style={{
-              color: "#2563EB",
+              color: '#2563EB',
             }}
             href="/register"
             className="text-sm"
@@ -255,15 +278,15 @@ export default function Login() {
 
         <div
           style={{
-            marginTop: "32px",
+            marginTop: '32px',
           }}
           className="w-full flex justify-center space-x-4"
         >
           <div className="flex items-center justify-center w-full my-6">
             <div
               style={{
-                borderTop: "1px solid #E5E7EB",
-                width: "40%",
+                borderTop: '1px solid #E5E7EB',
+                width: '40%',
               }}
               className="border-t border-gray-300 flex-grow"
             ></div>
@@ -272,8 +295,8 @@ export default function Login() {
             </span>
             <div
               style={{
-                borderTop: "1px solid #E5E7EB",
-                width: "40%",
+                borderTop: '1px solid #E5E7EB',
+                width: '40%',
               }}
               className="border-t border-gray-300 flex-grow"
             ></div>
@@ -282,42 +305,57 @@ export default function Login() {
         <div
           className="flex gap-4 items-center justify-center"
           style={{
-            gap: "24px",
-            marginTop: "32px",
+            gap: '24px',
+            marginTop: '32px',
           }}
         >
           <div
             className="flex justify-center items-center cursor-pointer"
             style={{
-              width: "46px",
-              height: "46px",
-              borderRadius: "50%",
-              backgroundColor: "#94a3b8 ",
+              width: '46px',
+              height: '46px',
+              borderRadius: '50%',
+              backgroundColor: '#94a3b8 ',
             }}
           >
-            <Image src={ic_facebook} width={32} height={32} alt="ic_facebook" />
+            <Image
+              src={ic_facebook}
+              width={32}
+              height={32}
+              alt="ic_facebook"
+            />
           </div>
           <div
             className="flex justify-center items-center cursor-pointer"
             style={{
-              width: "46px",
-              height: "46px",
-              borderRadius: "50%",
-              backgroundColor: "#94a3b8 ",
+              width: '46px',
+              height: '46px',
+              borderRadius: '50%',
+              backgroundColor: '#94a3b8 ',
             }}
           >
-            <Image src={ic_google} width={32} height={32} alt="ic_google" />
+            <Image
+              src={ic_google}
+              width={32}
+              height={32}
+              alt="ic_google"
+            />
           </div>
           <div
             className="flex justify-center items-center cursor-pointer"
             style={{
-              width: "46px",
-              height: "46px",
-              borderRadius: "50%",
-              backgroundColor: "#94a3b8 ",
+              width: '46px',
+              height: '46px',
+              borderRadius: '50%',
+              backgroundColor: '#94a3b8 ',
             }}
           >
-            <Image src={ic_qr} width={32} height={32} alt="ic_qr" />
+            <Image
+              src={ic_qr}
+              width={32}
+              height={32}
+              alt="ic_qr"
+            />
           </div>
         </div>
       </form>
