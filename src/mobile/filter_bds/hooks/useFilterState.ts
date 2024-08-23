@@ -64,6 +64,7 @@ export default function useFilterState() {
 
   const getLocalFieldValue = (fieldId: FilterFieldName) => {
     const fieldName = FilterFieldName[fieldId];
+    // @ts-ignore: read value
     return localFilterState[fieldName];
   };
 
@@ -153,6 +154,7 @@ export default function useFilterState() {
         FilterFieldName[filterOption.id as A];
 
       localValue = {
+        // @ts-ignore: read value
         [fieldName]: localFilterState[fieldName],
       };
     }
