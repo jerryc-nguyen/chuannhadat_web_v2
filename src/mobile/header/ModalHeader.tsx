@@ -8,7 +8,7 @@ import {
   Page,
   Panel,
 } from 'konsta/react';
-import React, { useState } from 'react';
+import React from 'react';
 import ModalSelectRegisterOrLogin from './ModalSelectRegisterOrLogin';
 
 export default function ModalHeader({

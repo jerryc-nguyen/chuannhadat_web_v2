@@ -1,12 +1,11 @@
 'use client';
 import { Icon } from 'konsta/react';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IoHeartOutline,
   IoMenuOutline,
   IoNotificationsOutline,
 } from 'react-icons/io5';
-import ModalHeader from './ModalHeader';
 
 export default function RightItem({
   setRightPanelOpened,
