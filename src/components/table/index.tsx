@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 interface DataType {
-  [key: string]: A;
+  [key: string]: any; // Changed to `any` for simplicity
 }
 
 interface Column {
@@ -11,14 +11,14 @@ interface Column {
   width?: number;
   fixed?: 'left' | 'right' | 'center';
   render?: (
-    value: A,
+    value: any,
     row: DataType,
     rowIndex: number,
   ) => React.ReactNode;
 }
 
 interface TableComponentProps {
-  data: A[];
+  data: DataType[];
   columns: Column[];
   title?: string;
   footer?: React.ReactNode;
@@ -30,9 +30,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   title,
   footer,
 }) => {
-  const [, setIsWideScreen] = useState(
-    window.innerWidth > 450,
-  );
+  const [isWideScreen, setIsWideScreen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,11 +45,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const containerStyle: React.CSSProperties = {
     overflowX: 'auto',
     width: '100%',
+    maxWidth: '1200px', // Adjust the maxWidth as needed
+    margin: '0 auto',
   };
 
   const tableStyle: React.CSSProperties = {
     width: '100%',
     borderCollapse: 'collapse',
+    fontSize: isWideScreen ? '0.875rem' : '0.75rem', // Adjust font size based on screen width
   };
 
   const noDataStyle: React.CSSProperties = {
@@ -79,9 +80,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                   key={col.key}
                   style={{
                     width: col.width,
-                    padding: '12px',
+                    padding: isWideScreen ? '12px' : '8px', // Adjust padding based on screen width
                     textAlign: 'left',
-                    fontSize: '0.75rem',
+                    fontSize: isWideScreen ? '0.75rem' : '0.65rem', // Adjust font size based on screen width
                     fontWeight: '600',
                     color: '#6b7280',
                   }}
@@ -109,9 +110,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       key={col.key}
                       style={{
                         width: col.width,
-                        padding: '12px',
+                        padding: isWideScreen ? '12px' : '8px', // Adjust padding based on screen width
                         textAlign: 'left',
-                        fontSize: '0.875rem',
+                        fontSize: isWideScreen ? '0.875rem' : '0.75rem', // Adjust font size based on screen width
                         fontWeight: '500',
                         color: '#111827',
                       }}
@@ -135,9 +136,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 <td
                   colSpan={columns.length}
                   style={{
-                    padding: '12px',
+                    padding: isWideScreen ? '12px' : '8px', // Adjust padding based on screen width
                     textAlign: 'center',
-                    fontSize: '0.875rem',
+                    fontSize: isWideScreen ? '0.875rem' : '0.75rem', // Adjust font size based on screen width
                     fontWeight: '500',
                     color: '#6b7280',
                   }}
