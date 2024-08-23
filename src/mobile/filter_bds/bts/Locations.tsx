@@ -39,21 +39,13 @@ export default function Locations() {
   const populateOptions = () => {
     if (city) {
       setDistrictOptions(
-<<<<<<< HEAD
-        //@ts-ignore
-=======
         //@ts-ignore: read field of object
->>>>>>> origin/main
         citiesDistricts[city.value + ''],
       );
     }
     if (district) {
       setWardOptions(
-<<<<<<< HEAD
-        //@ts-ignore
-=======
         //@ts-ignore: read field of object
->>>>>>> origin/main
         districtWards[district.value + ''],
       );
     }
@@ -67,11 +59,7 @@ export default function Locations() {
     resetWard();
 
     setDistrictOptions(
-<<<<<<< HEAD
-      //@ts-ignore
-=======
       //@ts-ignore: read field of object
->>>>>>> origin/main
       citiesDistricts[finalOption?.value + ''] || [],
     );
     setLocalFieldValue(FilterFieldName.city, finalOption);
@@ -83,14 +71,9 @@ export default function Locations() {
       district?.value != 'all' ? district : undefined;
 
     resetWard();
-<<<<<<< HEAD
-    //@ts-ignore
-    setWardOptions(
-=======
   
     setWardOptions(
       //@ts-ignore: read field of object
->>>>>>> origin/main
       districtWards[finalOption?.value + ''] || [],
     );
     setLocalFieldValue(

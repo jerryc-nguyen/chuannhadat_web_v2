@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navbar, Searchbar, Icon } from 'konsta/react';
+import { Navbar, Searchbar } from 'konsta/react';
 
 import RightItem from './RightItem';
 import ModalHeader from './ModalHeader';
