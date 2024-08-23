@@ -88,6 +88,7 @@ export default function FilterChips() {
       return selectedRoomText() || 'Số phòng';
     } else {
       return (
+        //@ts-ignore: read value
         filterState[fieldName]?.text ?? filterOption.text
       );
     }
@@ -159,6 +160,7 @@ export default function FilterChips() {
       footer: buildBtsFooter(filterOption),
       maxHeightPercent: buildMaxHeightPercent(filterOption),
       defaultContentHeight:
+        //@ts-ignore: read value
         DEFAULT_MODAL_HEIGHTS[filterOption.id],
     });
   };
