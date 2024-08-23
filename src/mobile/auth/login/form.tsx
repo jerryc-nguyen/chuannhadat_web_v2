@@ -23,7 +23,7 @@ export default function LoginForm({
   onLoginSuccess,
   onLoginError,
 }: {
-  onLoginSuccess?: (response: Record<string, any>) => void;
+  onLoginSuccess?: (response: ILoginResponse) => void;
   onLoginError?: () => void;
 }) {
   const [showPassword, setShowPassword] =

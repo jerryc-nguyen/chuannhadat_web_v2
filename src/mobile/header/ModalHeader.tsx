@@ -19,7 +19,7 @@ export default function ModalHeader({
   rightPanelOpened: boolean;
   setRightPanelOpened: (value: boolean) => void;
 }) {
-  const { currentUser } = useAuth();
+  const { currentUser, signout } = useAuth();
   const { openModal, closeModal } = useModals();
 
   const handleShowModalLoginAndRegister = () => {
@@ -57,16 +57,29 @@ export default function ModalHeader({
               </Link>
             }
           />
-          <Block className="flex flex-col gap-4">
-            <Button
-              className="h-12"
-              onClick={() =>
-                handleShowModalLoginAndRegister()
-              }
-            >
-              Đăng nhập/Đăng ký
-            </Button>
-          </Block>
+          {!currentUser && (
+            <Block className="flex flex-col gap-4">
+              <Button
+                className="h-12"
+                onClick={() =>
+                  handleShowModalLoginAndRegister()
+                }
+              >
+                Đăng nhập/Đăng ký
+              </Button>
+            </Block>
+          )}
+
+          {currentUser && (
+            <Block className="flex flex-col gap-4">
+              <Button
+                className="h-12"
+                onClick={() => signout()}
+              >
+                Đăng xuất
+              </Button>
+            </Block>
+          )}
         </Page>
       </Panel>
     </>
