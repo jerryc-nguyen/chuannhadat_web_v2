@@ -13,7 +13,7 @@ import {
   IFormPropsRegister,
   IFormResponse,
   IRegisterResponse,
-} from '../states';
+} from '../types';
 import registerSchema from './resolver';
 
 export default function RegisterForm({

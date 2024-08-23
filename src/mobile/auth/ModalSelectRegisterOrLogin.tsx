@@ -1,6 +1,6 @@
 'use client';
 
-import { registerLoginOption } from '@mobile/auth/states/register_login_option';
+import { registerLoginOption } from '@mobile/auth/register_login_option';
 import {
   Block,
   Segmented,
@@ -11,25 +11,30 @@ import LoginForm from '@mobile/auth/login/form';
 import RegisterForm from '@mobile/auth/register/form';
 import { toast } from 'react-toastify';
 
-export default function ModalSelectRegisterOrLogin({ onClose }: {onClose: () => void }) {
+export default function ModalSelectRegisterOrLogin({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
   const [activeTab, setActiveTab] = useState('login');
   const handleShowModalLoginAndRegister = (
     value: string,
   ) => {
     setActiveTab(value);
   };
-  
-  const onLoginSuccess = (response: Record<string, any>) => {
-    toast.success(`Xin chào, ${response.full_name || response.phone } bạn đã đăng nhập thành công!`);
+
+  const onLoginSuccess = (
+    response: Record<string, any>,
+  ) => {
+    toast.success(
+      `Xin chào, ${response.full_name || response.phone} bạn đã đăng nhập thành công!`,
+    );
     onClose();
-  }
+  };
 
   const onLoginError = () => {
-    toast.error(
-      'Mật khẩu hoặc tài khoản không chính xác',
-    );
-  }
-
+    toast.error('Mật khẩu hoặc tài khoản không chính xác');
+  };
 
   return (
     <>
@@ -52,8 +57,19 @@ export default function ModalSelectRegisterOrLogin({ onClose }: {onClose: () => 
             );
           })}
         </Segmented>
-        {activeTab == 'login' && <div className="mt-8"><LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError}/></div>}
-        {activeTab == 'register' && <div className="mt-8"><RegisterForm /></div>}
+        {activeTab == 'login' && (
+          <div className="mt-8">
+            <LoginForm
+              onLoginSuccess={onLoginSuccess}
+              onLoginError={onLoginError}
+            />
+          </div>
+        )}
+        {activeTab == 'register' && (
+          <div className="mt-8">
+            <RegisterForm />
+          </div>
+        )}
       </Block>
     </>
   );

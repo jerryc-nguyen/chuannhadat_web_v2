@@ -10,6 +10,7 @@ import {
 } from 'konsta/react';
 import React from 'react';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 export default function ModalHeader({
   rightPanelOpened,
@@ -18,17 +19,24 @@ export default function ModalHeader({
   rightPanelOpened: boolean;
   setRightPanelOpened: (value: boolean) => void;
 }) {
+  const { currentUser } = useAuth();
   const { openModal, closeModal } = useModals();
 
   const handleShowModalLoginAndRegister = () => {
     setRightPanelOpened(false);
     openModal({
       name: 'loginAndRegister',
-      content: <ModalSelectRegisterOrLogin onClose={closeModal}/>,
+      content: (
+        <ModalSelectRegisterOrLogin onClose={closeModal} />
+      ),
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
     });
   };
+  const title = currentUser
+    ? `Xin chào, ${currentUser.full_name}`
+    : 'Xin Chào, quý khách';
+
   return (
     <>
       <Panel
@@ -38,7 +46,8 @@ export default function ModalHeader({
       >
         <Page>
           <Navbar
-            title="Xin Chào, quý khách"
+            centerTitle={false}
+            title={title}
             right={
               <Link
                 navbar

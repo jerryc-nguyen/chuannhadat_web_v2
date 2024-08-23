@@ -43,15 +43,19 @@ export default function MainNav({
         }
         subnavbarClassName={`c-mainNav__sub ${utilClass}`}
         subnavbar={
-          isShowSearch && (<div style={{ display: 'block', width: '100%' }}>
-            <Searchbar
-              inputStyle={{ borderRadius: '30px' }}
-            />
+          isShowSearch && (
             <div
-              className="c-mainNav__mask"
-              onClick={() => onSearchClick()}
-            ></div>
-          </div>)
+              style={{ display: 'block', width: '100%' }}
+            >
+              <Searchbar
+                inputStyle={{ borderRadius: '30px' }}
+              />
+              <div
+                className="c-mainNav__mask"
+                onClick={() => onSearchClick()}
+              ></div>
+            </div>
+          )
         }
       />
       <ModalHeader

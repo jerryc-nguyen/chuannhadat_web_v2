@@ -7,33 +7,53 @@ import {
   IoNotificationsOutline,
 } from 'react-icons/io5';
 
+import useAuth from '@mobile/auth/hooks/useAuth';
+
 export default function RightItem({
   setRightPanelOpened,
 }: {
   setRightPanelOpened: (value: boolean) => void;
 }) {
+  const { currentUser } = useAuth();
+
   return (
     <>
-      <span className="flex items-center justify-center border rounded-full p-2 mr-2">
+      {currentUser && (
+        <span className="mr-2 flex items-center justify-center rounded-full border p-2">
+          <Icon
+            ios={
+              <IoNotificationsOutline className="h-5 w-5" />
+            }
+            badgeColors={{ bg: 'bg-red-500' }}
+          />
+        </span>
+      )}
+
+      <span className="mr-2 flex items-center justify-center rounded-full border p-2">
         <Icon
-          ios={
-            <IoNotificationsOutline className="w-5 h-5" />
-          }
+          ios={<IoHeartOutline className="h-5 w-5" />}
           badgeColors={{ bg: 'bg-red-500' }}
         />
       </span>
-      <span className="flex items-center justify-center border rounded-full p-2 mr-2">
-        <Icon
-          ios={<IoHeartOutline className="w-5 h-5" />}
-          badgeColors={{ bg: 'bg-red-500' }}
-        />
-      </span>
+
+      {currentUser && (
+        <span className="mr-2 flex items-center justify-center">
+          <img
+            src={currentUser.avatar_url}
+            alt={currentUser.full_name}
+            height={36}
+            width={36}
+            className="rounded-full border"
+          />
+        </span>
+      )}
+
       <div
         onClick={() => setRightPanelOpened(true)}
-        className="flex items-center justify-center border rounded-full p-2 mr-2"
+        className="mr-2 flex items-center justify-center rounded-full border p-2"
       >
         <Icon
-          ios={<IoMenuOutline className="w-5 h-5" />}
+          ios={<IoMenuOutline className="h-5 w-5" />}
           badgeColors={{ bg: 'bg-red-500' }}
         />
       </div>

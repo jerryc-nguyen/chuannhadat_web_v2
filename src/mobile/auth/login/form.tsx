@@ -17,8 +17,7 @@ import {
   IFormPropsLogin,
   IFormResponse,
   ILoginResponse,
-} from '../states';
-import { toast } from 'react-toastify';
+} from '../types';
 
 export default function LoginForm({
   onLoginSuccess,

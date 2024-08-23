@@ -8,9 +8,8 @@ export default function Login({
   onLoginError,
 }: {
   onLoginSuccess?: () => void;
-  onLoginError?: () => void
+  onLoginError?: () => void;
 }) {
-  
   return (
     <div
       style={{
@@ -18,7 +17,7 @@ export default function Login({
         paddingTop: '32px',
         paddingBottom: '32px',
       }}
-      className="max-w-md mx-auto mt-8 p-4"
+      className="mx-auto mt-8 max-w-md p-4"
     >
       <h2
         className="text-center font-bold"
@@ -29,7 +28,10 @@ export default function Login({
       >
         Đăng nhập
       </h2>
-      <LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError} />
+      <LoginForm
+        onLoginSuccess={onLoginSuccess}
+        onLoginError={onLoginError}
+      />
     </div>
   );
 }
