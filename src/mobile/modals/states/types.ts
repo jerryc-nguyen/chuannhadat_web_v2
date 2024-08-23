@@ -1,4 +1,4 @@
-import { FilterFieldName } from 'src/types';
+import { FilterFieldName } from '@models';
 import { ReactElement } from 'react';
 
 export enum ModalNames {
@@ -16,9 +16,9 @@ export interface DefaultModal {
   maxHeightPercent?: number;
   defaultContentHeight?: number;
   closeThreshold?: number;
-  btsProps?: any;
+  btsProps?: A;
   index?: number;
-  onClosed?: () => void;
+  onClosed?: IFunction;
 }
 
 export type Modal = DefaultModal;

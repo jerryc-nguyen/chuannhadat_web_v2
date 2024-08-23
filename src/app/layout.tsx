@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { getUserAgentInfo } from '@utils/ssrUserAgent';
-
-import './globals.css';
-import { QueryProvider } from 'src/components';
-
+import './index.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { QueryProvider } from '@components/providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -19,7 +17,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isMobile } = getUserAgentInfo();
+  const { isMobile } = useGetUserAgentInfo();
   const mobileClass = isMobile ? 'isMobile' : '';
 
   return (

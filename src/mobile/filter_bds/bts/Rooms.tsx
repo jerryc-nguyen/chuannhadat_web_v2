@@ -1,9 +1,6 @@
 import ListChips from '@mobile/ui/ListChips';
 import { Block, BlockTitle } from 'konsta/react';
-import {
-  OptionForSelect,
-  FilterFieldName,
-} from 'src/types';
+import { OptionForSelect, FilterFieldName } from '@models';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Rooms() {

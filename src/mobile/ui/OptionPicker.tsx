@@ -1,9 +1,9 @@
 import { Searchbar } from 'konsta/react';
 import ListCheckOptions from './ListCheckOptions';
 import { useMemo, useState } from 'react';
-import { stringToSlug } from '@utils/string';
 import { IoFileTrayOutline } from 'react-icons/io5';
-import { OptionForSelect } from 'src/types';
+import { OptionForSelect } from '@models';
+import { stringToSlug } from '@common/utils';
 
 export default function OptionPicker({
   options,
@@ -22,7 +22,7 @@ export default function OptionPicker({
 }) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: A) => {
     setSearchQuery(e.target.value);
   };
   const handleClear = () => {
@@ -30,8 +30,10 @@ export default function OptionPicker({
   };
 
   const filteredItems = searchQuery
-    ? options.filter((item: any) =>
-        stringToSlug(item.text).includes(stringToSlug(searchQuery))
+    ? options.filter((item: A) =>
+        stringToSlug(item.text).includes(
+          stringToSlug(searchQuery),
+        ),
       )
     : options;
 
@@ -46,7 +48,7 @@ export default function OptionPicker({
   return (
     <>
       {searchable && (
-        <div className='c-optionPicker__search bg-white py-3 px-2'>
+        <div className="c-optionPicker__search bg-white px-2 py-3">
           <Searchbar
             inputStyle={{ borderRadius: '30px' }}
             placeholder={searchPlaceHolder ?? 'Tìm kiếm'}
@@ -58,9 +60,12 @@ export default function OptionPicker({
       )}
 
       {isEmptyList ? (
-        <div className='flex items-center flex-col mt-4'>
-          <IoFileTrayOutline color='rgb(156 163 175)' size={25} />
-          <p className='text-gray'>
+        <div className="mt-4 flex flex-col items-center">
+          <IoFileTrayOutline
+            color="rgb(156 163 175)"
+            size={25}
+          />
+          <p className="text-gray">
             {' '}
             {emptyMessage ?? 'Không tìm thấy'}
           </p>

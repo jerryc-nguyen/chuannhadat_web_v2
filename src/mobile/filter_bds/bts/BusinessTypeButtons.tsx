@@ -3,7 +3,7 @@ import {
   Segmented,
   SegmentedButton,
 } from 'konsta/react';
-import { FilterFieldName } from 'src/types';
+import { FilterFieldName } from '@models';
 import useFilterState from '../hooks/useFilterState';
 
 export default function BusinessTypeButtons() {
