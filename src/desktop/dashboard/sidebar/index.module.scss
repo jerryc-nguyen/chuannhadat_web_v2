@@ -36,6 +36,8 @@
         padding-bottom: 0;
         margin-left: 25px;
         width: calc(100% - 27px);
+        display: flex;
+        flex-flow: column;
         a {
           padding: 8px 12px;
           border-radius: 8px;

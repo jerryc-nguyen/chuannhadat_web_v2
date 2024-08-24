@@ -160,7 +160,7 @@ const HeaderDashboard: React.FC<
       <Button
         variant="outline"
         size="icon"
-        className="ml-auto h-8 w-8"
+        className="ml-auto"
       >
         <LuBell className="h-4 w-4" />
         <span className="sr-only">

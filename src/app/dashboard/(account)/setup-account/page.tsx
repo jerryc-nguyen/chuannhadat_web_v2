@@ -2,9 +2,7 @@ import React from 'react';
 
 type SetUpAccountPageProps = object;
 
-const SetUpAccountPage: React.FC<SetUpAccountPageProps> = (
-  props,
-) => {
+const SetUpAccountPage: React.FC<SetUpAccountPageProps> = () => {
   return <div>SetUpAccountPage</div>;
 };
 

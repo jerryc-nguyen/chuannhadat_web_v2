@@ -1,10 +1,5 @@
 import { INavLinkGroup } from '@models/INavLinkGroups';
-import {
-  LuBadgeDollarSign,
-  LuFileText,
-  LuRepeat,
-  LuUserCircle,
-} from 'react-icons/lu';
+import { LuBadgeDollarSign, LuFileText, LuRepeat, LuUserCircle } from 'react-icons/lu';
 
 export const CURRENT_USER_KEY = 'current_user';
 export const ALL_VALUE = 'all';
@@ -66,11 +61,11 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Cài đặt tài khoản',
-        url: './setup-account',
+        url: 'setup-account',
       },
       {
         name: 'Thông báo',
-        url: './notifications',
+        url: 'notifications',
       },
     ],
   },
@@ -104,19 +99,19 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Thông tin số dư',
-        url: './balance-information',
+        url: 'balance-information',
       },
       {
         name: 'Nạp tiền vào tài khoản',
-        url: './top-up',
+        url: 'top-up',
       },
       {
         name: 'Lịch sử nạp tiền',
-        url: './recharge-history',
+        url: 'recharge-history',
       },
       {
         name: 'Mua gói dịch vụ',
-        url: './service-package',
+        url: 'service-package',
       },
       {
         name: 'Dùng mã quà tặng / KM',
