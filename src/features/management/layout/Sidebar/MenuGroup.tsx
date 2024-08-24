@@ -1,10 +1,15 @@
-import { Accordion } from '@components/ui/accordition';
 import Link from 'next/link';
 
 import { BiUser } from 'react-icons/bi';
 import { IoDocumentTextOutline } from 'react-icons/io5';
 import { PiCurrencyDollar } from 'react-icons/pi';
 import { LiaExchangeAltSolid } from 'react-icons/lia';
+import {
+  Accordion,
+  AccordionTrigger,
+  AccordionItem,
+  AccordionContent,
+} from '@components/ui/accordion';
 
 const MENU_GROUP = [
   {
@@ -91,20 +96,20 @@ const MENU_GROUP = [
 
 export const MenuGroup = () => {
   return (
-    <Accordion.Root
-      className="w-full rounded-md bg-mauve6 shadow-black/5"
+    <Accordion
+      className="bg-mauve6 w-full rounded-md shadow-black/5"
       type="single"
       collapsible
     >
       {MENU_GROUP.map((group) => (
-        <Accordion.Item key={group.id} value={group.id}>
-          <Accordion.Trigger>
+        <AccordionItem key={group.id} value={group.id}>
+          <AccordionTrigger>
             <div className="flex items-center gap-2">
               {group.icon}
               {group.label}
             </div>
-          </Accordion.Trigger>
-          <Accordion.Content>
+          </AccordionTrigger>
+          <AccordionContent>
             <div className="flex flex-col gap-3 pl-8 text-sm">
               {group.menus.map((menu) => (
                 <div key={menu.path}>
@@ -112,9 +117,9 @@ export const MenuGroup = () => {
                 </div>
               ))}
             </div>
-          </Accordion.Content>
-        </Accordion.Item>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </Accordion.Root>
+    </Accordion>
   );
 };

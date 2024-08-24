@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import konstaConfig from 'konsta/config';
-// import { mauve, violet } from '@radix-ui/colors';
-const { mauve, violet } = require('@radix-ui/colors');
+import { mauve, violet } from '@radix-ui/colors';
 
 const config = konstaConfig({
   darkMode: ['class'],
@@ -81,10 +80,8 @@ const config = konstaConfig({
         },
       },
       animation: {
-        slideDown:
-          'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
-        slideUp:
-          'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        slideDown: 'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
       },
     },
   },

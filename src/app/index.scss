@@ -1,1 +1,25 @@
 @import '../styles/global.scss';
+html {
+  overflow-y: hidden;
+}
+html.dark {
+  .sidebar-content {
+    &::-webkit-scrollbar {
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+    }
+    .nav-active {
+      background-color: white;
+      color: #0d1526;
+    }
+    .sub-menu_list {
+      border-color: white;
+      .nav-link_active {
+        background-color: white;
+        color: #0d1526;
+      }
+    }
+  }
+}
