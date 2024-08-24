@@ -1,0 +1,11 @@
+import React from 'react';
+
+type NotificationPageProps = object;
+
+const NotificationPage: React.FC<NotificationPageProps> = (
+  props,
+) => {
+  return <div>NotificationPage</div>;
+};
+
+export default NotificationPage;

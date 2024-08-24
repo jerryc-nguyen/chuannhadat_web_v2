@@ -4,7 +4,10 @@ import './index.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import { QueryProvider } from '@components/providers';
+import {
+  QueryProvider,
+  ThemeProvider,
+} from '@components/providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -21,12 +24,19 @@ export default function RootLayout({
   const mobileClass = isMobile ? 'isMobile' : '';
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={inter.className + ` ${mobileClass} `}
       >
         <QueryProvider>
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
           <ToastContainer
             position="top-center"
             autoClose={5000}
