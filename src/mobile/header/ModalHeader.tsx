@@ -3,7 +3,7 @@ import useModals from '@mobile/modals/hooks';
 import {
   Block,
   Button,
-  Link,
+  Link as KLink,
   Navbar,
   Page,
   Panel,
@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import Link from 'next/link';
 
 export default function ModalHeader({
   rightPanelOpened,
@@ -49,12 +50,12 @@ export default function ModalHeader({
             centerTitle={false}
             title={title}
             right={
-              <Link
+              <KLink
                 navbar
                 onClick={() => setRightPanelOpened(false)}
               >
                 Close
-              </Link>
+              </KLink>
             }
           />
           {!currentUser && (
@@ -67,6 +68,16 @@ export default function ModalHeader({
               >
                 Đăng nhập/Đăng ký
               </Button>
+            </Block>
+          )}
+
+          {currentUser && (
+            <Block className="flex flex-col gap-4">
+              <Link href="/dashboard">
+                <Button className="h-12">
+                  Trang quản lý
+                </Button>
+              </Link>
             </Block>
           )}
 
