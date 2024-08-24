@@ -4,7 +4,7 @@ module.exports = {
   semi: true,
   singleQuote: true,
   endOfLine: 'lf',
-  printWidth: 60,
+  printWidth: 100,
   bracketSpacing: true,
   bracketSameLine: false,
   plugins: ['prettier-plugin-tailwindcss'],
