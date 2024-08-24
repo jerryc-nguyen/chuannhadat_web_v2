@@ -1,11 +1,30 @@
 // Next Imports
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
+import { Provider as JotaiProvider } from 'jotai';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import RechargeView from '@mobile/main-financial-management/recharge';
 
 export const metadata: Metadata = {
-    title: "Nạp tiền vào TK",
-    description: "Chuẩn Nhà Đất"
-}
+  title: 'Nạp tiền vào tài khoản',
+  description: 'Chuẩn Nhà Đất',
+};
 
-const Page = () => <>Recharge</>
+const Page = () => {
+  const { isMobile } = useGetUserAgentInfo();
 
-export default Page
+  return (
+    <JotaiProvider>
+      {isMobile ? (
+        <div className="c-mobileApp">
+          <RechargeView />
+        </div>
+      ) : (
+        <RechargeView />
+      )}
+    </JotaiProvider>
+  );
+};
+
+export default Page;
+
+
