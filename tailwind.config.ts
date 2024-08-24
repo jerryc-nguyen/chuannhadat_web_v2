@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import konstaConfig from 'konsta/config';
+// import { mauve, violet } from '@radix-ui/colors';
+const { mauve, violet } = require('@radix-ui/colors');
 
 const config = konstaConfig({
   darkMode: ['class'],
@@ -23,6 +25,8 @@ const config = konstaConfig({
     },
     extend: {
       colors: {
+        ...mauve,
+        ...violet,
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -63,22 +67,24 @@ const config = konstaConfig({
         sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
-        'accordion-down': {
-          from: { height: '0' },
+        slideDown: {
+          from: { height: '0px' },
           to: {
             height: 'var(--radix-accordion-content-height)',
           },
         },
-        'accordion-up': {
+        slideUp: {
           from: {
             height: 'var(--radix-accordion-content-height)',
           },
-          to: { height: '0' },
+          to: { height: '0px' },
         },
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+        slideDown:
+          'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        slideUp:
+          'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
       },
     },
   },
