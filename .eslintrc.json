@@ -11,6 +11,6 @@
   ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }],
-    "no-empty-interface": false
+    "no-empty-interface": 0
   }
 }

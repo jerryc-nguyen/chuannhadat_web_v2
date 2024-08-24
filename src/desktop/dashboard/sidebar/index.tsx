@@ -15,7 +15,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { cn } from '@common/utils';
 import { usePathname } from 'next/navigation';
 import styles from './index.module.scss';
-import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
 
@@ -27,7 +26,6 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const [accordionActive, setAccordianActive] = React.useState('');
   const genKey = (index: number) => index;
   const pathname = usePathname();
-  const { theme } = useTheme();
 
   React.useEffect(() => {
     listNavDashboard.map((nav, index) => {
@@ -88,7 +86,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                         )
                       }
                       className={cn(
-                        'whitespace-nowrap px-3 py-0 py-[10px] hover:no-underline',
+                        'whitespace-nowrap rounded-sm px-3 py-0 py-[10px] hover:no-underline',
                         isMenuActive(index) ? 'nav-active' : '',
                       )}
                     >

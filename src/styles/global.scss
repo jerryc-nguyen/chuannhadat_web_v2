@@ -83,17 +83,30 @@
   overflow-x: scroll !important;
 }
 
-/* https://tailwindcss.com/docs/text-color */
-/* .text-gray {
-  color: rgb(156 163 175);
+html {
+  overflow-y: hidden;
 }
-.mr-2 {
-  margin-right: 0.625rem;
+html.dark {
+  .sidebar-content {
+    &::-webkit-scrollbar {
+      background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+    }
+    .nav-active {
+      background-color: white;
+      color: #0d1526;
+    }
+    .sub-menu_list {
+      border-color: white;
+      .nav-link_active {
+        background-color: white;
+        color: #0d1526;
+      }
+    }
+  }
 }
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-} */
 
 .Image {
   object-fit: cover;
