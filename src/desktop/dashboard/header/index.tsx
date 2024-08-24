@@ -13,13 +13,7 @@ import {
   LuBell,
 } from 'react-icons/lu';
 import { Badge } from '@components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,39 +23,24 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { Input } from '@components/ui/input';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from '@components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@components/ui/sheet';
 import { Button } from '@components/ui/button';
 import { ModeToggle } from '@components/ui/mode-toggle';
 type HeaderDashboardProps = object;
 
-const HeaderDashboard: React.FC<
-  HeaderDashboardProps
-> = () => {
+const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="md:hidden"
-          >
+          <Button variant="outline" size="icon" className="md:hidden">
             <LuMenu className="h-5 w-5" />
-            <span className="sr-only">
-              Toggle navigation menu
-            </span>
+            <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col">
           <nav className="grid gap-2 text-lg font-medium">
-            <Link
-              href="#"
-              className="flex items-center gap-2 text-lg font-semibold"
-            >
+            <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
               <LuPackage2 className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </Link>
@@ -109,8 +88,7 @@ const HeaderDashboard: React.FC<
               <CardHeader>
                 <CardTitle>Upgrade to Pro</CardTitle>
                 <CardDescription>
-                  Unlock all features and get unlimited
-                  access to our support team.
+                  Unlock all features and get unlimited access to our support team.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -137,15 +115,9 @@ const HeaderDashboard: React.FC<
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="rounded-full"
-          >
+          <Button variant="outline" size="icon" className="rounded-full">
             <LuUserCircle className="h-5 w-5" />
-            <span className="sr-only">
-              Toggle user menu
-            </span>
+            <span className="sr-only">Toggle user menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -157,15 +129,9 @@ const HeaderDashboard: React.FC<
           <DropdownMenuItem>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button
-        variant="outline"
-        size="icon"
-        className="ml-auto"
-      >
+      <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
         <LuBell className="h-4 w-4" />
-        <span className="sr-only">
-          Toggle notifications
-        </span>
+        <span className="sr-only">Toggle notifications</span>
       </Button>
       <ModeToggle />
     </header>

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Quản lý tài khoản',
 };
 const DashboardPage: React.FC<DashboardPageProps> = () => {
-  return <div>DashboardPage</div>;
+  return <div className="text-">DashboardPage</div>;
 };
 
 export default DashboardPage;
