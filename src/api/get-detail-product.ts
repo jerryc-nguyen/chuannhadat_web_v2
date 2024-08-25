@@ -11,7 +11,7 @@ export function useGetDetailProduct(product_uid: string) {
     AxiosResponse<ICommonResponse<IProductDetail>>,
     IReponseError
   >({
-    queryKey: [...QUERY_KEY.DETAIL_PRODUCT],
+    queryKey: [...QUERY_KEY.DETAIL_PRODUCT, product_uid],
     queryFn: async () => getRequest({ url: API_ROUTES.PRODUCT_DETAIL(product_uid) }),
   });
   return { data, error, ...rest };
