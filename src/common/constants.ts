@@ -45,4 +45,5 @@ export const QUERY_KEY = {
   LOGIN: ['login'],
   USER: ['user'],
   BALANCE: ['balance'],
+  DETAIL_PRODUCT: ['detail_product'],
 };
