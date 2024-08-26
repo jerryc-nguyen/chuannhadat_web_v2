@@ -28,6 +28,9 @@ import styles from './index.module.scss';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import useBalance from '@mobile/main-financial-management/hooks';
+import { useBalanceRequest } from '@api/balance';
+import { IBalanceResponse } from '@mobile/main-financial-management/types';
 
 type SidebarDashboardProps = object;
 
@@ -35,12 +38,21 @@ const SidebarDashboard: React.FC<
   SidebarDashboardProps
 > = () => {
   const { currentUser } = useAuth();
+  const { balanceInfo } = useBalance();
 
   const [accordionActive, setAccordianActive] =
     React.useState('');
+
+    const [balanceData, setBalanceData] =
+    React.useState<IBalanceResponse>({
+        tk_chinh: '0 Xu',
+        tk_km: '0 Xu',
+        total: '0 Xu',
+      });
   const genKey = (index: number) => index;
   const pathname = usePathname();
   const { theme } = useTheme();
+  const { fetchBalance } = useBalanceRequest();
 
   React.useEffect(() => {
     listNavDashboard.map((nav, index) => {
@@ -65,6 +77,19 @@ const SidebarDashboard: React.FC<
   const isMenuActive = (index: number) => {
     return accordionActive === `item${index}`;
   };
+
+  React.useEffect(() => {
+    const loadBalance = async () => {
+      try {
+        const result = await fetchBalance();
+        setBalanceData(result.data);
+      } catch (error) {
+        console.error('Error loading balance', error);
+      }
+    };
+
+    loadBalance() ;
+  }, [fetchBalance]);
   return (
     <div
       data-theme={theme}
@@ -166,7 +191,7 @@ const SidebarDashboard: React.FC<
                   Tài khoản chính
                 </CardDescription>
                 <CardTitle className="font-bold text-green-600">
-                  0 Xu
+                  {balanceData.tk_chinh}
                 </CardTitle>
               </CardHeader>
               <CardHeader className="my-2 rounded-sm border p-2 text-center hover:bg-slate-50">
@@ -174,7 +199,7 @@ const SidebarDashboard: React.FC<
                   Tài khoản KM
                 </CardDescription>
                 <CardTitle className="font-bold text-yellow-600">
-                  30,000 Xu
+                  {balanceData.tk_km}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">

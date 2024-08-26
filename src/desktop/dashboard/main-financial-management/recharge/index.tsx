@@ -121,7 +121,7 @@ const RechargeView = () => {
               data={defaultData}
             />
 
-            <div className='QR-transfer-bank text-center mt-4'>
+            <div className='QR-transfer-bank text-center mt-4 mb-12'>
               <h3>Quét mã QR bên dưới để thanh toán nhanh</h3>
               <h5>Vui lòng liên hệ tổng đài hỗ trợ để cập nhật thêm tiền nếu quá 24 giờ chưa thấy thay đổi số dư tài khoản</h5>
 

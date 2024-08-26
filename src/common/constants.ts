@@ -47,10 +47,12 @@ export const SORT_OPTIONS = [
 
 export const TOKEN = 'token';
 export const userLocalStorage = 'user';
+export const balanceLocalStorage = 'balance';
 
 export const QUERY_KEY = {
   LOGIN: ['login'],
   USER: ['user'],
+  BALANCE: ['balance'],
 };
 
 export const listNavDashboard: INavLinkGroup[] = [
@@ -103,7 +105,7 @@ export const listNavDashboard: INavLinkGroup[] = [
       },
       {
         name: 'Nạp tiền vào tài khoản',
-        url: 'top-up',
+        url: 'recharge',
       },
       {
         name: 'Lịch sử nạp tiền',

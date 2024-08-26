@@ -1,14 +1,14 @@
 @import '@styles/mobile/konsta_override';
 
 .c-mobileApp {
-    .c-balanceInfo {
+    .c-historyInfo {
         display: flex;
         flex-direction: column;
         margin: 0 auto;
         max-width: 1200px;
         padding: 1rem;
 
-        .c-cardBalance {
+        .c-cardHistory {
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1.3125rem;
@@ -49,14 +49,14 @@
         }
     }
 
-    .c-balanceFluctuation {
+    .c-historyFluctuation {
         display: flex;
         flex-direction: column;
         margin: 0 auto;
         max-width: 1200px; 
         padding: 1rem;
 
-        .c-cardBalance {
+        .c-cardHistory {
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1.3125rem;
@@ -89,7 +89,7 @@
             }
         }
 
-        .c-balanceFluctuation__note {
+        .c-historyFluctuation__note {
             margin-top: 1rem !important;
             margin: 6rem 1rem;
             padding: 1rem;

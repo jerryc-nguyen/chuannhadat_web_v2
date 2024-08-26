@@ -2,8 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import axiosInstance from './axiosInstance';
 import { AxiosError } from 'axios';
 import { API_ROUTES } from '@common/router';
+import { saveToStorage } from '@common/localstorage';
+import { balanceLocalStorage } from '@common/constants';
 
-export function useBalance() {
+export function useBalanceRequest() {
   const {
     mutateAsync: fetchBalance,
     isSuccess: isSuccessBalance,
@@ -11,6 +13,10 @@ export function useBalance() {
     mutationFn: async () => {
       const response = await axiosInstance.get(
         API_ROUTES.BALANCE.OVERVIEW,
+      );
+      saveToStorage(
+        balanceLocalStorage,
+        JSON.stringify(response.data.data),
       );
       return response.data;
     },

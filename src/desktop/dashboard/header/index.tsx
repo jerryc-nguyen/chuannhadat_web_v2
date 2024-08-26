@@ -1,5 +1,8 @@
+'use client'
+
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   LuUserCircle,
   LuHome,
@@ -36,11 +39,15 @@ import {
 } from '@components/ui/sheet';
 import { Button } from '@components/ui/button';
 import { ModeToggle } from '@components/ui/mode-toggle';
+import useAuth from '@mobile/auth/hooks/useAuth';
 type HeaderDashboardProps = object;
 
 const HeaderDashboard: React.FC<
   HeaderDashboardProps
 > = () => {
+
+  const {signout} = useAuth()
+  const router = useRouter()
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <Sheet>
@@ -154,7 +161,10 @@ const HeaderDashboard: React.FC<
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={()=> {
+            signout()
+            router.push('/')
+          }}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button

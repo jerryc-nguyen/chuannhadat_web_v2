@@ -4,7 +4,7 @@ import {
   getFromStorage,
 } from '@common/localstorage';
 import { removeCookie } from '@common/cookies';
-import { userLocalStorage, TOKEN } from '@common/constants';
+import { userLocalStorage, TOKEN, balanceLocalStorage } from '@common/constants';
 import { currentUserAtom } from '@mobile/auth/states';
 import { useAtom } from 'jotai';
 
@@ -28,6 +28,7 @@ export default function useAuth() {
   const signout = () => {
     setCurrentUser(undefined);
     removeFromStorage(userLocalStorage);
+    removeFromStorage(balanceLocalStorage);
     removeCookie(TOKEN);
   };
 

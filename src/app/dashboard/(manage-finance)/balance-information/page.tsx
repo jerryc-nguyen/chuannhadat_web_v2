@@ -1,7 +1,8 @@
 // Next Imports
 import type { Metadata } from 'next';
 import { Provider as JotaiProvider } from 'jotai';
-import BalanceView from '@mobile/main-financial-management/balance';
+import BalanceViewMobie from '@mobile/main-financial-management/balance';
+import BalanceViewDesktop from '@desktop/dashboard/main-financial-management/balance';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 export const metadata: Metadata = {
@@ -16,10 +17,10 @@ const Page = () => {
     <JotaiProvider>
       {isMobile ? (
         <div className="c-mobileApp">
-          <BalanceView />
+          <BalanceViewMobie />
         </div>
       ) : (
-        <BalanceView />
+        <BalanceViewDesktop />
       )}
     </JotaiProvider>
   );
