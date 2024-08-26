@@ -14,6 +14,7 @@ import { FaBath } from 'react-icons/fa6';
 import SliderImage from './SliderImage';
 import { FaHouseUser } from 'react-icons/fa';
 import Link from 'next/link';
+import SliderImage2 from './SliderImage2';
 export default function DetailProductCard({ product }: { product: IProduct }) {
   const { data } = useGetDetailProduct(product.uid);
   console.log('detail_product', data?.data.data);
@@ -34,7 +35,8 @@ export default function DetailProductCard({ product }: { product: IProduct }) {
           </BreadcrumbsItem>
         </Breadcrumbs>
         {data?.data.data.images && data?.data.data.images.length > 0 ? (
-          <SliderImage listImg={data.data.data.images} />
+      
+          <SliderImage2 listImg={data.data.data.images} />
         ) : (
           <AspectRatio.Root ratio={16 / 9}>
             <img
