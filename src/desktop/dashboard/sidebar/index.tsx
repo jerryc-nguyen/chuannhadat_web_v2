@@ -55,21 +55,16 @@ const SidebarDashboard: React.FC<
   const { fetchBalance } = useBalanceRequest();
 
   React.useEffect(() => {
-    listNavDashboard.map((nav, index) => {
+    listNavDashboard.forEach((nav, index) => {
       if (nav?.links) {
-        const listNavLink = nav?.links.map(
-          (item) => item.url,
-        );
-        if (
-          listNavLink.some((navLink) =>
-            pathname.includes(navLink),
-          )
-        ) {
+        const listNavLink = nav.links.map((item) => item.url);
+
+        if (listNavLink.some((navLink) => pathname === `/${navLink}`)) {
           setAccordianActive(`item${index}`);
         }
       }
     });
-  }, [pathname]);
+  }, [pathname,]);
 
   const getActiveLink = (url: string) => {
     return pathname.includes(url) ? 'nav-link_active' : '';

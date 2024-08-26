@@ -7,14 +7,13 @@ import {
   BlockTitle,
   Page as PageContainer,
 } from 'konsta/react';
-import '@styles/pages/mobile/finacial-management/recharge.scss';
+import '@styles/pages/mobile/finacial-management/top-up.scss';
 
-import MainNav from '@mobile/header/MainNav';
 import TableComponent from '@components/table';
 import BalanceInfo from '../components/BalanceInfo';
 import { VN_BANK } from '../constants';
 
-const RechargeView = () => {
+const TopUpView = () => {
 
   const defaultData = [
     {
@@ -95,7 +94,7 @@ const RechargeView = () => {
       <PageContainer>
         <BalanceInfo title="Nạp tiền vào tài khoản" />
 
-        <div className="c-recharge__content">
+        <div className="c-top-up__content">
           <BlockTitle medium>
             Các phương thức nạp tiền
           </BlockTitle>
@@ -121,7 +120,7 @@ const RechargeView = () => {
               data={defaultData}
             />
 
-            <div className='QR-transfer-bank text-center mt-4 mb-12'>
+            <div className='QR-transfer-bank text-center mt-4'>
               <h3>Quét mã QR bên dưới để thanh toán nhanh</h3>
               <h5>Vui lòng liên hệ tổng đài hỗ trợ để cập nhật thêm tiền nếu quá 24 giờ chưa thấy thay đổi số dư tài khoản</h5>
 
@@ -134,4 +133,4 @@ const RechargeView = () => {
   );
 };
 
-export default RechargeView;
+export default TopUpView;

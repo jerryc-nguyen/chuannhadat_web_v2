@@ -105,7 +105,7 @@ export const listNavDashboard: INavLinkGroup[] = [
       },
       {
         name: 'Nạp tiền vào tài khoản',
-        url: 'recharge',
+        url: 'top-up',
       },
       {
         name: 'Lịch sử nạp tiền',

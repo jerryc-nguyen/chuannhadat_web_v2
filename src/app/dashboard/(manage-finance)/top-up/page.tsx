@@ -2,8 +2,8 @@
 import type { Metadata } from 'next';
 import { Provider as JotaiProvider } from 'jotai';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import RechargeViewMobile from '@mobile/main-financial-management/recharge';
-import RechargeViewDesktop from '@desktop/dashboard/main-financial-management/recharge';
+import TopUpViewMobile from '@mobile/main-financial-management/top-up';
+import TopUpViewDesktop from '@desktop/dashboard/main-financial-management/top-up';
 
 export const metadata: Metadata = {
   title: 'Nạp tiền vào tài khoản',
@@ -17,10 +17,10 @@ const Page = () => {
     <JotaiProvider>
       {isMobile ? (
         <div className="c-mobileApp">
-          <RechargeViewMobile />
+          <TopUpViewMobile />
         </div>
       ) : (
-        <RechargeViewDesktop />
+        <TopUpViewDesktop />
       )}
     </JotaiProvider>
   );
