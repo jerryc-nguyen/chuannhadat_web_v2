@@ -6,6 +6,8 @@ import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
 import DetailProductCard from './DetailProductCard';
+import { useRouter } from 'next/navigation';
+import { useGetDetailProduct } from '@api/get-detail-product';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -24,13 +26,26 @@ const styles: A = {
 export default function ProductCard({ product }: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
   const { openModal } = useModals();
+  const router = useRouter();
   const handleShowDetailHouse = () => {
+    // const { data } = useGetDetailProduct(product.uid);
+    // if (!!data) {
+
+    // } else {
+    //   console.log('Bug!!!');
+    // }
+
     openModal({
       name: product.title,
       title: product.title,
       content: <DetailProductCard product={product} />,
       maxHeightPercent: 0.9,
+      footer: <div>Liên hệ: xx</div>,
+      onClosed: () => {
+        router.back();
+      },
     });
+    window.history.pushState({}, '', `/post/${product.slug}`);
   };
   return (
     <div className="m-4 overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">

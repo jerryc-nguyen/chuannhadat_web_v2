@@ -1,5 +1,5 @@
 import React from 'react';
-import { IProduct } from './type';
+import { IProduct, IProductDetail } from './type';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
 import { Breadcrumbs, BreadcrumbsItem, BreadcrumbsSeparator } from 'konsta/react';
@@ -15,8 +15,14 @@ import SliderImage from './SliderImage';
 import { FaHouseUser } from 'react-icons/fa';
 import Link from 'next/link';
 import SliderImage2 from './SliderImage2';
-export default function DetailProductCard({ product }: { product: IProduct }) {
+import { postDetailAtom } from '@mobile/post-detail/states';
+import { useAtom } from 'jotai';
+
+export default function DetailProductCard({ product }: { product: IProduct | IProductDetail }) {
+  // code load data product cần nằm ở ProductCard để chuẩn bị data trc khi đổ vào component
   const { data } = useGetDetailProduct(product.uid);
+  const [postDetail, setPostDetail] = useAtom(postDetailAtom);
+  setPostDetail(data?.data.data);
   console.log('detail_product', data?.data.data);
 
   const { buildThumbnailUrl } = useResizeImage();
@@ -35,7 +41,6 @@ export default function DetailProductCard({ product }: { product: IProduct }) {
           </BreadcrumbsItem>
         </Breadcrumbs>
         {data?.data.data.images && data?.data.data.images.length > 0 ? (
-      
           <SliderImage2 listImg={data.data.data.images} />
         ) : (
           <AspectRatio.Root ratio={16 / 9}>

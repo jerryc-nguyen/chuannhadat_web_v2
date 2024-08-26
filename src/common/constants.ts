@@ -1,3 +1,6 @@
+export const DEFAULT_BG_CLASS = 'bg-ios-light-surface dark:bg-ios-dark-surface';
+export const CURRENT_USER_KEY = 'current_user';
+
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
 export const ALL_OPTION = {
@@ -44,6 +47,6 @@ export const SORT_OPTIONS = [
 export const QUERY_KEY = {
   LOGIN: ['login'],
   USER: ['user'],
-  BALANCE: ['balance'],
   DETAIL_PRODUCT: ['detail_product'],
+  BALANCE: ['balance'],
 };
