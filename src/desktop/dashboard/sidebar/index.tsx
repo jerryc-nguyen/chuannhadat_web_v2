@@ -86,11 +86,11 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                         )
                       }
                       className={cn(
-                        'whitespace-nowrap rounded-sm px-3 py-0 py-[10px] hover:no-underline',
+                        'whitespace-nowrap rounded-sm px-3 py-[10px] hover:no-underline',
                         isMenuActive(index) ? 'nav-active' : '',
                       )}
                     >
-                      <span className="flex items-center gap-3 rounded-lg px-3 pl-0">
+                      <span className="flex items-center gap-3 rounded-lg px-3 pl-0 text-lg">
                         <nav.icon className="h-5 w-5" />
                         {nav.name}
                       </span>
@@ -102,7 +102,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                             key={genKey(index)}
                             href={`/dashboard/${navLink.url}`}
                             className={cn(
-                              'whitespace-nowrap rounded-sm py-2 text-xs transition transition-all dark:hover:!bg-white dark:hover:!text-muted',
+                              'whitespace-nowrap rounded-sm py-2 text-sm transition-all dark:hover:!bg-white dark:hover:!text-muted',
                               getActiveLink(navLink.url),
                             )}
                           >

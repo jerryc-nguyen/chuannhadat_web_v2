@@ -76,19 +76,19 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Đăng tin',
-        url: 'manage/post/new-post',
+        url: 'manage-post/new-post',
       },
       {
         name: 'Danh sách tin',
-        url: 'manage/post/sale-rent',
+        url: 'manage-post/collection-post',
       },
       {
         name: 'Hashtag của bạn',
-        url: 'manage/collection',
+        url: 'manage-post/collection',
       },
       {
         name: 'Thời gian tự động làm mới',
-        url: 'manage/auto-refresh-time',
+        url: 'manage-post/auto-refresh',
       },
     ],
   },

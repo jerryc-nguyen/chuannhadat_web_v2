@@ -68,24 +68,10 @@
   }
 }
 
-.hidden-scrollbar {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
-}
-.hidden-scrollbar ::-webkit-scrollbar {
-  width: 0 !important;
-  display: none !important;
-}
-.hidden-scrollbar::-webkit-scrollbar-thumb {
-  display: none !important;
-}
-.overflow-x-scroll {
-  overflow-x: scroll !important;
+html {
+  font-size: 16px;
 }
 
-html {
-  overflow-y: hidden;
-}
 html.dark {
   .sidebar-content {
     &::-webkit-scrollbar {
