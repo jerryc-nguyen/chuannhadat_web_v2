@@ -1,10 +1,5 @@
 import { AuthUtils } from '@common/auth';
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const DEFAULT_AXIOS_TIMEOUT = 60 * 1000; // 60S
 
@@ -46,9 +41,7 @@ privateAxios.interceptors.response.use(
 
     if (
       ENDPOINTS_NEED_TO_USE_HEADER.some(
-        (resUrl) =>
-          `${resUrl}`.toLocaleLowerCase() ===
-          requestUrl?.toLocaleLowerCase(),
+        (resUrl) => `${resUrl}`.toLocaleLowerCase() === requestUrl?.toLocaleLowerCase(),
       )
     ) {
       return response;
