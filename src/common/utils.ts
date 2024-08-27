@@ -8,10 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 export function stringToSlug(str?: string) {
   str = str ?? '';
 
-  const from =
-      'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ',
-    to =
-      'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy';
+  const from = 'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ',
+    to = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy';
   for (let i = 0, l = from.length; i < l; i++) {
     str = str.replace(RegExp(from[i], 'gi'), to[i]);
   }
@@ -27,11 +25,8 @@ export function stringToSlug(str?: string) {
 }
 
 export const removeEmpty = (obj: Record<A, A>) =>
-  Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => v !== ''),
-  );
+  Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== ''));
 
 export const removeNull = (obj: Record<A, A>) =>
-  Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => v),
-  );
+  Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
+export const genKey = (index: number) => index;

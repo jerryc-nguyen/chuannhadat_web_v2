@@ -1,0 +1,1 @@
+// mobile auto refresh page

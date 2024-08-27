@@ -12,4 +12,5 @@ export const API_ROUTES = {
     TRANSACTION: 'api/v1/balances/transactions',
     HISTORY: 'api/v1/balances/deposit_histories',
   },
+  SCHEDULED_REFRESHS: 'api/v1/scheduled_refreshs',
 };

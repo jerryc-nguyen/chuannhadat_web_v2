@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { QueryProvider } from '@components/providers';
+import { Toaster } from '@components/ui/sonner';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -22,11 +23,10 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={inter.className + ` ${mobileClass} `}
-      >
+      <body className={inter.className + ` ${mobileClass} `}>
         <QueryProvider>
           {children}
+          <Toaster richColors />
           <ToastContainer
             position="top-center"
             autoClose={5000}

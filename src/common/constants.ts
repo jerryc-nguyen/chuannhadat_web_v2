@@ -1,7 +1,6 @@
 import { INavLinkGroup } from '@models/INavLinkGroups';
 import { LuBadgeDollarSign, LuFileText, LuRepeat, LuUserCircle } from 'react-icons/lu';
 
-export const CURRENT_USER_KEY = 'current_user';
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
 export const ALL_OPTION = {
@@ -45,10 +44,6 @@ export const SORT_OPTIONS = [
   },
 ];
 
-export const TOKEN = 'token';
-export const userLocalStorage = 'user';
-export const balanceLocalStorage = 'balance';
-
 export const QUERY_KEY = {
   LOGIN: ['login'],
   USER: ['user'],
@@ -78,19 +73,19 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Đăng tin',
-        url: 'manage/post/new-post',
+        url: 'manage-post/new-post',
       },
       {
         name: 'Danh sách tin',
-        url: 'manage/post/sale-rent',
+        url: 'manage-post/collection-post',
       },
       {
         name: 'Hashtag của bạn',
-        url: 'manage/collection',
+        url: 'manage-post/collection',
       },
       {
         name: 'Thời gian tự động làm mới',
-        url: 'manage/auto-refresh-time',
+        url: 'manage-post/auto-refresh',
       },
     ],
   },
