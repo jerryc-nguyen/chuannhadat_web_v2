@@ -102,7 +102,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                             key={genKey(index)}
                             href={`/dashboard/${navLink.url}`}
                             className={cn(
-                              'whitespace-nowrap rounded-sm py-2 text-sm transition-all dark:hover:!bg-white dark:hover:!text-muted',
+                              'whitespace-nowrap rounded-sm py-2 text-base transition-all dark:hover:!bg-white dark:hover:!text-muted',
                               getActiveLink(navLink.url),
                             )}
                           >
