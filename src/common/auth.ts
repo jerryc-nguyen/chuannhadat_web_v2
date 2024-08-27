@@ -1,6 +1,8 @@
 import { ILoginResponse } from '@mobile/auth/types';
-import { CURRENT_USER_KEY } from './constants';
-import { getFromStorage } from './localstorage';
+import { getFromStorage, removeFromStorage } from './localstorage';
+
+export const CURRENT_USER_KEY = 'current_user';
+export const API_TOKEN = 'token';
 
 export class AuthUtils {
   static getCurrentUser(): ILoginResponse | null {
@@ -8,6 +10,14 @@ export class AuthUtils {
       const currentUserStr = getFromStorage(CURRENT_USER_KEY);
 
       return currentUserStr ? JSON.parse(currentUserStr) : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  static removeCurrentUser() {
+    try {
+      removeFromStorage(CURRENT_USER_KEY);
     } catch (err) {
       return null;
     }

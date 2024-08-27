@@ -1,7 +1,6 @@
 import { INavLinkGroup } from '@models/INavLinkGroups';
 import { LuBadgeDollarSign, LuFileText, LuRepeat, LuUserCircle } from 'react-icons/lu';
 
-export const CURRENT_USER_KEY = 'current_user';
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
 export const ALL_OPTION = {
@@ -44,9 +43,6 @@ export const SORT_OPTIONS = [
     value: 'area_desc',
   },
 ];
-
-export const TOKEN = 'token';
-export const userLocalStorage = 'user';
 
 export const QUERY_KEY = {
   LOGIN: ['login'],

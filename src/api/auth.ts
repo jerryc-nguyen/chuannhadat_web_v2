@@ -13,7 +13,7 @@ import {
 import { toast } from 'react-toastify';
 import { saveToStorage } from '@common/localstorage';
 import { API_ROUTES } from '@common/router';
-import { CURRENT_USER_KEY, TOKEN } from '@common/constants';
+import { CURRENT_USER_KEY, API_TOKEN } from '@common/auth';
 
 export function useLogin() {
   const { mutate: login, isPending: isLogin } = useMutation({
@@ -21,7 +21,7 @@ export function useLogin() {
       await axiosInstance.post(API_ROUTES.AUTH.LOGIN_BY_PHONE, data),
     onSuccess: ({ data }: { data: IFormResponse<ILoginResponse> }) => {
       if (data.code === 200) {
-        setCookie(TOKEN, data.data.api_token);
+        setCookie(API_TOKEN, data.data.api_token);
         saveToStorage(CURRENT_USER_KEY, JSON.stringify(data.data));
       }
     },

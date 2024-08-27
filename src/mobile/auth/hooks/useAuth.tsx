@@ -1,10 +1,8 @@
 import { useEffect, useMemo } from 'react';
-import { removeFromStorage, getFromStorage } from '@common/localstorage';
 import { removeCookie } from '@common/cookies';
-import { userLocalStorage, TOKEN } from '@common/constants';
 import { currentUserAtom } from '@mobile/auth/states';
 import { useAtom } from 'jotai';
-import { AuthUtils } from '@common/auth';
+import { AuthUtils, API_TOKEN } from '@common/auth';
 import { ILoginResponse } from '../types';
 
 export default function useAuth() {
@@ -20,8 +18,8 @@ export default function useAuth() {
 
   const signout = () => {
     setCurrentUser(null);
-    removeFromStorage(userLocalStorage);
-    removeCookie(TOKEN);
+    AuthUtils.removeCurrentUser();
+    removeCookie(API_TOKEN);
   };
 
   useEffect(() => {
