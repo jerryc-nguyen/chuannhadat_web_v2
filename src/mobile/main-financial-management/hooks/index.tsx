@@ -1,24 +1,16 @@
 import { useEffect, useMemo } from 'react';
-import {
-  getFromStorage,
-} from '@common/localstorage';
-import { balanceLocalStorage} from '@common/constants';
 import { balanceInfoAtom } from '@mobile/main-financial-management/states';
 import { useAtom } from 'jotai';
+import { IBalanceResponse } from '../types';
+import { BalanceUtils } from '@common/balance';
 
 export default function useBalance() {
-  const [balanceInfo, setBalanceInfo] =
-    useAtom(balanceInfoAtom);
-
-  const storedBalanceInfo = useMemo(() => {
-    const balanceInfoData = getFromStorage(balanceLocalStorage);
-    if (balanceInfoData) {
-      return JSON.parse(balanceInfoData);
-    } else {
-      return null;
-    }
+  const storedBalanceInfo = useMemo((): IBalanceResponse | null => {
+    return BalanceUtils.getBalanceInfo();
   }, []);
 
+  const [balanceInfo, setBalanceInfo] =
+    useAtom(balanceInfoAtom);
 
   useEffect(() => {
     setBalanceInfo(storedBalanceInfo);

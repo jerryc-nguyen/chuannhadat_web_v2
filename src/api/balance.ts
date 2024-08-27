@@ -3,7 +3,7 @@ import axiosInstance from './axiosInstance';
 import { AxiosError } from 'axios';
 import { API_ROUTES } from '@common/router';
 import { saveToStorage } from '@common/localstorage';
-import { balanceLocalStorage } from '@common/constants';
+import { BALANCE_INFO_KEY } from '@common/balance';
 
 export function useBalanceRequest() {
   const {
@@ -15,7 +15,7 @@ export function useBalanceRequest() {
         API_ROUTES.BALANCE.OVERVIEW,
       );
       saveToStorage(
-        balanceLocalStorage,
+        BALANCE_INFO_KEY,
         JSON.stringify(response.data.data),
       );
       return response.data;
