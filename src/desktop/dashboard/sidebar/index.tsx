@@ -17,6 +17,7 @@ import { usePathname } from 'next/navigation';
 import styles from './index.module.scss';
 import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import { Skeleton } from '@components/ui/skeleton';
 
 type SidebarDashboardProps = object;
 
@@ -65,6 +66,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">
           <div>
             <div className="my-2 flex w-full flex-col items-center">
+              <Skeleton />
               <Avatar className="h-[100px] w-[100px]">
                 <AvatarImage src={currentUser?.avatar_url} />
                 <AvatarFallback>currentUser?.full_name</AvatarFallback>

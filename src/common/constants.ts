@@ -44,6 +44,9 @@ export const SORT_OPTIONS = [
   },
 ];
 
+export const TOKEN = 'token';
+export const userLocalStorage = 'current_user';
+
 export const QUERY_KEY = {
   LOGIN: ['login'],
   USER: ['user'],

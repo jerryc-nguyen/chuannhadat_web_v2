@@ -6,27 +6,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@components/ui/dialog';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import timeIcon from '@assets/icons/time.svg';
 import React from 'react';
 import { useAtom } from 'jotai';
-import { timeRefreshAtom } from '../atoms/autorefreshAtoms';
+import {
+  contentDialogTimerPickerAtom,
+  defaultTimeRefresh,
+  showDialogTimePickerAtom,
+  timeRefreshAtom,
+} from '../atoms/autorefreshAtoms';
 
 type DialogTimePickerProps = {
-  buttonTrigger: React.ReactNode;
   isLoadingSubmit: boolean;
   handleSubmit: React.FormEventHandler<HTMLFormElement> | undefined;
   type: 'update' | 'add';
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
 };
 
 const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
-  const { isLoadingSubmit, handleSubmit, type, buttonTrigger, isOpen, setIsOpen } = props;
+  const { isLoadingSubmit, handleSubmit } = props;
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
+  const [contentDialog, setContentDialog] = useAtom(contentDialogTimerPickerAtom);
+  const [showDialog, setShowDialog] = useAtom(showDialogTimePickerAtom);
   const formatTime = (timeString: string) => {
     const [hours, minutes] = timeString.split(':').map(Number);
     return `${hours} giờ ${minutes} phút`;
@@ -34,10 +37,13 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
   const handleChangeTimeRefresh = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTimeRefresh(event.target.value);
   };
+  const onDissmisDialog = () => {
+    setContentDialog(undefined);
+    setTimeRefresh(defaultTimeRefresh);
+  };
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{buttonTrigger}</DialogTrigger>
-      <DialogContent>
+    <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <DialogContent onCloseAutoFocus={onDissmisDialog}>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle className="mb-2"> Lựa chọn thời gian</DialogTitle>
@@ -63,7 +69,7 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
           <DialogFooter>
             <Button disabled={isLoadingSubmit} type="submit">
               {isLoadingSubmit && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoadingSubmit ? 'Đang tải...' : type === 'update' ? 'Cập nhật' : 'Thêm'}
+              {isLoadingSubmit ? 'Đang tải...' : contentDialog?.buttonSubmit}
             </Button>
           </DialogFooter>
         </form>
