@@ -3,17 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import {
   App,
-  BlockTitle,
   Page as PageContainer,
 } from 'konsta/react';
-import { format, parseISO } from 'date-fns';
 import '@styles/pages/mobile/finacial-management/balance.scss';
+
 
 import { useBalanceRequest } from '@api/balance';
 import { ITransactionResponse } from '../types';
-import TableComponent from '@components/table';
-import NoteDescriptions from '../components/NoteDescription';
 import BalanceInfo from '../components/BalanceInfo';
+import TransactionActivity from '../components/TransactionActivity';
 
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();
@@ -35,59 +33,11 @@ const BalanceView = () => {
     loadTransaction();
   }, [fetchTransaction]);
 
-  const columns = [
-    {
-      title: 'Mã giao dịch',
-      dataIndex: 'code',
-      key: 'code',
-    },
-    {
-      title: 'Tài khoản',
-      dataIndex: 'account_type',
-      key: 'account_type',
-    },
-    {
-      title: 'Số tiền',
-      dataIndex: 'formatted_amount',
-      key: 'formatted_amount',
-      render: (value: string) => (
-        <span
-          style={{
-            color: value[0] === '+' ? '#28a745' : 'red',
-          }}
-        >
-          {value}
-        </span>
-      ),
-    },
-    {
-      title: 'Nội dung',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
-      title: 'Thời gian',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (value: string) => (
-        <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>
-      ),
-    },
-  ];
-
   return (
-    <App theme="ios">
+    <App theme="ios"  className='relative'>
       <PageContainer>
-        <BalanceInfo title="Thông tin số dư" />
-
-        <div className="c-balanceFluctuation">
-          <BlockTitle medium>Biến động số dư</BlockTitle>
-          <TableComponent
-            columns={columns}
-            data={transactionData}
-          />
-          <NoteDescriptions />
-        </div>
+      <BalanceInfo />
+        <TransactionActivity title='Biến động số dư' transactionsData={transactionData} emptyText='Không có biến động số dư'/>
       </PageContainer>
     </App>
   );

@@ -1,48 +1,72 @@
+import { FC, useEffect, useState } from 'react';
 import useBalance from '@mobile/main-financial-management/hooks';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
-import { Block, BlockTitle } from 'konsta/react';
-import { FC, useEffect, useState } from 'react';
 
-const BalanceInfo: FC<{ title: string }> = ({ title }) => {
+import { MdOutlineDiscount } from 'react-icons/md';
+import { FaRegMoneyBillAlt } from 'react-icons/fa';
+import { IoWalletOutline } from 'react-icons/io5';
+import { LuInfo } from 'react-icons/lu';
+
+import { Card, CardContent } from '@components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
+
+const BalanceInfo: FC = () => {
   const { balanceInfo } = useBalance();
 
-  const [balanceData, setBalanceData] =
-    useState<IBalanceResponse>({
-      tk_chinh: '0 Xu',
-      tk_km: '0 Xu',
-      total: '0 Xu',
-    });
-
+  const [balanceData, setBalanceData] = useState<IBalanceResponse>({
+    tk_chinh: '0 Xu',
+    tk_km: '0 Xu',
+    total: '0 Xu',
+  });
 
   useEffect(() => {
     balanceInfo && setBalanceData(balanceInfo);
   }, [balanceInfo]);
 
   return (
-    <div className="c-balanceInfo">
-      <BlockTitle large>{title}</BlockTitle>
-      <Block strong inset outline className="c-cardBalance">
-        <p className="uppercase">Số dư tài khoản</p>
-        <h2 className="">{balanceData.total}</h2>
-      </Block>
-      <Block strong inset outline className="c-cardBalance">
-        <p className="uppercase">Tài khoản chính</p>
-        <h2 className="text-[#007bff]">
-          {balanceData.tk_chinh}
-        </h2>
-      </Block>
-      <Block
-        strong
-        inset
-        outline
-        className="c-cardBalance c-cardSales"
-      >
-        <p className="uppercase">Tài khoản khuyến mãi</p>
-        <h2 className="text-[#fd7e14]">
-          {balanceData.tk_km}
-        </h2>
-      </Block>
-    </div>
+    <>
+      <Card className="m-auto mx-3 mt-3">
+        <CardContent className="pt-6">
+          <h3 className="text-16 mb-4 flex justify-between">
+            <span className='flex gap-2 items-center'>
+              Tài khoản chính{' '}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <LuInfo className="text-16" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>1 Xu tương đương 1 VNĐ.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </span>
+            <FaRegMoneyBillAlt className="text-32" />
+          </h3>
+          <h1 className="text-36 font-bold">{balanceData?.tk_chinh}</h1>
+        </CardContent>
+      </Card>
+      <div className="mx-3 flex gap-6">
+        <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">
+          <CardContent className="text-12 flex h-full items-center gap-4 p-3">
+            <IoWalletOutline className="text-20" />
+            <div>
+              <h3>Số dư tài khoản</h3>
+              <h1 className="text-18 font-medium">{balanceData?.total}</h1>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">
+          <CardContent className="text-12 flex h-full items-center gap-4 p-3">
+            <MdOutlineDiscount className="text-20" />
+            <div>
+              <h3>Tài khoản khuyến mãi</h3>
+              <h1 className="text-18 font-medium text-[#fd7e14]">{balanceData?.tk_km}</h1>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 
