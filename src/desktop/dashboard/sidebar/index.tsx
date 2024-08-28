@@ -17,18 +17,29 @@ import { usePathname } from 'next/navigation';
 import styles from './index.module.scss';
 import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import useBalance from '@mobile/main-financial-management/hooks';
+import { useBalanceRequest } from '@api/balance';
+import { IBalanceResponse } from '@mobile/main-financial-management/types';
 
 type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const { currentUser } = useAuth();
 
+  const [balanceData, setBalanceData] =
+  React.useState<IBalanceResponse>({
+      tk_chinh: '0 Xu',
+      tk_km: '0 Xu',
+      total: '0 Xu',
+    });
   const [accordionActive, setAccordianActive] = React.useState('');
   const genKey = (index: number) => index;
   const pathname = usePathname();
 
+  const { fetchBalance } = useBalanceRequest();
+
   React.useEffect(() => {
-    listNavDashboard.map((nav, index) => {
+    listNavDashboard.forEach((nav, index) => {
       if (nav?.links) {
         const listNavLink = nav?.links.map((item) => item.url);
         if (listNavLink.some((navLink) => pathname.includes(navLink))) {
@@ -36,7 +47,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
         }
       }
     });
-  }, [pathname]);
+  }, [pathname,]);
 
   const getActiveLink = (url: string) => {
     return pathname.includes(url) ? 'nav-link_active' : '';
@@ -44,6 +55,19 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const isMenuActive = (index: number) => {
     return accordionActive === `item${index}`;
   };
+
+  React.useEffect(() => {
+    const loadBalance = async () => {
+      try {
+        const result = await fetchBalance();
+        setBalanceData(result.data);
+      } catch (error) {
+        console.error('Error loading balance', error);
+      }
+    };
+
+    loadBalance() ;
+  }, [fetchBalance]);
   return (
     <div
       className={cn(
@@ -120,11 +144,11 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
             <Card className="rounded-sm p-3" x-chunk="dashboard-02-chunk-0">
               <CardHeader className="rounded-sm border p-2 text-center hover:bg-slate-50">
                 <CardDescription className="text-slate-600">Tài khoản chính</CardDescription>
-                <CardTitle className="font-bold text-green-600">0 Xu</CardTitle>
+                <CardTitle className="font-bold text-green-600">{balanceData.tk_chinh}</CardTitle>
               </CardHeader>
               <CardHeader className="my-2 rounded-sm border p-2 text-center hover:bg-slate-50">
                 <CardDescription className="text-slate-600">Tài khoản KM</CardDescription>
-                <CardTitle className="font-bold text-yellow-600">30,000 Xu</CardTitle>
+                <CardTitle className="font-bold text-yellow-600">{balanceData.tk_km}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <Button className="w-full">

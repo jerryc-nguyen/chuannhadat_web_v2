@@ -47,6 +47,7 @@ export const SORT_OPTIONS = [
 export const QUERY_KEY = {
   LOGIN: ['login'],
   USER: ['user'],
+  BALANCE: ['balance'],
 };
 
 export const listNavDashboard: INavLinkGroup[] = [
