@@ -4,13 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@comp
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@components/ui/button';
-import { LuCheck, LuClipboardEdit, LuTrash2 } from 'react-icons/lu';
+import { LuCheck, LuClipboardEdit, LuPlus, LuTrash2 } from 'react-icons/lu';
 import { useAtom, useSetAtom } from 'jotai';
 import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/atoms/breadcrumbAtom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -22,7 +23,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
 import { toast } from 'sonner';
@@ -32,24 +32,29 @@ import { service } from './service';
 import { AxiosError } from 'axios';
 import { DialogTimePicker } from '@desktop/dashboard/components';
 import {
-  showDialogAddRefreshAtom,
-  showDialogUpdateRefreshAtom,
   timeRefreshAtom,
+  showDialogTimePickerAtom,
+  contentDialogTimerPickerAtom,
+  defaultTimeRefresh,
 } from '@desktop/dashboard/atoms/autorefreshAtoms';
+import emptyData from '@assets/images/empty.png';
+import Image from 'next/image';
 
 type AutoRefreshDesktopProps = object;
 
 const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
-  const [showDialogAdd, setShowDialogAdd] = useAtom(showDialogAddRefreshAtom);
-  const [showDialogUpdate, setShowDialogUpdate] = useAtom(showDialogUpdateRefreshAtom);
-  const [showDialogDelete, setShowDialogDelete] = React.useState<boolean>(false);
+  const setShowDialogTimePicker = useSetAtom(showDialogTimePickerAtom);
+  const [contentDialogTimePicker, setContentDialogTimePicker] = useAtom(
+    contentDialogTimerPickerAtom,
+  );
+  const [showDialogWarning, setShowDialogWarning] = React.useState<boolean>(false);
   const [overviews, setOverviews] = React.useState<A>();
   const [scheduledTimes, setScheduledTimes] = React.useState<A>();
   const queryClient = useQueryClient();
-
+  const currentIdSheduleRef = React.useRef<number | null>(null);
   // Get list schedule time
-  const { isLoading, data, isSuccess } = useQuery({
+  const { data, isSuccess, isFetching } = useQuery({
     queryKey: ['refresh-time'],
     queryFn: service.GET_SCHEDULED_REFRESHS,
   });
@@ -62,8 +67,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
-      setTimeRefresh('00:00');
-      setShowDialogAdd(false);
+      onSuccessScheduleTime();
       toastSucess('Thêm thời gian thành công');
     },
   });
@@ -76,7 +80,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
-      setShowDialogDelete(false);
+      setShowDialogWarning(false);
       toastSucess('Xóa thời gian thành công');
     },
   });
@@ -88,12 +92,15 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
-
-      setTimeRefresh('00:00');
-      setShowDialogUpdate(false);
+      onSuccessScheduleTime();
       toastSucess('Cập nhật thời gian thành công');
     },
   });
+
+  const isLoadingDialog = React.useMemo(
+    () => isCreatePending || isUpdatePending,
+    [isCreatePending, isUpdatePending],
+  );
   React.useEffect(() => {
     if (isSuccess) {
       const { overviews, scheduled_times } = data.data;
@@ -124,6 +131,12 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Render method handler
+  const onSuccessScheduleTime = () => {
+    setShowDialogTimePicker(false);
+    setTimeRefresh(defaultTimeRefresh);
+    setContentDialogTimePicker(undefined);
+  };
   const toastSucess = (content: string, description?: string) => {
     toast.success(content, {
       description,
@@ -131,10 +144,6 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
         toast: '!bg-[#ecfdf3] !border-[#d3fde5] !text-[#008a2e]',
       },
     });
-  };
-  const handleDeleteSchedule = async (id: number, event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    deleteMutate(id);
   };
   const handleSubmitAddSchedule = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -144,31 +153,57 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
       minute,
     });
   };
-  const handleSubmitUpdateSchedule = (e: React.FormEvent<HTMLFormElement>, id: number) => {
+  const handleSubmitUpdateSchedule = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const [hour, minute] = timeRefresh.split(':');
+    const scheduleId = currentIdSheduleRef?.current;
     updateMutate({
-      id,
+      id: scheduleId as number,
       hour,
       minute,
     });
   };
-
+  const handleSubmitDeleteSchedule = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const scheduleId = currentIdSheduleRef?.current;
+    deleteMutate(scheduleId as number);
+  };
+  const handleSubmitDialogTimePicker = (e: React.FormEvent<HTMLFormElement>) => {
+    if (contentDialogTimePicker?.type === 'add') {
+      handleSubmitAddSchedule(e);
+    } else {
+      handleSubmitUpdateSchedule(e);
+    }
+    currentIdSheduleRef.current = null;
+  };
+  const handleUpdateScheduleTime = (id: number, formatedTime: string) => {
+    currentIdSheduleRef.current = id;
+    setTimeRefresh(formatedTime.slice(0, 5));
+    setContentDialogTimePicker({ buttonSubmit: 'Cập nhật', type: 'update' });
+    setShowDialogTimePicker(true);
+  };
+  const handleAddScheduleTime = () => {
+    setContentDialogTimePicker({ buttonSubmit: 'Thêm', type: 'add' });
+    setShowDialogTimePicker(true);
+  };
+  const handleShowDialogWarning = (id: number) => {
+    currentIdSheduleRef.current = id;
+    setShowDialogWarning(true);
+  };
+  const onDissmisDialogWarning = () => {
+    currentIdSheduleRef.current = null;
+  };
   // Render components
   const addTimeRefresh = () => (
     <div>
       <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Thêm thời gian</h2>
-      <DialogTimePicker
-        isOpen={showDialogAdd}
-        setIsOpen={setShowDialogAdd}
-        key={'add'}
-        buttonTrigger={
-          <Button className="bg-blue-500 text-lg hover:bg-blue-600">Thêm thời gian</Button>
-        }
-        isLoadingSubmit={isCreatePending}
-        handleSubmit={(e) => handleSubmitAddSchedule(e)}
-        type="add"
-      />
+      <Button
+        onClick={handleAddScheduleTime}
+        className="flex items-center gap-x-2 bg-blue-500 text-lg hover:bg-blue-600"
+      >
+        <LuPlus className="text-xl font-bold" />
+        Thêm thời gian
+      </Button>
     </div>
   );
 
@@ -179,7 +214,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
         <Card className="flex-1 hover:bg-blue-50">
           <CardHeader>
             <CardTitle className="dark:text-slate-400">Miễn phí</CardTitle>
-            {isLoading ? (
+            {isFetching ? (
               <Skeleton className="h-[32px] w-[100px]" />
             ) : (
               <CardDescription className="text-2xl font-bold text-blue-500">
@@ -191,7 +226,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
         <Card className="flex-1 hover:bg-yellow-100">
           <CardHeader>
             <CardTitle className="dark:text-slate-400">Đã mua</CardTitle>
-            {isLoading ? (
+            {isFetching ? (
               <Skeleton className="h-[32px] w-[100px]" />
             ) : (
               <CardDescription className="text-2xl font-bold text-yellow-500">
@@ -213,13 +248,12 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
       <Table className="max-w-2xl">
         <TableHeader>
           <TableRow>
-            <TableHead className="font-bold text-black">Thời gian</TableHead>
-            <TableHead className="font-bold text-black">Hành động</TableHead>
+            <TableHead className="text-base font-bold">Thời gian</TableHead>
+            <TableHead className="text-base font-bold">Hành động</TableHead>
           </TableRow>
         </TableHeader>
-
         <TableBody>
-          {isLoading ? (
+          {isFetching ? (
             <TableRow>
               <TableCell className="text-sm">Đang tải...</TableCell>
               <TableCell>
@@ -227,7 +261,6 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
                   <LuClipboardEdit className="mr-2" />
                   Cập nhật
                 </Button>
-
                 <Button disabled className="bg-red-500 hover:bg-red-600">
                   <LuTrash2 className="mr-2" />
                   Xóa
@@ -239,61 +272,31 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
               <TableRow key={schedule.id}>
                 <TableCell className="text-sm">{schedule.formatted_time}</TableCell>
                 <TableCell>
-                  <DialogTimePicker
-                    isOpen={showDialogUpdate}
-                    setIsOpen={setShowDialogUpdate}
-                    key={schedule.id}
-                    buttonTrigger={
-                      <Button className="mr-2 bg-green-500 hover:bg-green-600">
-                        <LuClipboardEdit className="mr-2" />
-                        Cập nhật
-                      </Button>
-                    }
-                    isLoadingSubmit={isUpdatePending}
-                    handleSubmit={(e) => handleSubmitUpdateSchedule(e, schedule.id)}
-                    type="update"
-                  />
-                  <AlertDialog onOpenChange={setShowDialogDelete} open={showDialogDelete}>
-                    <AlertDialogTrigger>
-                      <Button className="bg-red-500 hover:bg-red-600">
-                        <LuTrash2 className="mr-2" />
-                        Xóa
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Bạn có chắc chắn muốn xóa lịch cập nhật này?
-                        </AlertDialogTitle>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-                        <AlertDialogAction
-                          disabled={isDeletePending}
-                          onClick={(event) =>
-                            handleDeleteSchedule(
-                              schedule.id,
-                              event as MouseEvent<HTMLButtonElement>,
-                            )
-                          }
-                        >
-                          {isDeletePending ? (
-                            <>
-                              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                              Đang tải...
-                            </>
-                          ) : (
-                            'Xóa'
-                          )}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <Button
+                    onClick={() => handleUpdateScheduleTime(schedule.id, schedule.formatted_time)}
+                    className="mr-2 bg-green-500 hover:bg-green-600"
+                  >
+                    <LuClipboardEdit className="mr-2" />
+                    Cập nhật
+                  </Button>
+                  <Button
+                    onClick={() => handleShowDialogWarning(schedule.id)}
+                    className="bg-red-500 hover:bg-red-600"
+                  >
+                    <LuTrash2 className="mr-2" />
+                    Xóa
+                  </Button>
                 </TableCell>
               </TableRow>
             ))
           )}
         </TableBody>
+        {!isFetching && scheduledTimes?.length === 0 && (
+          <TableCaption className="bg-slate-100 py-4">
+            <Image width={100} alt="empty-data" className="mb-4" src={emptyData} />
+            Không có dữ liệu để hiển thị...
+          </TableCaption>
+        )}
       </Table>
     </div>
   );
@@ -336,7 +339,38 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
       </div>
     </div>
   );
-
+  const renderDialogScheduleTime = () => (
+    <DialogTimePicker
+      isLoadingSubmit={isLoadingDialog}
+      handleSubmit={(e) => handleSubmitDialogTimePicker(e)}
+      type="add"
+    />
+  );
+  const renderDialogWarning = () => (
+    <AlertDialog onOpenChange={setShowDialogWarning} open={showDialogWarning}>
+      <AlertDialogContent onCloseAutoFocus={onDissmisDialogWarning}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Bạn có chắc chắn muốn xóa lịch cập nhật này?</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
+          <AlertDialogAction
+            disabled={isDeletePending}
+            onClick={(event) => handleSubmitDeleteSchedule(event as MouseEvent<HTMLButtonElement>)}
+          >
+            {isDeletePending ? (
+              <>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Đang tải...
+              </>
+            ) : (
+              'Xóa'
+            )}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
   return (
     <section className="flex flex-col gap-y-6">
       <h1 className="text-4xl font-bold">Cài đặt tự động làm mới </h1>
@@ -344,6 +378,8 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
       {numberRefreshPost()}
       {refreshSettingsTable()}
       {refeshListPackage()}
+      {renderDialogScheduleTime()}
+      {renderDialogWarning()}
     </section>
   );
 };

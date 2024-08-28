@@ -1,6 +1,5 @@
 import Breadcrumb from '@components/breadcrumb';
 import { ThemeProvider } from '@components/providers';
-
 import HeaderDashboard from '@desktop/dashboard/header';
 import SidebarDashboard from '@desktop/dashboard/sidebar';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';

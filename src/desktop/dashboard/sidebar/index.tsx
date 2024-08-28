@@ -17,7 +17,7 @@ import { usePathname } from 'next/navigation';
 import styles from './index.module.scss';
 import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
-import useBalance from '@mobile/main-financial-management/hooks';
+import { Skeleton } from '@components/ui/skeleton';
 import { useBalanceRequest } from '@api/balance';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
 
@@ -26,12 +26,11 @@ type SidebarDashboardProps = object;
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const { currentUser } = useAuth();
 
-  const [balanceData, setBalanceData] =
-  React.useState<IBalanceResponse>({
-      tk_chinh: '0 Xu',
-      tk_km: '0 Xu',
-      total: '0 Xu',
-    });
+  const [balanceData, setBalanceData] = React.useState<IBalanceResponse>({
+    tk_chinh: '0 Xu',
+    tk_km: '0 Xu',
+    total: '0 Xu',
+  });
   const [accordionActive, setAccordianActive] = React.useState('');
   const genKey = (index: number) => index;
   const pathname = usePathname();
@@ -47,7 +46,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
         }
       }
     });
-  }, [pathname,]);
+  }, [pathname]);
 
   const getActiveLink = (url: string) => {
     return pathname.includes(url) ? 'nav-link_active' : '';
@@ -66,7 +65,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
       }
     };
 
-    loadBalance() ;
+    loadBalance();
   }, [fetchBalance]);
   return (
     <div
@@ -89,6 +88,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">
           <div>
             <div className="my-2 flex w-full flex-col items-center">
+              <Skeleton />
               <Avatar className="h-[100px] w-[100px]">
                 <AvatarImage src={currentUser?.avatar_url} />
                 <AvatarFallback>currentUser?.full_name</AvatarFallback>
