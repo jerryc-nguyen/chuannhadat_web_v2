@@ -28,10 +28,7 @@ export default function Login({
       >
         Đăng nhập
       </h2>
-      <LoginForm
-        onLoginSuccess={onLoginSuccess}
-        onLoginError={onLoginError}
-      />
+      <LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError} />
     </div>
   );
 }

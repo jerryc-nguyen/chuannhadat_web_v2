@@ -1,11 +1,10 @@
+import { AuthUtils } from '@common/auth';
 import { CookieKeys } from '@common/cookie';
 import { getCookie } from '@common/cookies';
-import axios, {
-  AxiosError,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { set, get } from 'lodash-es';
+
+const DEFAULT_AXIOS_TIMEOUT = 60 * 1000; // 60S
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -15,7 +14,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
   baseURL: baseUrl,
-  timeout: 20000,
+  timeout: DEFAULT_AXIOS_TIMEOUT,
   validateStatus: function (status: number) {
     return status >= 200 && status < 300;
   },
@@ -23,22 +22,15 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (request: InternalAxiosRequestConfig<A>) => {
-    const token = getCookie(CookieKeys.Token);
+    const token = AuthUtils.getAccessToken();
     if (!token) {
       return request;
     }
-    set(
-      request,
-      'headers.Authorization',
-      `Bearer ${token}`,
-    );
+    set(request, 'headers.Authorization', `Bearer ${token}`);
     return request;
   },
   (_error: A) => {
-    console.log(
-      '🚀 ~ axiosInstance.interceptors.request.use ~ _error:',
-      _error,
-    );
+    console.log('🚀 ~ axiosInstance.interceptors.request.use ~ _error:', _error);
     const errorResponse = {
       status: null,
       message: null,
@@ -50,7 +42,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
-    return response;
+    return response.data;
   },
   (error: AxiosError) => {
     const errorResponse = {

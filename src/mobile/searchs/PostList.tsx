@@ -1,8 +1,5 @@
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import {
-  useSuspenseQuery,
-  queryOptions,
-} from '@tanstack/react-query';
+import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import ProductCard from './ProductCard';
 import { IoChevronDown } from 'react-icons/io5';
@@ -13,11 +10,7 @@ import { FilterFieldName } from '@models';
 
 export default function PostList() {
   const { openModal3 } = useModals();
-  const {
-    buildFilterParams,
-    selectedSortText,
-    copyFilterStatesToLocal,
-  } = useFilterState();
+  const { buildFilterParams, selectedSortText, copyFilterStatesToLocal } = useFilterState();
   const filterParams = buildFilterParams({
     withLocal: false,
   });
@@ -27,12 +20,7 @@ export default function PostList() {
   const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ['home', filterParams],
-      queryFn: async () => {
-        const response = await searchApi(filterParams);
-
-        return response;
-        // return response.json();
-      },
+      queryFn: () => searchApi(filterParams),
     }),
   );
 
@@ -49,13 +37,8 @@ export default function PostList() {
   return (
     <div className="relative mx-auto w-full">
       <div className="flex items-center justify-between px-4">
-        <div className="text-slate-600">
-          Có {data?.pagination?.total_count} tin đăng
-        </div>
-        <div
-          className="flex items-center"
-          onClick={onShowSortOptions}
-        >
+        <div className="text-slate-600">Có {data?.pagination?.total_count} tin đăng</div>
+        <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
             {selectedSortText}
           </span>
@@ -64,12 +47,7 @@ export default function PostList() {
       </div>
 
       {data?.data.map((product: A) => {
-        return (
-          <ProductCard
-            key={product?.id}
-            product={product}
-          />
-        );
+        return <ProductCard key={product?.id} product={product} />;
       })}
     </div>
   );

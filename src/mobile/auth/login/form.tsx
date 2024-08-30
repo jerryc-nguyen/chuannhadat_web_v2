@@ -13,11 +13,7 @@ import ic_qr from '@assets/icons/ic_qr.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLogin } from '@api/auth';
-import {
-  IFormPropsLogin,
-  IFormResponse,
-  ILoginResponse,
-} from '../types';
+import { IFormPropsLogin, IFormResponse, ILoginResponse } from '../types';
 
 export default function LoginForm({
   onLoginSuccess,
@@ -26,8 +22,7 @@ export default function LoginForm({
   onLoginSuccess?: (response: ILoginResponse) => void;
   onLoginError?: () => void;
 }) {
-  const [showPassword, setShowPassword] =
-    React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
   const { login, isLogin } = useLogin();
   const {
     control,
@@ -44,12 +39,10 @@ export default function LoginForm({
         password: data.password,
       },
       {
-        onSuccess: (data: {
-          data: IFormResponse<ILoginResponse>;
-        }) => {
-          if (data.data.status) {
+        onSuccess: (response: IFormResponse<ILoginResponse>) => {
+          if (response.status) {
             if (onLoginSuccess) {
-              onLoginSuccess(data.data.data);
+              onLoginSuccess(response.data);
             }
           } else {
             if (onLoginError) {
@@ -96,9 +89,7 @@ export default function LoginForm({
                     paddingLeft: '36px',
                   }}
                   className={`mt-1 block w-full border py-2 ${
-                    errors.phone
-                      ? 'border-red-500'
-                      : 'border-gray-300'
+                    errors.phone ? 'border-red-500' : 'border-gray-300'
                   } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                   placeholder="Nhập số điện thoại/ Email"
                 />
@@ -108,12 +99,7 @@ export default function LoginForm({
                     left: '8px',
                   }}
                 >
-                  <Image
-                    src={ic_phone}
-                    alt="ic_phone"
-                    width={20}
-                    height={20}
-                  />
+                  <Image src={ic_phone} alt="ic_phone" width={20} height={20} />
                 </div>
               </div>
 
@@ -156,9 +142,7 @@ export default function LoginForm({
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   className={`mt-1 block w-full border py-2 ${
-                    errors.password
-                      ? 'border-red-500'
-                      : 'border-gray-300'
+                    errors.password ? 'border-red-500' : 'border-gray-300'
                   } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
                   placeholder="Nhập mật khẩu"
                 />
@@ -168,12 +152,7 @@ export default function LoginForm({
                     left: '8px',
                   }}
                 >
-                  <Image
-                    src={ic_password}
-                    alt="ic_password"
-                    width={20}
-                    height={20}
-                  />
+                  <Image src={ic_password} alt="ic_password" width={20} height={20} />
                 </div>
                 <button
                   type="button"
@@ -184,19 +163,9 @@ export default function LoginForm({
                   className="absolute top-1/2 flex -translate-y-1/2 items-center text-sm leading-5"
                 >
                   {showPassword ? (
-                    <Image
-                      src={ic_eyy_off}
-                      alt="ic_eyy_off"
-                      width={16}
-                      height={16}
-                    />
+                    <Image src={ic_eyy_off} alt="ic_eyy_off" width={16} height={16} />
                   ) : (
-                    <Image
-                      src={ic_eyy_show}
-                      alt="ic_eyy_show"
-                      width={16}
-                      height={16}
-                    />
+                    <Image src={ic_eyy_show} alt="ic_eyy_show" width={16} height={16} />
                   )}
                 </button>
               </div>
@@ -242,10 +211,7 @@ export default function LoginForm({
       </button>
 
       <div className="text-center">
-        <span className="pr-1 text-sm">
-          {' '}
-          Bạn chưa có tài khoản?
-        </span>
+        <span className="pr-1 text-sm"> Bạn chưa có tài khoản?</span>
         <Link
           style={{
             color: '#2563EB',
@@ -299,12 +265,7 @@ export default function LoginForm({
             backgroundColor: '#94a3b8 ',
           }}
         >
-          <Image
-            src={ic_facebook}
-            width={32}
-            height={32}
-            alt="ic_facebook"
-          />
+          <Image src={ic_facebook} width={32} height={32} alt="ic_facebook" />
         </div>
         <div
           className="flex cursor-pointer items-center justify-center"
@@ -315,12 +276,7 @@ export default function LoginForm({
             backgroundColor: '#94a3b8 ',
           }}
         >
-          <Image
-            src={ic_google}
-            width={32}
-            height={32}
-            alt="ic_google"
-          />
+          <Image src={ic_google} width={32} height={32} alt="ic_google" />
         </div>
         <div
           className="flex cursor-pointer items-center justify-center"
@@ -331,12 +287,7 @@ export default function LoginForm({
             backgroundColor: '#94a3b8 ',
           }}
         >
-          <Image
-            src={ic_qr}
-            width={32}
-            height={32}
-            alt="ic_qr"
-          />
+          <Image src={ic_qr} width={32} height={32} alt="ic_qr" />
         </div>
       </div>
     </form>
