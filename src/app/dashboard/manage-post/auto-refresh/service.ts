@@ -1,4 +1,4 @@
-import { privateAxios } from '@api/base';
+import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 
 export interface IPayloadCreateSchedule {
@@ -10,15 +10,15 @@ export interface IPayloadUpdateSchedule extends IPayloadCreateSchedule {
 }
 export const service = {
   GET_SCHEDULED_REFRESHS: async (): Promise<A> => {
-    return privateAxios.get(API_ROUTES.SCHEDULED_REFRESHS);
+    return axiosInstance.get(API_ROUTES.SCHEDULED_REFRESHS);
   },
   CREATE_SCHEDULED_REFRESHS: async (data: IPayloadCreateSchedule): Promise<A> => {
-    return privateAxios.post(API_ROUTES.SCHEDULED_REFRESHS, data);
+    return axiosInstance.post(API_ROUTES.SCHEDULED_REFRESHS, data);
   },
   DELETE_SCHEDULED_REFRESHS: async (id: number) => {
-    return privateAxios.delete(`${API_ROUTES.SCHEDULED_REFRESHS}/${id}`);
+    return axiosInstance.delete(`${API_ROUTES.SCHEDULED_REFRESHS}/${id}`);
   },
   UPDATE_SCHEDULED_REFRESHS: async (data: IPayloadUpdateSchedule): Promise<A> => {
-    return privateAxios.put(`${API_ROUTES.SCHEDULED_REFRESHS}/${data.id}`, data);
+    return axiosInstance.put(`${API_ROUTES.SCHEDULED_REFRESHS}/${data.id}`, data);
   },
 };

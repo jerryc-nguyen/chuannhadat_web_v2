@@ -6,7 +6,6 @@ import {
   IFormPropsLogin,
   IFormPropsRegister,
   IFormResponse,
-  ILoginResponse,
   IRegisterResponse,
 } from '@mobile/auth/types';
 
@@ -17,12 +16,14 @@ import { CURRENT_USER_KEY, API_TOKEN } from '@common/auth';
 
 export function useLogin() {
   const { mutate: login, isPending: isLogin } = useMutation({
-    mutationFn: async (data: IFormPropsLogin) =>
-      await axiosInstance.post(API_ROUTES.AUTH.LOGIN_BY_PHONE, data),
-    onSuccess: ({ data }: { data: IFormResponse<ILoginResponse> }) => {
-      if (data.code === 200) {
-        setCookie(API_TOKEN, data.data.api_token);
-        saveToStorage(CURRENT_USER_KEY, JSON.stringify(data.data));
+    // @ts-ignore: @TODO
+    mutationFn: async (data: IFormPropsLogin) => {
+      return await axiosInstance.post(API_ROUTES.AUTH.LOGIN_BY_PHONE, data);
+    },
+    onSuccess: (response: IFormResponse<ILoginResponse>) => {
+      if (response.code === 200) {
+        setCookie(API_TOKEN, response.data.api_token);
+        saveToStorage(CURRENT_USER_KEY, JSON.stringify(response.data));
       }
     },
     onError: () => {
