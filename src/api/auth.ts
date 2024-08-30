@@ -6,6 +6,7 @@ import {
   IFormPropsLogin,
   IFormPropsRegister,
   IFormResponse,
+  ILoginResponse,
   IRegisterResponse,
 } from '@mobile/auth/types';
 
