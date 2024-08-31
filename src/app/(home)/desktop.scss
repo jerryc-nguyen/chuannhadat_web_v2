@@ -1,0 +1,22 @@
+.layout-vars {
+  @media (min-width: 720px) {
+    --container-x-padding: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    --container-x-padding: 32px;
+  }
+
+  @media (min-width: 1280px) {
+    --container-x-padding: 50px;
+  }
+
+  @media (min-width: 1536px) {
+    --container-x-padding: 80px;
+  }
+}
+
+.px-container-x-padding {
+  padding-left: var(--container-x-padding);
+  padding-right: var(--container-x-padding);
+}

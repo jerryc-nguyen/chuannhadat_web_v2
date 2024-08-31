@@ -8,7 +8,7 @@ export default function MainNav() {
   const pathname = usePathname();
 
   return (
-    <div className="mr-4 flex">
+    <div className="flex">
       <Link href="/" className="mr-4 flex items-center space-x-2">
         <span className="font-bold">CND</span>
       </Link>
