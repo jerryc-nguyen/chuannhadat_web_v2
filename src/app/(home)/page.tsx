@@ -10,7 +10,6 @@ export default function Home() {
   const { isMobile } = useGetUserAgentInfo();
 
   const App = () => {
-    // eslint-disable-next-line no-constant-condition
     if (isMobile) {
       return (
         <div className="c-mobileApp">

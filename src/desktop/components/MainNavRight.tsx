@@ -58,10 +58,9 @@ export default function MainNavRight() {
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem>
+              <a href="/dashboard">Trang quản lý</a>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
@@ -78,19 +77,17 @@ export default function MainNavRight() {
       {!currentUser && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full">
-              <LuUserCircle className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full"
               onClick={() => {
                 showModalLoginAndRegister();
               }}
             >
-              Đăng nhập / Đăng ký
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+              <LuUserCircle className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
         </DropdownMenu>
       )}
     </>

@@ -6,9 +6,19 @@ import MainNav from '@desktop/components/MainNav';
 import './desktop.scss';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import PostList from '@desktop/home/PostList';
 
 export default function Desktop() {
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  useSyncParamsToState();
+
+  const { buildFilterParams } = useFilterState();
+  const filterParams = buildFilterParams({
+    withLocal: false,
+  });
+  filterParams.per_page = 12;
+  console.log('filterParams', filterParams);
 
   return (
     <main className="c-layout1col">
@@ -22,26 +32,7 @@ export default function Desktop() {
         </h1>
 
         <FilterChips />
-
-        <div className="c-content__gridWrap">
-          <div className="c-content__grid">
-            {items.map((item) => {
-              return (
-                <div key={item} className="min-720:gap-y-5 group relative flex flex-col gap-y-5">
-                  <div className="min-720:rounded-28 min-720:bg-bg-secondary min-720:px-28 min-720:pb-28 min-720:pt-24 relative overflow-hidden p-[1px]">
-                    <a className="min-720:gap-x-5 min-720:px-28 min-720:pb-28 min-720:pt-24 scrollbar-none min-720:scroll-pl-28 inset-0 flex w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden scroll-smooth p-[1px]">
-                      <img
-                        src="https://placehold.jp/366x222.png"
-                        alt="Mailchimp screen"
-                        className="h-full w-full object-cover object-top"
-                      ></img>
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <PostList />
       </main>
 
       <BtsModals1 />
