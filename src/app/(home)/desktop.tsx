@@ -21,8 +21,6 @@ export default function Desktop() {
           Bán đất thổ cư, đất nông nghiệp có giá tốt nhất trên toàn quốc - T8/2024
         </h1>
 
-        {/* <MainNav></MainNav> */}
-
         <FilterChips />
 
         <div className="c-content__gridWrap">

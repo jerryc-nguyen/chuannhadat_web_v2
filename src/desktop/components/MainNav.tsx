@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import MainNavRight from './MainNavRight';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { LuSearch } from 'react-icons/lu';
 
 export default function MainNav() {
   const pathname = usePathname();
@@ -16,7 +16,7 @@ export default function MainNav() {
       </Link>
 
       <div className="relative">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <LuSearch className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input placeholder="Chọn khu vực" className="rounded-full pl-8" />
       </div>
 
