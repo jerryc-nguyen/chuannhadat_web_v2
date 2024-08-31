@@ -3,6 +3,7 @@ import { Navbar, Searchbar } from 'konsta/react';
 
 import RightItem from './RightItem';
 import ModalHeader from './ModalHeader';
+import Link from 'next/link';
 
 export default function MainNav({
   type,
@@ -13,18 +14,15 @@ export default function MainNav({
   onSearchClick?: () => void;
   isShowSearch?: boolean;
 }) {
-  const [rightPanelOpened, setRightPanelOpened] =
-    useState(false);
+  const [rightPanelOpened, setRightPanelOpened] = useState(false);
 
-  const utilClass =
-    type == 'SearchInSub' ? 'isSearchSub' : '';
+  const utilClass = type == 'SearchInSub' ? 'isSearchSub' : '';
 
   const LeftItems = () => {
     return (
-      <img
-        src="https://chuannhadat.com/images/logo_mobile@2x.png"
-        width="40"
-      />
+      <Link href="/">
+        <img src="https://chuannhadat.com/images/logo_mobile@2x.png" width="40" />
+      </Link>
     );
   };
 
@@ -36,32 +34,18 @@ export default function MainNav({
         titleClassName={'c-mainNav__title'}
         rightClassName={'c-mainNav__right'}
         left={<LeftItems />}
-        right={
-          <RightItem
-            setRightPanelOpened={setRightPanelOpened}
-          />
-        }
+        right={<RightItem setRightPanelOpened={setRightPanelOpened} />}
         subnavbarClassName={`c-mainNav__sub ${utilClass}`}
         subnavbar={
           isShowSearch && (
-            <div
-              style={{ display: 'block', width: '100%' }}
-            >
-              <Searchbar
-                inputStyle={{ borderRadius: '30px' }}
-              />
-              <div
-                className="c-mainNav__mask"
-                onClick={() => onSearchClick()}
-              ></div>
+            <div style={{ display: 'block', width: '100%' }}>
+              <Searchbar inputStyle={{ borderRadius: '30px' }} />
+              <div className="c-mainNav__mask" onClick={() => onSearchClick()}></div>
             </div>
           )
         }
       />
-      <ModalHeader
-        rightPanelOpened={rightPanelOpened}
-        setRightPanelOpened={setRightPanelOpened}
-      />
+      <ModalHeader rightPanelOpened={rightPanelOpened} setRightPanelOpened={setRightPanelOpened} />
     </>
   );
 }

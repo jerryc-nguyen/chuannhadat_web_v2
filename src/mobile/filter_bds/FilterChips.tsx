@@ -56,7 +56,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
   },
 ];
 
-export default function FilterChips() {
+export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
   const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -75,12 +75,8 @@ export default function FilterChips() {
     return results.join(' / ');
   };
 
-  const selectedFilterText = (
-    filterOption: FilterChipOption,
-  ) => {
-    const fieldName =
-      FilterFieldName[filterOption.id as A] ||
-      filterOption.id;
+  const selectedFilterText = (filterOption: FilterChipOption) => {
+    const fieldName = FilterFieldName[filterOption.id as A] || filterOption.id;
 
     if (filterOption.id == FilterFieldName.locations) {
       return selectedLocationText ?? 'Khu vực';
@@ -117,9 +113,7 @@ export default function FilterChips() {
     }
   };
 
-  const buildMaxHeightPercent = (
-    filterOption: FilterChipOption,
-  ) => {
+  const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
         return 1;
@@ -129,28 +123,20 @@ export default function FilterChips() {
     }
   };
 
-  const buildBtsFooter = (
-    filterOption: FilterChipOption,
-  ) => {
+  const buildBtsFooter = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
         return <FooterOverviewBtsButton />;
       default:
-        return (
-          <FooterBtsButton filterOption={filterOption} />
-        );
+        return <FooterBtsButton filterOption={filterOption} />;
     }
   };
 
-  const showFilterBts = (
-    filterOption: FilterChipOption,
-  ) => {
+  const showFilterBts = (filterOption: FilterChipOption) => {
     if (filterOption.id == FilterFieldName.filterOverview) {
       copyFilterStatesToLocal();
     } else {
-      copyFilterStatesToLocal([
-        filterOption.id as FilterFieldName,
-      ]);
+      copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
 
     openModal({
@@ -166,18 +152,38 @@ export default function FilterChips() {
   };
 
   return (
-    <Block strongIos outlineIos>
-      {FILTER_ITEMS.map((item) => (
-        <Chip
-          key={item.id}
-          className="m-0.5"
-          onClick={() => {
-            showFilterBts(item);
-          }}
-        >
-          {selectedFilterText(item)}
-        </Chip>
-      ))}
-    </Block>
+    <>
+      {isMobile && (
+        <Block strongIos outlineIos>
+          {FILTER_ITEMS.map((item) => (
+            <Chip
+              key={item.id}
+              className="m-0.5"
+              onClick={() => {
+                showFilterBts(item);
+              }}
+            >
+              {selectedFilterText(item)}
+            </Chip>
+          ))}
+        </Block>
+      )}
+
+      {!isMobile && (
+        <div>
+          {FILTER_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              className="border-bg-quarternary hover:bg-bg-secondary hover:shadow-bg-quarternary relative m-0.5 cursor-pointer rounded-full border bg-white px-4 py-3 font-bold text-black transition-colors ease-out focus-visible:ring-4 focus-visible:ring-blue-200/50"
+              onClick={() => {
+                showFilterBts(item);
+              }}
+            >
+              {selectedFilterText(item)}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   );
 }

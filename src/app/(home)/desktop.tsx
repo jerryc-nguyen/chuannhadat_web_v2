@@ -4,6 +4,8 @@ import React from 'react';
 
 import MainNav from '@desktop/components/MainNav';
 import './desktop.scss';
+import FilterChips from '@mobile/filter_bds/FilterChips';
+import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 
 export default function Desktop() {
   const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -15,13 +17,13 @@ export default function Desktop() {
       </header>
 
       <main className="c-content c-content__container">
-        <h1 className="text-3xl font-bold leading-tight tracking-tighter">
+        <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tighter">
           Bán đất thổ cư, đất nông nghiệp có giá tốt nhất trên toàn quốc - T8/2024
         </h1>
 
-        <MainNav></MainNav>
+        {/* <MainNav></MainNav> */}
 
-        <MainNav></MainNav>
+        <FilterChips />
 
         <div className="c-content__gridWrap">
           <div className="c-content__grid">
@@ -43,6 +45,10 @@ export default function Desktop() {
           </div>
         </div>
       </main>
+
+      <BtsModals1 />
+      <BtsModals2 />
+      <BtsModals3 />
     </main>
   );
 }
