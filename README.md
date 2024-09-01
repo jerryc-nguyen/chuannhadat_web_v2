@@ -55,3 +55,6 @@ row-gap: 1.5rem;
 1em = 16px
 -20 = 1.25 | tw: 1 | gap-y-5
 -32 = 2
+
+===
+component examples from this repo: https://github.com/HashenUdara/shadcn-ui-examples/tree/main
