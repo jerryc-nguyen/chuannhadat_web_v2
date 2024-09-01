@@ -21,7 +21,7 @@ const styles: A = {
 export default function ProductCard({ product }: { product: A }) {
   const { buildThumbnailUrl } = useResizeImage();
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
+    <div className="shadow-2 rounded-lg bg-white dark:bg-slate-800">
       <AspectRatio.Root ratio={16 / 9}>
         <img
           className="Image"

@@ -31,7 +31,7 @@ export default function PostList() {
                 key={product?.id}
                 className="min-720:gap-y-5 group relative flex flex-col gap-y-5"
               >
-                <div className="min-720:rounded-28 min-720:bg-bg-secondary min-720:px-28 min-720:pb-28 min-720:pt-24 relative overflow-hidden p-[1px]">
+                <div className="min-720:rounded-28 min-720:bg-bg-secondary min-720:px-28 min-720:pb-28 min-720:pt-24 relative p-[1px]">
                   <ProductCard key={product?.id} product={product} />
                 </div>
               </div>

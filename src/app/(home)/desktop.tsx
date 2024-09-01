@@ -22,7 +22,7 @@ export default function Desktop() {
 
   return (
     <main className="c-layout1col">
-      <header className="c-content__container sticky top-0 z-10 border-b">
+      <header className="c-content__container shadow-1 sticky top-0 z-10 bg-white">
         <MainNav></MainNav>
       </header>
 
@@ -30,8 +30,10 @@ export default function Desktop() {
         <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tighter">
           Bán đất thổ cư, đất nông nghiệp có giá tốt nhất trên toàn quốc - T8/2024
         </h1>
+        <div className="top-50 sticky z-10">
+          <FilterChips />
+        </div>
 
-        <FilterChips />
         <PostList />
       </main>
 

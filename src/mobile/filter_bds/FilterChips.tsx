@@ -61,7 +61,7 @@ export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
   const { copyFilterStatesToLocal } = useFilterState();
 
   const { openModal } = useModals();
-  const { selectedLocationText } = useFilterLocations();
+  const { selectedLocationText, isSelectedLocation } = useFilterLocations();
 
   const selectedRoomText = (): string => {
     const results = [];
@@ -151,6 +151,25 @@ export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
     });
   };
 
+  const isActiveChip = (filterOption: FilterChipOption): boolean => {
+    const fieldName = FilterFieldName[filterOption.id as A] || filterOption.id;
+
+    if (filterOption.id == FilterFieldName.locations) {
+      return isSelectedLocation;
+    } else if (filterOption.id == FilterFieldName.rooms) {
+      return !!(filterState.bed || filterState.bath);
+    } else {
+      return (
+        //@ts-ignore: read value
+        !!filterState[fieldName]?.text
+      );
+    }
+  };
+
+  const activeChipClass = (filterOption: FilterChipOption): string => {
+    return isActiveChip(filterOption) ? 'bg-black text-white' : 'bg-white text-black';
+  };
+
   return (
     <>
       {isMobile && (
@@ -174,7 +193,7 @@ export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
           {FILTER_ITEMS.map((item) => (
             <button
               key={item.id}
-              className="border-bg-quarternary hover:bg-bg-secondary hover:shadow-bg-quarternary relative m-0.5 cursor-pointer rounded-full border bg-white px-4 py-3 font-bold text-black transition-colors ease-out focus-visible:ring-4 focus-visible:ring-blue-200/50"
+              className={`shadow-2 ${activeChipClass(item)} relative mr-2 cursor-pointer rounded-full px-4 py-3 font-bold`}
               onClick={() => {
                 showFilterBts(item);
               }}

@@ -8,31 +8,20 @@ export function useFilterLocations() {
   const [filterState] = useAtom(filterStateAtom);
   const { getLocalFieldValue } = useFilterState();
 
-  const selectedLocationText = useMemo(():
-    | string
-    | undefined => {
-    return (
-      filterState?.ward?.text ??
-      filterState?.district?.text ??
-      filterState?.city?.text
-    );
-  }, [
-    filterState?.city,
-    filterState?.district,
-    filterState?.ward,
-  ]);
+  const selectedLocationText = useMemo((): string | undefined => {
+    return filterState?.ward?.text ?? filterState?.district?.text ?? filterState?.city?.text;
+  }, [filterState?.city, filterState?.district, filterState?.ward]);
 
-  const currentCity = getLocalFieldValue(
-    FilterFieldName.city,
-  );
-  const currentDistrict = getLocalFieldValue(
-    FilterFieldName.district,
-  );
-  const currentWard = getLocalFieldValue(
-    FilterFieldName.ward,
-  );
+  const currentCity = getLocalFieldValue(FilterFieldName.city);
+  const currentDistrict = getLocalFieldValue(FilterFieldName.district);
+  const currentWard = getLocalFieldValue(FilterFieldName.ward);
+
+  const isSelectedLocation = useMemo((): boolean => {
+    return !!(filterState?.city || filterState?.district || filterState?.ward);
+  }, [filterState?.city, filterState?.district, filterState?.ward]);
 
   return {
+    isSelectedLocation: isSelectedLocation,
     selectedLocationText: selectedLocationText,
     currentCity: currentCity,
     currentDistrict: currentDistrict,
