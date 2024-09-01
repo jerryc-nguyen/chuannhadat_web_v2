@@ -56,12 +56,12 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
   },
 ];
 
-export default function FilterChips() {
+export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
   const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
 
   const { openModal } = useModals();
-  const { selectedLocationText } = useFilterLocations();
+  const { selectedLocationText, isSelectedLocation } = useFilterLocations();
 
   const selectedRoomText = (): string => {
     const results = [];
@@ -75,12 +75,8 @@ export default function FilterChips() {
     return results.join(' / ');
   };
 
-  const selectedFilterText = (
-    filterOption: FilterChipOption,
-  ) => {
-    const fieldName =
-      FilterFieldName[filterOption.id as A] ||
-      filterOption.id;
+  const selectedFilterText = (filterOption: FilterChipOption) => {
+    const fieldName = FilterFieldName[filterOption.id as A] || filterOption.id;
 
     if (filterOption.id == FilterFieldName.locations) {
       return selectedLocationText ?? 'Khu vực';
@@ -117,9 +113,7 @@ export default function FilterChips() {
     }
   };
 
-  const buildMaxHeightPercent = (
-    filterOption: FilterChipOption,
-  ) => {
+  const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
         return 1;
@@ -129,28 +123,20 @@ export default function FilterChips() {
     }
   };
 
-  const buildBtsFooter = (
-    filterOption: FilterChipOption,
-  ) => {
+  const buildBtsFooter = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
         return <FooterOverviewBtsButton />;
       default:
-        return (
-          <FooterBtsButton filterOption={filterOption} />
-        );
+        return <FooterBtsButton filterOption={filterOption} />;
     }
   };
 
-  const showFilterBts = (
-    filterOption: FilterChipOption,
-  ) => {
+  const showFilterBts = (filterOption: FilterChipOption) => {
     if (filterOption.id == FilterFieldName.filterOverview) {
       copyFilterStatesToLocal();
     } else {
-      copyFilterStatesToLocal([
-        filterOption.id as FilterFieldName,
-      ]);
+      copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
 
     openModal({
@@ -165,19 +151,58 @@ export default function FilterChips() {
     });
   };
 
+  const isActiveChip = (filterOption: FilterChipOption): boolean => {
+    const fieldName = FilterFieldName[filterOption.id as A] || filterOption.id;
+
+    if (filterOption.id == FilterFieldName.locations) {
+      return isSelectedLocation;
+    } else if (filterOption.id == FilterFieldName.rooms) {
+      return !!(filterState.bed || filterState.bath);
+    } else {
+      return (
+        //@ts-ignore: read value
+        !!filterState[fieldName]?.text
+      );
+    }
+  };
+
+  const activeChipClass = (filterOption: FilterChipOption): string => {
+    return isActiveChip(filterOption) ? 'bg-black text-white' : 'bg-white text-black';
+  };
+
   return (
-    <Block strongIos outlineIos>
-      {FILTER_ITEMS.map((item) => (
-        <Chip
-          key={item.id}
-          className="m-0.5"
-          onClick={() => {
-            showFilterBts(item);
-          }}
-        >
-          {selectedFilterText(item)}
-        </Chip>
-      ))}
-    </Block>
+    <>
+      {isMobile && (
+        <Block strongIos outlineIos>
+          {FILTER_ITEMS.map((item) => (
+            <Chip
+              key={item.id}
+              className="m-0.5"
+              onClick={() => {
+                showFilterBts(item);
+              }}
+            >
+              {selectedFilterText(item)}
+            </Chip>
+          ))}
+        </Block>
+      )}
+
+      {!isMobile && (
+        <div>
+          {FILTER_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              className={`shadow-2 ${activeChipClass(item)} relative mr-2 cursor-pointer rounded-full px-4 py-3 font-bold`}
+              onClick={() => {
+                showFilterBts(item);
+              }}
+            >
+              {selectedFilterText(item)}
+            </button>
+          ))}
+        </div>
+      )}
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Mobile from './mobile';
+import Desktop from './desktop';
 
 import { Provider as JotaiProvider } from 'jotai';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
@@ -16,7 +17,7 @@ export default function Home() {
         </div>
       );
     } else {
-      return <Mobile />;
+      return <Desktop />;
     }
   };
 
