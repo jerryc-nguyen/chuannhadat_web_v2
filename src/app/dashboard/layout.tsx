@@ -11,14 +11,16 @@ type DashboardLayoutProps = {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { isMobile } = useGetUserAgentInfo();
-  
+
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
       <section className="grid min-h-screen w-full md:grid-cols-[301px_1fr] lg:grid-cols-[301px_1fr]">
         <SidebarDashboard />
         <main className="flex h-screen flex-1 flex-col">
           <HeaderDashboard />
-          <div className={`${isMobile ? "" : "flex flex-1 flex-col p-8"}" gap-y-5 overflow-y-scroll rounded-md"`}>
+          <div
+            className={`${isMobile ? '' : 'flex flex-1 flex-col'} gap-y-5 overflow-y-scroll bg-[#F5F6FA] p-8 dark:bg-slate-800`}
+          >
             {!isMobile && <Breadcrumb />}
             {children}
           </div>
