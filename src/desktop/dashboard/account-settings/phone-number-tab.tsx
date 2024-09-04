@@ -24,7 +24,7 @@ const PhoneNumberTab: React.FC = () => {
   const { currentUser } = useAuth();
   const queryClient = useQueryClient();
 
-  // Update schedule time
+  // Update my phone
   const { mutate: updateMyPhone, isPending: isUpdateMyPhonePending } = useMutation({
     mutationFn: services.profiles.updateMyPhone,
     onError: (err: AxiosError<A>) => {

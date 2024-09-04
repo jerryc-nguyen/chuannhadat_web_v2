@@ -2,10 +2,6 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { Metadata } from 'next';
 import AccountSettingsDesktop from './desktop';
 import AccountSettingsMobile from './mobile';
-import { services } from '@api/services';
-import { useQuery } from '@tanstack/react-query';
-import { useAtomValue } from 'jotai';
-import { isTriggerRefresh } from '@desktop/atoms/triggerUpdateUserAtom';
 import React from 'react';
 
 export const metadata: Metadata = {

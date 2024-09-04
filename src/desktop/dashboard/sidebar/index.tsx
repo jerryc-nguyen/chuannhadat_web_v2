@@ -96,7 +96,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
       )}
     >
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center justify-center border-b px-4 lg:h-[60px] lg:px-6">
+        <div className="flex h-14 items-center justify-center border-b bg-white/30 px-4 backdrop-blur-md lg:h-[60px] lg:px-6">
           <Link href="/" className="gap-2 font-semibold">
             <Image
               src={'https://chuannhadat.com/images/logo_v2_3@2x.png'}

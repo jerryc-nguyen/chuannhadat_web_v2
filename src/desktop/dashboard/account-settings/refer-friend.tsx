@@ -1,8 +1,7 @@
 import { Button } from '@components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
 import Image from 'next/image';
 import React from 'react';
-import { LuCheck, LuCopy } from 'react-icons/lu';
+import { LuCheck, LuClipboard } from 'react-icons/lu';
 import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { EmptyTable } from '../components';
 
@@ -17,11 +16,22 @@ const ReferFriend: React.FC = () => {
       console.error('Failed to copy: ', err);
     }
   };
+  React.useEffect(() => {
+    let timeId: NodeJS.Timeout;
+    if (isCopy) {
+      timeId = setTimeout(() => {
+        setIsCopy(false);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeId);
+    };
+  }, [isCopy]);
   return (
     <>
       <section className="flex flex-col gap-y-6">
         <div className="border-b pb-4">
-          <h3 className="text-xl font-semibold">Thông tin liên hệ</h3>
+          <h3 className="text-xl font-semibold">Giới thiệu bạn bè</h3>
         </div>
         <div>
           <h4 className="mb-2 text-center text-lg font-semibold">Mã giới thiệu của bạn</h4>
@@ -32,23 +42,16 @@ const ReferFriend: React.FC = () => {
             >
               https://chuannhadat.com/gioi-thieu-ban-be/PVM507
             </span>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={handleCopyUrlRefer}
-                    variant="outline"
-                    size="icon"
-                    className="aspect-square h-12 w-12 rounded-l-none hover:bg-blue-100 hover:text-blue-600"
-                  >
-                    {isCopy ? <LuCheck /> : <LuCopy />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p id="tooltip-content">{isCopy ? 'Copied!' : 'Copy to clipboard'}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+
+            <Button
+              onClick={handleCopyUrlRefer}
+              variant="outline"
+              size="icon"
+              className="flex h-12 w-fit gap-x-2 rounded-l-none px-2"
+            >
+              {isCopy ? <LuCheck className="text-blue-500" /> : <LuClipboard />}
+              {isCopy ? 'Copied!' : 'Copy'}
+            </Button>
           </div>
         </div>
         <div>
