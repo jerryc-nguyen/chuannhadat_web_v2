@@ -136,3 +136,13 @@ label[aria-required='true']::after {
   color: red;
   margin-left: 0.2em; /* Điều chỉnh khoảng cách giữa chữ và dấu sao */
 }
+@media (min-width: 500px) {
+  #url-refer {
+    max-width: 35vw;
+  }
+}
+@media (max-width: 450px) {
+  #url-refer {
+    max-width: 60vw;
+  }
+}

@@ -54,6 +54,8 @@ const PersonalTab: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ['get-profile-me'],
       });
+      toastSucess('Cập nhật thông tin thành công');
+      reset();
     },
   });
   const formSchema = z
@@ -145,15 +147,15 @@ const PersonalTab: React.FC = () => {
       </div>
       <Form {...form}>
         <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
-          <FormItem className="flex items-center justify-between">
-            <div className="flex items-center gap-x-4">
+          <FormItem className="flex flex-col items-center justify-between gap-y-4 xl:flex-row">
+            <div className="flex flex-col items-center gap-x-4 gap-y-2 lg:flex-row">
               <Avatar className="h-[100px] w-[100px]">
                 <AvatarImage src={currentUser?.avatar_url} alt="avatar" />
                 <AvatarFallback>
                   {getValues('displayName')?.slice(0, 2) || 'No name'}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-col gap-y-1">
+              <div className="flex flex-col items-center gap-y-1 lg:items-start">
                 <span className="font-semibold">Ảnh đại diện</span>
                 <span className="text-xs text-slate-300">PNG,JPG dưới 15Mb</span>
               </div>
@@ -193,22 +195,27 @@ const PersonalTab: React.FC = () => {
             <FormLabel aria-required={true} className="text-base">
               Bạn là
             </FormLabel>
-            <div className="mt-2 flex justify-between gap-x-4">
+            <div className="mt-2 flex flex-col justify-between gap-x-4 gap-y-2 lg:flex-row">
               {listCustomerType.map((item) => (
                 <FormLabel
                   key={item.id}
                   htmlFor={item.id}
                   className={cn(
-                    'flex flex-1 cursor-pointer gap-x-2 space-x-3 space-y-0 rounded-lg border-2 bg-white p-3 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-300',
+                    'flex flex-1 cursor-pointer justify-between gap-x-2 space-x-3 space-y-0 rounded-lg border-2 bg-white p-3 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-300',
                     getValues('customerType') === item.id
                       ? 'border-blue-300 bg-blue-50 text-blue-600'
                       : 'text-slate-900',
                   )}
                 >
-                  <Image src={item.icon} alt="broker" width={60} className="object-contain" />
+                  <Image
+                    src={item.icon}
+                    alt="broker"
+                    width={60}
+                    className="hidden object-contain xl:block"
+                  />
                   <div>
                     <strong className="text-lg">{item.title}</strong>
-                    <p className="text-xs text-slate-400">{item.content}</p>
+                    <p className="text-xs text-slate-400 md:block">{item.content}</p>
                   </div>
                   <input
                     id={item.id}

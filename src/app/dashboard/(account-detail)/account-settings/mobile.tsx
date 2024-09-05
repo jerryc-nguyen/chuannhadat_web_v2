@@ -1,9 +1,110 @@
+'use client';
+import { listTabAccountSetting } from '@common/constants';
+import { cn, genKey } from '@common/utils';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import {
+  ContactInfor,
+  EmailTab,
+  PasswordTab,
+  PersonalTab,
+  ReferFriend,
+} from '@desktop/dashboard/account-settings';
+import PhoneNumberTab from '@desktop/dashboard/account-settings/phone-number-tab';
+import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/atoms/breadcrumbAtom';
+import { useSetAtom } from 'jotai';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
-type AccountSettingsMobileProps = object;
+const AccountSettingsMobile: React.FC = () => {
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get('tab');
+  const [tabActive, setTabActive] = React.useState(currentTab || 'personal-wall');
+  const router = useRouter();
+  const pathname = usePathname();
+  const handleChangeTab = (value: string) => {
+    setTabActive(value);
+    router.push(pathname + '?' + createQueryString('tab', value));
+  };
+  const createQueryString = React.useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams],
+  );
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
 
-const AccountSettingsMobile: React.FC<AccountSettingsMobileProps> = (props) => {
-  return <div>AccountSettingsMobile</div>;
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: 'account-settings',
+        title: 'Account-Settings',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb((state) => state.slice(0, -2));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <section>
+      <h1 className="mb-4 text-2xl font-bold">Cài đặt tài khoản </h1>
+      <Tabs
+        onValueChange={handleChangeTab}
+        value={tabActive}
+        className="flex w-full flex-col gap-y-4"
+        orientation="horizontal"
+      >
+        <TabsList className="flex h-fit flex-row overflow-hidden rounded-lg border bg-white p-0 dark:bg-slate-900">
+          {listTabAccountSetting.map((item, index) => (
+            <TabsTrigger
+              className={cn(
+                'w-full items-center justify-start gap-x-4 rounded-none border-none px-4 py-2 text-base font-medium !shadow-none transition-all',
+                tabActive === item.tabValue
+                  ? '!bg-blue-50 !text-blue-500 dark:!bg-white dark:!text-slate-900'
+                  : '',
+              )}
+              key={genKey(index)}
+              value={item.tabValue}
+            >
+              <span
+                className={cn(
+                  'aspect-square rounded-md border bg-white p-2 shadow-sm dark:border-slate-400 dark:bg-slate-900',
+                  tabActive === item.tabValue ? 'text-blue-500 dark:text-white' : '',
+                )}
+              >
+                <item.icon />
+              </span>
+              <span className="hidden lg:block">{item.title}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <div className="flex max-w-screen-lg flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
+          <TabsContent className="p-4" value="personal-wall">
+            <PersonalTab />
+          </TabsContent>
+          <TabsContent className="p-4" value="contact-infor">
+            <ContactInfor />
+          </TabsContent>
+          <TabsContent className="relative flex-1 p-4" value="email">
+            <EmailTab />
+          </TabsContent>
+          <TabsContent className="relative flex-1 p-4" value="phone-number">
+            <PhoneNumberTab />
+          </TabsContent>
+          <TabsContent className="p-4" value="password">
+            <PasswordTab />
+          </TabsContent>
+          <TabsContent className="p-4" value="refer-friend">
+            <ReferFriend />
+          </TabsContent>
+        </div>
+      </Tabs>
+    </section>
+  );
 };
 
 export default AccountSettingsMobile;

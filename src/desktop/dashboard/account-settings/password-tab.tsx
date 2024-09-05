@@ -18,7 +18,13 @@ import { toastSucess } from '@common/utils';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
+import { toast } from 'sonner';
 
+const defaultValues = {
+  currentPassword: '',
+  newPassowrd: '',
+  confirmPassword: '',
+};
 const PasswordTab: React.FC = () => {
   const newPasswordRef = React.useRef<string>('');
 
@@ -28,12 +34,24 @@ const PasswordTab: React.FC = () => {
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching update', err);
     },
-    onSuccess: () => {
-      toastSucess('Cập nhật mật khẩu thành công');
+    onSuccess: (data: A) => {
+      if (data.status) {
+        toastSucess('Cập nhật mật khẩu thành công');
+      } else {
+        toast.error(data.message);
+      }
+      reset();
     },
   });
   const formSchema = z.object({
-    currentPassword: z.string(),
+    currentPassword: z
+      .string()
+      .min(1, {
+        message: 'Mật khẩu hiện tại không được để trống, vui lòng điền để tiếp tục ',
+      })
+      .min(8, {
+        message: 'Mật khẩu hiện tại phải tối thiểu 8 kí tự ',
+      }),
     newPassowrd: z
       .string()
       .min(1, {
@@ -59,15 +77,12 @@ const PasswordTab: React.FC = () => {
         'Mật khẩu xác nhận không khớp mật khẩu mới',
       ),
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      currentPassword: '',
-      newPassowrd: '',
-      confirmPassword: '',
-    },
+    defaultValues: defaultValues,
   });
-  const { handleSubmit, control } = form;
+  const { handleSubmit, control, reset } = form;
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateMyPassword({
@@ -88,11 +103,14 @@ const PasswordTab: React.FC = () => {
             name="currentPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Mật khẩu hiện tại</FormLabel>
+                <FormLabel aria-required className="text-base">
+                  Mật khẩu hiện tại
+                </FormLabel>
 
                 <FormControl>
                   <Input type="password" placeholder="Mật khẩu hiện tại" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />

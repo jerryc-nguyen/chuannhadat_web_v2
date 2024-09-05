@@ -58,13 +58,13 @@ const AccountSettingsDesktop: React.FC = () => {
         className="flex w-full gap-x-4"
         orientation="horizontal"
       >
-        <TabsList className="sticky top-0 h-fit flex-col overflow-hidden rounded-lg border bg-white p-0 dark:bg-slate-900">
+        <TabsList className="sticky top-0 flex h-fit flex-col overflow-hidden rounded-lg border bg-white p-0 dark:bg-slate-900">
           {listTabAccountSetting.map((item, index) => (
             <TabsTrigger
               className={cn(
                 'w-full items-center justify-start gap-x-4 rounded-none border-none px-4 py-2 text-base font-medium !shadow-none transition-all',
                 tabActive === item.tabValue
-                  ? '!bg-blue-50 !text-blue-500 dark:!bg-white dark:!text-slate-900'
+                  ? '!bg-blue-100 !text-blue-500 dark:!bg-white dark:!text-slate-900'
                   : '',
               )}
               key={genKey(index)}
@@ -78,11 +78,11 @@ const AccountSettingsDesktop: React.FC = () => {
               >
                 <item.icon />
               </span>
-              {item.title}
+              <span className="hidden xl:block">{item.title}</span>
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="flex h-full min-h-[297px] flex-1 flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
+        <div className="flex h-full min-h-[297px] max-w-screen-lg flex-1 flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
           <TabsContent className="p-4" value="personal-wall">
             <PersonalTab />
           </TabsContent>

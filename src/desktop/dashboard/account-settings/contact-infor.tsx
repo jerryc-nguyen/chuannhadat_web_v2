@@ -63,6 +63,7 @@ const ContactInfor: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
       toastSucess('Cập nhật thông tin thành công');
+      reset();
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {

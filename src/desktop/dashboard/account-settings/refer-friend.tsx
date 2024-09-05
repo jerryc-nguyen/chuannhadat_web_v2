@@ -16,12 +16,13 @@ const ReferFriend: React.FC = () => {
       console.error('Failed to copy: ', err);
     }
   };
+
   React.useEffect(() => {
     let timeId: NodeJS.Timeout;
     if (isCopy) {
       timeId = setTimeout(() => {
         setIsCopy(false);
-      }, 3000);
+      }, 2000);
     }
     return () => {
       clearTimeout(timeId);
@@ -35,19 +36,18 @@ const ReferFriend: React.FC = () => {
         </div>
         <div>
           <h4 className="mb-2 text-center text-lg font-semibold">Mã giới thiệu của bạn</h4>
-          <div className="mx-auto flex justify-center">
+          <div className="mx-auto flex w-full justify-center overflow-hidden">
             <span
               id="url-refer"
-              className="rounded-md rounded-r-none bg-slate-200 p-3 px-4 dark:bg-slate-700"
+              className="overflow-hidden text-ellipsis whitespace-nowrap rounded-md rounded-r-none bg-slate-200 p-3 px-4 text-sm dark:bg-slate-700 lg:text-base"
             >
               https://chuannhadat.com/gioi-thieu-ban-be/PVM507
             </span>
-
             <Button
               onClick={handleCopyUrlRefer}
               variant="outline"
               size="icon"
-              className="flex h-12 w-fit gap-x-2 rounded-l-none px-2"
+              className="flex h-12 w-fit gap-x-2 rounded-l-none px-4"
             >
               {isCopy ? <LuCheck className="text-blue-500" /> : <LuClipboard />}
               {isCopy ? 'Copied!' : 'Copy'}
@@ -56,8 +56,8 @@ const ReferFriend: React.FC = () => {
         </div>
         <div>
           <h4 className="mb-4 text-center text-lg font-semibold">Ưu đãi khi giới thiệu bạn bè</h4>
-          <div className="flex">
-            <div className="flex flex-1 flex-col items-center gap-y-4 border-r">
+          <div className="flex flex-col gap-y-4 lg:flex-row">
+            <div className="flex flex-1 flex-col items-center gap-y-4 lg:border-r">
               <Image
                 alt="Bạn là người giới thiệu"
                 width={120}
@@ -67,14 +67,14 @@ const ReferFriend: React.FC = () => {
               />
               <div className="flex flex-col items-center">
                 <span className="text-md font-semibold">Bạn là người giới thiệu</span>
-                <ul className="list-disc">
+                <ul className="list-outside list-disc px-4 text-center">
                   <li className="text-green-500">
                     <strong className="text-yellow-500">10,000 Xu</strong> vào tài khoản khuyến mãi
                   </li>
                 </ul>
               </div>
             </div>
-            <div className="flex flex-1 flex-col items-center justify-center gap-y-4 border-l">
+            <div className="flex flex-1 flex-col items-center justify-center gap-y-4 lg:border-l">
               <Image
                 alt="Bạn là người giới thiệu"
                 width={120}
@@ -84,7 +84,7 @@ const ReferFriend: React.FC = () => {
               />
               <div className="flex flex-col items-center">
                 <span className="text-md font-semibold">Bạn là người được giới thiệu</span>
-                <ul className="list-disc">
+                <ul className="list-outside list-disc px-4 text-center">
                   <li className="text-green-500">
                     <strong className="text-yellow-500">10,000 Xu</strong> vào tài khoản khuyến mãi
                   </li>
@@ -95,7 +95,7 @@ const ReferFriend: React.FC = () => {
         </div>
         <div className="flex flex-col items-center">
           <h4 className="mb-2 text-center text-lg font-semibold">Quy định về quà tặng</h4>
-          <ul className="w-3/5 list-disc">
+          <ul className="w-full list-outside list-disc px-5 xl:w-3/5 xl:px-0">
             <li>
               Quà tặng sẽ cập nhật trực tiếp vào tài khoản của bạn sau khi người được giới thiệu
               đăng ký bằng mã giới thiệu ở trên và cập nhật đầy đủ thông tin cá nhân, số điện thoại.
@@ -118,7 +118,9 @@ const ReferFriend: React.FC = () => {
       </section>
       <section className="mt-6">
         <div className="mb-4 border-b pb-4">
-          <h3 className="text-xl font-semibold">Danh sách bạn bè đã giới thiệu</h3>
+          <h3 className="text-center text-xl font-semibold xl:text-start">
+            Danh sách bạn bè đã giới thiệu
+          </h3>
         </div>
         <Table>
           <TableHeader>

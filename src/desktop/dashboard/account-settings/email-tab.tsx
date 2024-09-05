@@ -50,7 +50,7 @@ const EmailTab: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button className="absolute bottom-0 w-fit -translate-y-4" type="submit">
+          <Button className="w-fit sm:absolute sm:bottom-0 sm:-translate-y-4" type="submit">
             Lưu thay đổi
           </Button>
         </form>
