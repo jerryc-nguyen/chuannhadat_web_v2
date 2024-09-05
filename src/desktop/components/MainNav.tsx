@@ -10,7 +10,8 @@ import { useEffect } from 'react';
 
 export default function MainNav() {
   const pathname = usePathname();
-  const { loadMore} = usePaginatedNotifications();
+
+  const { loadMore } = usePaginatedNotifications();
 
   useEffect(() => {
     loadMore();

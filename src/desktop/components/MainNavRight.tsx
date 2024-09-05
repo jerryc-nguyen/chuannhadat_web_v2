@@ -39,8 +39,12 @@ export default function MainNavRight() {
 
   const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
 
-  const handleMarkReadAll = () => {};
-  const handleRedirect = (id: number, is_read: boolean) => {};
+  const handleMarkReadAll = () => {
+    return;
+  };
+  const handleRedirect = (id: number, is_read: boolean) => {
+    return;
+  };
   const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
 
   return (

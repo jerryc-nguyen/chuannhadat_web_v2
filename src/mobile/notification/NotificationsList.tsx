@@ -17,17 +17,21 @@ const NotificationsList: React.FC<IProps> = ({ notifications, total, onLoadMore,
     <>
       <div className="c-notification__header flex justify-between"></div>
       <div className="c-notifications__list mt-6 h-[85%] overflow-scroll">
-        {notifications.map((notify) => (
-          <Card className="relative mb-4 mx-2" onClick={() => onRedirect(notify.id, notify.is_read)}>
-            {!notify.is_read && (
+        {notifications.map((notif) => (
+          <Card
+            key={notif.id}
+            className="relative mx-2 mb-4"
+            onClick={() => onRedirect(notif.id, notif.is_read)}
+          >
+            {!notif.is_read && (
               <span className="z-2 absolute left-2 top-2 h-2 w-2 rounded-[100%] bg-red-600" />
             )}
             <CardHeader>
-              <CardTitle>{notify.title}</CardTitle>
-              <CardDescription>{notify.formatted_created_at}</CardDescription>
+              <CardTitle>{notif.title}</CardTitle>
+              <CardDescription>{notif.formatted_created_at}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p>{notify.description}</p>
+              <p>{notif.description}</p>
             </CardContent>
           </Card>
         ))}
