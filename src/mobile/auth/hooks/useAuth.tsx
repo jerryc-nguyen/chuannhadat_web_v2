@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from 'react';
-import { removeCookie } from '@common/cookies';
+import React, { useMemo } from 'react';
+import { removeCookie, setCookie } from '@common/cookies';
 import { currentUserAtom } from '@mobile/auth/states';
 import { useAtom } from 'jotai';
 import { AuthUtils, API_TOKEN } from '@common/auth';
@@ -15,24 +15,35 @@ export default function useAuth() {
 
   const isLogged = useMemo(() => {
     return currentUser?.id != undefined;
-  }, []);
+  }, [currentUser]);
 
+  React.useEffect(() => {
+    setCurrentUser(storedCurrentUser);
+  }, [setCurrentUser, storedCurrentUser]);
 
   const signout = () => {
     setCurrentUser(null);
     AuthUtils.removeCurrentUser();
-    BalanceUtils.removeBalanceInfo();
     removeCookie(API_TOKEN);
+    BalanceUtils.removeBalanceInfo();
   };
 
-  useEffect(() => {
-    setCurrentUser(storedCurrentUser);
-  }, []);
+  const handleLogin = (user: ILoginResponse) => {
+    updateCurrentUser(user);
+    setCookie(API_TOKEN, user.api_token);
+  };
+
+  const updateCurrentUser = (user: ILoginResponse) => {
+    setCurrentUser(user);
+    AuthUtils.updateCurrentUser(user);
+  };
 
   return {
     currentUser,
     setCurrentUser,
     isLogged,
     signout,
+    handleLogin,
+    updateCurrentUser,
   };
 }

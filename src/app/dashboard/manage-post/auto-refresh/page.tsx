@@ -3,13 +3,12 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import AutoRefreshDesktop from './desktop';
 import { Metadata } from 'next';
 
-type AutoRefeshPageProps = object;
 export const metadata: Metadata = {
   title: 'Cập nhật tin tức',
   description: 'Quản lý cập nhật tin tức',
 };
 
-const AutoRefeshPage: React.FC<AutoRefeshPageProps> = () => {
+const AutoRefeshPage: React.FC = () => {
   const { isMobile } = useGetUserAgentInfo();
   if (isMobile) {
     return (

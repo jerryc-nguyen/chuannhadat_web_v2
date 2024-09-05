@@ -1,2 +1,3 @@
 import DialogTimePicker from './dialog-time-picker';
-export { DialogTimePicker };
+import EmptyTable from './empty-table';
+export { DialogTimePicker, EmptyTable };

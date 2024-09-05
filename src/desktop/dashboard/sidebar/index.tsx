@@ -17,13 +17,14 @@ import { usePathname } from 'next/navigation';
 import styles from './index.module.scss';
 import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
-import { Skeleton } from '@components/ui/skeleton';
 import { useBalanceRequest } from '@api/balance';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
+import useCheckLoggedUser from '@hooks/useCheckLoggedUser';
 
 type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
+  useCheckLoggedUser();
   const { currentUser } = useAuth();
 
   const [balanceData, setBalanceData] = React.useState<IBalanceResponse>({
@@ -75,7 +76,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
       )}
     >
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center justify-center border-b px-4 lg:h-[60px] lg:px-6">
+        <div className="flex h-14 items-center justify-center border-b bg-white/30 px-4 backdrop-blur-md lg:h-[60px] lg:px-6">
           <a href="/" className="gap-2 font-semibold">
             <Image
               src={'https://chuannhadat.com/images/logo_v2_3@2x.png'}
@@ -88,10 +89,9 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">
           <div>
             <div className="my-2 flex w-full flex-col items-center">
-              <Skeleton />
               <Avatar className="h-[100px] w-[100px]">
                 <AvatarImage src={currentUser?.avatar_url} />
-                <AvatarFallback>currentUser?.full_name</AvatarFallback>
+                <AvatarFallback>{currentUser?.full_name?.slice(0, 2) || 'No name'}</AvatarFallback>
               </Avatar>
               <b className="mt-2">{currentUser?.full_name}</b>
             </div>
@@ -144,11 +144,11 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
             <Card className="rounded-sm p-3" x-chunk="dashboard-02-chunk-0">
               <CardHeader className="rounded-sm border p-2 text-center hover:bg-slate-50">
                 <CardDescription className="text-slate-600">Tài khoản chính</CardDescription>
-                <CardTitle className="font-bold text-green-600">{balanceData.tk_chinh}</CardTitle>
+                <CardTitle className="font-bold text-green-600">{balanceData?.tk_chinh}</CardTitle>
               </CardHeader>
               <CardHeader className="my-2 rounded-sm border p-2 text-center hover:bg-slate-50">
                 <CardDescription className="text-slate-600">Tài khoản KM</CardDescription>
-                <CardTitle className="font-bold text-yellow-600">{balanceData.tk_km}</CardTitle>
+                <CardTitle className="font-bold text-yellow-600">{balanceData?.tk_km}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <Button className="w-full">

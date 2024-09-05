@@ -1,14 +1,12 @@
 'use client';
-import { Icon } from 'konsta/react';
-import React from 'react';
-import { IoHeartOutline, IoMenuOutline, IoNotificationsOutline } from 'react-icons/io5';
 
+import React from 'react';
+import { IoHeartOutline, IoNotificationsOutline } from 'react-icons/io5';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
