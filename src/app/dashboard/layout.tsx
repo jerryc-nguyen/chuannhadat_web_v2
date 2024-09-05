@@ -3,6 +3,7 @@ import Breadcrumb from '@components/breadcrumb';
 import { ThemeProvider } from '@components/providers';
 import HeaderDashboard from '@desktop/dashboard/header';
 import SidebarDashboard from '@desktop/dashboard/sidebar';
+import useCheckLoggedUser from '@hooks/useCheckLoggedUser';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import React from 'react';
 
