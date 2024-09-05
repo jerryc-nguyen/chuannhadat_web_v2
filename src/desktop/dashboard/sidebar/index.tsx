@@ -19,34 +19,14 @@ import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { useBalanceRequest } from '@api/balance';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
-import { useQuery } from '@tanstack/react-query';
-import { services } from '@api/services';
-import { saveToStorage } from '@common/localstorage';
-import { CURRENT_USER_KEY } from '@common/auth';
+import useCheckLoggedUser from '@hooks/useCheckLoggedUser';
 
 type SidebarDashboardProps = object;
-saveToStorage;
+
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
+  useCheckLoggedUser();
   const { currentUser } = useAuth();
-  // Get new data user time
-  const { data, isFetching } = useQuery({
-    queryKey: ['get-profile-me'],
-    queryFn: services.profiles.getMyProfile,
-  });
-  React.useEffect(() => {
-    if (data && !isFetching) {
-      const newCurrentUser = data.data;
-      saveToStorage(
-        CURRENT_USER_KEY,
-        JSON.stringify({
-          ...currentUser,
-          ...newCurrentUser,
-        }),
-      );
-      dispatchEvent(new Event('storage'));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isFetching]);
+
   const [balanceData, setBalanceData] = React.useState<IBalanceResponse>({
     tk_chinh: '0 Xu',
     tk_km: '0 Xu',
@@ -97,14 +77,14 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
     >
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center justify-center border-b bg-white/30 px-4 backdrop-blur-md lg:h-[60px] lg:px-6">
-          <Link href="/" className="gap-2 font-semibold">
+          <a href="/" className="gap-2 font-semibold">
             <Image
               src={'https://chuannhadat.com/images/logo_v2_3@2x.png'}
               alt="ic_phone"
               width={180}
               height={36}
             />
-          </Link>
+          </a>
         </div>
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">
           <div>

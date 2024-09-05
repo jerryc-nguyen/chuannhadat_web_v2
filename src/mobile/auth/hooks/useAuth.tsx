@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { removeCookie } from '@common/cookies';
+import { removeCookie, setCookie } from '@common/cookies';
 import { currentUserAtom } from '@mobile/auth/states';
 import { useAtom } from 'jotai';
 import { AuthUtils, API_TOKEN } from '@common/auth';
@@ -15,26 +15,27 @@ export default function useAuth() {
 
   const isLogged = useMemo(() => {
     return currentUser?.id != undefined;
-  }, [currentUser?.id]);
+  }, [currentUser]);
 
   React.useEffect(() => {
-    const handleLocalStorageChange = () => {
-      const data = AuthUtils.getCurrentUser();
-      setCurrentUser(data);
-    };
-
-    window.addEventListener('storage', handleLocalStorageChange);
     setCurrentUser(storedCurrentUser);
-    return () => {
-      window.removeEventListener('storage', handleLocalStorageChange);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setCurrentUser, storedCurrentUser]);
+
   const signout = () => {
     setCurrentUser(null);
     AuthUtils.removeCurrentUser();
-    BalanceUtils.removeBalanceInfo();
     removeCookie(API_TOKEN);
+    BalanceUtils.removeBalanceInfo();
+  };
+
+  const handleLogin = (user: ILoginResponse) => {
+    updateCurrentUser(user);
+    setCookie(API_TOKEN, user.api_token);
+  };
+
+  const updateCurrentUser = (user: ILoginResponse) => {
+    setCurrentUser(user);
+    AuthUtils.updateCurrentUser(user);
   };
 
   return {
@@ -42,5 +43,7 @@ export default function useAuth() {
     setCurrentUser,
     isLogged,
     signout,
+    handleLogin,
+    updateCurrentUser,
   };
 }
