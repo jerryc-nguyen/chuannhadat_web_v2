@@ -3,7 +3,9 @@ import { Navbar, Searchbar } from 'konsta/react';
 
 import RightItem from './RightItem';
 import ModalHeader from './ModalHeader';
+import ModalNotifyHeader from './ModalNotifyHeader';
 import Link from 'next/link';
+import { usePaginatedNotifications } from '@mobile/notification/hooks';
 
 export default function MainNav({
   type,
@@ -15,6 +17,7 @@ export default function MainNav({
   isShowSearch?: boolean;
 }) {
   const [rightPanelOpened, setRightPanelOpened] = useState(false);
+  const [notifyPanelOpened, setNotifyPanelOpened] = useState(false);
 
   const utilClass = type == 'SearchInSub' ? 'isSearchSub' : '';
 
@@ -26,6 +29,12 @@ export default function MainNav({
     );
   };
 
+  const { loadMore} = usePaginatedNotifications();
+
+  React.useEffect(() => {
+    loadMore();
+  }, []);
+
   return (
     <>
       <Navbar
@@ -34,7 +43,7 @@ export default function MainNav({
         titleClassName={'c-mainNav__title'}
         rightClassName={'c-mainNav__right'}
         left={<LeftItems />}
-        right={<RightItem setRightPanelOpened={setRightPanelOpened} />}
+        right={<RightItem setRightPanelOpened={setRightPanelOpened} setNotifyPanelOpened={setNotifyPanelOpened}/>}
         subnavbarClassName={`c-mainNav__sub ${utilClass}`}
         subnavbar={
           isShowSearch && (
@@ -46,6 +55,7 @@ export default function MainNav({
         }
       />
       <ModalHeader rightPanelOpened={rightPanelOpened} setRightPanelOpened={setRightPanelOpened} />
+      <ModalNotifyHeader notifyPanelOpened={notifyPanelOpened} setNotifyPanelOpened={setNotifyPanelOpened} />
     </>
   );
 }
