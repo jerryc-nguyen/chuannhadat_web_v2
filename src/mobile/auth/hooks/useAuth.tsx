@@ -34,7 +34,10 @@ export default function useAuth() {
   };
 
   const updateCurrentUser = (user: ILoginResponse) => {
-    setCurrentUser(user);
+    setTimeout(() => {
+      setCurrentUser(user);
+    }, 1);
+
     AuthUtils.updateCurrentUser(user);
   };
 

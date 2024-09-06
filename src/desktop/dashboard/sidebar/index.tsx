@@ -19,12 +19,10 @@ import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { useBalanceRequest } from '@api/balance';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
-import useCheckLoggedUser from '@hooks/useCheckLoggedUser';
 
 type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
-  useCheckLoggedUser();
   const { currentUser } = useAuth();
 
   const [balanceData, setBalanceData] = React.useState<IBalanceResponse>({
