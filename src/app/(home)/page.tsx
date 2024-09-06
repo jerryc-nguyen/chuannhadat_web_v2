@@ -3,8 +3,6 @@
 import React from 'react';
 import Mobile from './mobile';
 import Desktop from './desktop';
-
-import { Provider as JotaiProvider } from 'jotai';
 import { useSSROptionsContext } from '@components/providers/SSROptionsProvider';
 
 export default function Home() {
@@ -23,9 +21,5 @@ export default function Home() {
     }
   };
 
-  return (
-    <JotaiProvider>
-      <App />
-    </JotaiProvider>
-  );
+  return <App />;
 }

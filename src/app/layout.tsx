@@ -9,6 +9,7 @@ import { Toaster } from '@components/ui/sonner';
 import SSROptionsProvider from '@components/providers/SSROptionsProvider';
 import { cookies } from 'next/headers';
 import { API_TOKEN } from '@common/auth';
+import { Provider as JotaiProvider } from 'jotai';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,9 +38,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className + ` ${mobileClass} `}>
         <QueryProvider>
-          <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>
-            {children}
-          </SSROptionsProvider>
+          <JotaiProvider>
+            <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>
+              {children}
+            </SSROptionsProvider>
+          </JotaiProvider>
           <Toaster richColors />
           <ToastContainer
             position="top-center"
