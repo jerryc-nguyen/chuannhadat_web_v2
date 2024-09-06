@@ -8,8 +8,8 @@ import { IModalUpdatePassoword, IModalUpdateProfile } from '@models/interface/IM
 
 export const services = {
   profiles: {
-    getMyProfile: async (): Promise<A> => {
-      return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE);
+    getMyProfile: async (headers?: A): Promise<A> => {
+      return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE, { headers: headers });
     },
     updateMyProfile: async (data: IModalUpdateProfile): Promise<A> => {
       return axiosInstance.put(API_ROUTES.PROFILES.UPDATE_MY_PROFILE, data);

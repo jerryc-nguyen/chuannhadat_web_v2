@@ -1,18 +1,22 @@
+'use client';
+
 import { cn } from '@common/utils';
 import Breadcrumb from '@components/breadcrumb';
 import { ThemeProvider } from '@components/providers';
 import HeaderDashboard from '@desktop/dashboard/header';
 import SidebarDashboard from '@desktop/dashboard/sidebar';
-import useCheckLoggedUser from '@hooks/useCheckLoggedUser';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+
 import React from 'react';
+import { useSSROptionsContext } from '@components/providers/SSROptionsProvider';
+import useCheckLoggedUser from '@hooks/useCheckLoggedUser';
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const { isMobile } = useGetUserAgentInfo();
+  const { isMobile } = useSSROptionsContext();
+  useCheckLoggedUser();
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
