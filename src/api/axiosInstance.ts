@@ -1,6 +1,4 @@
 import { AuthUtils } from '@common/auth';
-import { CookieKeys } from '@common/cookie';
-import { getCookie } from '@common/cookies';
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { set, get } from 'lodash-es';
 
@@ -30,7 +28,6 @@ axiosInstance.interceptors.request.use(
     return request;
   },
   (_error: A) => {
-    console.log('🚀 ~ axiosInstance.interceptors.request.use ~ _error:', _error);
     const errorResponse = {
       status: null,
       message: null,

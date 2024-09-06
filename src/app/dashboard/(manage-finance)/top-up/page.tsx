@@ -1,6 +1,5 @@
 // Next Imports
 import type { Metadata } from 'next';
-import { Provider as JotaiProvider } from 'jotai';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import TopUpViewMobile from '@mobile/main-financial-management/top-up';
 import TopUpViewDesktop from '@desktop/dashboard/main-financial-management/top-up';
@@ -14,7 +13,7 @@ const Page = () => {
   const { isMobile } = useGetUserAgentInfo();
 
   return (
-    <JotaiProvider>
+    <>
       {isMobile ? (
         <div className="c-mobileApp">
           <TopUpViewMobile />
@@ -22,10 +21,8 @@ const Page = () => {
       ) : (
         <TopUpViewDesktop />
       )}
-    </JotaiProvider>
+    </>
   );
 };
 
 export default Page;
-
-

@@ -5,9 +5,17 @@ import { usePathname } from 'next/navigation';
 import MainNavRight from './MainNavRight';
 import { Input } from '@/components/ui/input';
 import { LuSearch } from 'react-icons/lu';
+import { usePaginatedNotifications } from '@desktop/notification/hooks';
+import { useEffect } from 'react';
 
 export default function MainNav() {
   const pathname = usePathname();
+
+  const { loadMore } = usePaginatedNotifications();
+
+  useEffect(() => {
+    loadMore();
+  }, []);
 
   return (
     <div className="flex items-center justify-between bg-white py-2">

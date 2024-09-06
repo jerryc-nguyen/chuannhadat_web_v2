@@ -1,5 +1,19 @@
-import { INavLinkGroup } from '@models/INavLinkGroups';
-import { LuBadgeDollarSign, LuFileText, LuRepeat, LuUserCircle } from 'react-icons/lu';
+import { CustomerGender, CustomerType } from '@models/enums';
+import {
+  LuBadgeDollarSign,
+  LuContact,
+  LuFileText,
+  LuLock,
+  LuMail,
+  LuPhone,
+  LuRepeat,
+  LuUserCircle,
+  LuUserCog2,
+  LuUserPlus2,
+} from 'react-icons/lu';
+import broker from '@assets/images/broker.png';
+import personal from '@assets/images/personal.png';
+import { INavLinkGroup } from '@models/interface/INavLinkGroups';
 
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
@@ -58,7 +72,7 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Cài đặt tài khoản',
-        url: 'setup-account',
+        url: 'account-settings',
       },
       {
         name: 'Thông báo',
@@ -130,5 +144,62 @@ export const listNavDashboard: INavLinkGroup[] = [
         url: 'request/advise',
       },
     ],
+  },
+];
+export const listTabAccountSetting = [
+  {
+    title: 'Trang cá nhân',
+    tabValue: 'personal-wall',
+    icon: LuUserCog2,
+  },
+  {
+    title: 'Thông tin liên hệ',
+    tabValue: 'contact-infor',
+    icon: LuContact,
+  },
+  {
+    title: 'Email',
+    tabValue: 'email',
+    icon: LuMail,
+  },
+  {
+    title: 'Số điện thoại',
+    tabValue: 'phone-number',
+    icon: LuPhone,
+  },
+  {
+    title: 'Mật khẩu',
+    tabValue: 'password',
+    icon: LuLock,
+  },
+  {
+    title: 'Giới thiệu bạn bè',
+    tabValue: 'refer-friend',
+    icon: LuUserPlus2,
+  },
+];
+
+export const listCustomerType = [
+  {
+    id: CustomerType.Customer,
+    title: 'Cá nhân',
+    content: 'Bạn có nhu cầu mua, bán hoặc thuê bất động sản cho mục đích cá nhân như ở, đầu tư',
+    icon: personal,
+  },
+  {
+    id: CustomerType.Broker,
+    title: 'Môi giới',
+    content: 'Bạn người có chuyên môn, làm trung gian giúp kết nối giữa người mua và người bán',
+    icon: broker,
+  },
+];
+export const listCustomerGender = [
+  {
+    id: CustomerGender.Male,
+    title: 'Nam',
+  },
+  {
+    id: CustomerGender.FeMale,
+    title: 'Nữ',
   },
 ];

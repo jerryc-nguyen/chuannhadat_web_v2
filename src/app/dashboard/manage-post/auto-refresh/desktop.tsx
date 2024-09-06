@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@comp
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -28,17 +27,15 @@ import {
 import { toast } from 'sonner';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Skeleton } from '@components/ui/skeleton';
-import { service } from './service';
 import { AxiosError } from 'axios';
-import { DialogTimePicker } from '@desktop/dashboard/components';
+import { DialogTimePicker, EmptyTable } from '@desktop/dashboard/components';
 import {
   timeRefreshAtom,
   showDialogTimePickerAtom,
   contentDialogTimerPickerAtom,
   defaultTimeRefresh,
 } from '@desktop/dashboard/atoms/autorefreshAtoms';
-import emptyData from '@assets/images/empty.png';
-import Image from 'next/image';
+import { services } from '@api/services';
 
 type AutoRefreshDesktopProps = object;
 
@@ -56,12 +53,12 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   // Get list schedule time
   const { data, isSuccess, isFetching } = useQuery({
     queryKey: ['refresh-time'],
-    queryFn: service.GET_SCHEDULED_REFRESHS,
+    queryFn: services.scheduledRefreshs.getScheduledRefreshs,
   });
 
   // Create schedule time
   const { mutate: createMutate, isPending: isCreatePending } = useMutation({
-    mutationFn: service.CREATE_SCHEDULED_REFRESHS,
+    mutationFn: services.scheduledRefreshs.createScheduledRefreshs,
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching create', err);
     },
@@ -74,7 +71,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
 
   // Delete schedule time
   const { mutate: deleteMutate, isPending: isDeletePending } = useMutation({
-    mutationFn: service.DELETE_SCHEDULED_REFRESHS,
+    mutationFn: services.scheduledRefreshs.deleteScheduledRefreshs,
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching delete', err);
     },
@@ -86,7 +83,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   });
   // Update schedule time
   const { mutate: updateMutate, isPending: isUpdatePending } = useMutation({
-    mutationFn: service.UPDATE_SCHEDULED_REFRESHS,
+    mutationFn: services.scheduledRefreshs.updateScheduledRefreshs,
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching update', err);
     },
@@ -291,12 +288,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
             ))
           )}
         </TableBody>
-        {!isFetching && scheduledTimes?.length === 0 && (
-          <TableCaption className="bg-slate-100 py-4">
-            <Image width={100} alt="empty-data" className="mb-4" src={emptyData} />
-            Không có dữ liệu để hiển thị...
-          </TableCaption>
-        )}
+        {!isFetching && scheduledTimes?.length === 0 && <EmptyTable />}
       </Table>
     </div>
   );

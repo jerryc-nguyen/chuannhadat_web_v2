@@ -33,7 +33,7 @@ import useAuth from '@mobile/auth/hooks/useAuth';
 type HeaderDashboardProps = object;
 
 const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
-  const { signout } = useAuth();
+  const { signout, currentUser } = useAuth();
   const router = useRouter();
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -121,16 +121,22 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon" className="rounded-full">
-            <LuUserCircle className="h-5 w-5" />
-            <span className="sr-only">Toggle user menu</span>
-          </Button>
+          <span className="mr-2 flex items-center justify-center">
+            <img
+              src={currentUser?.avatar_url}
+              alt={currentUser?.full_name || 'User'}
+              height={36}
+              width={36}
+              className="rounded-full border"
+            />
+          </span>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>Tài khoản của bạn</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <Link href="/dashboard/account-settings">
+            <DropdownMenuItem>Thông tin cá nhân</DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
