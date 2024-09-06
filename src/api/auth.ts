@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axiosInstance from './axiosInstance';
 
-import { setCookie } from '@common/cookies';
 import {
   IFormPropsLogin,
   IFormPropsRegister,

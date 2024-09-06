@@ -1,8 +1,8 @@
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { Metadata } from 'next';
-import AccountSettingsDesktop from './desktop';
-import AccountSettingsMobile from './mobile';
 import React from 'react';
+import AccountSettingsDesktop from '@desktop/dashboard/main-account-detail/account-settings';
+import AccountSettingsMobile from '@mobile/main-account-detail/account-settings';
 
 export const metadata: Metadata = {
   title: 'Tài khoản',

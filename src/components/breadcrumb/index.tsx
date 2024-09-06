@@ -9,8 +9,8 @@ import {
   BreadcrumbSeparator,
 } from '@components/ui/breadcrumb';
 import { useAtomValue } from 'jotai';
-import { breadcrumbAtom } from '@desktop/dashboard/atoms/breadcrumbAtom';
 import { genKey } from '@common/utils';
+import { breadcrumbAtom } from '@desktop/dashboard/states/breadcrumbAtom';
 type BreadcrumbProps = object;
 
 const Breadcrumb: React.FC<BreadcrumbProps> = () => {
