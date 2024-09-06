@@ -9,10 +9,6 @@ import { useHydrateAtoms } from 'jotai/utils';
 export default function useSSRCurrentUser() {
   const { selectedCookies } = useSSROptionsContext();
 
-  if (!selectedCookies['token']) {
-    return;
-  }
-
   const authHeaders = {
     Authorization: selectedCookies['token'],
   };
