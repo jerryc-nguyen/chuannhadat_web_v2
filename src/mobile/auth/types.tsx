@@ -1,4 +1,4 @@
-import { CustomerGender, CustomerType } from '@models/enums';
+import { CustomerGender, CustomerType } from '@common/types';
 
 export interface IFormPropsLogin {
   phone: string;

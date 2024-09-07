@@ -22,8 +22,10 @@ import { LuLoader2, LuUpload } from 'react-icons/lu';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { service } from '../../apis';
-import { CustomerGender, CustomerType, IModalUpdateProfile } from '../../types';
+
 import { listCustomerGender, listCustomerType } from '../../constants';
+import { CustomerGender, CustomerType } from '@common/types';
+import { IModalUpdateProfile } from '../../types';
 
 const PersonalTab: React.FC = () => {
   const { currentUser } = useAuth();

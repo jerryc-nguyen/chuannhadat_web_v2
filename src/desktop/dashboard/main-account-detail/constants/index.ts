@@ -1,7 +1,8 @@
 import { LuContact, LuLock, LuMail, LuPhone, LuUserCog2, LuUserPlus2 } from 'react-icons/lu';
-import { CustomerGender, CustomerType } from '../types';
 import broker from '@assets/images/broker.png';
 import personal from '@assets/images/personal.png';
+import { CustomerGender, CustomerType } from '@common/types';
+
 export const listTabAccountSetting = [
   {
     title: 'Trang cá nhân',
