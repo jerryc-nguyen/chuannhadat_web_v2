@@ -1,7 +1,8 @@
 import React from 'react';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import AutoRefreshDesktop from './desktop';
 import { Metadata } from 'next';
+import AutoRefreshDesktop from '@desktop/dashboard/main-manage-post/auto-refresh';
+import AutoRefreshMobile from '@mobile/main-manage-post/auto-refresh';
 
 export const metadata: Metadata = {
   title: 'Cập nhật tin tức',
@@ -13,7 +14,7 @@ const AutoRefeshPage: React.FC = () => {
   if (isMobile) {
     return (
       <div className="c-mobileApp">
-        <AutoRefreshDesktop />
+        <AutoRefreshMobile />
       </div>
     );
   } else {
