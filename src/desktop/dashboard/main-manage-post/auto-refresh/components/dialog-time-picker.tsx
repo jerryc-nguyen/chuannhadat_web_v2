@@ -17,7 +17,7 @@ import {
   defaultTimeRefresh,
   showDialogTimePickerAtom,
   timeRefreshAtom,
-} from '../states/autorefreshAtoms';
+} from '../../states/autorefreshAtoms';
 
 type DialogTimePickerProps = {
   isLoadingSubmit: boolean;
