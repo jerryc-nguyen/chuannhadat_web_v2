@@ -33,11 +33,11 @@ import {
   showDialogTimePickerAtom,
   contentDialogTimerPickerAtom,
   defaultTimeRefresh,
-} from '@desktop/dashboard/main-manage-post/auto-refresh/states/autorefreshAtoms';
+} from '@desktop/dashboard/main-manage-post/states/autorefreshAtoms';
 
 import EmptyTable from '@components/empty-table';
 import { DialogTimePicker } from './components';
-import { services } from './apis';
+import { services } from '../apis';
 
 type AutoRefreshDesktopProps = object;
 
