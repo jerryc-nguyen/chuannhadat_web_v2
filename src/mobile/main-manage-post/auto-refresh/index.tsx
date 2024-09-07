@@ -33,11 +33,11 @@ import {
   showDialogTimePickerAtom,
   contentDialogTimerPickerAtom,
   defaultTimeRefresh,
-} from '@desktop/dashboard/main-manage-post/states/autorefreshAtoms';
-import { services } from '@desktop/dashboard/main-manage-post/apis';
+} from '@desktop/dashboard/main-manage-post/auto-refresh/states/autorefreshAtoms';
 
 import EmptyTable from '@components/empty-table';
 import { DialogTimePicker } from '@desktop/dashboard/main-manage-post/auto-refresh/components';
+import { services } from '@desktop/dashboard/main-manage-post/auto-refresh/apis';
 
 const AutoRefreshMobile: React.FC = () => {
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
