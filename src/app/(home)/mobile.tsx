@@ -42,7 +42,7 @@ export default function Mobile() {
       <Page>
         <MainNav type="SearchInSub" onSearchClick={() => openFilterModal()} />
 
-        <FilterChips isMobile={true} />
+        <FilterChips />
         <HydrationBoundary state={dehydrate(queryClient)}>
           <PostList />
         </HydrationBoundary>
