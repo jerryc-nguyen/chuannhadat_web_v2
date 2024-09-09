@@ -1,5 +1,4 @@
-import { Block, Chip } from 'konsta/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { filterStateAtom } from './states';
 import { useAtom } from 'jotai';
 import { FilterFieldName } from '@models';
@@ -8,16 +7,17 @@ import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
 
-import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
 import FooterOverviewBtsButton from './FooterOverviewBtsButton';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Rooms from './bts/Rooms';
-import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
+
 import Direction from './bts/Direction';
 import useFilterState from './hooks/useFilterState';
+
+import * as Popover from '@radix-ui/react-popover';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -56,11 +56,11 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
   },
 ];
 
-export default function FilterChips() {
+export default function DesktopFilterChips() {
+  const [selectedChipOption, setSelectedChipOption] = useState<FilterChipOption>();
   const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
 
-  const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
 
   const selectedRoomText = (): string => {
@@ -113,16 +113,6 @@ export default function FilterChips() {
     }
   };
 
-  const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
-    switch (filterOption.id) {
-      case FilterFieldName.filterOverview:
-        return 1;
-
-      default:
-        return undefined;
-    }
-  };
-
   const buildBtsFooter = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.filterOverview:
@@ -132,23 +122,13 @@ export default function FilterChips() {
     }
   };
 
-  const showFilterBts = (filterOption: FilterChipOption) => {
+  const showFilterPopover = (filterOption: FilterChipOption) => {
     if (filterOption.id == FilterFieldName.filterOverview) {
       copyFilterStatesToLocal();
     } else {
       copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
-
-    openModal({
-      name: filterOption.id,
-      title: filterOption.text,
-      content: buildContent(filterOption),
-      footer: buildBtsFooter(filterOption),
-      maxHeightPercent: buildMaxHeightPercent(filterOption),
-      defaultContentHeight:
-        //@ts-ignore: read value
-        DEFAULT_MODAL_HEIGHTS[filterOption.id],
-    });
+    setSelectedChipOption(filterOption);
   };
 
   const isActiveChip = (filterOption: FilterChipOption): boolean => {
@@ -172,19 +152,36 @@ export default function FilterChips() {
 
   return (
     <>
-      <Block strongIos outlineIos>
-        {FILTER_ITEMS.map((item) => (
-          <Chip
+      <div className="relative">
+        {FILTER_ITEMS.map((item, itemIndex) => (
+          <Popover.Root
             key={item.id}
-            className="m-0.5"
-            onClick={() => {
-              showFilterBts(item);
+            open={item?.id == selectedChipOption?.id}
+            onOpenChange={(isOpen) => {
+              if (!isOpen) {
+                setSelectedChipOption(undefined);
+              }
             }}
           >
-            {selectedFilterText(item)}
-          </Chip>
+            <Popover.Trigger asChild>
+              <button
+                key={item.id}
+                className={`shadow-2 ${activeChipClass(item)} relative mr-2 cursor-pointer rounded-full px-4 py-3 font-bold`}
+                onClick={() => {
+                  showFilterPopover(item);
+                }}
+              >
+                {selectedFilterText(item)}
+              </button>
+            </Popover.Trigger>
+
+            <Popover.Content className="w-[300px] bg-white p-0" align={'start'}>
+              {buildContent(item)}
+              {buildBtsFooter(item)}
+            </Popover.Content>
+          </Popover.Root>
         ))}
-      </Block>
+      </div>
     </>
   );
 }
