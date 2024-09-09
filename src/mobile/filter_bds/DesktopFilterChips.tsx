@@ -6,18 +6,18 @@ import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
-
+import styles from './styles/filterChips.module.scss';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
 import FooterOverviewBtsButton from './FooterOverviewBtsButton';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Rooms from './bts/Rooms';
-
 import Direction from './bts/Direction';
 import useFilterState from './hooks/useFilterState';
-
-import * as Popover from '@radix-ui/react-popover';
+import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
+import { Button } from '@components/ui/button';
+import { cn } from '@common/utils';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -147,39 +147,36 @@ export default function DesktopFilterChips() {
   };
 
   const activeChipClass = (filterOption: FilterChipOption): string => {
-    return isActiveChip(filterOption) ? 'bg-black text-white' : 'bg-white text-black';
+    return isActiveChip(filterOption) ? 'bg-black text-white hover:opacity-80' : 'bg-white text-black hover:bg-slate-100';
   };
 
   return (
     <>
       <div className="relative">
-        {FILTER_ITEMS.map((item, itemIndex) => (
-          <Popover.Root
-            key={item.id}
-            open={item?.id == selectedChipOption?.id}
-            onOpenChange={(isOpen) => {
-              if (!isOpen) {
-                setSelectedChipOption(undefined);
-              }
-            }}
-          >
-            <Popover.Trigger asChild>
-              <button
-                key={item.id}
-                className={`shadow-2 ${activeChipClass(item)} relative mr-2 cursor-pointer rounded-full px-4 py-3 font-bold`}
-                onClick={() => {
+        {FILTER_ITEMS.map((item) => (
+          <Popover key={item.id}>
+            <PopoverTrigger onClick={() => {
                   showFilterPopover(item);
-                }}
-              >
+                }} className={cn(
+                  'shadow-2 relative mr-2 cursor-pointer rounded-xl px-4 py-2 font-medium transition-all duration-400 focus:animate-pulse',
+                  activeChipClass(item),
+                )}>
                 {selectedFilterText(item)}
-              </button>
-            </Popover.Trigger>
+            </PopoverTrigger>
 
-            <Popover.Content className="w-[300px] bg-white p-0" align={'start'}>
+            <PopoverContent
+            sideOffset={5}
+            align="center"
+            side="bottom"
+            className={cn('!relative mt-4 w-80', styles.filter_popover_content)}
+          >
+            <h2 className="text-lg font-semibold">{item.text}</h2>
+            <section className="content-filter my-4 max-h-[20rem] overflow-y-auto">
               {buildContent(item)}
-              {buildBtsFooter(item)}
-            </Popover.Content>
-          </Popover.Root>
+            </section>
+            {buildBtsFooter(item)}
+            </PopoverContent>
+          </Popover>
         ))}
       </div>
     </>

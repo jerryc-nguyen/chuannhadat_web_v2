@@ -166,10 +166,6 @@ export default function FilterChips() {
     }
   };
 
-  const activeChipClass = (filterOption: FilterChipOption): string => {
-    return isActiveChip(filterOption) ? 'bg-black text-white' : 'bg-white text-black';
-  };
-
   return (
     <>
       <Block strongIos outlineIos>
