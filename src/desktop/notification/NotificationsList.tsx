@@ -6,7 +6,6 @@ import { Label } from '@components/ui/label';
 import { Switch } from '@components/ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
 import { BsCheck2All } from 'react-icons/bs';
-import { SlSettings } from 'react-icons/sl';
 import { INotificationResponse } from './types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import { Button } from '@components/ui/button';
