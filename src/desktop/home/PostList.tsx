@@ -4,11 +4,16 @@ import { searchApi } from '@api/searchApi';
 import ProductCard from './ProductCard';
 import PostControls from './PostControls';
 
+import { useHydrateAtoms } from 'jotai/utils';
+import { loadedCardAuthorsAtom } from './states';
+
 export default function PostList() {
   const { buildFilterParams } = useFilterState();
+
   const filterParams = buildFilterParams({
     withLocal: false,
   });
+  filterParams.with_users = true;
   filterParams.per_page = 12;
   console.log('filterParams', filterParams);
 
@@ -18,6 +23,8 @@ export default function PostList() {
       queryFn: () => searchApi(filterParams),
     }),
   );
+
+  useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
 
   return (
     <>
