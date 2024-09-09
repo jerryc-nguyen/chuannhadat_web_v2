@@ -1,9 +1,25 @@
+import NotificationsDesktop from '@desktop/dashboard/main-account-detail/notifications';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import NotificationsMobile from '@mobile/main-account-detail/notifications';
+import { Metadata } from 'next';
 import React from 'react';
 
-type NotificationPageProps = object;
+export const metadata: Metadata = {
+  title: 'Tài khoản',
+  description: 'Cài đặt thông tin tài khoản',
+};
+const NotificationsPage: React.FC = () => {
+  const { isMobile } = useGetUserAgentInfo();
 
-const NotificationPage: React.FC<NotificationPageProps> = () => {
-  return <div>NotificationPage</div>;
+  if (isMobile) {
+    return (
+      <div className="c-mobileApp">
+        <NotificationsMobile />
+      </div>
+    );
+  } else {
+    return <NotificationsDesktop />;
+  }
 };
 
-export default NotificationPage;
+export default NotificationsPage;

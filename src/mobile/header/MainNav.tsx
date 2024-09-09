@@ -6,6 +6,7 @@ import ModalHeader from './ModalHeader';
 import ModalNotifyHeader from './ModalNotifyHeader';
 import Link from 'next/link';
 import { usePaginatedNotifications } from '@mobile/notification/hooks';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 export default function MainNav({
   type,
@@ -29,11 +30,12 @@ export default function MainNav({
     );
   };
 
-  const { loadMore} = usePaginatedNotifications();
+  const { loadMore } = usePaginatedNotifications();
+  const {  currentUser } = useAuth();
 
   React.useEffect(() => {
     loadMore();
-  }, []);
+  }, [currentUser]);
 
   return (
     <>
