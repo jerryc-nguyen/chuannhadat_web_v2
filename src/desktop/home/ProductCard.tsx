@@ -50,7 +50,7 @@ export default function ProductCard({ product }: { product: A }) {
       </AspectRatio.Root>
 
       <div className="p-4">
-        <h3 className="mb-2 font-bold text-slate-600">{product?.title}</h3>
+        <h3 className="limit-2-line mb-2 font-bold text-slate-600">{product?.title}</h3>
 
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col items-start justify-center">

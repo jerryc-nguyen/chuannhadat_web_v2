@@ -6,7 +6,6 @@ export default function CardAuthor({ product }: { product: A }) {
   const { getAuthorById } = useCardAuthors();
 
   const author = getAuthorById(product.user_id + '');
-  console.log('author', author, product.user_id);
   const fullName = author?.full_name ? author.full_name : 'Loading';
 
   return (
