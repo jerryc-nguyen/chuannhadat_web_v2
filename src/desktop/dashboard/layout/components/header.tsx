@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -29,11 +29,31 @@ import { Sheet, SheetContent, SheetTrigger } from '@components/ui/sheet';
 import { Button } from '@components/ui/button';
 import { ModeToggle } from '@components/ui/mode-toggle';
 import useAuth from '@mobile/auth/hooks/useAuth';
-type HeaderDashboardProps = object;
+import { Popover, PopoverTrigger } from '@components/ui/popover';
+import NotificationsList from '@desktop/notification/NotificationsList';
+import { usePaginatedNotifications } from '@desktop/notification/hooks';
+type HeaderDashboardProps = {
+  isMobile: boolean
+};
 
-const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
+const HeaderDashboard: React.FC<HeaderDashboardProps> = ({isMobile}) => {
   const { signout, currentUser } = useAuth();
   const router = useRouter();
+
+  const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
+
+  const handleMarkReadAll = () => {
+    return;
+  };
+  const handleRedirect = (id: number, is_read: boolean) => {
+    return;
+  };
+  const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
+
+  useEffect(()=> {
+    loadMore()
+  },[currentUser])
+  
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <Sheet>
@@ -147,8 +167,30 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-        <LuBell className="h-4 w-4" />
+      <Button variant="outline" size="icon" className="ml-auto h-8 w-8" onClick={()=> isMobile &&router.push("/dashboard/notifications") }>
+        {isMobile ? <div className="relative">
+              <LuBell className="h-4 w-4" />
+                <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
+                  {total}
+                </Badge>
+              </div> :  <Popover>
+            <PopoverTrigger asChild>
+              <div className="relative">
+              <LuBell className="h-4 w-4" />
+                <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
+                  {total}
+                </Badge>
+              </div>
+            </PopoverTrigger>
+            <NotificationsList
+              notifications={notifications}
+              total={total}
+              onLoadMore={loadMore}
+              onMarkReadAll={handleMarkReadAll}
+              onRedirect={handleRedirect}
+              onGetNotMarkRead={handleGetNotMarkRead}
+            />
+        </Popover>}
         <span className="sr-only">Toggle notifications</span>
       </Button>
       <ModeToggle />

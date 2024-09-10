@@ -6,13 +6,15 @@ import { Input } from '@/components/ui/input';
 import { LuSearch } from 'react-icons/lu';
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { useEffect } from 'react';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 export default function MainNav() {
   const { loadMore } = usePaginatedNotifications();
-
+  const {  currentUser } = useAuth();
+  
   useEffect(() => {
     loadMore();
-  }, []);
+  }, [currentUser]);
 
   return (
     <div className="flex items-center justify-between bg-white py-2">
