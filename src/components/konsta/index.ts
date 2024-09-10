@@ -1,3 +1,5 @@
 import List from './List';
 import ListItem from './ListItem';
-export { List, ListItem };
+import Checkbox from './Checkbox';
+
+export { List, ListItem, Checkbox };

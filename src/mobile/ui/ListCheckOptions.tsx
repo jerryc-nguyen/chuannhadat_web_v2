@@ -1,5 +1,4 @@
-import { Checkbox } from 'konsta/react';
-import { List, ListItem } from '@components/konsta';
+import { Checkbox, List, ListItem } from '@components/konsta';
 
 import { ReactElement, useState } from 'react';
 import { OptionForSelect } from '@models';
