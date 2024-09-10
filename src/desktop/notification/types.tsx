@@ -11,5 +11,6 @@ export interface INotificationResponse {
   description: string;
   formatted_created_at: string;
   is_read: boolean;
+  redirect_url: string;
 }
 

@@ -12,7 +12,7 @@ const MainDashboard: React.FC<MainDashboardProps> = ({ children }) => {
   const { isMobile } = useSSROptionsContext();
   return (
     <main className={cn('flex flex-1 flex-col', isMobile ? '' : 'h-screen')}>
-      <HeaderDashboard />
+      <HeaderDashboard isMobile={isMobile}/>
       <div
         className={`${isMobile ? '' : 'flex flex-col gap-y-5'} flex-1 overflow-y-auto bg-[#F5F6FA] p-4 dark:bg-slate-800 md:p-8`}
       >

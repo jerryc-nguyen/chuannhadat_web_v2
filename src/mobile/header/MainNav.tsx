@@ -7,17 +7,18 @@ import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { useEffect } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import { Input } from '@components/ui/input';
-
+import useAuth from '@mobile/auth/hooks/useAuth';
 export default function MainNav({
   onSearchClick = () => undefined,
 }: {
   onSearchClick?: () => void;
 }) {
   const { loadMore } = usePaginatedNotifications();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     loadMore();
-  }, []);
+  }, [currentUser]);
 
   return (
     <div>
