@@ -1,5 +1,7 @@
 import React from 'react';
-import { BlockTitle, List, ListItem } from 'konsta/react';
+import { BlockTitle } from 'konsta/react';
+import { List, ListItem } from '@components/konsta';
+
 import { FilterFieldName } from '@models';
 import Area from './bts/Area';
 import Price from './bts/Price';
@@ -60,11 +62,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.categoryType,
               title: 'Loại BĐS',
-              content: (
-                <CategoryType
-                  onSelect={() => closeModal2()}
-                />
-              ),
+              content: <CategoryType onSelect={() => closeModal2()} />,
             });
           }}
           after={categoryType?.text}
@@ -85,9 +83,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.price,
               title: 'Mức giá',
-              content: (
-                <Price onSelect={() => closeModal2()} />
-              ),
+              content: <Price onSelect={() => closeModal2()} />,
             });
           }}
           after={price?.text}
@@ -99,9 +95,7 @@ const FilterModal = () => {
             openModal2({
               name: 'bts_area',
               title: 'Diện tích',
-              content: (
-                <Area onSelect={() => closeModal2()} />
-              ),
+              content: <Area onSelect={() => closeModal2()} />,
             });
           }}
           after={area?.text}
@@ -113,9 +107,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.bed,
               title: 'Số phòng ngủ',
-              content: (
-                <Bed onSelect={() => closeModal2()} />
-              ),
+              content: <Bed onSelect={() => closeModal2()} />,
             });
           }}
           after={bedText()}
@@ -128,9 +120,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.bath,
               title: 'Số phòng tắm',
-              content: (
-                <Bath onSelect={() => closeModal2()} />
-              ),
+              content: <Bath onSelect={() => closeModal2()} />,
             });
           }}
           after={bathText()}
@@ -143,9 +133,7 @@ const FilterModal = () => {
             openModal2({
               name: FilterFieldName.direction,
               title: 'Hướng',
-              content: (
-                <Direction onSelect={() => closeModal2()} />
-              ),
+              content: <Direction onSelect={() => closeModal2()} />,
             });
           }}
           after={direction?.text}

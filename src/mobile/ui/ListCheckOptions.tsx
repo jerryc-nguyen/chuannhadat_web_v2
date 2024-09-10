@@ -1,4 +1,6 @@
-import { Checkbox, List, ListItem } from 'konsta/react';
+import { Checkbox } from 'konsta/react';
+import { List, ListItem } from '@components/konsta';
+
 import { ReactElement, useState } from 'react';
 import { OptionForSelect } from '@models';
 
@@ -11,8 +13,7 @@ const ListCheckOptions = ({
   selectedOption?: OptionForSelect | A;
   onSelect?: (arg: A) => void;
 }): ReactElement => {
-  const [curOption, setCurOption] =
-    useState(selectedOption);
+  const [curOption, setCurOption] = useState(selectedOption);
 
   return (
     <>
