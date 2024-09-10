@@ -93,7 +93,11 @@ export default function FilterChips() {
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.businessType:
-        return <BusinessTypeButtons />;
+        return (
+          <div className="bg-white p-4">
+            <BusinessTypeButtons />
+          </div>
+        );
       case FilterFieldName.categoryType:
         return <CategoryType />;
       case FilterFieldName.price:

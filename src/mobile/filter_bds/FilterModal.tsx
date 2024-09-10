@@ -48,9 +48,10 @@ const FilterModal = () => {
   return (
     <>
       <BlockTitle>Loại tin</BlockTitle>
-      <br />
 
-      <BusinessTypeButtons />
+      <div className="bg-white p-4">
+        <BusinessTypeButtons />
+      </div>
 
       <BlockTitle>Loại bất động sản</BlockTitle>
 
