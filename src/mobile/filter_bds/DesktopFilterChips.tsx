@@ -147,7 +147,9 @@ export default function DesktopFilterChips() {
   };
 
   const activeChipClass = (filterOption: FilterChipOption): string => {
-    return isActiveChip(filterOption) ? 'bg-black text-white hover:opacity-80' : 'bg-white text-black hover:bg-slate-100';
+    return isActiveChip(filterOption)
+      ? 'bg-black text-white hover:opacity-80'
+      : 'bg-white text-black hover:bg-slate-100';
   };
 
   return (
@@ -155,26 +157,29 @@ export default function DesktopFilterChips() {
       <div className="relative">
         {FILTER_ITEMS.map((item) => (
           <Popover key={item.id}>
-            <PopoverTrigger onClick={() => {
-                  showFilterPopover(item);
-                }} className={cn(
-                  'shadow-2 relative mr-2 cursor-pointer rounded-xl px-4 py-2 font-medium transition-all duration-400 focus:animate-pulse',
-                  activeChipClass(item),
-                )}>
-                {selectedFilterText(item)}
+            <PopoverTrigger
+              onClick={() => {
+                showFilterPopover(item);
+              }}
+              className={cn(
+                'shadow-2 relative mr-2 cursor-pointer rounded-xl px-4 py-2 font-medium transition-all duration-400 focus:animate-pulse',
+                activeChipClass(item),
+              )}
+            >
+              {selectedFilterText(item)}
             </PopoverTrigger>
 
             <PopoverContent
-            sideOffset={5}
-            align="center"
-            side="bottom"
-            className={cn('!relative mt-4 w-80', styles.filter_popover_content)}
-          >
-            <h2 className="text-lg font-semibold">{item.text}</h2>
-            <section className="content-filter my-4 max-h-[20rem] overflow-y-auto">
-              {buildContent(item)}
-            </section>
-            {buildBtsFooter(item)}
+              sideOffset={5}
+              align="center"
+              side="bottom"
+              className={cn('!relative mt-4 w-80', styles.filter_popover_content)}
+            >
+              <h2 className="text-lg font-semibold">{item.text}</h2>
+              <section className="content-filter my-4 max-h-[20rem] overflow-y-auto">
+                {buildContent(item)}
+              </section>
+              {buildBtsFooter(item)}
             </PopoverContent>
           </Popover>
         ))}
