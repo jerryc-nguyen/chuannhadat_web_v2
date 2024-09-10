@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axiosInstance from './axiosInstance';
 
-import { setCookie } from '@common/cookies';
 import {
   IFormPropsLogin,
   IFormPropsRegister,
@@ -11,11 +10,11 @@ import {
 } from '@mobile/auth/types';
 
 import { toast } from 'react-toastify';
-import { saveToStorage } from '@common/localstorage';
 import { API_ROUTES } from '@common/router';
-import { CURRENT_USER_KEY, API_TOKEN } from '@common/auth';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 export function useLogin() {
+  const { handleLogin } = useAuth();
   const { mutate: login, isPending: isLogin } = useMutation({
     // @ts-ignore: @TODO
     mutationFn: async (data: IFormPropsLogin) => {
@@ -23,8 +22,7 @@ export function useLogin() {
     },
     onSuccess: (response: IFormResponse<ILoginResponse>) => {
       if (response.code === 200) {
-        setCookie(API_TOKEN, response.data.api_token);
-        saveToStorage(CURRENT_USER_KEY, JSON.stringify(response.data));
+        handleLogin(response.data);
       }
     },
     onError: () => {

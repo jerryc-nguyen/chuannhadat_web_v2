@@ -4,7 +4,7 @@ import React from 'react';
 
 import MainNav from '@desktop/components/MainNav';
 import './desktop.scss';
-import FilterChips from '@mobile/filter_bds/FilterChips';
+import DesktopFilterChips from '@mobile/filter_bds/DesktopFilterChips';
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
@@ -31,7 +31,7 @@ export default function Desktop() {
           Bán đất thổ cư, đất nông nghiệp có giá tốt nhất trên toàn quốc - T8/2024
         </h1>
         <div className="top-50 sticky z-10">
-          <FilterChips />
+          <DesktopFilterChips />
         </div>
 
         <PostList />

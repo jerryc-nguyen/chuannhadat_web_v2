@@ -56,7 +56,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
   },
 ];
 
-export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
+export default function FilterChips() {
   const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -166,43 +166,21 @@ export default function FilterChips({ isMobile }: { isMobile?: boolean }) {
     }
   };
 
-  const activeChipClass = (filterOption: FilterChipOption): string => {
-    return isActiveChip(filterOption) ? 'bg-black text-white' : 'bg-white text-black';
-  };
-
   return (
     <>
-      {isMobile && (
-        <Block strongIos outlineIos>
-          {FILTER_ITEMS.map((item) => (
-            <Chip
-              key={item.id}
-              className="m-0.5"
-              onClick={() => {
-                showFilterBts(item);
-              }}
-            >
-              {selectedFilterText(item)}
-            </Chip>
-          ))}
-        </Block>
-      )}
-
-      {!isMobile && (
-        <div>
-          {FILTER_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              className={`shadow-2 ${activeChipClass(item)} relative mr-2 cursor-pointer rounded-full px-4 py-3 font-bold`}
-              onClick={() => {
-                showFilterBts(item);
-              }}
-            >
-              {selectedFilterText(item)}
-            </button>
-          ))}
-        </div>
-      )}
+      <Block strongIos outlineIos>
+        {FILTER_ITEMS.map((item) => (
+          <Chip
+            key={item.id}
+            className="m-0.5"
+            onClick={() => {
+              showFilterBts(item);
+            }}
+          >
+            {selectedFilterText(item)}
+          </Chip>
+        ))}
+      </Block>
     </>
   );
 }

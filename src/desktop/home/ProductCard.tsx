@@ -3,6 +3,10 @@ import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
 import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
+
+import { LuMoreHorizontal } from 'react-icons/lu';
+import CardAuthor from './CardAuthor';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -18,36 +22,35 @@ const styles: A = {
   },
 };
 
+const DEFAULT_THUMB_IMAGE =
+  'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
+
 export default function ProductCard({ product }: { product: A }) {
   const { buildThumbnailUrl } = useResizeImage();
   return (
     <div className="shadow-2 rounded-lg bg-white dark:bg-slate-800">
+      <CardAuthor product={product} />
       <AspectRatio.Root ratio={16 / 9}>
         <img
           className="Image"
           src={buildThumbnailUrl({
-            imageUrl: product?.featured_image_url,
+            imageUrl: product?.featured_image_url || DEFAULT_THUMB_IMAGE,
           })}
           alt={product?.name}
         />
 
         <div style={styles.imagesCountWrapper}>
           <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
-            {/* <IoPlayCircleOutline
-              name='play-circle-outline'
-              size={20}
-              style={{ color: '#fff' }}
-            /> */}
             <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
               <IoImage size={20} style={{ color: '#fff' }} />
-              <span style={{ color: '#fff', marginLeft: 5 }}>1</span>
+              <span style={{ color: '#fff', marginLeft: 5 }}>{product?.images_count}</span>
             </div>
           </div>
         </div>
       </AspectRatio.Root>
 
       <div className="p-4">
-        <h3 className="mb-2 font-bold text-slate-600">{product?.title}</h3>
+        <h3 className="limit-2-line mb-2 font-bold text-slate-600">{product?.title}</h3>
 
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col items-start justify-center">
@@ -71,10 +74,6 @@ export default function ProductCard({ product }: { product: A }) {
               <span className="ml-2">{product?.bathrooms_count}</span>
             </div>
           </div>
-        </div>
-        <div className="mt-3 flex flex-row items-center justify-between">
-          <div className="text-slate-600">{product?.short_location_name}</div>
-          <div className="text-slate-600">{product?.formatted_publish_at}</div>
         </div>
       </div>
     </div>

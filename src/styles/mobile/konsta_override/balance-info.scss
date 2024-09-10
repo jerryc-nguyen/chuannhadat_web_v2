@@ -20,30 +20,29 @@
         border: 0.0625rem solid rgba(231, 234, 243, 0.7);
         border-radius: 0.75rem;
         margin-bottom: 0;
-
-        p {
-            display: block;
-            color: #8c98a4;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.03125rem;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-        }
-
-        h2 {
-            color: #007bff;
-            font-weight: 600;
-            line-height: 1.4;
-            font-size: 1.3125rem;
-        }
-
-        &.c-cardSales {
+            p {
+                display: block;
+                color: #8c98a4;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.03125rem;
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+            }
+    
             h2 {
-                color: #fd7e14;
+                color: #007bff;
+                font-weight: 600;
+                line-height: 1.4;
+                font-size: 1.3125rem;
+            }
+    
+            &.c-cardSales {
+                h2 {
+                    color: #fd7e14;
+                }
             }
         }
-    }
 }
 
 .c-note__description{
