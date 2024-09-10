@@ -1,6 +1,7 @@
 :root {
   --shadow-1: rgba(0, 0, 0, 0.1);
   --shadow-2: rgba(0, 0, 0, 0.2);
+  --content-bg-color: #f0f2f5;
 }
 
 .shadow-2 {
@@ -9,6 +10,10 @@
 
 .shadow-1 {
   box-shadow: 0 1px 2px var(--shadow-1);
+}
+
+.content-bg-color {
+  background-color: var(--content-bg-color);
 }
 
 .c-layout1col {
@@ -43,7 +48,8 @@
     flex-direction: column;
     display: flex;
     z-index: 0;
-    background-color: #f0f2f5;
+    background-color: var(--content-bg-color);
+
     &__container {
       padding-left: var(--container-x-padding);
       padding-right: var(--container-x-padding);

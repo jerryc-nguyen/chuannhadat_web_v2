@@ -1,61 +1,40 @@
-import React, { useState } from 'react';
-import { Navbar, Searchbar } from 'konsta/react';
+'use client';
 
-import RightItem from './RightItem';
-import ModalHeader from './ModalHeader';
-import ModalNotifyHeader from './ModalNotifyHeader';
 import Link from 'next/link';
-import { usePaginatedNotifications } from '@mobile/notification/hooks';
+import MainNavRight from './MainNavRight';
+
+import { usePaginatedNotifications } from '@desktop/notification/hooks';
+import { useEffect } from 'react';
+import { LuSearch } from 'react-icons/lu';
+import { Input } from '@components/ui/input';
 
 export default function MainNav({
-  type,
   onSearchClick = () => undefined,
-  isShowSearch = true,
 }: {
-  type: string | null;
   onSearchClick?: () => void;
-  isShowSearch?: boolean;
 }) {
-  const [rightPanelOpened, setRightPanelOpened] = useState(false);
-  const [notifyPanelOpened, setNotifyPanelOpened] = useState(false);
+  const { loadMore } = usePaginatedNotifications();
 
-  const utilClass = type == 'SearchInSub' ? 'isSearchSub' : '';
-
-  const LeftItems = () => {
-    return (
-      <Link href="/">
-        <img src="https://chuannhadat.com/images/logo_mobile@2x.png" width="40" />
-      </Link>
-    );
-  };
-
-  const { loadMore} = usePaginatedNotifications();
-
-  React.useEffect(() => {
+  useEffect(() => {
     loadMore();
   }, []);
 
   return (
-    <>
-      <Navbar
-        innerClassName={`c-mainNav ${utilClass}`}
-        leftClassName={'c-mainNav__left'}
-        titleClassName={'c-mainNav__title'}
-        rightClassName={'c-mainNav__right'}
-        left={<LeftItems />}
-        right={<RightItem setRightPanelOpened={setRightPanelOpened} setNotifyPanelOpened={setNotifyPanelOpened}/>}
-        subnavbarClassName={`c-mainNav__sub ${utilClass}`}
-        subnavbar={
-          isShowSearch && (
-            <div style={{ display: 'block', width: '100%' }}>
-              <Searchbar inputStyle={{ borderRadius: '30px' }} />
-              <div className="c-mainNav__mask" onClick={() => onSearchClick()}></div>
-            </div>
-          )
-        }
-      />
-      <ModalHeader rightPanelOpened={rightPanelOpened} setRightPanelOpened={setRightPanelOpened} />
-      <ModalNotifyHeader notifyPanelOpened={notifyPanelOpened} setNotifyPanelOpened={setNotifyPanelOpened} />
-    </>
+    <div>
+      <div className="flex items-center justify-between bg-white py-2">
+        <Link href="/" className="mr-4 flex items-center space-x-2">
+          <img src="https://chuannhadat.com/images/logo_mobile@2x.png" width="40" alt="Logo" />
+        </Link>
+
+        <div className="flex items-center">
+          <MainNavRight />
+        </div>
+      </div>
+
+      <div className="relative mt-2" onClick={() => onSearchClick()}>
+        <LuSearch className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input placeholder="Chọn khu vực" className="rounded-full pl-8" />
+      </div>
+    </div>
   );
 }

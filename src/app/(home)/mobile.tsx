@@ -2,9 +2,8 @@
 
 import React from 'react';
 
-import { App, Page } from 'konsta/react';
-
 import MainNav from '@mobile/header/MainNav';
+
 import '@styles/pages/mobile/home.scss';
 import FilterModal from '@mobile/filter_bds/FilterModal';
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
@@ -38,19 +37,19 @@ export default function Mobile() {
   };
 
   return (
-    <App theme="ios">
-      <Page>
-        <MainNav type="SearchInSub" onSearchClick={() => openFilterModal()} />
+    <div className="content-bg-color">
+      <header className="c-content__container shadow-1 sticky top-0 z-10 bg-white px-4 py-3 pt-2">
+        <MainNav onSearchClick={() => openFilterModal()}></MainNav>
+      </header>
 
-        <FilterChips />
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <PostList />
-        </HydrationBoundary>
+      <FilterChips />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PostList />
+      </HydrationBoundary>
 
-        <BtsModals1 />
-        <BtsModals2 />
-        <BtsModals3 />
-      </Page>
-    </App>
+      <BtsModals1 />
+      <BtsModals2 />
+      <BtsModals3 />
+    </div>
   );
 }
