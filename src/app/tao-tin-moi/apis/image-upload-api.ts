@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from '@api/axiosInstance';
+import axios from 'axios';
 import { API_ROUTES } from '@common/router';
 import {
   FileWithPreview,
@@ -18,8 +19,12 @@ const TrackUploadedUrl = async (data: ITrackUploadedUrl_Request) => {
   return (await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.TRACK_UPLOADED_URL, data)).data;
 };
 
-const PerformUploadImageS3 = async (signedUrl: string, data: File, config: AxiosRequestConfig<any>) => {
-  return axiosInstance.put(signedUrl, data, config);
+const PerformUploadImageS3 = async (
+  signedUrl: string,
+  data: File,
+  config: AxiosRequestConfig<any>,
+) => {
+  return axios.put(signedUrl, data, config);
 };
 
 const ImageUploadApiService = {
@@ -33,31 +38,35 @@ const ImageUploadApiService = {
         const signedUrlResponse: IImageSignS3_Response = await GetSignedUploadUrl({
           folder: 'product_images',
           file_name: fileName,
-          new_file_name: key
+          new_file_name: key,
         });
 
-        if ( !signedUrlResponse?.signed_url ) {
-            throw new Error("Đã có lỗi xảy ra (code 1)");
+        if (!signedUrlResponse?.signed_url) {
+          throw new Error('Đã có lỗi xảy ra (code 1)');
         }
 
         const options = {
-            onUploadProgress: (event: AxiosProgressEvent) => {
-              const { loaded, total } = event;
+          onUploadProgress: (event: AxiosProgressEvent) => {
+            const { loaded, total } = event;
             //   onProgress(
             //     {
             //       percent: Math.round((loaded / total) * 100)
             //     },
             //     file
             //   );
-                console.log("loaded, total", loaded, total);
-            },
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'x-amz-acl': 'public-read'
-            }
-          };
-      
-        const uploadImageS3Response = await PerformUploadImageS3(signedUrlResponse.s3_url, file, options);
+            console.log('loaded, total', loaded, total);
+          },
+          headers: {
+            'Content-Type': file.type,
+            'x-amz-acl': 'public-read',
+          },
+        };
+
+        const uploadImageS3Response = await PerformUploadImageS3(
+          signedUrlResponse.signed_url,
+          file,
+          options,
+        );
         console.log('uploadImageS3Response', uploadImageS3Response);
 
         if (uploadImageS3Response.status === 200 || uploadImageS3Response) {
@@ -76,10 +85,10 @@ const ImageUploadApiService = {
             // onSuccess(response.data, file);
             console.log('trackUploadedUrlResponse', trackUploadedUrlResponse);
           } else {
-            throw new Error("Đã có lỗi xảy ra (code 4)");
+            throw new Error('Đã có lỗi xảy ra (code 4)');
           }
         } else {
-          throw new Error("Đã có lỗi xảy ra (code 2)");
+          throw new Error('Đã có lỗi xảy ra (code 2)');
         }
       } catch (err) {
         console.error('Error uploading file:', err);
