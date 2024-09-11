@@ -26,4 +26,8 @@ export const API_ROUTES = {
     UPDATE_PASSWORD: 'api/v1/profiles/update_password',
     UPDATE_PHONE: 'api/v1/profiles/update_phone',
   },
+  IMAGE_UPLOAD: {
+    SIGN_S3: 'api/v1/product_images/sign-s3',
+    TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url'
+  }
 };

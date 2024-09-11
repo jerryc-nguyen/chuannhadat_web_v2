@@ -1,40 +1,50 @@
-import Breadcrumb from '@components/breadcrumb';
-import { ThemeProvider } from '@components/providers';
-import HeaderDashboard from '@desktop/dashboard/header';
-import SidebarDashboard from '@desktop/dashboard/sidebar';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import React from 'react';
+import PageContainer from "@components/page-container/page-container";
+import Breadcrumb from "./components/breadcrumb";
+import { IBreadcrumbItem } from "@desktop/dashboard/atoms/breadcrumbAtom";
+import { Metadata } from "next";
 
-type DashboardLayoutProps = {
+type NewPostPageLayoutProps = {
   children: React.ReactNode;
 };
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const { isMobile } = useGetUserAgentInfo();
+const currentBreadcrumb: IBreadcrumbItem[] = [
+  {
+    link: "/",
+    title: "Trang chủ",
+    isActive: false,
+  },
+  {
+    link: "/",
+    title: "Quản lý tin đăng",
+    isActive: true,
+  },
+  {
+    link: "/",
+    title: "Đăng tin bán & cho thuê",
+    isActive: true,
+  },
+];
+
+export const metadata: Metadata = {
+  title: "Create new post",
+  description: "Create new post",
+};
+
+const NewPostPageLayout: React.FC<NewPostPageLayoutProps> = ({ children }) => {
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-      <section className="grid min-h-screen w-full md:grid-cols-[301px_1fr] lg:grid-cols-[301px_1fr]">
-        <SidebarDashboard />
-        <main className="h-full">
-          <HeaderDashboard />
-          {/* <div className={`${isMobile ? "" : "flex flex-1 flex-col"} gap-y-5 overflow-y-scroll rounded-md px-4 py-6 lg:px-8`}>
-            {!isMobile && <Breadcrumb />}
-            {children}
-          </div> */}
-          <div className='flex-1 space-y-4 p-8 pt-6'>
-            <div className="flex items-center justify-between space-y-2">
-              <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            </div>
+    <PageContainer scrollable>
+      <div className="flex-1 space-y-4">
+        <div className="flex items-center">
+          <Breadcrumb breadcrumbs={currentBreadcrumb}/>
+        </div>
 
-            <div className="space-y-4">
-              {children}
-            </div>
-          </div>
-        </main>
-      </section>
-    </ThemeProvider>
+        <div className="space-y-4">
+          {children}
+        </div>
+      </div>
+    </PageContainer>
   );
 };
 
-export default DashboardLayout;
+export default NewPostPageLayout;

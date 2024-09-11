@@ -11,6 +11,11 @@ import { cookies } from 'next/headers';
 import { API_TOKEN } from '@common/auth';
 import { Provider as JotaiProvider } from 'jotai';
 
+import { ThemeProvider } from '@components/providers';
+import { HeaderDashboard, SidebarDashboard } from '@desktop/dashboard/layout/components';
+// import SidebarDashboard from '@desktop/dashboard/sidebar';
+// import HeaderDashboard from '@desktop/dashboard/header';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -36,11 +41,24 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className + ` ${mobileClass} `}>
+      <body className={inter.className + ` ${mobileClass} overflow-hidden`}>
         <QueryProvider>
           <JotaiProvider>
             <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>
-              {children}
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <section className="flex">
+                  <SidebarDashboard />
+                  <main className="h-full w-full flex-1 overflow-hidden">
+                    <HeaderDashboard />
+                    {children}
+                  </main>
+                </section>
+              </ThemeProvider>
             </SSROptionsProvider>
           </JotaiProvider>
           <Toaster richColors />
