@@ -10,11 +10,7 @@ interface Column {
   dataIndex: string;
   width?: number;
   fixed?: 'left' | 'right' | 'center';
-  render?: (
-    value: any,
-    row: DataType,
-    rowIndex: number,
-  ) => React.ReactNode;
+  render?: (value: any, row: DataType, rowIndex: number) => React.ReactNode;
 }
 
 interface TableComponentProps {
@@ -24,12 +20,7 @@ interface TableComponentProps {
   footer?: React.ReactNode;
 }
 
-const TableComponent: React.FC<TableComponentProps> = ({
-  columns,
-  data,
-  title,
-  footer,
-}) => {
+const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, footer }) => {
   const [isWideScreen, setIsWideScreen] = useState(false);
 
   useEffect(() => {
@@ -38,8 +29,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     };
 
     window.addEventListener('resize', handleResize);
-    return () =>
-      window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const containerStyle: React.CSSProperties = {
@@ -64,15 +54,10 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="mb-4 text-center text-2xl font-bold">
-        {title}
-      </h2>
+    <div>
+      <h2 className="mb-4 text-center text-2xl font-bold">{title}</h2>
       <div style={containerStyle}>
-        <table
-          style={tableStyle}
-          className="divide-y divide-gray-200 border border-gray-300"
-        >
+        <table style={tableStyle} className="divide-y divide-gray-200 border border-gray-300">
           <thead className="bg-gray-50">
             <tr>
               {columns.map((col) => (
@@ -95,10 +80,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
           <tbody className="divide-y divide-gray-200 bg-white">
             {data.length === 0 ? (
               <tr>
-                <td
-                  colSpan={columns.length}
-                  style={noDataStyle}
-                >
+                <td colSpan={columns.length} style={noDataStyle}>
                   Không có dữ liệu
                 </td>
               </tr>
@@ -118,11 +100,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
                       }}
                     >
                       {col.render
-                        ? col.render(
-                            row[col.dataIndex],
-                            row,
-                            rowIndex,
-                          )
+                        ? col.render(row[col.dataIndex], row, rowIndex)
                         : row[col.dataIndex]}
                     </td>
                   ))}
