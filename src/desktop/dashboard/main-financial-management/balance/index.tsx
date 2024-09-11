@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { App, BlockTitle, Page as PageContainer } from 'konsta/react';
 import { format, parseISO } from 'date-fns';
 import '@styles/pages/mobile/finacial-management/balance.scss';
 

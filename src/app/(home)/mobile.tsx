@@ -15,6 +15,7 @@ import PostList from '@mobile/searchs/PostList';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { getQueryClient } from '@api/react-query';
+import SidePanel from '@components/SidePanel';
 
 export default function Mobile() {
   console.log('rerender Mobile');
@@ -50,6 +51,7 @@ export default function Mobile() {
       <BtsModals1 />
       <BtsModals2 />
       <BtsModals3 />
+      <SidePanel />
     </div>
   );
 }

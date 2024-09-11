@@ -19,19 +19,36 @@ import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { Popover, PopoverTrigger } from '@components/ui/popover';
 import { Badge } from '@components/ui/badge';
 import NotificationsList from '@desktop/notification/NotificationsList';
+import useSidePanels from '@components/SidePanel/hooks';
 
 export default function MainNavRight() {
   const { signout, currentUser } = useAuth();
   const router = useRouter();
 
   const { openModal, closeModal } = useModals();
-
+  const { openPanel } = useSidePanels();
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
       content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
+    });
+  };
+
+  const showNotificationPanel = () => {
+    openPanel({
+      side: 'right',
+      content: (
+        <NotificationsList
+          notifications={notifications}
+          total={total}
+          onLoadMore={loadMore}
+          onMarkReadAll={handleMarkReadAll}
+          onRedirect={handleRedirect}
+          onGetNotMarkRead={handleGetNotMarkRead}
+        />
+      ),
     });
   };
 
@@ -48,25 +65,19 @@ export default function MainNavRight() {
   return (
     <>
       {currentUser && (
-        <span className="mr-2 flex items-center justify-center rounded-full border p-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <div className="relative">
-                <IoNotificationsOutline className="h-5 w-5" />
-                <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
-                  {total}
-                </Badge>
-              </div>
-            </PopoverTrigger>
-            <NotificationsList
-              notifications={notifications}
-              total={total}
-              onLoadMore={loadMore}
-              onMarkReadAll={handleMarkReadAll}
-              onRedirect={handleRedirect}
-              onGetNotMarkRead={handleGetNotMarkRead}
-            />
-          </Popover>
+        <span
+          className="mr-2 flex items-center justify-center rounded-full border p-2"
+          onClick={() => {
+            console.log('aa');
+            showNotificationPanel();
+          }}
+        >
+          <div className="relative">
+            <IoNotificationsOutline className="h-5 w-5" />
+            <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
+              {total}
+            </Badge>
+          </div>
         </span>
       )}
 

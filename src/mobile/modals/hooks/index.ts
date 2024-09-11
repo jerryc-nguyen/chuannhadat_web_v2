@@ -1,9 +1,5 @@
 import { useAtom } from 'jotai';
-import {
-  btsModal2Atom,
-  btsModalAtom,
-  btsModal3Atom,
-} from '../states';
+import { btsModal2Atom, btsModalAtom, btsModal3Atom } from '../states';
 import { Modal } from '../states/types';
 
 export default function useModals() {
