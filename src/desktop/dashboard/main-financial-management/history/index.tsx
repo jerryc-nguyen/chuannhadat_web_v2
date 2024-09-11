@@ -1,11 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  App,
-  BlockTitle,
-  Page as PageContainer,
-} from 'konsta/react';
 import { format, parseISO } from 'date-fns';
 import '@styles/pages/mobile/finacial-management/history.scss';
 
@@ -18,10 +13,7 @@ import BalanceInfo from '../components/BalanceInfo';
 const HistoryView = () => {
   const { fetchHistoryTransaction } = useBalanceRequest();
 
-  const [
-    historyTransactionData,
-    setHistoryTransactionData,
-  ] = useState<ITransactionResponse[]>([]);
+  const [historyTransactionData, setHistoryTransactionData] = useState<ITransactionResponse[]>([]);
 
   useEffect(() => {
     const loadTransaction = async () => {
@@ -70,29 +62,20 @@ const HistoryView = () => {
       title: 'Thời gian',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (value: string) => (
-        <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>
-      ),
+      render: (value: string) => <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>,
     },
   ];
 
   return (
-    <App theme="ios">
-      <PageContainer>
-        <BalanceInfo title="Lịch sử nạp tiền" />
+    <div>
+      <BalanceInfo title="Lịch sử nạp tiền" />
 
-        <div className="c-historyFluctuation">
-          <BlockTitle medium>
-            Lịch sử nạp tiền của bạn
-          </BlockTitle>
-          <TableComponent
-            columns={columns}
-            data={historyTransactionData}
-          />
-          <NoteDescriptions />
-        </div>
-      </PageContainer>
-    </App>
+      <div className="c-historyFluctuation">
+        <h3 className="my-4 mt-8 text-xl font-bold">Lịch sử nạp tiền của bạn</h3>
+        <TableComponent columns={columns} data={historyTransactionData} />
+        <NoteDescriptions />
+      </div>
+    </div>
   );
 };
 

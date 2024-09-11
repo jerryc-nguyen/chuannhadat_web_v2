@@ -1,5 +1,4 @@
 import React from 'react';
-import { BlockTitle } from 'konsta/react';
 import { List, ListItem } from '@components/konsta';
 
 import { FilterFieldName } from '@models';
@@ -47,13 +46,13 @@ const FilterModal = () => {
 
   return (
     <>
-      <BlockTitle>Loại tin</BlockTitle>
+      <p>Loại tin</p>
 
       <div className="bg-white p-4">
         <BusinessTypeButtons />
       </div>
 
-      <BlockTitle>Loại bất động sản</BlockTitle>
+      <p>Loại bất động sản</p>
 
       <List strongIos>
         <ListItem
@@ -70,11 +69,11 @@ const FilterModal = () => {
         />
       </List>
 
-      <BlockTitle>Khu vực</BlockTitle>
+      <p>Khu vực</p>
 
       <Locations />
 
-      <BlockTitle>Thông tin chi tiết</BlockTitle>
+      <p>Thông tin chi tiết</p>
 
       <List strongIos outlineIos>
         <ListItem
