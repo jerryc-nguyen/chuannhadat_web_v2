@@ -12,14 +12,14 @@ import {
 } from '@components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
 import { Button } from '@components/ui/button';
-import { LuUserCircle } from 'react-icons/lu';
+import { LuMenu, LuUserCircle } from 'react-icons/lu';
 import useModals from '@mobile/modals/hooks';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
-import { Popover, PopoverTrigger } from '@components/ui/popover';
 import { Badge } from '@components/ui/badge';
 import NotificationsList from '@desktop/notification/NotificationsList';
 import useSidePanels from '@components/SidePanel/hooks';
+import MainNavSidePanel from './MainNavSidePanel';
 
 export default function MainNavRight() {
   const { signout, currentUser } = useAuth();
@@ -33,6 +33,13 @@ export default function MainNavRight() {
       content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
+    });
+  };
+
+  const openMainnNavSidePanel = () => {
+    openPanel({
+      side: 'right',
+      content: <MainNavSidePanel />,
     });
   };
 
@@ -131,6 +138,13 @@ export default function MainNavRight() {
           </DropdownMenuTrigger>
         </DropdownMenu>
       )}
+
+      <div
+        onClick={() => openMainnNavSidePanel()}
+        className="mr-2 flex items-center justify-center rounded-full border p-2"
+      >
+        <LuMenu className="h-5 w-5" />
+      </div>
     </>
   );
 }
