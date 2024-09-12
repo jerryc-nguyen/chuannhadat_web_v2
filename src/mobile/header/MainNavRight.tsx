@@ -27,6 +27,7 @@ export default function MainNavRight() {
 
   const { openModal, closeModal } = useModals();
   const { openPanel } = useSidePanels();
+
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
@@ -75,7 +76,6 @@ export default function MainNavRight() {
         <span
           className="mr-2 flex items-center justify-center rounded-full border p-2"
           onClick={() => {
-            console.log('aa');
             showNotificationPanel();
           }}
         >

@@ -5,12 +5,15 @@ import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin'
 import useAuth from '@mobile/auth/hooks/useAuth';
 import Link from 'next/link';
 import { Button } from '@components/ui/button';
+import useSidePanels from '@components/SidePanel/hooks';
 
 export default function MainNavSidePanel() {
   const { currentUser, signout } = useAuth();
   const { openModal, closeModal } = useModals();
+  const { closePanel } = useSidePanels();
 
   const handleShowModalLoginAndRegister = () => {
+    closePanel();
     openModal({
       name: 'loginAndRegister',
       content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
