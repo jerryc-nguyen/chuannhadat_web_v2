@@ -1,11 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  App,
-  BlockTitle,
-  Page as PageContainer,
-} from 'konsta/react';
 import { format, parseISO } from 'date-fns';
 import '@styles/pages/mobile/finacial-management/balance.scss';
 
@@ -18,9 +13,7 @@ import BalanceInfo from '../components/BalanceInfo';
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();
 
-  const [transactionData, setTransactionData] = useState<
-    ITransactionResponse[]
-  >([]);
+  const [transactionData, setTransactionData] = useState<ITransactionResponse[]>([]);
 
   useEffect(() => {
     const loadTransaction = async () => {
@@ -69,27 +62,19 @@ const BalanceView = () => {
       title: 'Thời gian',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (value: string) => (
-        <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>
-      ),
+      render: (value: string) => <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>,
     },
   ];
 
   return (
-    <App theme="ios">
-      <PageContainer>
-        <BalanceInfo title="Thông tin số dư" />
+    <div>
+      <BalanceInfo title="Thông tin số dư" />
 
-        <div className="c-balanceFluctuation">
-          <BlockTitle medium>Biến động số dư</BlockTitle>
-          <TableComponent
-            columns={columns}
-            data={transactionData}
-          />
-          <NoteDescriptions />
-        </div>
-      </PageContainer>
-    </App>
+      <h3 className="mb-4 mt-8 text-xl font-bold">Biến động số dư</h3>
+
+      <TableComponent columns={columns} data={transactionData} />
+      <NoteDescriptions />
+    </div>
   );
 };
 

@@ -25,10 +25,10 @@ const BalanceInfo: FC = () => {
 
   return (
     <>
-      <Card className="m-auto mx-3 mt-3">
+      <Card className="mt-3">
         <CardContent className="pt-6">
-          <h3 className="text-16 mb-4 flex justify-between">
-            <span className='flex gap-2 items-center'>
+          <h3 className="mb-4 flex justify-between text-16">
+            <span className="flex items-center gap-2">
               Tài khoản chính{' '}
               <TooltipProvider>
                 <Tooltip>
@@ -46,9 +46,9 @@ const BalanceInfo: FC = () => {
           <h1 className="text-36 font-bold">{balanceData?.tk_chinh}</h1>
         </CardContent>
       </Card>
-      <div className="mx-3 flex gap-6">
+      <div className="mt-3 flex gap-6">
         <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">
-          <CardContent className="text-12 flex h-full items-center gap-4 p-3">
+          <CardContent className="flex h-full items-center gap-4 p-3 text-12">
             <IoWalletOutline className="text-20" />
             <div>
               <h3>Số dư tài khoản</h3>
@@ -57,7 +57,7 @@ const BalanceInfo: FC = () => {
           </CardContent>
         </Card>
         <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">
-          <CardContent className="text-12 flex h-full items-center gap-4 p-3">
+          <CardContent className="flex h-full items-center gap-4 p-3 text-12">
             <MdOutlineDiscount className="text-20" />
             <div>
               <h3>Tài khoản khuyến mãi</h3>

@@ -1,5 +1,6 @@
+import { List, ListItem } from '@components/konsta';
 import { OptionForSelect } from '@models';
-import { List, ListItem } from 'konsta/react';
+
 import { ReactElement } from 'react';
 
 const ListOptions = ({

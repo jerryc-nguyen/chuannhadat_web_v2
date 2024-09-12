@@ -1,44 +1,28 @@
-import {
-  Block,
-  Segmented,
-  SegmentedButton,
-} from 'konsta/react';
 import { FilterFieldName } from '@models';
 import useFilterState from '../hooks/useFilterState';
+import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs';
 
 export default function BusinessTypeButtons() {
-  const {
-    getLocalFieldValue,
-    setLocalFieldValue,
-    filterFieldOptions,
-  } = useFilterState();
-  const value = getLocalFieldValue(
-    FilterFieldName.businessType,
-  );
+  const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.businessType);
 
   return (
-    <Block strongIos margin="my-0 mt-2">
-      <Segmented strong>
-        {filterFieldOptions.businessTypeOptions?.map(
-          (option) => {
-            return (
-              <SegmentedButton
-                strong
-                key={option.text}
-                active={option.text == value?.text}
-                onClick={() => {
-                  setLocalFieldValue(
-                    FilterFieldName.businessType,
-                    option,
-                  );
-                }}
-              >
-                {option.text}
-              </SegmentedButton>
-            );
-          },
-        )}
-      </Segmented>
-    </Block>
+    <Tabs defaultValue={value}>
+      <TabsList className="grid w-full grid-cols-2">
+        {filterFieldOptions.businessTypeOptions?.map((option) => {
+          return (
+            <TabsTrigger
+              value={option.value.toString()}
+              key={option.text}
+              onClick={() => {
+                setLocalFieldValue(FilterFieldName.businessType, option);
+              }}
+            >
+              {option.text}
+            </TabsTrigger>
+          );
+        })}
+      </TabsList>
+    </Tabs>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const noteDescriptions: string[] = [
   '1 Xu tương đương 1 VNĐ.',
@@ -9,9 +9,9 @@ const noteDescriptions: string[] = [
 ];
 
 const NoteDescriptions = () => (
-  <div className="c-note__description">
+  <div className="c-note__description mt-8">
     <label>Ghi chú:</label>
-    <ul className="list-disc list-inside ml-6">
+    <ul className="ml-6 list-inside list-disc">
       {noteDescriptions.map((note, index) => (
         <li key={index}>{note}</li>
       ))}

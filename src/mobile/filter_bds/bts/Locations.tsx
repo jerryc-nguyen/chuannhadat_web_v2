@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { List, ListItem } from 'konsta/react';
 
 import useModals from '@mobile/modals/hooks';
 import { ModalNames } from '@mobile/modals/states/types';
@@ -10,20 +9,18 @@ import useFilterState from '../hooks/useFilterState';
 import { FilterFieldName, OptionForSelect } from '@models';
 import OptionPicker from '@mobile/ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
+import { List, ListItem } from '@components/konsta';
 
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
 
-  const { setLocalFieldValue, localFilterState } =
-    useFilterState();
+  const { setLocalFieldValue, localFilterState } = useFilterState();
 
   const city = localFilterState.city;
   const district = localFilterState.district;
   const ward = localFilterState.ward;
 
-  const [districtOptions, setDistrictOptions] = useState(
-    [],
-  );
+  const [districtOptions, setDistrictOptions] = useState([]);
   const [wardOptions, setWardOptions] = useState([]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,8 +49,7 @@ export default function Locations() {
   };
 
   const onSelectCity = (city?: OptionForSelect) => {
-    const finalOption =
-      city?.value != 'all' ? city : undefined;
+    const finalOption = city?.value != 'all' ? city : undefined;
 
     resetDistrict();
     resetWard();
@@ -67,25 +63,20 @@ export default function Locations() {
   };
 
   const onSelectDistrict = (district?: OptionForSelect) => {
-    const finalOption =
-      district?.value != 'all' ? district : undefined;
+    const finalOption = district?.value != 'all' ? district : undefined;
 
     resetWard();
-  
+
     setWardOptions(
       //@ts-ignore: read field of object
       districtWards[finalOption?.value + ''] || [],
     );
-    setLocalFieldValue(
-      FilterFieldName.district,
-      finalOption,
-    );
+    setLocalFieldValue(FilterFieldName.district, finalOption);
     closeModal3();
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
-    const finalOption =
-      ward?.value != 'all' ? ward : undefined;
+    const finalOption = ward?.value != 'all' ? ward : undefined;
     setLocalFieldValue(FilterFieldName.ward, finalOption);
     closeModal3();
   };
