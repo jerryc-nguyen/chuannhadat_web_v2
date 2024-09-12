@@ -16,7 +16,6 @@ import Rooms from './bts/Rooms';
 import Direction from './bts/Direction';
 import useFilterState from './hooks/useFilterState';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
-import { Button } from '@components/ui/button';
 import { cn } from '@common/utils';
 
 export interface FilterChipOption {
@@ -57,7 +56,8 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
 ];
 
 export default function DesktopFilterChips() {
-  const [selectedChipOption, setSelectedChipOption] = useState<FilterChipOption>();
+  const [, setSelectedChipOption] = useState<FilterChipOption>();
+  const containerChipsRef = React.useRef(null);
   const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -154,7 +154,7 @@ export default function DesktopFilterChips() {
 
   return (
     <>
-      <div className="relative">
+      <div ref={containerChipsRef} className="filter-chips-desktop relative">
         {FILTER_ITEMS.map((item) => (
           <Popover key={item.id}>
             <PopoverTrigger
@@ -162,7 +162,7 @@ export default function DesktopFilterChips() {
                 showFilterPopover(item);
               }}
               className={cn(
-                'shadow-2 relative mr-2 cursor-pointer rounded-xl px-4 py-2 font-medium transition-all duration-400 focus:animate-pulse',
+                'shadow-2 duration-400 relative mr-2 cursor-pointer rounded-xl px-4 py-2 font-medium transition-all focus:animate-pulse',
                 activeChipClass(item),
               )}
             >
@@ -170,6 +170,7 @@ export default function DesktopFilterChips() {
             </PopoverTrigger>
 
             <PopoverContent
+              container={containerChipsRef.current}
               sideOffset={5}
               align="center"
               side="bottom"
