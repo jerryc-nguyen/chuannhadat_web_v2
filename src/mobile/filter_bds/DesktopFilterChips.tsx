@@ -17,6 +17,7 @@ import Direction from './bts/Direction';
 import useFilterState from './hooks/useFilterState';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
 import { cn } from '@common/utils';
+import './styles/DesktopFilterChips.scss';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;
@@ -154,7 +155,7 @@ export default function DesktopFilterChips() {
 
   return (
     <>
-      <div ref={containerChipsRef} className="filter-chips-desktop relative">
+      <div ref={containerChipsRef} className="c-desktopFilterChips relative">
         {FILTER_ITEMS.map((item) => (
           <Popover key={item.id}>
             <PopoverTrigger
