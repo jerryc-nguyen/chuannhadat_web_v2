@@ -128,7 +128,7 @@ export default function MainNavRight() {
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full"
+              className="mr-2 rounded-full"
               onClick={() => {
                 showModalLoginAndRegister();
               }}
