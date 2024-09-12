@@ -5,7 +5,7 @@ import { useState } from 'react';
 export type TSearchBoxProps = {
   placeholder?: string;
   value?: string;
-  onClick?: () => {};
+  onClick?: () => void;
   onInput?: (event: A) => void;
   onClear?: () => void;
 };
