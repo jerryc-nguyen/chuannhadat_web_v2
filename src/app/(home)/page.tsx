@@ -6,7 +6,6 @@ import Desktop from './desktop';
 import { useSSROptionsContext } from '@components/providers/SSROptionsProvider';
 
 export default function Home() {
-  console.log('render Home');
   const { isMobile } = useSSROptionsContext();
 
   const App = () => {
