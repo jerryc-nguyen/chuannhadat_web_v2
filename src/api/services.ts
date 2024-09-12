@@ -17,5 +17,10 @@ export const services = {
     makeMarkRead: async (id: number) => {
       return axiosInstance.put(`${API_ROUTES.NOTIFICATION.READ}`, {id});
     },
+  },
+  products: {
+    getDetailProduct: async (product_uid: string): Promise<A> => {
+      return axiosInstance.get(API_ROUTES.PRODUCT_DETAIL(product_uid));
+    },
   }
 };

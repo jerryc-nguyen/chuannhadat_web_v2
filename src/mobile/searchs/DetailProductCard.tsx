@@ -22,8 +22,8 @@ export default function DetailProductCard({ product }: { product: IProduct | IPr
   // code load data product cần nằm ở ProductCard để chuẩn bị data trc khi đổ vào component
   const { data } = useGetDetailProduct(product.uid);
   const [postDetail, setPostDetail] = useAtom(postDetailAtom);
-  setPostDetail(data?.data.data);
-  console.log('detail_product', data?.data.data);
+  setPostDetail(data?.data);
+  console.log('detail_product', data?.data);
 
   const { buildThumbnailUrl } = useResizeImage();
   return (
@@ -37,11 +37,11 @@ export default function DetailProductCard({ product }: { product: IProduct | IPr
           </BreadcrumbsItem>
           <BreadcrumbsSeparator />
           <BreadcrumbsItem className="text-sm" active>
-            {product.slug}
+            {(product as IProduct).slug}
           </BreadcrumbsItem>
         </Breadcrumbs>
-        {data?.data.data.images && data?.data.data.images.length > 0 ? (
-          <SliderImage2 listImg={data.data.data.images} />
+        {data?.data.images && data?.data.images.length > 0 ? (
+          <SliderImage2 listImg={data.data.images} />
         ) : (
           <AspectRatio.Root ratio={16 / 9}>
             <img
@@ -50,7 +50,7 @@ export default function DetailProductCard({ product }: { product: IProduct | IPr
                 imageUrl:
                   'https://cdn.dribbble.com/userupload/8392915/file/original-497a5e74203f601d33f76872e7ebaaa6.jpg',
               })}
-              alt={product?.name}
+              alt={(product as IProduct).name}
             />
           </AspectRatio.Root>
         )}
@@ -58,8 +58,8 @@ export default function DetailProductCard({ product }: { product: IProduct | IPr
 
       <div className="flex flex-col gap-1 rounded-xl bg-white p-4">
         <h4 className="text-lg font-bold">Mô tả chi tiết</h4>
-        {data?.data?.data?.description &&
-          data?.data?.data?.description.split('+').map((line, index) => {
+        {data?.data?.description &&
+          data?.data?.description.split('+').map((line, index) => {
             if (line.trim() === '') return null;
             return (
               <div className="mb-1" key={index}>
@@ -70,22 +70,22 @@ export default function DetailProductCard({ product }: { product: IProduct | IPr
           })}
       </div>
       <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
-        <h4 className="text-lg font-bold">{data?.data?.data?.title ?? ''}</h4>
+        <h4 className="text-lg font-bold">{data?.data?.title ?? ''}</h4>
         <div className="flex items-center justify-start gap-2">
           <span className="text-xl font-semibold text-red-600">{product?.formatted_price}</span>
           <span>-</span>
           <span className="text-sm text-slate-600">{product?.formatted_price_per_m2}</span>
         </div>
-        {data?.data?.data?.full_address && (
+        {data?.data?.full_address && (
           <div className="flex gap-1">
             <CiLocationOn width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{data?.data?.data?.full_address}</span>
+            <span className="text-sm text-slate-600">{data?.data?.full_address}</span>
           </div>
         )}
-        {data?.data?.data?.formatted_publish_at && (
+        {data?.data?.formatted_publish_at && (
           <div className="flex gap-1">
             <IoMdTime width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{data?.data?.data?.formatted_publish_at}</span>
+            <span className="text-sm text-slate-600">{data?.data?.formatted_publish_at}</span>
           </div>
         )}
       </div>
@@ -93,44 +93,52 @@ export default function DetailProductCard({ product }: { product: IProduct | IPr
       <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
         <h4 className="text-lg font-bold">Đặc điểm bất động sản</h4>
 
-        {data?.data?.data?.formatted_price && (
+<div className="flex flex-col">
+<div className="flex flex-row justify-between">
+        {data?.data?.formatted_price && (
           <div className="flex gap-1">
             <IoIosPricetags width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{`Giá/m²: ${data?.data?.data?.formatted_price_per_m2}`}</span>
+            <span className="text-sm text-slate-600">{`Giá/m²: ${data?.data?.formatted_price_per_m2}`}</span>
           </div>
         )}
-        {data?.data?.data?.formatted_price && (
+        {data?.data?.formatted_price && (
           <div className="flex gap-1">
             <FaBed width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{`Số phòng ngủ:: ${data?.data?.data?.bedrooms_count ?? 1}`}</span>
+            <span className="text-sm text-slate-600">{`Số phòng ngủ:: ${data?.data?.bedrooms_count ?? 1}`}</span>
           </div>
         )}
+        </div>
+        <div className="flex flex-row justify-between">
 
-        {data?.data?.data?.formatted_price && (
+        {data?.data?.formatted_price && (
           <div className="flex gap-1">
             <LuWarehouse width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{`Tổng số tầng: ${data?.data?.data?.floors_count ?? 1}`}</span>
+            <span className="text-sm text-slate-600">{`Tổng số tầng: ${data?.data?.floors_count ?? 1}`}</span>
           </div>
         )}
-        {data?.data?.data?.formatted_price && (
+        {data?.data?.formatted_price && (
           <div className="flex gap-1">
             <FaBath width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{`Số phòng tắm: ${data?.data?.data?.bathrooms_count ?? 1}`}</span>
+            <span className="text-sm text-slate-600">{`Số phòng tắm: ${data?.data?.bathrooms_count ?? 1}`}</span>
           </div>
         )}
+        </div>
+        <div className="flex flex-row justify-between">
 
-        {data?.data?.data?.formatted_price && (
+        {data?.data?.formatted_price && (
           <div className="flex gap-1">
             <MdOutlinePriceChange width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{`Giấy tờ pháp lý: ${!!data?.data?.data?.phap_ly ? 'Đã có sổ' : 'Chưa có sổ'}`}</span>
+            <span className="text-sm text-slate-600">{`Giấy tờ pháp lý: ${!!data?.data?.phap_ly ? 'Đã có sổ' : 'Chưa có sổ'}`}</span>
           </div>
         )}
-        {data?.data?.data?.formatted_price && (
+        {data?.data?.formatted_price && (
           <div className="flex gap-1">
             <FaHouseUser width={16} height={16} className="mt-[2px]" />
-            <span className="text-sm text-slate-600">{`Loại hình nhà: ${data?.data?.data?.category_type}`}</span>
+            <span className="text-sm text-slate-600">{`Loại hình nhà: ${data?.data?.category_type}`}</span>
           </div>
         )}
+        </div>
+        </div>
       </div>
     </div>
   );
