@@ -5,9 +5,8 @@ import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
-import DetailProductCard from './DetailProductCard';
 import { useRouter } from 'next/navigation';
-import { useGetDetailProduct } from '@api/get-detail-product';
+import PostDetailMobile from './PostDetailMobile ';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -38,7 +37,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
     openModal({
       name: product.title,
       title: product.title,
-      content: <DetailProductCard product={product} />,
+      content: <PostDetailMobile />,
       maxHeightPercent: 0.9,
       footer: <div>Liên hệ: xx</div>,
       onClosed: () => {

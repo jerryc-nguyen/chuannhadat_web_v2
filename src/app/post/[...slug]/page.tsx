@@ -1,15 +1,34 @@
-'use client';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import { services } from '@api/services';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import PostDetailDesktop from '@desktop/post-detail';
+import { Metadata } from 'next';
+import PostDetailMobile from '@mobile/searchs/PostDetailMobile ';
 
-import DetailProductCard from '@mobile/searchs/DetailProductCard';
-import { usePathname } from 'next/navigation';
-import { useGetDetailProduct } from '@api/get-detail-product';
-import { IProductDetail } from '@mobile/searchs/type';
+export const metadata: Metadata = {
+  title: 'Chuẩn nhà đất',
+  description: 'Chi tiết bài đăng',
+};
+export default async function PostDetailPage({ params }: { params: { slug: string } }) {
+  const productUid = params.slug[0].split('-').slice(-1)[0];
 
-export default function Page() {
-  const currentPath = usePathname();
-  const productUid = currentPath.split('-').slice(-1)[0];
-  console.log('productUidproductUid', productUid);
-  const {data} = useGetDetailProduct(productUid);
-console.log(data && data.data)
-  return !!data && <DetailProductCard product={data.data as IProductDetail} />;
+  const queryClient = new QueryClient();
+  // Prefetch api in server
+  await queryClient.prefetchQuery({
+    queryKey: ['get-detail-post', productUid],
+    queryFn: () => services.posts.getDetailPost(productUid),
+  });
+  const { isMobile } = useGetUserAgentInfo();
+  const dehydratedState = dehydrate(queryClient);
+  return (
+    <HydrationBoundary state={dehydratedState}>
+      {isMobile ? (
+        <div className="c-mobileApp">
+          <PostDetailMobile />
+        </div>
+      ) : (
+        <PostDetailDesktop />
+      )}
+    </HydrationBoundary>
+  );
 }

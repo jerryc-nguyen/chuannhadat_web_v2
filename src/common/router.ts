@@ -7,8 +7,10 @@ export const API_ROUTES = {
     CHANGE_PASSWORD: 'auth/reset-password',
     LOGOUT: 'auth/logout',
   },
-  PRODUCT_DETAIL: (product_uid: string) => `api/v1/products/detail?product_uid=${product_uid}`,
-
+  POSTS: {
+    DETAIL_POST: 'api/v1/products/detail',
+    UPDATE_POST: 'api/v1/products',
+  },
   BALANCE: {
     OVERVIEW: 'api/v1/balances/overviews',
     TRANSACTION: 'api/v1/balances/transactions',

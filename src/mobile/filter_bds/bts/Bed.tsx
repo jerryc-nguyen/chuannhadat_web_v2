@@ -1,19 +1,10 @@
 import { FilterFieldName, OptionForSelect } from '@models';
 
 import ListChips from '@mobile/ui/ListChips';
-import { Block } from 'konsta/react';
 import useFilterState from '../hooks/useFilterState';
 
-export default function Bed({
-  onSelect,
-}: {
-  onSelect?: (option: OptionForSelect) => void;
-}) {
-  const {
-    getLocalFieldValue,
-    setLocalFieldValue,
-    filterFieldOptions,
-  } = useFilterState();
+export default function Bed({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
+  const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
   const value = getLocalFieldValue(FilterFieldName.bed);
 
   const onSelectOption = (item: OptionForSelect) => {
@@ -25,13 +16,11 @@ export default function Bed({
 
   return (
     <>
-      <Block>
-        <ListChips
-          options={filterFieldOptions.roomOptions || []}
-          onSelect={onSelectOption}
-          value={value}
-        />
-      </Block>
+      <ListChips
+        options={filterFieldOptions.roomOptions || []}
+        onSelect={onSelectOption}
+        value={value}
+      />
     </>
   );
 }
