@@ -1,12 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  App,
-  Page as PageContainer,
-} from 'konsta/react';
-import '@styles/pages/mobile/finacial-management/balance.scss';
 
+import '@styles/pages/mobile/finacial-management/balance.scss';
 
 import { useBalanceRequest } from '@api/balance';
 import { ITransactionResponse } from '../types';
@@ -16,9 +12,7 @@ import TransactionActivity from '../components/TransactionActivity';
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();
 
-  const [transactionData, setTransactionData] = useState<
-    ITransactionResponse[]
-  >([]);
+  const [transactionData, setTransactionData] = useState<ITransactionResponse[]>([]);
 
   useEffect(() => {
     const loadTransaction = async () => {
@@ -34,12 +28,14 @@ const BalanceView = () => {
   }, [fetchTransaction]);
 
   return (
-    <App theme="ios"  className='relative'>
-      <PageContainer>
+    <div>
       <BalanceInfo />
-        <TransactionActivity title='Biến động số dư' transactionsData={transactionData} emptyText='Không có biến động số dư'/>
-      </PageContainer>
-    </App>
+      <TransactionActivity
+        title="Biến động số dư"
+        transactionsData={transactionData}
+        emptyText="Không có biến động số dư"
+      />
+    </div>
   );
 };
 

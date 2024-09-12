@@ -1,6 +1,6 @@
-import { Button } from 'konsta/react';
 import useModals from '@mobile/modals/hooks';
 import useFilterState from './hooks/useFilterState';
+import { Button } from '@components/ui/button';
 
 export default function FooterSortBtsButton() {
   const { closeModals } = useModals();
@@ -11,5 +11,9 @@ export default function FooterSortBtsButton() {
     closeModals();
   };
 
-  return <Button onClick={() => onApplySort()}>Áp dụng</Button>;
+  return (
+    <Button className="w-full" onClick={() => onApplySort()}>
+      Áp dụng
+    </Button>
+  );
 }

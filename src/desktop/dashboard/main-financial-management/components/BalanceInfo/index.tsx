@@ -1,7 +1,7 @@
 import useBalance from '@mobile/main-financial-management/hooks';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
-import { Block, BlockTitle } from 'konsta/react';
 import { FC, useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const BalanceInfo: FC<{ title: string }> = ({ title }) => {
   const { balanceInfo } = useBalance();
@@ -18,20 +18,33 @@ const BalanceInfo: FC<{ title: string }> = ({ title }) => {
 
   return (
     <div className="c-balanceInfo">
-      <BlockTitle large>{title}</BlockTitle>
-      <div className="c-balanceInfo__cards flex">
-        <Block strong inset outline className="c-cardBalance">
-          <p className="uppercase">Số dư tài khoản</p>
-          <h2 className="">{balanceData.total}</h2>
-        </Block>
-        <Block strong inset outline className="c-cardBalance">
-          <p className="uppercase">Tài khoản chính</p>
-          <h2 className="text-[#007bff]">{balanceData.tk_chinh}</h2>
-        </Block>
-        <Block strong inset outline className="c-cardBalance c-cardSales">
-          <p className="uppercase">Tài khoản khuyến mãi</p>
-          <h2 className="text-[#fd7e14]">{balanceData.tk_km}</h2>
-        </Block>
+      <h3 className="my-4 text-xl font-bold">{title}</h3>
+
+      <div className="flex gap-4">
+        <Card className="flex-1">
+          <CardHeader className="mt-4 p-4 pb-0">
+            <CardTitle className="uppercase text-slate-400">Số dư tài khoản</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 text-xl text-[#007bff]">{balanceData.total}</CardContent>
+        </Card>
+
+        <Card className="flex-1">
+          <CardHeader className="mt-4 p-4 pb-0">
+            <CardTitle className="uppercase text-slate-400">Tài khoản chính</CardTitle>
+          </CardHeader>
+          <CardContent className="gap-4 p-4 text-xl text-[#007bff]">
+            {balanceData.tk_chinh}
+          </CardContent>
+        </Card>
+
+        <Card className="flex-1">
+          <CardHeader className="mt-4 p-4 pb-0">
+            <CardTitle className="uppercase text-slate-400">Tài khoản khuyến mãi</CardTitle>
+          </CardHeader>
+          <CardContent className="gap-4 p-4 text-xl text-[#fd7e14]">
+            {balanceData.tk_km}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
