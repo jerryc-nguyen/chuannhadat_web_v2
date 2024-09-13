@@ -8,8 +8,7 @@ export const API_ROUTES = {
     LOGOUT: 'auth/logout',
   },
   POSTS: {
-    DETAIL_POST: 'api/v1/products/detail',
-    UPDATE_POST: 'api/v1/products',
+    DETAIL_POST: 'api/v1/products'
   },
   BALANCE: {
     OVERVIEW: 'api/v1/balances/overviews',

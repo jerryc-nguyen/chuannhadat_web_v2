@@ -10,14 +10,8 @@ export const metadata: Metadata = {
   description: 'Chi tiết bài đăng',
 };
 export default async function PostDetailPage({ params }: { params: { slug: string } }) {
-  const productUid = params.slug[0].split('-').slice(-1)[0];
-
   const queryClient = new QueryClient();
-  // Prefetch api in server
-  await queryClient.prefetchQuery({
-    queryKey: ['get-detail-post', productUid],
-    queryFn: () => services.posts.getDetailPost(productUid),
-  });
+
   const { isMobile } = useGetUserAgentInfo();
   const dehydratedState = dehydrate(queryClient);
   return (

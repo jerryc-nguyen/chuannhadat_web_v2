@@ -24,11 +24,7 @@ export const services = {
   },
   posts: {
     getDetailPost: async (product_uid: string): Promise<A> => {
-      return axiosInstance.get(API_ROUTES.POSTS.DETAIL_POST, {
-        params: {
-          product_uid,
-        },
-      });
+      return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
     },
   },
 };
