@@ -19,9 +19,7 @@ const ListChips = ({
         <HorizontalScroller>
           {options.map((item) => {
             const selectedClass =
-              value?.text == item.text
-                ? 'is-selected bg-blue-500 text-white border-none'
-                : 'bg-white';
+              value?.text == item.text ? 'is-selected bg-black text-white border-none' : 'bg-white';
             return (
               <button
                 className={`c-listChip__item shrink-0 rounded-full border border-black border-opacity-20 text-center ${selectedClass}`}

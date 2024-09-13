@@ -17,15 +17,15 @@ export default function Rooms() {
 
   return (
     <div>
-      <p>Phòng ngủ</p>
+      <p className="mb-2 font-bold">Phòng ngủ</p>
 
       <ListChips
         options={filterFieldOptions.roomOptions || []}
         onSelect={onSelectBed}
         value={curBed}
       />
-
-      <p>Nhà tắm</p>
+      <br />
+      <p className="mb-2 font-bold">Nhà tắm</p>
 
       <ListChips
         options={filterFieldOptions.roomOptions || []}
