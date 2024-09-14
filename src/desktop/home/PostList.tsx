@@ -1,38 +1,11 @@
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
-import { searchApi } from '@api/searchApi';
 import ProductCard from './ProductCard';
-import PostControls from './PostControls';
 
-import { useHydrateAtoms } from 'jotai/utils';
-import { loadedCardAuthorsAtom } from './states';
-
-export default function PostList() {
-  const { buildFilterParams } = useFilterState();
-
-  const filterParams = buildFilterParams({
-    withLocal: false,
-  });
-  filterParams.with_users = true;
-  filterParams.per_page = 12;
-  console.log('filterParams', filterParams);
-
-  const { data } = useSuspenseQuery(
-    queryOptions({
-      queryKey: ['home', filterParams],
-      queryFn: () => searchApi(filterParams),
-    }),
-  );
-
-  useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
-
+export default function PostList({ products }: { products: Array<A> }) {
   return (
     <>
-      <PostControls pagination={data?.pagination} />
-
       <div className="c-content__gridWrap">
         <div className="c-content__grid">
-          {data?.data.map((product: A) => {
+          {products.map((product: A) => {
             return (
               <div
                 key={product?.id}

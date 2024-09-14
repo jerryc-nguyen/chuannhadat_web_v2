@@ -1,4 +1,4 @@
-import { TLoadedCardAuthors, loadedCardAuthorsAtom, TCardAuthors } from '../states';
+import { TLoadedCardAuthors, loadedCardAuthorsAtom, TCardAuthor } from '../states';
 import { useAtom } from 'jotai';
 
 export default function useCardAuthors() {
@@ -8,7 +8,7 @@ export default function useCardAuthors() {
     setAllAuthors({ ...allAuthors, ...authors });
   };
 
-  const getAuthorById = (id: string): TCardAuthors | undefined => {
+  const getAuthorById = (id: string): TCardAuthor | undefined => {
     return allAuthors[id];
   };
 
