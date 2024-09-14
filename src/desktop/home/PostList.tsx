@@ -1,49 +1,11 @@
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { isServer, useSuspenseQuery, queryOptions } from '@tanstack/react-query';
-import { searchApi } from '@api/searchApi';
 import ProductCard from './ProductCard';
-import PostControls from './PostControls';
 
-import { useHydrateAtoms } from 'jotai/utils';
-import { loadedCardAuthorsAtom, seoInfoAtom } from './states';
-import { useEffect } from 'react';
-import { useAtom } from 'jotai';
-
-export default function PostList() {
-  const { buildFilterParams } = useFilterState();
-  const [seoInfo, setSeoInfo] = useAtom(seoInfoAtom);
-
-  const filterParams = buildFilterParams({
-    withLocal: false,
-  });
-  filterParams.with_users = true;
-  filterParams.per_page = 12;
-  filterParams.with_seo_info = true;
-  console.log('filterParams!!!', filterParams);
-
-  const { data } = useSuspenseQuery(
-    queryOptions({
-      queryKey: ['home', filterParams],
-      queryFn: () => searchApi(filterParams),
-    }),
-  );
-
-  console.log('data.seo_info', data.seo_info);
-
-  useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
-
-  useEffect(() => {
-    console.log('data.seo_infodata.seo_info', data.seo_info);
-    setSeoInfo(data.seo_info);
-  }, [data]);
-
+export default function PostList({ products }: { products: Array<A> }) {
   return (
     <>
-      <PostControls pagination={data?.pagination} />
-
       <div className="c-content__gridWrap">
         <div className="c-content__grid">
-          {data?.data.map((product: A) => {
+          {products.map((product: A) => {
             return (
               <div
                 key={product?.id}
