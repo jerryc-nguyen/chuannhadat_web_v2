@@ -2,10 +2,7 @@
 
 import * as React from "react"
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
-import useEmblaCarousel, {
-  type UseEmblaCarouselType,
-} from "embla-carousel-react"
-
+import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react"
 import { cn } from "@common/utils"
 import { Button } from "@components/ui/button"
 
@@ -19,6 +16,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
+  loop?: boolean
 }
 
 type CarouselContextProps = {
@@ -54,6 +52,7 @@ const Carousel = React.forwardRef<
       plugins,
       className,
       children,
+      loop = false,
       ...props
     },
     ref
@@ -61,6 +60,7 @@ const Carousel = React.forwardRef<
     const [carouselRef, api] = useEmblaCarousel(
       {
         ...opts,
+        loop,
         axis: orientation === "horizontal" ? "x" : "y",
       },
       plugins
@@ -68,20 +68,22 @@ const Carousel = React.forwardRef<
     const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)
 
+    // Hàm onSelect để kiểm tra và cập nhật khả năng scroll
     const onSelect = React.useCallback((api: CarouselApi) => {
-      if (!api) {
-        return
-      }
-
+      if (!api) return
+      console.log("Selecting new slide")
       setCanScrollPrev(api.canScrollPrev())
       setCanScrollNext(api.canScrollNext())
+      console.log("canScrollPrev:", api.canScrollPrev(), "canScrollNext:", api.canScrollNext())
     }, [])
 
     const scrollPrev = React.useCallback(() => {
+      console.log("Previous button clicked")
       api?.scrollPrev()
     }, [api])
 
     const scrollNext = React.useCallback(() => {
+      console.log("Next button clicked")
       api?.scrollNext()
     }, [api])
 
@@ -99,20 +101,16 @@ const Carousel = React.forwardRef<
     )
 
     React.useEffect(() => {
-      if (!api || !setApi) {
-        return
-      }
+      if (!api || !setApi) return
 
       setApi(api)
     }, [api, setApi])
 
     React.useEffect(() => {
-      if (!api) {
-        return
-      }
+      if (!api) return
 
       onSelect(api)
-      api.on("reInit", onSelect)
+      api.on("reInit", onSelect) // Re-select when carousel reinitializes
       api.on("select", onSelect)
 
       return () => {
@@ -198,7 +196,7 @@ const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
 >(({ className, variant = "outline", size = "icon", ...props }, ref) => {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel()
+  const { orientation, scrollPrev } = useCarousel() // Bỏ canScrollPrev
 
   return (
     <Button
@@ -206,14 +204,13 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute  h-8 w-8 rounded-full",
+        "absolute h-8 w-8 rounded-full",
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
+      onClick={scrollPrev} // Luôn cho phép cuộn
       {...props}
     >
       <ArrowLeftIcon className="h-4 w-4" />
@@ -227,7 +224,7 @@ const CarouselNext = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
 >(({ className, variant = "outline", size = "icon", ...props }, ref) => {
-  const { orientation, scrollNext, canScrollNext } = useCarousel()
+  const { orientation, scrollNext } = useCarousel() // Bỏ canScrollNext
 
   return (
     <Button
@@ -241,8 +238,7 @@ const CarouselNext = React.forwardRef<
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
-      disabled={!canScrollNext}
-      onClick={scrollNext}
+      onClick={scrollNext} // Luôn cho phép cuộn
       {...props}
     >
       <ArrowRightIcon className="h-4 w-4" />

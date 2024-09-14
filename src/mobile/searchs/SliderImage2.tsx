@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import React from 'react';
+import { Carousel,  CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Image } from './type';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
