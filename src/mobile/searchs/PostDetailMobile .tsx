@@ -1,23 +1,23 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
-import { Breadcrumbs, BreadcrumbsItem, BreadcrumbsSeparator } from 'konsta/react';
 import { CiLocationOn } from 'react-icons/ci';
 import { MdOutlinePriceChange } from 'react-icons/md';
 import { IoMdTime } from 'react-icons/io';
-import { IoIosPricetags } from 'react-icons/io';
+import { IoIosPricetags, IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import { FaBed } from 'react-icons/fa';
 import { LuWarehouse } from 'react-icons/lu';
 import { FaBath } from 'react-icons/fa6';
 import { FaHouseUser } from 'react-icons/fa';
-import Link from 'next/link';
-import SliderImage2 from './SliderImage2';
+
 import { postDetailAtom } from '@mobile/post-detail/states';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { usePathname } from 'next/navigation';
+import ImageCarousel from '@mobile/ui/ImageCarousel';
+import Spinner from '@components/ui/spinner';
 
 export default function PostDetailMobile() {
   const currentPath = usePathname();
@@ -32,10 +32,11 @@ export default function PostDetailMobile() {
     }
   }, [currentPath]);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['get-detail-post', productUid],
     queryFn: () => (productUid ? services.posts.getDetailPost(productUid) : Promise.resolve(null)),
-    enabled: !!productUid && productUid !== "/", // Only fetch if productUid is valid
+    enabled: !!productUid && productUid !== '/', // Ensure query is enabled only if productUid is valid
+    refetchOnWindowFocus: true, // Optional: refetch when window is focused
   });
 
   useEffect(() => {
@@ -44,26 +45,45 @@ export default function PostDetailMobile() {
     }
   }, [data, setPostDetail]);
 
-  if (!productUid) return <div>Loading...</div>; // Handle case when productUid is not available
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading data.</div>;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [isOverflow, setIsOverflow] = useState(false);
+
+  useEffect(() => {
+    const element = contentRef.current;
+    if (element) {
+      setIsOverflow(element.scrollHeight > 235);
+    }
+  }, [postDetail?.description]);
+
+  const handleToggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  useEffect(() => {
+    const containers = document.querySelectorAll('.c-mobileApp');
+
+    containers.forEach((container) => {
+      if (isLoading) {
+        (container as HTMLElement).style.height = '100vh';
+      } else {
+        (container as HTMLElement).style.height = 'auto';
+      }
+    });
+  }, [isLoading]);
+
+  if (isLoading)
+    return (
+      <div className="m-auto flex h-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex flex-col gap-4 rounded-xl bg-white p-4">
-        <Breadcrumbs>
-          <BreadcrumbsItem>
-            <Link href={'/'} className="text-sm">
-              Home
-            </Link>
-          </BreadcrumbsItem>
-          <BreadcrumbsSeparator />
-          <BreadcrumbsItem className="text-sm" active>
-            {(postDetail as any)?.slug}
-          </BreadcrumbsItem>
-        </Breadcrumbs>
         {postDetail?.images && postDetail?.images.length > 0 ? (
-          <SliderImage2 listImg={postDetail.images} />
+          <ImageCarousel images={postDetail.images} />
         ) : (
           <AspectRatio.Root ratio={16 / 9}>
             <img
@@ -80,16 +100,37 @@ export default function PostDetailMobile() {
 
       <div className="flex flex-col gap-1 rounded-xl bg-white p-4">
         <h4 className="text-lg font-bold">Mô tả chi tiết</h4>
-        {postDetail?.description &&
-          postDetail?.description.split('+').map((line: string, index: number) => {
-            if (line.trim() === '') return null;
-            return (
-              <div className="mb-1" key={index}>
-                {'+  ' + line.trim()}
-                <br />
-              </div>
-            );
-          })}
+        <div
+          ref={contentRef}
+          className={`overflow-hidden ${isExpanded ? 'h-auto' : 'h-[235px]'} transition-all duration-300`}
+        >
+          {postDetail?.description &&
+            postDetail?.description.split('+').map((line: string, index: number) => {
+              if (line.trim() === '') return null;
+              return (
+                <div className="mb-1" key={index}>
+                  {'+  ' + line.trim()}
+                  <br />
+                </div>
+              );
+            })}
+        </div>
+        {postDetail?.description && isOverflow && !isExpanded && (
+          <button
+            onClick={handleToggleExpand}
+            className="mt-2 flex items-center justify-center gap-2 text-blue-500 hover:underline"
+          >
+            Xem thêm <IoIosArrowDown />
+          </button>
+        )}
+        {isExpanded && (
+          <button
+            onClick={handleToggleExpand}
+            className="mt-2 flex items-center justify-center gap-2 text-blue-500 hover:underline"
+          >
+            Thu gọn <IoIosArrowUp />
+          </button>
+        )}
       </div>
       <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
         <h4 className="text-lg font-bold">{postDetail?.title ?? ''}</h4>
