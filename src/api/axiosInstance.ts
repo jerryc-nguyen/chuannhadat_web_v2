@@ -27,11 +27,11 @@ axiosInstance.interceptors.request.use(
     set(request, 'headers.Authorization', `Bearer ${token}`);
     return request;
   },
-  (_error: A) => {
+  (error: A) => {
     const errorResponse = {
       status: null,
       message: null,
-      errors: null,
+      errors: error,
     };
     return Promise.reject(errorResponse);
   },

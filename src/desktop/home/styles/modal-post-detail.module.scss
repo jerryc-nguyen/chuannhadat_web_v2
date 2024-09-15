@@ -1,0 +1,24 @@
+.modal_content_post {
+  :global {
+    .post-content {
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        width: 10px;
+        background-color: rgba(243 244 246 / var(--tw-bg-opacity));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 50px;
+      }
+      &:hover::-webkit-scrollbar {
+        opacity: 1; /* Hiển thị scrollbar khi hover */
+      }
+
+      &:hover::-webkit-scrollbar-thumb {
+        background-color: #a5a5a5; /* Đổi màu khi hover */
+      }
+    }
+  }
+}

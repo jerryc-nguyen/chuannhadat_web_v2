@@ -7,8 +7,6 @@ import { searchApi } from '@api/searchApi';
 import { useMemo } from 'react';
 
 export default function useFilterState() {
-  console.log('calling in server');
-
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const [filterFieldOptions] = useAtom(filterFieldOptionsAtom);
@@ -60,13 +58,11 @@ export default function useFilterState() {
   };
 
   const applyAllFilters = (filters?: A) => {
-    console.log('localFilterState', localFilterState);
     setFilterState({
       ...localFilterState,
       ...filters,
     });
     syncSelectedParamsToUrl();
-    console.log('buildFilterParams', buildFilterParams());
   };
 
   const buildFilterParams = ({ withLocal = true }: { withLocal?: boolean } = {}): Record<
