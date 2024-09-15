@@ -11,6 +11,11 @@ import { cookies } from 'next/headers';
 import { API_TOKEN } from '@common/auth';
 import { Provider as JotaiProvider } from 'jotai';
 
+
+// import Swiper and modules styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -36,7 +41,11 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className + ` ${mobileClass} `}>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no"
+      ></meta>
+      <body className={inter.className + ` ${mobileClass}`}>
         <QueryProvider>
           <JotaiProvider>
             <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>

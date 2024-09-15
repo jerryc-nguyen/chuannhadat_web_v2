@@ -12,13 +12,12 @@ import useModals from '@mobile/modals/hooks';
 import FooterOverviewBtsButton from '@mobile/filter_bds/FooterOverviewBtsButton';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import PostList from '@mobile/searchs/PostList';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary, QueryClientProvider } from '@tanstack/react-query';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { getQueryClient } from '@api/react-query';
 import SidePanel from '@components/SidePanel';
 
 export default function Mobile() {
-  console.log('rerender Mobile');
   const queryClient = getQueryClient();
 
   useSyncParamsToState();
@@ -44,9 +43,12 @@ export default function Mobile() {
       </header>
 
       <FilterChips />
+      
+      <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <PostList />
       </HydrationBoundary>
+      </QueryClientProvider>
 
       <BtsModals1 />
       <BtsModals2 />

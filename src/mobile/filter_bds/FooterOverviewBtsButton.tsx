@@ -15,14 +15,11 @@ export default function FooterOverviewBtsButton() {
     queryFn: () => searchApi(filterParams),
   });
 
-  console.log('isLoading', isLoading, data);
-
   const onApplyFilter = () => {
     applyAllFilters();
 
     closeModals();
   };
-
   return (
     <Button disabled={isLoading} className="w-full" onClick={onApplyFilter}>
       {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}

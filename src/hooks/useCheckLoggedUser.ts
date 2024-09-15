@@ -9,7 +9,7 @@ export default function useCheckLoggedUser() {
   const { signout, updateCurrentUser } = useAuth();
   const { data, isFetching } = useQuery({
     queryKey: ['get-profile-me'],
-    queryFn: services.getMyProfile,
+    queryFn: services.profiles.getMyProfile,
   });
 
   if (isFetching) {
