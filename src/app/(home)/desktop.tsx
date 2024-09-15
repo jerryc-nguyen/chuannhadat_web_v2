@@ -43,9 +43,9 @@ export default function Desktop() {
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  if (missingAuthors?.data) {
-    appendCardAuthors(missingAuthors.data);
-  }
+  // if (missingAuthors?.data) {
+  //   appendCardAuthors(missingAuthors.data);
+  // }
 
   return (
     <main className="c-layout1col">

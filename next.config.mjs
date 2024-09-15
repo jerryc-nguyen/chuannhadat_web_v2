@@ -11,6 +11,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'chuannhadat-assets.sgp1.digitaloceanspaces.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'chuannhadat-assets-dev.sgp1.digitaloceanspaces.com',
+      },
     ],
   },
 };
