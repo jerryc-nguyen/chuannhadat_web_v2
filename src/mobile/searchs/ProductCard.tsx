@@ -31,7 +31,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
     // if (!!data) {
 
     // } else {
-    //   console.log('Bug!!!');
+    //   ('Bug!!!');
     // }
 
     openModal({

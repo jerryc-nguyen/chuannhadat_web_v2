@@ -1,9 +1,20 @@
 import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
+import { concatStrings } from '@common/utils';
+import { Author, IProductDetail } from '@mobile/searchs/type';
 
 export const services = {
-  getMyProfile: async (headers?: A): Promise<A> => {
-    return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE, { headers: headers });
+  profiles: {
+    getMyProfile: async (headers?: A): Promise<A> => {
+      return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE, { headers: headers });
+    },
+    getProfileSlug: async (slug: string): Promise<{ data: Author }> => {
+      return axiosInstance.get(concatStrings(API_ROUTES.PROFILES.GET_MY_PROFILE_SLUG, slug), {
+        params: {
+          slug,
+        },
+      });
+    },
   },
   notifications: {
     getNotifications: async (params: {
