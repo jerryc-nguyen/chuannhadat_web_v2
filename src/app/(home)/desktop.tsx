@@ -1,12 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import MainNav from '@desktop/components/MainNav';
 import './desktop.scss';
 import DesktopFilterChips from '@mobile/filter_bds/DesktopFilterChips';
-import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
-
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import PostList from '@desktop/home/PostList';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
@@ -16,6 +13,8 @@ import { useHydrateAtoms } from 'jotai/utils';
 import { loadedCardAuthorsAtom } from '@desktop/home/states';
 import PostControls from '@desktop/home/PostControls';
 import useCardAuthors from '@desktop/home/hooks/useCardAuthors';
+import { ModalPostDetail } from '@desktop/home/components';
+import MainNav from '@desktop/components/MainNav';
 
 export default function Desktop() {
   useSyncParamsToState();
@@ -44,9 +43,9 @@ export default function Desktop() {
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  if (missingAuthors?.data) {
-    appendCardAuthors(missingAuthors.data);
-  }
+  // if (missingAuthors?.data) {
+  //   appendCardAuthors(missingAuthors.data);
+  // }
 
   return (
     <main className="c-layout1col">
@@ -59,14 +58,10 @@ export default function Desktop() {
         <div className="top-50 sticky z-10">
           <DesktopFilterChips />
         </div>
-
+        <ModalPostDetail />
         <PostControls pagination={data?.pagination} />
         <PostList products={data?.data} />
       </main>
-
-      <BtsModals1 />
-      <BtsModals2 />
-      <BtsModals3 />
     </main>
   );
 }

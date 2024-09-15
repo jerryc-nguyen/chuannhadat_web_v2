@@ -18,7 +18,6 @@ import { getQueryClient } from '@api/react-query';
 import SidePanel from '@components/SidePanel';
 
 export default function Mobile() {
-  console.log('rerender Mobile');
   const queryClient = getQueryClient();
 
   useSyncParamsToState();
