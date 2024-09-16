@@ -11,6 +11,7 @@ export enum ModalNames {
 export interface DefaultModal {
   name: string | ModalNames | FilterFieldName;
   title?: ReactElement | string;
+  titleDescription?: ReactElement | string;
   content?: ReactElement | string;
   footer?: ReactElement | string;
   maxHeightPercent?: number;
@@ -18,7 +19,11 @@ export interface DefaultModal {
   closeThreshold?: number;
   btsProps?: A;
   index?: number;
+  desktopSize?: string;
   onClosed?: IFunction;
+  isDesktopDialog?: boolean;
+  btsContentWrapClass?: string;
+  dialogContentWrapClass?: string;
 }
 
 export type Modal = DefaultModal;

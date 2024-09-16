@@ -19,7 +19,6 @@ import MainNav from '@desktop/components/MainNav';
 export default function Desktop() {
   useSyncParamsToState();
   const { appendCardAuthors } = useCardAuthors();
-
   const { buildFilterParams } = useFilterState();
 
   const filterParams = buildFilterParams({
@@ -38,14 +37,16 @@ export default function Desktop() {
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
 
-  const { data: missingAuthors } = useQuery({
+  const { data: missingAuthors, isLoading } = useQuery({
     queryKey: ['missing-card-authors', data.missing_user_ids],
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  // if (missingAuthors?.data) {
-  //   appendCardAuthors(missingAuthors.data);
-  // }
+  if (!isLoading && missingAuthors?.data) {
+    setTimeout(() => {
+      appendCardAuthors(missingAuthors.data);
+    }, 200);
+  }
 
   return (
     <main className="c-layout1col">
