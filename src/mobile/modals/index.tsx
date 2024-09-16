@@ -63,7 +63,7 @@ export function BtsModals1() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  if (modal?.isDesktopDialog) {
+  if (modal?.showAsDialog) {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (
@@ -148,7 +148,7 @@ export function BtsModals2() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  if (modal?.isDesktopDialog) {
+  if (modal?.showAsDialog) {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (
@@ -203,7 +203,7 @@ export function BtsModals3() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  if (modal?.isDesktopDialog) {
+  if (modal?.showAsDialog) {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (

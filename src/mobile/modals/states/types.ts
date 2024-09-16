@@ -21,7 +21,7 @@ export interface DefaultModal {
   index?: number;
   desktopSize?: string;
   onClosed?: IFunction;
-  isDesktopDialog?: boolean;
+  showAsDialog?: boolean;
   btsContentWrapClass?: string;
   dialogContentWrapClass?: string;
 }
