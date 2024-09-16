@@ -1,7 +1,7 @@
 import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { Author, IProductDetail } from '@mobile/searchs/type';
+import { Author } from '@mobile/searchs/type';
 
 export const services = {
   profiles: {

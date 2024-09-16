@@ -23,7 +23,7 @@ export function usePaginatedNotifications() {
   const { fetchNotification } = useNotificationRequest();
 
   const fetchNotifications = useCallback(
-    async (page: number, filter: 'read' | 'unread' | null, isFirstLogin: boolean = false) => {
+    async (page: number, filter: 'read' | 'unread' | null, isFirstLogin = false) => {
       if (!currentUser && !isFirstLogin) return;
 
       try {
@@ -34,7 +34,7 @@ export function usePaginatedNotifications() {
         });
 
         // Only set new notifications if we're not resetting due to a filter change
-        let newNotifications: INotificationResponse[] = response.results
+        let newNotifications: INotificationResponse[] = response?.results;
         setNotifications((prevNotifications) => {
           if (page !== 1) {
             const existingIds = new Set(notifications.map((notification) => notification.id));
@@ -42,11 +42,11 @@ export function usePaginatedNotifications() {
               (notification: INotificationResponse) => !existingIds.has(notification.id),
             );
 
-            newNotifications = [...prevNotifications, ...notifyTemp]
+            newNotifications = [...prevNotifications, ...notifyTemp];
 
             return newNotifications;
           }
-          
+
           return newNotifications;
         });
 
