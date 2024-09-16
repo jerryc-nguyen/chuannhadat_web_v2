@@ -1,11 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -76,10 +74,6 @@ export function DemoReportAnIssue() {
           />
         </div>
       </CardContent>
-      <CardFooter className="justify-between space-x-2">
-        <Button variant="ghost">Cancel</Button>
-        <Button>Submit</Button>
-      </CardFooter>
     </Card>
   );
 }

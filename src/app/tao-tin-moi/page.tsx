@@ -7,14 +7,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   FormSchemaTransactionType,
-  IProductForm,
 } from "./components/form-components/form-schema";
 import { Form } from "@/components/ui/form";
 import ProductDetailInfoForm from "./components/form-components/product-detail-info-form";
 import ImageForm from "./components/form-components/image-form";
+import { IProductForm } from "./type";
+import { Button } from "@components/ui/button";
 
 const NewPostPage: React.FC = () => {
-  const defaultValues = {
+  const defaultValues = { 
     name: "",
     description: "",
     price: 0,
@@ -63,14 +64,18 @@ const NewPostPage: React.FC = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
-          <div className="col-span-4 grid items-start gap-6 lg:col-span-2">
+          <div className="grid items-start gap-6 lg:col-span-2">
             <ImageForm form={form} />
             <ProductInfoForm form={form} />
             <ProductDetailInfoForm form={form} />
           </div>
-          <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
+          <div className="grid items-start gap-6 lg:col-span-1 top-2-safe sticky">
             <DemoReportAnIssue />
           </div>
+        </div>
+        <div className="bg-card border bottom-2-safe flex justify-between mt-6 p-3 rounded-lg sticky z-[9999]">
+          <Button variant="ghost">Cancel</Button>
+          <Button>Submit</Button>
         </div>
       </form>
     </Form>
