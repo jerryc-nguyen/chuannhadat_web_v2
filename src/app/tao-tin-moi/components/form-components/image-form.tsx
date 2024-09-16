@@ -6,7 +6,7 @@ import { Separator } from "@components/ui/separator";
 import { Image } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { IProductForm } from "@app/tao-tin-moi/type";
-import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem } from "@/components/ui/form";
 
 import dynamic from "next/dynamic";
 import { Input } from "@components/ui/input";
@@ -19,6 +19,7 @@ interface IImageForm {
 }
 
 const ImageForm: React.FC<IImageForm> = ({ form }) => {
+  // const image_ids = form.watch("image_ids");
 
   return (
     <Card>
@@ -42,7 +43,7 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
             </FormItem>
           )}
         />
-        <ImageUploader />
+        <ImageUploader form={form}/>
       </CardContent>
     </Card>
   );

@@ -3,8 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { Button } from '@components/ui/button';
 import ThumbDragAndDropZone from './component/thumbs-container';
-import { FileWithPreview } from '@app/tao-tin-moi/type';
-import ImageUploadApiService from '@app/tao-tin-moi/apis/image-upload-api';
+import { CNDImage, IProductForm } from '@app/tao-tin-moi/type';
+import { UseFormReturn } from "react-hook-form";
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',
@@ -27,22 +27,26 @@ const rejectStyle: CSSProperties = {
   borderColor: '#ff1744',
 };
 
-const ImageUploader: React.FC = () => {
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
+interface IImageUploader {
+  form: UseFormReturn<IProductForm>;
+}
+
+const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
+  const [images, setImages] = useState<CNDImage[]>([]);
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
     accept: {
       'image/*': [],
     },
     onDrop: (acceptedFiles: File[]) => {
-      setFiles((prev) => [
+      setImages((prev) => [
         ...prev,
         ...acceptedFiles.map((file) => {
-            const fileWithPreview = Object.assign(file, {
-                preview: URL.createObjectURL(file),
-            });
-            ImageUploadApiService.upload([fileWithPreview]);
-            return fileWithPreview;
+            const imgCND = {
+              url: URL.createObjectURL(file),
+              uploadedFile: file,
+            };
+            return imgCND;
         }
         ),
       ]);
@@ -60,10 +64,16 @@ const ImageUploader: React.FC = () => {
   );
 
   useEffect(() => {
+    form.setValue("image_ids", images.map(item => item.id?.toString() || "undefined").join(","))
+
     return () => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
+      images.forEach((file) => {
+        if ( file.id ) return;
+        URL.revokeObjectURL(file.url)
+      });
     };
-  }, [files]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images]);
 
   return (
     <section className="">
@@ -82,7 +92,7 @@ const ImageUploader: React.FC = () => {
         </span>
       </div>
 
-      <ThumbDragAndDropZone files={files} setFiles={setFiles}/>
+      <ThumbDragAndDropZone cndImages={images} setFiles={setImages}/>
     </section>
   );
 };

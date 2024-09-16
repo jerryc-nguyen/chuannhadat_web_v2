@@ -1,36 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FileWithPreview } from '@app/tao-tin-moi/type';
+import { CNDImage } from '@app/tao-tin-moi/type';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 interface IThumbDragAndDropZone {
-  files: FileWithPreview[];
+  cndImages: CNDImage[];
   setFiles: (arg0: any) => void;
 }
-const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ files, setFiles }) => {
+const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ cndImages, setFiles }) => {
 
-    const reorder = (list: any[], startIndex: number, endIndex: number) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-      
-        return result;
-      };
+  const reorder = (list: any[], startIndex: number, endIndex: number) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+  
+    return result;
+  };
 
-    function onDragEnd (result: any) {
-        // dropped outside the list
-        if (!result.destination) {
-          return;
-        }
+  function onDragEnd (result: any) {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
 
-        setFiles((prev: any) => {
-            return reorder(
-                prev,
-                result.source.index,
-                result.destination.index
-            )
-        })
-      }
+    setFiles((prev: any) => {
+        return reorder(
+            prev,
+            result.source.index,
+            result.destination.index
+        )
+    })
+  }
+
+  const generateKey = (cndImage: CNDImage) => {
+    return cndImage.id ? cndImage.id.toString() : (cndImage.uploadedFile ? (cndImage.uploadedFile.name) : "");
+  }
     
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -41,9 +45,13 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ files, setFiles
             ref={provided.innerRef}
             className="flex w-full flex-wrap justify-start gap-5 pt-4"
           >
-            {files.map((file, index) => {
+            {cndImages.map((cndImage, index) => {
               return (
-                <Draggable key={file.name + index} draggableId={file.name + index} index={index}>
+                <Draggable
+                  key={generateKey(cndImage)}
+                  draggableId={generateKey(cndImage)}
+                  index={index}
+                >
                   {(provided: any, snapshot: any) => (
                     <div
                       className="w-min"
@@ -53,7 +61,7 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ files, setFiles
                       variant={snapshot.isDragging ? 'elevation' : 'outlined'}
                       elevation={4}
                     >
-                      <PreviewThumb file={file} />
+                      <PreviewThumb image={cndImage} />
                     </div>
                   )}
                 </Draggable>

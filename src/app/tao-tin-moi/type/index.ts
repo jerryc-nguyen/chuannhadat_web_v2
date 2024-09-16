@@ -1,5 +1,7 @@
-export interface FileWithPreview extends File {
-    preview: string;
+export interface CNDImage {
+    id?: string | number;
+    url: string;
+    uploadedFile?: File;
 }
 
 export interface IProductForm {

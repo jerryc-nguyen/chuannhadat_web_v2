@@ -3,7 +3,6 @@ import axiosInstance from '@api/axiosInstance';
 import axios from 'axios';
 import { API_ROUTES } from '@common/router';
 import {
-  FileWithPreview,
   IImageSignS3_Request,
   IImageSignS3_Response,
   ITrackUploadedUrl_Request,
@@ -15,8 +14,8 @@ const GetSignedUploadUrl = async (data: IImageSignS3_Request): Promise<IImageSig
   return await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.SIGN_S3, data);
 };
 
-const TrackUploadedUrl = async (data: ITrackUploadedUrl_Request) => {
-  return (await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.TRACK_UPLOADED_URL, data)).data;
+const TrackUploadedUrl = async (data: ITrackUploadedUrl_Request): Promise<ITrackUploadedUrl_Response> => {
+  return await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.TRACK_UPLOADED_URL, data);
 };
 
 const PerformUploadImageS3 = async (
@@ -28,7 +27,8 @@ const PerformUploadImageS3 = async (
 };
 
 const ImageUploadApiService = {
-  upload: (files: FileWithPreview[]) => {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  upload: (files: File[], onUploadProgressCallback: (currentProgress: number) => void) => {
     const uploadPromises = files.map(async (file) => {
       try {
         const fileExtension = file.name.split('.').pop();
@@ -47,18 +47,7 @@ const ImageUploadApiService = {
 
         const options = {
           onUploadProgress: (event: AxiosProgressEvent) => {
-            const { loaded, total } = event;
-            //   onProgress(
-            //     {
-            //       percent: Math.round((loaded / total) * 100)
-            //     },
-            //     file
-            //   );
-            console.log('loaded, total', loaded, total);
-          },
-          headers: {
-            'Content-Type': file.type,
-            'x-amz-acl': 'public-read',
+            onUploadProgressCallback(Math.ceil((event.progress || 1) * 100));
           },
         };
 
@@ -79,11 +68,10 @@ const ImageUploadApiService = {
           });
 
           if (trackUploadedUrlResponse.success && trackUploadedUrlResponse.id) {
-            // file.thumbUrl = response.data.thumb_url;
-            // file.url = response.data.original_url;
-            // file.record = response.data;
-            // onSuccess(response.data, file);
-            console.log('trackUploadedUrlResponse', trackUploadedUrlResponse);
+            return {
+              ...trackUploadedUrlResponse,
+              url: signedUrlResponse.s3_url
+            };
           } else {
             throw new Error('Đã có lỗi xảy ra (code 4)');
           }
