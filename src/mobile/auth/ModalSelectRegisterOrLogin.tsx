@@ -38,35 +38,33 @@ export default function ModalSelectRegisterOrLogin({ onClose }: { onClose: () =>
 
   return (
     <>
-      <div className="mt-2 bg-white p-4">
-        <Tabs defaultValue={activeTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            {authOptions.map((option) => {
-              return (
-                <TabsTrigger
-                  key={option.value}
-                  value={option.value}
-                  onClick={() => {
-                    handleShowModalLoginAndRegister(option.value);
-                  }}
-                >
-                  {option.text}
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-        </Tabs>
-        {activeTab == 'login' && (
-          <div className="mt-8">
-            <LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError} />
-          </div>
-        )}
-        {activeTab == 'register' && (
-          <div className="mt-8">
-            <RegisterForm />
-          </div>
-        )}
-      </div>
+      <Tabs defaultValue={activeTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          {authOptions.map((option) => {
+            return (
+              <TabsTrigger
+                key={option.value}
+                value={option.value}
+                onClick={() => {
+                  handleShowModalLoginAndRegister(option.value);
+                }}
+              >
+                {option.text}
+              </TabsTrigger>
+            );
+          })}
+        </TabsList>
+      </Tabs>
+      {activeTab == 'login' && (
+        <div className="mt-8">
+          <LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError} />
+        </div>
+      )}
+      {activeTab == 'register' && (
+        <div className="mt-8">
+          <RegisterForm />
+        </div>
+      )}
     </>
   );
 }

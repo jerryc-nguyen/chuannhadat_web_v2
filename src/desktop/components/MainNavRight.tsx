@@ -32,6 +32,8 @@ export default function MainNavRight() {
       content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
+      showAsDialog: true,
+      btsContentWrapClass: 'mt-2 bg-white p-4',
     });
   };
 
