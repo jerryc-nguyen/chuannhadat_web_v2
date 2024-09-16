@@ -1,33 +1,33 @@
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { IoChevronDown } from 'react-icons/io5';
-import useModals from '@mobile/modals/hooks';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import FooterSortBtsButton from '@mobile/filter_bds/FooterSortBtsButton';
-import { FilterFieldName } from '@models';
+import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
 
 export default function PostControls({ pagination }: { pagination: any }) {
-  const { openModal3 } = useModals();
-  const { selectedSortText, copyFilterStatesToLocal } = useFilterState();
-
-  const onShowSortOptions = () => {
-    copyFilterStatesToLocal([FilterFieldName.sort]);
-    openModal3({
-      name: 'sort_bts',
-      title: 'Sắp xếp theo',
-      content: <SortOptions />,
-      footer: <FooterSortBtsButton />,
-    });
-  };
+  const { selectedSortText } = useFilterState();
 
   return (
     <div className="flex items-center justify-between">
       <div className="text-slate-600">Có {pagination?.total_count} tin đăng</div>
-      <div className="flex items-center" onClick={onShowSortOptions}>
-        <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
-          {selectedSortText}
-        </span>
-        <IoChevronDown />
-      </div>
+      <Popover>
+        <PopoverTrigger className="relative cursor-pointer">
+          <div className="flex items-center">
+            <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
+              {selectedSortText}
+            </span>
+            <IoChevronDown />
+          </div>
+        </PopoverTrigger>
+        <PopoverContent sideOffset={5} align="end" side="bottom" className="px-0">
+          <section className="max-h-[20rem] overflow-y-auto">
+            <SortOptions />
+          </section>
+          <div className="mt-4 px-4">
+            <FooterSortBtsButton />
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
