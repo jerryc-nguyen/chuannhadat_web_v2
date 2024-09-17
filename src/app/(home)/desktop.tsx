@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import './desktop.scss';
 import DesktopFilterChips from '@mobile/filter_bds/DesktopFilterChips';
@@ -21,14 +21,12 @@ export default function Desktop() {
   const { appendCardAuthors } = useCardAuthors();
   const { buildFilterParams } = useFilterState();
 
-  const filterParams = buildFilterParams({
-    withLocal: false,
-  });
+  const filterParams = buildFilterParams({ withLocal: false });
   filterParams.with_title = true;
   filterParams.with_users = true;
   filterParams.per_page = 12;
 
-  const { data } = useSuspenseQuery(
+  const { data, isFetched } = useSuspenseQuery(
     queryOptions({
       queryKey: ['home', filterParams],
       queryFn: () => searchApi(filterParams),
@@ -37,16 +35,26 @@ export default function Desktop() {
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
 
-  const { data: missingAuthors, isLoading } = useQuery({
+  useCallback(() => {
+    if (isFetched && data.users) {
+      setTimeout(() => {
+        appendCardAuthors(data.users);
+      }, 200);
+    }
+  }, [isFetched, data.users]);
+
+  const { data: missingAuthors, isFetched: isFetchedMissingAuthors } = useQuery({
     queryKey: ['missing-card-authors', data.missing_user_ids],
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  if (!isLoading && missingAuthors?.data) {
-    setTimeout(() => {
-      appendCardAuthors(missingAuthors.data);
-    }, 200);
-  }
+  useCallback(() => {
+    if (isFetched && data.users) {
+      setTimeout(() => {
+        appendCardAuthors(data.users);
+      }, 200);
+    }
+  }, [isFetchedMissingAuthors, missingAuthors?.data]);
 
   return (
     <main className="c-layout1col">

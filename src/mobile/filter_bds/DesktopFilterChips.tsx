@@ -5,7 +5,7 @@ import { FilterFieldName } from '@models';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
-import Locations from './bts/Locations';
+
 import styles from './styles/filterChips.module.scss';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
@@ -18,6 +18,7 @@ import useFilterState from './hooks/useFilterState';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
 import { cn } from '@common/utils';
 import './styles/DesktopFilterChips.scss';
+import Locations from '@desktop/product-filters/Locations';
 
 export interface FilterChipOption {
   id: string | FilterFieldName;

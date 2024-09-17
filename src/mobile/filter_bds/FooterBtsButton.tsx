@@ -9,10 +9,10 @@ import { LuLoader2 } from 'react-icons/lu';
 export default function FooterBtsButton({ filterOption }: { filterOption: FilterChipOption }) {
   const { closeModals } = useModals();
   const { applySingleFilter, buildFilterParams } = useFilterState();
-  const filterParams = buildFilterParams();
+  const filterParams = buildFilterParams({ withLocal: true });
 
   const { isLoading, data } = useQuery({
-    queryKey: ['searchs', filterParams],
+    queryKey: ['FooterBtsButton', filterParams],
     queryFn: () => searchApi(filterParams),
   });
 
