@@ -87,7 +87,7 @@ export default function Locations() {
 
   return (
     <div>
-      <List strongIos>
+      <List strongIos className="mt-4">
         <ListItem
           link
           title="Thành Phố"

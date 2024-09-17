@@ -34,7 +34,7 @@ export default function SearchBox(props: TSearchBoxProps) {
 
       {curValue.length > 0 && (
         <LuXCircle
-          className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground"
+          className="absolute right-3 top-2.5 h-4 w-4 cursor-pointer text-muted-foreground"
           onClick={onClear}
         />
       )}

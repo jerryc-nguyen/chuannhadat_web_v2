@@ -15,6 +15,7 @@ import PostControls from '@desktop/home/PostControls';
 import useCardAuthors from '@desktop/home/hooks/useCardAuthors';
 import { ModalPostDetail } from '@desktop/home/components';
 import MainNav from '@desktop/components/MainNav';
+import Locations from '@desktop/components/Locations';
 
 export default function Desktop() {
   useSyncParamsToState();
@@ -61,6 +62,7 @@ export default function Desktop() {
       </header>
 
       <main className="c-content c-content__container">
+        <Locations />
         <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tighter">{data?.title}</h1>
         <div className="top-50 sticky z-10">
           <DesktopFilterChips />
