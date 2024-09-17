@@ -2,22 +2,16 @@ import { services } from '@api/services';
 import { cn, genKey } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
+
 import { Skeleton } from '@components/ui/skeleton';
-import { IProductDetail } from '@mobile/searchs/type';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { LuPhoneCall, LuPhoneIncoming } from 'react-icons/lu';
+import { AuthorPostProps, StatusPhoneNumber } from '../type';
 
-type AuthorPostProps = {
-  data: IProductDetail;
-  className?:string
-};
-enum StatusPhoneNumber {
-  normal = 'Bấm để hiện số',
-  copy = 'Sao chép',
-  copied = 'Đã sao chép',
-}
-const AuthorPost: React.FC<AuthorPostProps> = ({ data,className }) => {
+import DialogContactAgain from '@components/dialog-contact-again';
+
+const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>();
   const [textButtonPhone, setTextButtonPhone] = React.useState<string>(StatusPhoneNumber.normal);
   const { data: profileData, isLoading } = useQuery({
@@ -26,11 +20,13 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data,className }) => {
     enabled: !!data?.author?.slug,
     select: (data) => data.data,
   });
+
   React.useEffect(() => {
     if (!isLoading && profileData) {
       setPhoneNumber(profileData.phone.slice(0, -4) + 'xxxx');
     }
   }, [isLoading, profileData]);
+
   React.useEffect(() => {
     if (textButtonPhone === StatusPhoneNumber.copied) {
       setTimeout(() => {
@@ -38,6 +34,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data,className }) => {
       }, 2000);
     }
   }, [textButtonPhone]);
+
   const handleClickButtonPhone = async () => {
     if (textButtonPhone === StatusPhoneNumber.copy) {
       const text = document.getElementById('phone-number')?.innerHTML;
@@ -60,7 +57,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data,className }) => {
         <div className="my-6 flex items-center gap-x-3 space-x-4">
           <Skeleton className="h-[100px] w-[100px] rounded-full" />
           <div className="flex-1 space-y-2">
-            <Skeleton className="h-5 w-18" />
+            <Skeleton className="w-18 h-5" />
             <Skeleton className="h-5 w-full" />
           </div>
         </div>
@@ -76,11 +73,15 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data,className }) => {
       </div>
     );
   };
+
   if (isLoading || !data?.author?.slug) return loadingAuthor();
-
   return (
-    <div className={cn("author-post sticky top-16 z-10 h-fit min-w-[310px] flex-1 rounded-lg bg-white p-8",className)}>
-
+    <div
+      className={cn(
+        'author-post sticky top-16 z-10 h-fit min-w-[310px] flex-1 rounded-lg bg-white p-8',
+        className,
+      )}
+    >
       <h3 className="text-lg font-semibold">Liên hệ</h3>
       <div className="my-6 flex items-center gap-x-3">
         <Avatar className="h-[100px] w-[100px]">
@@ -108,13 +109,19 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data,className }) => {
           </span>
           <span>{textButtonPhone}</span>
         </Button>
-        <Button
-          className="flex items-center gap-x-2 hover:bg-blue-500 hover:text-white"
-          variant={'outline'}
-        >
-          <LuPhoneIncoming />
-          Yêu cầu liên hệ lại
-        </Button>
+        <DialogContactAgain
+          elementTrigger={
+            <Button
+              className="flex items-center gap-x-2 hover:bg-blue-500 hover:text-white"
+              variant={'outline'}
+            >
+              <LuPhoneIncoming />
+              Yêu cầu liên hệ lại
+            </Button>
+          }
+          postId={data?.id}
+          title={data.title}
+        />
       </div>
     </div>
   );
