@@ -28,7 +28,7 @@ export default function Desktop() {
   filterParams.with_users = true;
   filterParams.per_page = 12;
 
-  const { data } = useSuspenseQuery(
+  const { data, isFetched } = useSuspenseQuery(
     queryOptions({
       queryKey: ['home', filterParams],
       queryFn: () => searchApi(filterParams),
@@ -37,12 +37,18 @@ export default function Desktop() {
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
 
-  const { data: missingAuthors, isLoading } = useQuery({
+  if (isFetched && data.users) {
+    setTimeout(() => {
+      appendCardAuthors(data.users);
+    }, 200);
+  }
+
+  const { data: missingAuthors, isFetched: isFetchedMissingAuthors } = useQuery({
     queryKey: ['missing-card-authors', data.missing_user_ids],
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  if (!isLoading && missingAuthors?.data) {
+  if (isFetchedMissingAuthors && missingAuthors?.data) {
     setTimeout(() => {
       appendCardAuthors(missingAuthors.data);
     }, 200);
