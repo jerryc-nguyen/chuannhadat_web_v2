@@ -8,7 +8,7 @@ import { LuLoader2 } from 'react-icons/lu';
 export default function FooterOverviewBtsButton() {
   const { closeModals } = useModals();
   const { applyAllFilters, buildFilterParams } = useFilterState();
-  const filterParams = buildFilterParams();
+  const filterParams = buildFilterParams({ withLocal: true });
 
   const { isLoading, data } = useQuery({
     queryKey: ['searchs', filterParams],

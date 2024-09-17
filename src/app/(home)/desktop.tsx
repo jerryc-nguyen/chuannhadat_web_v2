@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import './desktop.scss';
 import DesktopFilterChips from '@mobile/filter_bds/DesktopFilterChips';
@@ -15,16 +15,13 @@ import PostControls from '@desktop/home/PostControls';
 import useCardAuthors from '@desktop/home/hooks/useCardAuthors';
 import { ModalPostDetail } from '@desktop/home/components';
 import MainNav from '@desktop/components/MainNav';
-import Locations from '@desktop/components/Locations';
 
 export default function Desktop() {
   useSyncParamsToState();
   const { appendCardAuthors } = useCardAuthors();
   const { buildFilterParams } = useFilterState();
 
-  const filterParams = buildFilterParams({
-    withLocal: false,
-  });
+  const filterParams = buildFilterParams({ withLocal: false });
   filterParams.with_title = true;
   filterParams.with_users = true;
   filterParams.per_page = 12;
@@ -38,22 +35,26 @@ export default function Desktop() {
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
 
-  if (isFetched && data.users) {
-    setTimeout(() => {
-      appendCardAuthors(data.users);
-    }, 200);
-  }
+  useCallback(() => {
+    if (isFetched && data.users) {
+      setTimeout(() => {
+        appendCardAuthors(data.users);
+      }, 200);
+    }
+  }, [isFetched, data.users]);
 
   const { data: missingAuthors, isFetched: isFetchedMissingAuthors } = useQuery({
     queryKey: ['missing-card-authors', data.missing_user_ids],
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  if (isFetchedMissingAuthors && missingAuthors?.data) {
-    setTimeout(() => {
-      appendCardAuthors(missingAuthors.data);
-    }, 200);
-  }
+  useCallback(() => {
+    if (isFetched && data.users) {
+      setTimeout(() => {
+        appendCardAuthors(data.users);
+      }, 200);
+    }
+  }, [isFetchedMissingAuthors, missingAuthors?.data]);
 
   return (
     <main className="c-layout1col">
@@ -62,7 +63,6 @@ export default function Desktop() {
       </header>
 
       <main className="c-content c-content__container">
-        <Locations />
         <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tighter">{data?.title}</h1>
         <div className="top-50 sticky z-10">
           <DesktopFilterChips />
