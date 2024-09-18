@@ -5,7 +5,7 @@ import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
 import { Image } from '@mobile/searchs/type';
 
-const ImageCarousel: React.FC<{ images: Image[] }> = ({ images }) => {
+const ImageCarousel: React.FC<{ images: Image[]; onClick: (id: number) => void }> = ({ images, onClick }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const { buildThumbnailUrl } = useResizeImage();
   const [current, setCurrent] = React.useState(0);
@@ -37,6 +37,7 @@ const ImageCarousel: React.FC<{ images: Image[] }> = ({ images }) => {
         <CarouselContent>
           {images.map((image: Image, index: number) => (
             <CarouselItem
+            onClick={()=>onClick(image.id)}
               key={image.id || index}
               className={`transition-opacity duration-500 ${index === current ? 'opacity-100' : 'opacity-0'}`}
             >

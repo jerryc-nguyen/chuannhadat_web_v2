@@ -33,7 +33,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
     // } else {
     //   ('Bug!!!');
     // }
-
+console.log(product)
     openModal({
       name: product.title,
       title: product.title,
