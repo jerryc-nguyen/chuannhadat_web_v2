@@ -1,3 +1,4 @@
+
 /* eslint-disable @next/next/no-img-element */
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
@@ -7,6 +8,7 @@ import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
 import { useRouter } from 'next/navigation';
 import PostDetailMobile from './PostDetailMobile ';
+import PhoneNumber from '@mobile/post-detail/components/PhoneNumber';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -22,7 +24,7 @@ const styles: A = {
   },
 };
 
-export default function ProductCard({ product }: { product: IProduct }) {
+export default function ProductCard({ product}: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
   const { openModal } = useModals();
   const router = useRouter();
@@ -33,13 +35,12 @@ export default function ProductCard({ product }: { product: IProduct }) {
     // } else {
     //   ('Bug!!!');
     // }
-console.log(product)
     openModal({
       name: product.title,
       title: product.title,
       content: <PostDetailMobile />,
       maxHeightPercent: 0.9,
-      footer: <div>Liên hệ: xx</div>,
+      footer: <PhoneNumber />,
       onClosed: () => {
         router.back();
       },

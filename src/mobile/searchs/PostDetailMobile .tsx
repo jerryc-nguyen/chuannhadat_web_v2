@@ -11,7 +11,7 @@ import { LuWarehouse } from 'react-icons/lu';
 import { FaBath } from 'react-icons/fa6';
 import { FaHouseUser } from 'react-icons/fa';
 
-import { postDetailAtom } from '@mobile/post-detail/states';
+import { authorPhoneAtom, postDetailAtom } from '@mobile/post-detail/states';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
@@ -41,6 +41,7 @@ export default function PostDetailMobile() {
   const currentPath = usePathname();
   const [productUid, setProductUid] = useState<string | null>(null);
   const [postDetail, setPostDetail] = useAtom(postDetailAtom);
+  const [_,setAuthorPhone] = useAtom(authorPhoneAtom);
   const { buildThumbnailUrl } = useResizeImage();
 
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function PostDetailMobile() {
 
   useEffect(() => {
     if (data) {
+      setAuthorPhone(data.data.author.phone)
       setPostDetail(data.data);
     }
   }, [data, setPostDetail]);
