@@ -14,6 +14,9 @@ import { AutoComplete } from "@components/autocomplete";
 import { Checkbox } from "@components/ui/checkbox";
 
 import dynamic from "next/dynamic";
+import { center, SimpleLatLng } from "@components/map-leaflet/config";
+import MapsApiService from "@app/tao-tin-moi/apis/maps-api";
+import { LoadingSpinner } from "@components/icons/loading-spinner";
 const MapLeaflet = dynamic(() => import("@components/map-leaflet"), {
   ssr: false,
 });
@@ -44,6 +47,7 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
   }, [])
 
   useEffect(() => {
+    console.log("city_id",city_id);
     if ( !isFirstLoad ) return;
     form.setValue("district_id", "");
     if ( !city_id ) {
@@ -95,6 +99,34 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullAddressInfo, isHideFullAddress])
 
+  const [latLngPosition, setLatLngPosition] = useState<SimpleLatLng>(center);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+      console.log("isLoading", isLoading);
+  }, [isLoading])
+
+  const handleSearchLocationByLatLng = async (latLng: string) => {
+    setIsLoading(true);
+    try {
+      const res = await MapsApiService.GetLocationByLatLng(latLng);
+      setIsLoading(false);
+    
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch ( err: any ) {
+      if ( !err.status ) {
+        console.log("canceled");
+      } else {
+        setIsLoading(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleSearchLocationByLatLng(`${latLngPosition.lat},${latLngPosition.lng}`)
+  }, [latLngPosition])
+
   return (
     <Card className="bg-primary/10">
       <CardHeader>
@@ -104,7 +136,7 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
-        <FormField
+        {/* <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
@@ -116,7 +148,7 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
               />
             </FormItem>
           )}
-        />
+        /> */}
         {/* <FormField
           control={form.control}
           name="title"
@@ -130,7 +162,10 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
 
         <div className="grid gap-2">
           <Label htmlFor="subject">Vị trí trên bản đồ</Label>
-          <MapLeaflet key={"mapLeaflet"} />
+          <MapLeaflet key={"mapLeaflet"}
+            position={latLngPosition}
+            onPositionChange={setLatLngPosition}
+          />
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
@@ -154,6 +189,8 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   })}
                   placeholder={"Chọn Tỉnh/ Thành phố"}
                   emptyMessage="Không tìm thấy nội dung"
+                  disabled={isLoading}
+                  endAdornment={isLoading ? <LoadingSpinner/> : null}
                 />
                 <FormMessage />
               </FormItem>
@@ -181,7 +218,8 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     }) || []) : []}
                   placeholder={"Chọn Quận/ Huyện"}
                   emptyMessage="Không tìm thấy nội dung"
-                  disabled={city_id ? false : true}
+                  disabled={isLoading || (city_id ? false : true)}
+                  endAdornment={isLoading ? <LoadingSpinner/> : null}
                 />
                 <FormMessage />
               </FormItem>
@@ -209,7 +247,8 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     }) || []) : []}
                   placeholder={"Chọn Phường/ Xã"}
                   emptyMessage="Không tìm thấy nội dung"
-                  disabled={district_id ? false : true}
+                  disabled={isLoading || (district_id ? false : true)}
+                  endAdornment={isLoading ? <LoadingSpinner/> : null}
                 />
               </FormItem>
             )}
@@ -236,7 +275,8 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     }) || []) : []}
                   placeholder={"Chọn Đường/ Phố"}
                   emptyMessage="Không tìm thấy nội dung"
-                  disabled={district_id ? false : true}
+                  disabled={isLoading || (district_id ? false : true)}
+                  endAdornment={isLoading ? <LoadingSpinner/> : null}
                 />
               </FormItem>
             )}
@@ -263,7 +303,8 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     }) || []) : []}
                   placeholder={"Chọn Dự án"}
                   emptyMessage="Không tìm thấy nội dung"
-                  disabled={district_id ? false : true}
+                  disabled={isLoading || (district_id ? false : true)}
+                  endAdornment={isLoading ? <LoadingSpinner/> : null}
                 />
               </FormItem>
             )}

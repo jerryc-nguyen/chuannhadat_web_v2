@@ -29,5 +29,8 @@ export const API_ROUTES = {
   IMAGE_UPLOAD: {
     SIGN_S3: 'api/v1/product_images/sign-s3',
     TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url'
+  },
+  MAPS: {
+    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll'
   }
 };

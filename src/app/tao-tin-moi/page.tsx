@@ -1,7 +1,7 @@
 "use client";
 
 import ProductInfoForm from "./components/form-components/product-info-form";
-import { DemoReportAnIssue } from "./components/form-components/report-an-issue";
+import { ProductConfigForm } from "./components/form-components/product-config-form";
 import { businessTypeOptions, categoryTypeOptions } from "./constant";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -70,12 +70,12 @@ const NewPostPage: React.FC = () => {
             <ProductDetailInfoForm form={form} />
           </div>
           <div className="grid items-start gap-6 lg:col-span-1 top-2-safe sticky">
-            <DemoReportAnIssue />
+            <ProductConfigForm />
           </div>
         </div>
-        <div className="bg-card border bottom-2-safe flex justify-between mt-6 p-3 rounded-lg sticky z-[9999]">
+        <div className="bg-card border bottom-2-safe flex justify-between mt-6 p-3 rounded-lg sticky z-[999999]">
           <Button variant="ghost">Cancel</Button>
-          <Button>Submit</Button>
+          <Button>Đăng tin và thanh toán</Button>
         </div>
       </form>
     </Form>

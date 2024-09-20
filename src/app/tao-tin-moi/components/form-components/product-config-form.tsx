@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-export function DemoReportAnIssue() {
+export function ProductConfigForm() {
   return (
     <Card>
       <CardHeader>

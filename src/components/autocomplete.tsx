@@ -1,7 +1,7 @@
 import { cn } from "@common/utils"
 import { Command as CommandPrimitive } from "cmdk";
 import { Check, CircleX, ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Command,
   CommandEmpty,
@@ -21,6 +21,7 @@ type Props<T extends string> = {
   emptyMessage?: string;
   placeholder?: string;
   disabled?: boolean;
+  endAdornment?: ReactNode | null;
 };
 
 export function AutoComplete<T extends string>({
@@ -30,6 +31,7 @@ export function AutoComplete<T extends string>({
   isLoading,
   emptyMessage = "No items.",
   placeholder = "Search...",
+  endAdornment,
   disabled
 }: Props<T>) {
   const [open, setOpen] = useState(false);
@@ -80,9 +82,12 @@ export function AutoComplete<T extends string>({
                 placeholder={placeholder}
                 onChange={onSearchTextChange}
                 endAdornment={
-                  searchText ?
-                  <CircleX className="cursor-pointer" onClick={reset}/> :
-                  <ChevronDown className="h-4 w-4 opacity-50"/>
+                  endAdornment ||
+                  (
+                    searchText ?
+                      <CircleX className="cursor-pointer" onClick={reset}/> :
+                      <ChevronDown className="h-4 w-4 opacity-50"/>
+                  )
                 }
                 disabled={disabled}
               />
