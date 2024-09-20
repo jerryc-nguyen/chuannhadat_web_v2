@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
-
 import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
-import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
-
-import { LuMoreHorizontal } from 'react-icons/lu';
 import CardAuthor from './CardAuthor';
+import { useAtom, useAtomValue } from 'jotai';
+import { isLoadingModal, selectedPostId } from './states/modalPostDetailAtoms';
+import { useQueryClient } from '@tanstack/react-query';
+import { services } from '@api/services';
+import { LuLoader2 } from 'react-icons/lu';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -27,8 +28,22 @@ const DEFAULT_THUMB_IMAGE =
 
 export default function ProductCard({ product }: { product: A }) {
   const { buildThumbnailUrl } = useResizeImage();
+  const queryClient = useQueryClient();
+  const [postId, setSelectedPostId] = useAtom(selectedPostId);
+  const isLoadingCardProduct = useAtomValue(isLoadingModal);
+
+  const openModalPostDetail = async (postId: string) => {
+    setSelectedPostId(postId);
+    await queryClient.prefetchQuery({
+      queryKey: ['get-detail-post', postId],
+      queryFn: () => services.posts.getDetailPost(postId),
+    });
+  };
   return (
-    <div className="shadow-2 rounded-lg bg-white dark:bg-slate-800">
+    <div
+      onClick={() => openModalPostDetail(product.uid)}
+      className="shadow-2 relative cursor-pointer overflow-hidden rounded-lg bg-white dark:bg-slate-800"
+    >
       <CardAuthor product={product} />
       <AspectRatio.Root ratio={16 / 9}>
         <img
@@ -76,6 +91,12 @@ export default function ProductCard({ product }: { product: A }) {
           </div>
         </div>
       </div>
+      {isLoadingCardProduct && postId === product.uid && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/70 text-white">
+          <LuLoader2 className="mr-2 h-8 w-8 animate-spin" />
+          Đang tải
+        </div>
+      )}
     </div>
   );
 }

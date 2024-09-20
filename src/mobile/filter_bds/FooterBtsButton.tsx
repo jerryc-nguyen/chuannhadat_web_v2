@@ -1,20 +1,18 @@
-import { Button as ButtonMobile, Preloader } from 'konsta/react';
 import { FilterChipOption } from './FilterChips';
 import useModals from '@mobile/modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import { Button } from '@components/ui/button';
-import { useSSROptionsContext } from '@components/providers/SSROptionsProvider';
 import { LuLoader2 } from 'react-icons/lu';
 
 export default function FooterBtsButton({ filterOption }: { filterOption: FilterChipOption }) {
   const { closeModals } = useModals();
   const { applySingleFilter, buildFilterParams } = useFilterState();
-  const filterParams = buildFilterParams();
-  const { isMobile } = useSSROptionsContext();
+  const filterParams = buildFilterParams({ withLocal: true });
+
   const { isLoading, data } = useQuery({
-    queryKey: ['searchs', filterParams],
+    queryKey: ['FooterBtsButton', filterParams],
     queryFn: () => searchApi(filterParams),
   });
 
@@ -22,18 +20,11 @@ export default function FooterBtsButton({ filterOption }: { filterOption: Filter
     applySingleFilter(filterOption);
     closeModals();
   };
-  if (isMobile) {
-    return (
-      <ButtonMobile disabled={isLoading} onClick={() => onApplyFilter(filterOption)}>
-        Xem {data?.pagination?.total_count} kết quả
-        {isLoading && <Preloader className="small ml-3 text-white" size="w-5 h-5" />}
-      </ButtonMobile>
-    );
-  }
+
   return (
     <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter(filterOption)}>
-            {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
+      {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
     </Button>
   );
 }

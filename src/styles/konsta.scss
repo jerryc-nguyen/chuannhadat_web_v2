@@ -1,0 +1,111 @@
+:root {
+  --k-safe-area-left: 0px;
+  --k-safe-area-right: 0px;
+  --k-safe-area-top: 0px;
+  --k-safe-area-bottom: 0px;
+  --k-hairline-color: rgba(0, 0, 0, 0.2);
+}
+
+@media (min-resolution: 2dppx) {
+  :root {
+    --k-device-pixel-ratio: 2;
+  }
+}
+.ms-1 {
+  margin-inline-start: 0.25rem;
+}
+
+.ms-2 {
+  margin-inline-start: 0.5rem;
+}
+
+.ms-3 {
+  margin-inline-start: 0.75rem;
+}
+
+.ms-4 {
+  margin-inline-start: 1rem;
+}
+
+.ms-auto {
+  margin-inline-start: auto;
+}
+.bg-ios-light-surface {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 239 244 / var(--tw-bg-opacity));
+}
+.bg-ios-light-surface-1 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.bg-ios-light-surface-2 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(247 247 248 / var(--tw-bg-opacity));
+}
+.bg-ios-light-surface-3 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.bg-ios-light-surface-variant {
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 244 244 / var(--tw-bg-opacity));
+}
+
+.hairline-b::after {
+  position: absolute;
+  background-color: var(--k-hairline-color, rgba(0, 0, 0, 0.2));
+  transition-duration: var(--k-hairline-transition-duration);
+  content: '';
+  z-index: 10;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  transform-origin: center bottom;
+  transform: scaleY(calc(1 / var(--k-device-pixel-ratio, 1)));
+}
+
+.ps-4-safe {
+  padding-inline-start: calc(var(--k-safe-area-left) + 1rem);
+}
+
+.pe-\34-safe {
+  padding-inline-end: calc(var(--k-safe-area-right) + 1rem);
+}
+.py-2\.5 {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.me-4 {
+  margin-inline-end: 1rem;
+}
+.active\:duration-0:active {
+  animation-duration: 0ms;
+}
+.active\:hairline-transparent:active {
+  --k-hairline-color: transparent;
+}
+.active\:duration-0:active {
+  transition-duration: 0ms;
+}
+.active\:bg-opacity-10:active {
+  --tw-bg-opacity: 0.1;
+}
+.active\:bg-black:active {
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+.duration-300 {
+  animation-duration: 0.3s;
+}
+.ps-\34-safe {
+  padding-inline-start: calc(var(--k-safe-area-left) + 1rem);
+}
+
+.text-opacity-55 {
+  --tw-text-opacity: 0.55;
+}

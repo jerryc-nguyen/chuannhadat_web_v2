@@ -35,7 +35,6 @@ export const PhoneNumberTab: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
         toastSucess('Cập nhật số điện thoại thành công');
       } else {
-        console.log('error');
         toast.error(data.message);
       }
       reset();

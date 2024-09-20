@@ -14,8 +14,8 @@ export default function PostList() {
   const filterParams = buildFilterParams({
     withLocal: false,
   });
+
   filterParams.per_page = 12;
-  console.log('filterParams', filterParams);
 
   const { data } = useSuspenseQuery(
     queryOptions({

@@ -14,6 +14,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLogin } from '@api/auth';
 import { IFormPropsLogin, IFormResponse, ILoginResponse } from '../types';
+import { usePaginatedNotifications } from '@mobile/notification/hooks';
 
 export default function LoginForm({
   onLoginSuccess,
@@ -24,6 +25,8 @@ export default function LoginForm({
 }) {
   const [showPassword, setShowPassword] = React.useState(false);
   const { login } = useLogin();
+  const { loadMore } = usePaginatedNotifications();
+
   const {
     control,
     handleSubmit,
@@ -44,7 +47,8 @@ export default function LoginForm({
             if (onLoginSuccess) {
               onLoginSuccess(response.data);
             }
-          } else {
+              loadMore(true);
+            } else {
             if (onLoginError) {
               onLoginError();
             }

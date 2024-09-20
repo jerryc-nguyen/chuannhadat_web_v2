@@ -7,6 +7,9 @@ export const API_ROUTES = {
     CHANGE_PASSWORD: 'auth/reset-password',
     LOGOUT: 'auth/logout',
   },
+  POSTS: {
+    DETAIL_POST: 'api/v1/products'
+  },
   BALANCE: {
     OVERVIEW: 'api/v1/balances/overviews',
     TRANSACTION: 'api/v1/balances/transactions',
@@ -20,6 +23,7 @@ export const API_ROUTES = {
   SCHEDULED_REFRESHS: 'api/v1/scheduled_refreshs',
   PROFILES: {
     GET_MY_PROFILE: 'api/v1/profiles/me',
+    GET_MY_PROFILE_SLUG: 'api/v1/profiles/',
     UPDATE_MY_PROFILE: 'api/v1/profiles/me',
     UPDATE_AVATAR: 'api/v1/profiles/update_avatar',
     GET_PROFILE_ID: 'api/v1/profiles',

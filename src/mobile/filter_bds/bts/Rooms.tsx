@@ -1,14 +1,9 @@
 import ListChips from '@mobile/ui/ListChips';
-import { Block, BlockTitle } from 'konsta/react';
 import { OptionForSelect, FilterFieldName } from '@models';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Rooms() {
-  const {
-    getLocalFieldValue,
-    setLocalFieldValue,
-    filterFieldOptions,
-  } = useFilterState();
+  const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
   const curBed = getLocalFieldValue(FilterFieldName.bed);
   const curBath = getLocalFieldValue(FilterFieldName.bath);
 
@@ -21,24 +16,22 @@ export default function Rooms() {
   };
 
   return (
-    <>
-      <BlockTitle>Phòng ngủ</BlockTitle>
-      <Block>
-        <ListChips
-          options={filterFieldOptions.roomOptions || []}
-          onSelect={onSelectBed}
-          value={curBed}
-        />
-      </Block>
+    <div>
+      <p className="mb-2 font-bold">Phòng ngủ</p>
 
-      <BlockTitle>Nhà tắm</BlockTitle>
-      <Block>
-        <ListChips
-          options={filterFieldOptions.roomOptions || []}
-          onSelect={onSelectBath}
-          value={curBath}
-        />
-      </Block>
-    </>
+      <ListChips
+        options={filterFieldOptions.roomOptions || []}
+        onSelect={onSelectBed}
+        value={curBed}
+      />
+      <br />
+      <p className="mb-2 font-bold">Nhà tắm</p>
+
+      <ListChips
+        options={filterFieldOptions.roomOptions || []}
+        onSelect={onSelectBath}
+        value={curBath}
+      />
+    </div>
   );
 }

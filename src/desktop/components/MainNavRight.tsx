@@ -16,7 +16,7 @@ import { LuUserCircle } from 'react-icons/lu';
 import useModals from '@mobile/modals/hooks';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
-import { Popover, PopoverTrigger } from '@components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { Badge } from '@components/ui/badge';
 import NotificationsList from '@desktop/notification/NotificationsList';
 
@@ -32,6 +32,8 @@ export default function MainNavRight() {
       content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
+      showAsDialog: true,
+      btsContentWrapClass: 'mt-2 bg-white p-4',
     });
   };
 
@@ -58,14 +60,16 @@ export default function MainNavRight() {
                 </Badge>
               </div>
             </PopoverTrigger>
-            <NotificationsList
-              notifications={notifications}
-              total={total}
-              onLoadMore={loadMore}
-              onMarkReadAll={handleMarkReadAll}
-              onRedirect={handleRedirect}
-              onGetNotMarkRead={handleGetNotMarkRead}
-            />
+            <PopoverContent className="h-[520px] w-80">
+              <NotificationsList
+                notifications={notifications}
+                total={total}
+                onLoadMore={loadMore}
+                onMarkReadAll={handleMarkReadAll}
+                onRedirect={handleRedirect}
+                onGetNotMarkRead={handleGetNotMarkRead}
+              />
+            </PopoverContent>
           </Popover>
         </span>
       )}

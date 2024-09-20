@@ -1,20 +1,47 @@
 import { useAtom } from 'jotai';
 
-import {
-  btsModal2Atom,
-  btsModal3Atom,
-  btsModalAtom,
-} from './states';
+import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
 import { Modal } from './states/types';
 import { getViewportSize } from '@hooks/useViewportSize';
 import { useMemo } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
 export const DEFAULT_HEIGHT_PERCENT = 0.6;
+
+function DesktopModal({
+  modal,
+  onOpenChange,
+}: {
+  modal: Modal;
+  onOpenChange: (open: boolean) => void;
+}) {
+  return (
+    <Dialog open={modal != undefined} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild></DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{modal.title}</DialogTitle>
+          <DialogDescription>{modal.titleDescription}</DialogDescription>
+        </DialogHeader>
+        <div className={`${modal?.dialogContentWrapClass}`}>{modal?.content}</div>
+        {modal?.footer && <DialogFooter>{modal?.footer}</DialogFooter>}
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export function BtsModals1() {
   const [modal, setModal] = useAtom(btsModalAtom);
@@ -36,50 +63,44 @@ export function BtsModals1() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  return (
-    <Drawer.Root
-      shouldScaleBackground
-      open={modal != undefined}
-      onOpenChange={onOpenChange}
-      onClose={onClose}
-    >
-      <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40 c-bts__overlay1" />
-        <Drawer.Content className="flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
-          <div
-            className={`c-bts__header flex justify-between items-center ${headerClass}`}
-          >
-            <Drawer.Title className="c-bts__title">
-              {modal?.title}
-            </Drawer.Title>
-            <button
-              onClick={onClose}
-              className="c-bts__close"
-            >
-              <IoCloseOutline size={30} />
-            </button>
-          </div>
-          <div
-            data-vaul-no-drag
-            className="c-bts__content"
-            style={{
-              ...buildContentStyle(modal),
-            }}
-          >
-            {modal?.content}
-          </div>
-          {modal?.footer && (
+  if (modal?.showAsDialog) {
+    return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
+  } else {
+    return (
+      <Drawer.Root
+        shouldScaleBackground
+        open={modal != undefined}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+      >
+        <Drawer.Portal>
+          <Drawer.Overlay className="c-bts__overlay1 fixed inset-0 bg-black/40" />
+          <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
+            <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
+              <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
+              <button onClick={onClose} className="c-bts__close">
+                <IoCloseOutline size={30} />
+              </button>
+            </div>
             <div
               data-vaul-no-drag
-              className="c-bts__footer"
+              className="c-bts__content"
+              style={{
+                ...buildContentStyle(modal),
+              }}
             >
-              {modal?.footer}
+              <div className={`${modal?.btsContentWrapClass}`}>{modal?.content}</div>
             </div>
-          )}
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
-  );
+            {modal?.footer && (
+              <div data-vaul-no-drag className="c-bts__footer">
+                {modal?.footer}
+              </div>
+            )}
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    );
+  }
 }
 
 const buildContentStyle = (modal?: Modal) => {
@@ -88,16 +109,12 @@ const buildContentStyle = (modal?: Modal) => {
   }
 
   const viewportSizes = getViewportSize();
-  const maxHeightPercent =
-    modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
+  const maxHeightPercent = modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
   const footerHeight = modal?.footer ? FOOTER_HEIGHT : 0;
   let contentHeight = modal.defaultContentHeight;
 
   if (!modal.defaultContentHeight) {
-    contentHeight =
-      viewportSizes[1] * maxHeightPercent -
-      HEADER_HEIGHT -
-      footerHeight;
+    contentHeight = viewportSizes[1] * maxHeightPercent - HEADER_HEIGHT - footerHeight;
   }
 
   return { height: contentHeight + 'px' };
@@ -131,51 +148,39 @@ export function BtsModals2() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  return (
-    <Drawer.Root
-      open={modal != undefined}
-      onOpenChange={onOpenChange}
-      onClose={onClose}
-    >
-      <Drawer.Portal>
-        <Drawer.Overlay
-          className={`fixed inset-0 bg-black/40 c-bts__overlay2`}
-        />
-        <Drawer.Content className="flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
-          <div
-            className={`c-bts__header flex justify-between items-center ${headerClass}`}
-          >
-            <Drawer.Title className="c-bts__title">
-              {modal?.title}
-            </Drawer.Title>
-            <button
-              onClick={onClose}
-              className="c-bts__close"
-            >
-              <IoCloseOutline size={30} />
-            </button>
-          </div>
-          <div
-            data-vaul-no-drag
-            className="c-bts__content"
-            style={{
-              ...buildContentStyle(modal),
-            }}
-          >
-            {modal?.content}
-          </div>
-          {modal?.footer && (
+  if (modal?.showAsDialog) {
+    return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
+  } else {
+    return (
+      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose}>
+        <Drawer.Portal>
+          <Drawer.Overlay className={`c-bts__overlay2 fixed inset-0 bg-black/40`} />
+          <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
+            <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
+              <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
+              <button onClick={onClose} className="c-bts__close">
+                <IoCloseOutline size={30} />
+              </button>
+            </div>
             <div
               data-vaul-no-drag
-              className="c-bts__footer"
+              className="c-bts__content"
+              style={{
+                ...buildContentStyle(modal),
+              }}
             >
-              {modal?.footer}
+              <div className={`${modal?.btsContentWrapClass}`}>{modal?.content}</div>
             </div>
-          )}
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
-  );
+            {modal?.footer && (
+              <div data-vaul-no-drag className="c-bts__footer">
+                {modal?.footer}
+              </div>
+            )}
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    );
+  }
 }
 
 export function BtsModals3() {
@@ -198,49 +203,37 @@ export function BtsModals3() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  return (
-    <Drawer.Root
-      open={modal != undefined}
-      onOpenChange={onOpenChange}
-      onClose={onClose}
-    >
-      <Drawer.Portal>
-        <Drawer.Overlay
-          className={`fixed inset-0 bg-black/40 c-bts__overlay3`}
-        />
-        <Drawer.Content className="flex flex-col rounded-t-[10px] mt-24 fixed bottom-0 left-0 right-0">
-          <div
-            className={`c-bts__header flex justify-between items-center ${headerClass}`}
-          >
-            <Drawer.Title className="c-bts__title">
-              {modal?.title}
-            </Drawer.Title>
-            <button
-              onClick={onClose}
-              className="c-bts__close"
-            >
-              <IoCloseOutline size={30} />
-            </button>
-          </div>
-          <div
-            data-vaul-no-drag
-            className="c-bts__content"
-            style={{
-              ...buildContentStyle(modal),
-            }}
-          >
-            {modal?.content}
-          </div>
-          {modal?.footer && (
+  if (modal?.showAsDialog) {
+    return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
+  } else {
+    return (
+      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose}>
+        <Drawer.Portal>
+          <Drawer.Overlay className={`c-bts__overlay3 fixed inset-0 bg-black/40`} />
+          <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
+            <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
+              <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
+              <button onClick={onClose} className="c-bts__close">
+                <IoCloseOutline size={30} />
+              </button>
+            </div>
             <div
               data-vaul-no-drag
-              className="c-bts__footer"
+              className="c-bts__content"
+              style={{
+                ...buildContentStyle(modal),
+              }}
             >
-              {modal?.footer}
+              <div className={`${modal?.btsContentWrapClass}`}>{modal?.content}</div>
             </div>
-          )}
-        </Drawer.Content>
-      </Drawer.Portal>
-    </Drawer.Root>
-  );
+            {modal?.footer && (
+              <div data-vaul-no-drag className="c-bts__footer">
+                {modal?.footer}
+              </div>
+            )}
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
+    );
+  }
 }
