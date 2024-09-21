@@ -8,13 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@components/ui/breadcrumb';
-import { IBreadcrumbItem } from '@desktop/dashboard/atoms/breadcrumbAtom';
+
 import { genKey } from '@common/utils';
+import { IBreadcrumbItem } from '@desktop/dashboard/states/breadcrumbAtom';
 type BreadcrumbProps = {
   breadcrumbs: IBreadcrumbItem[];
 };
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({breadcrumbs}) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
 
   return (
     <BreadcrumbWrap>
