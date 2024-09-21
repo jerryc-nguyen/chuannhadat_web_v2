@@ -68,7 +68,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   return (
     <div
       className={cn(
-        'mr-1 hidden max-h-screen w-[301px] border-r bg-muted/40 md:block',
+        'hidden max-h-screen w-[301px] border-r bg-muted/40 md:block',
         styles.sidebarWrapper,
       )}
     >

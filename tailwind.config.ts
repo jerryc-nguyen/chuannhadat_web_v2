@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import konstaConfig from 'konsta/config';
 import { mauve, violet } from '@radix-ui/colors';
+import plugin from 'tailwindcss/plugin';
 
 const config = {
   darkMode: ['class'],
@@ -100,13 +101,28 @@ const config = {
           },
           to: { height: '0px' },
         },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
       },
       animation: {
         slideDown: 'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
         slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    plugin(function ({ addVariant }) {
+      addVariant('disabled-within', '&:has(input:is(:disabled), button:is(:disabled))');
+    }),
+  ],
 };
 export default config;
