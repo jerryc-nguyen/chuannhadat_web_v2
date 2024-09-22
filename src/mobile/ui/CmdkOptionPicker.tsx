@@ -30,45 +30,40 @@ export default function CmdkOptionPicker({
   searchPlaceHolder?: string;
   emptyMessage?: string;
 }) {
-  const [curValue, setValue] = useState(value)
+  const [curValue, setCurValue] = useState(value)
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = (e: A) => {
-    setSearchQuery(e.target.value);
-  };
-  const handleClear = () => {
-    setSearchQuery('');
-  };
 
   const filteredItems = searchQuery
     ? options.filter((item: A) => stringToSlug(item.text).includes(stringToSlug(searchQuery)))
     : options;
 
-  const isEmptyList = useMemo((): boolean => {
-    return (
-      (filteredItems[0]?.value == 'all' && filteredItems.length === 1) || filteredItems.length === 0
-    );
-  }, [filteredItems]);
-
   return (
     <>
-      <Command>
-        <CommandInput placeholder="Search listItem..." />
+      <Command filter={() => {
+        return 1
+      }}>
+        {
+          searchable && <CommandInput placeholder={searchPlaceHolder}
+            value={searchQuery}
+            onValueChange={setSearchQuery} />
+        }
         <CommandList>
-          <CommandEmpty>No listItem found.</CommandEmpty>
+          <CommandEmpty>{emptyMessage || 'Không tìm thấy kết quả.'}</CommandEmpty>
           <CommandGroup>
-            {options.map((listItem) => (
+            {filteredItems.map((listItem: OptionForSelect) => (
               <CommandItem
                 key={listItem.value}
                 value={listItem.value.toString()}
                 onSelect={(currentValue) => {
-                  console.log('currentValue', currentValue);
+                  setCurValue(listItem)
+                  onSelect && onSelect(listItem);
                 }}
               >
                 <LuCheck
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value?.text === listItem.text ? "opacity-100" : "opacity-0"
+                    curValue?.text === listItem.text ? "opacity-100" : "opacity-0"
                   )}
                 />
                 {listItem.text}

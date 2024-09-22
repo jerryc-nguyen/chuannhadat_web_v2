@@ -31,7 +31,7 @@ export default function LocationsPicker({
   onChangeWard: (ward?: OptionForSelect) => void;
 }) {
   const curTheme = theme ?? 'cmdk';
-  console.log('curTheme', curTheme);
+
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>(ward);
@@ -124,7 +124,6 @@ export default function LocationsPicker({
         </PopoverTrigger>
         <PopoverContent container={containerChipsRef.current} className="p-0" align="end" side="right">
           <OptionPicker
-            theme='ios'
             searchable
             options={[ALL_OPTION, ...cities]}
             value={curCity}
