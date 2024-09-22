@@ -30,7 +30,6 @@ export default function LocationsPicker({
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
 }) {
-  const curTheme = theme ?? 'cmdk';
 
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
@@ -106,9 +105,11 @@ export default function LocationsPicker({
   useEffect(() => {
     populateOptions();
   }, [populateOptions]);
-  const containerChipsRef = useRef(null);
+
+  const containerRef = useRef(null);
+
   return (
-    <div ref={containerChipsRef}>
+    <div ref={containerRef}>
       <Popover open={openCityDropdown} onOpenChange={setOpenCityDropdown}>
         <PopoverTrigger asChild>
 
@@ -122,7 +123,7 @@ export default function LocationsPicker({
             <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent container={containerChipsRef.current} className="p-0" align="end" side="right">
+        <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
           <OptionPicker
             searchable
             options={[ALL_OPTION, ...cities]}
@@ -144,7 +145,7 @@ export default function LocationsPicker({
             <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent container={containerChipsRef.current} className="p-0" align="end" side="right">
+        <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
           <OptionPicker
             searchable
             options={[ALL_OPTION, ...districtOptions]}
