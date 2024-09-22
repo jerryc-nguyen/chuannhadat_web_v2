@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import MainNavRight from './MainNavRight';
 
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
@@ -23,9 +22,9 @@ export default function MainNav({
   return (
     <div>
       <div className="flex items-center justify-between bg-white py-2">
-        <Link href="/" className="mr-4 flex items-center space-x-2">
+        <a href="/" className="mr-4 flex items-center space-x-2">
           <img src="https://chuannhadat.com/images/logo_mobile@2x.png" width="40" alt="Logo" />
-        </Link>
+        </a>
 
         <div className="flex items-center">
           <MainNavRight />

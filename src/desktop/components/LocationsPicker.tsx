@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
@@ -11,15 +11,18 @@ import { ALL_OPTION } from '@common/constants';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
 
 import { Button } from '@components/ui/button';
+import CmdkOptionPicker from '@mobile/ui/CmdkOptionPicker';
 
 export default function LocationsPicker({
   city,
   district,
   ward,
+  theme,
   onChangeCity,
   onChangeDistrict,
   onChangeWard,
 }: {
+  theme?: string;
   city?: OptionForSelect;
   district?: OptionForSelect;
   ward?: OptionForSelect;
@@ -27,6 +30,8 @@ export default function LocationsPicker({
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
 }) {
+  const curTheme = theme ?? 'cmdk';
+  console.log('curTheme', curTheme);
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>(ward);
@@ -101,11 +106,12 @@ export default function LocationsPicker({
   useEffect(() => {
     populateOptions();
   }, [populateOptions]);
-
+  const containerChipsRef = useRef(null);
   return (
-    <div>
+    <div ref={containerChipsRef}>
       <Popover open={openCityDropdown} onOpenChange={setOpenCityDropdown}>
         <PopoverTrigger asChild>
+
           <Button
             variant="outline"
             role="combobox"
@@ -116,8 +122,9 @@ export default function LocationsPicker({
             <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" align="end" side="right">
+        <PopoverContent container={containerChipsRef.current} className="p-0" align="end" side="right">
           <OptionPicker
+            theme='ios'
             searchable
             options={[ALL_OPTION, ...cities]}
             value={curCity}
@@ -138,7 +145,7 @@ export default function LocationsPicker({
             <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0" align="end" side="right">
+        <PopoverContent container={containerChipsRef.current} className="p-0" align="end" side="right">
           <OptionPicker
             searchable
             options={[ALL_OPTION, ...districtOptions]}

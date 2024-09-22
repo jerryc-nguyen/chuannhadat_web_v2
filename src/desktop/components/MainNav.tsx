@@ -6,6 +6,7 @@ import { LuSearch } from 'react-icons/lu';
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { useEffect } from 'react';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import MainNavLocationsPicker from './MainNavLocationsPicker';
 
 export default function MainNav() {
   const { loadMore } = usePaginatedNotifications();
@@ -22,8 +23,7 @@ export default function MainNav() {
       </a>
 
       <div className="relative">
-        <LuSearch className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Chọn khu vực" className="rounded-full pl-8" />
+        <MainNavLocationsPicker />
       </div>
 
       <div className="flex items-center">
