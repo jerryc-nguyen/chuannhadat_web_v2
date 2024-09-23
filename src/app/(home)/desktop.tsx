@@ -43,7 +43,11 @@ export default function Desktop() {
   useMemo(() => {
     if (missingAuthors?.data) {
       setTimeout(() => {
-        appendCardAuthors(missingAuthors.data);
+        let loadingAuthors = missingAuthors?.data;
+        if (data?.users) {
+          loadingAuthors = { ...loadingAuthors, ...data?.users }
+        }
+        appendCardAuthors(loadingAuthors);
       }, 200);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
