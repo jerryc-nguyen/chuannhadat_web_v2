@@ -32,16 +32,18 @@ export default function MainNavLocationsPicker() {
     })
   }
 
-  return <><Button
-    variant="outline"
-    role="combobox"
-    className="w-full justify-between rounded-full md:w-full"
-    onClick={() => showModalPickLocations()}
-  >
-    <span className='flex items-center'>
-      <LuMapPin className="h-4 w-4 shrink-0 opacity-50 mr-1" />
-      <span className='text-black'>{selectedLocationFullText ?? 'Chọn khu vực'}</span>
-    </span>
-    <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-  </Button></>;
+  return <>
+    <Button
+      variant='outline'
+      role="combobox"
+      className="w-full justify-between items-center rounded-full md:w-full text-md"
+      onClick={() => showModalPickLocations()}
+    >
+      <span className='flex items-center'>
+        <LuMapPin className="h-4 w-4 shrink-0 opacity-50 mr-1" />
+        <span className='text-black'>{selectedLocationFullText ?? 'Chọn khu vực'}</span>
+      </span>
+      <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+    </Button >
+  </>;
 }
