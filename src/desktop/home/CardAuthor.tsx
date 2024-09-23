@@ -4,10 +4,8 @@ import useCardAuthors from './hooks/useCardAuthors';
 
 export default function CardAuthor({ product }: { product: A }) {
   const { getAuthorById } = useCardAuthors();
-
   const author = getAuthorById(product.user_id + '');
   const fullName = author?.full_name ? author.full_name : 'Loading';
-
   return (
     <div className="flex items-center justify-between p-4">
       <div className="flex items-center space-x-4">

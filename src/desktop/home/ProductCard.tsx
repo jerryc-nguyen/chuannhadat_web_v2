@@ -23,10 +23,12 @@ const styles: A = {
   },
 };
 
-const DEFAULT_THUMB_IMAGE =
-  'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
-
-export default function ProductCard({ product }: { product: A }) {
+const DEFAULT_THUMB_IMAGE = 'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
+type ProductCardProps = {
+  product: A;
+  isShowAuthor?: boolean;
+};
+export default function ProductCard({ product, isShowAuthor = true }: ProductCardProps) {
   const { buildThumbnailUrl } = useResizeImage();
   const queryClient = useQueryClient();
   const [postId, setSelectedPostId] = useAtom(selectedPostId);
@@ -44,7 +46,7 @@ export default function ProductCard({ product }: { product: A }) {
       onClick={() => openModalPostDetail(product.uid)}
       className="shadow-2 relative cursor-pointer overflow-hidden rounded-lg bg-white dark:bg-slate-800"
     >
-      <CardAuthor product={product} />
+      {isShowAuthor && <CardAuthor product={product} />}
       <AspectRatio.Root ratio={16 / 9}>
         <img
           className="Image"
