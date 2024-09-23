@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { LuSearch } from 'react-icons/lu';
 import { Input } from '@components/ui/input';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import MainNavLocationsPicker from '@desktop/components/MainNavLocationsPicker';
 export default function MainNav({
   onSearchClick = () => undefined,
 }: {
@@ -31,10 +32,10 @@ export default function MainNav({
         </div>
       </div>
 
-      <div className="relative mt-2" onClick={() => onSearchClick()}>
-        <LuSearch className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Chọn khu vực" className="rounded-full pl-8" />
+      <div className="relative">
+        <MainNavLocationsPicker />
       </div>
+
     </div>
   );
 }

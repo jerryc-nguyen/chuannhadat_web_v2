@@ -22,7 +22,7 @@ export default function MainNav() {
         <img src="https://chuannhadat.com/images/logo_mobile@2x.png" width="40" alt="Logo" />
       </a>
 
-      <div className="relative">
+      <div className="relative md:w-1/3">
         <MainNavLocationsPicker />
       </div>
 

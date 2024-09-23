@@ -98,6 +98,7 @@ export default function Locations() {
               title: 'Thành Phố',
               content: (
                 <OptionPicker
+                  theme='ios'
                   searchable
                   options={[ALL_OPTION, ...cities]}
                   value={city}
@@ -119,6 +120,7 @@ export default function Locations() {
               title: 'Quận / Huyện',
               content: (
                 <OptionPicker
+                  theme='ios'
                   searchable
                   options={[ALL_OPTION, ...districtOptions]}
                   value={district}
@@ -141,6 +143,7 @@ export default function Locations() {
               title: 'Phường / Xã',
               content: (
                 <OptionPicker
+                  theme='ios'
                   searchable
                   options={[ALL_OPTION, ...wardOptions]}
                   value={ward}
