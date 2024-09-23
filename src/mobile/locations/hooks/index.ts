@@ -13,7 +13,7 @@ export function useFilterLocations() {
   }, [filterState?.city, filterState?.district, filterState?.ward]);
 
   const selectedLocationFullText = useMemo((): string | undefined => {
-    let results = [];
+    const results = [];
     if (filterState?.ward) {
       results.push(filterState?.ward.text);
     }
