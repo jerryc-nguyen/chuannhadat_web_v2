@@ -35,7 +35,7 @@ export default function MainNavLocationsPicker() {
   return <><Button
     variant="outline"
     role="combobox"
-    className="w-[200px] justify-between rounded-full"
+    className="w-full justify-between rounded-full md:w-full"
     onClick={() => showModalPickLocations()}
   >
     <span className='flex items-center'>

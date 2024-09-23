@@ -25,10 +25,10 @@ export interface FilterChipOption {
 }
 
 const FILTER_ITEMS: Array<FilterChipOption> = [
-  // {
-  //   id: FilterFieldName.filterOverview,
-  //   text: 'Bộ Lọc',
-  // },
+  {
+    id: FilterFieldName.filterOverview,
+    text: 'Bộ Lọc',
+  },
   {
     id: FilterFieldName.businessType,
     text: 'Loại tin',
@@ -37,7 +37,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     id: FilterFieldName.categoryType,
     text: 'Loại nhà đất',
   },
-  { id: FilterFieldName.locations, text: 'Khu vực' },
+  // { id: FilterFieldName.locations, text: 'Khu vực' },
   {
     id: FilterFieldName.price,
     text: 'Mức giá',

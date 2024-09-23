@@ -28,16 +28,20 @@ export default function OptionPicker({
   return (
     <>
       {theme != 'cmdk' && <IosOptionPicker
-        searchable
+        searchable={searchable}
         options={options}
         value={value}
         onSelect={onSelect}
+        emptyMessage={emptyMessage}
+        searchPlaceHolder={searchPlaceHolder}
       />}
       {theme == 'cmdk' && <CmdkOptionPicker
-        searchable
+        searchable={searchable}
         options={options}
         value={value}
         onSelect={onSelect}
+        emptyMessage={emptyMessage}
+        searchPlaceHolder={searchPlaceHolder}
       />}
     </>
   )
