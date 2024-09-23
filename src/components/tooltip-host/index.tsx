@@ -10,7 +10,7 @@ const TooltipHost: React.FC<TooltipHostProps> = ({ children, content }) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent className="max-w-[15rem] text-center">{content}</TooltipContent>
+        <TooltipContent className="max-w-[12rem] text-center">{content}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
