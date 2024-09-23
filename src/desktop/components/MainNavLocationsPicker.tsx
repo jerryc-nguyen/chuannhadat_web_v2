@@ -17,7 +17,7 @@ const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
 }
 
 export default function MainNavLocationsPicker() {
-  const { selectedLocationText } = useFilterLocations();
+  const { selectedLocationFullText } = useFilterLocations();
   const { openModal, closeModal } = useModals()
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -40,7 +40,7 @@ export default function MainNavLocationsPicker() {
   >
     <span className='flex items-center'>
       <LuMapPin className="h-4 w-4 shrink-0 opacity-50 mr-1" />
-      <span className='text-black'>{selectedLocationText ?? 'Chọn khu vực'}</span>
+      <span className='text-black'>{selectedLocationFullText ?? 'Chọn khu vực'}</span>
     </span>
     <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
   </Button></>;
