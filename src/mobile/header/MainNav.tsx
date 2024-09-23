@@ -4,15 +4,10 @@ import MainNavRight from './MainNavRight';
 
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { useEffect } from 'react';
-import { LuSearch } from 'react-icons/lu';
-import { Input } from '@components/ui/input';
 import useAuth from '@mobile/auth/hooks/useAuth';
-import MainNavLocationsPicker from '@desktop/components/MainNavLocationsPicker';
-export default function MainNav({
-  onSearchClick = () => undefined,
-}: {
-  onSearchClick?: () => void;
-}) {
+import MainNavLocationsPicker from './MainNavLocationsPicker';
+
+export default function MainNav() {
   const { loadMore } = usePaginatedNotifications();
   const { currentUser } = useAuth();
 

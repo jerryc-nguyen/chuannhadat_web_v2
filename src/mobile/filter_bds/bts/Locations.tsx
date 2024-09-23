@@ -26,10 +26,12 @@ export default function Locations() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
     setLocalFieldValue(FilterFieldName.district, undefined);
+    localFilterState.district = undefined;
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetWard = () => {
     setLocalFieldValue(FilterFieldName.ward, undefined);
+    localFilterState.ward = undefined;
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,7 +107,7 @@ export default function Locations() {
                   onSelect={onSelectCity}
                 />
               ),
-              maxHeightPercent: 0.5,
+              maxHeightPercent: 0.6,
             });
           }}
         />
@@ -128,7 +130,7 @@ export default function Locations() {
                   emptyMessage="Vui lòng chọn trước Tỉnh / Thành Phố"
                 />
               ),
-              maxHeightPercent: 0.5,
+              maxHeightPercent: 0.6,
             });
           }}
         />
@@ -151,7 +153,7 @@ export default function Locations() {
                   emptyMessage="Vui lòng chọn trước Quận / Huyện"
                 />
               ),
-              maxHeightPercent: 0.5,
+              maxHeightPercent: 0.6,
             });
           }}
         />
