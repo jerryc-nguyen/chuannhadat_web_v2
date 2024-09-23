@@ -15,6 +15,11 @@ export const API_ROUTES = {
     TRANSACTION: 'api/v1/balances/transactions',
     HISTORY: 'api/v1/balances/deposit_histories',
   },
+  SUBSCRIPTION_PLANS: {
+    GET: '/api/v1/subscription_plans',
+    BUY: 'api/v1/subscription_plans/buy_plan',
+    VALIDATE_BUY: 'api/v1/subscription_plans/validate_buy_plan',
+  },
   NOTIFICATION: {
     LIST: 'api/v1/notifications',
     READ: 'api/v1/notifications/read',
