@@ -17,7 +17,7 @@ const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
 }
 
 export default function MainNavLocationsPicker() {
-  const { selectedLocationFullText } = useFilterLocations();
+  const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
   const { openModal, closeModal } = useModals()
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -32,16 +32,18 @@ export default function MainNavLocationsPicker() {
     })
   }
 
+  const btnActiveClass = isSelectedLocation ? 'font-bold text-black' : 'text-slate-600';
+
   return <>
     <Button
       variant='outline'
       role="combobox"
-      className="w-full justify-between items-center rounded-full md:w-full text-md"
+      className={`w-full justify-between items-center rounded-full md:w-full text-md text-slate-600 ${btnActiveClass}`}
       onClick={() => showModalPickLocations()}
     >
       <span className='flex items-center'>
-        <LuMapPin className="h-4 w-4 shrink-0 opacity-50 mr-1" />
-        <span className='text-black'>{selectedLocationFullText ?? 'Chọn khu vực'}</span>
+        <LuMapPin className={`h-4 w-4 shrink-0 mr-1 text-slate-600 ${btnActiveClass}`} />
+        <span>{selectedLocationFullText || 'Chọn khu vực'}</span>
       </span>
       <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
     </Button >
