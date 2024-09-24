@@ -24,7 +24,7 @@ const styles: A = {
   },
 };
 
-export default function ProductCard({ product}: { product: IProduct }) {
+export default function ProductCard({ product }: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
   const { openModal } = useModals();
   const router = useRouter();
