@@ -30,9 +30,9 @@ const ServicePackageView = () => {
     <div>
       <h3 className="mb-4 mt-8 text-xl font-bold">Mua gói dịch vụ</h3>
 
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="mb-2 text-2xl font-bold break-words">{currentServicePackage?.title}</h1>
-        <p className="text-gray-600 mb-0 break-words whitespace-normal">{currentServicePackage?.sub_title}</p>
+      <div className=" mx-auto px-4 py-8">
+        <h1 className="mb-2 text-2xl font-bold">{currentServicePackage?.title}</h1>
+        <p className="text-gray-600 mb-0">{currentServicePackage?.sub_title}</p>
         <a href="https://chuannhadat.com/huong-dan-tu-dong-lam-moi" target="_blank" rel="noopener noreferrer">
           <Button variant="link" className='mb-8 text-[#007bff] pl-0'> {'>>'} Xem hướng dẫn cài đặt tự động làm mới tin giúp bạn tiết kiệm thời gian</Button>
         </a>

@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Service } from '../../types';
 import PaymentDialog from '../PaymentDialog';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { Service } from '@mobile/main-financial-management/types';
+import useModals from '@mobile/modals/hooks';
 
 interface ServiceCardProps {
   plan: Service;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
-  const [isDialogOpen, setDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { openModal } = useModals();
 
   const buyPlanMutation = useMutation({
     mutationFn: async (planId: number) => {
@@ -22,7 +23,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       console.log(data);
       toast.success(data.message || 'Mua gói thành công!');
-      handleCloseDialog();
     },
     onError: (error: any) => {
       toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
@@ -33,11 +33,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
   });
 
   const handleBuyNowClick = () => {
-    setDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
+    openModal({
+      name: plan.plan_name,
+      title: plan.plan_name,
+      content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading}/>,
+    });
   };
 
   const handleBuy = (planId: number) => {
@@ -77,15 +77,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
           </Button>
         </CardFooter>
       </Card>
-
-      {isDialogOpen && (
-        <PaymentDialog
-          plan={plan}
-          isLoading={isLoading}
-          onClose={handleCloseDialog}
-          onBuy={() => handleBuy(plan.plan_id)} // Pass plan.plan_id to handleBuy
-        />
-      )}
     </>
   );
 };

@@ -1,7 +1,6 @@
 import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { ServicePackageInfo } from '@desktop/dashboard/main-financial-management/types';
 import { Author } from '@mobile/searchs/type';
 
 export const services = {
@@ -21,14 +20,14 @@ export const services = {
     getSubscriptionPlans: async (): Promise<{ data: any }> => {
       return axiosInstance.get(API_ROUTES.SUBSCRIPTION_PLANS.GET);
     },
-    buySubscriptionPlans: async (plan_id: string): Promise<any> => {
+    buySubscriptionPlans: async (plan_id: number): Promise<any> => {
       try {
         const response = await axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.BUY, { plan_id });
-        return response.data; 
+        return response; 
       } catch (error) {
       }
     },
-    validateBuySubscriptionPlans: async (plan_id: string): Promise<any> => {
+    validateBuySubscriptionPlans: async (plan_id: number): Promise<any> => {
       return axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.VALIDATE_BUY, { plan_id });
     },
   },
