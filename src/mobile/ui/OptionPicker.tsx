@@ -4,8 +4,50 @@ import { IoFileTrayOutline } from 'react-icons/io5';
 import { OptionForSelect } from '@models';
 import { stringToSlug } from '@common/utils';
 import SearchBox from '@components/SearchBox';
+import CmdkOptionPicker from './CmdkOptionPicker';
 
 export default function OptionPicker({
+  options,
+  value,
+  searchable,
+  onSelect,
+  searchPlaceHolder,
+  emptyMessage,
+  theme,
+}: {
+  theme?: string,
+  options: Array<OptionForSelect>;
+  value?: OptionForSelect;
+  onSelect: (option: OptionForSelect) => void;
+  searchable?: boolean;
+  searchPlaceHolder?: string;
+  emptyMessage?: string;
+}) {
+  theme = theme ?? 'cmdk';
+
+  return (
+    <>
+      {theme != 'cmdk' && <IosOptionPicker
+        searchable={searchable}
+        options={options}
+        value={value}
+        onSelect={onSelect}
+        emptyMessage={emptyMessage}
+        searchPlaceHolder={searchPlaceHolder}
+      />}
+      {theme == 'cmdk' && <CmdkOptionPicker
+        searchable={searchable}
+        options={options}
+        value={value}
+        onSelect={onSelect}
+        emptyMessage={emptyMessage}
+        searchPlaceHolder={searchPlaceHolder}
+      />}
+    </>
+  )
+}
+
+export function IosOptionPicker({
   options,
   value,
   searchable,
