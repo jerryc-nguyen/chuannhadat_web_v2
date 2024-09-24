@@ -1,6 +1,7 @@
 import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
+import { IProductSummary } from '@desktop/post-detail/type';
 import { Author } from '@mobile/searchs/type';
 
 export const services = {
@@ -36,6 +37,13 @@ export const services = {
   posts: {
     getDetailPost: async (product_uid: string): Promise<A> => {
       return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
+    },
+    getPostsSameAuthor: async (product_uid: string): Promise<{ data: IProductSummary[] }> => {
+      return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}/${API_ROUTES.POSTS.POSTS_SAME_AUTHOR}`, {
+        params: {
+          product_uid,
+        },
+      });
     },
   },
 };

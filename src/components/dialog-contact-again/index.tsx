@@ -30,7 +30,7 @@ import {
 type DialogContactAgainProps = {
   postId: string | number;
   title: string;
-  elementTrigger: React.ReactNode;
+  elementTrigger: () => React.ReactNode;
 };
 
 const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
@@ -88,7 +88,7 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
         reset();
       }}
     >
-      <DialogTrigger asChild>{elementTrigger}</DialogTrigger>
+      <DialogTrigger asChild>{elementTrigger()}</DialogTrigger>
       <DialogContent className="pt-4 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Thông tin liên hệ lại</DialogTitle>

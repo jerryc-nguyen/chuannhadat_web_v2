@@ -12,12 +12,14 @@ import AuthorPost from '@desktop/post-detail/components/author-post';
 import { IProductDetail } from '@mobile/searchs/type';
 import styles from '../styles/modal-post-detail.module.scss';
 import { cn } from '@common/utils';
+import { useRouter } from 'next/navigation';
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   const [isOpenModal, setIsOpenModal] = useAtom(openModalDetail);
   const setIsLoadingModal = useSetAtom(isLoadingModal);
   const [postId, setPostId] = useAtom(selectedPostId);
+  const router = useRouter();
   const { data, isLoading } = useQuery({
     queryKey: ['get-detail-post', postId],
     queryFn: () => services.posts.getDetailPost(postId),
@@ -27,6 +29,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   React.useEffect(() => {
     if (data) {
       setIsOpenModal(true);
+      window.history.pushState({}, '', data.detail_path);
     }
     setIsLoadingModal(isLoading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,8 +40,15 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenModal]);
+
+  const onOpenChange = (isOpen: boolean) => {
+    setIsOpenModal(isOpen)
+    if (!isOpen) {
+      router.back();
+    }
+  }
   return (
-    <Sheet open={isOpenModal} onOpenChange={setIsOpenModal}>
+    <Sheet open={isOpenModal} onOpenChange={onOpenChange}>
       <SheetContent
         side={'left'}
         className={cn('flex !w-3/4 flex-col bg-gray-100', styles.modal_content_post)}
