@@ -15,7 +15,7 @@ const ServicePackageView = () => {
   const [currentServicePackage, setCurrentServicePackage] = React.useState<ServicePackageInfo>();
 
   const { data } = useQuery({
-    queryKey: ['subscriptionPlans'],
+    queryKey: ['subscriptionPlans', currentUser],
     queryFn: () =>
       currentUser ? services.subscription_plans.getSubscriptionPlans() : Promise.resolve(null),
     enabled: !!currentUser,

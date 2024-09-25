@@ -1,11 +1,9 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui/dialog';
+import { Dialog, DialogContent } from '@components/ui/dialog';
 import { Button } from '@components/ui/button';
 import { Service } from '../../types';
-import useBalance from '@mobile/main-financial-management/hooks';
 import { useMemo, useState } from 'react';
 import { RadioGroup } from '@components/ui/Radio';
-import { useMutation } from '@tanstack/react-query';
-import { services } from '@api/services';
+
 
 interface Props {
   plan: Service;
@@ -13,7 +11,6 @@ interface Props {
 }
 
 const SubscriptionDialog: React.FC<Props> = ({ plan, onClose }) => {
-  const { balanceInfo } = useBalance();
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0);
 
   const calculatePrice = (total: number, discount: number) => {
@@ -76,7 +73,7 @@ const SubscriptionDialog: React.FC<Props> = ({ plan, onClose }) => {
               - Gói dịch vụ sẽ tự động gia hạn vào cuối kỳ.<br />
               - Bạn có thể tắt chế độ tự động nếu không có nhu cầu.
             </div>
-            {finalPrice&& (
+            {finalPrice && (
               <div className='flex gap-4 items-center justify-center mt-4'>
                 <div className="text-red-600 ">
                   Số dư không đủ để thanh toán. Vui lòng nạp thêm tiền.
