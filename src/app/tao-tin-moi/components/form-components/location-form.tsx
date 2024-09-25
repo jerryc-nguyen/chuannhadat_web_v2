@@ -26,7 +26,7 @@ interface ILocationForm {
 }
 
 const LocationForm: React.FC<ILocationForm> = ({ form }) => {
-  const [isFirstLoad, setIsFirstLoad] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   
   const city_id = form.watch("city_id");
   const district_id = form.watch("district_id");
@@ -43,13 +43,12 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
   });
 
   useEffect(() => {
-    setIsFirstLoad(true);
+    setIsFirstLoad(false);
   }, [])
 
   useEffect(() => {
     console.log("city_id",city_id);
-    if ( !isFirstLoad ) return;
-    form.setValue("district_id", "");
+    if ( isFirstLoad ) return;
     if ( !city_id ) {
       setFullAddressInfo(prev => {return {...prev, cityLabel: "", districtLabel: ""}})
     } else {
@@ -57,14 +56,6 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [city_id])
-
-  useEffect(() => {
-    if ( !isFirstLoad ) return;
-    form.setValue("ward_id", "");
-    form.setValue("street_id", "");
-    form.setValue("project_id", "");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [district_id])
 
   const [isHideFullAddress, setIsHideFullAddress] = useState(false);
   const [fullAddress, setFullAddress] = useState<string>("");
@@ -108,10 +99,23 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
 
   const handleSearchLocationByLatLng = async (latLng: string) => {
     setIsLoading(true);
+    setIsFirstLoad(true);
+    form.setValue("city_id", "");
+    form.setValue("district_id", "");
+    form.setValue("ward_id", "");
     try {
-      const res = await MapsApiService.GetLocationByLatLng(latLng);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await MapsApiService.GetLocationByLatLng(latLng);
       setIsLoading(false);
-    
+      console.log("handleSearchLocationByLatLng", res);
+      if ( res && res.data ) {
+        if ( res.data.city ) form.setValue("city_id", res.data.city.value);
+        if ( res.data.district ) form.setValue("district_id", res.data.district.value);
+        if ( res.data.ward ) form.setValue("ward_id", res.data.ward.value);
+        setTimeout(() => {
+          form.trigger("city_id")
+        }, 200);
+      }
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch ( err: any ) {
@@ -120,12 +124,68 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
       } else {
         setIsLoading(false);
       }
+    } finally {
+      setIsFirstLoad(false);
     }
   }
 
   useEffect(() => {
+    if ( isFirstLoad ) return;
     handleSearchLocationByLatLng(`${latLngPosition.lat},${latLngPosition.lng}`)
   }, [latLngPosition])
+
+  const [optionsCity] = useState<{ value: string; label: string }[]>(citiesData.map(item => {
+    return {
+      value: item.value.toString(),
+      label: item.text
+    }
+  }));
+
+  const [optionsDistrict, setOptionsDistrict] = useState<{ value: string; label: string }[]>([]);
+  const [optionsWard, setOptionsWard] = useState<{ value: string; label: string }[]>([]);
+  const [optionsStreet, setOptionsStreet] = useState<{ value: string; label: string }[]>([]);
+  const [optionsProject, setOptionsProject] = useState<{ value: string; label: string }[]>([]);
+
+  useEffect(() => {
+    if ( city_id ) {
+      setOptionsDistrict(cityDistrictsData[city_id.toString()]?.map(item => {
+        return {
+          value: item.value.toString(),
+          label: item.text
+        }
+      }));
+    } else {
+      setOptionsDistrict([]);
+    }
+  }, [city_id])
+
+  useEffect(() => {
+    if ( district_id ) {
+      setOptionsWard(districtsWardsData[district_id.toString()]?.map(item => {
+        return {
+          value: item.value ? item.value.toString() : item.id ? item.id.toString() : "",
+          label: item.text
+        }
+      }));
+      setOptionsStreet(districtsStreetsData[district_id.toString()]?.map(item => {
+        return {
+          value: item.value ? item.value.toString() : item.id ? item.id.toString() : "",
+          label: item.text
+        }
+      }));
+      setOptionsProject(districtsProjectsData[district_id.toString()]?.map(item => {
+        return {
+          value: item.value.toString(),
+          label: item.text
+        }
+      }));
+    } else {
+      setOptionsWard([]);
+      setOptionsStreet([]);
+      setOptionsProject([]);
+    }
+    setFullAddressInfo((prev) => {return {...prev, districtLabel: "", wardLabel: "", streetLabel: "", projectLabel: ""}});
+  }, [district_id])
 
   return (
     <Card className="bg-primary/10">
@@ -180,13 +240,12 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   onSelectedValueChange={(value) => {
                     field.onChange(value?.value || "");
                     setFullAddressInfo((prev) => {return {...prev, cityLabel: value?.label || ""}});
+                    form.setValue("district_id", "");
                   }}
-                  items={citiesData.map(item => {
-                    return {
-                      value: item.value.toString(),
-                      label: item.text
-                    }
-                  })}
+                  onSelectedValueCallback={(value) => {
+                    setFullAddressInfo((prev) => {return {...prev, cityLabel: value?.label || ""}});
+                  }}
+                  items={optionsCity}
                   placeholder={"Chọn Tỉnh/ Thành phố"}
                   emptyMessage="Không tìm thấy nội dung"
                   disabled={isLoading}
@@ -208,14 +267,14 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   onSelectedValueChange={(value) => {
                     field.onChange(value?.value || "");
                     setFullAddressInfo((prev) => {return {...prev, districtLabel: value?.label || ""}});
+                    form.setValue("ward_id", "");
+                    form.setValue("street_id", "");
+                    form.setValue("project_id", "");
                   }}
-                  items={city_id ? 
-                    (cityDistrictsData[city_id.toString()]?.map(item => {
-                      return {
-                        value: item.value.toString(),
-                        label: item.text
-                      }
-                    }) || []) : []}
+                  onSelectedValueCallback={(value) => {
+                    setFullAddressInfo((prev) => {return {...prev, districtLabel: value?.label || ""}});
+                  }}
+                  items={optionsDistrict}
                   placeholder={"Chọn Quận/ Huyện"}
                   emptyMessage="Không tìm thấy nội dung"
                   disabled={isLoading || (city_id ? false : true)}
@@ -238,13 +297,10 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     field.onChange(value?.value || "");
                     setFullAddressInfo((prev) => {return {...prev, wardLabel: value?.label || ""}});
                   }}
-                  items={district_id ? 
-                    (districtsWardsData[city_id.toString()]?.map(item => {
-                      return {
-                        value: item.value ? item.value.toString() : item.id ? item.id.toString() : "",
-                        label: item.text
-                      }
-                    }) || []) : []}
+                  onSelectedValueCallback={(value) => {
+                    setFullAddressInfo((prev) => {return {...prev, wardLabel: value?.label || ""}});
+                  }}
+                  items={optionsWard}
                   placeholder={"Chọn Phường/ Xã"}
                   emptyMessage="Không tìm thấy nội dung"
                   disabled={isLoading || (district_id ? false : true)}
@@ -266,13 +322,10 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     field.onChange(value?.value || "");
                     setFullAddressInfo((prev) => {return {...prev, streetLabel: value?.label || ""}});
                   }}
-                  items={district_id ? 
-                    (districtsStreetsData[city_id.toString()]?.map(item => {
-                      return {
-                        value: item.value ? item.value.toString() : item.id ? item.id.toString() : "",
-                        label: item.text
-                      }
-                    }) || []) : []}
+                  onSelectedValueCallback={(value) => {
+                    setFullAddressInfo((prev) => {return {...prev, streetLabel: value?.label || ""}});
+                  }}
+                  items={optionsStreet}
                   placeholder={"Chọn Đường/ Phố"}
                   emptyMessage="Không tìm thấy nội dung"
                   disabled={isLoading || (district_id ? false : true)}
@@ -294,13 +347,10 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                     field.onChange(value?.value || "");
                     setFullAddressInfo((prev) => {return {...prev, projectLabel: value?.label || ""}});
                   }}
-                  items={district_id ? 
-                    (districtsProjectsData[city_id.toString()]?.map(item => {
-                      return {
-                        value: item.value.toString(),
-                        label: item.text
-                      }
-                    }) || []) : []}
+                  onSelectedValueCallback={(value) => {
+                    setFullAddressInfo((prev) => {return {...prev, projectLabel: value?.label || ""}});
+                  }}
+                  items={optionsProject}
                   placeholder={"Chọn Dự án"}
                   emptyMessage="Không tìm thấy nội dung"
                   disabled={isLoading || (district_id ? false : true)}

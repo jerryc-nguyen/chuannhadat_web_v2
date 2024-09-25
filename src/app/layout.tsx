@@ -4,7 +4,7 @@ import './index.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import { QueryProvider } from '@components/providers';
+import { QueryProvider, ThemeProvider } from '@components/providers';
 import { Toaster } from '@components/ui/sonner';
 import SSROptionsProvider from '@components/providers/SSROptionsProvider';
 import { cookies } from 'next/headers';
@@ -16,6 +16,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import ModalsProvider from '@components/ModalsProvider';
+import { HeaderDashboard, SidebarDashboard } from '@desktop/dashboard/layout/components';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -45,11 +46,29 @@ export default function RootLayout({
         name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no"
       ></meta>
+      {/* của Khải đừng xóa */}
+      {/* <body className={inter.className + ` ${mobileClass} overflow-hidden`}> */}
       <body className={inter.className + ` ${mobileClass}`}>
         <QueryProvider>
           <JotaiProvider>
             <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>
-              <ModalsProvider>{children}</ModalsProvider>
+              <ModalsProvider>
+              {/* của Khải đừng xóa */}
+                {/* <ThemeProvider
+                  attribute="class"
+                  defaultTheme="light"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <section className="flex">
+                    <SidebarDashboard />
+                    <main className="h-full w-full flex-1 overflow-hidden">
+                      <HeaderDashboard isMobile/> */}
+                      {children}
+                    {/* </main>
+                  </section>
+                </ThemeProvider> */}
+              </ModalsProvider>
             </SSROptionsProvider>
           </JotaiProvider>
           <Toaster richColors />

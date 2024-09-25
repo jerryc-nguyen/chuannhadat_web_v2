@@ -27,6 +27,7 @@ export interface IProductForm {
     view_direction?: string;
     furniture?: string;
     image_ids: string;
+    youtube_url?: string;
 }
 
 export interface IImageSignS3_Request {

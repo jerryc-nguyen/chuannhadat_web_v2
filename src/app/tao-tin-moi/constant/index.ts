@@ -46,14 +46,14 @@ export const phapLyTypeOptions = [
 ]
 
 export const viewDirectionTypeOptions = [
-    {value: "west", label: "Hướng Tây"},
-    {value: "west_south", label: "Hướng Tây Nam"},
-    {value: "west_north", label: "Hướng Tây Bắc"},
-    {value: "east", label: "Hướng Đông"},
-    {value: "east_south", label: "Hướng Đông Nam"},
-    {value: "east_north", label: "Hướng Đông Bắc"},
-    {value: "south", label: "Hướng Nam"},
-    {value: "north", label: "Hướng Bắc"}
+    {value: "view_west", label: "Hướng Tây"},
+    {value: "view_west_south", label: "Hướng Tây Nam"},
+    {value: "view_west_north", label: "Hướng Tây Bắc"},
+    {value: "view_east", label: "Hướng Đông"},
+    {value: "view_east_south", label: "Hướng Đông Nam"},
+    {value: "view_east_north", label: "Hướng Đông Bắc"},
+    {value: "view_south", label: "Hướng Nam"},
+    {value: "view_north", label: "Hướng Bắc"}
 ]
 
 export const furnitureTypeOptions = [

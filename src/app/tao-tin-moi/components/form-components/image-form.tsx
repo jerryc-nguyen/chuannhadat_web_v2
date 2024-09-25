@@ -6,7 +6,7 @@ import { Separator } from "@components/ui/separator";
 import { Image } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { IProductForm } from "@app/tao-tin-moi/type";
-import { FormField, FormItem } from "@/components/ui/form";
+import { FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import dynamic from "next/dynamic";
 import { Input } from "@components/ui/input";
@@ -19,7 +19,6 @@ interface IImageForm {
 }
 
 const ImageForm: React.FC<IImageForm> = ({ form }) => {
-  // const image_ids = form.watch("image_ids");
 
   return (
     <Card>
@@ -32,14 +31,18 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
       <CardContent className="grid gap-6">
         <FormField
           control={form.control}
-          name="title"
+          name="youtube_url"
           render={({ field }) => (
             <FormItem className="grid gap-2">
               <Input
                 {...field}
                 className="relative"
-                placeholder="Nhập địa chỉ..."
+                placeholder="Nhập Link Youtube..."
               />
+              <FormDescription>
+                URL phải có định dạng: https://www.youtube.com/watch?....
+              </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

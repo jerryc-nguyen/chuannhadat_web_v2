@@ -36,5 +36,9 @@ export const API_ROUTES = {
   },
   MAPS: {
     GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll'
+  },
+  PRODUCTS: {
+    END_POINT: 'api/v1/products',
+    DELETE: 'api/v1/products/{product_id}'
   }
 };

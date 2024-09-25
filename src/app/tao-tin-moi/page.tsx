@@ -13,6 +13,7 @@ import ProductDetailInfoForm from "./components/form-components/product-detail-i
 import ImageForm from "./components/form-components/image-form";
 import { IProductForm } from "./type";
 import { Button } from "@components/ui/button";
+import ProductApiService from "./apis/product-api";
 
 const NewPostPage: React.FC = () => {
   const defaultValues = { 
@@ -42,16 +43,21 @@ const NewPostPage: React.FC = () => {
     entrance_direction: "",
     view_direction: "",
     furniture: "",
-    image_ids: ""
+    image_ids: "",
+    youtube_url: ""
   };
 
   const form = useForm({
     resolver: yupResolver(FormSchemaTransactionType),
     defaultValues,
+    reValidateMode: "onChange"
   });
 
   const onSubmit = async (data: IProductForm) => {
     try {
+      const res = await ProductApiService.Create(data);
+      console.log("resssssssss", res);
+      
       console.log("data", data);
     } catch (error) {
       console.log("error", error);
@@ -69,13 +75,18 @@ const NewPostPage: React.FC = () => {
             <ProductInfoForm form={form} />
             <ProductDetailInfoForm form={form} />
           </div>
-          <div className="grid items-start gap-6 lg:col-span-1 top-2-safe sticky">
+          <div className="grid items-start gap-6 lg:col-span-1 top-2 sticky">
             <ProductConfigForm />
           </div>
         </div>
-        <div className="bg-card border bottom-2-safe flex justify-between mt-6 p-3 rounded-lg sticky z-[999999]">
-          <Button variant="ghost">Cancel</Button>
-          <Button>Đăng tin và thanh toán</Button>
+        <div className="bg-card border bottom-2 flex justify-between mt-6 p-3 rounded-lg sticky z-[999999]">
+          <Button type="button" variant="ghost" onClick={() => {
+            form.setValue("city_id", "2");
+            setTimeout(() => {
+              form.trigger("city_id")
+            }, 200);
+          }}>Cancel</Button>
+          <Button type="submit">Đăng tin và thanh toán</Button>
         </div>
       </form>
     </Form>

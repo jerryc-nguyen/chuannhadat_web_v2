@@ -42,4 +42,7 @@ export const FormSchemaTransactionType = yup.object().shape({
     view_direction: yup.string(),
     furniture: yup.string(),
     image_ids: yup.string().required("Đăng tối thiểu 1 ảnh."),
+    youtube_url: yup
+      .string()
+      .matches(/^https:\/\/www\.youtube\.com\/watch\?/, 'Đường dẫn phải bắt đầu với "https://www.youtube.com/watch?..."')
 });

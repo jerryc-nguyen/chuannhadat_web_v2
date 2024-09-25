@@ -33,6 +33,7 @@ interface IImageUploader {
 
 const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
   const [images, setImages] = useState<CNDImage[]>([]);
+  const errors = form.formState.errors;
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
     accept: {
@@ -64,7 +65,9 @@ const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
   );
 
   useEffect(() => {
-    form.setValue("image_ids", images.map(item => item.id?.toString() || "undefined").join(","))
+    console.log("images", images);
+    
+    form.setValue("image_ids", images.filter(item => item.id ? true : false).map(item => item.id?.toString()).join(","));
 
     return () => {
       images.forEach((file) => {
@@ -93,6 +96,9 @@ const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
       </div>
 
       <ThumbDragAndDropZone cndImages={images} setFiles={setImages}/>
+      {errors.image_ids && (
+        <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-destructive">{errors.image_ids.message}</p>
+      )}
     </section>
   );
 };
