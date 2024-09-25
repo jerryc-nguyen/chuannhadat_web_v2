@@ -11,10 +11,6 @@ import { cookies } from 'next/headers';
 import { API_TOKEN } from '@common/auth';
 import { Provider as JotaiProvider } from 'jotai';
 
-// import Swiper and modules styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import ModalsProvider from '@components/ModalsProvider';
 import { HeaderDashboard, SidebarDashboard } from '@desktop/dashboard/layout/components';
 const inter = Inter({ subsets: ['latin'] });
