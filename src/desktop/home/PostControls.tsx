@@ -13,9 +13,7 @@ export default function PostControls({ pagination }: { pagination: any }) {
       <Popover>
         <PopoverTrigger className="relative cursor-pointer">
           <div className="flex items-center">
-            <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
-              {selectedSortText}
-            </span>
+            <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">{selectedSortText}</span>
             <IoChevronDown />
           </div>
         </PopoverTrigger>

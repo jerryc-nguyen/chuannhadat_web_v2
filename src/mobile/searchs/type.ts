@@ -38,6 +38,9 @@ export interface Author {
   description: string;
   formatted_joined_at: string;
   gender: string;
+  facebook_url?: string;
+  website_url?: string;
+  youtube_url?: string;
 }
 
 export interface IProductDetail {
