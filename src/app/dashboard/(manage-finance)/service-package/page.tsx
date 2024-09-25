@@ -1,5 +1,6 @@
 // Next Imports
 import ServicePackageViewDesktop from "@desktop/dashboard/main-financial-management/service-package";
+import ServicePackageViewMobile from "@mobile/main-financial-management/service-package";
 import { useGetUserAgentInfo } from "@hooks/useGetUserAgentInfo";
 import type { Metadata } from "next";
 
@@ -15,7 +16,7 @@ const Page = () => {
       <>
         {isMobile ? (
           <div className="c-mobileApp">
-            <ServicePackageViewDesktop />
+            <ServicePackageViewMobile />
           </div>
         ) : (
           <ServicePackageViewDesktop />
