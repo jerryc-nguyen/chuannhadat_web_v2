@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import PaymentDialog from '../PaymentDialog';
+import { BuyButton, PaymentDialog } from '../PaymentDialog';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
@@ -36,7 +36,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     openModal({
       name: plan.plan_name,
       title: plan.plan_name,
-      content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading}/>,
+      content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+      footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+      maxHeightPercent: 0.8
     });
   };
 
