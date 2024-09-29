@@ -28,11 +28,9 @@ export function stringToSlug(str?: string) {
   return str;
 }
 
-export const removeEmpty = (obj: Record<A, A>) =>
-  Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== ''));
+export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== ''));
 
-export const removeNull = (obj: Record<A, A>) =>
-  Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
+export const removeNull = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
 export const genKey = (index: number) => index;
 
 export const toastSucess = (content: string, description?: string) => {
@@ -48,8 +46,23 @@ export const generateRandomString = (length: number) => {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
-  for ( let i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+};
+export const getInitialsName = (fullName: string) => {
+  const words = fullName.trim().split(' ');
+  if (words.length === 1) {
+    return words[0].substring(0, 2).toUpperCase();
+  }
+
+  const initials = words[0][0] + words[1][0];
+  return initials.toUpperCase();
+};
+export const truncateText = (text: string, maxLength: number = 100) => {
+  if (text?.length > maxLength) {
+    return text?.substring(0, maxLength) + ' .....';
+  }
+  return text;
+};

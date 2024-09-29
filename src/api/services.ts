@@ -16,6 +16,9 @@ export const services = {
         },
       });
     },
+    getProfileId: async (id: number): Promise<A> => {
+      return axiosInstance.get(`${API_ROUTES.PROFILES.GET_PROFILE_ID}/${id}`);
+    },
   },
   subscription_plans: {
     getSubscriptionPlans: async (): Promise<{ data: any }> => {

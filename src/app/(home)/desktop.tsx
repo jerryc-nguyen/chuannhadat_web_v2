@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import './desktop.scss';
 import DesktopFilterChips from '@mobile/filter_bds/DesktopFilterChips';
@@ -45,7 +45,7 @@ export default function Desktop() {
       setTimeout(() => {
         let loadingAuthors = missingAuthors?.data;
         if (data?.users) {
-          loadingAuthors = { ...loadingAuthors, ...data?.users }
+          loadingAuthors = { ...loadingAuthors, ...data?.users };
         }
         appendCardAuthors(loadingAuthors);
       }, 200);
