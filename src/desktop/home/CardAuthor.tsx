@@ -9,12 +9,13 @@ import { ReactElement } from 'react';
 const SSRHoverComponent = ({ authorSlug, children }: { authorSlug: string, children: ReactElement }) => {
   return <div data-slug={authorSlug}>{children}</div>
 }
+
 export default function CardAuthor({ product }: { product: A }) {
   const { getAuthorById } = useCardAuthors();
   const author = getAuthorById(product.user_id + '');
   const fullName = author?.full_name ? author.full_name : 'Loading';
   const HoverComponent = (isServer || !author) ? SSRHoverComponent : HoverCardAuthor;
-  console.log('HoverComponent', isServer || !author, author)
+
   return (
     <div className="flex items-center justify-between p-4">
       <div className="flex items-center space-x-4">
