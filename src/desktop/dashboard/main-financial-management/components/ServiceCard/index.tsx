@@ -20,9 +20,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
       return await services.subscription_plans.buySubscriptionPlans(planId);
     },
     onSuccess: (data) => {
-      console.log(data);
-      toast.success(data.message || 'Mua gói thành công!');
-      handleCloseDialog();
+      if (data.status) {
+        toast.success(data.message || 'Mua gói thành công!');
+
+        handleCloseDialog();
+      } else toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
     onError: (error: any) => {
       toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
@@ -32,8 +34,23 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     },
   });
 
-  const handleBuyNowClick = () => {
-    setDialogOpen(true);
+  const buyPlanValidatorMutation = useMutation({
+    mutationFn: async (planId: number) => {
+      return await services.subscription_plans.validateBuySubscriptionPlans(planId);
+    },
+    onSuccess: (data) => {
+      data.status
+        ? setDialogOpen(true)
+        : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
+    },
+    onError: (error: any) => {
+      console.log(error);
+      toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
+    },
+  });
+
+  const handleBuyNowClick = (planId: number) => {
+    buyPlanValidatorMutation.mutate(planId);
   };
 
   const handleCloseDialog = () => {
@@ -72,7 +89,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
         </CardContent>
 
         <CardFooter>
-          <Button variant="default" className="w-full" onClick={handleBuyNowClick}>
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={() => handleBuyNowClick(plan.plan_id)}
+          >
             Mua ngay
           </Button>
         </CardFooter>

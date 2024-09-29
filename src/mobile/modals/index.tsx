@@ -117,7 +117,7 @@ const buildContentStyle = (modal?: Modal) => {
     contentHeight = viewportSizes[1] * maxHeightPercent - HEADER_HEIGHT - footerHeight;
   }
 
-  return { height: contentHeight + 'px' };
+  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? "hidden" : "scroll" };
 };
 
 const buildHeaderClass = (modal?: Modal) => {
