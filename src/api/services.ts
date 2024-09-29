@@ -20,6 +20,22 @@ export const services = {
       return axiosInstance.get(`${API_ROUTES.PROFILES.GET_PROFILE_ID}/${id}`);
     },
   },
+  subscription_plans: {
+    getSubscriptionPlans: async (): Promise<{ data: any }> => {
+      return axiosInstance.get(API_ROUTES.SUBSCRIPTION_PLANS.GET);
+    },
+    buySubscriptionPlans: async (plan_id: number): Promise<any> => {
+      try {
+        const response = await axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.BUY, { plan_id });
+        return response; 
+      } catch (error) {
+        console.log('ERROR', error)
+      }
+    },
+    validateBuySubscriptionPlans: async (plan_id: number): Promise<any> => {
+      return axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.VALIDATE_BUY, { plan_id });
+    },
+  },
   notifications: {
     getNotifications: async (params: {
       page: number;

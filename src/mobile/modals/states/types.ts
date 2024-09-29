@@ -24,6 +24,7 @@ export interface DefaultModal {
   showAsDialog?: boolean;
   btsContentWrapClass?: string;
   dialogContentWrapClass?: string;
+  isHiddenScroll?: boolean
 }
 
 export type Modal = DefaultModal;
