@@ -49,6 +49,10 @@ const ImageUploadApiService = {
           onUploadProgress: (event: AxiosProgressEvent) => {
             onUploadProgressCallback(Math.ceil((event.progress || 1) * 100));
           },
+          headers: {
+            'Content-Type': file.type,
+            'x-amz-acl': 'public-read',
+          }
         };
 
         const uploadImageS3Response = await PerformUploadImageS3(
