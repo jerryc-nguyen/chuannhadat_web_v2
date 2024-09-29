@@ -27,6 +27,7 @@ const SubscriptionDialog: React.FC<Props> = ({ plan, onClose }) => {
   const selectedOption = pricingOptions[selectedOptionIndex];
   const finalPrice = useMemo(() => calculatePrice(selectedOption.originalPrice, selectedOption.discount), [selectedOptionIndex]);
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const handlePayment = () => {
   };
 
