@@ -1,7 +1,7 @@
 import { Button } from '@components/ui/button';
 import { IProductDetail } from '@mobile/searchs/type';
 import React from 'react';
-import { LuHeart, LuMapPin, LuShare2 } from 'react-icons/lu';
+import { LuHeart, LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
 import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
 import NextJsImage from './next-image';
 import Image from 'next/image';
@@ -16,14 +16,17 @@ import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/plugins/counter.css';
 import SubTitleComponent from './subtitle-component';
+import { useRouter } from 'next/navigation';
 
 type OverviewPostProps = {
   data: IProductDetail;
+  isInsideModal?: boolean;
 };
 
-const OverviewPost: React.FC<OverviewPostProps> = ({ data }) => {
+const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false }) => {
   const [openSlideImage, setIsOpenSlideImage] = React.useState<boolean>(false);
   const [indexImageActive, setIndexImageActive] = React.useState<number>(0);
+  const router = useRouter();
   const renderClassImages = (length: number) => {
     switch (length) {
       case 1:
@@ -68,11 +71,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data }) => {
               src={item.url}
             />
             {data?.images.length > 3 && index === 2 && (
-              <Button
-                onClick={() => setIsOpenSlideImage(true)}
-                variant={'outline'}
-                className="relative z-10"
-              >
+              <Button onClick={() => setIsOpenSlideImage(true)} variant={'outline'} className="relative z-10">
                 Xem thêm {data?.images.length - 3} hình
               </Button>
             )}
@@ -149,6 +148,18 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data }) => {
             Lưu tin
             <LuHeart className="ml-2" />
           </Button>
+          {isInsideModal && (
+            <Button
+              onClick={() => {
+                router.push(data.detail_path);
+              }}
+              className="border bg-blue-500 text-white hover:bg-blue-400"
+              variant={'link'}
+            >
+              Xem chi tiết
+              <LuMoveRight className="ml-2" />
+            </Button>
+          )}
         </div>
       </div>
     </div>

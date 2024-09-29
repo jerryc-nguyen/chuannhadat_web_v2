@@ -2,7 +2,7 @@ import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
 import { IProductSummary } from '@desktop/post-detail/type';
-import { Author } from '@mobile/searchs/type';
+import { Author, IProductDetail } from '@mobile/searchs/type';
 
 export const services = {
   profiles: {
@@ -54,7 +54,7 @@ export const services = {
     },
   },
   posts: {
-    getDetailPost: async (product_uid: string): Promise<A> => {
+    getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
       return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
     },
     getPostsSameAuthor: async (product_uid: string): Promise<{ data: IProductSummary[] }> => {

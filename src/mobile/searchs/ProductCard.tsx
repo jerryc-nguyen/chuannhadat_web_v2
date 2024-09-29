@@ -1,4 +1,3 @@
-
 /* eslint-disable @next/next/no-img-element */
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
@@ -29,6 +28,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
   const { openModal } = useModals();
   const router = useRouter();
   const handleShowDetailHouse = () => {
+    console.log('fffffff');
     // const { data } = useGetDetailProduct(product.uid);
     // if (!!data) {
 
