@@ -64,9 +64,9 @@ export default function Desktop() {
         <div className="top-50 sticky z-10">
           <DesktopFilterChips />
         </div>
-        <ModalPostDetail />
         <PostControls pagination={data?.pagination} />
         <PostList products={data?.data} />
+        <ModalPostDetail />
       </main>
     </main>
   );

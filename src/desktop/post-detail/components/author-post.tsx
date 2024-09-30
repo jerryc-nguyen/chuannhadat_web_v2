@@ -1,5 +1,5 @@
 import { services } from '@api/services';
-import { cn, genKey } from '@common/utils';
+import { cn, genKey, getInitialsName } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
 
@@ -80,41 +80,44 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
       Yêu cầu liên hệ lại
     </Button>
   );
-  if (isLoading || !data?.author?.slug) return loadingAuthor();
   return (
     <div className={cn('author-post sticky top-16 z-10 h-fit min-w-[310px] flex-1', className)}>
-      <div className="rounded-lg bg-white p-8">
-        <h3 className="text-lg font-semibold">Liên hệ</h3>
-        <div className="my-6 flex items-center gap-x-3">
-          <Avatar className="h-[100px] w-[100px]">
-            <AvatarImage src={profileData?.avatar_url} />
-            <AvatarFallback>Author</AvatarFallback>
-          </Avatar>
-          <div>
-            <strong className="text-blue-500">{profileData?.full_name}</strong>
-            <p className="text-slate-400">Đã đăng {profileData?.posts_count} tin</p>
+      {isLoading || !data?.author?.slug ? (
+        loadingAuthor()
+      ) : (
+        <div className="rounded-lg bg-white p-8">
+          <h3 className="text-lg font-semibold">Liên hệ</h3>
+          <div className="my-6 flex items-center gap-x-3">
+            <Avatar className="h-[100px] w-[100px]">
+              <AvatarImage src={profileData?.avatar_url} />
+              <AvatarFallback>{getInitialsName(profileData?.full_name as string)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <strong className="text-blue-500">{profileData?.full_name}</strong>
+              <p className="text-slate-400">Đã đăng {profileData?.posts_count} tin</p>
+            </div>
+          </div>
+          <div className="my-4">
+            {profileData?.formatted_badges &&
+              profileData?.formatted_badges.map((item, index) => <li key={genKey(index)}>{item}</li>)}
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <Button
+              onClick={handleClickButtonPhone}
+              className="flex h-fit items-center justify-center gap-x-2 bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
+              variant={'outline'}
+            >
+              <span className="flex items-center gap-x-2">
+                <LuPhoneCall />
+                <span id="phone-number">{phoneNumber}</span>
+              </span>
+              <span>{textButtonPhone}</span>
+            </Button>
+            <DialogContactAgain elementTrigger={buttonContactAgain} postId={data?.id} title={data.title} />
           </div>
         </div>
-        <div className="my-4">
-          {profileData?.formatted_badges &&
-            profileData?.formatted_badges.map((item, index) => <li key={genKey(index)}>{item}</li>)}
-        </div>
-        <div className="flex flex-col gap-y-2">
-          <Button
-            onClick={handleClickButtonPhone}
-            className="flex h-fit items-center justify-center gap-x-2 bg-blue-500 text-white hover:bg-blue-400 hover:text-white"
-            variant={'outline'}
-          >
-            <span className="flex items-center gap-x-2">
-              <LuPhoneCall />
-              <span id="phone-number">{phoneNumber}</span>
-            </span>
-            <span>{textButtonPhone}</span>
-          </Button>
-          <DialogContactAgain elementTrigger={buttonContactAgain} postId={data?.id} title={data.title} />
-        </div>
-      </div>
-      <PostsBySameAuthor fullNameAuthor={profileData?.full_name} authorId={profileData?.id} productId={data.uid} />
+      )}
+      <PostsBySameAuthor fullNameAuthor={profileData?.full_name} authorId={profileData?.id} productId={data?.uid} />
     </div>
   );
 };
