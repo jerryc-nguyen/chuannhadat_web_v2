@@ -7,6 +7,8 @@ import useModals from '@mobile/modals/hooks';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import FooterSortBtsButton from '@mobile/filter_bds/FooterSortBtsButton';
 import { FilterFieldName } from '@models';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Button } from 'react-day-picker';
 
 export default function PostList() {
   const { openModal3 } = useModals();
@@ -15,7 +17,12 @@ export default function PostList() {
     withLocal: false,
   });
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [products, setProducts] = useState<A[]>([]);
+  const [showLoadMore, setShowLoadMore] = useState(false);
+
   filterParams.per_page = 12;
+  filterParams.page = currentPage;
 
   const { data } = useSuspenseQuery(
     queryOptions({
@@ -34,6 +41,20 @@ export default function PostList() {
     });
   };
 
+  useLayoutEffect(() => {
+    if (data) {
+      setProducts((prevProducts) => {
+        const existingIds = new Set(prevProducts.map((product) => product.id));
+        const newProducts = data.data.filter((product: A) => !existingIds.has(product.id));
+        return [...prevProducts, ...newProducts];
+      });
+    }
+  }, [data]);
+
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
   return (
     <div className="relative mx-auto w-full">
       <div className="flex items-center justify-between px-4">
@@ -46,9 +67,16 @@ export default function PostList() {
         </div>
       </div>
 
-      {data?.data.map((product: A) => {
+      {products?.map((product: A) => {
         return <ProductCard key={product?.id} product={product} />;
       })}
+
+      <Button
+        className="load-more-button m-auto animate-bounce text-[20px] text-blue-400 m-auto flex items-center"
+        onClick={handleLoadMore}
+      >
+        Xem thêm <IoChevronDown className="ml-2" />
+      </Button>
     </div>
   );
 }

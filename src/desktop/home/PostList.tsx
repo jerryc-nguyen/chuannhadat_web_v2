@@ -1,9 +1,16 @@
+import { RefObject } from 'react';
 import ProductCard from './ProductCard';
 
-export default function PostList({ products }: { products: Array<A> }) {
+export default function PostList({
+  products,
+  postRef,
+}: {
+  products: Array<A>;
+  postRef: RefObject<HTMLDivElement>;
+}) {
   return (
     <>
-      <div className="c-content__gridWrap">
+      <div className="c-content__gridWrap" ref={postRef}>
         <div className="c-content__grid">
           {products.map((product: A) => {
             return (
