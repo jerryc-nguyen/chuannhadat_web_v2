@@ -3,8 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { Button } from '@components/ui/button';
 import ThumbDragAndDropZone from './component/thumbs-container';
-import { CNDImage, IProductForm } from '@app/tao-tin-moi/type';
 import { UseFormReturn } from "react-hook-form";
+import { CNDImage, IProductForm } from '@desktop/dashboard/main-manage-post/new-post/type';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',

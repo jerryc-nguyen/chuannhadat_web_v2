@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CNDImage } from '@app/tao-tin-moi/type';
+import { CNDImage } from '@desktop/dashboard/main-manage-post/new-post/type';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { CircleX } from 'lucide-react';
-import { CNDImage } from '@app/tao-tin-moi/type';
 import ImageWithFallback from '@components/image-with-fallback';
-import ImageUploadApiService from '@app/tao-tin-moi/apis/image-upload-api';
+import ImageUploadApiService from '@desktop/dashboard/main-manage-post/new-post/apis/image-upload-api';
+import { CNDImage } from '@desktop/dashboard/main-manage-post/new-post/type';
 
 interface IPreviewThumb {
   image: CNDImage;

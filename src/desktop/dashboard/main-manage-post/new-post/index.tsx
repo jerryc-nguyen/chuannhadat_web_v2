@@ -15,7 +15,7 @@ import { IProductForm } from "./type";
 import { Button } from "@components/ui/button";
 import ProductApiService from "./apis/product-api";
 
-const NewPostPage: React.FC = () => {
+const NewPost: React.FC = () => {
   const defaultValues = { 
     name: "",
     description: "",
@@ -93,4 +93,4 @@ const NewPostPage: React.FC = () => {
   );
 };
 
-export default NewPostPage;
+export default NewPost;

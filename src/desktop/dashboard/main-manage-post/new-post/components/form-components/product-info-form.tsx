@@ -17,15 +17,15 @@ import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import { Separator } from "@components/ui/separator";
 import { Checkbox } from "@components/ui/checkbox";
 import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
+import LocationForm from "./location-form";
+import { PriceAutoComplete } from "./fields/price-autocomplete";
+import { BadgeInfo } from "lucide-react";
 import {
   businessTypeOptions,
   categoryTypeOptions,
   phapLyTypeOptions,
-} from "@app/tao-tin-moi/constant";
-import { IProductForm } from "@app/tao-tin-moi/type";
-import LocationForm from "./location-form";
-import { PriceAutoComplete } from "./fields/price-autocomplete";
-import { BadgeInfo } from "lucide-react";
+} from "../../constant";
+import { IProductForm } from "../../type";
 
 interface IProductInfoForm {
   form: UseFormReturn<IProductForm>;

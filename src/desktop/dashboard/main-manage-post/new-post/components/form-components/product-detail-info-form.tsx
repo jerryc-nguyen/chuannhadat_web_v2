@@ -20,12 +20,12 @@ import {
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import { Separator } from "@components/ui/separator";
 import { maskNumber } from "@common/priceHelpers";
-import { furnitureTypeOptions, viewDirectionTypeOptions } from "@app/tao-tin-moi/constant";
-import { IProductForm } from "@app/tao-tin-moi/type";
 import React from "react";
 import { Button } from "@components/ui/button";
 import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
 import { ReceiptText } from "lucide-react";
+import { IProductForm } from "../../type";
+import { furnitureTypeOptions, viewDirectionTypeOptions } from "../../constant";
 
 interface IProductDetailInfoForm {
   form: UseFormReturn<IProductForm>;

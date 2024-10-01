@@ -7,16 +7,17 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@components/ui/separator";
 import { MapPin, CircleAlert } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { citiesData, cityDistrictsData, districtsProjectsData, districtsStreetsData, districtsWardsData } from "@app/tao-tin-moi/constant";
-import { IProductForm } from "@app/tao-tin-moi/type";
 import { useCallback, useEffect, useState } from "react";
 import { AutoComplete } from "@components/autocomplete";
 import { Checkbox } from "@components/ui/checkbox";
 
 import dynamic from "next/dynamic";
 import { center, SimpleLatLng } from "@components/map-leaflet/config";
-import MapsApiService from "@app/tao-tin-moi/apis/maps-api";
 import { LoadingSpinner } from "@components/icons/loading-spinner";
+import { IProductForm } from "../../type";
+import MapsApiService from "../../apis/maps-api";
+import { citiesData, cityDistrictsData, districtsProjectsData, districtsStreetsData, districtsWardsData } from "../../constant";
+
 const MapLeaflet = dynamic(() => import("@components/map-leaflet"), {
   ssr: false,
 });
@@ -196,30 +197,6 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
-        {/* <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem className="grid gap-2">
-              <Input
-                {...field}
-                className="relative"
-                placeholder="Nhập địa chỉ..."
-              />
-            </FormItem>
-          )}
-        /> */}
-        {/* <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem className="grid gap-2">
-              <FormLabel>Vị trí trên bản đồ</FormLabel>
-              <MapLeaflet key={"mapLeaflet"} />
-            </FormItem>
-          )}
-        /> */}
-
         <div className="grid gap-2">
           <Label htmlFor="subject">Vị trí trên bản đồ</Label>
           <MapLeaflet key={"mapLeaflet"}

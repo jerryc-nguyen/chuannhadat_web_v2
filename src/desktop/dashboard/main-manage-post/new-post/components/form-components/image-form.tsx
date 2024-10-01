@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@components/ui/separator";
 import { Image } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
-import { IProductForm } from "@app/tao-tin-moi/type";
 import { FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { IProductForm } from "../../type";
 
 import dynamic from "next/dynamic";
 import { Input } from "@components/ui/input";
