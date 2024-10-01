@@ -19,3 +19,29 @@ export interface ITransactionResponse {
   description: string;
   created_at: string;
 }
+
+export interface ServiceContent {
+  text: string;
+  value: number;
+}
+
+export interface BuyInfo {
+  total: number;
+  discount: number;
+  formatted_total: string;
+}
+
+export interface Service {
+  plan_id: number;
+  plan_name: string;
+  image_url: string;
+  contents: ServiceContent[];
+  buy_info: BuyInfo;
+}
+
+export interface ServicePackageInfo {
+  sub_title: string;
+  title: string;
+  plans: Service[];
+  type: string
+}

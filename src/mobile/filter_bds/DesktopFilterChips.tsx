@@ -38,7 +38,7 @@ const FILTER_ITEMS: Array<FilterChipOption> = [
     id: FilterFieldName.categoryType,
     text: 'Loại nhà đất',
   },
-  { id: FilterFieldName.locations, text: 'Khu vực' },
+  // { id: FilterFieldName.locations, text: 'Khu vực' },
   {
     id: FilterFieldName.price,
     text: 'Mức giá',

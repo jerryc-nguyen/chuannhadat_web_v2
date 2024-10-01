@@ -17,9 +17,6 @@ export const service = {
         },
       });
     },
-    getProfileId: async (id: number): Promise<A> => {
-      return axiosInstance.get(`${API_ROUTES.PROFILES.GET_PROFILE_ID}/${id}`);
-    },
     updateMyPassword: async (data: IModalUpdatePassoword) => {
       return axiosInstance.post(API_ROUTES.PROFILES.UPDATE_PASSWORD, data);
     },

@@ -8,12 +8,18 @@ export const API_ROUTES = {
     LOGOUT: 'auth/logout',
   },
   POSTS: {
-    DETAIL_POST: 'api/v1/products'
+    DETAIL_POST: 'api/v1/products',
+    POSTS_SAME_AUTHOR: 'same_owner_products',
   },
   BALANCE: {
     OVERVIEW: 'api/v1/balances/overviews',
     TRANSACTION: 'api/v1/balances/transactions',
     HISTORY: 'api/v1/balances/deposit_histories',
+  },
+  SUBSCRIPTION_PLANS: {
+    GET: '/api/v1/subscription_plans',
+    BUY: 'api/v1/subscription_plans/buy_plan',
+    VALIDATE_BUY: 'api/v1/subscription_plans/validate_buy_plan',
   },
   NOTIFICATION: {
     LIST: 'api/v1/notifications',
@@ -32,7 +38,7 @@ export const API_ROUTES = {
   },
   IMAGE_UPLOAD: {
     SIGN_S3: 'api/v1/product_images/sign-s3',
-    TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url'
+    TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url',
   },
   MAPS: {
     GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll'

@@ -1,7 +1,8 @@
 import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { Author } from '@mobile/searchs/type';
+import { IProductSummary } from '@desktop/post-detail/type';
+import { Author, IProductDetail } from '@mobile/searchs/type';
 
 export const services = {
   profiles: {
@@ -14,6 +15,25 @@ export const services = {
           slug,
         },
       });
+    },
+    getProfileId: async (id: number): Promise<A> => {
+      return axiosInstance.get(`${API_ROUTES.PROFILES.GET_PROFILE_ID}/${id}`);
+    },
+  },
+  subscription_plans: {
+    getSubscriptionPlans: async (): Promise<{ data: any }> => {
+      return axiosInstance.get(API_ROUTES.SUBSCRIPTION_PLANS.GET);
+    },
+    buySubscriptionPlans: async (plan_id: number): Promise<any> => {
+      try {
+        const response = await axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.BUY, { plan_id });
+        return response; 
+      } catch (error) {
+        console.log('ERROR', error)
+      }
+    },
+    validateBuySubscriptionPlans: async (plan_id: number): Promise<any> => {
+      return axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.VALIDATE_BUY, { plan_id });
     },
   },
   notifications: {
@@ -34,8 +54,15 @@ export const services = {
     },
   },
   posts: {
-    getDetailPost: async (product_uid: string): Promise<A> => {
+    getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
       return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
+    },
+    getPostsSameAuthor: async (product_uid: string): Promise<{ data: IProductSummary[] }> => {
+      return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}/${API_ROUTES.POSTS.POSTS_SAME_AUTHOR}`, {
+        params: {
+          product_uid,
+        },
+      });
     },
   },
 };

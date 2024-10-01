@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 
 import './desktop.scss';
 import DesktopFilterChips from '@mobile/filter_bds/DesktopFilterChips';
@@ -26,35 +26,32 @@ export default function Desktop() {
   filterParams.with_users = true;
   filterParams.per_page = 12;
 
-  const { data, isFetched } = useSuspenseQuery(
+  const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ['home', filterParams],
       queryFn: () => searchApi(filterParams),
     }),
   );
 
-  useHydrateAtoms([[loadedCardAuthorsAtom, data.users || {}]]);
+  useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);
 
-  useCallback(() => {
-    if (isFetched && data.users) {
-      setTimeout(() => {
-        appendCardAuthors(data.users);
-      }, 200);
-    }
-  }, [isFetched, data.users]);
-
-  const { data: missingAuthors, isFetched: isFetchedMissingAuthors } = useQuery({
+  const { data: missingAuthors } = useQuery({
     queryKey: ['missing-card-authors', data.missing_user_ids],
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
   });
 
-  useCallback(() => {
-    if (isFetched && data.users) {
+  useMemo(() => {
+    if (missingAuthors?.data) {
       setTimeout(() => {
-        appendCardAuthors(data.users);
+        let loadingAuthors = missingAuthors?.data;
+        if (data?.users) {
+          loadingAuthors = { ...loadingAuthors, ...data?.users };
+        }
+        appendCardAuthors(loadingAuthors);
       }, 200);
     }
-  }, [isFetchedMissingAuthors, missingAuthors?.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [missingAuthors]);
 
   return (
     <main className="c-layout1col">
@@ -67,9 +64,9 @@ export default function Desktop() {
         <div className="top-50 sticky z-10">
           <DesktopFilterChips />
         </div>
-        <ModalPostDetail />
         <PostControls pagination={data?.pagination} />
         <PostList products={data?.data} />
+        <ModalPostDetail />
       </main>
     </main>
   );
