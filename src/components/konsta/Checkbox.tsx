@@ -13,7 +13,6 @@ const Checkbox = forwardRef((props: A, ref: A) => {
     component = 'label',
     className,
     colors: colorsProp,
-
     defaultChecked,
     checked,
     indeterminate,
@@ -22,15 +21,10 @@ const Checkbox = forwardRef((props: A, ref: A) => {
     disabled,
     readOnly,
     onChange,
-
     ios,
     material,
-
-    touchRipple = true,
-
     // Children
     children,
-
     // Rest
     ...rest
   } = props;

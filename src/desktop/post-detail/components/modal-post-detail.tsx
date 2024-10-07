@@ -4,14 +4,14 @@ import { useAtom, useSetAtom } from 'jotai';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
 import { services } from '@api/services';
 import { useQuery } from '@tanstack/react-query';
-import OverviewPost from '@desktop/post-detail/components/overview-post';
-import FeaturesPost from '@desktop/post-detail/components/features-post';
-import DescriptionPost from '@desktop/post-detail/components/description-post';
-import NotePost from '@desktop/post-detail/components/note-post';
-import AuthorPost from '@desktop/post-detail/components/author-post';
 import { IProductDetail } from '@mobile/searchs/type';
 import styles from '../styles/modal-post-detail.module.scss';
 import { cn } from '@common/utils';
+import OverviewPost from './overview-post';
+import FeaturesPost from './features-post';
+import DescriptionPost from './description-post';
+import NotePost from './note-post';
+import AuthorPost from './author-post';
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
@@ -43,13 +43,20 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
       setPostId('');
     }
   };
+
   return (
     <Sheet open={isOpenModal} onOpenChange={onOpenChange}>
-      <SheetContent side={'left'} className={cn('flex !w-3/4 flex-col bg-gray-100', styles.modal_content_post)}>
+      <SheetContent
+        side={'left'}
+        className={cn('flex !w-3/4 flex-col bg-gray-100', styles.modal_content_post)}
+      >
         <SheetHeader>
           <SheetTitle>Đường dẫn</SheetTitle>
         </SheetHeader>
-        <section ref={postContentRef} className="post-content relative flex flex-1 justify-between gap-x-4">
+        <section
+          ref={postContentRef}
+          className="post-content relative flex flex-1 justify-between gap-x-4"
+        >
           <div className="content-post flex flex-[3] flex-col gap-y-4">
             <OverviewPost isInsideModal data={data as IProductDetail} />
             <FeaturesPost data={data as IProductDetail} />

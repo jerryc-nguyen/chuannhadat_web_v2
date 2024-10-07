@@ -2,6 +2,12 @@ import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
 import { IProductSummary } from '@desktop/post-detail/type';
+import {
+  IFormPropsLogin,
+  IFormPropsRegister,
+  IRegisterResponse,
+  LoginResponse,
+} from '@mobile/auth/types';
 import { Author, IProductDetail } from '@mobile/searchs/type';
 
 export const services = {
@@ -21,18 +27,18 @@ export const services = {
     },
   },
   subscription_plans: {
-    getSubscriptionPlans: async (): Promise<{ data: any }> => {
+    getSubscriptionPlans: async (): Promise<{ data: A }> => {
       return axiosInstance.get(API_ROUTES.SUBSCRIPTION_PLANS.GET);
     },
-    buySubscriptionPlans: async (plan_id: number): Promise<any> => {
+    buySubscriptionPlans: async (plan_id: number): Promise<A> => {
       try {
         const response = await axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.BUY, { plan_id });
-        return response; 
+        return response;
       } catch (error) {
-        console.log('ERROR', error)
+        console.log('ERROR', error);
       }
     },
-    validateBuySubscriptionPlans: async (plan_id: number): Promise<any> => {
+    validateBuySubscriptionPlans: async (plan_id: number): Promise<A> => {
       return axiosInstance.post(API_ROUTES.SUBSCRIPTION_PLANS.VALIDATE_BUY, { plan_id });
     },
   },
@@ -58,11 +64,22 @@ export const services = {
       return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
     },
     getPostsSameAuthor: async (product_uid: string): Promise<{ data: IProductSummary[] }> => {
-      return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}/${API_ROUTES.POSTS.POSTS_SAME_AUTHOR}`, {
-        params: {
-          product_uid,
+      return axiosInstance.get(
+        `${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}/${API_ROUTES.POSTS.POSTS_SAME_AUTHOR}`,
+        {
+          params: {
+            product_uid,
+          },
         },
-      });
+      );
+    },
+  },
+  auth: {
+    signIn: async (data: IFormPropsLogin): Promise<LoginResponse> => {
+      return axiosInstance.post(API_ROUTES.AUTH.LOGIN_BY_PHONE, data);
+    },
+    signUp: async (data: Partial<IFormPropsRegister>): Promise<IRegisterResponse> => {
+      return axiosInstance.post(API_ROUTES.AUTH.REGISTER_BY_PHONE, data);
     },
   },
 };

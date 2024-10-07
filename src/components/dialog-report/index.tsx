@@ -13,7 +13,14 @@ import { useForm } from 'react-hook-form';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { LuAlertTriangle, LuSendHorizonal } from 'react-icons/lu';
 import { Textarea } from '@components/ui/textarea';
@@ -65,11 +72,11 @@ const DialogReport: React.FC<DialogReportProps> = () => {
   });
   const { handleSubmit, control, reset } = form;
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log('🚀 ~ onSubmit ~ values:', values);
     setIsAcceptCapcha(false);
-    console.log('🐴 values', values);
   }
   const onChageCapcha = (value: A) => {
-    console.log('🫒 value', value);
+    console.log('🚀 ~ onChageCapcha ~ value:', value);
     setIsAcceptCapcha(true);
   };
   const listReasonOtion = [
@@ -118,7 +125,10 @@ const DialogReport: React.FC<DialogReportProps> = () => {
           <DialogTitle>Báo cáo tin rao có nội dung không đúng</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form className={cn('grid gap-4', styles.dialog_content)} onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className={cn('grid gap-4', styles.dialog_content)}
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="flex flex-col gap-y-2">
               <FormField
                 control={form.control}
@@ -135,14 +145,19 @@ const DialogReport: React.FC<DialogReportProps> = () => {
                         name="reason_options"
                         render={({ field }) => {
                           return (
-                            <FormItem key={item.id} className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormItem
+                              key={item.id}
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
                               <FormControl>
                                 <Checkbox
                                   checked={field.value?.includes(item.id as never)}
                                   onCheckedChange={(checked: boolean) => {
                                     return checked
                                       ? field.onChange([...field.value, item.id])
-                                      : field.onChange(field.value?.filter((value) => value !== item.id));
+                                      : field.onChange(
+                                          field.value?.filter((value) => value !== item.id),
+                                        );
                                   }}
                                 />
                               </FormControl>
@@ -202,7 +217,12 @@ const DialogReport: React.FC<DialogReportProps> = () => {
                       Số điện thoại
                     </FormLabel>
                     <FormControl>
-                      <Input type="number" id="phoneNumber" placeholder="Nhập số điện thoại" {...field} />
+                      <Input
+                        type="number"
+                        id="phoneNumber"
+                        placeholder="Nhập số điện thoại"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -227,14 +247,22 @@ const DialogReport: React.FC<DialogReportProps> = () => {
               />
             </div>
 
-            <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_CAPCHA_SITE_KEY as string} onChange={onChageCapcha} hl="vi" />
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_CAPCHA_SITE_KEY as string}
+              onChange={onChageCapcha}
+              hl="vi"
+            />
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="ghost">
                   Đóng
                 </Button>
               </DialogClose>
-              <Button disabled={!isAcceptCapcha} className="flex items-center gap-x-2" type="submit">
+              <Button
+                disabled={!isAcceptCapcha}
+                className="flex items-center gap-x-2"
+                type="submit"
+              >
                 Gửi yêu cầu
                 <LuSendHorizonal />
               </Button>

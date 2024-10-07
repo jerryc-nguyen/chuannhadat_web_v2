@@ -11,13 +11,11 @@ import { ALL_OPTION } from '@common/constants';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
 
 import { Button } from '@components/ui/button';
-import CmdkOptionPicker from '@mobile/ui/CmdkOptionPicker';
 
 export default function LocationsPicker({
   city,
   district,
   ward,
-  theme,
   onChangeCity,
   onChangeDistrict,
   onChangeWard,
@@ -30,7 +28,6 @@ export default function LocationsPicker({
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
 }) {
-
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>(ward);
@@ -112,7 +109,6 @@ export default function LocationsPicker({
     <div ref={containerRef}>
       <Popover open={openCityDropdown} onOpenChange={setOpenCityDropdown}>
         <PopoverTrigger asChild>
-
           <Button
             variant="outline"
             role="combobox"

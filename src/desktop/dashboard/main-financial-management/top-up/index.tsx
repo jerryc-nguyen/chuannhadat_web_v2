@@ -111,6 +111,7 @@ const TopUpView = () => {
           <div className="info-title-transfer-bank">
             <h3>Chuyển khoản ngân hàng</h3>
             <img
+              alt="payment"
               height="40"
               style={{
                 height: '40px',
@@ -130,6 +131,7 @@ const TopUpView = () => {
             </h5>
 
             <img
+              alt="Nguyen Van Linh"
               src="https://img.vietqr.io/image/VCCB-9021203567235-compact2.png?addInfo=cnd15991&amp;accountName=NGUYEN VAN LINH"
               width="300"
             />

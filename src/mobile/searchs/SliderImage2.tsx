@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Carousel,  CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { Image } from './type';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
@@ -21,6 +21,7 @@ export default function SliderImage2({ listImg }: { listImg: Image[] }) {
               <CarouselItem key={index}>
                 <AspectRatio.Root ratio={16 / 9}>
                   <img
+                    alt="image"
                     className="Image rounded-md"
                     src={buildThumbnailUrl({
                       imageUrl: img.url,

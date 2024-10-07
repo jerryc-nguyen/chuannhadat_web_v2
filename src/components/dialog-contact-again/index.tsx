@@ -75,11 +75,11 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
   });
   const { handleSubmit, control, reset } = form;
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log('🚀 ~ onSubmit ~ values:', values);
     setIsAcceptCapcha(false);
-    console.log('🐴 values', values);
   }
   const onChageCapcha = (value: A) => {
-    console.log('🫒 value', value);
+    console.log('🚀 ~ onChageCapcha ~ value:', value);
     setIsAcceptCapcha(true);
   };
   return (

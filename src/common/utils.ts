@@ -28,9 +28,11 @@ export function stringToSlug(str?: string) {
   return str;
 }
 
-export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== ''));
+export const removeEmpty = (obj: Record<A, A>) =>
+  Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== ''));
 
-export const removeNull = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
+export const removeNull = (obj: Record<A, A>) =>
+  Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
 export const genKey = (index: number) => index;
 
 export const toastSucess = (content: string, description?: string) => {
@@ -60,7 +62,7 @@ export const getInitialsName = (fullName: string) => {
   const initials = words[0][0] + words[1][0];
   return initials.toUpperCase();
 };
-export const truncateText = (text: string, maxLength: number = 100) => {
+export const truncateText = (text: string, maxLength = 100) => {
   if (text?.length > maxLength) {
     return text?.substring(0, maxLength) + ' .....';
   }

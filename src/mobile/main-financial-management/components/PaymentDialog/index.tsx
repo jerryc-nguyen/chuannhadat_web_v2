@@ -9,14 +9,21 @@ interface PaymentDialogProps {
 }
 
 export const BuyButton: React.FC<PaymentDialogProps> = ({ plan, onBuy, isLoading }) => {
-  return (<Button variant="default" className='w-full mt-4' onClick={() => onBuy(plan.plan_id)} disabled={isLoading}>
-    {isLoading ? 'Đang xử lý...' : 'Mua'}
-  </Button>)
-}
-
-export const PaymentDialog: React.FC<PaymentDialogProps> = ({ plan, onBuy, isLoading }) => {
   return (
-    <div className='w-full'>
+    <Button
+      variant="default"
+      className="mt-4 w-full"
+      onClick={() => onBuy(plan.plan_id)}
+      disabled={isLoading}
+    >
+      {isLoading ? 'Đang xử lý...' : 'Mua'}
+    </Button>
+  );
+};
+
+export const PaymentDialog: React.FC<PaymentDialogProps> = ({ plan }) => {
+  return (
+    <div className="w-full">
       <div className="w-full rounded-lg bg-white p-4 shadow-md">
         <img
           src={plan.image_url}
@@ -45,7 +52,6 @@ export const PaymentDialog: React.FC<PaymentDialogProps> = ({ plan, onBuy, isLoa
           </div>
         </div>
       </div>
-
     </div>
   );
 };
