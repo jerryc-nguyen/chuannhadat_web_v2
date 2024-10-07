@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CNDImage } from '@app/tao-tin-moi/type';
+import { CNDImage } from '@app/(home)/tao-tin-moi/type';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
@@ -8,34 +8,33 @@ interface IThumbDragAndDropZone {
   setFiles: (arg0: any) => void;
 }
 const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ cndImages, setFiles }) => {
-
   const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
-  
+
     return result;
   };
 
-  function onDragEnd (result: any) {
+  function onDragEnd(result: any) {
     // dropped outside the list
     if (!result.destination) {
       return;
     }
 
     setFiles((prev: any) => {
-        return reorder(
-            prev,
-            result.source.index,
-            result.destination.index
-        )
-    })
+      return reorder(prev, result.source.index, result.destination.index);
+    });
   }
 
   const generateKey = (cndImage: CNDImage) => {
-    return cndImage.id ? cndImage.id.toString() : (cndImage.uploadedFile ? (cndImage.uploadedFile.name) : "");
-  }
-    
+    return cndImage.id
+      ? cndImage.id.toString()
+      : cndImage.uploadedFile
+        ? cndImage.uploadedFile.name
+        : '';
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" direction="horizontal">

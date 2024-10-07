@@ -1,22 +1,22 @@
 import axiosMapsInstance from '@api/axiosMapsInstance';
 import { API_ROUTES } from '@common/router';
 
-interface LocationResponse {
+export interface LocationResponse {
   status: number | null;
   message: string | null;
   data: {
     status: boolean;
     address?: string;
-    city?: {value: string; text: string};
-    district?: {value: string; text: string};
-    ward?: {value: string; text: string};
+    city?: { value: string; text: string };
+    district?: { value: string; text: string };
+    ward?: { value: string; text: string };
     polygon_points?: number[][];
   };
 }
 
 const MapsApiService = {
   abortController: new AbortController(), // Store a single instance initially
-  
+
   GetLocationByLatLng: async (latLng: string) => {
     // Cancel the previous request, if any
     if (MapsApiService.abortController) {

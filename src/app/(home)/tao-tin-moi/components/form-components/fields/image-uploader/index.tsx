@@ -3,8 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import { Button } from '@components/ui/button';
 import ThumbDragAndDropZone from './component/thumbs-container';
-import { CNDImage, IProductForm } from '@app/tao-tin-moi/type';
-import { UseFormReturn } from "react-hook-form";
+import { CNDImage, IProductForm } from '@app/(home)/tao-tin-moi/type';
+import { UseFormReturn } from 'react-hook-form';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',
@@ -42,13 +42,12 @@ const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
       setImages((prev) => [
         ...prev,
         ...acceptedFiles.map((file) => {
-            const imgCND = {
-              url: URL.createObjectURL(file),
-              uploadedFile: file,
-            };
-            return imgCND;
-        }
-        ),
+          const imgCND = {
+            url: URL.createObjectURL(file),
+            uploadedFile: file,
+          };
+          return imgCND;
+        }),
       ]);
     },
   });
@@ -64,15 +63,15 @@ const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
   );
 
   useEffect(() => {
-    form.setValue("image_ids", images.map(item => item.id?.toString() || "undefined").join(","))
+    form.setValue('image_ids', images.map((item) => item.id?.toString() || 'undefined').join(','));
 
     return () => {
       images.forEach((file) => {
-        if ( file.id ) return;
-        URL.revokeObjectURL(file.url)
+        if (file.id) return;
+        URL.revokeObjectURL(file.url);
       });
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images]);
 
   return (
@@ -92,7 +91,7 @@ const ImageUploader: React.FC<IImageUploader> = ({ form }) => {
         </span>
       </div>
 
-      <ThumbDragAndDropZone cndImages={images} setFiles={setImages}/>
+      <ThumbDragAndDropZone cndImages={images} setFiles={setImages} />
     </section>
   );
 };

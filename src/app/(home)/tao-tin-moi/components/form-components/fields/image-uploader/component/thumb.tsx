@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { CircleX } from 'lucide-react';
-import { CNDImage } from '@app/tao-tin-moi/type';
+import { CNDImage } from '@app/(home)/tao-tin-moi/type';
 import ImageWithFallback from '@components/image-with-fallback';
-import ImageUploadApiService from '@app/tao-tin-moi/apis/image-upload-api';
+import ImageUploadApiService from '@app/(home)/tao-tin-moi/apis/image-upload-api';
 
 interface IPreviewThumb {
   image: CNDImage;
@@ -14,10 +14,10 @@ const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
   const [isError, setIsError] = useState<boolean>(false);
 
   const handleUploadImage = (file: CNDImage) => {
-    console.log("start handleUploadImage", file);
-    
+    console.log('start handleUploadImage', file);
+
     if (file.id || !file.uploadedFile) return;
-    console.log("start handleUploadImage ready");
+    console.log('start handleUploadImage ready');
     setIsUploading(true);
 
     const uploadPromises = ImageUploadApiService.upload([file.uploadedFile], (val) => {
@@ -32,7 +32,7 @@ const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
             url: result.url,
             id: result.id,
           }));
-          
+
           // nếu là file vừa mới tải lên
           // => view tạm bằng url blob
           // => gọi api upload
@@ -52,12 +52,12 @@ const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
 
   useEffect(() => {
     handleUploadImage(cndImage);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="relative group inline-flex h-24 w-24 cursor-grab rounded-lg border-2 border-secondary p-2 transition-transform duration-300 hover:scale-110">
-      <div className="w-full image-fill-wrapper relative rounded-lg overflow-hidden flex items-center justify-center flex-col bg-grey-50 duration-300">
+    <div className="group relative inline-flex h-24 w-24 cursor-grab rounded-lg border-2 border-secondary p-2 transition-transform duration-300 hover:scale-110">
+      <div className="image-fill-wrapper bg-grey-50 relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg duration-300">
         <ImageWithFallback
           className="block h-full w-auto"
           src={cndImage.url}
@@ -70,19 +70,19 @@ const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
           isError={isError}
           setIsError={setIsError}
         />
-        <CircleX className="absolute right-0 top-0 z-10 text-[#596570] opacity-0 transition-opacity duration-300 group-hover:opacity-100 cursor-pointer" />
+        <CircleX className="absolute right-0 top-0 z-10 cursor-pointer text-[#596570] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
 
-      {
-        isUploading ? (
-          <div className="bg-black/10 rounded-full w-[4.8rem] absolute top-1/2 transform -translate-y-1/2">
-            <div className="bg-black/40 text-fs-12 font-medium text-blue-100 text-center py-0.5 leading-none rounded-full duration-300"
-              style={{width: `${currentUploadProgress}%`}}>
-            </div>
-          </div>
-        ) : <></>
-      }
-
+      {isUploading ? (
+        <div className="absolute top-1/2 w-[4.8rem] -translate-y-1/2 transform rounded-full bg-black/10">
+          <div
+            className="text-fs-12 rounded-full bg-black/40 py-0.5 text-center font-medium leading-none text-blue-100 duration-300"
+            style={{ width: `${currentUploadProgress}%` }}
+          ></div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

@@ -1,0 +1,91 @@
+// Font Family
+
+//font size variables
+$size1: 0.0625rem !default;
+$font-base: $size1 * 16; // Assumes the browser default, typically `16px`
+$f12: $font-base * 0.75 !default;
+$f13: $font-base * 0.8125 !default;
+$f14: $font-base * 0.875 !default;
+$f16: $font-base * 1 !default;
+$f18: $font-base * 1.125 !default;
+$f19: $font-base * 1.1875 !default;
+$f20: $font-base * 1.25 !default;
+$f24: $font-base * 1.5 !default;
+$f28: $font-base * 1.75 !default;
+$f32: $font-base * 2 !default;
+$f38: $font-base * 2.375 !default;
+
+//font weight variables
+$fw300: 300 !default;
+$normal: 400 !default;
+$medium: 500 !default;
+$semibold: 600 !default;
+$bold: 700 !default;
+
+//line height variables
+$lh1: 1 !default;
+$lh125: 1.25 !default;
+$lh135: 1.35 !default;
+$lh14: 1.4 !default;
+$lh15: 1.5 !default;
+$lh2: 2 !default;
+
+//padding margin variables
+$s4: 0.25rem;
+$s8: 0.5rem;
+$s10: 0.625rem;
+$s12: 0.75rem;
+$s14: 0.875rem;
+$s15: 0.9375rem;
+$s16: 1rem;
+$s18: 1.125rem;
+$s20: 1.25rem;
+$s22: 1.375rem;
+$s24: 1.5rem;
+$s28: 1.75rem;
+$s32: 2rem;
+$s40: 2.5rem;
+$s48: 3rem;
+$s64: 4rem;
+
+// border-radius-variables
+$br: 0.5rem !default;
+$br4: 0.25rem !default;
+$br8: 0.5rem !default;
+$br20: 1.25rem !default;
+
+// resonsive breakpoints
+$grid-breakpoints: (
+  xs: 410px,
+  sm: 640px,
+  md: 768px,
+  ipadair: 821px,
+  lg: 1024px,
+  xl: 1280px,
+  2xl: 1440px,
+  3xl: 1536px,
+) !default;
+
+// variable color
+$primary-color: #4e6af0;
+$secondary-color: #27115f;
+$info-color: #2e90fa;
+$success-color: #38cb89;
+$warning-color: #ffab00;
+$error-color: #f04438;
+
+$neutral-00: #e8e9ea;
+$neutral-01: #fefefe;
+$neutral-02: #f3f5f7;
+$neutral-03: #f7f8fb;
+$neutral-04: #6c7275;
+$neutral-05: #343839;
+$neutral-06: #232627;
+$neutral-07: #141718;
+
+// width and height variables
+$w10: 10%;
+$w40: 40%;
+$w50: 50%;
+$w80: 80%;
+$w100: 100%;

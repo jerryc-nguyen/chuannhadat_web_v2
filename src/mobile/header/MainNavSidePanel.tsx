@@ -8,7 +8,7 @@ import { Button } from '@components/ui/button';
 import useSidePanels from '@components/SidePanel/hooks';
 
 export default function MainNavSidePanel() {
-  const { currentUser, signout } = useAuth();
+  const { currentUser, signOut } = useAuth();
   const { openModal, closeModal } = useModals();
   const { closePanel } = useSidePanels();
 
@@ -16,14 +16,12 @@ export default function MainNavSidePanel() {
     closePanel();
     openModal({
       name: 'loginAndRegister',
-      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
+      content: <ModalSelectRegisterOrLogin handleSetTokenServer={() => {}} onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       btsContentWrapClass: 'mt-2 bg-white p-4',
     });
   };
-
-  const title = currentUser ? `Xin chào, ${currentUser.full_name}` : 'Xin Chào, quý khách';
 
   return (
     <>
@@ -45,7 +43,7 @@ export default function MainNavSidePanel() {
 
       {currentUser && (
         <div className="flex flex-col gap-4">
-          <Button className="h-12" onClick={() => signout()}>
+          <Button className="h-12" onClick={() => signOut()}>
             Đăng xuất
           </Button>
         </div>

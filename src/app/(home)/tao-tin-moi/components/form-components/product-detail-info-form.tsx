@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -10,22 +10,22 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import { Separator } from "@components/ui/separator";
-import { maskNumber } from "@common/priceHelpers";
-import { furnitureTypeOptions, viewDirectionTypeOptions } from "@app/tao-tin-moi/constant";
-import { IProductForm } from "@app/tao-tin-moi/type";
-import React from "react";
-import { Button } from "@components/ui/button";
-import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
-import { ReceiptText } from "lucide-react";
+} from '@/components/ui/accordion';
+import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
+import { Separator } from '@components/ui/separator';
+import { maskNumber } from '@common/priceHelpers';
+import { furnitureTypeOptions, viewDirectionTypeOptions } from '@app/(home)/tao-tin-moi/constant';
+import { IProductForm } from '@app/(home)/tao-tin-moi/type';
+import React from 'react';
+import { Button } from '@components/ui/button';
+import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
+import { ReceiptText } from 'lucide-react';
 
 interface IProductDetailInfoForm {
   form: UseFormReturn<IProductForm>;
@@ -37,7 +37,7 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
     const regex = /^(?![.,])\d+([.,]\d{0,})?$/;
 
-    if (regex.test(value) || value === "") {
+    if (regex.test(value) || value === '') {
       field.onChange(value); // Update the value only if it matches the regex
     }
   };
@@ -45,7 +45,9 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-md flex gap-2"><ReceiptText /> Chi tiết Bất động sản</CardTitle>
+        <CardTitle className="text-md flex gap-2">
+          <ReceiptText /> Chi tiết Bất động sản
+        </CardTitle>
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
@@ -197,7 +199,7 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
                                   size="sm"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    form.setValue("entrance_direction", "");
+                                    form.setValue('entrance_direction', '');
                                   }}
                                 >
                                   Xóa lựa chọn
@@ -239,7 +241,7 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
                                   size="sm"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    form.setValue("view_direction", "");
+                                    form.setValue('view_direction', '');
                                   }}
                                 >
                                   Xóa lựa chọn
@@ -281,7 +283,7 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
                                   size="sm"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    form.setValue("furniture", "");
+                                    form.setValue('furniture', '');
                                   }}
                                 >
                                   Xóa lựa chọn

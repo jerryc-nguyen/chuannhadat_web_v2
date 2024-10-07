@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+'use client';
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -11,34 +11,34 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import { Separator } from "@components/ui/separator";
-import { Checkbox } from "@components/ui/checkbox";
-import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
+import { Separator } from '@components/ui/separator';
+import { Checkbox } from '@components/ui/checkbox';
+import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
 import {
   businessTypeOptions,
   categoryTypeOptions,
   phapLyTypeOptions,
-} from "@app/tao-tin-moi/constant";
-import { IProductForm } from "@app/tao-tin-moi/type";
-import LocationForm from "./location-form";
-import { PriceAutoComplete } from "./fields/price-autocomplete";
-import { BadgeInfo } from "lucide-react";
+} from '@app/(home)/tao-tin-moi/constant';
+import { IProductForm } from '@app/(home)/tao-tin-moi/type';
+import LocationForm from './location-form';
+import { PriceAutoComplete } from './fields/price-autocomplete';
+import { BadgeInfo } from 'lucide-react';
 
 interface IProductInfoForm {
   form: UseFormReturn<IProductForm>;
 }
 
 const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
-  const price_in_vnd = form.watch("price_in_vnd");
+  const price_in_vnd = form.watch('price_in_vnd');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
     const regex = /^(?![.,])\d+([.,]\d{0,})?$/;
 
-    if (regex.test(value) || value === "") {
+    if (regex.test(value) || value === '') {
       field.onChange(value); // Update the value only if it matches the regex
     }
   };
@@ -46,7 +46,9 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-md flex gap-2"><BadgeInfo /> Thông tin Bất động sản</CardTitle>
+        <CardTitle className="text-md flex gap-2">
+          <BadgeInfo /> Thông tin Bất động sản
+        </CardTitle>
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
@@ -138,7 +140,7 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        form.setValue("phap_ly", "");
+                        form.setValue('phap_ly', '');
                       }}
                     >
                       Xóa lựa chọn
@@ -163,8 +165,8 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                   className="relative"
                   placeholder="Nhập tiêu đề..."
                   endAdornment={
-                    <span className="absolute right-1 top-0 text-2xs">
-                      {form.getValues("title").length}/99
+                    <span className="text-2xs absolute right-1 top-0">
+                      {form.getValues('title').length}/99
                     </span>
                   }
                 />
@@ -189,8 +191,8 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                   className="min-h-[150px]"
                   placeholder="Nhập mô tả..."
                   endAdornment={
-                    <span className="absolute right-1 top-1 text-2xs">
-                      {form.getValues("description").length}/3000
+                    <span className="text-2xs absolute right-1 top-1">
+                      {form.getValues('description').length}/3000
                     </span>
                   }
                 />
@@ -241,7 +243,7 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                   }}
                   items={buildOptionsPrice({
                     searchText: price_in_vnd,
-                    businessType: form.getValues("business_type"),
+                    businessType: form.getValues('business_type'),
                   })}
                   emptyMessage="Nhập giá bán"
                   InputRender={
@@ -254,13 +256,13 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                         onChangeFieldNumber(field, rawValue);
                       }}
                       maxLength={12}
-                      disabled={form.getValues("price_in_vnd") === "Thỏa thuận"}
+                      disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
                     />
                   }
                 />
 
                 <div
-                  className={`flex ${form.formState.errors.price_in_vnd ? "justify-between" : "justify-end"}`}
+                  className={`flex ${form.formState.errors.price_in_vnd ? 'justify-between' : 'justify-end'}`}
                 >
                   <FormMessage />
 
@@ -269,9 +271,9 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                       id="terms"
                       onCheckedChange={(value) => {
                         if (value) {
-                          form.setValue("price_in_vnd", "Thỏa thuận");
+                          form.setValue('price_in_vnd', 'Thỏa thuận');
                         } else {
-                          form.setValue("price_in_vnd", "");
+                          form.setValue('price_in_vnd', '');
                         }
                       }}
                     />
