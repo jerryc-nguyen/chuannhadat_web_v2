@@ -1,286 +1,150 @@
 'use client';
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ic_eyy_off from '@assets/icons/eye-off.svg';
-import ic_eyy_show from '@assets/icons/eye-show.svg';
-import ic_phone from '@assets/icons/ic-phone.svg';
-import ic_password from '@assets/icons/ic_password.svg';
-import Image from 'next/image';
-
-import { useRegister } from '@api/auth';
-import {
-  IFormPropsRegister,
-  IFormResponse,
-  IRegisterResponse,
-} from '../types';
+import { IFormPropsRegister, IRegisterResponse } from '../types';
 import registerSchema from './resolver';
-
-export default function RegisterForm({
-  onRegisterSuccess,
-  onRegisterError,
-}: {
-  onRegisterSuccess?: () => void;
-  onRegisterError?: () => void;
-}) {
-  const [showPassword, setShowPassword] =
-    React.useState(false);
-  const { register, isRegister } = useRegister();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+import { Button } from '@components/ui/button';
+import { services } from '@api/services';
+import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form';
+import { Input } from '@components/ui/input';
+import useAuth from '../hooks/useAuth';
+import { usePaginatedNotifications } from '@desktop/notification/hooks';
+type RegisterFormProps = {
+  onClose: () => void;
+  handleSetTokenServer: (token: string) => void;
+};
+export default function RegisterForm({ onClose, handleSetTokenServer }: RegisterFormProps) {
+  const { handleLogin } = useAuth();
+  const { loadMore } = usePaginatedNotifications();
+  const { mutate: registerMutate, isPending: isRegister } = useMutation({
+    mutationFn: services.auth.signUp,
+    onSuccess: (response: IRegisterResponse) => {
+      if (response.code === 200 && response.status) {
+        const userData = response.data;
+        handleLogin(userData);
+        loadMore();
+        handleSetTokenServer(userData.api_token as string);
+        toast.success('Đăng ký thàng công');
+      } else {
+        toast.error(response.message ?? 'Lỗi đăng ký');
+        reset();
+      }
+      onClose();
+    },
+    onError: () => {
+      toast.error('Lỗi server vui lòng đăng nhập lại');
+      reset();
+    },
+  });
+  const form = useForm({
     resolver: yupResolver(registerSchema),
   });
+  const { control, handleSubmit, reset } = form;
   const onSubmit = (data: IFormPropsRegister) => {
-    register(
-      {
-        phone: data.phone,
-        password: data.password,
-      },
-      {
-        onSuccess: (data: {
-          data: IFormResponse<IRegisterResponse>;
-        }) => {
-          if (data.data.status) {
-            if (onRegisterSuccess) {
-              onRegisterSuccess();
-            }
-          } else {
-            if (onRegisterError) {
-              onRegisterError();
-            }
-          }
-        },
-      },
-    );
+    registerMutate({
+      phone: data.phone,
+      password: data.password,
+    });
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div
-          style={{
-            marginBottom: '16px',
-          }}
-        >
-          <Controller
-            name="phone"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <div>
-                <label
-                  htmlFor="phone"
-                  className="mb-2 block text-sm font-medium"
-                  style={{
-                    color: '#374151',
-                  }}
-                >
-                  Số điện thoại/ Email
-                </label>
-                <div className="relative">
-                  <input
-                    {...field}
-                    id="phone"
-                    type="text"
-                    style={{
-                      paddingLeft: '36px',
-                    }}
-                    className={`mt-1 block w-full border py-2 ${
-                      errors.phone
-                        ? 'border-red-500'
-                        : 'border-gray-300'
-                    } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
-                    placeholder="Nhập số điện thoại/ Email"
-                  />
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2"
-                    style={{
-                      left: '8px',
-                    }}
-                  >
-                    <Image
-                      src={ic_phone}
-                      alt="ic_phone"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                </div>
+    <Form {...form}>
+      <form className="mt-4 flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
+        <FormField
+          name="phone"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel aria-required htmlFor="phone" className="mb-2 block text-sm font-medium">
+                Số điện thoại/ Email
+              </FormLabel>
+              <FormControl className="relative">
+                <Input
+                  {...field}
+                  id="phone"
+                  type="text"
+                  className={`mt-1 block w-full rounded-md border py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
+                  placeholder="Nhập số điện thoại/ Email"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-                {errors.phone && (
-                  <p
-                    style={{
-                      color: '#EF4444',
-                    }}
-                    className="mt-2 text-sm text-red-600"
-                  >
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-            )}
-          />
-        </div>
+        <FormField
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel
+                aria-required
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium"
+              >
+                Mật khẩu
+              </FormLabel>
+              <FormControl className="relative">
+                <Input
+                  {...field}
+                  type="password"
+                  id="password"
+                  className={`mt-1 block w-full rounded-md border py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
+                  placeholder="Nhập mật khẩu"
+                />
+              </FormControl>
 
-        <div className="mb-4">
-          <Controller
-            name="password"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <label
-                  htmlFor="password"
-                  className="mb-2 block text-sm font-medium"
-                  style={{
-                    color: '#374151',
-                  }}
-                >
-                  Mật khẩu
-                </label>
-                <div className="relative">
-                  <input
-                    style={{
-                      paddingLeft: '36px',
-                    }}
-                    {...field}
-                    id="password"
-                    type={
-                      showPassword ? 'text' : 'password'
-                    }
-                    className={`mt-1 block w-full border py-2 ${
-                      errors.password
-                        ? 'border-red-500'
-                        : 'border-gray-300'
-                    } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
-                    placeholder="Nhập mật khẩu"
-                  />
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2"
-                    style={{
-                      left: '8px',
-                    }}
-                  >
-                    <Image
-                      src={ic_password}
-                      alt="ic_password"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={togglePasswordVisibility}
-                    style={{
-                      right: '16px',
-                    }}
-                    className="absolute top-1/2 flex -translate-y-1/2 items-center text-sm leading-5"
-                  >
-                    {showPassword ? (
-                      <Image
-                        src={ic_eyy_off}
-                        alt="ic_eyy_off"
-                        width={16}
-                        height={16}
-                      />
-                    ) : (
-                      <Image
-                        src={ic_eyy_show}
-                        alt="ic_eyy_show"
-                        width={16}
-                        height={16}
-                      />
-                    )}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p
-                    style={{
-                      color: '#EF4444',
-                    }}
-                    className="mt-2 text-sm text-red-600"
-                  >
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-            )}
-          />
-        </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div className="mb-4">
-          <Controller
-            name="confirmPassword"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="mb-2 block text-sm font-medium"
-                  style={{ color: '#374151' }}
-                >
-                  Nhập lại mật khẩu
-                </label>
-                <div className="relative">
-                  <input
-                    style={{ paddingLeft: '36px' }}
-                    {...field}
-                    id="confirmPassword"
-                    type={
-                      showPassword ? 'text' : 'password'
-                    }
-                    className={`mt-1 block w-full border py-2 ${
-                      errors.confirmPassword
-                        ? 'border-red-500'
-                        : 'border-gray-300'
-                    } rounded-md shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
-                    placeholder="Nhập lại mật khẩu"
-                  />
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2"
-                    style={{ left: '8px' }}
-                  >
-                    <Image
-                      src={ic_password}
-                      alt="ic_password"
-                      width={20}
-                      height={20}
-                    />
-                  </div>
-                </div>
-                {errors.confirmPassword && (
-                  <p
-                    style={{ color: '#EF4444' }}
-                    className="mt-2 text-sm text-red-600"
-                  >
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
-              </div>
-            )}
-          />
-        </div>
+        <FormField
+          name="confirmPassword"
+          control={control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel
+                aria-required
+                htmlFor="confirmPassword"
+                className="mb-2 block text-sm font-medium"
+              >
+                Nhập lại mật khẩu
+              </FormLabel>
+              <FormControl className="relative">
+                <Input
+                  {...field}
+                  type="password"
+                  id="confirmPassword"
+                  className={`mt-1 block w-full rounded-md border py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
+                  placeholder="Nhập lại mật khẩu"
+                />
+              </FormControl>
 
-        <button
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
           disabled={isRegister}
           type="submit"
-          style={{
-            backgroundColor: '#2563EB',
-            color: '#fff',
-            marginBottom: '32px',
-            marginTop: '32px',
-          }}
-          className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-offset-2"
+          className="text-md my-4 w-full rounded-md bg-primary_color/80 px-4 py-2 font-semibold text-white hover:bg-primary_color focus:animate-pulse"
         >
-          Đăng ký
-        </button>
+          {isRegister ? 'Đang xác thực' : 'Đăng ký'}
+        </Button>
       </form>
-    </>
+    </Form>
   );
 }

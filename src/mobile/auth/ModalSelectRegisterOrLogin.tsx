@@ -3,10 +3,7 @@
 import React, { useState } from 'react';
 import LoginForm from '@mobile/auth/login/form';
 import RegisterForm from '@mobile/auth/register/form';
-import { toast } from 'react-toastify';
-import useAuth from './hooks/useAuth';
-import { ILoginResponse } from './types';
-import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
 const authOptions = [
   {
@@ -18,53 +15,47 @@ const authOptions = [
     value: 'register',
   },
 ];
-
-export default function ModalSelectRegisterOrLogin({ onClose }: { onClose: () => void }) {
-  const { setCurrentUser } = useAuth();
+type ModalSelectRegisterOrLoginProps = {
+  onClose: () => void;
+  handleSetTokenServer: (token: string) => void;
+};
+export default function ModalSelectRegisterOrLogin({
+  onClose,
+  handleSetTokenServer,
+}: ModalSelectRegisterOrLoginProps) {
   const [activeTab, setActiveTab] = useState('login');
   const handleShowModalLoginAndRegister = (value: string) => {
     setActiveTab(value);
   };
 
-  const onLoginSuccess = (response: ILoginResponse) => {
-    toast.success(`Xin chào, ${response.full_name || response.phone} bạn đã đăng nhập thành công!`);
-    setCurrentUser(response);
-    onClose();
-  };
-
-  const onLoginError = () => {
-    toast.error('Mật khẩu hoặc tài khoản không chính xác');
-  };
-
   return (
-    <>
-      <Tabs defaultValue={activeTab}>
-        <TabsList className="grid w-full grid-cols-2">
-          {authOptions.map((option) => {
-            return (
-              <TabsTrigger
-                key={option.value}
-                value={option.value}
-                onClick={() => {
-                  handleShowModalLoginAndRegister(option.value);
-                }}
-              >
-                {option.text}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-      </Tabs>
-      {activeTab == 'login' && (
+    <Tabs defaultValue={activeTab}>
+      <TabsList className="flex w-full">
+        {authOptions.map((option) => {
+          return (
+            <TabsTrigger
+              key={option.value}
+              className="flex-1"
+              value={option.value}
+              onClick={() => {
+                handleShowModalLoginAndRegister(option.value);
+              }}
+            >
+              {option.text}
+            </TabsTrigger>
+          );
+        })}
+      </TabsList>
+      <TabsContent value="login">
         <div className="mt-8">
-          <LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError} />
+          <LoginForm handleSetTokenServer={handleSetTokenServer} onClose={onClose} />
         </div>
-      )}
-      {activeTab == 'register' && (
+      </TabsContent>
+      <TabsContent value="register">
         <div className="mt-8">
-          <RegisterForm />
+          <RegisterForm handleSetTokenServer={handleSetTokenServer} onClose={onClose} />
         </div>
-      )}
-    </>
+      </TabsContent>
+    </Tabs>
   );
 }
