@@ -1,24 +1,8 @@
-'use client';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import HomeDesktop from '@desktop/home/HomeDesktop';
+import HomeMobile from '@mobile/home/HomeMobile';
 
-import React from 'react';
-import Mobile from './mobile';
-import Desktop from './desktop';
-import { useSSROptionsContext } from '@components/providers/SSROptionsProvider';
-
-export default function Home() {
-  const { isMobile } = useSSROptionsContext();
-
-  const App = () => {
-    if (isMobile) {
-      return (
-        <div className="c-mobileApp">
-          <Mobile />
-        </div>
-      );
-    } else {
-      return <Desktop />;
-    }
-  };
-
-  return <App />;
+export default function HomePage() {
+  const { isMobile } = useGetUserAgentInfo();
+  return isMobile ? <HomeMobile /> : <HomeDesktop />;
 }

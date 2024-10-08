@@ -26,10 +26,9 @@ export function useFilterLocations() {
     return results.join(', ');
   }, [filterState?.city, filterState?.district, filterState?.ward]);
 
-
-  const currentCity = getLocalFieldValue(FilterFieldName.city);
-  const currentDistrict = getLocalFieldValue(FilterFieldName.district);
-  const currentWard = getLocalFieldValue(FilterFieldName.ward);
+  const currentCity = getLocalFieldValue(FilterFieldName.City);
+  const currentDistrict = getLocalFieldValue(FilterFieldName.District);
+  const currentWard = getLocalFieldValue(FilterFieldName.Ward);
 
   const isSelectedLocation = useMemo((): boolean => {
     return !!(filterState?.city || filterState?.district || filterState?.ward);

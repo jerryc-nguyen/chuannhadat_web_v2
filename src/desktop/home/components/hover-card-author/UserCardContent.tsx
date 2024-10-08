@@ -3,7 +3,6 @@ import { CustomerGender } from '@common/types';
 import { getInitialsName, truncateText } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
-import { HoverCardContent } from '@components/ui/hover-card';
 import { Skeleton } from '@components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
@@ -101,7 +100,10 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       {authorData?.facebook_url && (
         <div className="flex items-center pt-2">
           <LuFacebook className="mr-2 h-4 w-4 opacity-70" />
-          <Link href={authorData.facebook_url} className="text-xs text-muted-foreground hover:text-black">
+          <Link
+            href={authorData.facebook_url}
+            className="text-xs text-muted-foreground hover:text-black"
+          >
             Liên kết facebook
           </Link>
         </div>
@@ -109,7 +111,10 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       {authorData?.youtube_url && (
         <div className="flex items-center pt-2">
           <LuYoutube className="mr-2 h-4 w-4 opacity-70" />
-          <Link href={authorData.youtube_url} className="text-xs text-muted-foreground hover:text-black">
+          <Link
+            href={authorData.youtube_url}
+            className="text-xs text-muted-foreground hover:text-black"
+          >
             Liên kết youtube
           </Link>
         </div>
@@ -122,7 +127,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       )}
       <Button
         onClick={() => {
-          router.push(`profile/${authorData?.id}`);
+          router.push(`/profile/${authorData?.slug}`);
         }}
         className="mt-4 w-full border bg-blue-500 text-white hover:bg-blue-400"
         variant={'link'}

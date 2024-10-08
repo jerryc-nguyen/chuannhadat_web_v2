@@ -14,11 +14,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { cn } from '@common/utils';
 import { usePathname } from 'next/navigation';
 import styles from '../styles/sidebar.module.scss';
-import Image from 'next/image';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { useBalanceRequest } from '@api/balance';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
 import { listNavDashboard } from '../constants';
+import Logo from '@components/logo';
 
 type SidebarDashboardProps = object;
 
@@ -74,14 +74,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
     >
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center justify-center border-b bg-white/30 px-4 backdrop-blur-md lg:h-[60px] lg:px-6">
-          <a href="/" className="gap-2 font-semibold">
-            <Image
-              src={'https://chuannhadat.com/images/logo_v2_3@2x.png'}
-              alt="ic_phone"
-              width={180}
-              height={36}
-            />
-          </a>
+          <Logo />
         </div>
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">
           <div>

@@ -23,7 +23,7 @@ export function usePaginatedNotifications() {
   const { fetchNotification } = useNotificationRequest();
 
   const fetchNotifications = useCallback(
-    async (page: number, filter: 'read' | 'unread' | null, isFirstLogin: boolean = false) => {
+    async (page: number, filter: 'read' | 'unread' | null, isFirstLogin = false) => {
       if (!currentUser && !isFirstLogin) return;
 
       try {

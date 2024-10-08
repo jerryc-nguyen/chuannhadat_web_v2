@@ -9,19 +9,16 @@ import { BalanceUtils } from '@common/balance';
 export default function useAuth() {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
 
-  const storedCurrentUser = useMemo((): ILoginResponse | null => {
-    return AuthUtils.getCurrentUser();
-  }, []);
-
   const isLogged = useMemo(() => {
     return currentUser?.id != undefined;
   }, [currentUser]);
 
   React.useEffect(() => {
-    setCurrentUser(storedCurrentUser);
-  }, [setCurrentUser, storedCurrentUser]);
+    const currentUser = AuthUtils.getCurrentUser();
+    setCurrentUser(currentUser);
+  }, []);
 
-  const signout = () => {
+  const signOut = () => {
     setCurrentUser(null);
     AuthUtils.removeCurrentUser();
     removeCookie(API_TOKEN);
@@ -34,10 +31,7 @@ export default function useAuth() {
   };
 
   const updateCurrentUser = (user: ILoginResponse) => {
-    setTimeout(() => {
-      setCurrentUser(user);
-    }, 1);
-
+    setCurrentUser(user);
     AuthUtils.updateCurrentUser(user);
   };
 
@@ -45,7 +39,7 @@ export default function useAuth() {
     currentUser,
     setCurrentUser,
     isLogged,
-    signout,
+    signOut,
     handleLogin,
     updateCurrentUser,
   };

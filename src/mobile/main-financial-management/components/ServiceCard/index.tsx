@@ -25,10 +25,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
       if (data.status) {
         toast.success(data.message || 'Mua gói thành công!');
 
-        closeModal()
+        closeModal();
       } else toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
-    onError: (error: any) => {
+    onError: (error: A) => {
       toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
     },
     onSettled: () => {
@@ -43,24 +43,22 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       data.status
         ? openModal({
-          name: plan.plan_name,
-          title: plan.plan_name,
-          content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-          footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-          maxHeightPercent: 0.8,
-          isHiddenScroll: true
-        })
+            name: plan.plan_name,
+            title: plan.plan_name,
+            content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+            footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+            maxHeightPercent: 0.8,
+            isHiddenScroll: true,
+          })
         : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
-    onError: (error: any) => {
+    onError: (error: A) => {
       console.log(error);
       toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
     },
   });
 
-  const handleBuyNowClick = (planId: number) => 
-    buyPlanValidatorMutation.mutate(planId); // Call the mutation and pass planId as variable
-    
+  const handleBuyNowClick = (planId: number) => buyPlanValidatorMutation.mutate(planId); // Call the mutation and pass planId as variable
 
   const handleBuy = (planId: number) => {
     setIsLoading(true);
@@ -94,7 +92,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
         </CardContent>
 
         <CardFooter>
-          <Button variant="default" className="w-full" onClick={()=>handleBuyNowClick(plan.plan_id)}>
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={() => handleBuyNowClick(plan.plan_id)}
+          >
             Mua ngay
           </Button>
         </CardFooter>

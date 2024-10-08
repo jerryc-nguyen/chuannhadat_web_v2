@@ -4,17 +4,18 @@ import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs';
 
 export default function BusinessTypeButtons() {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
-  const businessType = getLocalFieldValue(FilterFieldName.businessType);
+  const businessType = getLocalFieldValue(FilterFieldName.BusinessType);
   return (
-    <Tabs defaultValue={businessType?.value}>
-      <TabsList className="grid w-full grid-cols-2">
+    <Tabs defaultValue={businessType?.value as string}>
+      <TabsList className="flex w-full">
         {filterFieldOptions.businessTypeOptions?.map((option) => {
           return (
             <TabsTrigger
               value={option.value.toString()}
               key={option.text}
+              className="flex-1"
               onClick={() => {
-                setLocalFieldValue(FilterFieldName.businessType, option);
+                setLocalFieldValue(FilterFieldName.BusinessType, option);
               }}
             >
               {option.text}

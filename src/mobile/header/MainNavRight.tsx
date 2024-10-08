@@ -1,13 +1,15 @@
 'use client';
 
 import React from 'react';
-import { IoHeartOutline, IoNotificationsOutline } from 'react-icons/io5';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
@@ -20,18 +22,37 @@ import { Badge } from '@components/ui/badge';
 import NotificationsList from '@desktop/notification/NotificationsList';
 import useSidePanels from '@components/SidePanel/hooks';
 import MainNavSidePanel from './MainNavSidePanel';
-
-export default function MainNavRight() {
-  const { signout, currentUser } = useAuth();
+import Image from 'next/image';
+import { Skeleton } from '@components/ui/skeleton';
+import Link from 'next/link';
+import { LucideBell, LucideHeart } from 'lucide-react';
+import { cn } from '@common/utils';
+type MainNavRightProps = {
+  isLogged: boolean;
+  handleRemoveToken: () => void;
+  handleSetToken: (token: string) => void;
+};
+export default function MainNavRight({
+  isLogged,
+  handleRemoveToken,
+  handleSetToken,
+}: MainNavRightProps) {
+  const { signOut, currentUser } = useAuth();
   const router = useRouter();
-
+  React.useEffect(() => {
+    if (!isLogged) {
+      signOut();
+    }
+  }, [isLogged]);
   const { openModal, closeModal } = useModals();
   const { openPanel } = useSidePanels();
 
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
-      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
+      content: (
+        <ModalSelectRegisterOrLogin handleSetTokenServer={handleSetToken} onClose={closeModal} />
+      ),
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       btsContentWrapClass: 'mt-2 bg-white p-4',
@@ -66,86 +87,110 @@ export default function MainNavRight() {
   const handleMarkReadAll = () => {
     return;
   };
-  const handleRedirect = (id: number, is_read: boolean) => {
+  const handleRedirect = () => {
     return;
   };
+  const handleLogOut = () => {
+    handleRemoveToken();
+    router.refresh();
+  };
   const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
-
-  return (
-    <>
-      {currentUser && (
-        <span
-          className="mr-2 flex items-center justify-center rounded-full border p-2"
-          onClick={() => {
-            showNotificationPanel();
-          }}
-        >
-          <div className="relative">
-            <IoNotificationsOutline className="h-5 w-5" />
-            <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
-              {total}
-            </Badge>
-          </div>
-        </span>
-      )}
-
-      <span className="mr-2 flex items-center justify-center rounded-full border p-2">
-        <IoHeartOutline className="h-5 w-5" />
-      </span>
-
-      {currentUser && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <span className="mr-2 flex items-center justify-center">
-              <img
-                src={currentUser.avatar_url}
-                alt={currentUser.full_name}
-                height={36}
-                width={36}
-                className="rounded-full border"
-              />
-            </span>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+  const renderAvatar = () => {
+    return isLogged ? (
+      <DropdownMenu>
+        <DropdownMenuTrigger className="cursor-pointer" asChild>
+          {currentUser?.avatar_url ? (
+            <Image
+              alt={currentUser.full_name}
+              width={40}
+              height={40}
+              className="rounded-full"
+              src={currentUser.avatar_url}
+            />
+          ) : (
+            <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
+          )}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
             <DropdownMenuItem>
-              <a href="/dashboard">Trang quản lý</a>
+              <Link href="/dashboard">Trang quản lý</Link>
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                signout();
-                router.push('/');
-              }}
-            >
-              Logout
+            <DropdownMenuItem>
+              <Link href="/dashboard/manage-post/collection-post">Quản lý tin đăng</Link>
+              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+            <DropdownMenuItem>
+              <Link href="/dashboard/account-settings">Cài đặt tài khoản</Link>
+              <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href="/dashboard/top-up">Nạp tiền</Link>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer" onClick={handleLogOut}>
+            Đăng xuất
+            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ) : (
+      <Button
+        variant="outline"
+        size="icon"
+        className="rounded-full"
+        onClick={() => {
+          showModalLoginAndRegister();
+        }}
+      >
+        <LuUserCircle className="h-5 w-5" />
+      </Button>
+    );
+  };
+  const renderNotification = () => {
+    return (
+      isLogged && (
+        <div className="relative">
+          <Button
+            onClick={() => {
+              showNotificationPanel();
+            }}
+            size={'icon'}
+            variant={'outline'}
+            className="rounded-full"
+          >
+            <LucideBell className="h-5 w-5" />
+          </Button>
 
-      {!currentUser && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="mr-2 rounded-full"
-              onClick={() => {
-                showModalLoginAndRegister();
-              }}
-            >
-              <LuUserCircle className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-        </DropdownMenu>
-      )}
-
+          <Badge
+            className={cn(
+              'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full bg-error_color hover:bg-error_color',
+            )}
+          >
+            {total}
+          </Badge>
+        </div>
+      )
+    );
+  };
+  return (
+    <div className="header-icon justify-betweens flex gap-x-2">
+      {renderNotification()}
+      <Button size={'icon'} variant="outline" className="rounded-full">
+        <LucideHeart className="h-5 w-5" />
+      </Button>
+      {renderAvatar()}
       <div
         onClick={() => openMainnNavSidePanel()}
         className="mr-2 flex items-center justify-center rounded-full border p-2"
       >
         <LuMenu className="h-5 w-5" />
       </div>
-    </>
+    </div>
   );
 }

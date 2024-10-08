@@ -7,9 +7,9 @@ export default function SortOptions({
 }: {
   onSelect?: (option: OptionForSelect) => void;
 }) {
-  const { getLocalFieldValue, setLocalFieldValue } =
-    useFilterState();
-  const value = getLocalFieldValue(FilterFieldName.sort);
+  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.Sort);
+  console.log('🚀 ~ value:', value);
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function SortOptions({
         options={SORT_OPTIONS}
         selectedOption={value}
         onSelect={(option: OptionForSelect) => {
-          setLocalFieldValue(FilterFieldName.sort, option);
+          setLocalFieldValue(FilterFieldName.Sort, option);
           if (onSelect) {
             onSelect(option);
           }

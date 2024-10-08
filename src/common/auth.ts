@@ -17,8 +17,7 @@ export class AuthUtils {
   static getCurrentUser(): ILoginResponse | null {
     try {
       const currentUserStr = getFromStorage(CURRENT_USER_KEY);
-
-      return currentUserStr ? JSON.parse(currentUserStr) : null;
+      return currentUserStr;
     } catch (err) {
       return null;
     }

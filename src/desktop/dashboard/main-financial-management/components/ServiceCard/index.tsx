@@ -26,7 +26,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
         handleCloseDialog();
       } else toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
-    onError: (error: any) => {
+    onError: (error: A) => {
       toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
     },
     onSettled: () => {
@@ -43,7 +43,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
         ? setDialogOpen(true)
         : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
-    onError: (error: any) => {
+    onError: (error: A) => {
       console.log(error);
       toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
     },

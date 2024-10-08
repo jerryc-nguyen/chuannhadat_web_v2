@@ -3,10 +3,9 @@
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 import SidePanel from './SidePanel';
 
-export default function ModalsProvider(props: any) {
+export default function ModalsProvider() {
   return (
     <>
-      {props.children}
       <BtsModals1 />
       <BtsModals2 />
       <BtsModals3 />

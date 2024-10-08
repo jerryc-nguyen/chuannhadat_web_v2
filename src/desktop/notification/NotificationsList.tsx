@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { PopoverContent } from '@components/ui/popover';
 import { Label } from '@components/ui/label';
 import { Switch } from '@components/ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
@@ -12,7 +11,7 @@ import { Button } from '@components/ui/button';
 
 interface IProps {
   notifications: INotificationResponse[];
-  total: number;
+  total: number | null;
   onLoadMore: () => void;
   onRedirect: (id: number, is_readed: boolean) => void;
   onMarkReadAll: () => void;
@@ -75,7 +74,7 @@ const NotificationsList: React.FC<IProps> = ({
             </CardContent>
           </Card>
         ))}
-        {total > notifications.length && notifications.length > 0 && (
+        {total && total > notifications.length && notifications.length > 0 && (
           <Button onClick={onLoadMore}>Load more</Button>
         )}
       </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export type Range = {
   min?: number;
   max?: number;
@@ -22,22 +23,22 @@ export const PARAM_DISTRICT = 'district_id';
 export const PARAM_WARD = 'ward_id';
 export const PARAM_SORT = 'sort';
 
-export enum FilterFieldName {
-  none,
-  filterOverview,
-  businessType,
-  categoryType,
-  locations,
-  price,
-  area,
-  rooms,
-  bed,
-  bath,
-  direction,
-  city,
-  district,
-  ward,
-  sort,
+export const enum FilterFieldName {
+  None = 'none',
+  FilterOverview = 'filterOverview',
+  BusinessType = 'businessType',
+  CategoryType = 'categoryType',
+  Locations = 'locations',
+  Price = 'price',
+  Area = 'area',
+  Rooms = 'rooms',
+  Bed = 'bed',
+  Bath = 'bath',
+  Direction = 'direction',
+  City = 'city',
+  District = 'district',
+  Ward = 'ward',
+  Sort = 'sort',
 }
 
 export const FILTER_FIELDS_TO_PARAMS = [

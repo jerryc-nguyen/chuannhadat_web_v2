@@ -8,7 +8,7 @@ const ListCheckOptions = ({
   selectedOption,
   onSelect,
 }: {
-  options: OptionForSelect[] | A[];
+  options: OptionForSelect[];
   selectedOption?: OptionForSelect | A;
   onSelect?: (arg: A) => void;
 }): ReactElement => {

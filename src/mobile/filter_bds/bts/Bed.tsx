@@ -5,10 +5,10 @@ import useFilterState from '../hooks/useFilterState';
 
 export default function Bed({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
-  const value = getLocalFieldValue(FilterFieldName.bed);
+  const value = getLocalFieldValue(FilterFieldName.Bed);
 
   const onSelectOption = (item: OptionForSelect) => {
-    setLocalFieldValue(FilterFieldName.bed, item);
+    setLocalFieldValue(FilterFieldName.Bed, item);
     if (onSelect) {
       onSelect(item);
     }

@@ -8,7 +8,7 @@ type DescriptionPostProps = {
 
 const DescriptionPost: React.FC<DescriptionPostProps> = ({ data }) => {
   return (
-    <div className="description flex flex-col gap-1 rounded-xl bg-white p-8">
+    <div className="description flex flex-col gap-1 rounded-xl border bg-white p-6">
       <h3 className="pb-5 text-xl font-semibold">Mô tả chi tiết</h3>
       {data?.description &&
         data?.description.split('\r\n').map((line: string, index: number) => {
