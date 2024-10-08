@@ -16,6 +16,12 @@ export interface IFormResponse<T> {
   message: string;
 }
 
+export type LoginResponse = {
+  data: ILoginResponse;
+  status: boolean;
+  code: number;
+  message?: string;
+};
 export interface ILoginResponse {
   address: string;
   api_token: string;
@@ -37,7 +43,7 @@ export interface ILoginResponse {
   youtube_url?: string;
   facebook_url?: string;
 }
-export type IRegisterResponse = ILoginResponse;
+export type IRegisterResponse = LoginResponse;
 export enum ILoginAndRegisterModalType {
   LOGIN = 'login',
   REGISTER = 'register',

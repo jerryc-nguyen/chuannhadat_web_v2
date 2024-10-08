@@ -17,6 +17,7 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/plugins/counter.css';
 import SubTitleComponent from './subtitle-component';
 import { useRouter } from 'next/navigation';
+import useModalPostDetail from '../hooks/useModalPostDetail';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -47,9 +48,15 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       createModule('SubTitle', () => <SubTitleComponent>{data?.title}</SubTitleComponent>),
     );
   };
+  const { onCloseModal } = useModalPostDetail();
   return (
-    <div className={cn(styles.overview_post, 'relative rounded-lg bg-white p-8')}>
-      <div className={cn('list-image', renderClassImages(data?.images.length))}>
+    <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
+      <div
+        className={cn(
+          'list-image overflow-hidden rounded-lg',
+          renderClassImages(data?.images.length),
+        )}
+      >
         {data?.images.slice(0, 3).map((item, index) => (
           <div
             key={item.id}
@@ -71,7 +78,11 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               src={item.url}
             />
             {data?.images.length > 3 && index === 2 && (
-              <Button onClick={() => setIsOpenSlideImage(true)} variant={'outline'} className="relative z-10">
+              <Button
+                onClick={() => setIsOpenSlideImage(true)}
+                variant={'outline'}
+                className="relative z-10"
+              >
                 Xem thêm {data?.images.length - 3} hình
               </Button>
             )}
@@ -152,6 +163,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
             <Button
               onClick={() => {
                 router.push(data.detail_path);
+                onCloseModal();
               }}
               className="border bg-blue-500 text-white hover:bg-blue-400"
               variant={'link'}

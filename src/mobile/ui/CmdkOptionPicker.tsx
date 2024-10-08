@@ -1,9 +1,6 @@
-import ListCheckOptions from './ListCheckOptions';
-import { useMemo, useState } from 'react';
-import { IoFileTrayOutline } from 'react-icons/io5';
+import { useState } from 'react';
 import { OptionForSelect } from '@models';
 import { cn, stringToSlug } from '@common/utils';
-import SearchBox from '@components/SearchBox';
 import {
   Command,
   CommandEmpty,
@@ -11,9 +8,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from '@/components/ui/command';
 import { LuCheck } from 'react-icons/lu';
-
 
 export default function CmdkOptionPicker({
   options,
@@ -30,9 +26,8 @@ export default function CmdkOptionPicker({
   searchPlaceHolder?: string;
   emptyMessage?: string;
 }) {
-  const [curValue, setCurValue] = useState(value)
+  const [curValue, setCurValue] = useState(value);
   const [searchQuery, setSearchQuery] = useState('');
-
 
   const filteredItems = searchQuery
     ? options.filter((item: A) => stringToSlug(item.text).includes(stringToSlug(searchQuery)))
@@ -40,14 +35,18 @@ export default function CmdkOptionPicker({
 
   return (
     <>
-      <Command filter={() => {
-        return 1
-      }}>
-        {
-          searchable && <CommandInput placeholder={searchPlaceHolder}
+      <Command
+        filter={() => {
+          return 1;
+        }}
+      >
+        {searchable && (
+          <CommandInput
+            placeholder={searchPlaceHolder}
             value={searchQuery}
-            onValueChange={setSearchQuery} />
-        }
+            onValueChange={setSearchQuery}
+          />
+        )}
         <CommandList>
           <CommandEmpty>{emptyMessage || 'Không tìm thấy kết quả.'}</CommandEmpty>
           <CommandGroup>
@@ -56,14 +55,14 @@ export default function CmdkOptionPicker({
                 key={listItem.value}
                 value={listItem.value.toString()}
                 onSelect={(currentValue) => {
-                  setCurValue(listItem)
+                  setCurValue(listItem);
                   onSelect && onSelect(listItem);
                 }}
               >
                 <LuCheck
                   className={cn(
-                    "mr-2 h-4 w-4",
-                    curValue?.text === listItem.text ? "opacity-100" : "opacity-0"
+                    'mr-2 h-4 w-4',
+                    curValue?.text === listItem.text ? 'opacity-100' : 'opacity-0',
                   )}
                 />
                 {listItem.text}

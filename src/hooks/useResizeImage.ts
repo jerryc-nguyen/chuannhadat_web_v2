@@ -3,12 +3,9 @@ import { isServer } from '@tanstack/react-query';
 import queryString from 'query-string';
 
 const CDN_MAPS: Record<string, A> = {
-  'chuannhadat-assets.sgp1.digitaloceanspaces.com':
-    'images.chuannhadat.com',
-  'chuannhadat-assets.sgp1.cdn.digitaloceanspaces.com':
-    'images.chuannhadat.com',
-  'chuannhadat-assets-dev.sgp1.digitaloceanspaces.com':
-    's3-images-dev.b-cdn.net',
+  'chuannhadat-assets.sgp1.digitaloceanspaces.com': 'images.chuannhadat.com',
+  'chuannhadat-assets.sgp1.cdn.digitaloceanspaces.com': 'images.chuannhadat.com',
+  'chuannhadat-assets-dev.sgp1.digitaloceanspaces.com': 's3-images-dev.b-cdn.net',
 };
 
 export const MAX_THUMB_WIDTH = 480;
@@ -21,13 +18,7 @@ export default function useResizeImage() {
     [screenWidth] = getViewportSize();
   }
 
-  const resize = ({
-    imageUrl,
-    sizes,
-  }: {
-    imageUrl: string;
-    sizes: Record<string, A>;
-  }): string => {
+  const resize = ({ imageUrl, sizes }: { imageUrl: string; sizes: Record<string, A> }): string => {
     const updatedCdnUrl = applyCdnUrlFor(imageUrl);
     const url = new URL(updatedCdnUrl);
     const newURLStr = updatedCdnUrl.replace(url.search, '');
@@ -58,8 +49,7 @@ export default function useResizeImage() {
     ratio?: number;
   }): string => {
     width = width ?? thresholdWidth(screenWidth);
-    width =
-      width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
+    width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
 
     const height = Math.ceil(width / curRatio);
@@ -95,8 +85,8 @@ export default function useResizeImage() {
   };
 
   return {
-    resize: resize,
-    thresholdWidth: thresholdWidth,
-    buildThumbnailUrl: buildThumbnailUrl,
+    resize,
+    thresholdWidth,
+    buildThumbnailUrl,
   };
 }

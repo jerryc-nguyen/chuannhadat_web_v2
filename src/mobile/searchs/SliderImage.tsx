@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { FreeMode, Navigation, Thumbs, Grid } from 'swiper/modules';
+import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -34,6 +34,7 @@ export default function SliderImage({ listImg }: { listImg: Image[] }) {
             <SwiperSlide key={index}>
               <AspectRatio.Root ratio={16 / 9}>
                 <img
+                  alt="swipper image"
                   className="Image rounded-md"
                   src={buildThumbnailUrl({
                     imageUrl: img.url,
@@ -45,7 +46,7 @@ export default function SliderImage({ listImg }: { listImg: Image[] }) {
         })}
       </Swiper>
       <Swiper
-        onSwiper={(swiper: any) => setThumbsSwiper(swiper)}
+        onSwiper={(swiper: A) => setThumbsSwiper(swiper)}
         loop={true}
         spaceBetween={10}
         slidesPerView={2}

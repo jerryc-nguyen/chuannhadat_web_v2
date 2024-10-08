@@ -1,16 +1,8 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React from 'react';
-
 import RegisterForm from './form';
 
-export default function Register({
-  onRegisterSuccess,
-  onRegisterError,
-}: {
-  onRegisterSuccess?: () => void;
-  onRegisterError?: () => void
-}) {
-  
+export default function Register() {
   return (
     <>
       <div
@@ -19,7 +11,7 @@ export default function Register({
           paddingTop: '32px',
           paddingBottom: '32px',
         }}
-        className="max-w-md mx-auto mt-8 p-4 bg-white rounded-md"
+        className="mx-auto mt-8 max-w-md rounded-md bg-white p-4"
       >
         <h2
           className="text-center font-bold"
@@ -30,7 +22,7 @@ export default function Register({
         >
           Đăng ký
         </h2>
-        <RegisterForm onRegisterSuccess={onRegisterSuccess} onRegisterError={onRegisterError}/>
+        <RegisterForm onClose={() => { }} handleSetTokenServer={() => { }} />
       </div>
     </>
   );

@@ -15,7 +15,7 @@ export default function OptionPicker({
   emptyMessage,
   theme,
 }: {
-  theme?: string,
+  theme?: string;
   options: Array<OptionForSelect>;
   value?: OptionForSelect;
   onSelect: (option: OptionForSelect) => void;
@@ -27,24 +27,28 @@ export default function OptionPicker({
 
   return (
     <>
-      {theme != 'cmdk' && <IosOptionPicker
-        searchable={searchable}
-        options={options}
-        value={value}
-        onSelect={onSelect}
-        emptyMessage={emptyMessage}
-        searchPlaceHolder={searchPlaceHolder}
-      />}
-      {theme == 'cmdk' && <CmdkOptionPicker
-        searchable={searchable}
-        options={options}
-        value={value}
-        onSelect={onSelect}
-        emptyMessage={emptyMessage}
-        searchPlaceHolder={searchPlaceHolder}
-      />}
+      {theme != 'cmdk' && (
+        <IosOptionPicker
+          searchable={searchable}
+          options={options}
+          value={value}
+          onSelect={onSelect}
+          emptyMessage={emptyMessage}
+          searchPlaceHolder={searchPlaceHolder}
+        />
+      )}
+      {theme == 'cmdk' && (
+        <CmdkOptionPicker
+          searchable={searchable}
+          options={options}
+          value={value}
+          onSelect={onSelect}
+          emptyMessage={emptyMessage}
+          searchPlaceHolder={searchPlaceHolder}
+        />
+      )}
     </>
-  )
+  );
 }
 
 export function IosOptionPicker({
@@ -52,7 +56,6 @@ export function IosOptionPicker({
   value,
   searchable,
   onSelect,
-  searchPlaceHolder,
   emptyMessage,
 }: {
   options: Array<OptionForSelect>;

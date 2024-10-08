@@ -1,3 +1,4 @@
+'use client';
 import * as React from 'react';
 
 import { cn } from '@common/utils';
@@ -5,7 +6,7 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 
 export const inputVariants = cva(
-  'flex items-center h-10 w-full px-3 py-2 text-sm bg-transparent file:border-0 file:text-sm file:font-medium placeholder:text-muted-foreground disabled-within:cursor-not-allowed disabled-within:opacity-50 disabled-within:bg-muted border border-transparent focus-within:outline-none aria-invalid:ring-1 aria-invalid:ring-destructive aria-invalid:focus-within:ring-2 aria-invalid:focus-within:ring-destructive',
+  'flex items-center h-10 w-full px-3 py-2 text-sm bg-transparent file:border-0 file:text-sm file:font-medium placeholder:text-muted-foreground disabled-within:cursor-not-allowed disabled-within:opacity-50 disabled-within:bg-muted border border-transparent focus-within:outline-none aria-invalid:ring-1 aria-invalid:ring-destructive aria-invalid:focus-within:ring-1 aria-invalid:focus-within:ring-destructive',
 
   {
     variants: {
@@ -15,7 +16,7 @@ export const inputVariants = cva(
       },
       variant: {
         outline:
-          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2 disabled-within:cursor-not-allowed disabled-within:opacity-50',
+          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-1 disabled-within:cursor-not-allowed disabled-within:opacity-50',
         filled: 'border-2 bg-background focus-within:border-primary focus-within:bg-transparent',
         underlined:
           'rounded-none border-b-border focus-within:border-b-primary focus-within:shadow-[0_1px_0px_0px_hsl(var(--primary))]',
@@ -43,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <div className={cn(inputVariants({ variant, rounded, className }), className)}>
           {startAdornment && (
-            <span className="flex items-center text-2xs text-muted-foreground">
+            <span className="text-2xs flex items-center text-muted-foreground">
               {startAdornment}
             </span>
           )}
@@ -69,7 +70,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={typeInput}
           className={cn(
-            'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+            'flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
             className,
           )}
           ref={ref}

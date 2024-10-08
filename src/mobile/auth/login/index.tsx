@@ -1,15 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 'use client';
 import React from 'react';
 
 import LoginForm from './form';
 
-export default function Login({
-  onLoginSuccess,
-  onLoginError,
-}: {
-  onLoginSuccess?: () => void;
-  onLoginError?: () => void;
-}) {
+export default function Login() {
   return (
     <div
       style={{
@@ -28,7 +23,7 @@ export default function Login({
       >
         Đăng nhập
       </h2>
-      <LoginForm onLoginSuccess={onLoginSuccess} onLoginError={onLoginError} />
+      <LoginForm onClose={() => { }} handleSetTokenServer={() => { }} />
     </div>
   );
 }

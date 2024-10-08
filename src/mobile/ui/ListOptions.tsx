@@ -13,7 +13,7 @@ const ListOptions = ({
   return (
     <>
       <List strongIos outlineIos margin="my-0">
-        {options!.map((item) => {
+        {options?.map((item) => {
           return (
             <ListItem
               key={item.text}

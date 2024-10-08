@@ -1,0 +1,10 @@
+.profile_detail_wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  :global {
+    .profile-image {
+      width: calc(100vw - 10px);
+    }
+  }
+}

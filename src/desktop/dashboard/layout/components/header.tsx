@@ -1,60 +1,22 @@
-'use client';
-
-import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import {
-  LuHome,
-  LuLineChart,
-  LuMenu,
-  LuPackage,
-  LuPackage2,
-  LuSearch,
-  LuShoppingCart,
-  LuUsers,
-  LuBell,
-} from 'react-icons/lu';
-import { Badge } from '@components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@components/ui/dropdown-menu';
+'use server';
+import React from 'react';
+import { LuSearch } from 'react-icons/lu';
 import { Input } from '@components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@components/ui/sheet';
-import { Button } from '@components/ui/button';
-import { ModeToggle } from '@components/ui/mode-toggle';
-import useAuth from '@mobile/auth/hooks/useAuth';
-import { Popover, PopoverTrigger } from '@components/ui/popover';
-import NotificationsList from '@desktop/notification/NotificationsList';
-import { usePaginatedNotifications } from '@desktop/notification/hooks';
-import { PopoverContent } from '@radix-ui/react-popover';
-type HeaderDashboardProps = {
-  isMobile: boolean;
-};
+import MainNavRight from '@desktop/components/MainNavRight';
+import { cookies } from 'next/headers';
+import { API_TOKEN } from '@common/auth';
+type HeaderDashboardProps = object;
 
-const HeaderDashboard: React.FC<HeaderDashboardProps> = ({ isMobile }) => {
-  const { signout, currentUser } = useAuth();
-  const router = useRouter();
-
-  const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
-
-  const handleMarkReadAll = () => {
-    return;
+const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
+  const isLogged = cookies().has(API_TOKEN);
+  const handleRemoveToken = () => {
+    'use server';
+    cookies().delete(API_TOKEN);
   };
-  const handleRedirect = (id: number, is_read: boolean) => {
-    return;
+  const handleSetToken = (token: string) => {
+    'use server';
+    cookies().set(API_TOKEN, token);
   };
-  const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
-
-  useEffect(() => {
-    loadMore();
-  }, [currentUser]);
-
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <div className="w-full flex-1">
@@ -69,69 +31,11 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({ isMobile }) => {
           </div>
         </form>
       </div>
-
-      {isMobile ? (
-        <div className="relative">
-          <LuBell className="h-4 w-4" />
-          <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
-            {total}
-          </Badge>
-        </div>
-      ) : (
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="relative">
-              <LuBell className="h-4 w-4" />
-              <Badge className="absolute right-[-15px] top-[-18px] ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500">
-                {total}
-              </Badge>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="h-[520px] w-200 filter_popover_content">
-            <NotificationsList
-              notifications={notifications}
-              total={total}
-              onLoadMore={loadMore}
-              onMarkReadAll={handleMarkReadAll}
-              onRedirect={handleRedirect}
-              onGetNotMarkRead={handleGetNotMarkRead}
-            />
-          </PopoverContent>
-
-        </Popover>
-      )}
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <span className="mr-2 flex items-center justify-center">
-            <img
-              src={currentUser?.avatar_url}
-              alt={currentUser?.full_name || 'User'}
-              height={36}
-              width={36}
-              className="rounded-full border"
-            />
-          </span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Tài khoản của bạn</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <Link href="/dashboard/account-settings">
-            <DropdownMenuItem>Thông tin cá nhân</DropdownMenuItem>
-          </Link>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              signout();
-              router.push('/');
-            }}
-          >
-            Logout
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-
+      <MainNavRight
+        handleSetToken={handleSetToken}
+        handleRemoveToken={handleRemoveToken}
+        isLogged={isLogged}
+      />
     </header>
   );
 };

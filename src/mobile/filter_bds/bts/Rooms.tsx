@@ -4,15 +4,15 @@ import useFilterState from '../hooks/useFilterState';
 
 export default function Rooms() {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
-  const curBed = getLocalFieldValue(FilterFieldName.bed);
-  const curBath = getLocalFieldValue(FilterFieldName.bath);
+  const curBed = getLocalFieldValue(FilterFieldName.Bed);
+  const curBath = getLocalFieldValue(FilterFieldName.Bath);
 
   const onSelectBed = (item: OptionForSelect) => {
-    setLocalFieldValue(FilterFieldName.bed, item);
+    setLocalFieldValue(FilterFieldName.Bed, item);
   };
 
   const onSelectBath = (item: OptionForSelect) => {
-    setLocalFieldValue(FilterFieldName.bath, item);
+    setLocalFieldValue(FilterFieldName.Bath, item);
   };
 
   return (
@@ -22,7 +22,7 @@ export default function Rooms() {
       <ListChips
         options={filterFieldOptions.roomOptions || []}
         onSelect={onSelectBed}
-        value={curBed}
+        value={curBed as OptionForSelect}
       />
       <br />
       <p className="mb-2 font-bold">Nhà tắm</p>
@@ -30,7 +30,7 @@ export default function Rooms() {
       <ListChips
         options={filterFieldOptions.roomOptions || []}
         onSelect={onSelectBath}
-        value={curBath}
+        value={curBath as OptionForSelect}
       />
     </div>
   );

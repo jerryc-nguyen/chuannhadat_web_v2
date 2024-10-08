@@ -14,8 +14,8 @@ import Bed from './bts/Bed';
 import Bath from './bts/Bath';
 
 export const DEFAULT_MODAL_HEIGHTS = {
-  [FilterFieldName.rooms]: 270,
-  [FilterFieldName.businessType]: 80,
+  [FilterFieldName.Rooms]: 270,
+  [FilterFieldName.BusinessType]: 80,
 };
 
 const FilterModal = () => {
@@ -60,7 +60,7 @@ const FilterModal = () => {
           title="Loại BĐS"
           onClick={() => {
             openModal2({
-              name: FilterFieldName.categoryType,
+              name: FilterFieldName.CategoryType,
               title: 'Loại BĐS',
               content: <CategoryType onSelect={() => closeModal2()} />,
             });
@@ -81,7 +81,7 @@ const FilterModal = () => {
           title="Mức giá"
           onClick={() => {
             openModal2({
-              name: FilterFieldName.price,
+              name: FilterFieldName.Price,
               title: 'Mức giá',
               content: <Price onSelect={() => closeModal2()} />,
             });
@@ -105,7 +105,7 @@ const FilterModal = () => {
           title="Số phòng ngủ"
           onClick={() => {
             openModal2({
-              name: FilterFieldName.bed,
+              name: FilterFieldName.Bed,
               title: 'Số phòng ngủ',
               content: <Bed onSelect={() => closeModal2()} />,
             });
@@ -118,7 +118,7 @@ const FilterModal = () => {
           title="Số phòng tắm"
           onClick={() => {
             openModal2({
-              name: FilterFieldName.bath,
+              name: FilterFieldName.Bath,
               title: 'Số phòng tắm',
               content: <Bath onSelect={() => closeModal2()} />,
             });
@@ -131,7 +131,7 @@ const FilterModal = () => {
           title="Hướng"
           onClick={() => {
             openModal2({
-              name: FilterFieldName.direction,
+              name: FilterFieldName.Direction,
               title: 'Hướng',
               content: <Direction onSelect={() => closeModal2()} />,
             });

@@ -25,12 +25,12 @@ export default function Locations() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
-    setLocalFieldValue(FilterFieldName.district, undefined);
+    setLocalFieldValue(FilterFieldName.District, undefined);
     localFilterState.district = undefined;
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetWard = () => {
-    setLocalFieldValue(FilterFieldName.ward, undefined);
+    setLocalFieldValue(FilterFieldName.Ward, undefined);
     localFilterState.ward = undefined;
   };
 
@@ -60,7 +60,7 @@ export default function Locations() {
       //@ts-ignore: read field of object
       citiesDistricts[finalOption?.value + ''] || [],
     );
-    setLocalFieldValue(FilterFieldName.city, finalOption);
+    setLocalFieldValue(FilterFieldName.City, finalOption);
     closeModal3();
   };
 
@@ -73,13 +73,13 @@ export default function Locations() {
       //@ts-ignore: read field of object
       districtWards[finalOption?.value + ''] || [],
     );
-    setLocalFieldValue(FilterFieldName.district, finalOption);
+    setLocalFieldValue(FilterFieldName.District, finalOption);
     closeModal3();
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
     const finalOption = ward?.value != 'all' ? ward : undefined;
-    setLocalFieldValue(FilterFieldName.ward, finalOption);
+    setLocalFieldValue(FilterFieldName.Ward, finalOption);
     closeModal3();
   };
 
@@ -100,7 +100,7 @@ export default function Locations() {
               title: 'Thành Phố',
               content: (
                 <OptionPicker
-                  theme='ios'
+                  theme="ios"
                   searchable
                   options={[ALL_OPTION, ...cities]}
                   value={city}
@@ -122,7 +122,7 @@ export default function Locations() {
               title: 'Quận / Huyện',
               content: (
                 <OptionPicker
-                  theme='ios'
+                  theme="ios"
                   searchable
                   options={[ALL_OPTION, ...districtOptions]}
                   value={district}
@@ -145,7 +145,7 @@ export default function Locations() {
               title: 'Phường / Xã',
               content: (
                 <OptionPicker
-                  theme='ios'
+                  theme="ios"
                   searchable
                   options={[ALL_OPTION, ...wardOptions]}
                   value={ward}

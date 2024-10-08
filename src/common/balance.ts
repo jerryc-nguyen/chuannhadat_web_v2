@@ -8,7 +8,7 @@ export class BalanceUtils {
     try {
       const balanceInfoStr = getFromStorage(BALANCE_INFO_KEY);
 
-      return balanceInfoStr ? JSON.parse(balanceInfoStr) : null;
+      return balanceInfoStr;
     } catch (err) {
       return null;
     }
@@ -21,5 +21,4 @@ export class BalanceUtils {
       return null;
     }
   }
-
 }
