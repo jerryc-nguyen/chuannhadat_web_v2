@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React from 'react';
 import RegisterForm from './form';
 
@@ -21,7 +22,7 @@ export default function Register() {
         >
           Đăng ký
         </h2>
-        <RegisterForm onClose={() => {}} handleSetTokenServer={() => {}} />
+        <RegisterForm onClose={() => { }} handleSetTokenServer={() => { }} />
       </div>
     </>
   );

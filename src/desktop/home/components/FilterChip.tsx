@@ -41,7 +41,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, isRedirectAfter
 
   const onApplyFilter = () => {
     setIsOpenPopover(false);
-    applySingleFilter(filterChipItem, isRedirectAfterApplyFilter);
+    applySingleFilter(filterChipItem);
   };
   const selectedRoomText = (): string => {
     const results = [];

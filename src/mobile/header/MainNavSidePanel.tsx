@@ -16,7 +16,7 @@ export default function MainNavSidePanel() {
     closePanel();
     openModal({
       name: 'loginAndRegister',
-      content: <ModalSelectRegisterOrLogin handleSetTokenServer={() => {}} onClose={closeModal} />,
+      content: <ModalSelectRegisterOrLogin handleSetTokenServer={() => { return; }} onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       btsContentWrapClass: 'mt-2 bg-white p-4',

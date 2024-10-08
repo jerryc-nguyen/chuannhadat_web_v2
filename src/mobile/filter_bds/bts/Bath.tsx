@@ -5,10 +5,10 @@ import ListChips from '@mobile/ui/ListChips';
 
 export default function Bath({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
-  const value = getLocalFieldValue(FilterFieldName.bath);
+  const value = getLocalFieldValue(FilterFieldName.Bath);
 
   const onSelectOption = (item: OptionForSelect) => {
-    setLocalFieldValue(FilterFieldName.bath, item);
+    setLocalFieldValue(FilterFieldName.Bath, item);
     if (onSelect) {
       onSelect(item);
     }

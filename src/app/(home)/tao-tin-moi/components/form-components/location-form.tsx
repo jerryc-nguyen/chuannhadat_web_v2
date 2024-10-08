@@ -22,7 +22,8 @@ import { Checkbox } from '@components/ui/checkbox';
 import dynamic from 'next/dynamic';
 import { center, SimpleLatLng } from '@components/map-leaflet/config';
 import { LoadingSpinner } from '@components/icons/loading-spinner';
-import MapsApiService from '@app/(home)/apis';
+import MapsApiService from '../../apis/maps-api';
+
 const MapLeaflet = dynamic(() => import('@components/map-leaflet'), {
   ssr: false,
 });
@@ -92,11 +93,11 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
       if (!isHideFullAddress) {
         setFullAddress(
           (projectLabel ? projectLabel + ', ' : '') +
-            (addressText ? addressText + ', ' : '') +
-            (streetLabel ? streetLabel + ', ' : '') +
-            (wardLabel ? wardLabel + ', ' : '') +
-            (districtLabel ? districtLabel + ', ' : '') +
-            (cityLabel ? cityLabel : ''),
+          (addressText ? addressText + ', ' : '') +
+          (streetLabel ? streetLabel + ', ' : '') +
+          (wardLabel ? wardLabel + ', ' : '') +
+          (districtLabel ? districtLabel + ', ' : '') +
+          (cityLabel ? cityLabel : ''),
         );
       } else {
         setFullAddress((districtLabel ? districtLabel + ', ' : '') + (cityLabel ? cityLabel : ''));
@@ -230,11 +231,11 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   items={
                     city_id
                       ? cityDistrictsData[city_id.toString()]?.map((item) => {
-                          return {
-                            value: item.value.toString(),
-                            label: item.text,
-                          };
-                        }) || []
+                        return {
+                          value: item.value.toString(),
+                          label: item.text,
+                        };
+                      }) || []
                       : []
                   }
                   placeholder={'Chọn Quận/ Huyện'}
@@ -264,15 +265,15 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   items={
                     district_id
                       ? districtsWardsData[city_id.toString()]?.map((item) => {
-                          return {
-                            value: item.value
-                              ? item.value.toString()
-                              : item.id
-                                ? item.id.toString()
-                                : '',
-                            label: item.text,
-                          };
-                        }) || []
+                        return {
+                          value: item.value
+                            ? item.value.toString()
+                            : item.id
+                              ? item.id.toString()
+                              : '',
+                          label: item.text,
+                        };
+                      }) || []
                       : []
                   }
                   placeholder={'Chọn Phường/ Xã'}
@@ -301,15 +302,15 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   items={
                     district_id
                       ? districtsStreetsData[city_id.toString()]?.map((item) => {
-                          return {
-                            value: item.value
-                              ? item.value.toString()
-                              : item.id
-                                ? item.id.toString()
-                                : '',
-                            label: item.text,
-                          };
-                        }) || []
+                        return {
+                          value: item.value
+                            ? item.value.toString()
+                            : item.id
+                              ? item.id.toString()
+                              : '',
+                          label: item.text,
+                        };
+                      }) || []
                       : []
                   }
                   placeholder={'Chọn Đường/ Phố'}
@@ -338,11 +339,11 @@ const LocationForm: React.FC<ILocationForm> = ({ form }) => {
                   items={
                     district_id
                       ? districtsProjectsData[city_id.toString()]?.map((item) => {
-                          return {
-                            value: item.value.toString(),
-                            label: item.text,
-                          };
-                        }) || []
+                        return {
+                          value: item.value.toString(),
+                          label: item.text,
+                        };
+                      }) || []
                       : []
                   }
                   placeholder={'Chọn Dự án'}
