@@ -1,27 +1,42 @@
-import { useAtom } from 'jotai';
-import { filterFieldOptionsAtom, filterStateAtom, localFilterStateAtom } from '../states';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import {
+  defaultFilterStateAtom,
+  filterFieldOptionsAtom,
+  filterStateAtom,
+  isRedirectWhenApplyFilter,
+  localFilterStateAtom,
+} from '../states';
 import { OptionForSelect } from '@models';
 import { FilterFieldName, FILTER_FIELDS_TO_PARAMS, FILTER_FIELDS_PARAMS_MAP } from '@models';
-import { FilterChipOption } from '../FilterChips';
 import { searchApi } from '@api/searchApi';
 import { useMemo } from 'react';
+import { FilterChipOption, FilterState } from '../types';
+import { SORT_OPTIONS } from '@common/constants';
+import { objectToQueryParams } from '@common/utils';
+import { usePathname } from 'next/navigation';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
-  const [filterFieldOptions] = useAtom(filterFieldOptionsAtom);
-
-  const copyFilterStatesToLocalByFieldId = (fieldIds: Array<FilterFieldName>) => {
+  const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
+  const isRedirect = useAtomValue(isRedirectWhenApplyFilter);
+  const setIsRedirect = useSetAtom(isRedirectWhenApplyFilter);
+  const pathname = usePathname();
+  const resetDataFilter = () => {
+    setFilterState(defaultFilterStateAtom);
+    setLocalFilterState({});
+    setIsRedirect(true);
+  };
+  const copyFilterStatesToLocalByFieldId = (fieldNames: Array<FilterFieldName>) => {
     let values: Record<string, A> = {};
-    fieldIds?.forEach((fieldId) => {
-      const fieldName = FilterFieldName[fieldId];
-      if (fieldId == FilterFieldName.locations) {
+    fieldNames?.forEach((fieldName) => {
+      if (fieldName == FilterFieldName.Locations) {
         values = {
           city: filterState.city,
           district: filterState.district,
           ward: filterState.ward,
         };
-      } else if (fieldId == FilterFieldName.rooms) {
+      } else if (fieldName == FilterFieldName.Rooms) {
         values = {
           bath: filterState.bath,
           bed: filterState.bed,
@@ -32,7 +47,6 @@ export default function useFilterState() {
     });
     setLocalFilterState({ ...values });
   };
-
   const copyFilterStatesToLocal = (fieldIds: Array<FilterFieldName> = []) => {
     if (fieldIds.length > 0) {
       copyFilterStatesToLocalByFieldId(fieldIds);
@@ -41,28 +55,31 @@ export default function useFilterState() {
     }
   };
 
-  const getLocalFieldValue = (fieldId: FilterFieldName) => {
-    const fieldName = FilterFieldName[fieldId];
-    // @ts-ignore: read value
-    return localFilterState[fieldName];
+  const getLocalFieldValue = (fieldName: FilterFieldName) => {
+    return localFilterState[fieldName as keyof FilterState];
   };
 
   const setLocalFieldValue = (fieldId: FilterFieldName, option: OptionForSelect | undefined) => {
-    const fieldName = FilterFieldName[fieldId];
     const finalOption = option?.value != 'all' ? option : undefined;
 
     setLocalFilterState({
       ...localFilterState,
-      [fieldName]: finalOption,
+      [fieldId]: finalOption,
     });
   };
 
   const applyAllFilters = (filters?: A) => {
-    setFilterState({
+    const allFilterState = {
       ...localFilterState,
       ...filters,
-    });
-    syncSelectedParamsToUrl();
+    };
+    setFilterState(allFilterState);
+    if (isRedirect) {
+      syncSelectedParamsToUrl();
+    } else {
+      const syncParamUrl = objectToQueryParams(allFilterState);
+      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
+    }
   };
 
   const buildFilterParams = ({ withLocal = true }: { withLocal?: boolean } = {}): Record<
@@ -79,7 +96,6 @@ export default function useFilterState() {
         ...localFilterState,
       };
     }
-
     FILTER_FIELDS_TO_PARAMS.forEach((fieldName: string) => {
       const paramName = FILTER_FIELDS_PARAMS_MAP[fieldName];
       const option = allCurrentFilters[fieldName] as OptionForSelect;
@@ -94,70 +110,99 @@ export default function useFilterState() {
         results[paramName] = [option?.range?.min, option?.range?.max].join(',');
       }
     });
-
     return results;
   };
 
   const applySingleFilter = (filterOption: FilterChipOption) => {
     let localValue: Record<string, A> = {};
 
-    if (filterOption.id == FilterFieldName.locations) {
+    if (filterOption.id == FilterFieldName.Locations) {
       localValue = {
         city: localFilterState.city,
         district: localFilterState.district,
         ward: localFilterState.ward,
       };
-    } else if (filterOption.id == FilterFieldName.rooms) {
+    } else if (filterOption.id == FilterFieldName.Rooms) {
       localValue = {
         bed: localFilterState.bed,
         bath: localFilterState.bath,
       };
     } else {
-      const fieldName = FilterFieldName[filterOption.id as A];
+      const fieldName = filterOption.id;
 
       localValue = {
         // @ts-ignore: read value
         [fieldName]: localFilterState[fieldName],
       };
     }
-
-    setFilterState({ ...filterState, ...localValue });
-    syncSelectedParamsToUrl();
+    const allFilterState = { ...filterState, ...localValue };
+    setFilterState(allFilterState);
+    if (isRedirect) {
+      syncSelectedParamsToUrl();
+    } else {
+      const syncParamUrl = objectToQueryParams(allFilterState);
+      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
+    }
   };
 
   const syncSelectedParamsToUrl = async () => {
     const filterParams = buildFilterParams();
     filterParams.only_url = true;
-
     const response = await searchApi(filterParams);
-
     const { listing_url } = response;
     window.history.pushState({}, '', listing_url);
   };
 
-  const applySort = () => {
-    setFilterState({
+  // handle apply filter by sort in desktop
+  const onSelectSortOption = (value: string) => {
+    const selectedSortOption = SORT_OPTIONS.find((item) => item.value === value);
+    setLocalFieldValue(FilterFieldName.Sort, selectedSortOption);
+    const newFilterState = {
+      ...filterState,
+      sort: selectedSortOption,
+    };
+    applyFilterToSyncParams(newFilterState);
+  };
+  // handle apply filter by sort in mobile
+  const applySortFilter = () => {
+    const newFilterState = {
       ...filterState,
       sort: localFilterState.sort,
-    });
-    syncSelectedParamsToUrl();
+    };
+    applyFilterToSyncParams(newFilterState);
+  };
+  const applyFilterToSyncParams = (newFilterState: FilterState) => {
+    setFilterState(newFilterState);
+    if (isRedirect) {
+      syncSelectedParamsToUrl();
+    } else {
+      const syncParamUrl = objectToQueryParams(newFilterState);
+      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
+    }
   };
 
-  const selectedSortText = useMemo((): string => {
-    return filterState.sort?.text || 'Sắp xếp';
-  }, [filterState]);
+  const selectedSortValue = useMemo((): string | undefined => {
+    return filterState.sort?.value as string | undefined;
+  }, [filterState.sort?.value]);
+  const selectedSortText = useMemo((): string | undefined => {
+    return filterState.sort?.text as string | undefined;
+  }, [filterState.sort?.text]);
 
   return {
-    filterState: filterState,
-    localFilterState: localFilterState,
-    filterFieldOptions: filterFieldOptions,
-    getLocalFieldValue: getLocalFieldValue,
-    setLocalFieldValue: setLocalFieldValue,
-    applyAllFilters: applyAllFilters,
-    buildFilterParams: buildFilterParams,
-    applySingleFilter: applySingleFilter,
-    copyFilterStatesToLocal: copyFilterStatesToLocal,
-    applySort: applySort,
-    selectedSortText: selectedSortText,
+    filterState,
+    localFilterState,
+    filterFieldOptions,
+    getLocalFieldValue,
+    setLocalFieldValue,
+    applyAllFilters,
+    buildFilterParams,
+    applySingleFilter,
+    copyFilterStatesToLocal,
+    onSelectSortOption,
+    selectedSortValue,
+    resetDataFilter,
+    applySortFilter,
+    selectedSortText,
+    setIsRedirect,
   };
 }

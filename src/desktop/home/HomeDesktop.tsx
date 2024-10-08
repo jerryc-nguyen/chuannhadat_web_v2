@@ -6,10 +6,9 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { queryOptions, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { searchApi, cardAuthors } from '@api/searchApi';
 import { useHydrateAtoms } from 'jotai/utils';
-import { dataPostListAtom, loadedCardAuthorsAtom } from '@desktop/home/states';
+import { loadedCardAuthorsAtom } from '@desktop/home/states';
 import PostControls from '@desktop/home/components/PostControls';
 import useCardAuthors from '@desktop/home/hooks/useCardAuthors';
-import { useSetAtom } from 'jotai';
 
 export default function HomeDesktop() {
   useSyncParamsToState();
@@ -21,7 +20,7 @@ export default function HomeDesktop() {
   filterParams.with_users = true;
   filterParams.per_page = 12;
 
-  const { data, isSuccess } = useSuspenseQuery(
+  const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ['home', filterParams],
       queryFn: () => searchApi(filterParams),
@@ -35,10 +34,7 @@ export default function HomeDesktop() {
     queryFn: () => cardAuthors({ user_ids: data?.missing_user_ids.join(',') }),
     enabled: !!data?.missing_user_ids,
   });
-  const setDataPostList = useSetAtom(dataPostListAtom);
-  if (isSuccess) {
-    setDataPostList(data.data);
-  }
+
   useMemo(() => {
     if (missingAuthors?.data) {
       setTimeout(() => {
@@ -57,7 +53,7 @@ export default function HomeDesktop() {
       <h1 className="mb-4 text-2xl font-semibold text-primary_color">Tin đăng mới nhất</h1>
       <p>{data?.title}</p>
       <PostControls pagination={data?.pagination} />
-      <PostList />
+      <PostList dataPostList={data?.data} />
     </section>
   );
 }

@@ -18,7 +18,6 @@ type ProfileDetailPage = {
 export default async function ProfileDetailPage({ params }: ProfileDetailPage) {
   const profileSlug = params.slug[0];
   const { isMobile } = useGetUserAgentInfo();
-  console.log('🚀 ~ ProfileDetailPage ~ isMobile:', isMobile);
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ['get-detail-profile', profileSlug],

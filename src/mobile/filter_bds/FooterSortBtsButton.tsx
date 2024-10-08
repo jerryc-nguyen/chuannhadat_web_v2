@@ -4,10 +4,10 @@ import { Button } from '@components/ui/button';
 
 export default function FooterSortBtsButton() {
   const { closeModals } = useModals();
-  const { applySort } = useFilterState();
+  const { applySortFilter } = useFilterState();
 
   const onApplySort = () => {
-    applySort();
+    applySortFilter();
     closeModals();
   };
 

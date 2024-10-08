@@ -1,11 +1,10 @@
 'use server';
 import MainNavRight from './MainNavRight';
-
-import MainNavLocationsPicker from './MainNavLocationsPicker';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cookies } from 'next/headers';
 import { API_TOKEN } from '@common/auth';
+import MainNavLocationsPicker from './MainNavLocationsPicker';
 
 export default async function HeaderMobile() {
   const isLogged = cookies().has(API_TOKEN);

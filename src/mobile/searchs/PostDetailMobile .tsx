@@ -45,7 +45,7 @@ export default function PostDetailMobile() {
   const { buildThumbnailUrl } = useResizeImage();
 
   useEffect(() => {
-    const uid = currentPath.split('-').slice(-1)[0];
+    const uid = currentPath.split('-')?.slice(-1)[0];
     if (uid && uid !== '') {
       setProductUid(uid);
     }
@@ -60,7 +60,7 @@ export default function PostDetailMobile() {
 
   useEffect(() => {
     if (data) {
-      setAuthorPhone(data.data.author.phone);
+      setAuthorPhone(data.data?.author.phone);
       setPostDetail(data.data);
     }
   }, [data, setPostDetail]);

@@ -7,25 +7,16 @@ export default function CategoryType({
 }: {
   onSelect?: (option: OptionForSelect) => void;
 }) {
-  const {
-    getLocalFieldValue,
-    setLocalFieldValue,
-    filterFieldOptions,
-  } = useFilterState();
-  const value = getLocalFieldValue(
-    FilterFieldName.categoryType,
-  );
+  const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.CategoryType);
 
   return (
     <>
       <ListCheckOptions
-        options={filterFieldOptions.categoryTypeOptions!}
+        options={filterFieldOptions.categoryTypeOptions}
         selectedOption={value}
         onSelect={(option: OptionForSelect) => {
-          setLocalFieldValue(
-            FilterFieldName.categoryType,
-            option,
-          );
+          setLocalFieldValue(FilterFieldName.CategoryType, option);
           if (onSelect) {
             onSelect(option);
           }

@@ -36,4 +36,4 @@ export type TLoadedCardAuthors = Record<string, TCardAuthor>;
 export const loadedCardAuthorsAtom = atom<TLoadedCardAuthors>({});
 
 export const seoInfoAtom = atom<TSeoInfo | Record<string, A>>({});
-export const dataPostListAtom = atom<IPostProductCard[]>([]);
+// export const dataPostListAtom = atom<IPostProductCard[]>([]);

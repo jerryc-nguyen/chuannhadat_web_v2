@@ -1,6 +1,6 @@
 'use client';
-
 import React from 'react';
+import styles from './index.module.scss';
 import background_profile from '@assets/images/background_profile.jpg';
 import Image, { StaticImageData } from 'next/image';
 import { useQuery } from '@tanstack/react-query';
@@ -29,7 +29,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
   );
 
   const profileImage = () => (
-    <div className="relative">
+    <div className="profile-image w-screen -translate-x-5">
       <picture>
         <source
           media="(min-width: 799px)"
@@ -42,7 +42,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           draggable="false"
           className="h-[24vh] w-full bg-white/20 object-cover contrast-50"
           src={background_profile}
-          alt="Responsive Image"
+          alt="Background customer"
         />
       </picture>
       <div className="relative -translate-y-[100px] pl-4">
@@ -55,7 +55,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           }}
           height={140}
           width={140}
-          className="rounded-full border-4 border-solid border-slate-200"
+          className="rounded-full border-4 border-solid border-slate-200 bg-slate-300"
         />
         <h2 className="mt-4 text-2xl font-semibold">{profileData?.full_name}</h2>
         <p className="text-muted-foregroun my-1 pr-4">{profileData?.job_title}</p>
@@ -73,18 +73,18 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     </div>
   );
   const profileBadges = () => (
-    <div className="mb-4 flex flex-wrap items-center gap-y-4 px-4 pt-2">
+    <div className="flex flex-wrap items-center gap-y-4 pt-2">
       <ButtonPhone className="flex-1 py-3" phoneNumberProfile={profileData?.phone as string} />
     </div>
   );
   const profileDescription = () => (
     <>
-      <p className="px-4 capitalize">{profileData?.description}</p>
-      <div className="my-2 px-4">
+      <p className="capitalize">{profileData?.description}</p>
+      <div className="my-2">
         {profileData?.formatted_badges &&
           profileData?.formatted_badges.map((item, index) => <li key={genKey(index)}>{item}</li>)}
       </div>
-      <div className="flex flex-col px-4">
+      <div className="flex flex-col">
         {profileData?.formatted_joined_at && (
           <span className="flex items-center gap-x-2 whitespace-nowrap text-muted-foreground">
             <LucideClock4 className="h-4 w-4" />
@@ -124,12 +124,12 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
   );
   const porfileListPost = () => (
     <div>
-      <h2 className="mb-2 mt-12 px-4 text-xl font-semibold">Tin đã đăng</h2>
-      <PostList />
+      <h2 className="mb-2 mt-12 text-xl font-semibold">Tin đã đăng</h2>
+      <PostList isRedirectAfterApplyFilter={false} />
     </div>
   );
   return (
-    <section>
+    <section className={styles.profile_detail_wrapper}>
       {!profileData ? (
         <NotFound className="h-full" />
       ) : (

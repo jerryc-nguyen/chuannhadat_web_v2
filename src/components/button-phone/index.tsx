@@ -40,7 +40,7 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
     <Button
       onClick={handleClickButtonPhone}
       className={cn(
-        'flex h-fit items-center justify-center gap-x-2 bg-blue-500 text-white hover:bg-blue-400 hover:text-white',
+        'flex h-fit items-center justify-center gap-x-2 bg-primary_color/80 text-white hover:bg-primary_color hover:text-white',
         className,
       )}
       variant={'outline'}

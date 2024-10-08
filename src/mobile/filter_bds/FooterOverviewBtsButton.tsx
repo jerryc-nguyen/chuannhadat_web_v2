@@ -5,7 +5,7 @@ import { searchApi } from '@api/searchApi';
 import { Button } from '@components/ui/button';
 import { LuLoader2 } from 'react-icons/lu';
 
-export default function FooterOverviewBtsButton() {
+export default function FooterOverviewBtsButton({ isRedirect }: { isRedirect: boolean }) {
   const { closeModals } = useModals();
   const { applyAllFilters, buildFilterParams } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: true });
@@ -17,7 +17,6 @@ export default function FooterOverviewBtsButton() {
 
   const onApplyFilter = () => {
     applyAllFilters();
-
     closeModals();
   };
   return (
