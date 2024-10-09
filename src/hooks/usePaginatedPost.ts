@@ -10,7 +10,6 @@ interface FilterParams {
 
 function usePaginatedData(filterParams: FilterParams, initialPage = 1, itemsPerPage = 12) {
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setLoading] = useState(false);
   const [shouldReset, setShouldReset] = useState(false);
   const [prevFilterParams, setPrevFilterParams] = useState<FilterParams>({});
@@ -24,6 +23,8 @@ function usePaginatedData(filterParams: FilterParams, initialPage = 1, itemsPerP
       queryFn: () => searchApi(filterParams),
     }),
   );
+
+  const [products, setProducts] = useState<any[]>(data.data);
 
   useEffect(() => {
     const { per_page, page, ...restCurrentParams } = filterParams;
