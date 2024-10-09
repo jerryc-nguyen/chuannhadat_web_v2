@@ -55,7 +55,9 @@ export default function ProductCard({ product }: { product: IProduct }) {
           src={genImageSrc}
           alt={product?.title}
           fill
+          blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII='
           loading='lazy'
+          placeholder='blur'
           className="h-full w-full cursor-pointer object-cover"
         />
 
