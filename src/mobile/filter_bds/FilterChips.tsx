@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { filterStateAtom } from './states';
 import { useAtom } from 'jotai';
@@ -18,51 +19,20 @@ import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
 import Direction from './bts/Direction';
 import useFilterState from './hooks/useFilterState';
 import { cn } from '@common/utils';
-
-export interface FilterChipOption {
-  id: string | FilterFieldName;
-  text: string;
-}
-
-const FILTER_ITEMS: Array<FilterChipOption> = [
-  {
-    id: FilterFieldName.filterOverview,
-    text: 'Bộ Lọc',
-  },
-  {
-    id: FilterFieldName.businessType,
-    text: 'Loại tin',
-  },
-  {
-    id: FilterFieldName.categoryType,
-    text: 'Loại nhà đất',
-  },
-  // { id: FilterFieldName.locations, text: 'Khu vực' },
-  {
-    id: FilterFieldName.price,
-    text: 'Mức giá',
-  },
-  {
-    id: FilterFieldName.area,
-    text: 'Diện tích',
-  },
-  {
-    id: FilterFieldName.rooms,
-    text: 'Số Phòng',
-  },
-  {
-    id: FilterFieldName.direction,
-    text: 'Hướng',
-  },
-];
-
-export default function FilterChips() {
+import { listFilterMobile } from './constants';
+import { FilterChipOption } from './types';
+import { Button } from '@components/ui/button';
+type FilterChipsProp = {
+  isRedirectWhenApplyFilter?: boolean;
+};
+export default function FilterChips({ isRedirectWhenApplyFilter = true }: FilterChipsProp) {
   const [filterState] = useAtom(filterStateAtom);
-  const { copyFilterStatesToLocal } = useFilterState();
-
+  const { copyFilterStatesToLocal, setIsRedirect } = useFilterState();
   const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
-
+  React.useEffect(() => {
+    setIsRedirect(isRedirectWhenApplyFilter);
+  }, []);
   const selectedRoomText = (): string => {
     const results = [];
     if (filterState.bed) {
@@ -76,11 +46,11 @@ export default function FilterChips() {
   };
 
   const selectedFilterText = (filterOption: FilterChipOption) => {
-    const fieldName = FilterFieldName[filterOption.id as A] || filterOption.id;
+    const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.locations) {
+    if (filterOption.id == FilterFieldName.Locations) {
       return selectedLocationText ?? 'Khu vực';
-    } else if (filterOption.id == FilterFieldName.rooms) {
+    } else if (filterOption.id == FilterFieldName.Rooms) {
       return selectedRoomText() || 'Số phòng';
     } else {
       return (
@@ -92,25 +62,25 @@ export default function FilterChips() {
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
-      case FilterFieldName.businessType:
+      case FilterFieldName.BusinessType:
         return (
           <div className="bg-white p-4">
             <BusinessTypeButtons />
           </div>
         );
-      case FilterFieldName.categoryType:
+      case FilterFieldName.CategoryType:
         return <CategoryType />;
-      case FilterFieldName.price:
+      case FilterFieldName.Price:
         return <Price />;
-      case FilterFieldName.area:
+      case FilterFieldName.Area:
         return <Area />;
-      case FilterFieldName.filterOverview:
+      case FilterFieldName.FilterOverview:
         return <FilterModal />;
-      case FilterFieldName.locations:
+      case FilterFieldName.Locations:
         return <Locations />;
-      case FilterFieldName.rooms:
+      case FilterFieldName.Rooms:
         return <Rooms />;
-      case FilterFieldName.direction:
+      case FilterFieldName.Direction:
         return <Direction />;
       default:
         return undefined;
@@ -119,7 +89,7 @@ export default function FilterChips() {
 
   const buildMaxHeightPercent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
-      case FilterFieldName.filterOverview:
+      case FilterFieldName.FilterOverview:
         return 1;
 
       default:
@@ -129,15 +99,15 @@ export default function FilterChips() {
 
   const buildBtsFooter = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
-      case FilterFieldName.filterOverview:
-        return <FooterOverviewBtsButton />;
+      case FilterFieldName.FilterOverview:
+        return <FooterOverviewBtsButton isRedirect={isRedirectWhenApplyFilter} />;
       default:
         return <FooterBtsButton filterOption={filterOption} />;
     }
   };
 
   const showFilterBts = (filterOption: FilterChipOption) => {
-    if (filterOption.id == FilterFieldName.filterOverview) {
+    if (filterOption.id == FilterFieldName.FilterOverview) {
       copyFilterStatesToLocal();
     } else {
       copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
@@ -156,11 +126,11 @@ export default function FilterChips() {
   };
 
   const isActiveChip = (filterOption: FilterChipOption): boolean => {
-    const fieldName = FilterFieldName[filterOption.id as A] || filterOption.id;
+    const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.locations) {
+    if (filterOption.id == FilterFieldName.Locations) {
       return isSelectedLocation;
-    } else if (filterOption.id == FilterFieldName.rooms) {
+    } else if (filterOption.id == FilterFieldName.Rooms) {
       return !!(filterState.bed || filterState.bath);
     } else {
       return (
@@ -177,12 +147,12 @@ export default function FilterChips() {
   };
 
   return (
-    <div className="p-4">
-      {FILTER_ITEMS.map((item) => (
-        <button
+    <div className="mt-5">
+      {listFilterMobile.map((item) => (
+        <Button
           key={item.id}
           className={cn(
-            'shadow-2 relative mb-2 mr-2 cursor-pointer rounded-xl px-4 py-2 font-medium transition-all duration-400 focus:animate-pulse',
+            'duration-400 relative mb-2 mr-2 cursor-pointer rounded-xl border px-4 py-2 font-medium shadow-md transition-all focus:animate-pulse',
             activeChipClass(item),
           )}
           onClick={() => {
@@ -190,7 +160,7 @@ export default function FilterChips() {
           }}
         >
           {selectedFilterText(item)}
-        </button>
+        </Button>
       ))}
     </div>
   );

@@ -11,13 +11,13 @@ export default function Locations() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
-    setLocalFieldValue(FilterFieldName.district, undefined);
+    setLocalFieldValue(FilterFieldName.District, undefined);
     // trick to fix state not sync!!!
     localFilterState.district = undefined;
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetWard = () => {
-    setLocalFieldValue(FilterFieldName.ward, undefined);
+    setLocalFieldValue(FilterFieldName.Ward, undefined);
     // trick to fix state not sync!!!
     localFilterState.ward = undefined;
   };
@@ -26,19 +26,19 @@ export default function Locations() {
     resetDistrict();
     resetWard();
     const finalOption = city?.value != 'all' ? city : undefined;
-    setLocalFieldValue(FilterFieldName.city, finalOption);
+    setLocalFieldValue(FilterFieldName.City, finalOption);
   };
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     resetWard();
 
     const finalOption = district?.value != 'all' ? district : undefined;
-    setLocalFieldValue(FilterFieldName.district, finalOption);
+    setLocalFieldValue(FilterFieldName.District, finalOption);
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
     const finalOption = ward?.value != 'all' ? ward : undefined;
-    setLocalFieldValue(FilterFieldName.ward, finalOption);
+    setLocalFieldValue(FilterFieldName.Ward, finalOption);
   };
 
   return (

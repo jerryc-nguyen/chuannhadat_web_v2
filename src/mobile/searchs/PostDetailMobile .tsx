@@ -12,7 +12,7 @@ import { FaBath } from 'react-icons/fa6';
 import { FaHouseUser } from 'react-icons/fa';
 
 import { authorPhoneAtom, postDetailAtom } from '@mobile/post-detail/states';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { usePathname } from 'next/navigation';
@@ -41,11 +41,11 @@ export default function PostDetailMobile() {
   const currentPath = usePathname();
   const [productUid, setProductUid] = useState<string | null>(null);
   const [postDetail, setPostDetail] = useAtom(postDetailAtom);
-  const [_,setAuthorPhone] = useAtom(authorPhoneAtom);
+  const setAuthorPhone = useSetAtom(authorPhoneAtom);
   const { buildThumbnailUrl } = useResizeImage();
 
   useEffect(() => {
-    const uid = currentPath.split('-').slice(-1)[0];
+    const uid = currentPath.split('-')?.slice(-1)[0];
     if (uid && uid !== '') {
       setProductUid(uid);
     }
@@ -60,7 +60,7 @@ export default function PostDetailMobile() {
 
   useEffect(() => {
     if (data) {
-      setAuthorPhone(data.data.author.phone)
+      setAuthorPhone(data.data?.author.phone);
       setPostDetail(data.data);
     }
   }, [data, setPostDetail]);
@@ -267,7 +267,7 @@ export default function PostDetailMobile() {
             iconPrev: () => <GoArrowLeft className="text-2xl opacity-50 hover:opacity-100" />,
             iconNext: () => <GoArrowRight className="text-2xl opacity-50 hover:opacity-100" />,
           }}
-          plugins={[Thumbnails,  Zoom, Counter]}
+          plugins={[Thumbnails, Zoom, Counter]}
         />
       )}
     </div>

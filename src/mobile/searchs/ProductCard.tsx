@@ -1,6 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
+import React from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
-
 import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
@@ -8,6 +7,7 @@ import useModals from '@mobile/modals/hooks';
 import { useRouter } from 'next/navigation';
 import PostDetailMobile from './PostDetailMobile ';
 import PhoneNumber from '@mobile/post-detail/components/PhoneNumber';
+import Image from 'next/image';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -25,16 +25,10 @@ const styles: A = {
 
 export default function ProductCard({ product }: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
+
   const { openModal } = useModals();
   const router = useRouter();
   const handleShowDetailHouse = () => {
-    console.log('fffffff');
-    // const { data } = useGetDetailProduct(product.uid);
-    // if (!!data) {
-
-    // } else {
-    //   ('Bug!!!');
-    // }
     openModal({
       name: product.title,
       title: product.title,
@@ -47,24 +41,28 @@ export default function ProductCard({ product }: { product: IProduct }) {
     });
     window.history.pushState({}, '', `/post/${product.slug}`);
   };
+
+  const genImageSrc = React.useMemo(() => {
+    return buildThumbnailUrl({
+      imageUrl: product?.featured_image_url,
+    });
+  }, [product?.featured_image_url]);
+
   return (
-    <div className="m-4 overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
+    <div className="my-4 overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
       <AspectRatio.Root ratio={16 / 9}>
-        <img
-          className="Image"
-          src={buildThumbnailUrl({
-            imageUrl: product?.featured_image_url,
-          })}
-          alt={product?.name}
+        <Image
+          src={genImageSrc}
+          alt={product?.title}
+          fill
+          blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII='
+          loading='lazy'
+          placeholder='blur'
+          className="h-full w-full cursor-pointer object-cover"
         />
 
         <div style={styles.imagesCountWrapper}>
           <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
-            {/* <IoPlayCircleOutline
-              name='play-circle-outline'
-              size={20}
-              style={{ color: '#fff' }}
-            /> */}
             <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
               <IoImage size={20} style={{ color: '#fff' }} />
               <span style={{ color: '#fff', marginLeft: 5 }}>1</span>

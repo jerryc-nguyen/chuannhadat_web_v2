@@ -17,6 +17,7 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/plugins/counter.css';
 import SubTitleComponent from './subtitle-component';
 import { useRouter } from 'next/navigation';
+import useModalPostDetail from '../hooks/useModalPostDetail';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -47,9 +48,15 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       createModule('SubTitle', () => <SubTitleComponent>{data?.title}</SubTitleComponent>),
     );
   };
+  const { onCloseModal } = useModalPostDetail();
   return (
-    <div className={cn(styles.overview_post, 'relative rounded-lg bg-white p-8')}>
-      <div className={cn('list-image', renderClassImages(data?.images.length))}>
+    <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
+      <div
+        className={cn(
+          'list-image overflow-hidden rounded-lg',
+          renderClassImages(data?.images.length),
+        )}
+      >
         {data?.images.slice(0, 3).map((item, index) => (
           <div
             key={item.id}
@@ -130,9 +137,11 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         <div className="action flex gap-x-4">
           <TooltipProvider delayDuration={0}>
             <Tooltip>
-              <TooltipTrigger className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-                Chia sẻ
-                <LuShare2 className="ml-2" />
+              <TooltipTrigger asChild>
+                <Button variant={'outline'}>
+                  Chia sẻ
+                  <LuShare2 className="ml-2" />
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <p className="text-center">
@@ -152,8 +161,9 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
             <Button
               onClick={() => {
                 router.push(data.detail_path);
+                onCloseModal();
               }}
-              className="border bg-blue-500 text-white hover:bg-blue-400"
+              className="border bg-primary_color/80 text-white hover:bg-primary_color"
               variant={'link'}
             >
               Xem chi tiết

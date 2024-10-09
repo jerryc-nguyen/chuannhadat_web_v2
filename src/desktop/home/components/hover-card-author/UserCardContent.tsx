@@ -3,12 +3,10 @@ import { CustomerGender } from '@common/types';
 import { getInitialsName, truncateText } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
-import { HoverCardContent } from '@components/ui/hover-card';
 import { Skeleton } from '@components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
 
@@ -17,7 +15,6 @@ type UserCardContentProps = {
 };
 
 const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
-  const router = useRouter();
   const { data: authorData, status } = useQuery({
     queryKey: ['get-author-by-slug', authorSlug],
     queryFn: () => services.profiles.getProfileSlug(authorSlug),
@@ -101,7 +98,10 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       {authorData?.facebook_url && (
         <div className="flex items-center pt-2">
           <LuFacebook className="mr-2 h-4 w-4 opacity-70" />
-          <Link href={authorData.facebook_url} className="text-xs text-muted-foreground hover:text-black">
+          <Link
+            href={authorData.facebook_url}
+            className="text-xs text-muted-foreground hover:text-black"
+          >
             Liên kết facebook
           </Link>
         </div>
@@ -109,7 +109,10 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       {authorData?.youtube_url && (
         <div className="flex items-center pt-2">
           <LuYoutube className="mr-2 h-4 w-4 opacity-70" />
-          <Link href={authorData.youtube_url} className="text-xs text-muted-foreground hover:text-black">
+          <Link
+            href={authorData.youtube_url}
+            className="text-xs text-muted-foreground hover:text-black"
+          >
             Liên kết youtube
           </Link>
         </div>
@@ -120,15 +123,14 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
           <span className="text-xs text-muted-foreground">{authorData?.address}</span>
         </div>
       )}
-      <Button
-        onClick={() => {
-          router.push(`profile/${authorData?.id}`);
-        }}
-        className="mt-4 w-full border bg-blue-500 text-white hover:bg-blue-400"
-        variant={'link'}
-      >
-        Xem trang cá nhân
-      </Button>
+      <Link href={`/profile/${authorData?.slug}`} target="_blank">
+        <Button
+          className="mt-4 w-full border bg-primary_color/80 text-white hover:bg-primary_color"
+          variant={'link'}
+        >
+          Xem trang cá nhân
+        </Button>
+      </Link>
     </>
   );
   return !authorData ? loadingCardContent() : userCardContent();

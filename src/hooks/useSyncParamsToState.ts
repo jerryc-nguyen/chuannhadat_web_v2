@@ -14,14 +14,12 @@ function useSyncParamsToState() {
   const params = {
     path: currentPage + '?' + queryParams.toString(),
   };
-
   const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ['toParamsApi', params],
       queryFn: () => toParamsApi(params),
     }),
   );
-
   useHydrateAtoms([[filterStateAtom, data.data?.state || {}]]);
 }
 

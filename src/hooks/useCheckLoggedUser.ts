@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 export default function useCheckLoggedUser() {
   const router = useRouter();
-  const { signout, updateCurrentUser } = useAuth();
+  const { signOut, updateCurrentUser } = useAuth();
   const { data, isFetching } = useQuery({
     queryKey: ['get-profile-me'],
     queryFn: services.profiles.getMyProfile,
@@ -20,7 +20,7 @@ export default function useCheckLoggedUser() {
     updateCurrentUser(data?.data);
   } else {
     toast.error('Bạn phải đăng nhập để truy cập trang này.');
-    signout();
+    signOut();
     router.push('/');
   }
 }

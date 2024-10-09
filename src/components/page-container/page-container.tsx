@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function PageContainer({
   children,
-  scrollable = false
+  scrollable = false,
 }: {
   children: React.ReactNode;
   scrollable?: boolean;
@@ -13,10 +13,10 @@ export default function PageContainer({
       {scrollable ? (
         // 60px là chiều cao của header
         <ScrollArea className="h-[calc(100dvh-60px)]">
-          <div className="h-full p-4 md:px-8">{children}</div>
+          <div className="h-full py-4">{children}</div>
         </ScrollArea>
       ) : (
-        <div className="h-full p-4 md:px-8">{children}</div>
+        <div className="h-full py-4">{children}</div>
       )}
     </>
   );

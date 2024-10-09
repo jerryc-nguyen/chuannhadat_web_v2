@@ -1,10 +1,10 @@
-import { FilterChipOption } from './FilterChips';
 import useModals from '@mobile/modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import { Button } from '@components/ui/button';
 import { LuLoader2 } from 'react-icons/lu';
+import { FilterChipOption } from './types';
 
 export default function FooterBtsButton({ filterOption }: { filterOption: FilterChipOption }) {
   const { closeModals } = useModals();

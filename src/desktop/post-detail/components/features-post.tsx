@@ -7,7 +7,7 @@ type FeaturesPostProps = {
 
 const FeaturesPost: React.FC<FeaturesPostProps> = ({ data }) => {
   return (
-    <div className="features-estate rounded-lg bg-white p-8">
+    <div className="features-estate rounded-lg border bg-white p-6">
       <h3 className="pb-5 text-xl font-semibold">Đặc điểm của bất động sản</h3>
       <div className="flex flex-col gap-y-2">
         {data?.formatted_price_per_m2 && (
