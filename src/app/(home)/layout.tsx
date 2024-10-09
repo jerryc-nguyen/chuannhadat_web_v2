@@ -13,7 +13,7 @@ export default function HomeLayout({
   return (
     <>
       {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
-      <main className="z-5 relative px-5 md:px-10">{children}</main>
+      <main className="z-5 relative h-fit px-5 md:px-10">{children}</main>
       <ModalsProvider />
     </>
   );

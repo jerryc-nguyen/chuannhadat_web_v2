@@ -7,7 +7,6 @@ import { Skeleton } from '@components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
 
@@ -16,7 +15,6 @@ type UserCardContentProps = {
 };
 
 const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
-  const router = useRouter();
   const { data: authorData, status } = useQuery({
     queryKey: ['get-author-by-slug', authorSlug],
     queryFn: () => services.profiles.getProfileSlug(authorSlug),
@@ -125,15 +123,14 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
           <span className="text-xs text-muted-foreground">{authorData?.address}</span>
         </div>
       )}
-      <Button
-        onClick={() => {
-          router.push(`/profile/${authorData?.slug}`);
-        }}
-        className="mt-4 w-full border bg-blue-500 text-white hover:bg-blue-400"
-        variant={'link'}
-      >
-        Xem trang cá nhân
-      </Button>
+      <Link href={`/profile/${authorData?.slug}`} target="_blank">
+        <Button
+          className="mt-4 w-full border bg-primary_color/80 text-white hover:bg-primary_color"
+          variant={'link'}
+        >
+          Xem trang cá nhân
+        </Button>
+      </Link>
     </>
   );
   return !authorData ? loadingCardContent() : userCardContent();
