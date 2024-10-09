@@ -64,20 +64,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-
-    onStateChange(updater) {
-      console.log("updater", updater);
-      
-    },
   });
-
-  React.useEffect(() => {
-    table.getRowModel().rows.map((row) => {
-      row.getVisibleCells().map((cell) => {
-        console.log('cell.getContext()', cell.getContext());
-      })
-    })
-  }, [])
 
   return (
     <div className="space-y-4">

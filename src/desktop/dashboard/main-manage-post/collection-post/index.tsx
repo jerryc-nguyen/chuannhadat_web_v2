@@ -43,7 +43,7 @@ export default function TaskDataTable() {
   const handleFilter = async ( data: ProductQuery ) => {
     try {
         const res = await ProductApiService.Filter(data);
-        console.log("djsakdhas", res);
+        console.log("handleFilter products list", res);
         setProductList(res.data)
         
     } catch (err) {

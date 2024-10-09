@@ -12,8 +12,8 @@ import { Separator } from "@components/ui/separator";
 import Link from "next/link";
 import hideOnFrontendReasonConstant from "../constant/hide_on_frontend_reason";
 import { Fragment } from "react";
-import useModals from "@mobile/modals/hooks";
 import UpVipProductForm from "../../components/up-vip-form";
+import useModals from "@mobile/modals/hooks";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -48,7 +48,7 @@ export const columns: ColumnDef<Product>[] = [
       const hide_on_frontend_reason = row.original.hide_on_frontend_reason;
 
       const images = row.original.images;
-      const imageUrl = images?.[0]?.url || "/default-image.png";
+      const imageUrl = images?.[0]?.url || "/default-image.jpg";
       
       const images_count = row.original.images_count;
       const visibility = row.original.visibility;
@@ -90,6 +90,11 @@ export const columns: ColumnDef<Product>[] = [
                 height={100}
                 src={imageUrl}
                 className="object-cover rounded-lg h-36 w-48 border-2"
+                onError={(e) => {
+                  e.currentTarget.src = "/default-image.jpg"; // Set default image path
+                  e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
+                }}
+              
               />
               <div className="flex gap-2 items-center justify-center">
                 <span>Ẩn tin</span>
@@ -259,7 +264,9 @@ const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: strin
       title: 'Cấu hình tin đăng',
       content: <UpVipProductForm productId={productId} closeModal={closeModal}/>,
       footer: <></>,
-      showAsDialog: true
+      showAsDialog: true,
+      maxHeightPercent: 0.8,
+      isHiddenScroll: true,
     })
   }
 

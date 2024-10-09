@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import TaskDataTable from '@desktop/dashboard/main-manage-post/collection-post';
 
 export const metadata: Metadata = {
-  title: 'Cập nhật tin tức',
-  description: 'Quản lý cập nhật tin tức',
+  title: 'Danh sách tin',
+  description: 'Quản lý danh sách tin tức',
 };
 
 const NewPostPage: React.FC = () => {

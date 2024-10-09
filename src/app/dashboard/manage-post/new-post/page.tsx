@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import NewPost from '@desktop/dashboard/main-manage-post/new-post';
 
 export const metadata: Metadata = {
-  title: 'Cập nhật tin tức',
-  description: 'Quản lý cập nhật tin tức',
+  title: 'Đăng tin',
+  description: 'Tạo mới tin tức',
 };
 
 const NewPostPage: React.FC = () => {
