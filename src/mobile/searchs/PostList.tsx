@@ -16,7 +16,6 @@ import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
 import useDebounce from '@hooks/useDebounce';
 
-
 type PostListProps = {
   isRedirectAfterApplyFilter?: boolean;
 };
@@ -37,8 +36,7 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
     withLocal: false,
   });
 
-
-  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams); 
+  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams);
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -60,7 +58,11 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
   };
 
   const handleScroll = useDebounce(() => {
-    if (currentPage <= 3 && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if (
+      currentPage <= 3 &&
+      data?.pagination.total_count !== products.length &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight
+    ) {
       handleLoadMore();
     }
   }, 200);
@@ -86,19 +88,20 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
         return <ProductCard key={product?.id} product={product} />;
       })}
 
-      {currentPage > 3 && !isLoading && products.length > 0 ? (
-        <Button
-          className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
-          variant={'link'}
-          onClick={handleLoadMore}
-        >
-          Xem thêm
-        </Button>
-      ) : (
-        <div className="m-auto mt-2 flex w-full justify-center">
-          <Spinner />
-        </div>
-      )}
+      {data?.pagination.total_count !== products.length &&
+        (currentPage > 3 && !isLoading && products.length > 0 ? (
+          <Button
+            className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
+            variant={'link'}
+            onClick={handleLoadMore}
+          >
+            Xem thêm
+          </Button>
+        ) : (
+          <div className="m-auto mt-2 flex w-full justify-center">
+            <Spinner />
+          </div>
+        ))}
     </div>
   );
 }
