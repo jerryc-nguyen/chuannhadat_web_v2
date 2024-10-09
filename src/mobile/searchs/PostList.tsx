@@ -6,11 +6,16 @@ import { IoChevronDown } from 'react-icons/io5';
 import useModals from '@mobile/modals/hooks';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import { FilterFieldName } from '@models';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import ProductCard from './ProductCard';
 import { Button } from '@components/ui/button';
 import React from 'react';
 import { useRefCallback } from '@hooks/useRefCallback';
+import Spinner from '@components/ui/spinner';
+import usePaginatedData from '@hooks/usePaginatedPost';
+import useDebounce from '@hooks/useDebounce';
+
 type PostListProps = {
   isRedirectAfterApplyFilter?: boolean;
 };
@@ -31,14 +36,7 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
     withLocal: false,
   });
 
-  filterParams.per_page = 12;
-
-  const { data } = useSuspenseQuery(
-    queryOptions({
-      queryKey: ['home', filterParams],
-      queryFn: () => searchApi(filterParams),
-    }),
-  );
+  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams);
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -59,6 +57,21 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
     });
   };
 
+  const handleScroll = useDebounce(() => {
+    if (
+      currentPage <= 2 &&
+      data?.pagination.total_count !== products.length &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight
+    ) {
+      handleLoadMore();
+    }
+  }, 200);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentPage, handleScroll]);
+
   return (
     <div className="relative mx-auto w-full">
       <div className="flex items-center justify-between">
@@ -71,9 +84,24 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
         </div>
       </div>
 
-      {data?.data.map((product: A) => {
+      {products?.map((product: A) => {
         return <ProductCard key={product?.id} product={product} />;
       })}
+
+      {data?.pagination.total_count !== products.length &&
+        (currentPage > 2 && !isLoading && products.length > 0 ? (
+          <Button
+            className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
+            variant={'link'}
+            onClick={handleLoadMore}
+          >
+            Xem thêm
+          </Button>
+        ) : (
+          <div className="m-auto mt-2 flex w-full justify-center">
+            <Spinner />
+          </div>
+        ))}
     </div>
   );
 }
