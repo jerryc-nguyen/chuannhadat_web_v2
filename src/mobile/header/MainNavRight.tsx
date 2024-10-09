@@ -185,12 +185,14 @@ export default function MainNavRight({
         <LucideHeart className="h-5 w-5" />
       </Button>
       {renderAvatar()}
-      <div
+      <Button
+        variant="outline"
+        size="icon"
         onClick={() => openMainnNavSidePanel()}
-        className="mr-2 flex items-center justify-center rounded-full border p-2"
+        className="mr-2 rounded-full !bg-white"
       >
         <LuMenu className="h-5 w-5" />
-      </div>
+      </Button>
     </div>
   );
 }

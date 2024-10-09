@@ -78,7 +78,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
       <Button
         onClick={() => handleViewDetailPost(product)}
         variant={'link'}
-        className="mt-2 w-full border bg-blue-500 text-white hover:bg-blue-400"
+        className="mt-2 w-full border bg-blue-500 text-white hover:bg-primary_color/80"
       >
         Xem chi tiết
       </Button>

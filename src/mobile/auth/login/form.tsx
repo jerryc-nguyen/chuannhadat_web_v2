@@ -129,7 +129,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, handleSetTokenServer }) 
         <Button
           type="submit"
           disabled={isPending}
-          className="bg-primary_color/80 hover:bg-primary_color text-md flex w-full items-center gap-x-2 rounded-md px-4 py-2 font-semibold text-white focus-within:animate-pulse"
+          className="text-md flex w-full items-center gap-x-2 rounded-md bg-primary_color/80 px-4 py-2 font-semibold text-white focus-within:animate-pulse hover:bg-primary_color"
         >
           {isPending ? 'Đang xác thực ...' : 'Đăng nhập'}
         </Button>
@@ -147,17 +147,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, handleSetTokenServer }) 
           <span className="block h-[1px] flex-1 bg-slate-300" />
         </div>
         <div className="mb-4 flex items-center justify-center gap-x-3 text-sm">
-          <div className="border-primary_color/30 flex flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border py-3 shadow-lg">
-            <FcGoogle className="text-xl" />
-            Google
+          <div className="flex flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border border-primary_color/30 py-3 shadow-lg">
+            <FcGoogle className="text-2xl sm:text-xl" />
+            <span className="hidden sm:block">Google</span>
           </div>
-          <div className="border-primary_color/30 flex flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border py-3 shadow-lg">
-            <IoLogoFacebook className="text-xl text-blue-500" />
-            Facebook
+          <div className="flex flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border border-primary_color/30 py-3 shadow-lg">
+            <IoLogoFacebook className="text-2xl text-blue-500 sm:text-xl" />
+            <span className="hidden sm:block">Facebook</span>
           </div>
-          <div className="border-primary_color/30 flex flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border py-3 shadow-lg">
-            <BsQrCode className="text-primary_color" />
-            QR
+          <div className="flex h-full flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border border-primary_color/30 py-3 shadow-lg">
+            <BsQrCode className="h-6 w-6 text-primary_color sm:h-5 sm:w-5" />
+            <span className="hidden sm:block"> QR</span>
           </div>
         </div>
       </form>

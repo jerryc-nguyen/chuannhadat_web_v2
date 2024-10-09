@@ -28,7 +28,6 @@ const PostControls: React.FC<PostControlsProps> = ({
 }) => {
   useSyncParamsToState();
   const { selectedSortValue, onSelectSortOption, setIsRedirect } = useFilterState();
-  console.log('🚀 ~ selectedSortValue:', selectedSortValue);
   const handleChangeSortOption = (value: string) => {
     onSelectSortOption(value);
   };

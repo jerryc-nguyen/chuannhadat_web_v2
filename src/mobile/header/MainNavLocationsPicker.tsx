@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
 import { useRefCallback } from '@hooks/useRefCallback';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import Locations from '@mobile/filter_bds/bts/Locations';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useFilterLocations } from '@mobile/locations/hooks';

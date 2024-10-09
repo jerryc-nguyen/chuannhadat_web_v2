@@ -6,13 +6,15 @@ import Image, { StaticImageData } from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
 import ButtonPhone from '@components/button-phone';
-import { LucideClock4 } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
-import { genKey } from '@common/utils';
 import default_avatar from '@assets/images/default_avatar.png';
 import NotFound from '@app/not-found';
 import PostList from '@mobile/searchs/PostList';
 import Link from 'next/link';
+import { PiGenderIntersexBold } from 'react-icons/pi';
+import { RiArticleLine } from 'react-icons/ri';
+import { CustomerGender } from '@common/types';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
@@ -57,50 +59,42 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           width={140}
           className="rounded-full border-4 border-solid border-slate-200 bg-slate-300"
         />
-        <h2 className="mt-4 text-2xl font-semibold">{profileData?.full_name}</h2>
-        <p className="text-muted-foregroun my-1 pr-4">{profileData?.job_title}</p>
-        <div className="flex gap-x-2">
-          {profileData?.profile_tags.map((profile, index) => (
-            <span
-              key={genKey(index)}
-              className="block rounded-sm border border-solid border-slate-200 bg-slate-100 px-2 py-1 text-xs"
-            >
-              {profile}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );
-  const profileBadges = () => (
-    <div className="flex flex-wrap items-center gap-y-4 pt-2">
-      <ButtonPhone className="flex-1 py-3" phoneNumberProfile={profileData?.phone as string} />
-    </div>
-  );
-  const profileDescription = () => (
-    <>
-      <p className="capitalize">{profileData?.description}</p>
-      <div className="my-2">
-        {profileData?.formatted_badges &&
-          profileData?.formatted_badges.map((item, index) => <li key={genKey(index)}>{item}</li>)}
-      </div>
-      <div className="flex flex-col">
-        {profileData?.formatted_joined_at && (
-          <span className="flex items-center gap-x-2 whitespace-nowrap text-muted-foreground">
-            <LucideClock4 className="h-4 w-4" />
-            {profileData?.formatted_joined_at}
+  const listInfoProfileIcon = () => (
+    <div className="mb-2 flex flex-col items-start gap-y-3">
+      {profileData?.address && (
+        <span className="flex items-center gap-x-1 whitespace-nowrap">
+          <LuMapPin className="mr-2 h-5 w-5" />
+          <span className="text-sm text-muted-foreground">{profileData?.address}</span>
+        </span>
+      )}
+      {profileData?.formatted_joined_at && (
+        <span className="flex items-center gap-x-1 whitespace-nowrap">
+          <CalendarDays className="mr-2 h-5 w-5" />
+          <span className="text-sm text-muted-foreground">{profileData?.formatted_joined_at}</span>
+        </span>
+      )}
+      {profileData?.gender && (
+        <span className="flex items-center gap-x-1 whitespace-nowrap">
+          <PiGenderIntersexBold className="mr-2 h-5 w-5" />
+          <span className="text-sm text-muted-foreground">
+            Giới tính {profileData?.gender === CustomerGender.Male ? 'nam' : 'nữ'}
           </span>
-        )}
-        {profileData?.address && (
-          <span className="flex items-center gap-x-2 whitespace-nowrap text-muted-foreground">
-            <LuMapPin />
-            {profileData?.address}
+        </span>
+      )}
+      {profileData?.posts_count && (
+        <span className="flex items-center gap-x-1 whitespace-nowrap">
+          <RiArticleLine className="mr-2 h-5 w-5" />
+          <span className="text-sm text-muted-foreground">
+            Số bài đăng {profileData?.posts_count}
           </span>
-        )}
-      </div>
+        </span>
+      )}
       {profileData?.facebook_url && (
         <div className="flex items-center pt-2">
-          <LuFacebook className="mr-2 h-4 w-4 opacity-70" />
+          <LuFacebook className="mr-2 h-4 w-4" />
           <Link
             href={profileData.facebook_url}
             className="text-xs text-muted-foreground hover:text-black"
@@ -120,11 +114,32 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           </Link>
         </div>
       )}
-    </>
+    </div>
   );
+  const profileInformation = () => (
+    <div className="flex flex-col gap-y-2">
+      <h2 className="mt-4 text-2xl font-semibold">{profileData?.full_name}</h2>
+      <div className="flex flex-wrap gap-x-2 gap-y-2">
+        {profileData?.profile_tags.map((item) => (
+          <span
+            className="text-nowrap rounded-[6px] bg-primary_color/80 px-[10px] py-1 text-xs font-semibold text-white shadow-md"
+            key={item}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+      <p className="text-muted-foregroun my-1 pr-4">
+        {profileData?.job_title || profileData?.description}
+      </p>
+      {listInfoProfileIcon()}
+      <ButtonPhone className="w-full py-2" phoneNumberProfile={profileData?.phone as string} />
+    </div>
+  );
+
   const porfileListPost = () => (
     <div>
-      <h2 className="mb-2 mt-12 text-xl font-semibold">Tin đã đăng</h2>
+      <h2 className="mb-2 mt-12 text-xl font-semibold text-primary_color">Tin đã đăng</h2>
       <PostList isRedirectAfterApplyFilter={false} />
     </div>
   );
@@ -136,8 +151,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
         <section>
           {profileImage()}
           <div className="-translate-y-[100px]">
-            {profileBadges()}
-            {profileDescription()}
+            {profileInformation()}
             {porfileListPost()}
           </div>
         </section>
