@@ -45,6 +45,9 @@ export const API_ROUTES = {
   },
   PRODUCTS: {
     END_POINT: 'api/v1/products',
-    DELETE: 'api/v1/products/{product_id}'
+    DELETE: 'api/v1/products/{product_id}',
+    GET_UP_VIP_SETTINGS: 'api/v1/products/up_vip_settings',
+    UP_VIP: 'api/v1/products/up_vip',
+    VALIDATE_UP_VIP: 'api/v1/products/validate_up_vip'
   }
 };
