@@ -14,8 +14,6 @@ import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
 import useDebounce from '@hooks/useDebounce';
 
-
-
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
   const { appendCardAuthors } = useCardAuthors();
@@ -48,7 +46,7 @@ const HomeDesktop: React.FC = () => {
   }, [missingAuthors, appendCardAuthors, data?.users]);
 
   const handleScroll = useDebounce(() => {
-    if (currentPage <= 3 && data.pagination.total_count !== products.length && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if (currentPage <= 2 && data.pagination.total_count !== products.length && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       handleLoadMore();
     }
   }, 200);
@@ -65,7 +63,7 @@ const HomeDesktop: React.FC = () => {
       <PostControls pagination={data?.pagination} />
       <PostList dataPostList={products} />
       {data?.pagination.total_count !== products.length &&
-        (currentPage > 3 && !isLoading && products.length > 0 ? (
+        (currentPage > 2 && !isLoading && products.length > 0 ? (
           <Button
             className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
             variant={'link'}

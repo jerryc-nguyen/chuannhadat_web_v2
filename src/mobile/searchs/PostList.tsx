@@ -59,7 +59,7 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
 
   const handleScroll = useDebounce(() => {
     if (
-      currentPage <= 3 &&
+      currentPage <= 2 &&
       data?.pagination.total_count !== products.length &&
       window.innerHeight + window.scrollY >= document.body.offsetHeight
     ) {
@@ -89,7 +89,7 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
       })}
 
       {data?.pagination.total_count !== products.length &&
-        (currentPage > 3 && !isLoading && products.length > 0 ? (
+        (currentPage > 2 && !isLoading && products.length > 0 ? (
           <Button
             className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
             variant={'link'}
