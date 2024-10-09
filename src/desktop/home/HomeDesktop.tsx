@@ -1,9 +1,9 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import PostList from '@desktop/home/components/PostList';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useQuery} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { cardAuthors } from '@api/searchApi';
 import { useHydrateAtoms } from 'jotai/utils';
 import { loadedCardAuthorsAtom } from '@desktop/home/states';
@@ -12,8 +12,11 @@ import useCardAuthors from '@desktop/home/hooks/useCardAuthors';
 import { Button } from '@components/ui/button';
 import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
+import useDebounce from '@hooks/useDebounce';
 
-export default function HomeDesktop() {
+
+
+const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
   const { appendCardAuthors } = useCardAuthors();
   const { buildFilterParams } = useFilterState();
@@ -22,7 +25,7 @@ export default function HomeDesktop() {
   filterParams.with_title = true;
   filterParams.with_users = true;
 
-  const { products, isLoading, handleLoadMore, data } = usePaginatedData(filterParams); 
+  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams); 
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);
 
@@ -42,7 +45,18 @@ export default function HomeDesktop() {
         appendCardAuthors(loadingAuthors);
       }, 200);
     }
-  }, [missingAuthors]);
+  }, [missingAuthors, appendCardAuthors, data?.users]);
+
+  const handleScroll = useDebounce(() => {
+    if (currentPage <= 3 && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      handleLoadMore();
+    }
+  }, 200);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentPage, handleScroll]);
 
   return (
     <section className="my-10">
@@ -50,7 +64,7 @@ export default function HomeDesktop() {
       <p>{data?.title}</p>
       <PostControls pagination={data?.pagination} />
       <PostList dataPostList={products} />
-      {!isLoading && products.length > 0 ? (
+      {currentPage > 3 && !isLoading && products.length > 0 ? (
         <Button
           className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
           variant={'link'}
@@ -65,4 +79,6 @@ export default function HomeDesktop() {
       )}
     </section>
   );
-}
+};
+
+export default HomeDesktop;

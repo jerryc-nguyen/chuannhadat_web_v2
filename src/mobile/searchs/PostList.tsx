@@ -14,6 +14,7 @@ import React from 'react';
 import { useRefCallback } from '@hooks/useRefCallback';
 import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
+import useDebounce from '@hooks/useDebounce';
 
 
 type PostListProps = {
@@ -37,7 +38,7 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
   });
 
 
-  const { products, isLoading, handleLoadMore, data } = usePaginatedData(filterParams); 
+  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams); 
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -58,6 +59,17 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
     });
   };
 
+  const handleScroll = useDebounce(() => {
+    if (currentPage <= 3 && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      handleLoadMore();
+    }
+  }, 200);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [currentPage, handleScroll]);
+
   return (
     <div className="relative mx-auto w-full">
       <div className="flex items-center justify-between">
@@ -74,7 +86,7 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
         return <ProductCard key={product?.id} product={product} />;
       })}
 
-      {!isLoading && products.length > 0 ? (
+      {currentPage > 3 && !isLoading && products.length > 0 ? (
         <Button
           className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
           variant={'link'}
