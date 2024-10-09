@@ -5,6 +5,7 @@ const nextConfig = {
     additionalData: `@import "src/styles/variables/_variables.scss"; @import "src/styles/variables/_mixin.scss"; `,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

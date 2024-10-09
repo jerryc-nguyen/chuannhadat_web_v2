@@ -1,3 +1,4 @@
+import React from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
@@ -6,7 +7,7 @@ import useModals from '@mobile/modals/hooks';
 import { useRouter } from 'next/navigation';
 import PostDetailMobile from './PostDetailMobile ';
 import PhoneNumber from '@mobile/post-detail/components/PhoneNumber';
-import React from 'react';
+import Image from 'next/image';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -46,10 +47,20 @@ export default function ProductCard({ product }: { product: IProduct }) {
       imageUrl: product?.featured_image_url,
     });
   }, [product?.featured_image_url]);
+
   return (
     <div className="my-4 overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
       <AspectRatio.Root ratio={16 / 9}>
-        <img className="Image" src={genImageSrc} alt={product?.name} />
+        <Image
+          src={genImageSrc}
+          alt={product?.title}
+          fill
+          blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII='
+          loading='lazy'
+          placeholder='blur'
+          className="h-full w-full cursor-pointer object-cover"
+        />
+
         <div style={styles.imagesCountWrapper}>
           <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
             <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
