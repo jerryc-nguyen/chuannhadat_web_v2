@@ -9,7 +9,6 @@ export default function SortOptions({
 }) {
   const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
   const value = getLocalFieldValue(FilterFieldName.Sort);
-  console.log('🚀 ~ value:', value);
 
   return (
     <>
