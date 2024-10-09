@@ -62,6 +62,7 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
             })}
             alt="Image post"
             fill
+            loading='lazy'
             className="h-full w-full cursor-pointer object-cover transition-all hover:scale-125"
           />
           <div style={styles.imagesCountWrapper}>
