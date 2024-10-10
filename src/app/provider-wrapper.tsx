@@ -1,3 +1,4 @@
+'use server';
 import React from 'react';
 import { Provider as JotaiProvider } from 'jotai';
 import { cookies } from 'next/headers';
@@ -5,28 +6,41 @@ import { API_TOKEN } from '@common/auth';
 import { Toaster } from '@components/ui/sonner';
 import { ToastContainer } from 'react-toastify';
 import { QueryProvider } from '@components/providers';
-import SSROptionsProvider from '@components/providers/SSROptionsProvider';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import SessionTimeOutPopup from '@components/timeout-popup/SessionTimeOutPopup';
+import ListModal from '@components/ListModal';
+import { timeOutDuration } from '@common/constants';
 
 type ProviderWrapperProps = {
   children: React.ReactNode;
 };
-const selectedCookies = (): Record<string, string | undefined | null> => {
-  const results: Record<string, string | undefined | null> = {};
-  const cookieStore = cookies();
-  results[API_TOKEN] = cookieStore.get(API_TOKEN)?.value;
-  return results;
-};
-const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
-  const cookies = selectedCookies();
-  const { isMobile } = useGetUserAgentInfo();
 
+const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
+  const isLogged = cookies().has(API_TOKEN);
+  const handleRemoveToken = () => {
+    'use server';
+    cookies().delete(API_TOKEN);
+  };
+  const handleSetToken = (token: string) => {
+    'use server';
+    cookies().set({
+      name: API_TOKEN,
+      value: token,
+      httpOnly: true,
+      maxAge: timeOutDuration / 1000, // in seconds
+      secure: true,
+      sameSite: 'lax',
+    });
+  };
   return (
     <QueryProvider>
       <JotaiProvider>
-        <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>
-          {children}
-        </SSROptionsProvider>
+        {children}
+        <ListModal />
+        <SessionTimeOutPopup
+          handleSetToken={handleSetToken}
+          isLogged={isLogged}
+          handleRemoveToken={handleRemoveToken}
+        />
       </JotaiProvider>
       <Toaster richColors />
       <ToastContainer

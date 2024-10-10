@@ -41,9 +41,11 @@ export default function MainNavRight({
     if (!isLogged) {
       signOut();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
   React.useEffect(() => {
     loadMore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
   const router = useRouter();
   const { openModal, closeModal } = useModals();
@@ -89,7 +91,9 @@ export default function MainNavRight({
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
+          {currentUser?.full_name && (
+            <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>

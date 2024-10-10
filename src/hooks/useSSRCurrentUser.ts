@@ -1,16 +1,14 @@
 'use client';
 
 import { services } from '@api/services';
-import { useSSROptionsContext } from '@components/providers/SSROptionsProvider';
+import { getToken } from '@common/cookies';
 import { currentUserAtom } from '@mobile/auth/states';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { useHydrateAtoms } from 'jotai/utils';
 
 export default function useSSRCurrentUser() {
-  const { selectedCookies } = useSSROptionsContext();
-
   const authHeaders = {
-    Authorization: selectedCookies['token'],
+    Authorization: getToken(),
   };
   const { data } = useSuspenseQuery(
     queryOptions({

@@ -156,7 +156,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, handleSetTokenServer }) 
             <span className="hidden sm:block">Facebook</span>
           </div>
           <div className="flex h-full flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border border-primary_color/30 py-3 shadow-lg">
-            <BsQrCode className="h-6 w-6 text-primary_color sm:h-5 sm:w-5" />
+            <BsQrCode className="h-6 w-6 text-primary_color sm:h-4 sm:w-4" />
             <span className="hidden sm:block"> QR</span>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import { useAtom } from 'jotai';
-
 import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
 import './style.scss';
 import { Drawer } from 'vaul';
@@ -15,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from '@components/ui/dialog';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -31,7 +30,7 @@ function DesktopModal({
   return (
     <Dialog open={modal != undefined} onOpenChange={onOpenChange}>
       <DialogTrigger asChild></DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{modal.title}</DialogTitle>
           <DialogDescription>{modal.titleDescription}</DialogDescription>
@@ -117,7 +116,7 @@ const buildContentStyle = (modal?: Modal) => {
     contentHeight = viewportSizes[1] * maxHeightPercent - HEADER_HEIGHT - footerHeight;
   }
 
-  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? "hidden" : "scroll" };
+  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? 'hidden' : 'scroll' };
 };
 
 const buildHeaderClass = (modal?: Modal) => {

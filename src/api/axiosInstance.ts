@@ -1,4 +1,4 @@
-import { AuthUtils } from '@common/auth';
+import { getToken } from '@common/cookies';
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { set, get } from 'lodash-es';
 
@@ -20,7 +20,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (request: InternalAxiosRequestConfig<A>) => {
-    const token = AuthUtils.getAccessToken();
+    const token = getToken();
+    console.log('token', token);
     if (!token) {
       return request;
     }

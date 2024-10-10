@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { removeCookie, setCookie } from '@common/cookies';
+import { removeCookie, setToken } from '@common/cookies';
 import { currentUserAtom } from '@mobile/auth/states';
 import { useAtom } from 'jotai';
 import { AuthUtils, API_TOKEN } from '@common/auth';
@@ -27,7 +27,7 @@ export default function useAuth() {
 
   const handleLogin = (user: ILoginResponse) => {
     updateCurrentUser(user);
-    setCookie(API_TOKEN, user.api_token);
+    setToken(user.api_token);
   };
 
   const updateCurrentUser = (user: ILoginResponse) => {
