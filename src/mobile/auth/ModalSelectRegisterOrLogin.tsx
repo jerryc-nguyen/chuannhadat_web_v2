@@ -17,11 +17,9 @@ const authOptions = [
 ];
 type ModalSelectRegisterOrLoginProps = {
   onClose: () => void;
-  handleSetTokenServer: (token: string) => void;
 };
 export default function ModalSelectRegisterOrLogin({
   onClose,
-  handleSetTokenServer,
 }: ModalSelectRegisterOrLoginProps) {
   const [activeTab, setActiveTab] = useState('login');
   const handleShowModalLoginAndRegister = (value: string) => {
@@ -48,12 +46,12 @@ export default function ModalSelectRegisterOrLogin({
       </TabsList>
       <TabsContent value="login">
         <div className="mt-8">
-          <LoginForm handleSetTokenServer={handleSetTokenServer} onClose={onClose} />
+          <LoginForm  onClose={onClose} />
         </div>
       </TabsContent>
       <TabsContent value="register">
         <div className="mt-8">
-          <RegisterForm handleSetTokenServer={handleSetTokenServer} onClose={onClose} />
+          <RegisterForm  onClose={onClose} />
         </div>
       </TabsContent>
     </Tabs>

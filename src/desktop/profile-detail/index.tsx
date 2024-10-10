@@ -44,7 +44,6 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       }),
   });
   const toggleVisibility = () => {
-    console.log('fffffffff', window.scrollY);
     if (window.scrollY > 420) {
       setIsVisible(true);
     } else {

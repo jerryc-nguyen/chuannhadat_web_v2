@@ -51,4 +51,4 @@ export const QUERY_KEY = {
   BALANCE: ['balance'],
 };
 
-export const timeOutDuration = 15 * 3600 * 1000; // 3 months
+export const timeOutDuration = 15 * 3600 * 1000; // 15 days

@@ -13,41 +13,34 @@ import React from 'react';
 import { isShowSessionTimout } from './session-timeout-atoms';
 import { Separator } from '@components/ui/separator';
 import useAuth from '@mobile/auth/hooks/useAuth';
-import { getToken } from '@common/cookies';
+import { getTokenClient } from '@common/cookies';
 import { AuthUtils } from '@common/auth';
 import { useIdleTimer } from 'react-idle-timer';
 import { useRouter } from 'next/navigation';
 import { timeOutDuration } from '@common/constants';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
+import { removeTokenServer } from '@app/action';
 
 type SessionTimeOutPopupProps = {
   isLogged: boolean;
-  handleRemoveToken: () => void;
-  handleSetToken: (token: string) => void;
 };
-const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({
-  isLogged,
-  handleRemoveToken,
-  handleSetToken,
-}) => {
+const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) => {
   const [showSessionTimeout, setShowSessionTimeout] = useAtom(isShowSessionTimout);
   const { openModal, closeModal } = useModals();
   const router = useRouter();
-  const tokenCookie = getToken();
+  const tokenCookie = getTokenClient();
   const currentUser = AuthUtils.getCurrentUser();
   const { signOut } = useAuth();
 
   const handleCloseTimoutPopup = () => {
     setShowSessionTimeout(false);
-    handleRemoveToken();
+    removeTokenServer();
     router.refresh();
     broadCastMessage();
     openModal({
       name: 'loginAndRegister',
-      content: (
-        <ModalSelectRegisterOrLogin handleSetTokenServer={handleSetToken} onClose={closeModal} />
-      ),
+      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       showAsDialog: true,
@@ -72,9 +65,7 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({
       setShowSessionTimeout(false);
       openModal({
         name: 'loginAndRegister',
-        content: (
-          <ModalSelectRegisterOrLogin handleSetTokenServer={handleSetToken} onClose={closeModal} />
-        ),
+        content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
         title: 'Đăng nhập / Đăng ký',
         maxHeightPercent: 0.9,
         showAsDialog: true,

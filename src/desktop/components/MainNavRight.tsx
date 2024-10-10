@@ -26,16 +26,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Skeleton } from '@components/ui/skeleton';
 import { cn } from '@common/utils';
+import { removeTokenServer } from '@app/action';
 type MainNavRightProps = {
   isLogged: boolean;
-  handleRemoveToken: () => void;
-  handleSetToken: (token: string) => void;
 };
-export default function MainNavRight({
-  isLogged,
-  handleRemoveToken,
-  handleSetToken,
-}: MainNavRightProps) {
+export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { signOut, currentUser } = useAuth();
   React.useEffect(() => {
     if (!isLogged) {
@@ -52,9 +47,7 @@ export default function MainNavRight({
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
-      content: (
-        <ModalSelectRegisterOrLogin handleSetTokenServer={handleSetToken} onClose={closeModal} />
-      ),
+      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       showAsDialog: true,
@@ -70,7 +63,7 @@ export default function MainNavRight({
   };
   const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
   const handleLogOut = () => {
-    handleRemoveToken();
+    removeTokenServer();
     router.refresh();
   };
 

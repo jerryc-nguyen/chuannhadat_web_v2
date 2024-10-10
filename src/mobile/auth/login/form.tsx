@@ -22,12 +22,12 @@ import useAuth from '../hooks/useAuth';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
+import { setTokenServer } from '@app/action';
 
 type LoginFormProps = {
   onClose: () => void;
-  handleSetTokenServer: (token: string) => void;
 };
-const LoginForm: React.FC<LoginFormProps> = ({ onClose, handleSetTokenServer }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
   const { handleLogin } = useAuth();
   const { loadMore } = usePaginatedNotifications();
 
@@ -37,7 +37,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, handleSetTokenServer }) 
       if (response.status) {
         const userData = response.data;
         handleLogin(userData);
-        handleSetTokenServer(userData.api_token as string);
+        const handleSetToken = setTokenServer.bind(null, userData.api_token);
+        handleSetToken();
         loadMore();
         onClose();
         toast.success(
@@ -48,8 +49,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, handleSetTokenServer }) 
       }
       reset();
     },
-    onError: () => {
+    onError: (error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
+      console.debug(error);
       reset();
     },
   });

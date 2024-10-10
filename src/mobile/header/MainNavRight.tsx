@@ -27,22 +27,18 @@ import { Skeleton } from '@components/ui/skeleton';
 import Link from 'next/link';
 import { LucideBell, LucideHeart } from 'lucide-react';
 import { cn } from '@common/utils';
+import { removeTokenServer } from '@app/action';
 type MainNavRightProps = {
   isLogged: boolean;
-  handleRemoveToken: () => void;
-  handleSetToken: (token: string) => void;
 };
-export default function MainNavRight({
-  isLogged,
-  handleRemoveToken,
-  handleSetToken,
-}: MainNavRightProps) {
+export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { signOut, currentUser } = useAuth();
   const router = useRouter();
   React.useEffect(() => {
     if (!isLogged) {
       signOut();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
   const { openModal, closeModal } = useModals();
   const { openPanel } = useSidePanels();
@@ -50,9 +46,7 @@ export default function MainNavRight({
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
-      content: (
-        <ModalSelectRegisterOrLogin handleSetTokenServer={handleSetToken} onClose={closeModal} />
-      ),
+      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       btsContentWrapClass: 'mt-2 bg-white p-4',
@@ -91,7 +85,7 @@ export default function MainNavRight({
     return;
   };
   const handleLogOut = () => {
-    handleRemoveToken();
+    removeTokenServer();
     router.refresh();
   };
   const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
