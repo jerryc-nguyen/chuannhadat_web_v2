@@ -50,3 +50,5 @@ export const QUERY_KEY = {
   DETAIL_PRODUCT: ['detail_product'],
   BALANCE: ['balance'],
 };
+
+export const timeOutDuration = 15 * 3600 * 1000; // 15 days

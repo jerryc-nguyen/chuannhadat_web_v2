@@ -22,7 +22,7 @@ export default function Register() {
         >
           Đăng ký
         </h2>
-        <RegisterForm onClose={() => { }} handleSetTokenServer={() => { }} />
+        <RegisterForm onClose={() => {}} />
       </div>
     </>
   );

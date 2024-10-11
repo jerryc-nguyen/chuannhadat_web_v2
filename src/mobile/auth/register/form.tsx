@@ -19,11 +19,11 @@ import {
 import { Input } from '@components/ui/input';
 import useAuth from '../hooks/useAuth';
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
+import { setTokenServer } from '@app/action';
 type RegisterFormProps = {
   onClose: () => void;
-  handleSetTokenServer: (token: string) => void;
 };
-export default function RegisterForm({ onClose, handleSetTokenServer }: RegisterFormProps) {
+export default function RegisterForm({ onClose }: RegisterFormProps) {
   const { handleLogin } = useAuth();
   const { loadMore } = usePaginatedNotifications();
   const { mutate: registerMutate, isPending: isRegister } = useMutation({
@@ -33,7 +33,8 @@ export default function RegisterForm({ onClose, handleSetTokenServer }: Register
         const userData = response.data;
         handleLogin(userData);
         loadMore();
-        handleSetTokenServer(userData.api_token as string);
+        const handleSetToken = setTokenServer.bind(null, userData.api_token);
+        handleSetToken();
         toast.success('Đăng ký thàng công');
       } else {
         toast.error(response.message ?? 'Lỗi đăng ký');
@@ -41,8 +42,9 @@ export default function RegisterForm({ onClose, handleSetTokenServer }: Register
       }
       onClose();
     },
-    onError: () => {
+    onError: (error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
+      console.debug(error);
       reset();
     },
   });
