@@ -16,6 +16,7 @@ import { Skeleton } from "./ui/skeleton";
 type Props<T extends string> = {
   selectedValue: T;
   onSelectedValueChange: (arg0: { value: T; label: string } | null) => void;
+  onSelectedValueCallback?: (arg0: { value: T; label: string } | null) => void;
   items: { value: T; label: string }[];
   isLoading?: boolean;
   emptyMessage?: string;
@@ -27,6 +28,7 @@ type Props<T extends string> = {
 export function AutoComplete<T extends string>({
   selectedValue,
   onSelectedValueChange,
+  onSelectedValueCallback,
   items,
   isLoading,
   emptyMessage = "No items.",
@@ -37,8 +39,15 @@ export function AutoComplete<T extends string>({
   const [open, setOpen] = useState(false);
   const [rerenderedTimes, setRerenderedTimes] = useState<number>(1);
 
+  const [options, setOptions] = useState<{ value: T; label: string }[]>(items);
+
+  useEffect(() => {
+    setOptions(items || []);
+    setSearchText("");
+  }, [items])
+
   const onSelectItem = (inputValue: { value: T; label: string }) => {
-    setSearchText(inputValue.label);
+    setSearchText(inputValue.label || "");
     onSelectedValueChange(inputValue);
     setOpen(false);
   };
@@ -56,6 +65,15 @@ export function AutoComplete<T extends string>({
   useEffect(() => {
     setRerenderedTimes(val => val+1)
   }, [searchText])
+
+  useEffect(() => {
+    const selectedOption = options.find((item) => item.value == selectedValue);
+    if ( !selectedOption ) return;
+    setSearchText(selectedOption?.label || "");
+    if ( onSelectedValueCallback ) {
+      onSelectedValueCallback(selectedOption);
+    }
+  }, [selectedValue, options]);
 
   const reset = () => {
     onSelectedValueChange(null);
@@ -117,31 +135,34 @@ export function AutoComplete<T extends string>({
                   </div>
                 </CommandPrimitive.Loading>
               )}
-              {items.length > 0 && !isLoading ? (
-                <CommandGroup>
-                  {items.filter(item => item.label.toLowerCase().includes(searchText.toLowerCase())).map((option, index) => (
-                    <CommandItem
-                      key={index * rerenderedTimes}
-                      value={option.value}
-                      onMouseDown={(e) => e.preventDefault()}
-                      onSelect={() => onSelectItem(option)}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedValue === option.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                      {option.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ) : null}
-              {!isLoading ? (
-                <CommandEmpty>{emptyMessage ?? "No items."}</CommandEmpty>
-              ) : null}
+              {
+                !isLoading ?
+                <>
+                  {
+                    options.length > 0 ?
+                    options.filter(item => (item.label?.toLowerCase() || "").includes((searchText?.toLowerCase() || ""))).map((option, index) => (
+                      <CommandItem
+                        key={index * rerenderedTimes}
+                        // key={index}
+                        value={option.value || ""}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onSelect={() => onSelectItem(option)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            selectedValue === option.value
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        />
+                        {option.label}
+                      </CommandItem>
+                    )): <CommandEmpty>{emptyMessage ?? "No items."}</CommandEmpty>
+                  }
+                </>
+                : null
+              }
             </CommandList>
           </PopoverContent>
         </Command>

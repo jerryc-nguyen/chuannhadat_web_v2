@@ -78,11 +78,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               src={item.url}
             />
             {data?.images.length > 3 && index === 2 && (
-              <Button
-                onClick={() => setIsOpenSlideImage(true)}
-                variant={'outline'}
-                className="relative z-10"
-              >
+              <Button onClick={() => setIsOpenSlideImage(true)} variant={'outline'} className="relative z-10">
                 Xem thêm {data?.images.length - 3} hình
               </Button>
             )}
