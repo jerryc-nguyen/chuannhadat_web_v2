@@ -1,32 +1,26 @@
+'use server';
 import React from 'react';
 import { Provider as JotaiProvider } from 'jotai';
 import { cookies } from 'next/headers';
-import { API_TOKEN } from '@common/auth';
+import { API_TOKEN_SERVER } from '@common/auth';
 import { Toaster } from '@components/ui/sonner';
 import { ToastContainer } from 'react-toastify';
 import { QueryProvider } from '@components/providers';
-import SSROptionsProvider from '@components/providers/SSROptionsProvider';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import SessionTimeOutPopup from '@components/timeout-popup/SessionTimeOutPopup';
+import ListModal from '@components/ListModal';
 
 type ProviderWrapperProps = {
   children: React.ReactNode;
 };
-const selectedCookies = (): Record<string, string | undefined | null> => {
-  const results: Record<string, string | undefined | null> = {};
-  const cookieStore = cookies();
-  results[API_TOKEN] = cookieStore.get(API_TOKEN)?.value;
-  return results;
-};
-const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
-  const cookies = selectedCookies();
-  const { isMobile } = useGetUserAgentInfo();
 
+const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
+  const isLogged = cookies().has(API_TOKEN_SERVER);
   return (
     <QueryProvider>
       <JotaiProvider>
-        <SSROptionsProvider isMobile={isMobile} selectedCookies={cookies}>
-          {children}
-        </SSROptionsProvider>
+        {children}
+        <ListModal />
+        <SessionTimeOutPopup isLogged={isLogged} />
       </JotaiProvider>
       <Toaster richColors />
       <ToastContainer

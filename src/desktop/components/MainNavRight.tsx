@@ -26,33 +26,28 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Skeleton } from '@components/ui/skeleton';
 import { cn } from '@common/utils';
+import { removeTokenServer } from '@app/action';
 type MainNavRightProps = {
   isLogged: boolean;
-  handleRemoveToken: () => void;
-  handleSetToken: (token: string) => void;
 };
-export default function MainNavRight({
-  isLogged,
-  handleRemoveToken,
-  handleSetToken,
-}: MainNavRightProps) {
+export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { signOut, currentUser } = useAuth();
   React.useEffect(() => {
     if (!isLogged) {
       signOut();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
   React.useEffect(() => {
     loadMore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
   const router = useRouter();
   const { openModal, closeModal } = useModals();
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
-      content: (
-        <ModalSelectRegisterOrLogin handleSetTokenServer={handleSetToken} onClose={closeModal} />
-      ),
+      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
       title: 'Đăng nhập / Đăng ký',
       maxHeightPercent: 0.9,
       showAsDialog: true,
@@ -68,7 +63,7 @@ export default function MainNavRight({
   };
   const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
   const handleLogOut = () => {
-    handleRemoveToken();
+    removeTokenServer();
     router.refresh();
   };
 
@@ -89,7 +84,9 @@ export default function MainNavRight({
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
+          {currentUser?.full_name && (
+            <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>

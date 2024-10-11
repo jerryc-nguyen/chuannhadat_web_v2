@@ -23,7 +23,7 @@ export default function Login() {
       >
         Đăng nhập
       </h2>
-      <LoginForm onClose={() => { }} handleSetTokenServer={() => { }} />
+      <LoginForm onClose={() => {}} />
     </div>
   );
 }
