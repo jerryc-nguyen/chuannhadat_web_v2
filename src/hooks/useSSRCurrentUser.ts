@@ -1,14 +1,14 @@
 'use client';
 
 import { services } from '@api/services';
-import { getToken } from '@common/cookies';
+import { getTokenClient } from '@common/cookies';
 import { currentUserAtom } from '@mobile/auth/states';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { useHydrateAtoms } from 'jotai/utils';
 
 export default function useSSRCurrentUser() {
   const authHeaders = {
-    Authorization: getToken(),
+    Authorization: getTokenClient(),
   };
   const { data } = useSuspenseQuery(
     queryOptions({

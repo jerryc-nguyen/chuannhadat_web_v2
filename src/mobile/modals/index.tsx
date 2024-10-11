@@ -27,10 +27,11 @@ function DesktopModal({
   modal: Modal;
   onOpenChange: (open: boolean) => void;
 }) {
+  const dialogClass = modal.allowChildOverflow ? '' : 'overflow-y-auto';
   return (
     <Dialog open={modal != undefined} onOpenChange={onOpenChange}>
       <DialogTrigger asChild></DialogTrigger>
-      <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-[425px]">
+      <DialogContent className={`max-h-[80vh] sm:max-w-[425px] ${dialogClass}`}>
         <DialogHeader>
           <DialogTitle>{modal.title}</DialogTitle>
           <DialogDescription>{modal.titleDescription}</DialogDescription>
