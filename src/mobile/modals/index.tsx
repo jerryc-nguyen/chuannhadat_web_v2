@@ -5,7 +5,7 @@ import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
 import { Modal } from './states/types';
 import { getViewportSize } from '@hooks/useViewportSize';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -45,6 +45,20 @@ function DesktopModal({
 
 export function BtsModals1() {
   const [modal, setModal] = useAtom(btsModalAtom);
+  const [contentStyle, setContentStyle] = useState({})
+
+  useEffect(() => {
+    function handleResize() {
+      setContentStyle(buildContentStyle(modal));
+    }
+
+    // Attach the event listener to the window object
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [])
 
   const onClose = () => {
     if (modal?.onClosed) {
@@ -90,9 +104,7 @@ export function BtsModals1() {
             <div
               data-vaul-no-drag
               className="c-bts__content"
-              style={{
-                ...buildContentStyle(modal),
-              }}
+              style={{ ...buildContentStyle(modal), ...contentStyle }}
             >
               <div className={`${modal?.btsContentWrapClass}`}>{modal?.content}</div>
             </div>
@@ -122,10 +134,10 @@ const buildContentStyle = (modal?: Modal) => {
   let contentHeight = modal.defaultContentHeight;
 
   if (!modal.defaultContentHeight) {
-    contentHeight = viewportSizes[1] * maxHeightPercent - HEADER_HEIGHT - footerHeight;
+    contentHeight = viewportSizes[1] * maxHeightPercent - headerHeight - footerHeight;
   }
 
-  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? 'hidden' : 'scroll' };
+  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? 'hidden' : 'scroll-y' };
 };
 
 const buildHeaderClass = (modal?: Modal) => {
