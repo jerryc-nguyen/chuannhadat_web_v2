@@ -71,7 +71,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
   }, [buildThumbnailUrl, product?.featured_image_url]);
 
   return (
-    <div className="my-4 overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
+    <div className="my-4 overflow-hidden bg-white shadow-lg dark:bg-slate-800">
       <AspectRatio.Root ratio={16 / 9}>
         <Image
           src={genImageSrc}

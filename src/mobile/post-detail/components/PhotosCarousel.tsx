@@ -23,55 +23,57 @@ export default function PhotosCarousel({ product }: { product?: IProductDetail }
   const [openSlideImage, setIsOpenSlideImage] = useState<boolean>(false);
   const [indexImageActive, setIndexImageActive] = useState<number>(0);
 
-  return <div className="flex flex-col gap-4 bg-white p-4">
-    {product?.images && product?.images.length > 0 ? (
-      <ImageCarousel images={product.images} onClick={onClickImage} />
-    ) : (
-      <AspectRatio ratio={16 / 9}>
-        <img
-          className="Image"
-          src={buildThumbnailUrl({
-            imageUrl:
-              'https://cdn.dribbble.com/userupload/8392915/file/original-497a5e74203f601d33f76872e7ebaaa6.jpg',
-          })}
-          alt={(product as any)?.name}
-        />
-      </AspectRatio>
-    )}
+  return (
+    <div className="flex flex-col gap-4 bg-white">
+      {product?.images && product?.images.length > 0 ? (
+        <ImageCarousel images={product.images} onClick={onClickImage} />
+      ) : (
+        <AspectRatio ratio={16 / 9}>
+          <img
+            className="Image"
+            src={buildThumbnailUrl({
+              imageUrl:
+                'https://cdn.dribbble.com/userupload/8392915/file/original-497a5e74203f601d33f76872e7ebaaa6.jpg',
+            })}
+            alt={(product as any)?.name}
+          />
+        </AspectRatio>
+      )}
 
-    {openSlideImage && (
-      <Lightbox
-        open={openSlideImage}
-        controller={{ closeOnPullDown: true }}
-        index={indexImageActive}
-        close={() => setIsOpenSlideImage(false)}
-        styles={{
-          root: { pointerEvents: 'auto' },
-          slide: {
-            maxWidth: '100%',
-            maxHeight: '100%',
-            overflow: 'hidden',
-          },
-        }}
-        slides={product?.images.map((item) => ({
-          src: item.url,
-        }))}
-        thumbnails={{
-          vignette: false,
-          padding: 0,
-          border: 0,
-          height: 50, // Reduced height for better fit on small screens
-          width: 70, // Reduced width for better fit on small screens
-          imageFit: 'cover',
-          hidden: product?.images && product?.images.length <= 1,
-        }}
-        counter={{ container: { style: { top: '0' } } }}
-        render={{
-          iconPrev: () => <GoArrowLeft className="text-2xl opacity-50 hover:opacity-100" />,
-          iconNext: () => <GoArrowRight className="text-2xl opacity-50 hover:opacity-100" />,
-        }}
-        plugins={[Thumbnails, Zoom, Counter]}
-      />
-    )}
-  </div>
+      {openSlideImage && (
+        <Lightbox
+          open={openSlideImage}
+          controller={{ closeOnPullDown: true }}
+          index={indexImageActive}
+          close={() => setIsOpenSlideImage(false)}
+          styles={{
+            root: { pointerEvents: 'auto' },
+            slide: {
+              maxWidth: '100%',
+              maxHeight: '100%',
+              overflow: 'hidden',
+            },
+          }}
+          slides={product?.images.map((item) => ({
+            src: item.url,
+          }))}
+          thumbnails={{
+            vignette: false,
+            padding: 0,
+            border: 0,
+            height: 50, // Reduced height for better fit on small screens
+            width: 70, // Reduced width for better fit on small screens
+            imageFit: 'cover',
+            hidden: product?.images && product?.images.length <= 1,
+          }}
+          counter={{ container: { style: { top: '0' } } }}
+          render={{
+            iconPrev: () => <GoArrowLeft className="text-2xl opacity-50 hover:opacity-100" />,
+            iconNext: () => <GoArrowRight className="text-2xl opacity-50 hover:opacity-100" />,
+          }}
+          plugins={[Thumbnails, Zoom, Counter]}
+        />
+      )}
+    </div>
+  )
 }

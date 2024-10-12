@@ -9,10 +9,12 @@ export default function HomeLayout({
   children: React.ReactNode;
 }>) {
   const { isMobile } = useGetUserAgentInfo();
+  const mobileClass = isMobile ? '' : 'px-5 md:px-10';
+
   return (
     <>
       {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
-      <main className="z-5 relative h-fit px-5 md:px-10">{children}</main>
+      <main className={`z-5 relative h-fit ${mobileClass}`}>{children}</main>
     </>
   );
 }

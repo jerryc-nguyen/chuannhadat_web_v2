@@ -14,12 +14,7 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
           <span className="text-md text-slate-600">{data?.full_address}</span>
         </div>
       )}
-      {data?.formatted_publish_at && (
-        <div className="flex gap-1">
-          <span className="min-w-[8rem] text-sm font-semibold text-slate-500">Ngày đăng</span>
-          <span className="text-md text-slate-600">{data?.formatted_publish_at}</span>
-        </div>
-      )}
+
       {data?.formatted_price_per_m2 && (
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold text-slate-500">Giá / m2</span>
@@ -52,6 +47,13 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
           <span className="text-md text-slate-600">
             {data?.phap_ly ? 'Sổ hồng/sổ đỏ' : 'Chưa có sổ'}
           </span>
+        </div>
+      )}
+
+      {data?.formatted_publish_at && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold text-slate-500">Ngày đăng</span>
+          <span className="text-md text-slate-600">{data?.formatted_publish_at}</span>
         </div>
       )}
     </div>
