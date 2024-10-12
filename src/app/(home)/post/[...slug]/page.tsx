@@ -3,7 +3,7 @@ import { services } from '@api/services';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import PostDetailDesktop from '@desktop/post-detail';
 import { Metadata } from 'next';
-import PostDetailMobile from '@mobile/searchs/PostDetailMobile ';
+import PostDetailMobile from '@mobile/post-detail/PostDetailMobile ';
 
 export const metadata: Metadata = {
   title: 'Chuẩn nhà đất',
