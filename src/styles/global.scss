@@ -68,6 +68,10 @@
   }
 }
 
+.text-gray {
+  color: hsl(var(--muted-foreground));
+}
+
 html.dark {
   .sidebar-content {
     &::-webkit-scrollbar {

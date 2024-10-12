@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { authorPhoneAtom } from '../states';
+import { authorAtom } from '../states';
 import { useAtom } from 'jotai';
 
 const PhoneNumber: React.FC = () => {
-    const [authorPhone] = useAtom(authorPhoneAtom);
-
-    const [isVisible, setIsVisible] = useState(false);
+  const [author] = useAtom(authorAtom);
+  const authorPhone = author?.phone || ''
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleClick = () => {
     setIsVisible(true);
-    navigator.clipboard.writeText(authorPhone);
-    window.location.href = `tel:${authorPhone}`;
+    navigator.clipboard.writeText(authorPhone || '');
+    window.location.href = `tel:${authorPhone || ''}`;
   };
 
   return (

@@ -59,6 +59,10 @@ export function BtsModals1() {
     }
   };
 
+  const isStringTitle = useMemo(() => {
+    return typeof modal?.title === "string";
+  }, [modal]);
+
   const headerClass = useMemo(() => {
     return buildHeaderClass(modal);
   }, [modal]);
@@ -77,7 +81,8 @@ export function BtsModals1() {
           <Drawer.Overlay className="c-bts__overlay1 fixed inset-0 bg-black/40" />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
-              <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
+              {isStringTitle && <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>}
+              {!isStringTitle && (<div className='w-full'>{modal?.title}</div>)}
               <button onClick={onClose} className="c-bts__close">
                 <IoCloseOutline size={30} />
               </button>
@@ -108,9 +113,12 @@ const buildContentStyle = (modal?: Modal) => {
     return {};
   }
 
+  const headerHeight = modal?.headerHeight ?? HEADER_HEIGHT;
+  let footerHeight = modal?.footerHeight ?? FOOTER_HEIGHT;
+
   const viewportSizes = getViewportSize();
   const maxHeightPercent = modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
-  const footerHeight = modal?.footer ? FOOTER_HEIGHT : 0;
+  footerHeight = modal?.footer ? footerHeight : 0;
   let contentHeight = modal.defaultContentHeight;
 
   if (!modal.defaultContentHeight) {
