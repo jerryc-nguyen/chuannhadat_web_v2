@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { openModalDetail } from '@desktop/post-detail/states/modalPostDetailAtoms';
-import { removeBrowserHistoryModalsState, updateCurrentUrlSearchParams } from './utils';
+import { removeBrowserHistoryModalsState } from './utils';
 import useModals from '@mobile/modals/hooks';
 import { historyPushedPathAtom } from './states';
 
@@ -33,10 +33,12 @@ export const useBrowserPushState = () => {
 }
 
 export default function useBrowserPopstate() {
+  const [, setCurrentPath] = useAtom(historyPushedPathAtom)
   const { closeModals: closeBtsModals } = useModals();
   const openProductDetailModal = useSetAtom(openModalDetail);
 
   const hideModalOnBack = (event: A) => {
+    setCurrentPath(undefined);
     removeBrowserHistoryModalsState();
     closeBtsModals();
     openProductDetailModal(false);
@@ -46,5 +48,6 @@ export default function useBrowserPopstate() {
     window.addEventListener('popstate', hideModalOnBack);
 
     return () => window.removeEventListener("popstate", hideModalOnBack);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
