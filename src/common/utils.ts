@@ -29,7 +29,7 @@ export function stringToSlug(str?: string) {
   return str;
 }
 
-export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => 
+export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) =>
   v !== '' && v !== null && v !== undefined
 ));
 
@@ -134,18 +134,4 @@ export const updateUrlSearchParams = (url: string, params: Record<string, A>) =>
   }
   urlObj.search = queryString.stringify(removeEmpty(newParams));
   return urlObj.toString();
-}
-
-export const updateCurrentUrlSearchParams = (params: Record<string, A>) => {
-  const url = window.location.href;
-  return updateUrlSearchParams(url, params);
-}
-
-export const removePopupState = (currentPushedPath?: string) => {
-  if (!!currentPushedPath) {
-    window.history.back();
-  } else if (window.location.href.indexOf('bts') != -1) {
-    const newUrl = updateCurrentUrlSearchParams({ bts: null });
-    window.history.replaceState({ bts: null }, '', newUrl);
-  }
 }

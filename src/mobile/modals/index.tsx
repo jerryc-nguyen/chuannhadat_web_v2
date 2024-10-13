@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog';
-import { removePopupState } from '@common/utils';
+import { removeBrowserHistoryModalsState } from '@components/popstate-handler/utils';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -64,7 +64,7 @@ export function BtsModals1() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    removePopupState(modal?.pushToPath);
+    removeBrowserHistoryModalsState(modal?.pushToPath);
     setModal(undefined);
   };
 
@@ -155,7 +155,7 @@ export function BtsModals2() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    removePopupState(modal?.pushToPath);
+    removeBrowserHistoryModalsState(modal?.pushToPath);
     setModal(undefined);
   };
 
@@ -211,7 +211,7 @@ export function BtsModals3() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    removePopupState(modal?.pushToPath);
+    removeBrowserHistoryModalsState(modal?.pushToPath);
     setModal(undefined);
   };
 

@@ -50,7 +50,7 @@ const ProductDetailTitleBts = ({ product }: { product: A }) => {
 }
 export default function ProductCard({ product }: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
-  const { openModal, closeModals } = useModals();
+  const { openModal } = useModals();
 
   const showDetailPostModal = () => {
     openModal({
