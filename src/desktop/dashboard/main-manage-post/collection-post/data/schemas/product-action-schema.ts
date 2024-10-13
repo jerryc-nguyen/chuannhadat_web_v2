@@ -7,3 +7,13 @@ export const upVipProductInputSchema = z.object({
 })
 
 export type UpVipProductInput = z.infer<typeof upVipProductInputSchema>
+
+export type ShowOnFrontEndProductInput = {
+    productId: string;
+    showOnFrontEnd: boolean;
+}
+
+export type SetUpAutoRefreshProductInput = {
+    productId: string;
+    autoRefresh: boolean;
+}

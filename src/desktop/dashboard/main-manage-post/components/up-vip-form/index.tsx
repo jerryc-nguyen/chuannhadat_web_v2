@@ -6,7 +6,7 @@ import { Radio } from "@components/ui/Radio";
 import { maskNumber } from "@common/priceHelpers";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UpVipProductInput, upVipProductInputSchema } from "../../collection-post/data/schemas/up-vip-schema";
+import { UpVipProductInput, upVipProductInputSchema } from "../../collection-post/data/schemas/product-action-schema";
 import { Button } from "@components/ui/button";
 import { LoadingSpinner } from "@components/icons/loading-spinner";
 

@@ -6,14 +6,17 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { Product } from "../data/schemas/product-schema";
 import Image from "next/image";
 import { Switch } from "@components/ui/switch";
-import { ChevronsUp, ImageIcon, Maximize2, RefreshCw, SquarePen, Trash2 } from "lucide-react";
+import { ChevronsUp, ImageIcon, Maximize2, RefreshCw, SquarePen, Trash2, TriangleAlert } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import Link from "next/link";
 import hideOnFrontendReasonConstant from "../constant/hide_on_frontend_reason";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import UpVipProductForm from "../../components/up-vip-form";
 import useModals from "@mobile/modals/hooks";
+import ProductApiService from "../apis/product-api";
+import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput } from "../data/schemas/product-action-schema";
+import { toast } from 'react-toastify';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -51,7 +54,7 @@ export const columns: ColumnDef<Product>[] = [
       const imageUrl = images?.[0]?.url || "/default-image.jpg";
       
       const images_count = row.original.images_count;
-      const visibility = row.original.visibility;
+      const visible = row.original.visible;
 
       const title = row.original.title;
       const formatted_price = row.original.formatted_price;
@@ -64,6 +67,7 @@ export const columns: ColumnDef<Product>[] = [
 
       const productId = row.original.id;
       const adsType = row.original.ads_type;
+      const auto_refresh_product = row.original.auto_refresh_product;
 
       return (
         <div className="container">
@@ -96,13 +100,7 @@ export const columns: ColumnDef<Product>[] = [
                 }}
               
               />
-              <div className="flex gap-2 items-center justify-center">
-                <span>Ẩn tin</span>
-                <Switch
-                  checked={visibility === "visible"}
-                />
-                <span>Hiện tin</span>
-              </div>
+              <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
               <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
                 <ImageIcon  size={16}/>
                 <span>{images_count}</span>
@@ -110,9 +108,19 @@ export const columns: ColumnDef<Product>[] = [
               </div>
             </div>
             <div className="flex flex-col flex-1 h-full">
-              <span className="mb-3 text-16 font-semibold">
-                {title}
-              </span>
+              <div className="mb-2">
+                <span className="mb-3 text-16 font-semibold">
+                  {title}
+                  <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
+                    <span className="mx-2"> · </span> 
+                    <span className="space-x-1">
+                      <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+                      <span>{" "}Tin đang bị ẩn!{" "}</span>
+                      <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+                    </span>
+                  </span>
+                </span>
+              </div>
               <div className="mb-2 flex gap-5 flex-wrap">
                 <span className="text-sm font-medium">
                   {formatted_price || "--"}
@@ -150,26 +158,15 @@ export const columns: ColumnDef<Product>[] = [
               </div>
 
               <div className="flex gap-16">
-
                 <ButtonUpVip productId={productId} adsType={adsType}/>
-                <div className="bg-background border flex items-center px-3 space-x-2 text-sm rounded-md w-max">
-                  <Checkbox id="terms"
-                    checked
-                  />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Làm mới tin tự động
-                  </label>
-                </div>
+
+                <CheckboxAutoRefresh productId={productId} auto_refresh_product={auto_refresh_product}/>
+                
               </div>
             </div>
             <div className="flex flex-col space-y-1 col-span-2 h-full">
               <div className="flex flex-col">
-                <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1">
-                  <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
-                </Button>
+                <ButtonRefresh productId={productId} />
 
                 <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-2">
                   <SquarePen size={16}/> <span className="text-sm">Cập nhật tin</span> 
@@ -200,6 +197,7 @@ export const columns: ColumnDef<Product>[] = [
       const formatted_created_at = row.original.formatted_created_at;
       const formatted_published_at = row.original.formatted_published_at;
       const ads_type = row.original.ads_type;
+      const expires_after_days = row.original.expires_after_days;
 
       return (
         <div className="flex flex-col gap-1 min-h-[180px] w-max">
@@ -245,7 +243,12 @@ export const columns: ColumnDef<Product>[] = [
                 ads_type === "vip_2" ? "TIN VIP 2" :
                 ads_type === "vip_3" ? "TIN VIP 3" : "Tin thường"
               }
+              {
+                (expires_after_days && ads_type !== "normal") ? 
+                  <span className="text-muted-foreground">{` (hết hạn sau ${expires_after_days})`}</span> : <></>
+              }
             </span>
+            
           </div>
         </div>
       );
@@ -262,21 +265,132 @@ const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: strin
     openModal({
       name: 'ModalUpVipProduct',
       title: 'Cấu hình tin đăng',
-      content: <UpVipProductForm productId={productId} closeModal={closeModal}/>,
+      content: (
+        <UpVipProductForm productId={productId} closeModal={closeModal}/>
+      ),
       footer: <></>,
       showAsDialog: true,
-      maxHeightPercent: 0.8,
-      isHiddenScroll: true,
-    })
+    });
   }
 
   return (
-    <Button variant="outline" size="sm" className="h-8" onClick={showModalUpVipProduct} disabled={adsType !== "normal"}>
+    <Button variant="outline" size="sm" className="h-8" onClick={() => {
+      showModalUpVipProduct();
+    }} disabled={adsType !== "normal"}>
       <ChevronsUp color="#28a745" size={16}/>
       <span className="text-sm text-[#28a745]">
         UP VIP
       </span>
       <ChevronsUp color="#28a745" size={16}/>
+    </Button>
+  )
+}
+
+const SwitchButtonToggleShowOnFrontEnd = ({ productId, visible }: { productId: string, visible: boolean } ) => {
+  const [checked, setChecked] = useState<boolean>(visible);
+
+  const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
+    try {
+      const res: A = await ProductApiService.ShowOnFrontend(data);
+      console.log("handleShowOnFrontend success response", res);
+      if ( res.status === true && res.message ) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+        setChecked(!data.showOnFrontEnd);
+      }
+    } catch (err) {
+      setChecked(!data.showOnFrontEnd);
+      console.error("handleShowOnFrontend error", err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
+  };
+
+  return (
+    <div className="flex gap-2 items-center justify-center">
+      <span>Ẩn tin</span>
+      <Switch
+        checked={checked}
+        onCheckedChange={(checked) => {
+          setChecked(checked);
+          handleShowOnFrontend({
+            productId: productId,
+            showOnFrontEnd: checked
+          });
+        }}
+      />
+      <span>Hiện tin</span>
+    </div>
+  )
+}
+
+const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: string, auto_refresh_product: boolean } ) => {
+  const [checked, setChecked] = useState<boolean>(auto_refresh_product);
+
+  const handleSetUpAutoRefresh = async (data: SetUpAutoRefreshProductInput) => {
+    try {
+      const res: A = await ProductApiService.SetUpAutoRefresh(data);
+      console.log("handleSetUpAutoRefresh success response", res);
+
+      if ( res.status === true && res.message ) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+        setChecked(!data.autoRefresh);
+      }
+    } catch (err) {
+      setChecked(!data.autoRefresh);
+      console.error("handleSetUpAutoRefresh error", err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
+  };
+
+  return (
+    <div className="bg-background border flex items-center px-3 space-x-2 text-sm rounded-md w-max">
+      <Checkbox
+        checked={checked}
+        onCheckedChange={(checkedState) => {
+          if (typeof checkedState === 'boolean') {
+            setChecked(checkedState);
+            handleSetUpAutoRefresh({
+              productId: productId,
+              autoRefresh: checkedState
+            })
+          }
+        }}
+      />
+      <label
+        htmlFor="terms"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Làm mới tin tự động
+      </label>
+    </div>
+  )
+}
+
+const ButtonRefresh = ({ productId }: { productId: string } ) => {
+  const handleRefresh = async () => {
+    try {
+      const res: A = await ProductApiService.Refresh({
+        productId: productId
+      });
+      console.log("handleRefresh success response", res);
+
+      if ( res.status === true && res.message ) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err) {
+      console.error("handleRefresh error", err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
+  };
+
+  return (
+    <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1" onClick={handleRefresh}>
+      <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
     </Button>
   )
 }

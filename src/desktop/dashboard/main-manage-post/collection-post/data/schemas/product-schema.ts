@@ -29,6 +29,9 @@ export const productSchema = z.object({
     formatted_kt: z.string(),
     formatted_created_at: z.string(),
     formatted_published_at: z.string(),
+    expires_after_days: z.string(),
+    visible: z.boolean(),
+    auto_refresh_product: z.boolean(),
 })
 
 export type Product = z.infer<typeof productSchema>
