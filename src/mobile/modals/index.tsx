@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog';
-import { removeBrowserHistoryModalsState } from '@components/popstate-handler/utils';
+import { useBrowserPushState } from '@components/popstate-handler/hooks';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -45,6 +45,7 @@ function DesktopModal({
 }
 
 export function BtsModals1() {
+  const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModalAtom);
   const [contentStyle, setContentStyle] = useState({})
 
@@ -64,7 +65,7 @@ export function BtsModals1() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    removeBrowserHistoryModalsState(modal?.pushToPath);
+    historyBack()
     setModal(undefined);
   };
 
@@ -149,13 +150,14 @@ const buildHeaderClass = (modal?: Modal) => {
 };
 
 export function BtsModals2() {
+  const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModal2Atom);
 
   const onClose = () => {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    removeBrowserHistoryModalsState(modal?.pushToPath);
+    historyBack();
     setModal(undefined);
   };
 
@@ -205,13 +207,14 @@ export function BtsModals2() {
 }
 
 export function BtsModals3() {
+  const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModal3Atom);
 
   const onClose = () => {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    removeBrowserHistoryModalsState(modal?.pushToPath);
+    historyBack();
     setModal(undefined);
   };
 

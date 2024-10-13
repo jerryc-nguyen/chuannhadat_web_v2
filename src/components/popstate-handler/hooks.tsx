@@ -19,12 +19,9 @@ export const useBrowserPushState = () => {
   }
 
   const historyBack = () => {
+    removeBrowserHistoryModalsState(currentPath)
     if (currentPath) {
-      window.history.back();
       clearPushPath();
-    } else if (window.location.href.indexOf('bts') != -1) {
-      const newUrl = updateCurrentUrlSearchParams({ bts: null });
-      window.history.replaceState({ bts: null }, '', newUrl);
     }
   }
 
