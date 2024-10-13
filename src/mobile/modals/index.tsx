@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog';
+import { removePopupState } from '@common/utils';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -52,7 +53,6 @@ export function BtsModals1() {
       setContentStyle(buildContentStyle(modal));
     }
 
-    // Attach the event listener to the window object
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -64,6 +64,7 @@ export function BtsModals1() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
+    removePopupState(modal?.pushToPath);
     setModal(undefined);
   };
 
@@ -154,7 +155,7 @@ export function BtsModals2() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-
+    removePopupState(modal?.pushToPath);
     setModal(undefined);
   };
 
@@ -210,6 +211,7 @@ export function BtsModals3() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
+    removePopupState(modal?.pushToPath);
     setModal(undefined);
   };
 

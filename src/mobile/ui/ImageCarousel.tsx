@@ -37,7 +37,7 @@ const ImageCarousel: React.FC<{ images: Image[]; onClick: (id: number) => void }
         <CarouselContent>
           {images.map((image: Image, index: number) => (
             <CarouselItem
-              onClick={() => onClick(image.id)}
+              onClick={() => onClick(index)}
               key={image.id || index}
               className={`transition-opacity duration-500 ${index === current ? 'opacity-100' : 'opacity-0'}`}
             >

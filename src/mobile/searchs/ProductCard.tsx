@@ -50,9 +50,9 @@ const ProductDetailTitleBts = ({ product }: { product: A }) => {
 }
 export default function ProductCard({ product }: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
+  const { openModal, closeModals } = useModals();
 
-  const { openModal } = useModals();
-  const handleShowDetailHouse = () => {
+  const showDetailPostModal = () => {
     openModal({
       name: product.title,
       title: <ProductDetailTitleBts product={product} />,
@@ -60,7 +60,8 @@ export default function ProductCard({ product }: { product: IProduct }) {
       maxHeightPercent: 0.95,
       footer: <AuthorInfo />,
       headerHeight: 74.59,
-      footerHeight: 67
+      footerHeight: 67,
+      pushToPath: `/post/${product.slug}`
     });
   };
 
@@ -96,7 +97,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       <div className="p-4">
         <h3
           className="mb-2 cursor-pointer font-bold text-slate-600 hover:text-blue-500"
-          onClick={handleShowDetailHouse}
+          onClick={showDetailPostModal}
         >
           {product?.title}
         </h3>
