@@ -27,12 +27,12 @@ export default function ProductDescription({ product }: IProps) {
 
   return (
     <Card className="rounded-none">
-      <CardHeader>
+      <CardHeader className='px-4'>
         <CardTitle>Mô tả chi tiết</CardTitle>
       </CardHeader>
       <CardContent
         ref={contentRef}
-        className={`overflow-hidden ${isExpanded ? 'h-auto' : 'h-[235px]'} transition-all duration-300`}
+        className={`overflow-hidden px-4 ${isExpanded ? 'h-auto' : 'h-[235px]'} transition-all duration-300`}
       >
         <FormatHtml content={product?.description || ''} />
       </CardContent>

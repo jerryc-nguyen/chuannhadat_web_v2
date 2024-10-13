@@ -28,6 +28,7 @@ export interface DefaultModal {
   allowChildOverflow?: boolean;
   headerHeight?: number;
   footerHeight?: number;
+  pushToPath?: string
 }
 
 export type Modal = DefaultModal;

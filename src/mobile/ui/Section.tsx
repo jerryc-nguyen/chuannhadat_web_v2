@@ -7,10 +7,10 @@ type SectionProps = {
 export default function Section(props: SectionProps) {
   return (
     <Card className="rounded-none">
-      <CardHeader>
-        <CardTitle>{props.title}</CardTitle>
+      <CardHeader className='px-4'>
+        <CardTitle style={{ lineHeight: '1.25em' }}>{props.title}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className='px-4'>
         {props.children}
       </CardContent>
     </Card>
