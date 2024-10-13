@@ -1,22 +1,13 @@
-'use server';
 import React from 'react';
 import { LuSearch } from 'react-icons/lu';
 import { Input } from '@components/ui/input';
 import MainNavRight from '@desktop/components/MainNavRight';
 import { cookies } from 'next/headers';
-import { API_TOKEN } from '@common/auth';
+import { API_TOKEN_SERVER } from '@common/auth';
 type HeaderDashboardProps = object;
 
 const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
-  const isLogged = cookies().has(API_TOKEN);
-  const handleRemoveToken = () => {
-    'use server';
-    cookies().delete(API_TOKEN);
-  };
-  const handleSetToken = (token: string) => {
-    'use server';
-    cookies().set(API_TOKEN, token);
-  };
+  const isLogged = cookies().has(API_TOKEN_SERVER);
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <div className="w-full flex-1">
@@ -31,11 +22,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
           </div>
         </form>
       </div>
-      <MainNavRight
-        handleSetToken={handleSetToken}
-        handleRemoveToken={handleRemoveToken}
-        isLogged={isLogged}
-      />
+      <MainNavRight isLogged={isLogged} />
     </header>
   );
 };

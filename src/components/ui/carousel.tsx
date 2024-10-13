@@ -71,19 +71,15 @@ const Carousel = React.forwardRef<
     // Hàm onSelect để kiểm tra và cập nhật khả năng scroll
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) return
-      console.log("Selecting new slide")
       setCanScrollPrev(api.canScrollPrev())
       setCanScrollNext(api.canScrollNext())
-      console.log("canScrollPrev:", api.canScrollPrev(), "canScrollNext:", api.canScrollNext())
     }, [])
 
     const scrollPrev = React.useCallback(() => {
-      console.log("Previous button clicked")
       api?.scrollPrev()
     }, [api])
 
     const scrollNext = React.useCallback(() => {
-      console.log("Next button clicked")
       api?.scrollNext()
     }, [api])
 

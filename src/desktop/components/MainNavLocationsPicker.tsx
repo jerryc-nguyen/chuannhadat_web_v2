@@ -36,6 +36,7 @@ export default function MainNavLocationsPicker() {
       content: <Locations />,
       footer: <ApplyButton closeModal={closeModal} />,
       showAsDialog: true,
+      allowChildOverflow: true
     });
   };
 

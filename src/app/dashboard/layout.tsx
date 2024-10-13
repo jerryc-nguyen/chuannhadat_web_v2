@@ -5,7 +5,7 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import './index.scss';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-import { API_TOKEN } from '@common/auth';
+import { API_TOKEN_SERVER } from '@common/auth';
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ type DashboardLayoutProps = {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { isMobile } = useGetUserAgentInfo();
-  const isLogged = cookies().has(API_TOKEN);
+  const isLogged = cookies().has(API_TOKEN_SERVER);
   if (!isLogged) {
     redirect('/');
   }
