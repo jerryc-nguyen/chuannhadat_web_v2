@@ -65,8 +65,12 @@ export function BtsModals1() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    historyBack()
+
     setModal(undefined);
+
+    if (modal?.supportPushState || modal?.supportPushState == undefined) {
+      historyBack()
+    }
   };
 
   const onOpenChange = (open: boolean) => {
@@ -150,14 +154,12 @@ const buildHeaderClass = (modal?: Modal) => {
 };
 
 export function BtsModals2() {
-  const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModal2Atom);
 
   const onClose = () => {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    historyBack();
     setModal(undefined);
   };
 
@@ -207,14 +209,12 @@ export function BtsModals2() {
 }
 
 export function BtsModals3() {
-  const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModal3Atom);
 
   const onClose = () => {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-    historyBack();
     setModal(undefined);
   };
 

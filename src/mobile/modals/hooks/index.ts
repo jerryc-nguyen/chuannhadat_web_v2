@@ -25,9 +25,12 @@ export default function useModals() {
     }
   }
 
-  const openModal = (newModal: Modal) => {
-    setModal(newModal);
-    syncModalsStateToUrl(newModal);
+  const openModal = (modal: Modal) => {
+    setModal(modal);
+    if (modal?.supportPushState || modal?.supportPushState == undefined) {
+      syncModalsStateToUrl(modal);
+    }
+
   };
 
   const closeModal = () => {
@@ -37,9 +40,8 @@ export default function useModals() {
     setModal(undefined);
   };
 
-  const openModal2 = (newModal: Modal) => {
-    setModal2(newModal);
-    syncModalsStateToUrl(newModal);
+  const openModal2 = (modal: Modal) => {
+    setModal2(modal);
   };
 
   const closeModal2 = () => {
@@ -49,9 +51,8 @@ export default function useModals() {
     setModal2(undefined);
   };
 
-  const openModal3 = (newModal: Modal) => {
-    setModal3(newModal);
-    syncModalsStateToUrl(newModal);
+  const openModal3 = (modal: Modal) => {
+    setModal3(modal);
   };
 
   const closeModal3 = () => {
