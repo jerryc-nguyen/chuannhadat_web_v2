@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UpVipProductInput, upVipProductInputSchema } from "../../data/schemas/product-action-schema";
 import { Button } from "@components/ui/button";
 import { LoadingSpinner } from "@components/icons/loading-spinner";
-import useProductActionSetting from "../../hooks";
+import useProductActionSetting from "../../hooks/product-action-setting";
 import { useBalanceRequest } from "@api/balance";
 
 interface IUpVipProductFormProps {

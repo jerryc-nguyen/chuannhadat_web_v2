@@ -87,6 +87,14 @@ const ProductApiService = {
 
     return response;
   },
+
+  Delete: async (data: {
+    productId: string;
+  }) => {
+    const response = await axiosInstance.delete(`${API_ROUTES.PRODUCTS.DELETE.replace("{product_id}", data.productId)}`);
+
+    return response;
+  },
 };
 
 export default ProductApiService;

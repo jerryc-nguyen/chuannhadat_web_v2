@@ -18,12 +18,13 @@ import ProductApiService from "../apis/product-api";
 import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput } from "../data/schemas/product-action-schema";
 import { toast } from 'react-toastify';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/tooltip";
-import useProductActionSetting from "../hooks";
+import useProductActionSetting from "../hooks/product-action-setting";
 import { useQueryClient } from "@tanstack/react-query";
 import { services } from '@api/services';
 import { isLoadingModal, selectedPostId } from "@desktop/post-detail/states/modalPostDetailAtoms";
 import { useAtom, useAtomValue } from "jotai";
 import Spinner from '@components/ui/spinner';
+import useProductsList from "../hooks/product-list";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -164,9 +165,7 @@ export const columns: ColumnDef<Product>[] = [
 
                 <Separator className="h-[1px]" />
                 
-                <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mt-2">
-                  <Trash2 size={16}/>  <span className="text-sm">Xóa tin</span>
-                </Button>
+                <ButtonDelete productId={productId} />
               </div>
             </div>
           </div>
@@ -399,6 +398,53 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  )
+}
+
+const ButtonDelete = ({ productId }: { productId: string } ) => {
+  const { openModal, closeModal } = useModals();
+  const { handleFilterProduct, productQueryForm} = useProductsList();
+
+  const showConfirmDelete = () => {
+    openModal({
+      name: 'ModalUpVipProduct',
+      title: 'Xác nhận',
+      content: (
+        <div>Bạn muốn xóa BDS ?</div>
+      ),
+      footer: <>
+        <Button variant="ghost" onClick={closeModal}>Hủy</Button>
+        <Button onClick={handleDelete}>OK</Button>
+      </>,
+      showAsDialog: true,
+    });
+  }
+
+  const handleDelete = async () => {
+    try {
+      const res: A = await ProductApiService.Delete({
+        productId: productId
+      });
+      console.log("handleDelete success response", res);
+
+      if ( res.status === 200 && res.success === true && res.message ) {
+        toast.success(res.message);
+        closeModal();
+        handleFilterProduct(productQueryForm.getValues());
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: A) {
+      console.error("handleDelete error", err);
+      const errMsg = err.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
+      toast.error(errMsg);
+    }
+  };
+
+  return (
+    <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mt-2" onClick={showConfirmDelete}>
+      <Trash2 size={16}/>  <span className="text-sm">Xóa tin</span>
+    </Button>
   )
 }
 
