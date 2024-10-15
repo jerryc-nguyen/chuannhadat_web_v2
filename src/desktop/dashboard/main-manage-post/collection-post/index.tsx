@@ -9,6 +9,7 @@ import { ProductQuery } from "./data/schemas/product-query-schema"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import useProductActionSetting from "./hooks"
+import ModalPostDetail from "@desktop/post-detail/components/modal-post-detail"
 
 const defaultValues = {
   business_type: "",
@@ -31,7 +32,7 @@ const defaultValues = {
   sort_by: "",
   sort_direction: "",
   page: 1,
-  per_page: 10,
+  per_page: 100,
 }
 
 export default function TaskDataTable() {
@@ -63,7 +64,8 @@ export default function TaskDataTable() {
 
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
-        <DataTable data={productsList} columns={columns} />
+      <ModalPostDetail />
+      <DataTable data={productsList} columns={columns} />
     </div>
   )
 }

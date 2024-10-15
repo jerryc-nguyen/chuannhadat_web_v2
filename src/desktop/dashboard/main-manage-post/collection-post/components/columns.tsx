@@ -19,6 +19,11 @@ import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput } from "../dat
 import { toast } from 'react-toastify';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/tooltip";
 import useProductActionSetting from "../hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { services } from '@api/services';
+import { isLoadingModal, selectedPostId } from "@desktop/post-detail/states/modalPostDetailAtoms";
+import { useAtom, useAtomValue } from "jotai";
+import Spinner from '@components/ui/spinner';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -59,6 +64,7 @@ export const columns: ColumnDef<Product>[] = [
       const visible = row.original.visible;
 
       const title = row.original.title;
+      const productUid = row.original.uid;
       const formatted_price = row.original.formatted_price;
       const formatted_area = row.original.formatted_area;
       const formatted_price_per_m2 = row.original.formatted_price_per_m2;
@@ -89,39 +95,21 @@ export const columns: ColumnDef<Product>[] = [
             ) : <></>
           }
           <div className="flex w-full flex-col gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center min-h-[180px]">
-            <div className="relative group inline-flex rounded-lg flex-col gap-3 h-full">
-              <Image
-                alt={title}
-                width={100}
-                height={100}
-                src={imageUrl}
-                className="object-cover rounded-lg h-36 w-48 border-2"
-                onError={(e) => {
-                  e.currentTarget.src = "/default-image.jpg"; // Set default image path
-                  e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
-                }}
-              
-              />
-              <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
-              <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
-                <ImageIcon  size={16}/>
-                <span>{images_count}</span>
-                <span>hình</span>
-              </div>
-            </div>
+            <ImageProduct 
+              title={title}
+              imageUrl={imageUrl}
+              images_count={images_count}
+              visible={visible}
+              productId={productId}
+              productUid={productUid}
+            />
             <div className="flex flex-col flex-1 h-full">
               <div className="mb-2">
-                <span className="mb-3 text-16 font-semibold">
-                  {title}
-                  <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
-                    <span className="mx-2"> · </span> 
-                    <span className="space-x-1">
-                      <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
-                      <span>{" "}Tin đang bị ẩn!{" "}</span>
-                      <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
-                    </span>
-                  </span>
-                </span>
+                <TitleTriggerOpenProductDetail
+                  title={title}
+                  visible={visible}
+                  productUid={productUid}
+                />
               </div>
               <div className="mb-2 flex gap-5 flex-wrap">
                 <span className="text-sm font-medium">
@@ -411,5 +399,71 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
+  )
+}
+
+const ImageProduct = ({ imageUrl, images_count, title, visible, productId, productUid }: { imageUrl: string, images_count: number, title: string, visible: boolean, productId: string, productUid: string } ) => {
+  const postId = useAtomValue(selectedPostId);
+  const isLoadingCardProduct = useAtomValue(isLoadingModal);
+  
+  return (
+    <div className="relative group inline-flex rounded-lg flex-col gap-3 h-full">
+      <Image
+        alt={title}
+        width={100}
+        height={100}
+        src={imageUrl}
+        className="object-cover rounded-lg h-36 w-48 border-2"
+        onError={(e) => {
+          e.currentTarget.src = "/default-image.jpg"; // Set default image path
+          e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
+        }}
+      
+      />
+      <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
+        <ImageIcon  size={16}/>
+        <span>{images_count}</span>
+        <span>hình</span>
+      </div>
+      {isLoadingCardProduct && postId === productUid && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
+          <div role="status">
+            <Spinner />
+          </div>
+          <span className="font-medium">Đang tải...</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const TitleTriggerOpenProductDetail = ({ title, visible, productUid }: { title: string, visible: boolean, productUid: string } ) => {
+  const queryClient = useQueryClient();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_postId, setSelectedPostId] = useAtom(selectedPostId);
+
+  const openModalPostDetail = async () => {
+    setSelectedPostId(productUid);
+    await queryClient.prefetchQuery({
+      queryKey: ['get-detail-post', productUid],
+      queryFn: () => services.posts.getDetailPost(productUid),
+    });
+  };
+
+  return (
+    <span className="mb-3 text-16 font-semibold hover:text-primary_color cursor-pointer"
+      onClick={openModalPostDetail}
+    >
+      {title}
+      <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
+        <span className="mx-2"> · </span> 
+        <span className="space-x-1">
+          <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+          <span>{" "}Tin đang bị ẩn!{" "}</span>
+          <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+        </span>
+      </span>
+    </span>
   )
 }
