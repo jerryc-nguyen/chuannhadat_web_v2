@@ -23,7 +23,7 @@ const HomeDesktop: React.FC = () => {
   filterParams.with_title = true;
   filterParams.with_users = true;
 
-  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams); 
+  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams);
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);
 
@@ -46,7 +46,11 @@ const HomeDesktop: React.FC = () => {
   }, [missingAuthors, appendCardAuthors, data?.users]);
 
   const handleScroll = useDebounce(() => {
-    if (currentPage <= 2 && data.pagination.total_count !== products.length && (window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if (
+      currentPage <= 2 &&
+      data.pagination.total_count !== products.length &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight
+    ) {
       handleLoadMore();
     }
   }, 200);
@@ -58,8 +62,7 @@ const HomeDesktop: React.FC = () => {
 
   return (
     <section className="my-10">
-      <h1 className="mb-4 text-2xl font-semibold text-primary_color">Tin đăng mới nhất</h1>
-      <p>{data?.title}</p>
+      <h1 className="mb-4 text-2xl font-semibold text-primary_color">{data?.title}</h1>
       <PostControls pagination={data?.pagination} />
       <PostList dataPostList={products} />
       {data?.pagination.total_count !== products.length &&

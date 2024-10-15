@@ -12,6 +12,7 @@ import Image from 'next/image';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import Spinner from '@components/ui/spinner';
+import Link from 'next/link';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -46,7 +47,7 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
       queryFn: () => services.posts.getDetailPost(postId),
     });
   };
-
+  const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
   return (
     <Card className="post-list_item relative h-full rounded-md p-4">
       {isShowAuthor && (
@@ -56,17 +57,19 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
       )}
       <CardContent className="p-0">
         <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md bg-muted">
-          <Image
-            src={buildThumbnailUrl({
-              imageUrl: product?.featured_image_url || DEFAULT_THUMB_IMAGE,
-            })}
-            alt="Image post"
-            fill
-            blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII='
-            loading='lazy'
-            placeholder='blur'
-            className="h-full w-full cursor-pointer object-cover transition-all hover:scale-125"
-          />
+          <Link href={`post/${product.slug}`} target="_blank">
+            <Image
+              src={buildThumbnailUrl({
+                imageUrl: product?.featured_image_url || DEFAULT_THUMB_IMAGE,
+              })}
+              alt="Image post"
+              fill
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII="
+              loading="lazy"
+              placeholder="blur"
+              className="h-full w-full cursor-pointer object-cover transition-all hover:scale-125"
+            />
+          </Link>
           <div style={styles.imagesCountWrapper}>
             <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
               <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
@@ -86,22 +89,24 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
         </h3>
 
         <div className="mt-4 flex w-full justify-between">
+          {isShowInfoPrice && (
+            <div className="flex flex-col gap-y-1 text-sm">
+              <span className="text-base font-bold text-black">{product?.formatted_price}</span>
+              <span className="alic text-muted-foreground">{product?.formatted_price_per_m2}</span>
+            </div>
+          )}
           <div className="flex flex-col gap-y-1 text-sm">
-            <span className="font-bold text-[#505780]">{product?.formatted_price}</span>
-            <span className="italic text-muted-foreground">{product?.formatted_area}</span>
-          </div>
-          <div className="flex flex-col gap-y-1 text-sm">
-            <span className="font-bold text-[#505780]">{product?.formatted_price_per_m2}</span>
+            <span className="text-base font-bold text-black">{product?.formatted_area}</span>
             <span className="italic text-muted-foreground">{product?.formatted_kt || '...'}</span>
           </div>
           <div className="flex flex-col gap-y-1">
-            <div className="flex w-fit gap-x-1 rounded-full border bg-primary_color/10 px-2 py-1 text-primary_color">
+            <div className="flex w-fit gap-x-1 rounded-full border px-2 py-1 text-muted-foreground">
               <BedRoomIcon />
               {product?.bedrooms_count && (
                 <span className="text-nowrap font-medium leading-5">{product.bedrooms_count}</span>
               )}
             </div>
-            <div className="flex w-fit gap-x-1 rounded-full border bg-primary_color/10 px-2 py-1 text-primary_color">
+            <div className="flex w-fit gap-x-1 rounded-full border px-2 py-1 text-muted-foreground">
               <BadRoomIcon />
               {product?.bathrooms_count && (
                 <span className="text-nowrap font-medium leading-5">{product.bathrooms_count}</span>

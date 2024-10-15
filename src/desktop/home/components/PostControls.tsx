@@ -35,7 +35,7 @@ const PostControls: React.FC<PostControlsProps> = ({
     setIsRedirect(isRedirectAfterApplyFilter);
   }, []);
   return (
-    <div className="my-2 flex flex-wrap items-center justify-between">
+    <div className="my-2">
       {isShowListChips && (
         <Select>
           <div className="relative my-2 flex flex-wrap gap-2">
@@ -49,19 +49,14 @@ const PostControls: React.FC<PostControlsProps> = ({
           </div>
         </Select>
       )}
-      <div
-        className={cn(
-          'filter-sort flex flex-row items-center',
-          isShowListChips ? 'gap-x-3' : 'w-full justify-between',
-        )}
-      >
+      <div className="filter-sort flex w-full items-center justify-between">
         <span className="font-semibold text-black">Có {pagination?.total_count} tin đăng</span>
         <Select
           defaultValue={undefined}
           value={selectedSortValue}
           onValueChange={handleChangeSortOption}
         >
-          <SelectTrigger className="right-0 w-[180px] shadow-sm">
+          <SelectTrigger className="right-0 w-[180px] bg-black text-white shadow-sm">
             <SelectValue placeholder="Sắp xếp theo" />
           </SelectTrigger>
           <SelectContent>

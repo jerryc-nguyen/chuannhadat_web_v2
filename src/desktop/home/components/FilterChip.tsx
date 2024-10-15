@@ -110,7 +110,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, isRedirectAfter
               showFilterPopover(filterChipItem);
               setIsOpenPopover(true);
             }}
-            className="w-fit gap-x-4"
+            className="w-fit gap-x-4 bg-black text-white"
           >
             <SelectValue placeholder={selectedFilterText(filterChipItem)} />
           </SelectTrigger>
