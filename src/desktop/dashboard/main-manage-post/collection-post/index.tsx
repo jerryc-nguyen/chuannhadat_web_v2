@@ -8,6 +8,7 @@ import ProductApiService from "./apis/product-api"
 import { ProductQuery } from "./data/schemas/product-query-schema"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import useProductActionSetting from "./hooks"
 
 const defaultValues = {
   business_type: "",
@@ -51,10 +52,13 @@ export default function TaskDataTable() {
     }
   };
 
+  const { handleGetProductActionSettings } = useProductActionSetting();
+
   useEffect(() => {
-    // form.handleSubmit(handleFilter)();
     const initialValues = form.getValues(); // Get the current form values
-    handleFilter(initialValues); 
+    handleFilter(initialValues);
+    handleGetProductActionSettings();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

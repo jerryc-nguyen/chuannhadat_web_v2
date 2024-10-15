@@ -12,11 +12,13 @@ import { Separator } from "@components/ui/separator";
 import Link from "next/link";
 import hideOnFrontendReasonConstant from "../constant/hide_on_frontend_reason";
 import { Fragment, useState } from "react";
-import UpVipProductForm from "../../components/up-vip-form";
+import UpVipProductForm from "./up-vip-form";
 import useModals from "@mobile/modals/hooks";
 import ProductApiService from "../apis/product-api";
 import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput } from "../data/schemas/product-action-schema";
 import { toast } from 'react-toastify';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/tooltip";
+import useProductActionSetting from "../hooks";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -370,6 +372,8 @@ const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: s
 }
 
 const ButtonRefresh = ({ productId }: { productId: string } ) => {
+  const { productActionSettings, decreaseTotalRefreshsCount } = useProductActionSetting();
+
   const handleRefresh = async () => {
     try {
       const res: A = await ProductApiService.Refresh({
@@ -379,18 +383,33 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
 
       if ( res.status === true && res.message ) {
         toast.success(res.message);
+        decreaseTotalRefreshsCount();
       } else {
         toast.error(res.message);
       }
-    } catch (err) {
+    } catch (err: A) {
       console.error("handleRefresh error", err);
-      toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
+      const errMsg = err.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
+      toast.error(errMsg);
     }
   };
 
   return (
-    <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1" onClick={handleRefresh}>
-      <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
-    </Button>
+    <TooltipProvider delayDuration={10}>
+      <Tooltip>
+        <TooltipTrigger>
+          <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1" onClick={handleRefresh}>
+            <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          {
+            ( productActionSettings && productActionSettings.total_refreshs_count ) ?
+              <p>Làm mới tin thủ công. Bạn còn lần {productActionSettings.total_refreshs_count} làm mới</p> :
+              <></>
+          }
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }

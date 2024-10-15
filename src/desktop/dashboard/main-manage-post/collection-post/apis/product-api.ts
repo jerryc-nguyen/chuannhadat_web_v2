@@ -34,8 +34,8 @@ const ProductApiService = {
     return response;
   },
 
-  GetUpVipSettings: async () => {
-    const response = await axiosInstance.get(`${API_ROUTES.PRODUCTS.GET_UP_VIP_SETTINGS}`);
+  GetProductActionSettings: async () => {
+    const response = await axiosInstance.get(`${API_ROUTES.PRODUCTS.GET_PRODUCT_ACTION_SETTINGS}`);
 
     return response;
   },
