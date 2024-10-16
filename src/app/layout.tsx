@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-      <body className={cn(inter.className, isMobile ? 'isMobile' : '', 'bg-neutral_03')}>
+      <body className={cn(inter.className, isMobile ? 'isMobile' : '', 'bg-white')}>
         <ProviderWrapper>{children}</ProviderWrapper>
       </body>
     </html>

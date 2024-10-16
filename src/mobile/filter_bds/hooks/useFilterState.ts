@@ -11,7 +11,6 @@ import { FilterFieldName, FILTER_FIELDS_TO_PARAMS, FILTER_FIELDS_PARAMS_MAP } fr
 import { searchApi } from '@api/searchApi';
 import { useMemo } from 'react';
 import { FilterChipOption, FilterState } from '../types';
-import { SORT_OPTIONS } from '@common/constants';
 import { objectToQueryParams } from '@common/utils';
 import { usePathname } from 'next/navigation';
 
@@ -67,12 +66,20 @@ export default function useFilterState() {
       [fieldId]: finalOption,
     });
   };
+  const removeFilterValue = (fieldId: FilterFieldName) => {
+    setLocalFilterState({
+      ...localFilterState,
+      [fieldId]: undefined,
+    });
+    applyAllFilters({ [fieldId]: undefined });
+  };
 
   const applyAllFilters = (filters?: A) => {
     const allFilterState = {
-      ...localFilterState,
+      ...filterState,
       ...filters,
     };
+
     setFilterState(allFilterState);
     if (isRedirect) {
       syncSelectedParamsToUrl();
@@ -153,16 +160,6 @@ export default function useFilterState() {
     window.history.pushState({}, '', listing_url);
   };
 
-  // handle apply filter by sort in desktop
-  const onSelectSortOption = (value: string) => {
-    const selectedSortOption = SORT_OPTIONS.find((item) => item.value === value);
-    setLocalFieldValue(FilterFieldName.Sort, selectedSortOption);
-    const newFilterState = {
-      ...filterState,
-      sort: selectedSortOption,
-    };
-    applyFilterToSyncParams(newFilterState);
-  };
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
     const newFilterState = {
@@ -181,9 +178,6 @@ export default function useFilterState() {
     }
   };
 
-  const selectedSortValue = useMemo((): string | undefined => {
-    return filterState.sort?.value as string | undefined;
-  }, [filterState.sort?.value]);
   const selectedSortText = useMemo((): string | undefined => {
     return filterState.sort?.text as string | undefined;
   }, [filterState.sort?.text]);
@@ -198,11 +192,10 @@ export default function useFilterState() {
     buildFilterParams,
     applySingleFilter,
     copyFilterStatesToLocal,
-    onSelectSortOption,
-    selectedSortValue,
     resetDataFilter,
     applySortFilter,
     selectedSortText,
     setIsRedirect,
+    removeFilterValue,
   };
 }
