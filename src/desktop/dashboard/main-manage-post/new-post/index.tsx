@@ -1,7 +1,6 @@
 "use client";
 
 import ProductInfoForm from "./components/form-components/product-info-form";
-import { ProductConfigForm } from "./components/form-components/product-config-form";
 import { businessTypeOptions, categoryTypeOptions } from "./constant";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,11 +8,14 @@ import {
   FormSchemaTransactionType,
 } from "./components/form-components/form-schema";
 import { Form } from "@/components/ui/form";
-import ProductDetailInfoForm from "./components/form-components/product-detail-info-form";
 import ImageForm from "./components/form-components/image-form";
 import { IProductForm } from "./type";
 import { Button } from "@components/ui/button";
 import ProductApiService from "./apis/product-api";
+import LocationForm from "./components/form-components/location-form";
+import ProductTypeForm from "./components/form-components/product-type";
+import ProductDescriptionForm from "./components/form-components/product-description";
+import Link from "next/link";
 
 const NewPost: React.FC = () => {
   const defaultValues = { 
@@ -70,22 +72,21 @@ const NewPost: React.FC = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
-          <div className="grid items-start gap-6 lg:col-span-2">
-            <ImageForm form={form} />
+          <div className="grid items-start gap-6 lg:col-span-3">
+            <ProductTypeForm form={form} />
+            <LocationForm form={form} />
+            <ProductDescriptionForm form={form} />
             <ProductInfoForm form={form} />
-            <ProductDetailInfoForm form={form} />
+            <ImageForm form={form} />
           </div>
-          <div className="grid items-start gap-6 lg:col-span-1 top-2 sticky">
+          {/* <div className="grid items-start gap-6 lg:col-span-1 top-2 sticky">
             <ProductConfigForm />
-          </div>
+          </div> */}
         </div>
         <div className="bg-card border bottom-2 flex justify-between mt-6 p-3 rounded-lg sticky z-[999999]">
-          <Button type="button" variant="ghost" onClick={() => {
-            form.setValue("city_id", "2");
-            setTimeout(() => {
-              form.trigger("city_id")
-            }, 200);
-          }}>Cancel</Button>
+          <Link href={`/dashboard/manage-post/collection-post`}>
+            <Button type="button" variant="ghost">Trở lại</Button>
+          </Link>
           <Button type="submit">Đăng tin và thanh toán</Button>
         </div>
       </form>

@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,20 +12,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import { Separator } from "@components/ui/separator";
 import { Checkbox } from "@components/ui/checkbox";
 import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
-import LocationForm from "./location-form";
 import { PriceAutoComplete } from "./fields/price-autocomplete";
 import { BadgeInfo } from "lucide-react";
 import {
-  businessTypeOptions,
-  categoryTypeOptions,
+  furnitureTypeOptions,
   phapLyTypeOptions,
+  viewDirectionTypeOptions,
 } from "../../constant";
 import { IProductForm } from "../../type";
+import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
 
 interface IProductInfoForm {
   form: UseFormReturn<IProductForm>;
@@ -54,28 +53,22 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="business_type"
+              name="area"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Nhu cầu của bạn là
+                    <span className="text-red-600">*</span> Diện tích (m²)
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue defaultValue={field.value} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {businessTypeOptions.map((item, index) => (
-                        <SelectItem key={index} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    {...field}
+                    value={maskNumber(field.value).formattedValue}
+                    onChange={(e) => {
+                      const { rawValue } = maskNumber(e.target.value);
+                      onChangeFieldNumber(field, rawValue);
+                    }}
+                    placeholder="Nhập diện tích (m²)"
+                    maxLength={10}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -83,26 +76,36 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
 
             <FormField
               control={form.control}
-              name="category_type"
+              name="phap_ly"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
-                  <FormLabel>
-                    <span className="text-red-600">*</span> Loại bất động sản
-                  </FormLabel>
+                  <FormLabel>Giấy tờ pháp lý</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
                     defaultValue={field.value}
                   >
                     <SelectTrigger>
-                      <SelectValue defaultValue={field.value} />
+                      <SelectValue defaultValue={field.value} placeholder="Không xác định" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categoryTypeOptions.map((item, index) => (
+                      {phapLyTypeOptions.map((item, index) => (
                         <SelectItem key={index} value={item.value}>
                           {item.label}
                         </SelectItem>
                       ))}
+                      <SelectSeparator />
+                      <Button
+                        className="w-full px-2"
+                        variant="secondary"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          form.setValue("phap_ly", "");
+                        }}
+                      >
+                        Xóa lựa chọn
+                      </Button>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -110,120 +113,6 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
               )}
             />
           </div>
-
-          <FormField
-            control={form.control}
-            name="phap_ly"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormLabel>Giấy tờ pháp lý</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue defaultValue={field.value} placeholder="Không xác định" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {phapLyTypeOptions.map((item, index) => (
-                      <SelectItem key={index} value={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                    <SelectSeparator />
-                    <Button
-                      className="w-full px-2"
-                      variant="secondary"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        form.setValue("phap_ly", "");
-                      }}
-                    >
-                      Xóa lựa chọn
-                    </Button>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormLabel>
-                  <span className="text-red-600">*</span> Tiêu đề
-                </FormLabel>
-                <Input
-                  {...field}
-                  className="relative"
-                  placeholder="Nhập tiêu đề..."
-                  endAdornment={
-                    <span className="absolute right-1 top-0 text-2xs">
-                      {form.getValues("title").length}/99
-                    </span>
-                  }
-                />
-                <FormDescription>
-                  Tiêu đề ngắn gọn dễ hiểu, tối thiểu 30 ký tự và không được dài quá 99 ký tự.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormLabel>
-                  <span className="text-red-600">*</span> Nội dung mô tả
-                </FormLabel>
-                <Textarea
-                  {...field}
-                  className="min-h-[150px]"
-                  placeholder="Nhập mô tả..."
-                  endAdornment={
-                    <span className="absolute right-1 top-1 text-2xs">
-                      {form.getValues("description").length}/3000
-                    </span>
-                  }
-                />
-                <FormDescription>
-                  Nội dung mô tả tối thiểu 100 kí tự và không được dài quá 3000 ký tự.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="area"
-            render={({ field }) => (
-              <FormItem className="grid gap-2">
-                <FormLabel>
-                  <span className="text-red-600">*</span> Diện tích (m²)
-                </FormLabel>
-                <Input
-                  {...field}
-                  value={maskNumber(field.value).formattedValue}
-                  onChange={(e) => {
-                    const { rawValue } = maskNumber(e.target.value);
-                    onChangeFieldNumber(field, rawValue);
-                  }}
-                  placeholder="Nhập diện tích (m²)"
-                  maxLength={10}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}
@@ -287,7 +176,243 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
             )}
           />
 
-          <LocationForm form={form} />
+          <div className="grid gap-4 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="bedrooms_count"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Số phòng ngủ</FormLabel>
+                  <RoundedOptionsNumberInput
+                    {...field}
+                    className="relative"
+                    placeholder="Nhập số"
+                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                    maxLength={3}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bathrooms_count"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Số phòng tắm</FormLabel>
+                  <RoundedOptionsNumberInput
+                    {...field}
+                    className="relative"
+                    placeholder="Nhập số"
+                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                    maxLength={3}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="facade"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Mặt tiền</FormLabel>
+                  <Input
+                    {...field}
+                    value={maskNumber(field.value).formattedValue}
+                    onChange={(e) => {
+                      const { rawValue } = maskNumber(e.target.value);
+                      onChangeFieldNumber(field, rawValue);
+                    }}
+                    placeholder="Nhập số"
+                    endAdornment={
+                      <span>
+                        <b>m</b>
+                      </span>
+                    }
+                    maxLength={8}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="entrance"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Đường rộng</FormLabel>
+                  <Input
+                    {...field}
+                    value={maskNumber(field.value).formattedValue}
+                    onChange={(e) => {
+                      const { rawValue } = maskNumber(e.target.value);
+                      onChangeFieldNumber(field, rawValue);
+                    }}
+                    placeholder="Nhập số"
+                    endAdornment={
+                      <span>
+                        <b>m</b>
+                      </span>
+                    }
+                    maxLength={8}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="floors_count"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Số tầng</FormLabel>
+                  <RoundedOptionsNumberInput
+                    {...field}
+                    className="relative"
+                    placeholder="Nhập số"
+                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                    maxLength={3}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="entrance_direction"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Hướng nhà/ đất</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Không xác định"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {viewDirectionTypeOptions.map((item, index) => (
+                        <SelectItem key={index} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                      <SelectSeparator />
+                      <Button
+                        className="w-full px-2"
+                        variant="secondary"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          form.setValue("entrance_direction", "");
+                        }}
+                      >
+                        Xóa lựa chọn
+                      </Button>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="view_direction"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Hướng ban công</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Không xác định"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {viewDirectionTypeOptions.map((item, index) => (
+                        <SelectItem key={index} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                      <SelectSeparator />
+                      <Button
+                        className="w-full px-2"
+                        variant="secondary"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          form.setValue("view_direction", "");
+                        }}
+                      >
+                        Xóa lựa chọn
+                      </Button>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="furniture"
+              render={({ field }) => (
+                <FormItem className="grid gap-2">
+                  <FormLabel>Nội thất</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Không xác định"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {furnitureTypeOptions.map((item, index) => (
+                        <SelectItem key={index} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                      <SelectSeparator />
+                      <Button
+                        className="w-full px-2"
+                        variant="secondary"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          form.setValue("furniture", "");
+                        }}
+                      >
+                        Xóa lựa chọn
+                      </Button>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>
