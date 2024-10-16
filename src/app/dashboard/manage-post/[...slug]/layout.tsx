@@ -20,14 +20,14 @@ const currentBreadcrumb: IBreadcrumbItem[] = [
   },
   {
     link: "/",
-    title: "Đăng tin bán & cho thuê",
+    title: "Chỉnh sửa tin bán & cho thuê",
     isActive: true,
   },
 ];
 
 export const metadata: Metadata = {
   title: 'Chuẩn nhà đất',
-  description: 'Tạo mới bài đăng',
+  description: 'Chỉnh sửa bài đăng',
 };
 
 const NewPostPageLayout: React.FC<NewPostPageLayoutProps> = ({ children }) => {

@@ -159,9 +159,11 @@ export const columns: ColumnDef<Product>[] = [
               <div className="flex flex-col">
                 <ButtonRefresh productId={productId} />
 
-                <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-2">
-                  <SquarePen size={16}/> <span className="text-sm">Cập nhật tin</span> 
-                </Button>
+                <Link href={`/dashboard/manage-post/edit-${productUid}`} target="_blank">
+                  <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-2">
+                    <SquarePen size={16}/> <span className="text-sm">Cập nhật tin</span> 
+                  </Button>
+                </Link>
 
                 <Separator className="h-[1px]" />
                 
@@ -183,6 +185,8 @@ export const columns: ColumnDef<Product>[] = [
     ),
     cell: ({ row }) => {
       const id = row.original.id;
+      // const productUid = row.original.uid;
+      const detail_path = row.original.detail_path;
       const formatted_created_at = row.original.formatted_created_at;
       const formatted_published_at = row.original.formatted_published_at;
       const ads_type = row.original.ads_type;
@@ -193,8 +197,8 @@ export const columns: ColumnDef<Product>[] = [
           <span className="text-xs">
             <span className="font-medium mb-2">Mã tin:</span>
             <Link
-              className="ml-2 text-blue-600 hover:text-blue-900"
-              href={`${id}`}
+              className="ml-2 text-blue-600 hover:text-blue-900 cursor-pointer"
+              href={`${detail_path}`}
             >
               #{id}
             </Link>
