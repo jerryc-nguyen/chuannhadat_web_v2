@@ -15,6 +15,7 @@ import Link from 'next/link';
 import React from 'react';
 
 import useModalPostDetail from '../hooks/useModalPostDetail';
+import { HttpStatusCode } from 'axios';
 
 type PostsBySameAuthorProps = {
   productId: string;
@@ -27,12 +28,18 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
   authorSlug,
   fullNameAuthor,
 }) => {
-  const { data: relatedPosts, isLoading } = useQuery({
+  const {
+    data: relatedPosts,
+    isLoading,
+    isSuccess,
+    status,
+  } = useQuery({
     queryKey: ['get-posts-same-author', productId],
     queryFn: () => services.posts.getPostsSameAuthor(productId),
     enabled: !!productId,
     select: (data) => data.data,
   });
+
   const { onCloseModal } = useModalPostDetail();
 
   const loadingRelatedCard = () => (
@@ -62,7 +69,14 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
       </div>
     </div>
   );
-  if (relatedPosts?.length === 0 || isLoading || !productId) return loadingRelatedCard();
+  console.log({
+    relatedPosts,
+    isLoading,
+    isSuccess,
+    status,
+  });
+  if ((isSuccess && relatedPosts.length === 0) || status === 'error') return null;
+  if (isLoading || !productId) return loadingRelatedCard();
   return (
     <>
       <TooltipHost content={'Chỉ hiện tin có ngày đăng trong 2 tuần gần nhất'}>
