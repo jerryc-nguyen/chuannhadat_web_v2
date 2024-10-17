@@ -11,7 +11,7 @@ import useResizeImage from '@hooks/useResizeImage';
 
 export default function CardAuthor({ product }: { product: A }) {
   const { getAuthorById } = useCardAuthors();
-  const author = getAuthorById(product.user_id + '');
+  const author = getAuthorById(product.user_id);
   const { buildThumbnailUrl } = useResizeImage();
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
     author?.avatar_url || default_avatar,
@@ -22,7 +22,7 @@ export default function CardAuthor({ product }: { product: A }) {
     <div className="flex items-center justify-between gap-x-2">
       <HoverCardAuthor authorSlug={author?.slug as string}>
         {imgSrc ? (
-          <Link target="_blank" href={`profile/${author?.slug}`}>
+          <Link target="_blank" href={`/profile/${author?.slug}`}>
             <Image
               width={40}
               height={40}
@@ -51,19 +51,21 @@ export default function CardAuthor({ product }: { product: A }) {
         <HoverCardAuthor authorSlug={author?.slug as string}>
           <Link
             target="_blank"
-            href={`profile/${author?.slug}`}
+            href={`/profile/${author?.slug}`}
             className="text-sm font-semibold leading-none hover:underline"
           >
             {fullName}
           </Link>
         </HoverCardAuthor>
         <p className="mt-1 flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-muted-foreground">
-          <Link target="_blank" className="hover:underline" href={`post/${product.slug}`}>
+          <Link target="_blank" className="hover:underline" href={`/post/${product.slug}`}>
             {product?.formatted_publish_at}
           </Link>
           ·
           <TooltipHost content={product?.short_location_name}>
-            <span>{product?.short_location_name}</span>
+            <span className="overflow-hidden text-ellipsis text-nowrap">
+              {product?.short_location_name}
+            </span>
           </TooltipHost>
         </p>
       </div>

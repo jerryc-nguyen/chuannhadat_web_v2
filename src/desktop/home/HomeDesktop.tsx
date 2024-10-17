@@ -1,24 +1,23 @@
 'use client';
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import PostList from '@desktop/home/components/PostList';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useQuery } from '@tanstack/react-query';
-import { cardAuthors } from '@api/searchApi';
-import { useHydrateAtoms } from 'jotai/utils';
-import { loadedCardAuthorsAtom } from '@desktop/home/states';
 import PostControls from '@desktop/home/components/PostControls';
-import useCardAuthors from '@desktop/home/hooks/useCardAuthors';
 import { Button } from '@components/ui/button';
 import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
 import useDebounce from '@hooks/useDebounce';
+import useCardAuthors from './hooks/useCardAuthors';
+import { cardAuthors } from '@api/searchApi';
+import { useQuery } from '@tanstack/react-query';
+import { useHydrateAtoms } from 'jotai/utils';
+import { loadedCardAuthorsAtom } from './states';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
-  const { appendCardAuthors } = useCardAuthors();
   const { buildFilterParams } = useFilterState();
-
+  const { appendCardAuthors } = useCardAuthors();
   const filterParams = buildFilterParams({ withLocal: false });
   filterParams.with_title = true;
   filterParams.with_users = true;
@@ -26,25 +25,12 @@ const HomeDesktop: React.FC = () => {
   const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams);
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);
-
-  const { data: missingAuthors } = useQuery({
-    queryKey: ['missing-card-authors', data?.missing_user_ids],
-    queryFn: () => cardAuthors({ user_ids: data?.missing_user_ids.join(',') }),
-    enabled: !!data?.missing_user_ids,
-  });
-
-  useMemo(() => {
-    if (missingAuthors?.data) {
-      setTimeout(() => {
-        let loadingAuthors = missingAuthors?.data;
-        if (data?.users) {
-          loadingAuthors = { ...loadingAuthors, ...data?.users };
-        }
-        appendCardAuthors(loadingAuthors);
-      }, 200);
+  useEffect(() => {
+    if (data?.users) {
+      appendCardAuthors(data?.users);
     }
-  }, [missingAuthors, appendCardAuthors, data?.users]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.users]);
   const handleScroll = useDebounce(() => {
     if (
       currentPage <= 2 &&
@@ -54,7 +40,18 @@ const HomeDesktop: React.FC = () => {
       handleLoadMore();
     }
   }, 200);
-
+  const { data: missingAuthors, isSuccess } = useQuery({
+    queryKey: ['missing-card-authors', data.missing_user_ids],
+    queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
+    enabled: !!data.missing_user_ids,
+    select: (data) => data.data,
+  });
+  React.useEffect(() => {
+    if (missingAuthors && isSuccess) {
+      appendCardAuthors(missingAuthors);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
