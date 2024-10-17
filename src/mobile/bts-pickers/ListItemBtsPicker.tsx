@@ -3,7 +3,7 @@ import useModals from "@mobile/modals/hooks";
 
 import { OptionForSelect } from "@models";
 import { directionsOptions } from "@mobile/filter_bds/constants";
-import ListCheckOptionsV2 from "./ListCheckOptionsV2";
+import ListCheckOptions from "@mobile/ui/ListCheckOptions";
 
 type IListItemBtsPickerProps = {
   options: Array<OptionForSelect>,
@@ -35,7 +35,7 @@ export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, 
         openModal({
           name: `ListItemBtsPicker_${btsTitle}`,
           title: btsTitle,
-          content: <ListCheckOptionsV2 value={value} onSelect={onLocalSelect} options={directionsOptions} />,
+          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={directionsOptions} />,
         });
       }}
       after={selectedOption?.text}
