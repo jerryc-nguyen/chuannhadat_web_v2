@@ -15,7 +15,7 @@ type IListItemBtsPickerProps = {
 
 export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect }: IListItemBtsPickerProps) {
   const { openModal, closeModal } = useModals();
-  const selectedOption = options.find((item: OptionForSelect) => item.value == value)
+  const selectedOption = options.find((item: OptionForSelect) => item.value.toString() == value)
 
   const onLocalSelect = (option: OptionForSelect) => {
     if (onSelect) {
@@ -35,7 +35,7 @@ export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, 
         openModal({
           name: `ListItemBtsPicker_${btsTitle}`,
           title: btsTitle,
-          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={directionsOptions} />,
+          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={options} />,
         });
       }}
       after={selectedOption?.text}

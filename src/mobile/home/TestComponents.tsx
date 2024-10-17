@@ -1,9 +1,12 @@
 import List from "@components/konsta/List";
-import { directionsOptions } from "@mobile/filter_bds/constants";
+import { directionsOptions, roomsOptions } from "@mobile/filter_bds/constants";
 import { useState } from "react";
 import ListItemBtsPicker from "../bts-pickers/ListItemBtsPicker";
 import ListItemBtsInput from "@mobile/bts-pickers/ListItemBtsInput";
 import useModals from "@mobile/modals/hooks";
+import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/new-post/components/form-components/fields/price-autocomplete";
+import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
+import { Input } from "@components/ui/input";
 
 const PriceInputField = ({ value, onChange }: A) => {
   const [val, setVal] = useState(value);
@@ -18,14 +21,36 @@ const PriceInputField = ({ value, onChange }: A) => {
 
   return (
     <div>
-      <input type='text' value={val} onChange={onLocalChange} />
+      <PriceAutoComplete
+        selectedValue={value}
+        onSelectedValueChange={(value) => {
+          setVal(value)
+        }}
+        items={buildOptionsPrice({
+          searchText: val,
+          businessType: 'sell',
+        })}
+        emptyMessage="Nhập giá bán"
+        InputRender={
+          <Input
+            value={maskNumber(val).formattedValue}
+            placeholder="Nhập giá bán"
+            onChange={(e) => {
+              setVal(value)
+            }}
+            maxLength={12}
+          />
+        }
+      />
+
       <button onClick={onApply}>Apply</button>
     </div>
   )
 }
 
 export default function TestComponents() {
-  const [direction, setDirection] = useState('west');
+  const [bed, setBed] = useState('1');
+  const [direction, setDirection] = useState('east');
   const [price, setPrice] = useState<string | undefined>(undefined);
   const { openModal, closeModal } = useModals();
 
@@ -39,6 +64,16 @@ export default function TestComponents() {
     value: direction
   }
 
+  const bedFieldOption = {
+    onSelect: (option: A) => {
+      console.log('onSelect', option)
+      setBed(option.value)
+    },
+    options: roomsOptions,
+    btsTitle: 'Phòng ngủ',
+    value: bed
+  }
+
   const onPriceChanged = (value: string) => {
     setPrice(value);
     closeModal();
@@ -48,10 +83,12 @@ export default function TestComponents() {
     displayText: price,
     openModal: openModal,
     closeModal: closeModal,
+
     modal: {
       name: '',
       title: 'Giá',
       content: <PriceInputField value={price} onChange={onPriceChanged} />,
+      showAsDialog: true
     }
   }
 
@@ -60,6 +97,7 @@ export default function TestComponents() {
     <List strongIos outlineIos>
       <ListItemBtsPicker {...directionFieldOption} />
       <ListItemBtsInput {...priceFieldOption} />
+      <ListItemBtsPicker {...bedFieldOption} />
     </List>
   </>
 }
