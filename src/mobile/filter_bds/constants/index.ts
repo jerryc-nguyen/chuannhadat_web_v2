@@ -209,6 +209,10 @@ export const listFilterDesktop: Array<FilterChipOption> = [
     id: FilterFieldName.Direction,
     text: 'Hướng',
   },
+  {
+    id: FilterFieldName.Sort,
+    text: 'Sắp xếp',
+  },
 ];
 export const listFilterMobile: FilterChipOption[] = [
   {
