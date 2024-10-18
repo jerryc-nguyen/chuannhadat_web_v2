@@ -1,7 +1,7 @@
 import { cn } from '@common/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import React from 'react';
-import styles from '../styles/filter-chip.module.scss';
+import styles from '../styles/FilterChip.module.scss';
 import { FilterFieldName } from '@models';
 import BusinessTypeButtons from '@mobile/filter_bds/bts/BusinessTypeButtons';
 import CategoryType from '@mobile/filter_bds/bts/CategoryType';
@@ -148,19 +148,19 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
           )}
         >
           <PopoverTrigger asChild>
-            <span
+            <div
               onClick={() => {
                 showFilterPopover(filterChipItem);
                 setIsOpenPopover(true);
               }}
               className={cn(
-                'flex cursor-pointer items-center gap-x-2',
+                'flex cursor-pointer items-center gap-x-1',
                 isActiveChip(filterChipItem) ? '' : 'text-slate-600 hover:text-black',
               )}
             >
               {onRenderIconChip(filterChipItem)}
               {selectedFilterText(filterChipItem)}
-            </span>
+            </div>
           </PopoverTrigger>
           {isActiveChip(filterChipItem) && (
             <LuX
