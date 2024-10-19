@@ -7,6 +7,7 @@ import useModals from "@mobile/modals/hooks";
 import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/new-post/components/form-components/fields/price-autocomplete";
 import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
 import { Input } from "@components/ui/input";
+import LocationsPicker from "@mobile/ui/LocationsPicker";
 
 const PriceInputField = ({ value, onChange }: A) => {
   const [val, setVal] = useState(value);
@@ -93,11 +94,17 @@ export default function TestComponents() {
   }
 
   return <>
-    {JSON.stringify(direction)}
     <List strongIos outlineIos>
       <ListItemBtsPicker {...directionFieldOption} />
       <ListItemBtsInput {...priceFieldOption} />
       <ListItemBtsPicker {...bedFieldOption} />
     </List>
+
+    <LocationsPicker
+      openModal={openModal}
+      onChangeCity={(city) => { console.log('aa'); closeModal() }}
+      onChangeDistrict={(district) => { closeModal() }}
+      onChangeWard={(ward) => { closeModal() }}
+    />
   </>
 }

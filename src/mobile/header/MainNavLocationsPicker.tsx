@@ -28,6 +28,7 @@ export default function MainNavLocationsPicker() {
       Áp dụng
     </Button>
   );
+
   const showModalPickLocations = () => {
     copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
@@ -36,6 +37,7 @@ export default function MainNavLocationsPicker() {
       content: <Locations />,
       footer: renderFooterApply(),
       maxHeightPercent: 0.5,
+      supportPushState: false
     });
   };
 
