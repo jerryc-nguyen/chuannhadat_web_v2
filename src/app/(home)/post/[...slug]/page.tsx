@@ -3,7 +3,7 @@ import { services } from '@api/services';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import PostDetailDesktop from '@desktop/post-detail';
 import { Metadata } from 'next';
-import PostDetailMobile from '@mobile/searchs/PostDetailMobile ';
+import PostDetailMobile from '@mobile/post-detail/PostDetailMobile ';
 
 export const metadata: Metadata = {
   title: 'Chuẩn nhà đất',
@@ -24,7 +24,7 @@ export default async function PostDetailPage({ params }: { params: { slug: strin
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
         <div className="c-mobileApp">
-          <PostDetailMobile />
+          <PostDetailMobile productUid={productUid} />
         </div>
       ) : (
         <PostDetailDesktop />

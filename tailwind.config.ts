@@ -24,7 +24,7 @@ const config = {
     },
     extend: {
       colors: {
-        primary_color: '#4E6AF0',
+        primary_color: '#0057ff',
         secondary_color: '#27115F',
         info_color: '#2E90FA',
         success_color: '#38CB89',

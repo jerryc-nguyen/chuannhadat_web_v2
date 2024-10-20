@@ -15,6 +15,7 @@ type ProviderWrapperProps = {
 
 const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
   const isLogged = cookies().has(API_TOKEN_SERVER);
+
   return (
     <QueryProvider>
       <JotaiProvider>

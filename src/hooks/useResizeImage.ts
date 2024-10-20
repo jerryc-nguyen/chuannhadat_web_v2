@@ -65,7 +65,7 @@ export default function useResizeImage() {
 
   const applyCdnUrlFor = (url: string): string => {
     for (const host in CDN_MAPS) {
-      url = url.replace(host, CDN_MAPS[host]);
+      url = url.replace(host, CDN_MAPS[host]) || url;
     }
     return url;
   };

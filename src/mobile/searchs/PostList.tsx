@@ -1,12 +1,10 @@
 'use client';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
-import { searchApi } from '@api/searchApi';
 import { IoChevronDown } from 'react-icons/io5';
 import useModals from '@mobile/modals/hooks';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import { FilterFieldName } from '@models';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import ProductCard from './ProductCard';
 import { Button } from '@components/ui/button';
@@ -29,9 +27,11 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
     applySortFilter,
     setIsRedirect,
   } = useFilterState();
-  React.useEffect(() => {
+
+  useEffect(() => {
     setIsRedirect(isRedirectAfterApplyFilter);
   }, []);
+
   const filterParams = buildFilterParams({
     withLocal: false,
   });

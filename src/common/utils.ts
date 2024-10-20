@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import queryString from 'query-string';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
@@ -28,7 +29,9 @@ export function stringToSlug(str?: string) {
   return str;
 }
 
-export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== ''));
+export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) =>
+  v !== '' && v !== null && v !== undefined
+));
 
 export const removeNull = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
 export const genKey = (index: number) => index;
@@ -121,4 +124,14 @@ export const queryParamsToObject = (query: string): Record<string, A> => {
     });
 
   return result;
-};
+}
+
+export const updateUrlSearchParams = (url: string, params: Record<string, A>) => {
+  const urlObj = new URL(url);
+  const newParams = {
+    ...urlObj.searchParams,
+    ...params
+  }
+  urlObj.search = queryString.stringify(removeEmpty(newParams));
+  return urlObj.toString();
+}

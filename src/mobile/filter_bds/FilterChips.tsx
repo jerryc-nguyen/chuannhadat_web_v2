@@ -122,6 +122,7 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
       defaultContentHeight:
         //@ts-ignore: read value
         DEFAULT_MODAL_HEIGHTS[filterOption.id],
+      supportPushState: false
     });
   };
 

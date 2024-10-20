@@ -1,18 +1,8 @@
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@components/ui/select';
-import { SORT_OPTIONS } from '@common/constants';
 
 import React from 'react';
 import { listFilterDesktop } from '@mobile/filter_bds/constants';
 import FilterChip from './FilterChip';
-import { cn } from '@common/utils';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 
 type PostControlsProps = {
@@ -27,54 +17,23 @@ const PostControls: React.FC<PostControlsProps> = ({
   isShowListChips = true,
 }) => {
   useSyncParamsToState();
-  const { selectedSortValue, onSelectSortOption, setIsRedirect } = useFilterState();
-  const handleChangeSortOption = (value: string) => {
-    onSelectSortOption(value);
-  };
+  const { setIsRedirect } = useFilterState();
+
   React.useEffect(() => {
     setIsRedirect(isRedirectAfterApplyFilter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="my-2 flex flex-wrap items-center justify-between">
+    <div className="my-2 flex flex-col gap-x-3 lg:flex-row lg:items-center">
+      <span className="font-semibold text-black">Có {pagination?.total_count} tin đăng</span>
+      <div className="hidden h-8 w-[2px] bg-[#f0f0f0] lg:block" />
       {isShowListChips && (
-        <Select>
-          <div className="relative my-2 flex flex-wrap gap-2">
-            {listFilterDesktop.map((item) => (
-              <FilterChip
-                isRedirectAfterApplyFilter={isRedirectAfterApplyFilter}
-                filterChipItem={item}
-                key={item.id}
-              />
-            ))}
-          </div>
-        </Select>
+        <div className="relative my-2 flex flex-wrap gap-2">
+          {listFilterDesktop.map((item) => (
+            <FilterChip filterChipItem={item} key={item.id} />
+          ))}
+        </div>
       )}
-      <div
-        className={cn(
-          'filter-sort flex flex-row items-center',
-          isShowListChips ? 'gap-x-3' : 'w-full justify-between',
-        )}
-      >
-        <span className="font-semibold text-black">Có {pagination?.total_count} tin đăng</span>
-        <Select
-          defaultValue={undefined}
-          value={selectedSortValue}
-          onValueChange={handleChangeSortOption}
-        >
-          <SelectTrigger className="right-0 w-[180px] shadow-sm">
-            <SelectValue placeholder="Sắp xếp theo" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {SORT_OPTIONS.map((item) => (
-                <SelectItem key={item.value} className="cursor-pointer" value={item.value}>
-                  {item.text}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
     </div>
   );
 };

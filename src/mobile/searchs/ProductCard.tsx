@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
-import { useRouter } from 'next/navigation';
-import PostDetailMobile from './PostDetailMobile ';
-import PhoneNumber from '@mobile/post-detail/components/PhoneNumber';
+import PostDetailMobile from '../post-detail/PostDetailMobile ';
 import Image from 'next/image';
+import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
+import Link from 'next/link';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -23,41 +23,67 @@ const styles: A = {
   },
 };
 
+const ProductDetailTitleBts = ({ product }: { product: A }) => {
+  return (
+    <div className="mr-4 flex flex-grow items-center justify-between">
+      <div className="flex flex-col items-start justify-center">
+        <span className={`text-xl font-semibold`}>{product?.formatted_price}</span>
+        <span className="text-gray text-sm">{product?.formatted_price_per_m2}</span>
+      </div>
+
+      <div className="flex flex-col items-start justify-center">
+        <span className={`text-xl font-semibold`}>{product?.formatted_area}</span>
+        <span className="text-gray text-sm">{product?.formatted_kt || '...'}</span>
+      </div>
+
+      <div className="flex flex-col items-start justify-center">
+        <div className="flex items-center justify-center">
+          <img src="https://spaces.chuannhadat.com/icons/bed_icon.svg" width="16" alt="" />
+          <span className="ml-2">{product?.bedrooms_count}</span>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <img src="https://spaces.chuannhadat.com/icons/bath_icon.svg" width="16" alt="" />
+          <span className="ml-2">{product?.bathrooms_count}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 export default function ProductCard({ product }: { product: IProduct }) {
   const { buildThumbnailUrl } = useResizeImage();
-
   const { openModal } = useModals();
-  const router = useRouter();
-  const handleShowDetailHouse = () => {
+
+  const showDetailPostModal = (e: A) => {
+    e.preventDefault();
     openModal({
       name: product.title,
-      title: product.title,
-      content: <PostDetailMobile />,
-      maxHeightPercent: 0.9,
-      footer: <PhoneNumber />,
-      onClosed: () => {
-        router.back();
-      },
+      title: <ProductDetailTitleBts product={product} />,
+      content: <PostDetailMobile productUid={product.uid} />,
+      maxHeightPercent: 0.95,
+      footer: <AuthorInfo />,
+      headerHeight: 74.59,
+      footerHeight: 67,
+      pushToPath: `/post/${product.slug}`,
     });
-    window.history.pushState({}, '', `/post/${product.slug}`);
   };
 
   const genImageSrc = React.useMemo(() => {
     return buildThumbnailUrl({
       imageUrl: product?.featured_image_url,
     });
-  }, [product?.featured_image_url]);
+  }, [buildThumbnailUrl, product?.featured_image_url]);
 
   return (
-    <div className="my-4 overflow-hidden rounded-lg bg-white shadow-md dark:bg-slate-800">
+    <div className="my-4 overflow-hidden bg-white shadow-lg dark:bg-slate-800">
       <AspectRatio.Root ratio={16 / 9}>
         <Image
           src={genImageSrc}
           alt={product?.title}
           fill
-          blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII='
-          loading='lazy'
-          placeholder='blur'
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII="
+          loading="lazy"
+          placeholder="blur"
           className="h-full w-full cursor-pointer object-cover"
         />
 
@@ -72,12 +98,13 @@ export default function ProductCard({ product }: { product: IProduct }) {
       </AspectRatio.Root>
 
       <div className="p-4">
-        <h3
+        <Link
+          onClick={showDetailPostModal}
+          href={`/post/${product.slug}`}
           className="mb-2 cursor-pointer font-bold text-slate-600 hover:text-blue-500"
-          onClick={handleShowDetailHouse}
         >
           {product?.title}
-        </h3>
+        </Link>
 
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col items-start justify-center">

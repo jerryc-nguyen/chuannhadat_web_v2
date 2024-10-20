@@ -175,10 +175,14 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
       </Button>
       {renderAvatar()}
 
-      <Link href="/dashboard/manage-post/new-post" target="_blank">
-        <Button asChild className="text-md ml-2 hidden items-center gap-x-2 rounded-md border bg-primary_color/80 px-6 py-2 font-medium text-white hover:bg-primary_color md:flex">
-          <span className="bg-primary text-primary-foreground hover:bg-primary/90 space-x-2">
-            <p>Đăng tin</p><LucidePenSquare className="h-5 w-5" />
+      <Link href="/tao-tin-moi" target="_blank">
+        <Button
+          asChild
+          className="text-md ml-2 hidden items-center gap-x-2 rounded-md border bg-primary_color/80 px-6 py-2 font-medium text-white hover:bg-primary_color md:flex"
+        >
+          <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
+            <p>Đăng tin</p>
+            <LucidePenSquare className="h-5 w-5" />
           </span>
         </Button>
       </Link>

@@ -5,7 +5,7 @@ import { Drawer } from 'vaul';
 import { IoCloseOutline } from 'react-icons/io5';
 import { Modal } from './states/types';
 import { getViewportSize } from '@hooks/useViewportSize';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog';
+import { useBrowserPushState } from '@components/popstate-handler/hooks';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -44,13 +45,32 @@ function DesktopModal({
 }
 
 export function BtsModals1() {
+  const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModalAtom);
+  const [contentStyle, setContentStyle] = useState({})
+
+  useEffect(() => {
+    function handleResize() {
+      setContentStyle(buildContentStyle(modal));
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [])
 
   const onClose = () => {
     if (modal?.onClosed) {
       modal.onClosed();
     }
+
     setModal(undefined);
+
+    if (modal?.supportPushState || modal?.supportPushState == undefined) {
+      historyBack()
+    }
   };
 
   const onOpenChange = (open: boolean) => {
@@ -58,6 +78,10 @@ export function BtsModals1() {
       onClose();
     }
   };
+
+  const isStringTitle = useMemo(() => {
+    return typeof modal?.title === "string";
+  }, [modal]);
 
   const headerClass = useMemo(() => {
     return buildHeaderClass(modal);
@@ -77,7 +101,8 @@ export function BtsModals1() {
           <Drawer.Overlay className="c-bts__overlay1 fixed inset-0 bg-black/40" />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
-              <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
+              {isStringTitle && <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>}
+              {!isStringTitle && (<div className='w-full'>{modal?.title}</div>)}
               <button onClick={onClose} className="c-bts__close">
                 <IoCloseOutline size={30} />
               </button>
@@ -85,9 +110,7 @@ export function BtsModals1() {
             <div
               data-vaul-no-drag
               className="c-bts__content"
-              style={{
-                ...buildContentStyle(modal),
-              }}
+              style={{ ...buildContentStyle(modal), ...contentStyle }}
             >
               <div className={`${modal?.btsContentWrapClass}`}>{modal?.content}</div>
             </div>
@@ -108,16 +131,19 @@ const buildContentStyle = (modal?: Modal) => {
     return {};
   }
 
+  const headerHeight = modal?.headerHeight ?? HEADER_HEIGHT;
+  let footerHeight = modal?.footerHeight ?? FOOTER_HEIGHT;
+
   const viewportSizes = getViewportSize();
   const maxHeightPercent = modal.maxHeightPercent ?? DEFAULT_HEIGHT_PERCENT;
-  const footerHeight = modal?.footer ? FOOTER_HEIGHT : 0;
+  footerHeight = modal?.footer ? footerHeight : 0;
   let contentHeight = modal.defaultContentHeight;
 
   if (!modal.defaultContentHeight) {
-    contentHeight = viewportSizes[1] * maxHeightPercent - HEADER_HEIGHT - footerHeight;
+    contentHeight = viewportSizes[1] * maxHeightPercent - headerHeight - footerHeight;
   }
 
-  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? 'hidden' : 'scroll' };
+  return { height: contentHeight + 'px', overflow: modal?.isHiddenScroll ? 'hidden' : 'scroll-y' };
 };
 
 const buildHeaderClass = (modal?: Modal) => {
@@ -134,7 +160,6 @@ export function BtsModals2() {
     if (modal?.onClosed) {
       modal.onClosed();
     }
-
     setModal(undefined);
   };
 

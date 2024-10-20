@@ -26,6 +26,10 @@ export interface DefaultModal {
   dialogContentWrapClass?: string;
   isHiddenScroll?: boolean;
   allowChildOverflow?: boolean;
+  headerHeight?: number;
+  footerHeight?: number;
+  pushToPath?: string;
+  supportPushState?: boolean
 }
 
 export type Modal = DefaultModal;
