@@ -19,12 +19,11 @@ import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput } from "../dat
 import { toast } from 'react-toastify';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/tooltip";
 import useProductActionSetting from "../hooks/product-action-setting";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { services } from '@api/services';
 import { isLoadingModal, selectedPostId } from "@desktop/post-detail/states/modalPostDetailAtoms";
 import { useAtom, useAtomValue } from "jotai";
 import Spinner from '@components/ui/spinner';
-import useProductsList from "../hooks/product-list";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -95,7 +94,7 @@ export const columns: ColumnDef<Product>[] = [
               </div>
             ) : <></>
           }
-          <div className="flex w-full flex-col gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center min-h-[180px]">
+          <div className="flex w-full gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center min-h-[180px]">
             <ImageProduct 
               title={title}
               imageUrl={imageUrl}
@@ -407,7 +406,28 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
 
 const ButtonDelete = ({ productId }: { productId: string } ) => {
   const { openModal, closeModal } = useModals();
-  const { handleFilterProduct, productQueryForm} = useProductsList();
+
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: () => ProductApiService.Delete({ productId }), // Mutation function
+    onSuccess: (res: A) => {
+      console.log("handleDelete success response", res);
+
+      if (res.status === 200 && res.success === true && res.message) {
+        toast.success(res.message);
+        queryClient.invalidateQueries({queryKey: ['collection-post']}); // Invalidate cache to refetch product list
+        closeModal(); // Close modal on success
+      } else {
+        toast.error(res.message);
+      }
+    },
+    onError: (err: A) => {
+      console.error("handleDelete error", err);
+      const errMsg = err?.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
+      toast.error(errMsg); // Show error toast
+    },
+  });
 
   const showConfirmDelete = () => {
     openModal({
@@ -418,32 +438,11 @@ const ButtonDelete = ({ productId }: { productId: string } ) => {
       ),
       footer: <>
         <Button variant="ghost" onClick={closeModal}>Hủy</Button>
-        <Button onClick={handleDelete}>OK</Button>
+        <Button onClick={() => deleteMutation.mutate()}>OK</Button>
       </>,
       showAsDialog: true,
     });
   }
-
-  const handleDelete = async () => {
-    try {
-      const res: A = await ProductApiService.Delete({
-        productId: productId
-      });
-      console.log("handleDelete success response", res);
-
-      if ( res.status === 200 && res.success === true && res.message ) {
-        toast.success(res.message);
-        closeModal();
-        handleFilterProduct(productQueryForm.getValues());
-      } else {
-        toast.error(res.message);
-      }
-    } catch (err: A) {
-      console.error("handleDelete error", err);
-      const errMsg = err.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
-      toast.error(errMsg);
-    }
-  };
 
   return (
     <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mt-2" onClick={showConfirmDelete}>
@@ -457,25 +456,27 @@ const ImageProduct = ({ imageUrl, images_count, title, visible, productId, produ
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
   
   return (
-    <div className="relative group inline-flex rounded-lg flex-col gap-3 h-full">
-      <Image
-        alt={title}
-        width={100}
-        height={100}
-        src={imageUrl}
-        className="object-cover rounded-lg h-36 w-48 border-2"
-        onError={(e) => {
-          e.currentTarget.src = "/default-image.jpg"; // Set default image path
-          e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
-        }}
-      
-      />
-      <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
-      <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
-        <ImageIcon  size={16}/>
-        <span>{images_count}</span>
-        <span>hình</span>
+    <div className="group inline-flex rounded-lg flex-col gap-3 h-full">
+      <div className="relative h-36 w-48">
+        <Image
+          alt={title}
+          src={imageUrl}
+          className="object-cover rounded-lg border-2"
+          onError={(e) => {
+            e.currentTarget.src = "/default-image.jpg"; // Set default image path
+            e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
+          }}
+          fill
+        />
+
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
+          <ImageIcon  size={16}/>
+          <span>{images_count}</span>
+          <span>hình</span>
+        </div>
       </div>
+      <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
+      
       {isLoadingCardProduct && postId === productUid && (
         <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
           <div role="status">

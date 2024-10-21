@@ -2,17 +2,8 @@
 
 import * as React from "react";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -26,44 +17,67 @@ import {
   TableHeader,
   TableRow,
  } from "@/components/ui/table";
+import { columns } from "./columns";
+import { needUpdateProductsListAtom, productQueryFormAtom, productsListAppliedAtom } from "../states";
+import { useAtom, useAtomValue } from "jotai";
+import { useQueryClient } from "@tanstack/react-query";
+import { CollectionPost } from "../constant/use-query-key";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
+export function DataTable() {
+  const [needUpdateProductsList, setNeedUpdateProductsList] = useAtom(needUpdateProductsListAtom);
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+  const productQueryForm = useAtomValue(productQueryFormAtom);
+  const page = productQueryForm?.watch("page") ?? 0;
+  const pageSize = productQueryForm?.watch("per_page") ?? 0;
+
+  const queryClient = useQueryClient();
+
+  const cachedData: A = queryClient.getQueryData([CollectionPost, productQueryForm?.getValues()]);
+  const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
+  const totalRecords = cachedData?.pagination?.total_count ?? 0;
+  const totalPages = cachedData?.pagination?.total_pages ?? 0;
+
+  const [productsListApplied, setProductsListApplied] = useAtom(productsListAppliedAtom);
+
+  React.useEffect(() => {
+    if ( !cachedData || !needUpdateProductsList) return;
+    
+    setProductsListApplied({
+      productsList,
+      totalRecords,
+      totalPages
+    });
+    setNeedUpdateProductsList(false);
+
+  }, [cachedData, setProductsListApplied])
+  
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
-    data,
-    columns,
+    data: productsListApplied.productsList,
+    columns: columns,
     state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
+        rowSelection,
+        pagination: {
+            pageIndex: page - 1,
+            pageSize: pageSize,
+        }
     },
+    manualPagination: true,
+    pageCount: productsListApplied.totalPages,
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+    onPaginationChange: (updater) => {
+        const newPagination = typeof updater === 'function' 
+            ? updater({ pageIndex: page - 1, pageSize }) 
+            : updater;
+        
+        // Update both page and per_page values in the form
+        productQueryForm?.setValue('page', newPagination.pageIndex + 1); // update form's page value (1-based index)
+        productQueryForm?.setValue('per_page', newPagination.pageSize);   // update form's per_page value
+    },
+    onRowSelectionChange: setRowSelection,
+    getRowId: row => row.id,
   });
 
   return (

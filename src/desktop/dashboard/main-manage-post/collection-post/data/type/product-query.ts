@@ -1,0 +1,43 @@
+export const enum ProductQueryFieldName {
+    BusinessType = 'business_type',
+    CategoryType = 'category_type',
+    City = 'city_id',
+    District = 'district_id',
+    Ward = 'ward_id',
+    Street = 'street_id',
+    Project = 'project_id',
+    Price = 'price',
+    Area = 'area',
+    FloorCount = 'floors_count',
+    Directions = 'directions',
+    MatTien = 'mat_tien',
+    BedroomsCount  = 'bedrooms_count',
+    BathroomsCount = 'bathrooms_count',
+    Furnitures = 'furnitures',
+}
+
+export const productQueryFromDefaultValues = {
+    [ProductQueryFieldName.BusinessType]: "",
+    [ProductQueryFieldName.CategoryType]: "",
+    [ProductQueryFieldName.City]: "",
+    [ProductQueryFieldName.District]: "",
+    [ProductQueryFieldName.Ward]: "",
+    [ProductQueryFieldName.Street]: "",
+    [ProductQueryFieldName.Project]: "",
+    [ProductQueryFieldName.Price]: "",
+    [ProductQueryFieldName.Area]: "",
+    [ProductQueryFieldName.FloorCount]: "",
+    [ProductQueryFieldName.Directions]: "",
+    [ProductQueryFieldName.MatTien]: "",
+    [ProductQueryFieldName.BedroomsCount]: "",
+    [ProductQueryFieldName.BathroomsCount]: "",
+    [ProductQueryFieldName.Furnitures]: "",
+
+    // trường này ko dùng - trong api có
+    selected_ids: "",
+  
+    sort_by: "",
+    sort_direction: "",
+    page: 1,
+    per_page: 10,
+}

@@ -12,6 +12,9 @@ import { Separator } from "@components/ui/separator";
 import { Radio } from '@components/ui/Radio';
 import { useState } from "react";
 import Link from "next/link";
+import { DataTableViewOptions } from "./data-table-view-options";
+import QueryChip from "./query-chip";
+import { listChipsQuery } from "../constant/list_chips_query";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -53,10 +56,6 @@ export function DataTableToolbar<TData>({
               <Search size={16} />
             </Button>
           </ButtonGroup>
-          <Button variant="outline" size="sm" className="h-10 border-dashed">
-            <SlidersHorizontal className="mr-2 h-4 w-4" />
-            Lọc tin
-          </Button>
         </div>
 
         <div className={`flex ${!selectedOption ? "justify-end" : "justify-between"}`}>
@@ -81,6 +80,12 @@ export function DataTableToolbar<TData>({
         </div>
       </div>
 
+      <div className="relative my-2 flex flex-wrap gap-2">
+        {listChipsQuery.map((item) => (
+          <QueryChip queryChipItem={item} key={item.id} />
+        ))}
+      </div>
+
       <Separator className="h-[1px]" />
       
       <div className="space-x-10 flex">
@@ -94,6 +99,27 @@ export function DataTableToolbar<TData>({
           />
         ))}
       </div>
+
+      {
+        table.getFilteredSelectedRowModel().rows.length > 0 ? (
+          <div className="space-x-10 flex">
+            <div className="text-sm text-muted-foreground content-center">
+              <span>
+                {table.getFilteredSelectedRowModel().rows.length} /{" "}
+                {table.getFilteredRowModel().rows.length} đã chọn.
+              </span>
+            </div>
+
+
+            <DataTableViewOptions table={table}/>
+            {/* <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <span className="bg-primary text-primary-foreground hover:bg-primary/90 space-x-2">
+                <p>Thao tác hàng loạt</p>
+              </span>
+            </Button> */}
+          </div> 
+        ) : <></>
+      }
     </div>
   );
 }
