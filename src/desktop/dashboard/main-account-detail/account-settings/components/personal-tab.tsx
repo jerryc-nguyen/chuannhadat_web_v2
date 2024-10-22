@@ -1,5 +1,4 @@
 'use client';
-import { cn, toastSucess } from '@common/utils';
 import { Button } from '@components/ui/button';
 import {
   Form,
@@ -26,6 +25,8 @@ import { service } from '../../apis';
 import { listCustomerGender, listCustomerType } from '../../constants';
 import { CustomerGender, CustomerType } from '@common/types';
 import { IModalUpdateProfile } from '../../types';
+import { cn } from '@common/utils';
+import { toast } from 'sonner';
 
 const PersonalTab: React.FC = () => {
   const { currentUser } = useAuth();
@@ -42,7 +43,7 @@ const PersonalTab: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ['get-profile-me'],
       });
-      toastSucess('Cập nhật thông tin thành công');
+      toast.success('Cập nhật thông tin thành công');
     },
   });
   // Upload avatar
@@ -55,7 +56,7 @@ const PersonalTab: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ['get-profile-me'],
       });
-      toastSucess('Cập nhật thông tin thành công');
+      toast.success('Cập nhật thông tin thành công');
       reset();
     },
   });

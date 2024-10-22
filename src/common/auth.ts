@@ -3,6 +3,7 @@ import { getFromStorage, removeFromStorage, saveToStorage } from './localstorage
 import { getCookie } from './cookies';
 
 export const CURRENT_USER_KEY = 'current_user';
+export const FRONTEND_TOKEN = 'frontend-token';
 export const API_TOKEN_SERVER = 'token-server';
 export const API_TOKEN_CIENT = 'token-client';
 

@@ -14,7 +14,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { toastSucess } from '@common/utils';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
@@ -33,7 +32,7 @@ export const PhoneNumberTab: React.FC = () => {
     onSuccess: (data: A) => {
       if (data.status) {
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
-        toastSucess('Cập nhật số điện thoại thành công');
+        toast.success('Cập nhật số điện thoại thành công');
       } else {
         toast.error(data.message);
       }

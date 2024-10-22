@@ -41,13 +41,18 @@ export const API_ROUTES = {
     TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url',
   },
   MAPS: {
-    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll'
+    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
   },
   PRODUCTS: {
     END_POINT: 'api/v1/products',
     DELETE: 'api/v1/products/{product_id}',
     GET_UP_VIP_SETTINGS: 'api/v1/products/up_vip_settings',
     UP_VIP: 'api/v1/products/up_vip',
-    VALIDATE_UP_VIP: 'api/v1/products/validate_up_vip'
-  }
+    VALIDATE_UP_VIP: 'api/v1/products/validate_up_vip',
+  },
+  SAVES: {
+    SAVE_POST: 'api/v1/saves/save_product',
+    SAVED_PRODUCTS: 'api/v1/saves/saved_products',
+    SAVED_SUMMARY: 'api/v1/saves/summary',
+  },
 };

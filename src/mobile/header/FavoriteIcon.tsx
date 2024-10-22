@@ -1,0 +1,205 @@
+import { services } from '@api/services';
+import { cn, timeAgo } from '@common/utils';
+import { Badge } from '@components/ui/badge';
+import { Button } from '@components/ui/button';
+import { Separator } from '@components/ui/separator';
+import { Skeleton } from '@components/ui/skeleton';
+import { v4 as uuidv4 } from 'uuid';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { LucideHeart } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { HiMiniXMark } from 'react-icons/hi2';
+import { LuArrowRight } from 'react-icons/lu';
+import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
+import { useSetAtom } from 'jotai';
+import { listPostIdSavedAtom } from '@desktop/home/states';
+import { AxiosError } from 'axios';
+import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@components/ui/sheet';
+import { toast } from 'sonner';
+
+type FavoriteIconProps = object;
+type PostLoadingType = {
+  id: string;
+  status: boolean;
+};
+const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
+  const [openSavedPost, setOpenSavePost] = React.useState<boolean>(false);
+  const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
+  const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
+  const queryClient = useQueryClient();
+  const { data: savedSummary } = useQuery({
+    queryKey: ['save_summary'],
+    queryFn: () => services.saves.savedSummary(),
+    select: (data) => data.data,
+  });
+
+  React.useEffect(() => {
+    const listPostLoading = savedSummary?.saved_product_uids.map((item) => ({
+      id: item,
+      status: false,
+    }));
+    setLoadingRemovePost(listPostLoading as PostLoadingType[]);
+  }, [savedSummary?.saved_product_uids]);
+
+  React.useEffect(() => {
+    if (savedSummary) {
+      setListPostIdSaved(savedSummary.saved_product_uids);
+    }
+  }, [savedSummary?.saved_product_uids]);
+
+  const { data: listSavedPost, isFetching } = useQuery({
+    queryKey: ['list_saves_post'],
+    queryFn: () => services.saves.savedPosts(),
+    enabled: openSavedPost,
+    select: (data) => data.data,
+    staleTime: 0,
+  });
+
+  const { mutate: savePostMutate } = useMutation({
+    mutationFn: services.saves.savePost,
+    onError: (err: AxiosError<A>) => {
+      console.error('Error fetching update', err);
+    },
+    onSuccess: (data: A) => {
+      if (data.status) {
+        queryClient.invalidateQueries({ queryKey: ['save_summary'] });
+        queryClient.invalidateQueries({ queryKey: ['list_saves_post'] }).then(() => {
+          setLoadingRemovePost((post) => post.filter((item) => !item.status));
+          toast.success('Xóa tin lưu thành công');
+        });
+      } else {
+        toast.error('Xóa tin lưu không thành công');
+      }
+    },
+  });
+
+  const handleRemovePost = (uid: string) => {
+    setLoadingRemovePost((post) =>
+      post.map((item) => {
+        if (item.id === uid)
+          return {
+            id: uid,
+            status: true,
+          };
+        return item;
+      }),
+    );
+    const payload: ISaveProductPayload = {
+      product_uid: uid,
+      action: ActionSaveProduct.Unlike,
+    };
+    savePostMutate(payload);
+  };
+
+  const onRenderLoadingListPost = () =>
+    new Array(savedSummary?.saved_product_uids.length).fill(0).map((item) => (
+      <section className="flex gap-x-2 px-5 py-3" key={uuidv4() + item}>
+        <Skeleton className="h-[70px] w-[80px]" />
+        <div className="flex flex-1 flex-col justify-between">
+          <div className="flex h-8 flex-col gap-y-1">
+            <Skeleton className="h-3 flex-1" />
+            <Skeleton className="h-3 flex-1" />
+          </div>
+          <Skeleton className="mb-1 h-4 w-12" />
+        </div>
+      </section>
+    ));
+  const onRenderListPost = () => {
+    if (listSavedPost?.pagination?.total_count === 0)
+      return (
+        <div className="mb-4 flex items-center justify-center pb-4 pt-2">
+          <Image alt="empty-save-post" src={EmptyPost} />
+        </div>
+      );
+    return listSavedPost?.data.map((post) => (
+      <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">
+        <Link href={`/post/${post.product.slug}`} className="flex flex-1 cursor-pointer gap-x-2">
+          <Image
+            width={80}
+            height={70}
+            className="h-[70px] overflow-hidden rounded-sm border bg-slate-200 object-cover shadow-md"
+            alt={post.product.title}
+            src={post.product.images[0].url}
+            unoptimized
+          />
+
+          <div className="flex flex-1 flex-col justify-between">
+            <p className="line-clamp-2 text-xs font-semibold hover:text-primary_color">
+              {post.product.title}
+            </p>
+            <span className="mb-1 text-xs text-muted-foreground">{timeAgo(post.created_at)}</span>
+          </div>
+        </Link>
+        {loadingRemovePost.find((item) => item.id === post.product.uid)?.status ? (
+          <AiOutlineLoading3Quarters className="animate-spin text-xl duration-500" />
+        ) : (
+          <HiMiniXMark
+            onClick={() => handleRemovePost(post.product.uid)}
+            className="cursor-pointer text-xl hover:text-error_color"
+          />
+        )}
+      </section>
+    ));
+  };
+
+  return (
+    <Sheet onOpenChange={setOpenSavePost} open={openSavedPost}>
+      <SheetTrigger asChild>
+        <div className="relative">
+          <Button size={'icon'} variant="outline" className="rounded-full">
+            <LucideHeart className="h-5 w-5" />
+          </Button>
+          <Badge
+            className={cn(
+              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white hover:bg-error_color',
+              savedSummary ? 'bg-error_color' : 'bg-transparent',
+            )}
+          >
+            {savedSummary ? (
+              savedSummary.saved_product_uids.length
+            ) : (
+              <span className="relative flex h-4 w-4 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
+                <span className="relative inline-flex h-4 w-4 rounded-full bg-primary_color" />
+              </span>
+            )}
+          </Badge>
+        </div>
+      </SheetTrigger>
+      <SheetContent className="p-0">
+        <SheetHeader className="p-3">
+          <SheetTitle>Tin đăng đã lưu</SheetTitle>
+        </SheetHeader>
+        <section>
+          <Separator />
+          <section className="max-h-[90vh] overflow-y-auto">
+            {isFetching ? onRenderLoadingListPost() : onRenderListPost()}
+          </section>
+        </section>
+        <SheetFooter>
+          {savedSummary && savedSummary?.saved_product_uids?.length > 0 && (
+            <Link
+              href={''}
+              className="flex w-full items-center justify-center gap-x-2 py-3 text-center text-sm font-medium text-error_color hover:underline"
+            >
+              Xem tất cả <LuArrowRight />
+            </Link>
+          )}
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+export default FavoriteIcon;

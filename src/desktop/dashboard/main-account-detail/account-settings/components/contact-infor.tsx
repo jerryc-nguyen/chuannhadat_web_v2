@@ -16,9 +16,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toastSucess } from '@common/utils';
 import { LuLoader2 } from 'react-icons/lu';
 import { service } from '../../apis';
+import { toast } from 'sonner';
 
 const ContactInfor: React.FC = () => {
   const { currentUser } = useAuth();
@@ -62,7 +62,7 @@ const ContactInfor: React.FC = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
-      toastSucess('Cập nhật thông tin thành công');
+      toast.success('Cập nhật thông tin thành công');
       reset();
     },
   });
