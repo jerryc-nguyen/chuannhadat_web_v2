@@ -10,7 +10,6 @@ import {
 } from '@app/(home)/tao-tin-moi/constant';
 import { useEffect, useMemo, useState } from 'react';
 import { AutoComplete } from '@components/autocomplete';
-
 import { LoadingSpinner } from '@components/icons/loading-spinner';
 import { OptionForSelect } from '@models';
 
@@ -26,7 +25,7 @@ interface ILocationForm {
   onChangeStreet: (street?: OptionForSelect) => void;
 }
 
-const LocationPickerForm: React.FC<ILocationForm> = ({
+const LocationsPickerForm: React.FC<ILocationForm> = ({
   form, city, district, ward, street,
   onChangeCity, onChangeDistrict, onChangeWard, onChangeStreet
 }) => {
@@ -188,4 +187,4 @@ const LocationPickerForm: React.FC<ILocationForm> = ({
   );
 };
 
-export default LocationPickerForm;
+export default LocationsPickerForm;

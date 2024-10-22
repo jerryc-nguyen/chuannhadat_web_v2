@@ -9,8 +9,10 @@ import { UseFormReturn } from 'react-hook-form';
 import { IProductForm } from '@app/(home)/tao-tin-moi/type';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import LocationPickerForm from '@components/location-picker-form';
+
 import { OptionForSelect } from '@models';
+import LocationsPickerFormV2 from '@desktop/components/form-fields/LocationsPickerFormV2';
+import LocationsPickerForm from '@desktop/components/form-fields/LocationsPickerForm';
 
 interface ILocationForm {
   form: UseFormReturn<IProductForm>;
@@ -84,8 +86,12 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
-
-        <LocationPickerForm form={form} city={curCity} district={curDistrict} ward={curWard} street={curStreet}
+        <LocationsPickerFormV2
+          form={form}
+          city={curCity}
+          district={curDistrict}
+          ward={curWard}
+          street={curStreet}
           onChangeCity={onSelectCity}
           onChangeDistrict={onSelectDistrict}
           onChangeWard={onSelectWard}
