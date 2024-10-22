@@ -1,17 +1,14 @@
 'use client';
 
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { UseFormReturn } from 'react-hook-form';
 import {
   citiesData,
   cityDistrictsData,
-  districtsProjectsData,
   districtsStreetsData,
   districtsWardsData,
 } from '@app/(home)/tao-tin-moi/constant';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AutoComplete } from '@components/autocomplete';
 
 import { LoadingSpinner } from '@components/icons/loading-spinner';
@@ -111,7 +108,6 @@ const LocationPickerForm: React.FC<ILocationForm> = ({
               emptyMessage="Không tìm thấy nội dung"
               disabled={isLoading}
               endAdornment={isLoading ? <LoadingSpinner /> : null}
-              filter={false}
             />
             <FormMessage />
           </FormItem>
@@ -137,7 +133,6 @@ const LocationPickerForm: React.FC<ILocationForm> = ({
               emptyMessage="Không tìm thấy nội dung"
               disabled={isLoading || !city_id}
               endAdornment={isLoading ? <LoadingSpinner /> : null}
-              filter={false}
             />
             <FormMessage />
           </FormItem>
@@ -161,7 +156,6 @@ const LocationPickerForm: React.FC<ILocationForm> = ({
               emptyMessage="Không tìm thấy nội dung"
               disabled={isLoading || !district_id}
               endAdornment={isLoading ? <LoadingSpinner /> : null}
-              filter={false}
             />
           </FormItem>
         )}
@@ -184,7 +178,6 @@ const LocationPickerForm: React.FC<ILocationForm> = ({
               emptyMessage="Không tìm thấy nội dung"
               disabled={isLoading || !district_id}
               endAdornment={isLoading ? <LoadingSpinner /> : null}
-              filter={false}
             />
           </FormItem>
         )}

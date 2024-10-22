@@ -61,7 +61,6 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
     updateFullAddress({ street: street });
   }
 
-
   const updateFullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }) => {
     const address = [
       street?.text || curStreet?.text,
@@ -72,11 +71,15 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
     setFullAddress(address)
   }
 
+  const mapSrc = useMemo(() => {
+    return `https://maps.google.com/maps?&q=${fullAddress}&output=embed`
+  }, [fullAddress])
+
   return (
     <Card className="bg-primary/10">
       <CardHeader>
         <CardTitle className="text-md flex gap-2">
-          <MapPin /> Tìm kiếm địa chỉ bất động sản
+          <MapPin /> Chọn địa chỉ bất động sản
         </CardTitle>
         <Separator />
       </CardHeader>
@@ -90,6 +93,12 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
 
         <div className="grid gap-2">
           <Label htmlFor="subject">Vị trí trên bản đồ</Label>
+
+          <iframe
+            className='w-full min-h-64'
+            style={{ border: 0 }}
+            loading="lazy"
+            src={mapSrc}></iframe>
         </div>
 
         <div className="grid gap-2">
@@ -103,7 +112,7 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
         </div>
 
       </CardContent>
-    </Card>
+    </Card >
   );
 };
 
