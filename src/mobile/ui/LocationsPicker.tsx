@@ -9,7 +9,7 @@ import OptionPicker from '@mobile/ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 
 import { List, ListItem } from '@components/konsta';
-import useModals from '@mobile/modals/hooks';
+import { Modal } from '@mobile/modals/states/types';
 
 type LocationsPickerProps = {
   modalOption?: Record<A, A>;

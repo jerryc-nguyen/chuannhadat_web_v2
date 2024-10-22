@@ -12,13 +12,13 @@ import ImageForm from "./components/form-components/image-form";
 import { IProductForm } from "./type";
 import { Button } from "@components/ui/button";
 import ProductApiService from "./apis/product-api";
-import LocationForm from "./components/form-components/location-form";
 import ProductTypeForm from "./components/form-components/product-type";
 import ProductDescriptionForm from "./components/form-components/product-description";
 import Link from "next/link";
+import LocationFormV2 from "@app/(home)/tao-tin-moi/components/form-components/location-form-v2";
 
 const NewPost: React.FC = () => {
-  const defaultValues = { 
+  const defaultValues = {
     name: "",
     description: "",
     price: 0,
@@ -59,7 +59,7 @@ const NewPost: React.FC = () => {
     try {
       const res = await ProductApiService.Create(data);
       console.log("resssssssss", res);
-      
+
       console.log("data", data);
     } catch (error) {
       console.log("error", error);
@@ -74,7 +74,7 @@ const NewPost: React.FC = () => {
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
             <ProductTypeForm form={form} />
-            <LocationForm form={form} />
+            <LocationFormV2 form={form} />
             <ProductDescriptionForm form={form} />
             <ProductInfoForm form={form} />
             <ImageForm form={form} />
