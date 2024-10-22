@@ -1,23 +1,16 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@components/ui/separator';
 import { MapPin, CircleAlert } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
-
 import { IProductForm } from '@app/(home)/tao-tin-moi/type';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import dynamic from 'next/dynamic';
-import { center, SimpleLatLng } from '@components/map-leaflet/config';
-import { LoadingSpinner } from '@components/icons/loading-spinner';
-import MapsApiService from '../../apis/maps-api';
 import LocationPickerForm from '@components/location-picker-form';
 import { OptionForSelect } from '@models';
-
 
 interface ILocationForm {
   form: UseFormReturn<IProductForm>;
@@ -27,10 +20,10 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
   const [isFirstLoad, setIsFirstLoad] = useState(false);
   const { city_id, district_id, ward_id, street_id } = form.getValues();
 
-  const [curCity, setCurCity] = useState({ value: city_id, text: '' });
-  const [curDistrict, setCurDistrict] = useState({ value: district_id, text: '' });
-  const [curWard, setCurWard] = useState({ value: ward_id, text: '' });
-  const [curStreet, setCurStreet] = useState({ value: street_id, text: '' });
+  const [curCity, setCurCity] = useState<OptionForSelect | undefined>({ value: city_id, text: '' });
+  const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>({ value: district_id, text: '' });
+  const [curWard, setCurWard] = useState<OptionForSelect | undefined>({ value: ward_id, text: '' });
+  const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>({ value: street_id, text: '' });
 
   useEffect(() => {
     setIsFirstLoad(true);
@@ -38,28 +31,45 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
 
   const [fullAddress, setFullAddress] = useState<string>('');
 
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     console.log('isLoading', isLoading);
   }, [isLoading]);
 
-
   const onSelectCity = (city?: OptionForSelect) => {
     console.log('onSelectCity', city)
+    setCurCity(city);
+    updateFullAddress({ city: city });
   }
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     console.log('onSelectDistrict', district)
+    setCurDistrict(district);
+    updateFullAddress({ district: district });
   }
 
   const onSelectWard = (ward?: OptionForSelect) => {
     console.log('onSelectWard', ward)
+    setCurWard(ward);
+    updateFullAddress({ ward: ward });
   }
 
   const onSelectStreet = (street?: OptionForSelect) => {
     console.log('onSelectStreet', street)
+    setCurStreet(street)
+    updateFullAddress({ street: street });
+  }
+
+
+  const updateFullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }) => {
+    const address = [
+      street?.text || curStreet?.text,
+      ward?.text || curWard?.text,
+      district?.text || curDistrict?.text,
+      city?.text || curCity?.text
+    ].filter((text) => (text || '').length > 0).join(', ')
+    setFullAddress(address)
   }
 
   return (
@@ -73,19 +83,13 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
       <CardContent className="grid gap-6">
 
         <LocationPickerForm form={form} city={curCity} district={curDistrict} ward={curWard} street={curStreet}
-          onChangeCity={function (city?: OptionForSelect): void {
-            onSelectCity(city)
-          }} onChangeDistrict={function (district?: OptionForSelect): void {
-            onSelectDistrict(district)
-          }} onChangeWard={function (ward?: OptionForSelect): void {
-            onSelectWard(ward)
-          }} onChangeStreet={function (street?: OptionForSelect): void {
-            onSelectStreet(street)
-          }} />
+          onChangeCity={onSelectCity}
+          onChangeDistrict={onSelectDistrict}
+          onChangeWard={onSelectWard}
+          onChangeStreet={onSelectStreet} />
 
         <div className="grid gap-2">
           <Label htmlFor="subject">Vị trí trên bản đồ</Label>
-
         </div>
 
         <div className="grid gap-2">
@@ -94,8 +98,7 @@ const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
             id="subject"
             placeholder="Nhập Địa chỉ..."
             value={fullAddress}
-            onChange={(e) => { return }
-            }
+            onChange={(e) => { setFullAddress(e.target.value) }}
           />
         </div>
 
