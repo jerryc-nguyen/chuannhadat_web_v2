@@ -8,6 +8,7 @@ import PostDetailMobile from '../post-detail/PostDetailMobile ';
 import Image from 'next/image';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
+import ButtonSave from '@desktop/home/components/ButtonSave';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -95,6 +96,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
             </div>
           </div>
         </div>
+        <ButtonSave postUid={product.uid} />
       </AspectRatio.Root>
 
       <div className="p-4">

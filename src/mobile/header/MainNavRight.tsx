@@ -1,7 +1,7 @@
 'use client';
-
 import React from 'react';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import { v4 as uuidv4 } from 'uuid';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,15 +25,24 @@ import MainNavSidePanel from './MainNavSidePanel';
 import Image from 'next/image';
 import { Skeleton } from '@components/ui/skeleton';
 import Link from 'next/link';
-import { LucideBell, LucideHeart } from 'lucide-react';
+import { LucideBell } from 'lucide-react';
 import { cn } from '@common/utils';
 import { removeTokenServer } from '@app/action';
+import { getCookie, setFrontendToken } from '@common/cookies';
+import { FRONTEND_TOKEN } from '@common/auth';
+import FavoriteIcon from './FavoriteIcon';
 type MainNavRightProps = {
   isLogged: boolean;
 };
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { signOut, currentUser } = useAuth();
   const router = useRouter();
+  React.useEffect(() => {
+    const hasFrontendToken = getCookie(FRONTEND_TOKEN);
+    if (!hasFrontendToken) {
+      setFrontendToken(uuidv4());
+    }
+  }, []);
   React.useEffect(() => {
     if (!isLogged) {
       signOut();
@@ -175,9 +184,7 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
   return (
     <div className="header-icon justify-betweens flex gap-x-2">
       {renderNotification()}
-      <Button size={'icon'} variant="outline" className="rounded-full">
-        <LucideHeart className="h-5 w-5" />
-      </Button>
+      <FavoriteIcon />
       {renderAvatar()}
       <Button
         variant="outline"

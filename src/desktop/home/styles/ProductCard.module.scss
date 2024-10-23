@@ -1,0 +1,71 @@
+.card_wrapper {
+  :global {
+    .card-content {
+      overflow: hidden;
+      padding: 0;
+      border-radius: $s8;
+      &:hover .card-image {
+        scale: 1.3;
+      }
+    }
+    .card-content_carousel:hover .slider_button {
+      opacity: 1;
+      visibility: visible;
+    }
+    .card-content_carousel:hover .favorite_button {
+      opacity: 1;
+      visibility: visible;
+    }
+    .favorite_button {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .heart-animate {
+      &:local {
+        animation: heart-pop 0.3s ease-in-out;
+      }
+    }
+
+    .slider_button {
+      opacity: 0;
+      visibility: hidden;
+      transition: all ease 0.3s;
+    }
+    .slider_list_dot {
+      position: absolute;
+      bottom: $s10;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: $s8;
+      .slider-dot {
+        height: $s8;
+        width: $s8;
+        background: $neutral_01;
+        opacity: 0.6;
+        border-radius: 100%;
+        display: inline-block;
+        transition: all ease 0.4s;
+        cursor: pointer;
+      }
+      .slide-dot_active {
+        width: $s16;
+        border-radius: 6.25rem;
+        opacity: 1;
+      }
+    }
+  }
+
+  @keyframes heart-pop {
+    0% {
+      transform: scale(1.2);
+    }
+    60% {
+      transform: scale(1.8);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}

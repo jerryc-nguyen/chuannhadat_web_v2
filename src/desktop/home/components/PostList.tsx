@@ -1,10 +1,11 @@
 'use client';
 import ModalPostDetail from '@desktop/post-detail/components/modal-post-detail';
 import ProductCard from './ProductCard';
-import styles from '../styles/post-list.module.scss';
+import styles from '../styles/PostList.module.scss';
 import React from 'react';
 import { IPostProductCard } from '../states';
 import { cn } from '@common/utils';
+
 type PostListProps = {
   isShowAuthor?: boolean;
   dataPostList: IPostProductCard[];
@@ -17,7 +18,7 @@ export default function PostList({ isShowAuthor = true, dataPostList, className 
         <ModalPostDetail />
         <div className={cn('post_list', className)}>
           {dataPostList.map((product) => {
-            return <ProductCard key={product?.id} isShowAuthor={isShowAuthor} product={product} />;
+            return <ProductCard isShowAuthor={isShowAuthor} product={product} key={product?.id} />;
           })}
         </div>
       </div>

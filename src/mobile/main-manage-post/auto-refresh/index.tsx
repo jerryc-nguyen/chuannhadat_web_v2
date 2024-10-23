@@ -65,7 +65,7 @@ const AutoRefreshMobile: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
       onSuccessScheduleTime();
-      toastSucess('Thêm thời gian thành công');
+      toast.success('Thêm thời gian thành công');
     },
   });
 
@@ -78,7 +78,7 @@ const AutoRefreshMobile: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
       setShowDialogWarning(false);
-      toastSucess('Xóa thời gian thành công');
+      toast.success('Xóa thời gian thành công');
     },
   });
   // Update schedule time

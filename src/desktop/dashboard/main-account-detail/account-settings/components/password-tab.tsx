@@ -13,7 +13,6 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { toastSucess } from '@common/utils';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
@@ -36,7 +35,7 @@ const PasswordTab: React.FC = () => {
     },
     onSuccess: (data: A) => {
       if (data.status) {
-        toastSucess('Cập nhật mật khẩu thành công');
+        toast.success('Cập nhật mật khẩu thành công');
       } else {
         toast.error(data.message);
       }

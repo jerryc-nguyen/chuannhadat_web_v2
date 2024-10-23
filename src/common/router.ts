@@ -41,7 +41,7 @@ export const API_ROUTES = {
     TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url',
   },
   MAPS: {
-    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll'
+    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
   },
   PRODUCTS: {
     END_POINT: 'api/v1/products',
@@ -52,5 +52,10 @@ export const API_ROUTES = {
     REFRESH: 'api/v1/products/{product_id}/refresh',
     SETUP_AUTO_REFRESH: 'api/v1/products/{product_id}/setup_auto_refresh',
     SHOW_ON_FRONTEND: 'api/v1/products/{product_id}/show_on_frontend',
-  }
+  },
+  SAVES: {
+    SAVE_POST: 'api/v1/saves/save_product',
+    SAVED_PRODUCTS: 'api/v1/saves/saved_products',
+    SAVED_SUMMARY: 'api/v1/saves/summary',
+  },
 };

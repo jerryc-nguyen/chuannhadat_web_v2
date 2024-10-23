@@ -1,42 +1,35 @@
-/* eslint-disable @next/next/no-img-element */
-import { IoImage } from 'react-icons/io5';
-import useResizeImage from '@hooks/useResizeImage';
 import CardAuthor from './CardAuthor';
 import { useAtom, useAtomValue } from 'jotai';
 import { isLoadingModal, selectedPostId } from '../../post-detail/states/modalPostDetailAtoms';
 import { useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
-import { AspectRatio } from '@components/ui/AspectRatio';
-import Image from 'next/image';
+import { EmblaCarouselType } from 'embla-carousel';
+import styles from '../styles/ProductCard.module.scss';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import Spinner from '@components/ui/spinner';
-import Link from 'next/link';
+import { Carousel, CarouselApi, CarouselContent } from '@components/ui/carousel';
+import { cn } from '@common/utils';
+import React, { useCallback } from 'react';
+import ImageCard from './ImageCard';
+import Fade from 'embla-carousel-fade';
+import ImageSliderAction from './ImageSliderAction';
+import useEmblaCarousel from 'embla-carousel-react';
 
-const styles: A = {
-  imagesCountWrapper: {
-    position: 'absolute',
-    bottom: 15,
-    left: 15,
-    height: 35,
-  },
-  imagesCount: {
-    backgroundColor: 'rgba(0,0,0,.3)',
-    display: 'flex',
-    borderRadius: 20,
-  },
-};
-
-const DEFAULT_THUMB_IMAGE =
-  'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
+import ButtonSave from './ButtonSave';
+import useResizeImage from '@hooks/useResizeImage';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
 };
 export default function ProductCard({ product, isShowAuthor = true }: ProductCardProps) {
-  const { buildThumbnailUrl } = useResizeImage();
   const queryClient = useQueryClient();
+  const [imageSliderViewPortRef] = useEmblaCarousel();
+  const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
+  const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
+  const { buildThumbnailUrl } = useResizeImage();
+
   const [postId, setSelectedPostId] = useAtom(selectedPostId);
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
 
@@ -47,38 +40,69 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
       queryFn: () => services.posts.getDetailPost(postId),
     });
   };
+
+  const updateSlidesInView = React.useCallback((imageSliderApi: EmblaCarouselType) => {
+    setSlidesInView((slidesInView) => {
+      if (slidesInView.length === imageSliderApi.slideNodes().length) {
+        imageSliderApi.off('slidesInView', updateSlidesInView);
+      }
+      const inView = imageSliderApi.slidesInView().filter((index) => !slidesInView.includes(index));
+      return slidesInView.concat(inView);
+    });
+  }, []);
+
+  // https://stackoverflow.com/a/50227675
+  const preloadImages = useCallback((event: A) => {
+    if (event.scrollProgress() != 0) {
+      return
+    }
+    product.images.forEach((picture: A, index: number) => {
+      setTimeout(() => {
+        const img = new Image();
+        img.src = buildThumbnailUrl({ imageUrl: picture.url })
+      }, index * 10)
+    });
+  }, [buildThumbnailUrl, product.images])
+
+  React.useEffect(() => {
+    if (!imageSliderApi) return;
+    updateSlidesInView(imageSliderApi);
+    imageSliderApi.on('slidesInView', updateSlidesInView);
+    imageSliderApi.on('reInit', updateSlidesInView);
+    imageSliderApi.on('select', preloadImages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageSliderApi, updateSlidesInView]);
+
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
   return (
-    <Card className="post-list_item relative h-full rounded-md p-4">
+    <Card className={cn(styles.card_wrapper, 'relative h-full overflow-hidden rounded-md p-4')}>
       {isShowAuthor && (
         <CardHeader className="p-0 pb-4">
           <CardAuthor product={product} />
         </CardHeader>
       )}
-      <CardContent className="p-0">
-        <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-md bg-muted">
-          <Link href={`post/${product.slug}`} target="_blank">
-            <Image
-              src={buildThumbnailUrl({
-                imageUrl: product?.featured_image_url || DEFAULT_THUMB_IMAGE,
-              })}
-              alt="Image post"
-              fill
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII="
-              loading="lazy"
-              placeholder="blur"
-              className="h-full w-full cursor-pointer object-cover transition-all hover:scale-125"
-            />
-          </Link>
-          <div style={styles.imagesCountWrapper}>
-            <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
-              <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
-                <IoImage size={20} style={{ color: '#fff' }} />
-                <span style={{ color: '#fff', marginLeft: 5 }}>{product?.images_count}</span>
-              </div>
-            </div>
-          </div>
-        </AspectRatio>
+      <CardContent className="card-content">
+        <Carousel
+          opts={{ loop: true }}
+          setApi={setImageSliderApi}
+          plugins={[Fade()]}
+          className="card-content_carousel w-full"
+        >
+          <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
+            {product.images.map((item: A, index: number) => (
+              <ImageCard
+                key={item.id}
+                inView={slidesInView.indexOf(index) > -1}
+                countImages={product.lenght}
+                item={item}
+                slug={product?.slug}
+                index={index}
+              />
+            ))}
+          </CarouselContent>
+          <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
+          <ButtonSave postUid={product.uid} />
+        </Carousel>
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
         <h3
