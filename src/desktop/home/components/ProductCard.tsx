@@ -11,13 +11,14 @@ import BedRoomIcon from '@assets/icons/badroom-icon';
 import Spinner from '@components/ui/spinner';
 import { Carousel, CarouselApi, CarouselContent } from '@components/ui/carousel';
 import { cn } from '@common/utils';
-import React from 'react';
+import React, { useCallback } from 'react';
 import ImageCard from './ImageCard';
 import Fade from 'embla-carousel-fade';
 import ImageSliderAction from './ImageSliderAction';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import ButtonSave from './ButtonSave';
+import useResizeImage from '@hooks/useResizeImage';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
@@ -27,6 +28,7 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
   const [imageSliderViewPortRef] = useEmblaCarousel();
   const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
   const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
+  const { buildThumbnailUrl } = useResizeImage();
 
   const [postId, setSelectedPostId] = useAtom(selectedPostId);
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
@@ -49,11 +51,26 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
     });
   }, []);
 
+  // https://stackoverflow.com/a/50227675
+  const preloadImages = useCallback((event: A) => {
+    if (event.scrollProgress() != 0) {
+      return
+    }
+    product.images.forEach((picture: A, index: number) => {
+      setTimeout(() => {
+        const img = new Image();
+        img.src = buildThumbnailUrl({ imageUrl: picture.url })
+      }, index * 10)
+    });
+  }, [buildThumbnailUrl, product.images])
+
   React.useEffect(() => {
     if (!imageSliderApi) return;
     updateSlidesInView(imageSliderApi);
     imageSliderApi.on('slidesInView', updateSlidesInView);
     imageSliderApi.on('reInit', updateSlidesInView);
+    imageSliderApi.on('select', preloadImages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageSliderApi, updateSlidesInView]);
 
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
