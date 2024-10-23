@@ -15,7 +15,7 @@ type IListItemBtsPickerProps = {
 
 export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect }: IListItemBtsPickerProps) {
   const { openModal, closeModal } = useModals();
-  const selectedOption = options.find((item: OptionForSelect) => item.value.toString() == value)
+  const selectedOption = options.find((item: OptionForSelect) => (item.value + '') == value)
 
   const onLocalSelect = (option: OptionForSelect) => {
     if (onSelect) {

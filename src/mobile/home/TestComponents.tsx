@@ -97,7 +97,7 @@ export default function TestComponents() {
     <List strongIos outlineIos>
       <ListItemBtsPicker {...directionFieldOption} />
       <ListItemBtsInput {...priceFieldOption} />
-      <ListItemBtsPicker {...bedFieldOption} />
+      {/* <ListItemBtsPicker {...bedFieldOption} /> */}
     </List>
 
     <LocationsPicker

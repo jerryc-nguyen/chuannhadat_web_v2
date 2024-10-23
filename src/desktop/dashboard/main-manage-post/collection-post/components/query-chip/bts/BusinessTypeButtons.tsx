@@ -7,10 +7,10 @@ export default function BusinessTypeButtons({ value, onChange }: { value: string
     <ButtonGroup className={`p-1 bg-muted rounded grid grid-cols-${defaultListFilterOptions.businessTypeOptions.length}`}>
       {defaultListFilterOptions.businessTypeOptions?.map((option) => (
         <Button
-          variant={"ghost"} 
+          variant={"ghost"}
           key={option.value}
           className={`grid-cols-1 hover:bg-background ${value != option.value ? "bg-transparent" : "bg-background"}`}
-          onClick={() => {onChange(option.value.toString())}}
+          onClick={() => { onChange(option.value + '') }}
         >
           {option.text}
         </Button>

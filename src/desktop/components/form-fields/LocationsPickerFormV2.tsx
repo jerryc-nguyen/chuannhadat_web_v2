@@ -203,7 +203,7 @@ export default function LocationsPickerFormV2({
           name="street_id"
           render={({ field }) => (
             <FormItem className="grid gap-2">
-              <FormLabel>Đường/ Phố'</FormLabel>
+              <FormLabel>Đường/ Phố</FormLabel>
               <DropdownSelectField
                 options={[...streetOptions]}
                 placeholder='Chọn Đường/ Phố'
