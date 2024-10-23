@@ -10,13 +10,14 @@ import BadRoomIcon from '@assets/icons/bedroom-icon';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import Spinner from '@components/ui/spinner';
 import { Carousel, CarouselApi, CarouselContent } from '@components/ui/carousel';
-
 import { cn } from '@common/utils';
 import React from 'react';
 import ImageCard from './ImageCard';
 import Fade from 'embla-carousel-fade';
 import ImageSliderAction from './ImageSliderAction';
 import useEmblaCarousel from 'embla-carousel-react';
+
+import ButtonSave from './ButtonSave';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
@@ -68,7 +69,7 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
           opts={{ loop: true }}
           setApi={setImageSliderApi}
           plugins={[Fade()]}
-          className="card-content_list w-full"
+          className="card-content_carousel w-full"
         >
           <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
             {product.images.map((item: A, index: number) => (
@@ -83,6 +84,7 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
             ))}
           </CarouselContent>
           <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
+          <ButtonSave postUid={product.uid} />
         </Carousel>
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">

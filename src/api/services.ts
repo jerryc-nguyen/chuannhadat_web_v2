@@ -1,4 +1,6 @@
 import axiosInstance from '@api/axiosInstance';
+import { FRONTEND_TOKEN } from '@common/auth';
+import { getCookie } from '@common/cookies';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
 import { IProductSummary } from '@desktop/post-detail/type';
@@ -9,6 +11,13 @@ import {
   LoginResponse,
 } from '@mobile/auth/types';
 import { Author, IProductDetail } from '@mobile/searchs/type';
+import {
+  ActionSaveProduct,
+  ISavedProductsResponse,
+  ISaveProductPayload,
+  ISaveProductResponse,
+  ISavesSummaryResponse,
+} from '@models/savesPostModel';
 
 export const services = {
   profiles: {
@@ -80,6 +89,29 @@ export const services = {
     },
     signUp: async (data: Partial<IFormPropsRegister>): Promise<IRegisterResponse> => {
       return axiosInstance.post(API_ROUTES.AUTH.REGISTER_BY_PHONE, data);
+    },
+  },
+  saves: {
+    savePost: async (payload: ISaveProductPayload): Promise<ISaveProductResponse> => {
+      return axiosInstance.post(API_ROUTES.SAVES.SAVE_POST, payload, {
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
+    },
+    savedPosts: async (): Promise<ISavedProductsResponse> => {
+      return axiosInstance.get(API_ROUTES.SAVES.SAVED_PRODUCTS, {
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
+    },
+    savedSummary: async (): Promise<ISavesSummaryResponse> => {
+      return axiosInstance.get(API_ROUTES.SAVES.SAVED_SUMMARY, {
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
     },
   },
 };

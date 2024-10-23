@@ -29,11 +29,13 @@ export function stringToSlug(str?: string) {
   return str;
 }
 
-export const removeEmpty = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) =>
-  v !== '' && v !== null && v !== undefined
-));
+export const removeEmpty = (obj: Record<A, A>) =>
+  Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v !== '' && v !== null && v !== undefined),
+  );
 
-export const removeNull = (obj: Record<A, A>) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
+export const removeNull = (obj: Record<A, A>) =>
+  Object.fromEntries(Object.entries(obj).filter(([, v]) => v));
 export const genKey = (index: number) => index;
 
 export const toastSucess = (content: string, description?: string) => {
@@ -124,14 +126,36 @@ export const queryParamsToObject = (query: string): Record<string, A> => {
     });
 
   return result;
-}
+};
 
 export const updateUrlSearchParams = (url: string, params: Record<string, A>) => {
   const urlObj = new URL(url);
   const newParams = {
     ...urlObj.searchParams,
-    ...params
-  }
+    ...params,
+  };
   urlObj.search = queryString.stringify(removeEmpty(newParams));
   return urlObj.toString();
-}
+};
+export const timeAgo = (date: string) => {
+  const now = new Date();
+  const past = new Date(date);
+  const diff = Math.floor((now.getTime() - past.getTime()) / 1000);
+
+  const intervals = [
+    { label: 'năm', seconds: 31536000 },
+    { label: 'tháng', seconds: 2592000 },
+    { label: 'ngày', seconds: 86400 },
+    { label: 'giờ', seconds: 3600 },
+    { label: 'phút', seconds: 60 },
+    { label: 'giây', seconds: 1 },
+  ];
+
+  for (const interval of intervals) {
+    const count = Math.floor(diff / interval.seconds);
+    if (count > 0) {
+      return `${count} ${interval.label} trước`;
+    }
+  }
+  return 'Vừa xong';
+};

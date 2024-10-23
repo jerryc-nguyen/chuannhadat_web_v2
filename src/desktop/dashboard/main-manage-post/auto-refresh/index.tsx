@@ -67,7 +67,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
       onSuccessScheduleTime();
-      toastSucess('Thêm thời gian thành công');
+      toast.success('Thêm thời gian thành công');
     },
   });
 
@@ -80,7 +80,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
       setShowDialogWarning(false);
-      toastSucess('Xóa thời gian thành công');
+      toast.success('Xóa thời gian thành công');
     },
   });
   // Update schedule time
@@ -92,7 +92,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['refresh-time'] });
       onSuccessScheduleTime();
-      toastSucess('Cập nhật thời gian thành công');
+      toast.success('Cập nhật thời gian thành công');
     },
   });
 
@@ -136,14 +136,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     setTimeRefresh(defaultTimeRefresh);
     setContentDialogTimePicker(undefined);
   };
-  const toastSucess = (content: string, description?: string) => {
-    toast.success(content, {
-      description,
-      classNames: {
-        toast: '!bg-[#ecfdf3] !border-[#d3fde5] !text-[#008a2e]',
-      },
-    });
-  };
+
   const handleSubmitAddSchedule = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const [hour, minute] = timeRefresh.split(':');
