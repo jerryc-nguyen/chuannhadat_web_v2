@@ -11,7 +11,7 @@ export default function BusinessTypeButtons() {
         {filterFieldOptions.businessTypeOptions?.map((option) => {
           return (
             <TabsTrigger
-              value={option.value.toString()}
+              value={option.value + ''}
               key={option.text}
               className="flex-1"
               onClick={() => {

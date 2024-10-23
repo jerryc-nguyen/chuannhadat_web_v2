@@ -16,7 +16,6 @@ import { usePathname } from 'next/navigation';
 import styles from '../styles/sidebar.module.scss';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { useBalanceRequest } from '@api/balance';
-import { IBalanceResponse } from '@mobile/main-financial-management/types';
 import { listNavDashboard } from '../constants';
 import Logo from '@components/logo';
 
@@ -24,16 +23,11 @@ type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const { currentUser } = useAuth();
-  const [balanceData, setBalanceData] = React.useState<IBalanceResponse>({
-    tk_chinh: '0 Xu',
-    tk_km: '0 Xu',
-    total: '0 Xu',
-  });
   const [accordionActive, setAccordianActive] = React.useState('');
   const genKey = (index: number) => index;
   const pathname = usePathname();
 
-  const { fetchBalance } = useBalanceRequest();
+  const { balanceData, fetchBalance } = useBalanceRequest();
 
   React.useEffect(() => {
     listNavDashboard.forEach((nav, index) => {
@@ -56,8 +50,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   React.useEffect(() => {
     const loadBalance = async () => {
       try {
-        const result = await fetchBalance();
-        setBalanceData(result.data);
+        await fetchBalance();
       } catch (error) {
         console.error('Error loading balance', error);
       }

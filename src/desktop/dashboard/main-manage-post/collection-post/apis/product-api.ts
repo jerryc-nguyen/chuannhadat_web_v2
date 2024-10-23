@@ -2,7 +2,7 @@
 import { API_ROUTES } from '@common/router';
 import axiosInstance from '@api/axiosInstance';
 import { ProductQuery } from '../data/schemas/product-query-schema';
-import { UpVipProductInput } from '../data/schemas/up-vip-schema';
+import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput, UpVipProductInput } from '../data/schemas/product-action-schema';
 
 const ProductApiService = {
   Filter: async (data: ProductQuery) => {
@@ -34,8 +34,8 @@ const ProductApiService = {
     return response;
   },
 
-  GetUpVipSettings: async () => {
-    const response = await axiosInstance.get(`${API_ROUTES.PRODUCTS.GET_UP_VIP_SETTINGS}`);
+  GetProductActionSettings: async () => {
+    const response = await axiosInstance.get(`${API_ROUTES.PRODUCTS.GET_PRODUCT_ACTION_SETTINGS}`);
 
     return response;
   },
@@ -50,7 +50,7 @@ const ProductApiService = {
 
     return response;
   },
-  // post /api/v1/products/validate_up_vip
+
   ValidateUpVip: async (data: UpVipProductInput) => {
     const formData = new FormData();
     formData.append('product_id', data.product_id);
@@ -58,6 +58,40 @@ const ProductApiService = {
     formData.append('number_of_day', data.number_of_day);
 
     const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.VALIDATE_UP_VIP}`, formData);
+
+    return response;
+  },
+
+  ShowOnFrontend: async (data: ShowOnFrontEndProductInput) => {
+    const formData = new FormData();
+    formData.append('show_on_frontend', String(data.showOnFrontEnd));
+
+    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.SHOW_ON_FRONTEND.replace("{product_id}", data.productId)}`, formData);
+
+    return response;
+  },
+
+  Refresh: async (data: {
+    productId: string;
+  }) => {
+    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.REFRESH.replace("{product_id}", data.productId)}`);
+
+    return response;
+  },
+
+  SetUpAutoRefresh: async (data: SetUpAutoRefreshProductInput) => {
+    const formData = new FormData();
+    formData.append('auto_refresh', String(data.autoRefresh));
+
+    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.SETUP_AUTO_REFRESH.replace("{product_id}", data.productId)}`, formData);
+
+    return response;
+  },
+
+  Delete: async (data: {
+    productId: string;
+  }) => {
+    const response = await axiosInstance.delete(`${API_ROUTES.PRODUCTS.DELETE.replace("{product_id}", data.productId)}`);
 
     return response;
   },

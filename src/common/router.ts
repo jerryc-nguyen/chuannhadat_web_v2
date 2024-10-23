@@ -46,9 +46,12 @@ export const API_ROUTES = {
   PRODUCTS: {
     END_POINT: 'api/v1/products',
     DELETE: 'api/v1/products/{product_id}',
-    GET_UP_VIP_SETTINGS: 'api/v1/products/up_vip_settings',
+    GET_PRODUCT_ACTION_SETTINGS: 'api/v1/products/settings',
     UP_VIP: 'api/v1/products/up_vip',
     VALIDATE_UP_VIP: 'api/v1/products/validate_up_vip',
+    REFRESH: 'api/v1/products/{product_id}/refresh',
+    SETUP_AUTO_REFRESH: 'api/v1/products/{product_id}/setup_auto_refresh',
+    SHOW_ON_FRONTEND: 'api/v1/products/{product_id}/show_on_frontend',
   },
   SAVES: {
     SAVE_POST: 'api/v1/saves/save_product',

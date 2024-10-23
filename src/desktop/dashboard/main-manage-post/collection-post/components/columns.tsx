@@ -6,14 +6,24 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { Product } from "../data/schemas/product-schema";
 import Image from "next/image";
 import { Switch } from "@components/ui/switch";
-import { ChevronsUp, ImageIcon, Maximize2, RefreshCw, SquarePen, Trash2 } from "lucide-react";
+import { ChevronsUp, ImageIcon, Maximize2, RefreshCw, SquarePen, Trash2, TriangleAlert } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { Separator } from "@components/ui/separator";
 import Link from "next/link";
 import hideOnFrontendReasonConstant from "../constant/hide_on_frontend_reason";
-import { Fragment } from "react";
-import UpVipProductForm from "../../components/up-vip-form";
+import { Fragment, useState } from "react";
+import UpVipProductForm from "./up-vip-form";
 import useModals from "@mobile/modals/hooks";
+import ProductApiService from "../apis/product-api";
+import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput } from "../data/schemas/product-action-schema";
+import { toast } from 'react-toastify';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui/tooltip";
+import useProductActionSetting from "../hooks/product-action-setting";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { services } from '@api/services';
+import { isLoadingModal, selectedPostId } from "@desktop/post-detail/states/modalPostDetailAtoms";
+import { useAtom, useAtomValue } from "jotai";
+import Spinner from '@components/ui/spinner';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -51,9 +61,10 @@ export const columns: ColumnDef<Product>[] = [
       const imageUrl = images?.[0]?.url || "/default-image.jpg";
       
       const images_count = row.original.images_count;
-      const visibility = row.original.visibility;
+      const visible = row.original.visible;
 
       const title = row.original.title;
+      const productUid = row.original.uid;
       const formatted_price = row.original.formatted_price;
       const formatted_area = row.original.formatted_area;
       const formatted_price_per_m2 = row.original.formatted_price_per_m2;
@@ -64,6 +75,7 @@ export const columns: ColumnDef<Product>[] = [
 
       const productId = row.original.id;
       const adsType = row.original.ads_type;
+      const auto_refresh_product = row.original.auto_refresh_product;
 
       return (
         <div className="container">
@@ -82,37 +94,23 @@ export const columns: ColumnDef<Product>[] = [
               </div>
             ) : <></>
           }
-          <div className="flex w-full flex-col gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center min-h-[180px]">
-            <div className="relative group inline-flex rounded-lg flex-col gap-3 h-full">
-              <Image
-                alt={title}
-                width={100}
-                height={100}
-                src={imageUrl}
-                className="object-cover rounded-lg h-36 w-48 border-2"
-                onError={(e) => {
-                  e.currentTarget.src = "/default-image.jpg"; // Set default image path
-                  e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
-                }}
-              
-              />
-              <div className="flex gap-2 items-center justify-center">
-                <span>Ẩn tin</span>
-                <Switch
-                  checked={visibility === "visible"}
-                />
-                <span>Hiện tin</span>
-              </div>
-              <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
-                <ImageIcon  size={16}/>
-                <span>{images_count}</span>
-                <span>hình</span>
-              </div>
-            </div>
+          <div className="flex w-full gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center min-h-[180px]">
+            <ImageProduct 
+              title={title}
+              imageUrl={imageUrl}
+              images_count={images_count}
+              visible={visible}
+              productId={productId}
+              productUid={productUid}
+            />
             <div className="flex flex-col flex-1 h-full">
-              <span className="mb-3 text-16 font-semibold">
-                {title}
-              </span>
+              <div className="mb-2">
+                <TitleTriggerOpenProductDetail
+                  title={title}
+                  visible={visible}
+                  productUid={productUid}
+                />
+              </div>
               <div className="mb-2 flex gap-5 flex-wrap">
                 <span className="text-sm font-medium">
                   {formatted_price || "--"}
@@ -150,36 +148,25 @@ export const columns: ColumnDef<Product>[] = [
               </div>
 
               <div className="flex gap-16">
-
                 <ButtonUpVip productId={productId} adsType={adsType}/>
-                <div className="bg-background border flex items-center px-3 space-x-2 text-sm rounded-md w-max">
-                  <Checkbox id="terms"
-                    checked
-                  />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Làm mới tin tự động
-                  </label>
-                </div>
+
+                <CheckboxAutoRefresh productId={productId} auto_refresh_product={auto_refresh_product}/>
+                
               </div>
             </div>
             <div className="flex flex-col space-y-1 col-span-2 h-full">
               <div className="flex flex-col">
-                <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1">
-                  <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
-                </Button>
+                <ButtonRefresh productId={productId} />
 
-                <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-2">
-                  <SquarePen size={16}/> <span className="text-sm">Cập nhật tin</span> 
-                </Button>
+                <Link href={`/dashboard/manage-post/edit-${productUid}`} target="_blank">
+                  <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-2">
+                    <SquarePen size={16}/> <span className="text-sm">Cập nhật tin</span> 
+                  </Button>
+                </Link>
 
                 <Separator className="h-[1px]" />
                 
-                <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mt-2">
-                  <Trash2 size={16}/>  <span className="text-sm">Xóa tin</span>
-                </Button>
+                <ButtonDelete productId={productId} />
               </div>
             </div>
           </div>
@@ -197,17 +184,20 @@ export const columns: ColumnDef<Product>[] = [
     ),
     cell: ({ row }) => {
       const id = row.original.id;
+      // const productUid = row.original.uid;
+      const detail_path = row.original.detail_path;
       const formatted_created_at = row.original.formatted_created_at;
       const formatted_published_at = row.original.formatted_published_at;
       const ads_type = row.original.ads_type;
+      const expires_after_days = row.original.expires_after_days;
 
       return (
         <div className="flex flex-col gap-1 min-h-[180px] w-max">
           <span className="text-xs">
             <span className="font-medium mb-2">Mã tin:</span>
             <Link
-              className="ml-2 text-blue-600 hover:text-blue-900"
-              href={`${id}`}
+              className="ml-2 text-blue-600 hover:text-blue-900 cursor-pointer"
+              href={`${detail_path}`}
             >
               #{id}
             </Link>
@@ -245,7 +235,12 @@ export const columns: ColumnDef<Product>[] = [
                 ads_type === "vip_2" ? "TIN VIP 2" :
                 ads_type === "vip_3" ? "TIN VIP 3" : "Tin thường"
               }
+              {
+                (expires_after_days && ads_type !== "normal") ? 
+                  <span className="text-muted-foreground">{` (hết hạn sau ${expires_after_days})`}</span> : <></>
+              }
             </span>
+            
           </div>
         </div>
       );
@@ -262,21 +257,264 @@ const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: strin
     openModal({
       name: 'ModalUpVipProduct',
       title: 'Cấu hình tin đăng',
-      content: <UpVipProductForm productId={productId} closeModal={closeModal}/>,
+      content: (
+        <UpVipProductForm productId={productId} closeModal={closeModal}/>
+      ),
       footer: <></>,
       showAsDialog: true,
-      maxHeightPercent: 0.8,
-      isHiddenScroll: true,
-    })
+    });
   }
 
   return (
-    <Button variant="outline" size="sm" className="h-8" onClick={showModalUpVipProduct} disabled={adsType !== "normal"}>
+    <Button variant="outline" size="sm" className="h-8" onClick={() => {
+      showModalUpVipProduct();
+    }} disabled={adsType !== "normal"}>
       <ChevronsUp color="#28a745" size={16}/>
       <span className="text-sm text-[#28a745]">
         UP VIP
       </span>
       <ChevronsUp color="#28a745" size={16}/>
     </Button>
+  )
+}
+
+const SwitchButtonToggleShowOnFrontEnd = ({ productId, visible }: { productId: string, visible: boolean } ) => {
+  const [checked, setChecked] = useState<boolean>(visible);
+
+  const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
+    try {
+      const res: A = await ProductApiService.ShowOnFrontend(data);
+      console.log("handleShowOnFrontend success response", res);
+      if ( res.status === true && res.message ) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+        setChecked(!data.showOnFrontEnd);
+      }
+    } catch (err) {
+      setChecked(!data.showOnFrontEnd);
+      console.error("handleShowOnFrontend error", err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
+  };
+
+  return (
+    <div className="flex gap-2 items-center justify-center">
+      <span>Ẩn tin</span>
+      <Switch
+        checked={checked}
+        onCheckedChange={(checked) => {
+          setChecked(checked);
+          handleShowOnFrontend({
+            productId: productId,
+            showOnFrontEnd: checked
+          });
+        }}
+      />
+      <span>Hiện tin</span>
+    </div>
+  )
+}
+
+const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: string, auto_refresh_product: boolean } ) => {
+  const [checked, setChecked] = useState<boolean>(auto_refresh_product);
+
+  const handleSetUpAutoRefresh = async (data: SetUpAutoRefreshProductInput) => {
+    try {
+      const res: A = await ProductApiService.SetUpAutoRefresh(data);
+      console.log("handleSetUpAutoRefresh success response", res);
+
+      if ( res.status === true && res.message ) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+        setChecked(!data.autoRefresh);
+      }
+    } catch (err) {
+      setChecked(!data.autoRefresh);
+      console.error("handleSetUpAutoRefresh error", err);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
+  };
+
+  return (
+    <div className="bg-background border flex items-center px-3 space-x-2 text-sm rounded-md w-max">
+      <Checkbox
+        checked={checked}
+        onCheckedChange={(checkedState) => {
+          if (typeof checkedState === 'boolean') {
+            setChecked(checkedState);
+            handleSetUpAutoRefresh({
+              productId: productId,
+              autoRefresh: checkedState
+            })
+          }
+        }}
+      />
+      <label
+        htmlFor="terms"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        Làm mới tin tự động
+      </label>
+    </div>
+  )
+}
+
+const ButtonRefresh = ({ productId }: { productId: string } ) => {
+  const { productActionSettings, decreaseTotalRefreshsCount } = useProductActionSetting();
+
+  const handleRefresh = async () => {
+    try {
+      const res: A = await ProductApiService.Refresh({
+        productId: productId
+      });
+      console.log("handleRefresh success response", res);
+
+      if ( res.status === true && res.message ) {
+        toast.success(res.message);
+        decreaseTotalRefreshsCount();
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: A) {
+      console.error("handleRefresh error", err);
+      const errMsg = err.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
+      toast.error(errMsg);
+    }
+  };
+
+  return (
+    <TooltipProvider delayDuration={10}>
+      <Tooltip>
+        <TooltipTrigger>
+          <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1" onClick={handleRefresh}>
+            <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          {
+            ( productActionSettings && productActionSettings.total_refreshs_count ) ?
+              <p>Làm mới tin thủ công. Bạn còn lần {productActionSettings.total_refreshs_count} làm mới</p> :
+              <></>
+          }
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
+const ButtonDelete = ({ productId }: { productId: string } ) => {
+  const { openModal, closeModal } = useModals();
+
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: () => ProductApiService.Delete({ productId }), // Mutation function
+    onSuccess: (res: A) => {
+      console.log("handleDelete success response", res);
+
+      if (res.status === 200 && res.success === true && res.message) {
+        toast.success(res.message);
+        queryClient.invalidateQueries({queryKey: ['collection-post']}); // Invalidate cache to refetch product list
+        closeModal(); // Close modal on success
+      } else {
+        toast.error(res.message);
+      }
+    },
+    onError: (err: A) => {
+      console.error("handleDelete error", err);
+      const errMsg = err?.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
+      toast.error(errMsg); // Show error toast
+    },
+  });
+
+  const showConfirmDelete = () => {
+    openModal({
+      name: 'ModalUpVipProduct',
+      title: 'Xác nhận',
+      content: (
+        <div>Bạn muốn xóa BDS ?</div>
+      ),
+      footer: <>
+        <Button variant="ghost" onClick={closeModal}>Hủy</Button>
+        <Button onClick={() => deleteMutation.mutate()}>OK</Button>
+      </>,
+      showAsDialog: true,
+    });
+  }
+
+  return (
+    <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mt-2" onClick={showConfirmDelete}>
+      <Trash2 size={16}/>  <span className="text-sm">Xóa tin</span>
+    </Button>
+  )
+}
+
+const ImageProduct = ({ imageUrl, images_count, title, visible, productId, productUid }: { imageUrl: string, images_count: number, title: string, visible: boolean, productId: string, productUid: string } ) => {
+  const postId = useAtomValue(selectedPostId);
+  const isLoadingCardProduct = useAtomValue(isLoadingModal);
+  
+  return (
+    <div className="group inline-flex rounded-lg flex-col gap-3 h-full">
+      <div className="relative h-36 w-48">
+        <Image
+          alt={title}
+          src={imageUrl}
+          className="object-cover rounded-lg border-2"
+          onError={(e) => {
+            e.currentTarget.src = "/default-image.jpg"; // Set default image path
+            e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
+          }}
+          fill
+        />
+
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
+          <ImageIcon  size={16}/>
+          <span>{images_count}</span>
+          <span>hình</span>
+        </div>
+      </div>
+      <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
+      
+      {isLoadingCardProduct && postId === productUid && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
+          <div role="status">
+            <Spinner />
+          </div>
+          <span className="font-medium">Đang tải...</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const TitleTriggerOpenProductDetail = ({ title, visible, productUid }: { title: string, visible: boolean, productUid: string } ) => {
+  const queryClient = useQueryClient();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_postId, setSelectedPostId] = useAtom(selectedPostId);
+
+  const openModalPostDetail = async () => {
+    setSelectedPostId(productUid);
+    await queryClient.prefetchQuery({
+      queryKey: ['get-detail-post', productUid],
+      queryFn: () => services.posts.getDetailPost(productUid),
+    });
+  };
+
+  return (
+    <span className="mb-3 text-16 font-semibold hover:text-primary_color cursor-pointer"
+      onClick={openModalPostDetail}
+    >
+      {title}
+      <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
+        <span className="mx-2"> · </span> 
+        <span className="space-x-1">
+          <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+          <span>{" "}Tin đang bị ẩn!{" "}</span>
+          <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+        </span>
+      </span>
+    </span>
   )
 }

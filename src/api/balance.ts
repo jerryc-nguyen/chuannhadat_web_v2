@@ -4,11 +4,16 @@ import { AxiosError } from 'axios';
 import { API_ROUTES } from '@common/router';
 import { saveToStorage } from '@common/localstorage';
 import { BALANCE_INFO_KEY } from '@common/balance';
+import { useAtom } from 'jotai';
+import { balanceDataAtom } from '@desktop/dashboard/layout/states';
 
 export function useBalanceRequest() {
+  const [balanceData, setBalanceData] = useAtom(balanceDataAtom);
+
   const { mutateAsync: fetchBalance, isSuccess: isSuccessBalance } = useMutation({
     mutationFn: async () => {
       const response = await axiosInstance.get(API_ROUTES.BALANCE.OVERVIEW);
+      setBalanceData(response.data);
       saveToStorage(BALANCE_INFO_KEY, JSON.stringify(response.data));
       return response;
     },
@@ -33,6 +38,7 @@ export function useBalanceRequest() {
     });
 
   return {
+    balanceData,
     fetchBalance,
     fetchTransaction,
     fetchHistoryTransaction,

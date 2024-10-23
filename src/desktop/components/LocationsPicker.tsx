@@ -11,7 +11,6 @@ import { ALL_OPTION } from '@common/constants';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
 
 import { Button } from '@components/ui/button';
-import CmdkOptionPicker from '@mobile/ui/CmdkOptionPicker';
 
 export default function LocationsPicker({
   city,

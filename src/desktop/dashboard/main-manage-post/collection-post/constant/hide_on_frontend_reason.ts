@@ -8,7 +8,7 @@ const hideOnFrontendReasonConstant = [
         ]
     },
     {
-        value: "price",
+        value: "wrong_price_policy",
         content: [
             "Tin bị ẩn do giá không phù hợp",
             "Vui lòng kiểm tra lại: Bán hay cho thuê, hình đại diện, giá, diện tích của tin đăng",

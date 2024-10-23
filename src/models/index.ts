@@ -5,7 +5,7 @@ export type Range = {
 };
 
 export type OptionForSelect = {
-  value: number | string;
+  value: number | string | undefined;
   text: string;
   range?: Range;
   params?: Record<string, A>;

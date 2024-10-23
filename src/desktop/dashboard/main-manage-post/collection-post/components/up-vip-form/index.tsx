@@ -1,31 +1,16 @@
 import { useEffect, useState } from "react";
-import ProductApiService from "../../collection-post/apis/product-api";
+import ProductApiService from "../../apis/product-api";
 import { toast } from 'react-toastify';
 import { ButtonGroup } from "@components/ui/button-group";
 import { Radio } from "@components/ui/Radio";
 import { maskNumber } from "@common/priceHelpers";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UpVipProductInput, upVipProductInputSchema } from "../../collection-post/data/schemas/up-vip-schema";
+import { UpVipProductInput, upVipProductInputSchema } from "../../data/schemas/product-action-schema";
 import { Button } from "@components/ui/button";
 import { LoadingSpinner } from "@components/icons/loading-spinner";
-
-type UpVipProductOptions = {
-    ads_type_options: AdsTypeOption[],
-    number_of_day_options: NumberOfDayOption[],
-}
-
-type AdsTypeOption = {
-    formatted_amount: string;
-    text: string;
-    value: string;
-}
-
-type NumberOfDayOption = {
-    formatted_discount: string;
-    text: string;
-    value: number;
-}
+import useProductActionSetting from "../../hooks/product-action-setting";
+import { useBalanceRequest } from "@api/balance";
 
 interface IUpVipProductFormProps {
     productId: string;
@@ -34,8 +19,8 @@ interface IUpVipProductFormProps {
 }
 
 const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => {
-    const [upVipProductOptions, setUpVipProductOptions] = useState<UpVipProductOptions | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { productActionSettings, isLoadingProductActionSetting } = useProductActionSetting();
+    const { fetchBalance } = useBalanceRequest();
 
     const [defaultValues] = useState<UpVipProductInput>({
         product_id: productId.toString(),
@@ -54,6 +39,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
           const res = await ProductApiService.UpVip(data);
           console.log("handleUpVip success response", res);
           toast.success("Up VIP thành công.");
+          fetchBalance();
           closeModal();
 
           // TODO KHAI NEED HELP: Cập nhật số dư tài khoản real-time
@@ -67,25 +53,6 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
     const adsType = form.watch("ads_type");
     const numberOfDay = form.watch("number_of_day");
 
-
-    useEffect(() => {
-        handleGetUpVipSettings();
-    }, [])
-
-    const handleGetUpVipSettings = async () => {
-        setIsLoading(true);
-        try {
-            const res = await ProductApiService.GetUpVipSettings();
-            setUpVipProductOptions(res.data);
-        } catch (err) {
-            console.error("handleFilter error", err);
-            setUpVipProductOptions(null);
-            toast.error("Không thể lấy Cấu hình tin đăng, vui lòng thử lại sau.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const [isLoadingValidate, setIsLoadingValidate] = useState<boolean>(false);
     const [errorValidate, setErrorValidate] = useState<string>("");
     const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -93,8 +60,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
     const handleValidateUpVip = async (data: UpVipProductInput) => {
         setIsLoadingValidate(true);
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const res: any = await ProductApiService.ValidateUpVip(data);
+          const res: A = await ProductApiService.ValidateUpVip(data);
           if ( res.status ) {
             setErrorValidate("");
             console.log("handleUpVip success response", res);
@@ -102,11 +68,9 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
             throw new Error(res.message);
           }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
+        } catch (err: A) {
           console.error("handleUpVip error", err);
           const errMessage = err.message || "Có lỗi xảy ra, vui lòng thử lại sau.";
-          toast.error(errMessage);
           setErrorValidate(errMessage)
         } finally {
             setIsLoadingValidate(false);
@@ -143,21 +107,21 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
     return (
         <div className="space-y-6 w-full">
             {
-                (isLoading && !upVipProductOptions) ? (
+                (isLoadingProductActionSetting && !productActionSettings) ? (
                     <div className="flex flex-1 justify-center">
                         <LoadingSpinner/> 
                     </div>
-                ) : (!isLoading && !upVipProductOptions) ? (
+                ) : (!isLoadingProductActionSetting && (!productActionSettings || !productActionSettings.up_vip)) ? (
                     <span>
                         Không thể lấy Cấu hình tin đăng, vui lòng thử lại sau. 
                     </span>
                 ) :<></>
             }
             {
-                upVipProductOptions ? (
+                ( productActionSettings && productActionSettings.up_vip) ? (
                     <form onSubmit={form.handleSubmit(handleUpVip)}>
                         {
-                            (upVipProductOptions?.ads_type_options && upVipProductOptions?.ads_type_options.length > 0) ? (
+                            (productActionSettings.up_vip?.ads_type_options && productActionSettings.up_vip?.ads_type_options.length > 0) ? (
                                 <div className="space-y-4">
                                     <h6 className="text-16 font-semibold">
                                         Chọn loại tin đăng
@@ -165,7 +129,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
 
                                     <ButtonGroup className="flex-1 w-full" orientation="vertical">
                                         {
-                                            upVipProductOptions.ads_type_options.map((item, index) => (
+                                            productActionSettings.up_vip.ads_type_options.map((item, index) => (
                                                 <div key={index} className="flex justify-between space-y-2">
                                                     <Radio
                                                         key={item.value}
@@ -191,7 +155,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
                             ) : <></>
                         }
                         {
-                            (upVipProductOptions?.number_of_day_options && upVipProductOptions?.number_of_day_options.length > 0) ? (
+                            (productActionSettings.up_vip?.number_of_day_options && productActionSettings.up_vip?.number_of_day_options.length > 0) ? (
                                 <div className="space-y-4">
                                     <h6 className="text-16 font-semibold">
                                         Chọn thời gian đăng tin
@@ -199,7 +163,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
 
                                     <ButtonGroup className="flex-1 w-full" orientation="vertical">
                                         {
-                                            upVipProductOptions.number_of_day_options.map((item, index) => (
+                                            productActionSettings.up_vip.number_of_day_options.map((item, index) => (
                                                 <div key={index} className="flex justify-between space-y-2">
                                                     <Radio
                                                         key={item.value}
@@ -230,7 +194,10 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
                         </span>
 
                         <div className="flex flex-1 justify-end font-medium mt-6">
-                            <Button type="submit" variant="default" size="sm" className="h-8" disabled={!!(!isLoadingValidate && errorValidate)}>
+                            <Button type="submit" variant="default" size="sm" className="h-8"
+                                // disabled={!!(!isLoadingValidate && errorValidate)}
+                                disabled={!!(isLoadingValidate || errorValidate || !productActionSettings || !productActionSettings.up_vip)}
+                            >
                                 {
                                     isLoadingValidate ? <LoadingSpinner /> : <></>
                                 }

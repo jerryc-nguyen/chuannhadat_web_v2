@@ -53,8 +53,8 @@ export default function CmdkOptionPicker({
             {filteredItems.map((listItem: OptionForSelect) => (
               <CommandItem
                 key={listItem.value}
-                value={listItem.value.toString()}
-                onSelect={(currentValue) => {
+                value={listItem.value + ''}
+                onSelect={() => {
                   setCurValue(listItem);
                   onSelect && onSelect(listItem);
                 }}
