@@ -15,7 +15,6 @@ import Link from 'next/link';
 import React from 'react';
 
 import useModalPostDetail from '../hooks/useModalPostDetail';
-import { HttpStatusCode } from 'axios';
 
 type PostsBySameAuthorProps = {
   productId: string;
@@ -69,12 +68,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
       </div>
     </div>
   );
-  console.log({
-    relatedPosts,
-    isLoading,
-    isSuccess,
-    status,
-  });
+
   if ((isSuccess && relatedPosts.length === 0) || status === 'error') return null;
   if (isLoading || !productId) return loadingRelatedCard();
   return (

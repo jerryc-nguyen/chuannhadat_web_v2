@@ -18,6 +18,8 @@ import 'yet-another-react-lightbox/plugins/counter.css';
 import SubTitleComponent from './subtitle-component';
 import { useRouter } from 'next/navigation';
 import useModalPostDetail from '../hooks/useModalPostDetail';
+import { useMutation } from '@tanstack/react-query';
+import { services } from '@api/services';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -28,6 +30,18 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   const [openSlideImage, setIsOpenSlideImage] = React.useState<boolean>(false);
   const [indexImageActive, setIndexImageActive] = React.useState<number>(0);
   const router = useRouter();
+  const { mutate: addViewPost } = useMutation({
+    mutationFn: services.trackings.viewProduct,
+  });
+  React.useEffect(() => {
+    console.log('data?.uid', data?.uid);
+    if (data?.uid) {
+      addViewPost({
+        product_uid: data.uid,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.uid]);
   const renderClassImages = (length: number) => {
     switch (length) {
       case 1:
@@ -78,7 +92,11 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               src={item.url}
             />
             {data?.images.length > 3 && index === 2 && (
-              <Button onClick={() => setIsOpenSlideImage(true)} variant={'outline'} className="relative z-10">
+              <Button
+                onClick={() => setIsOpenSlideImage(true)}
+                variant={'outline'}
+                className="relative z-10"
+              >
                 Xem thêm {data?.images.length - 3} hình
               </Button>
             )}

@@ -11,7 +11,7 @@ import useResizeImage from '@hooks/useResizeImage';
 
 export default function CardAuthor({ product }: { product: A }) {
   const { getAuthorById } = useCardAuthors();
-  const author = getAuthorById(product.user_id);
+  const author = product.author ?? getAuthorById(product.user_id);
   const { buildThumbnailUrl } = useResizeImage();
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
     author?.avatar_url || default_avatar,

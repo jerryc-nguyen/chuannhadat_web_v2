@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';

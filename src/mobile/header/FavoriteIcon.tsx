@@ -177,7 +177,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           </Badge>
         </div>
       </SheetTrigger>
-      <SheetContent className="p-0">
+      <SheetContent className="w-[90vw] p-0">
         <SheetHeader className="p-3">
           <SheetTitle>Tin đăng đã lưu</SheetTitle>
         </SheetHeader>
