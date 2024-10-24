@@ -9,7 +9,7 @@ export interface ISavesSummaryResponse {
 
 interface Post {
   id: number;
-  product: IProductDetail[];
+  product: IProductDetail;
   created_at: string;
 }
 
@@ -21,12 +21,8 @@ export interface Pagination {
 export interface ISavedProductsResponse {
   code: HttpStatusCode;
   status: boolean;
-  data: {
-    code: number;
-    status: boolean;
-    pagination: Pagination;
-    data: Post[];
-  };
+  pagination: Pagination;
+  data: Post[];
 }
 export enum ActionSaveProduct {
   Like = 'like',

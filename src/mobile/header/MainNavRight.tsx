@@ -19,7 +19,6 @@ import useModals from '@mobile/modals/hooks';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { Badge } from '@components/ui/badge';
-import NotificationsList from '@desktop/notification/NotificationsList';
 import useSidePanels from '@components/SidePanel/hooks';
 import MainNavSidePanel from './MainNavSidePanel';
 import Image from 'next/image';
@@ -31,6 +30,7 @@ import { removeTokenServer } from '@app/action';
 import { getCookie, setFrontendToken } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import FavoriteIcon from './FavoriteIcon';
+import NotificationsList from '@mobile/notification/NotificationsList';
 type MainNavRightProps = {
   isLogged: boolean;
 };

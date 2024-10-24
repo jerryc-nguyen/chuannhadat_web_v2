@@ -46,7 +46,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           </Badge>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="h-[520px] w-80">
+      <PopoverContent className="left-1/2 w-[23rem] -translate-x-1/2 p-0">
         <NotificationsList
           notifications={notifications}
           total={total}

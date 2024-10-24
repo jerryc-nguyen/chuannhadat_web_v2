@@ -49,13 +49,13 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     if (savedSummary) {
       setListPostIdSaved(savedSummary.saved_product_uids);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedSummary?.saved_product_uids]);
 
   const { data: listSavedPost, isFetching } = useQuery({
     queryKey: ['list_saves_post'],
-    queryFn: () => services.saves.savedPosts(),
+    queryFn: services.saves.savedPosts,
     enabled: openSavedPost,
-    select: (data) => data.data,
     staleTime: 0,
   });
 
@@ -117,7 +117,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
       );
     return listSavedPost?.data.map((post) => (
       <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">
-        <Link href={`/post/${post.product.slug}`} className="flex flex-1 cursor-pointer gap-x-2">
+        <Link href={post.product?.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
           <Image
             width={80}
             height={70}
@@ -171,7 +171,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
         </div>
       </PopoverTrigger>
       <PopoverContent className="left-1/2 w-[23rem] -translate-x-1/2 p-0">
-        <h4 className="py-2 text-center font-semibold">Tin đăng đã lưu</h4>
+        <h4 className="py-2 text-center text-lg font-semibold">Tin đăng đã lưu</h4>
         <Separator />
         <section className="max-h-[50vh] overflow-y-auto">
           {isFetching ? onRenderLoadingListPost() : onRenderListPost()}
