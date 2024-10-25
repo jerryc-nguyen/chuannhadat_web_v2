@@ -2,16 +2,12 @@
 
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { UseFormReturn } from 'react-hook-form';
-import {
-  citiesData,
-  cityDistrictsData,
-  districtsStreetsData,
-  districtsWardsData,
-} from '@app/(home)/tao-tin-moi/constant';
+
 import { useEffect, useMemo, useState } from 'react';
 import { AutoComplete } from '@components/autocomplete';
 import { LoadingSpinner } from '@components/icons/loading-spinner';
 import { OptionForSelect } from '@models';
+import { citiesData, cityDistrictsData, districtsStreetsData, districtsWardsData } from '@desktop/dashboard/main-manage-post/new-post/constant';
 
 interface ILocationForm {
   form: UseFormReturn<A>;

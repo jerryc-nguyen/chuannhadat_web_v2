@@ -15,7 +15,7 @@ import ProductApiService from "./apis/product-api";
 import ProductTypeForm from "./components/form-components/product-type";
 import ProductDescriptionForm from "./components/form-components/product-description";
 import Link from "next/link";
-import LocationFormV2 from "@app/(home)/tao-tin-moi/components/form-components/location-form-v2";
+import LocationFormV2 from "./components/form-components/location-form-v2";
 
 const NewPost: React.FC = () => {
   const defaultValues = {
