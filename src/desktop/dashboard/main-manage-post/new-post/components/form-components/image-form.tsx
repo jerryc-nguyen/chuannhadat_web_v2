@@ -24,7 +24,7 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
     <Card>
       <CardHeader>
         <CardTitle className="text-md flex gap-2">
-            <Image /> Hình ảnh, Video
+          <Image /> Hình ảnh, Video
         </CardTitle>
         <Separator />
       </CardHeader>
@@ -46,7 +46,7 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
             </FormItem>
           )}
         />
-        <ImageUploader form={form}/>
+        <ImageUploader uploadedImages={[]} />
       </CardContent>
     </Card>
   );

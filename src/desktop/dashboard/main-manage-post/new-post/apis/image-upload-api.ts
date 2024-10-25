@@ -28,7 +28,7 @@ const PerformUploadImageS3 = async (
 
 const ImageUploadApiService = {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  upload: (files: File[], onUploadProgressCallback: (currentProgress: number) => void) => {
+  upload: (files: File[], onUploadProgressCallback: (file: File, currentProgress: number) => void) => {
     const uploadPromises = files.map(async (file) => {
       try {
         const fileExtension = file.name.split('.').pop();
@@ -47,7 +47,7 @@ const ImageUploadApiService = {
 
         const options = {
           onUploadProgress: (event: AxiosProgressEvent) => {
-            onUploadProgressCallback(Math.ceil((event.progress || 1) * 100));
+            onUploadProgressCallback(file, Math.ceil((event.progress || 1) * 100));
           },
           headers: {
             'Content-Type': file.type,
@@ -74,7 +74,8 @@ const ImageUploadApiService = {
           if (trackUploadedUrlResponse.success && trackUploadedUrlResponse.id) {
             return {
               ...trackUploadedUrlResponse,
-              url: signedUrlResponse.s3_url
+              url: signedUrlResponse.s3_url,
+              file: file
             };
           } else {
             throw new Error('Đã có lỗi xảy ra (code 4)');
