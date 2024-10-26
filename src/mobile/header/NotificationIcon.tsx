@@ -3,7 +3,7 @@ import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import { LucideBell } from 'lucide-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import {
   Sheet,
@@ -67,11 +67,17 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const handleRedirect = (id: number, is_read: boolean) => {
     return;
   };
+
+  const showBadge = useMemo(() => {
+    return total !== null && total > 0
+  }, [total])
+
   React.useEffect(() => {
     loadMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
   if (!isLogged) return null;
+
   return (
     <Sheet onOpenChange={setOpenModalNotifications} open={openModalNotifications}>
       <SheetTrigger asChild>
@@ -87,23 +93,25 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <LucideBell className="h-5 w-5" />
           </Button>
 
-          <Badge
-            className={cn(
-              'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
-              total !== null
-                ? 'bg-error_color hover:bg-error_color'
-                : 'bg-transparent hover:bg-transparent',
-            )}
-          >
-            {total !== null ? (
-              total
-            ) : (
-              <span className="relative flex h-4 w-4 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
-                <span className="relative inline-flex h-4 w-4 rounded-full bg-primary_color" />
-              </span>
-            )}
-          </Badge>
+          {showBadge &&
+            <Badge
+              className={cn(
+                'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
+                total !== null
+                  ? 'bg-error_color hover:bg-error_color'
+                  : 'bg-transparent hover:bg-transparent',
+              )}
+            >
+              {total !== null ? (
+                total
+              ) : (
+                <span className="relative flex h-4 w-4 items-center justify-center">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
+                  <span className="relative inline-flex h-4 w-4 rounded-full bg-primary_color" />
+                </span>
+              )}
+            </Badge>
+          }
         </div>
       </SheetTrigger>
       <SheetContent className="flex w-[90vw] flex-col gap-y-0 p-0">

@@ -96,27 +96,29 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         </CardHeader>
       )}
       <CardContent className="card-content">
-        <Carousel
-          opts={{ loop: true }}
-          setApi={setImageSliderApi}
-          plugins={[Fade()]}
-          className="card-content_carousel w-full"
-        >
-          <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
-            {product.images.map((item: A, index: number) => (
-              <ImageCard
-                key={item.id}
-                inView={slidesInView.indexOf(index) > -1}
-                countImages={product.lenght}
-                item={item}
-                detailPath={product.detail_path || ''}
-                index={index}
-              />
-            ))}
-          </CarouselContent>
-          <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
-          <ButtonSave postUid={product.uid} />
-        </Carousel>
+        {product.images.length > 0 &&
+          <Carousel
+            opts={{ loop: true }}
+            setApi={setImageSliderApi}
+            plugins={[Fade()]}
+            className="card-content_carousel w-full"
+          >
+            <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
+              {product.images.map((item: A, index: number) => (
+                <ImageCard
+                  key={item.id}
+                  inView={slidesInView.indexOf(index) > -1}
+                  countImages={product.lenght}
+                  item={item}
+                  detailPath={product.detail_path || ''}
+                  index={index}
+                />
+              ))}
+            </CarouselContent>
+            <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
+            <ButtonSave postUid={product.uid} />
+          </Carousel>
+        }
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
         <h3
