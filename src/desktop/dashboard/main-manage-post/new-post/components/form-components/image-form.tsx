@@ -16,10 +16,6 @@ interface IImageForm {
 }
 
 const ImageForm: React.FC<IImageForm> = ({ form }) => {
-  const onImagesChanged = (images: IUploadedImage[]) => {
-    const imageIds = images.map(img => img.id?.toString()).join(',')
-    form.setValue("image_ids", imageIds);
-  }
 
   return (
     <Card>
@@ -47,7 +43,26 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
             </FormItem>
           )}
         />
-        <ImageUploader uploadedImages={[]} onUploaded={onImagesChanged} />
+
+        <FormField
+          control={form.control}
+          name="image_ids"
+          render={({ field }) => {
+
+            const onImagesChanged = (images: IUploadedImage[]) => {
+              const imageIds = images.map(img => img.id?.toString()).join(',')
+              field.onChange(imageIds)
+            }
+
+            return (
+              <FormItem className="grid gap-2">
+                <ImageUploader uploadedImages={[]} onUploaded={onImagesChanged} />
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+
       </CardContent>
     </Card>
   );
