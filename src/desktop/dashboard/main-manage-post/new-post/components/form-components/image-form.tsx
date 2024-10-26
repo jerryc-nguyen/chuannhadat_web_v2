@@ -10,6 +10,7 @@ import { IProductForm } from "../../type";
 
 import dynamic from "next/dynamic";
 import { Input } from "@components/ui/input";
+import { IUploadedImage } from "./fields/image-uploader/types";
 const ImageUploader = dynamic(() => import("./fields/image-uploader"), {
   ssr: false,
 });
@@ -19,6 +20,11 @@ interface IImageForm {
 }
 
 const ImageForm: React.FC<IImageForm> = ({ form }) => {
+  const onImagesChanged = (images: IUploadedImage[]) => {
+    console.log('imagesimages', images);
+    const imageIds = images.map(img => img.id?.toString()).join(',')
+    form.setValue("image_ids", imageIds);
+  }
 
   return (
     <Card>
@@ -46,7 +52,7 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
             </FormItem>
           )}
         />
-        <ImageUploader uploadedImages={[]} />
+        <ImageUploader uploadedImages={[]} onUploaded={onImagesChanged} />
       </CardContent>
     </Card>
   );

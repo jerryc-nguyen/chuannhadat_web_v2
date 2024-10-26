@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Button } from '@components/ui/button';
 import ThumbDragAndDropZone from './component/thumbs-container';
 import { IUploadedImage } from './types';
-import ImageUploadApiService from '@desktop/dashboard/main-manage-post/new-post/apis/image-upload-api';
+import ImageUploadApiService, { UploadFolders } from '@desktop/dashboard/main-manage-post/new-post/apis/image-upload-api';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',
@@ -28,12 +28,19 @@ const rejectStyle: CSSProperties = {
 };
 
 interface IImageUploader {
-  uploadedImages: IUploadedImage[]
+  uploadedImages: IUploadedImage[],
+  onUploaded: (images: IUploadedImage[]) => void
 }
 
-const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages }) => {
+const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded }) => {
   const [images, setImages] = useState<IUploadedImage[]>(uploadedImages);
 
+  const handleOnChange = (newImages: IUploadedImage[]) => {
+    const uploadedImgs = newImages.filter((item) => {
+      return parseInt(item.id + '') && parseInt(item.id + '') > 0
+    })
+    onUploaded(uploadedImgs)
+  }
   const updateUploadProgress = (file: File, progress: number) => {
     setImages((oldImages: IUploadedImage[]) => {
       return oldImages.map((img: IUploadedImage) => {
@@ -53,44 +60,51 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages }) => {
 
   const handleUploadCompleted = (result: A) => {
     setImages((oldImages: IUploadedImage[]) => {
-      return oldImages.map((img: IUploadedImage) => {
+      const newImages = oldImages.map((img: IUploadedImage) => {
         // @ts-ignore: check new attr
-        if (img.uploadedFile && img.uploadedFile.new_id == result.file?.new_id) {
+        const matched = img.uploadedFile && img.uploadedFile.new_id == result.file?.new_id
+        if (matched) {
           return {
             ...img,
             uploading: false,
-            progress: 100
+            progress: 100,
+            id: result.id
           }
         } else {
           return img;
         }
       });
+      handleOnChange(newImages);
+      return newImages;
     });
   }
 
   const uploadImagesHandler = (files: File[]) => {
-    const uploadPromises = ImageUploadApiService.upload(files, (file, progress) => {
-      console.log(`Uploading ${file.name}: ${progress}`)
-      updateUploadProgress(file, progress)
-    });
+    const uploadPromises = ImageUploadApiService.upload(
+      UploadFolders.PRODUCT_IMAGES,
+      files,
+      (file, progress) => {
+        // console.log(`Uploading ${file.name}: ${progress}`)
+        updateUploadProgress(file, progress)
+      });
 
     uploadPromises.forEach((uploading) => {
       uploading.then((result) => {
         console.log('Uploaded', result);
         handleUploadCompleted(result);
+      }).catch((err) => {
+        console.error('Error in one or more uploads:', err);
       })
-        .catch((err) => {
-          console.error('Error in one or more uploads:', err);
-        })
     })
-
   }
+
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
     accept: {
       'image/*': [],
     },
     onDrop: (files: File[]) => {
       const newImages = files.map((file) => {
+        // use file blob source as the uploading id
         const newId = URL.createObjectURL(file);
 
         // @ts-ignore: add new attr
@@ -120,50 +134,9 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages }) => {
     [isFocused, isDragAccept, isDragReject],
   );
 
-  useEffect(() => {
-    console.log("images", images);
-
-    // form.setValue("image_ids", images.filter(item => item.id ? true : false).map(item => item.id?.toString()).join(","));
-
-    return () => {
-      images.forEach((file) => {
-        if (file.id) return;
-        // URL.revokeObjectURL(file.url)
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
-
   const onImagesChanged = (images: IUploadedImage[]) => {
-    console.log('onImagesChanged', images)
     setImages(images)
   }
-
-  // Promise.all(uploadPromises)
-  //   .then((results) => {
-  //     results.forEach((result) => {
-  //       setCndImage((prev) => ({
-  //         ...prev,
-  //         url: result.url,
-  //         id: result.id,
-  //       }));
-
-  //       // nếu là file vừa mới tải lên
-  //       // => view tạm bằng url blob
-  //       // => gọi api upload
-  //       // => upload thành công thì thay url blob đó bằng url thật
-  //       // => giải phóng memory cái ảnh tạm ở phía client
-  //       URL.revokeObjectURL(cndImage.url);
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.error('Error in one or more uploads:', err);
-  //     setIsError(true);
-  //   })
-  //   .finally(() => {
-  //     setIsUploading(false);
-  //   });
-
 
   return (
     <section className="">
@@ -182,7 +155,7 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages }) => {
         </span>
       </div>
 
-      <ThumbDragAndDropZone uploadedImages={images} onChange={onImagesChanged} />
+      <ThumbDragAndDropZone images={images} onChange={onImagesChanged} />
     </section>
   );
 };

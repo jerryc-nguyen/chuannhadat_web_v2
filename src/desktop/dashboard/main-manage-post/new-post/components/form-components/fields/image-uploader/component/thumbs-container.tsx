@@ -5,11 +5,11 @@ import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 interface IThumbDragAndDropZone {
-  uploadedImages: IUploadedImage[];
+  images: IUploadedImage[];
   onChange: (images: IUploadedImage[]) => void;
 }
 
-const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ uploadedImages, onChange }) => {
+const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChange }) => {
   const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -25,7 +25,7 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ uploadedImages,
     }
 
     onChange(reorder(
-      uploadedImages,
+      images,
       result.source.index,
       result.destination.index
     ))
@@ -44,7 +44,7 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ uploadedImages,
             ref={provided.innerRef}
             className="flex w-full flex-wrap justify-start gap-5 pt-4"
           >
-            {uploadedImages.map((image, index) => {
+            {images.map((image, index) => {
               return (
                 <Draggable
                   key={generateKey(image)}

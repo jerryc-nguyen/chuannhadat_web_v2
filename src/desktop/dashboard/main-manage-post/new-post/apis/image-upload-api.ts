@@ -26,9 +26,13 @@ const PerformUploadImageS3 = async (
   return axios.put(signedUrl, data, config);
 };
 
+export const UploadFolders = {
+  PRODUCT_IMAGES: 'product_images'
+}
+
 const ImageUploadApiService = {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  upload: (files: File[], onUploadProgressCallback: (file: File, currentProgress: number) => void) => {
+  upload: (folder: string, files: File[], onUploadProgressCallback: (file: File, currentProgress: number) => void) => {
     const uploadPromises = files.map(async (file) => {
       try {
         const fileExtension = file.name.split('.').pop();
@@ -36,7 +40,7 @@ const ImageUploadApiService = {
         const key = `images/${file.name}`;
 
         const signedUrlResponse: IImageSignS3_Response = await GetSignedUploadUrl({
-          folder: 'product_images',
+          folder: folder,
           file_name: fileName,
           new_file_name: key,
         });
