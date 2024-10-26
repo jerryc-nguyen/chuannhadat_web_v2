@@ -2,8 +2,8 @@ import { cn } from '@common/utils';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import NotificationsList from '@desktop/notification/NotificationsList';
+import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 import { LucideBell } from 'lucide-react';
 import React from 'react';
 
@@ -13,9 +13,7 @@ type NotificationIconProps = {
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
-  const handleMarkReadAll = () => {
-    return;
-  };
+
   const handleRedirect = () => {
     return;
   };
@@ -31,15 +29,17 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
 
           <Badge
             className={cn(
-              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full hover:bg-error_color',
-              total ? 'bg-error_color' : 'bg-transparent',
+              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
+              total !== null
+                ? 'bg-error_color hover:bg-error_color'
+                : 'bg-transparent hover:bg-transparent',
             )}
           >
-            {total ? (
+            {total !== null ? (
               total
             ) : (
               <span className="relative flex h-4 w-4 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
                 <span className="relative inline-flex h-4 w-4 rounded-full bg-primary_color" />
               </span>
             )}
@@ -51,7 +51,6 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           notifications={notifications}
           total={total}
           onLoadMore={loadMore}
-          onMarkReadAll={handleMarkReadAll}
           onRedirect={handleRedirect}
           onGetNotMarkRead={handleGetNotMarkRead}
         />

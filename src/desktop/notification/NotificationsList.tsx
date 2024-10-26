@@ -10,13 +10,15 @@ import { Separator } from '@components/ui/separator';
 import { Badge } from '@components/ui/badge';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
+import { useMutation } from '@tanstack/react-query';
+import { services } from '@api/services';
+import { AxiosError } from 'axios';
 
 interface IProps {
   notifications: INotificationResponse[];
   total: number | null;
   onLoadMore: () => void;
   onRedirect: (id: number, is_readed: boolean) => void;
-  onMarkReadAll: () => void;
   onGetNotMarkRead: (status: 'read' | 'unread' | null) => void;
 }
 
@@ -25,16 +27,30 @@ const NotificationsList: React.FC<IProps> = ({
   total,
   onLoadMore,
   onRedirect,
-  onMarkReadAll,
   onGetNotMarkRead,
 }) => {
   const [isReaded, setReaded] = React.useState<boolean>(false);
+  const [isMarkAllRead, setIsMarkAllRead] = React.useState<boolean>(false);
   const handleChangeStatus = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | EventTarget>,
   ) => {
     event.stopPropagation();
     setReaded(!isReaded);
     !isReaded ? onGetNotMarkRead('unread') : onGetNotMarkRead(null);
+  };
+  const { mutateAsync: makeMarkReadAll } = useMutation({
+    mutationFn: services.notifications.makeMarkReadAll,
+    onSuccess: (data) => {
+      if (data.success) {
+        setIsMarkAllRead(true);
+      }
+    },
+    onError: (err: AxiosError<A>) => {
+      console.warn('Mark all read notification api has problem', err);
+    },
+  });
+  const handleMarkReadAll = () => {
+    makeMarkReadAll();
   };
   const renderNoNotification = () => (
     <section className="mb-5 flex flex-col items-center justify-center p-5">
@@ -45,6 +61,8 @@ const NotificationsList: React.FC<IProps> = ({
       </p>
     </section>
   );
+  if (total === 0) return renderNoNotification();
+
   return (
     <>
       <div className="c-notification__header">
@@ -76,9 +94,9 @@ const NotificationsList: React.FC<IProps> = ({
               </div>
             </section>
           ))}
-          {total && total > notifications.length && notifications.length > 0 && (
+          {total && total > notifications.length && notifications.length > 0 ? (
             <Button onClick={onLoadMore}>Tải thêm</Button>
-          )}
+          ) : null}
         </div>
       ) : (
         renderNoNotification()
@@ -95,12 +113,14 @@ const NotificationsList: React.FC<IProps> = ({
               />
               <Label htmlFor="airplane-mode">Chưa đọc</Label>
             </div>
-            <div onClick={onMarkReadAll} className="flex items-center gap-x-2">
-              <BsCheck2All className="text-primary_color" />
-              <p className="cursor-pointer text-xs font-semibold text-primary_color hover:underline">
-                Đánh dấu đã đọc tất cả
-              </p>
-            </div>
+            {!isMarkAllRead || notifications.some((item) => !item.is_read) ? (
+              <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
+                <BsCheck2All className="text-primary_color" />
+                <p className="cursor-pointer text-xs font-semibold text-primary_color hover:underline">
+                  Đánh dấu đã đọc tất cả
+                </p>
+              </div>
+            ) : null}
           </section>
         </>
       )}

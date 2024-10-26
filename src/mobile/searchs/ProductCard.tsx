@@ -9,6 +9,7 @@ import Image from 'next/image';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
 import ButtonSave from '@desktop/home/components/ButtonSave';
+import LoadingProductCard from '@desktop/home/components/LoadingProductCard';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -74,9 +75,11 @@ export default function ProductCard({ product }: { product: IProduct }) {
       imageUrl: product?.featured_image_url,
     });
   }, [buildThumbnailUrl, product?.featured_image_url]);
-
+  if (!product) {
+    return <LoadingProductCard />;
+  }
   return (
-    <div className="my-4 overflow-hidden bg-white shadow-lg dark:bg-slate-800">
+    <div className="my-4 overflow-hidden bg-white shadow-lg">
       <AspectRatio.Root ratio={16 / 9}>
         <Image
           src={genImageSrc}

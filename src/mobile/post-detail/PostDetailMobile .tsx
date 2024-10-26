@@ -10,6 +10,7 @@ import PhotosCarousel from '@mobile/post-detail/components/PhotosCarousel';
 import ProductDescription from './components/ProductDescription';
 import Section from '@mobile/ui/Section';
 import { FeaturesList } from '@desktop/post-detail/components/features-post';
+import ViewedPostsMobile from './components/ViewedPostsMobile';
 
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);
@@ -54,6 +55,7 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
         <FeaturesList data={product} />
       </Section>
       <ProductDescription product={product} />
+      <ViewedPostsMobile productUid={product?.uid as string} />
     </div>
   );
 }

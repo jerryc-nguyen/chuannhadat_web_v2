@@ -155,8 +155,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           </Button>
           <Badge
             className={cn(
-              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white hover:bg-error_color',
-              savedSummary ? 'bg-error_color' : 'bg-transparent',
+              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white',
+              savedSummary
+                ? 'bg-error_color hover:bg-error_color'
+                : 'bg-transparent hover:bg-transparent',
             )}
           >
             {savedSummary ? (

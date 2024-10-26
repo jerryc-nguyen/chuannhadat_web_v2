@@ -9,7 +9,7 @@ export const API_ROUTES = {
   },
   POSTS: {
     DETAIL_POST: 'api/v1/products',
-    VIEWD_PRODUCTS: 'api/v1/products/viewd_products',
+    VIEWD_PRODUCTS: 'api/v1/products/viewed_products',
     POSTS_SAME_AUTHOR: 'same_owner_products',
   },
   BALANCE: {

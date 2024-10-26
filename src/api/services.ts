@@ -11,8 +11,10 @@ import {
   LoginResponse,
 } from '@mobile/auth/types';
 import { Author, IProductDetail } from '@mobile/searchs/type';
+import { IResponseData } from '@models';
+import { IViewedPostsPayload } from '@models/modelPayload';
+import { IViewedPostResonpse } from '@models/modelResponse';
 import {
-  IResponseData,
   ISavedProductsResponse,
   ISaveProductPayload,
   ISavesSummaryResponse,
@@ -81,8 +83,13 @@ export const services = {
         },
       );
     },
-    getViewedPost: async (): Promise<{ data: IProductSummary[] }> => {
-      return axiosInstance.get(API_ROUTES.POSTS.VIEWD_PRODUCTS);
+    getViewedPosts: async (payload: IViewedPostsPayload): Promise<IViewedPostResonpse> => {
+      return axiosInstance.get(API_ROUTES.POSTS.VIEWD_PRODUCTS, {
+        params: payload,
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
     },
   },
   auth: {

@@ -2,29 +2,24 @@ import { services } from '@api/services';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
-import ProductCard from '@desktop/home/components/ProductCard';
-import { IProductDetail } from '@mobile/searchs/type';
+import ProductCard from '@mobile/searchs/ProductCard';
+import { IProduct, IProductDetail } from '@mobile/searchs/type';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
-type ViewedPostsProps = {
+type ViewedPostsMobileProps = {
   productUid: string;
-  isInsideModal?: boolean;
 };
 
-const defaultpageSize = 3;
-const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = false }) => {
+const defaultpageSize = 1;
+const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [prevBtnEnabled, setPrevBtnEnabled] = React.useState(false);
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [listProduct, setListProduct] = React.useState<(IProductDetail | undefined)[]>([
-    undefined,
-    undefined,
-    undefined,
-  ]);
+  const [listProduct, setListProduct] = React.useState<(IProductDetail | undefined)[]>([undefined]);
   const isScrollNext = React.useRef<boolean>(false);
   const [pageNumber, setPageNumber] = React.useState(1);
 
@@ -82,27 +77,28 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
   }, [api, onSelect]);
   if (viewedPosts?.pagination.total_count === 0) return null;
   return (
-    <section className={cn('flex w-full flex-col gap-1 rounded-xl border bg-white p-6')}>
+    <section className={cn('flex w-full flex-col gap-1 overflow-hidden border bg-white p-4')}>
       <div
         className={cn(
-          'flex justify-between',
+          'flex items-center justify-between',
           viewedPosts?.pagination.total_count === defaultpageSize ? 'hidden' : 'flex',
         )}
       >
-        <h3 className="pb-5 text-xl font-semibold">Tin vừa xem</h3>
+        <h3 className="text-2xl font-semibold">Tin vừa xem</h3>
         <section className="flex gap-x-2">
           <Button
             variant="outline"
             size="icon"
             disabled={isFetching || !prevBtnEnabled}
             onClick={handleScrollPrevious}
+            className="rounded-full"
           >
             <LuChevronLeft className="text-xl" />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="flex items-center justify-center gap-x-2"
+            className="flex items-center justify-center gap-x-2 rounded-full"
             disabled={
               isFetching || selectedIndex + defaultpageSize === viewedPosts?.pagination.total_count
             }
@@ -121,16 +117,13 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
           align: 'start',
           loop: false,
         }}
-        className={cn('w-full', isInsideModal ? 'sm:max-w-[45vw]' : 'sm:max-w-[66vw]')}
+        className="w-full"
         setApi={setApi}
       >
         <CarouselContent>
           {listProduct.map((product, index) => (
-            <CarouselItem
-              className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
-              key={product?.id || index}
-            >
-              <ProductCard isShowAuthor={false} product={product} />
+            <CarouselItem key={product?.id || index}>
+              <ProductCard product={product as unknown as IProduct} />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -139,4 +132,4 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
   );
 };
 
-export default ViewedPosts;
+export default ViewedPostsMobile;

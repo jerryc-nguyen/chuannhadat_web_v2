@@ -13,8 +13,8 @@ import { getCookie, setFrontendToken } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import FavoriteIcon from './FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
-import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import AvatarIcon from './AvatarIcon';
+import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { signOut, currentUser } = useAuth();
   const { loadMore } = usePaginatedNotifications();

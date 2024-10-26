@@ -1,15 +1,16 @@
 import { useAtom } from 'jotai';
-import {
-  pageAtom,
-  perPageAtom,
-  notificationsDataAtom,
-  totalAtom,
-  filterStatusAtom,
-} from '../states';
+
 import { useNotificationRequest } from '@api/notification';
-import { INotificationResponse } from '../types';
 import { useCallback } from 'react';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import { INotificationResponse } from '@models/modelResponse';
+import {
+  filterStatusAtom,
+  notificationsDataAtom,
+  pageAtom,
+  perPageAtom,
+  totalAtom,
+} from '@mobile/notification/states';
 
 // Custom hook to manage notifications data
 export function usePaginatedNotifications() {
@@ -33,28 +34,26 @@ export function usePaginatedNotifications() {
           filter_status: filter,
         });
 
-        const existingIds = new Set(notifications.map((notification) => notification.id));
-        const newNotifications = response.results.filter(
-          (notification: INotificationResponse) => !existingIds.has(notification.id),
-        );
-
         // Only set new notifications if we're not resetting due to a filter change
+        let newNotifications: INotificationResponse[] = response?.results;
         setNotifications((prevNotifications) => {
           if (page !== 1) {
             const existingIds = new Set(notifications.map((notification) => notification.id));
-            const newNotifications = response.results.filter(
+            const notifyTemp = response.results.filter(
               (notification: INotificationResponse) => !existingIds.has(notification.id),
             );
-            return [...prevNotifications, ...newNotifications];
-          }
-          return response.results;
-        });
 
+            newNotifications = [...prevNotifications, ...notifyTemp];
+
+            return newNotifications;
+          }
+
+          return newNotifications;
+        });
         const totalCount =
           filter !== null
             ? response.total_count
-            : response.results.filter((res: INotificationResponse) => !res.is_read).length;
-
+            : newNotifications.filter((res: INotificationResponse) => !res.is_read).length;
         setTotal(totalCount);
       } catch (error) {
         console.error('Error loading notifications:', error);

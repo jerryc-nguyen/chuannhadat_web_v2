@@ -15,6 +15,7 @@ interface Post {
 
 export interface Pagination {
   total_count: number;
+  total_pages: number;
   page: number;
   per_page: number;
 }
@@ -31,9 +32,4 @@ export enum ActionSaveProduct {
 export interface ISaveProductPayload {
   product_uid: string;
   action: ActionSaveProduct;
-}
-
-export interface IResponseData {
-  code: HttpStatusCode;
-  status: boolean;
 }

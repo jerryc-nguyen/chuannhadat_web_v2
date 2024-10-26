@@ -56,13 +56,13 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     if (savedSummary) {
       setListPostIdSaved(savedSummary.saved_product_uids);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedSummary?.saved_product_uids]);
 
   const { data: listSavedPost, isFetching } = useQuery({
     queryKey: ['list_saves_post'],
     queryFn: () => services.saves.savedPosts(),
     enabled: openSavedPost,
-    select: (data) => data.data,
     staleTime: 0,
   });
 
@@ -124,7 +124,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
       );
     return listSavedPost?.data.map((post) => (
       <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">
-        <Link href={`/post/${post.product.slug}`} className="flex flex-1 cursor-pointer gap-x-2">
+        <Link href={post.product.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
           <Image
             width={80}
             height={70}
@@ -162,8 +162,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           </Button>
           <Badge
             className={cn(
-              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white hover:bg-error_color',
-              savedSummary ? 'bg-error_color' : 'bg-transparent',
+              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white',
+              savedSummary
+                ? 'bg-error_color hover:bg-error_color'
+                : 'bg-transparent hover:bg-transparent',
             )}
           >
             {savedSummary ? (
