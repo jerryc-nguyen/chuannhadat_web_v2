@@ -18,8 +18,8 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import useAuth from '../hooks/useAuth';
-import { usePaginatedNotifications } from '@desktop/notification/hooks';
 import { setTokenServer } from '@app/action';
+import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 type RegisterFormProps = {
   onClose: () => void;
 };

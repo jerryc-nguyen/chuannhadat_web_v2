@@ -1,13 +1,13 @@
-import FormatHtml from "@components/FormatHtml";
-import { Button } from "@components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@components/ui/card";
-import { IProductDetail } from "@mobile/searchs/type";
-import { useEffect, useRef, useState } from "react";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import FormatHtml from '@components/FormatHtml';
+import { Button } from '@components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@components/ui/card';
+import { IProductDetail } from '@mobile/searchs/type';
+import { useEffect, useRef, useState } from 'react';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 type IProps = {
-  product?: IProductDetail
-}
+  product?: IProductDetail;
+};
 
 export default function ProductDescription({ product }: IProps) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -27,7 +27,7 @@ export default function ProductDescription({ product }: IProps) {
 
   return (
     <Card className="rounded-none">
-      <CardHeader className='px-4'>
+      <CardHeader className="px-4">
         <CardTitle>Mô tả chi tiết</CardTitle>
       </CardHeader>
       <CardContent
@@ -41,7 +41,6 @@ export default function ProductDescription({ product }: IProps) {
           justifyContent: 'center',
         }}
       >
-        {' '}
         {product?.description && isOverflow && !isExpanded && (
           <Button
             variant="link"
@@ -62,5 +61,5 @@ export default function ProductDescription({ product }: IProps) {
         )}
       </CardFooter>
     </Card>
-  )
+  );
 }

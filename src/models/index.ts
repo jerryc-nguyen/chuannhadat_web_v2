@@ -1,9 +1,14 @@
+import { HttpStatusCode } from 'axios';
+
 /* eslint-disable no-unused-vars */
 export type Range = {
   min?: number;
   max?: number;
 };
-
+export interface IResponseData {
+  code: HttpStatusCode;
+  status: boolean;
+}
 export type OptionForSelect = {
   value: number | string | undefined;
   text: string;

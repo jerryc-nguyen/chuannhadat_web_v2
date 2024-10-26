@@ -5,7 +5,6 @@ import loginSchema from './resolver';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import { IFormPropsLogin, LoginResponse } from '../types';
-import { usePaginatedNotifications } from '@mobile/notification/hooks';
 import { Input } from '@components/ui/input';
 import {
   Form,
@@ -19,10 +18,11 @@ import { Button } from '@components/ui/button';
 import { BsQrCode } from 'react-icons/bs';
 import { IoLogoFacebook } from 'react-icons/io5';
 import useAuth from '../hooks/useAuth';
-import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { setTokenServer } from '@app/action';
+import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
+import { toast } from 'sonner';
 
 type LoginFormProps = {
   onClose: () => void;
@@ -36,9 +36,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
     onSuccess: (response: LoginResponse) => {
       if (response.status) {
         const userData = response.data;
-        handleLogin(userData);
         const handleSetToken = setTokenServer.bind(null, userData.api_token);
         handleSetToken();
+        handleLogin(userData);
         loadMore();
         onClose();
         toast.success(

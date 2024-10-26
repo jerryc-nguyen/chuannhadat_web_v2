@@ -8,7 +8,7 @@ import React from 'react';
 type ImageCardProps = {
   countImages: number;
   item: A;
-  slug: string;
+  detailPath: string;
   inView: boolean;
   index: number;
 };
@@ -16,12 +16,12 @@ const DEFAULT_THUMB_IMAGE =
   'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
 
 const ImageCard: React.FC<ImageCardProps> = (props) => {
-  const { countImages, slug, inView, item } = props;
+  const { countImages, detailPath, inView, item } = props;
   const { buildThumbnailUrl } = useResizeImage();
   if (countImages < 2)
     return (
       <AspectRatio ratio={16 / 9} className="rounded-md bg-muted">
-        <Link href={`/post/${slug}`} target="_blank">
+        <Link href={detailPath} target="_blank">
           <Image
             src={buildThumbnailUrl({
               imageUrl: item.url || DEFAULT_THUMB_IMAGE,
@@ -39,7 +39,7 @@ const ImageCard: React.FC<ImageCardProps> = (props) => {
   return (
     <CarouselItem className="card_item aspect-[16/9] pl-0" key={item.id}>
       <AspectRatio ratio={16 / 9} className="rounded-md bg-muted">
-        <Link href={`/post/${slug}`} target="_blank">
+        <Link href={detailPath} target="_blank">
           <Image
             src={buildThumbnailUrl({
               imageUrl: inView ? item.url : DEFAULT_THUMB_IMAGE,

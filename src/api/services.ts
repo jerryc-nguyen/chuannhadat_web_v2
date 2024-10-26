@@ -11,11 +11,12 @@ import {
   LoginResponse,
 } from '@mobile/auth/types';
 import { Author, IProductDetail } from '@mobile/searchs/type';
+import { IResponseData } from '@models';
+import { IViewedPostsPayload } from '@models/modelPayload';
+import { IViewedPostResonpse } from '@models/modelResponse';
 import {
-  ActionSaveProduct,
   ISavedProductsResponse,
   ISaveProductPayload,
-  ISaveProductResponse,
   ISavesSummaryResponse,
 } from '@models/savesPostModel';
 
@@ -82,6 +83,14 @@ export const services = {
         },
       );
     },
+    getViewedPosts: async (payload: IViewedPostsPayload): Promise<IViewedPostResonpse> => {
+      return axiosInstance.get(API_ROUTES.POSTS.VIEWD_PRODUCTS, {
+        params: payload,
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
+    },
   },
   auth: {
     signIn: async (data: IFormPropsLogin): Promise<LoginResponse> => {
@@ -92,7 +101,7 @@ export const services = {
     },
   },
   saves: {
-    savePost: async (payload: ISaveProductPayload): Promise<ISaveProductResponse> => {
+    savePost: async (payload: ISaveProductPayload): Promise<IResponseData> => {
       return axiosInstance.post(API_ROUTES.SAVES.SAVE_POST, payload, {
         headers: {
           'Frontend-Token': getCookie(FRONTEND_TOKEN),
@@ -108,6 +117,15 @@ export const services = {
     },
     savedSummary: async (): Promise<ISavesSummaryResponse> => {
       return axiosInstance.get(API_ROUTES.SAVES.SAVED_SUMMARY, {
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
+    },
+  },
+  trackings: {
+    viewProduct: async (payload: { product_uid: string }): Promise<ISavesSummaryResponse> => {
+      return axiosInstance.post(API_ROUTES.TRACKINGS.VIEW_PRODUCT, payload, {
         headers: {
           'Frontend-Token': getCookie(FRONTEND_TOKEN),
         },

@@ -19,11 +19,13 @@ import useEmblaCarousel from 'embla-carousel-react';
 
 import ButtonSave from './ButtonSave';
 import useResizeImage from '@hooks/useResizeImage';
+import LoadingProductCard from './LoadingProductCard';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
+  className?: string;
 };
-export default function ProductCard({ product, isShowAuthor = true }: ProductCardProps) {
+export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
   const [imageSliderViewPortRef] = useEmblaCarousel();
   const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
@@ -52,17 +54,20 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
   }, []);
 
   // https://stackoverflow.com/a/50227675
-  const preloadImages = useCallback((event: A) => {
-    if (event.scrollProgress() != 0) {
-      return
-    }
-    product.images.forEach((picture: A, index: number) => {
-      setTimeout(() => {
-        const img = new Image();
-        img.src = buildThumbnailUrl({ imageUrl: picture.url })
-      }, index * 10)
-    });
-  }, [buildThumbnailUrl, product.images])
+  const preloadImages = useCallback(
+    (event: A) => {
+      if (event.scrollProgress() != 0) {
+        return;
+      }
+      product.images.forEach((picture: A, index: number) => {
+        setTimeout(() => {
+          const img = new Image();
+          img.src = buildThumbnailUrl({ imageUrl: picture.url });
+        }, index * 10);
+      });
+    },
+    [buildThumbnailUrl, product?.images],
+  );
 
   React.useEffect(() => {
     if (!imageSliderApi) return;
@@ -74,35 +79,46 @@ export default function ProductCard({ product, isShowAuthor = true }: ProductCar
   }, [imageSliderApi, updateSlidesInView]);
 
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
+  if (!product) {
+    return <LoadingProductCard />;
+  }
   return (
-    <Card className={cn(styles.card_wrapper, 'relative h-full overflow-hidden rounded-md p-4')}>
+    <Card
+      className={cn(
+        styles.card_wrapper,
+        'relative h-full overflow-hidden rounded-md p-4',
+        className,
+      )}
+    >
       {isShowAuthor && (
         <CardHeader className="p-0 pb-4">
           <CardAuthor product={product} />
         </CardHeader>
       )}
       <CardContent className="card-content">
-        <Carousel
-          opts={{ loop: true }}
-          setApi={setImageSliderApi}
-          plugins={[Fade()]}
-          className="card-content_carousel w-full"
-        >
-          <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
-            {product.images.map((item: A, index: number) => (
-              <ImageCard
-                key={item.id}
-                inView={slidesInView.indexOf(index) > -1}
-                countImages={product.lenght}
-                item={item}
-                slug={product?.slug}
-                index={index}
-              />
-            ))}
-          </CarouselContent>
-          <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
-          <ButtonSave postUid={product.uid} />
-        </Carousel>
+        {product.images.length > 0 &&
+          <Carousel
+            opts={{ loop: true }}
+            setApi={setImageSliderApi}
+            plugins={[Fade()]}
+            className="card-content_carousel w-full"
+          >
+            <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
+              {product.images.map((item: A, index: number) => (
+                <ImageCard
+                  key={item.id}
+                  inView={slidesInView.indexOf(index) > -1}
+                  countImages={product.lenght}
+                  item={item}
+                  detailPath={product.detail_path || ''}
+                  index={index}
+                />
+              ))}
+            </CarouselContent>
+            <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
+            <ButtonSave postUid={product.uid} />
+          </Carousel>
+        }
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
         <h3

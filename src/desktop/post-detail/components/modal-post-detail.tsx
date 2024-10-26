@@ -3,7 +3,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/she
 import { useAtom, useSetAtom } from 'jotai';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
 import { services } from '@api/services';
-import { useQuery } from '@tanstack/react-query';
 import { IProductDetail } from '@mobile/searchs/type';
 import styles from '../styles/modal-post-detail.module.scss';
 import { cn } from '@common/utils';
@@ -13,6 +12,8 @@ import DescriptionPost from './description-post';
 import NotePost from './note-post';
 import AuthorPost from './author-post';
 import { useBrowserPushState } from '@components/popstate-handler/hooks';
+import { useQuery } from '@tanstack/react-query';
+import ViewedPosts from './ViewedPosts';
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
@@ -30,8 +31,8 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
 
   const updateBrowserPath = (product: IProductDetail) => {
     window.history.pushState({}, '', product.detail_path);
-    trackPushPath(product.detail_path)
-  }
+    trackPushPath(product.detail_path);
+  };
 
   React.useEffect(() => {
     if (data) {
@@ -64,12 +65,13 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
         </SheetHeader>
         <section
           ref={postContentRef}
-          className="post-content relative flex flex-1 justify-between gap-x-4"
+          className="post-content relative flex flex-1 justify-between gap-x-4 overflow-x-hidden p-0"
         >
           <div className="content-post flex flex-[3] flex-col gap-y-4">
             <OverviewPost isInsideModal data={data as IProductDetail} />
             <FeaturesPost data={data as IProductDetail} />
             <DescriptionPost data={data as IProductDetail} />
+            <ViewedPosts isInsideModal productUid={data?.uid as string} />
             <NotePost />
           </div>
           <AuthorPost className="!top-0" data={data as IProductDetail} />

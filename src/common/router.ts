@@ -9,6 +9,7 @@ export const API_ROUTES = {
   },
   POSTS: {
     DETAIL_POST: 'api/v1/products',
+    VIEWD_PRODUCTS: 'api/v1/products/viewed_products',
     POSTS_SAME_AUTHOR: 'same_owner_products',
   },
   BALANCE: {
@@ -57,5 +58,8 @@ export const API_ROUTES = {
     SAVE_POST: 'api/v1/saves/save_product',
     SAVED_PRODUCTS: 'api/v1/saves/saved_products',
     SAVED_SUMMARY: 'api/v1/saves/summary',
+  },
+  TRACKINGS: {
+    VIEW_PRODUCT: 'api/v1/trackings/view_product',
   },
 };
