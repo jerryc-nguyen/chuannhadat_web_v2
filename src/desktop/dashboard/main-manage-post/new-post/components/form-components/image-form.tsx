@@ -7,13 +7,9 @@ import { Image } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { IProductForm } from "../../type";
-
-import dynamic from "next/dynamic";
 import { Input } from "@components/ui/input";
-import { IUploadedImage } from "./fields/image-uploader/types";
-const ImageUploader = dynamic(() => import("./fields/image-uploader"), {
-  ssr: false,
-});
+import { IUploadedImage } from "@components/image-uploader/types";
+import ImageUploader from "@components/image-uploader";
 
 interface IImageForm {
   form: UseFormReturn<IProductForm>;
@@ -21,7 +17,6 @@ interface IImageForm {
 
 const ImageForm: React.FC<IImageForm> = ({ form }) => {
   const onImagesChanged = (images: IUploadedImage[]) => {
-    console.log('imagesimages', images);
     const imageIds = images.map(img => img.id?.toString()).join(',')
     form.setValue("image_ids", imageIds);
   }

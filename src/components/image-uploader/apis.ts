@@ -2,13 +2,9 @@
 import axiosInstance from '@api/axiosInstance';
 import axios from 'axios';
 import { API_ROUTES } from '@common/router';
-import {
-  IImageSignS3_Request,
-  IImageSignS3_Response,
-  ITrackUploadedUrl_Request,
-  ITrackUploadedUrl_Response,
-} from '../type';
+
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios';
+import { IImageSignS3_Request, IImageSignS3_Response, ITrackUploadedUrl_Request, ITrackUploadedUrl_Response } from './types';
 
 const GetSignedUploadUrl = async (data: IImageSignS3_Request): Promise<IImageSignS3_Response> => {
   return await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.SIGN_S3, data);

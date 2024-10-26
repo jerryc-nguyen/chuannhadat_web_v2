@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Button } from '@components/ui/button';
 import ThumbDragAndDropZone from './component/thumbs-container';
 import { IUploadedImage } from './types';
-import ImageUploadApiService, { UploadFolders } from '@desktop/dashboard/main-manage-post/new-post/apis/image-upload-api';
+import ImageUploadApiService, { UploadFolders } from '@components/image-uploader/apis';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',

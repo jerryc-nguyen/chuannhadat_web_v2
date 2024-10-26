@@ -8,7 +8,6 @@ interface IPreviewThumb {
 }
 const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
   const [isError, setIsError] = useState<boolean>(image.hasError || false);
-  console.log("PreviewThumb", image);
 
   return (
     <div className="relative group inline-flex h-52 w-52 cursor-grab rounded-lg border-2 border-secondary p-2 transition-transform duration-300 hover:scale-110">
