@@ -26,6 +26,9 @@ export const setFrontendToken = (value: string) => {
 export const getTokenClient = () => {
   return cookies.get(API_TOKEN_CIENT);
 };
+export const getFrontendTokenClient = () => {
+  return cookies.get(FRONTEND_TOKEN);
+};
 export const removeTokenClient = () => {
   cookies.remove(API_TOKEN_CIENT);
 };

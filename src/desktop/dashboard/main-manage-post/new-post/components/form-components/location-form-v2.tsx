@@ -6,13 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@components/ui/separator';
 import { MapPin, CircleAlert } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
-import { IProductForm } from '@app/(home)/tao-tin-moi/type';
+
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 
 import { OptionForSelect } from '@models';
 import LocationsPickerFormV2 from '@desktop/components/form-fields/LocationsPickerFormV2';
 import LocationsPickerForm from '@desktop/components/form-fields/LocationsPickerForm';
+import { IProductForm } from '../../type';
 
 interface ILocationForm {
   form: UseFormReturn<IProductForm>;

@@ -1,4 +1,4 @@
-import { getTokenClient } from '@common/cookies';
+import { getTokenClient, getFrontendTokenClient } from '@common/cookies';
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { set, get } from 'lodash-es';
 
@@ -20,11 +20,16 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (request: InternalAxiosRequestConfig<A>) => {
-    const token = getTokenClient();
-    if (!token) {
-      return request;
+    const accessToken = getTokenClient();
+    if (accessToken) {
+      set(request, 'headers.Authorization', `Bearer ${accessToken}`);
     }
-    set(request, 'headers.Authorization', `Bearer ${token}`);
+
+    const frontendToken = getFrontendTokenClient();
+    if (frontendToken) {
+      set(request, 'headers.Frontend-Token', frontendToken);
+    }
+
     return request;
   },
   (error: A) => {

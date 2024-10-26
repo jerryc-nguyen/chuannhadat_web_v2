@@ -2,13 +2,9 @@
 import axiosInstance from '@api/axiosInstance';
 import axios from 'axios';
 import { API_ROUTES } from '@common/router';
-import {
-  IImageSignS3_Request,
-  IImageSignS3_Response,
-  ITrackUploadedUrl_Request,
-  ITrackUploadedUrl_Response,
-} from '../type';
+
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios';
+import { IImageSignS3_Request, IImageSignS3_Response, ITrackUploadedUrl_Request, ITrackUploadedUrl_Response } from './types';
 
 const GetSignedUploadUrl = async (data: IImageSignS3_Request): Promise<IImageSignS3_Response> => {
   return await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.SIGN_S3, data);
@@ -26,9 +22,13 @@ const PerformUploadImageS3 = async (
   return axios.put(signedUrl, data, config);
 };
 
+export const UploadFolders = {
+  PRODUCT_IMAGES: 'product_images'
+}
+
 const ImageUploadApiService = {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  upload: (files: File[], onUploadProgressCallback: (currentProgress: number) => void) => {
+  upload: (folder: string, files: File[], onUploadProgressCallback: (file: File, currentProgress: number) => void) => {
     const uploadPromises = files.map(async (file) => {
       try {
         const fileExtension = file.name.split('.').pop();
@@ -36,7 +36,7 @@ const ImageUploadApiService = {
         const key = `images/${file.name}`;
 
         const signedUrlResponse: IImageSignS3_Response = await GetSignedUploadUrl({
-          folder: 'product_images',
+          folder: folder,
           file_name: fileName,
           new_file_name: key,
         });
@@ -47,7 +47,7 @@ const ImageUploadApiService = {
 
         const options = {
           onUploadProgress: (event: AxiosProgressEvent) => {
-            onUploadProgressCallback(Math.ceil((event.progress || 1) * 100));
+            onUploadProgressCallback(file, Math.ceil((event.progress || 1) * 100));
           },
           headers: {
             'Content-Type': file.type,
@@ -74,7 +74,8 @@ const ImageUploadApiService = {
           if (trackUploadedUrlResponse.success && trackUploadedUrlResponse.id) {
             return {
               ...trackUploadedUrlResponse,
-              url: signedUrlResponse.s3_url
+              url: signedUrlResponse.s3_url,
+              file: file
             };
           } else {
             throw new Error('Đã có lỗi xảy ra (code 4)');

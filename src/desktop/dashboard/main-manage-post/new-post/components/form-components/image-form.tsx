@@ -7,12 +7,9 @@ import { Image } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { IProductForm } from "../../type";
-
-import dynamic from "next/dynamic";
 import { Input } from "@components/ui/input";
-const ImageUploader = dynamic(() => import("./fields/image-uploader"), {
-  ssr: false,
-});
+import { IUploadedImage } from "@components/image-uploader/types";
+import ImageUploader from "@components/image-uploader";
 
 interface IImageForm {
   form: UseFormReturn<IProductForm>;
@@ -24,7 +21,7 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
     <Card>
       <CardHeader>
         <CardTitle className="text-md flex gap-2">
-            <Image /> Hình ảnh, Video
+          <Image /> Hình ảnh, Video
         </CardTitle>
         <Separator />
       </CardHeader>
@@ -46,7 +43,26 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
             </FormItem>
           )}
         />
-        <ImageUploader form={form}/>
+
+        <FormField
+          control={form.control}
+          name="image_ids"
+          render={({ field }) => {
+
+            const onImagesChanged = (images: IUploadedImage[]) => {
+              const imageIds = images.map(img => img.id?.toString()).join(',')
+              field.onChange(imageIds)
+            }
+
+            return (
+              <FormItem className="grid gap-2">
+                <ImageUploader uploadedImages={[]} onUploaded={onImagesChanged} />
+                <FormMessage />
+              </FormItem>
+            )
+          }}
+        />
+
       </CardContent>
     </Card>
   );
