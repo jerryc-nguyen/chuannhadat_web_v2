@@ -16,6 +16,7 @@ import ProductTypeForm from "./components/form-components/product-type";
 import ProductDescriptionForm from "./components/form-components/product-description";
 import Link from "next/link";
 import LocationFormV2 from "./components/form-components/location-form-v2";
+import { toast } from 'sonner';
 
 const NewPost: React.FC = () => {
   const defaultValues = {
@@ -60,7 +61,16 @@ const NewPost: React.FC = () => {
       const res = await ProductApiService.Create(data);
       console.log("resssssssss", res);
 
-      console.log("data", data);
+      if (res.status) {
+        toast.success('Đăng tin thành công');
+        setTimeout(() => {
+          window.location.href = '/dashboard/manage-post/collection-post'
+        }, 1500)
+
+      } else {
+        // @ts-ignore: ok
+        toast.error(res.message || 'Đăng tin không thành công');
+      }
     } catch (error) {
       console.log("error", error);
     } finally {
