@@ -1,4 +1,4 @@
-import { Image } from '@models';
+import { TPhoto } from '@models';
 
 export interface IProduct {
   bathrooms_count: number | null;
@@ -48,7 +48,7 @@ export interface IProductDetail {
   business_type: string;
   category_type: string;
   ads_type: string;
-  images: Image[];
+  images: TPhoto[];
   images_count: number;
   full_address: string;
   formatted_price: string;

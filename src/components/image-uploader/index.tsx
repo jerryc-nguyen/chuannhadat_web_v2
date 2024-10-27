@@ -1,10 +1,10 @@
 import React, { useEffect, useState, CSSProperties, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Image from 'next/image';
 import { Button } from '@components/ui/button';
 import ThumbDragAndDropZone from './component/thumbs-container';
 import { IUploadedImage } from './types';
 import ImageUploadApiService, { UploadFolders } from '@components/image-uploader/apis';
+import Image from 'next/image';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',
@@ -30,6 +30,16 @@ const rejectStyle: CSSProperties = {
 interface IImageUploader {
   uploadedImages: IUploadedImage[],
   onUploaded: (images: IUploadedImage[]) => void
+}
+
+export const convertToUploadedImages = (images: TPhoto[]): IUploadedImage[] => {
+  return images.map((img: TPhoto) => {
+    return {
+      ...img,
+      process: 100,
+      uploading: false
+    }
+  })
 }
 
 const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded }) => {

@@ -8,9 +8,13 @@ import { FormDescription, FormField, FormItem, FormMessage } from "@/components/
 
 import { Input } from "@components/ui/input";
 import { IUploadedImage } from "@components/image-uploader/types";
-import ImageUploader from "@components/image-uploader";
+import ImageUploader, { convertToUploadedImages } from "@components/image-uploader";
 
-const ImageForm: React.FC<A> = ({ form }) => {
+type ImageFormProps = {
+  form: A
+}
+
+const ImageForm = ({ form }: ImageFormProps) => {
 
   return (
     <Card>
@@ -49,9 +53,13 @@ const ImageForm: React.FC<A> = ({ form }) => {
               field.onChange(imageIds)
             }
 
+            console.log("form.images", form.getValues('images'));
+
+            const uploadedImages = convertToUploadedImages(form.getValues('images'));
+
             return (
               <FormItem className="grid gap-2">
-                <ImageUploader uploadedImages={[]} onUploaded={onImagesChanged} />
+                <ImageUploader uploadedImages={uploadedImages} onUploaded={onImagesChanged} />
                 <FormMessage />
               </FormItem>
             )

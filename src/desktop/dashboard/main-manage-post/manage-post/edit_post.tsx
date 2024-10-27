@@ -93,8 +93,9 @@ const EditPost = ({ params }: { params: { slug: string } }) => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
-            <ProductDescriptionForm form={form} />
             <ImageForm form={form} />
+            <ProductDescriptionForm form={form} />
+
             <ProductTypeForm form={form} />
             <LocationFormV2 form={form} />
 

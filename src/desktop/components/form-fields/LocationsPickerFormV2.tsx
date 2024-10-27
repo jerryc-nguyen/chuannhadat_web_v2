@@ -74,6 +74,18 @@ export default function LocationsPickerFormV2({
     return citiesDistricts[city.value + '']
   }, [city?.value])
 
+  const wardOptions = useMemo(() => {
+    return curDistrict?.value
+      // @ts-ignore: ok
+      ? districtWards[curDistrict?.value + ''] : []
+  }, [curDistrict?.value])
+
+  const streetOptions = useMemo(() => {
+    return curDistrict?.value
+      // @ts-ignore: ok
+      ? districtStreets[curDistrict?.value + ''] : []
+  }, [curDistrict?.value])
+
   const populateCity = () => {
     if (curCity?.value && !curCity?.text) {
       city = cities.find((option) => option.value.toString() == curCity?.value)
@@ -159,17 +171,6 @@ export default function LocationsPickerFormV2({
     updateFullAddress({ street: finalOption });
   };
 
-  const wardOptions = useMemo(() => {
-    return curDistrict?.value
-      // @ts-ignore: ok
-      ? districtWards[curDistrict?.value + ''] : []
-  }, [curDistrict?.value])
-
-  const streetOptions = useMemo(() => {
-    return curDistrict?.value
-      // @ts-ignore: ok
-      ? districtStreets[curDistrict?.value + ''] : []
-  }, [curDistrict?.value])
 
   useEffect(() => {
     populateOptions();

@@ -1,6 +1,6 @@
 import { HttpStatusCode } from 'axios';
 
-export interface Image {
+export type TPhoto = {
   id: number;
   url: string;
 }
