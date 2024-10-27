@@ -1,3 +1,5 @@
+import { Image } from '@models';
+
 export interface IPayloadCreateSchedule {
   hour: string;
   minute: string;
@@ -30,4 +32,35 @@ export interface IProductForm {
   furniture?: string;
   image_ids?: string;
   youtube_url?: string;
+}
+
+export interface IManageProductDetail {
+  id: number;
+  uid: string;
+  title: string;
+  detail_path: string;
+  business_type: string;
+  category_type: string;
+  ads_type: string;
+  images: Image[];
+  images_count: number;
+  full_address: string;
+  formatted_price: string;
+  formatted_area: string;
+  formatted_price_per_m2: string;
+  description: string;
+  bedrooms_count: number;
+  bathrooms_count: number;
+  entrance: number;
+  floors_count: number;
+  phap_ly: string;
+  lat: number;
+  lon: number;
+  visibility: string;
+  hide_on_frontend_reason: string | null;
+  formatted_publish_at: string;
+  formatted_facade_with_label: string;
+  price_per_m2: number;
+  formatted_kt: string;
+
 }

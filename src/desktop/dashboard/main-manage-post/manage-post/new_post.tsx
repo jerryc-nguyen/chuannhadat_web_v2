@@ -21,7 +21,7 @@ const defaultValues: IProductForm = {
   description: "",
   business_type: businessTypeOptions[0].value,
   category_type: categoryTypeOptions[0].value,
-  title: "",
+  title: "test",
   area: "",
   phap_ly: "",
   price_in_vnd: "",

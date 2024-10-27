@@ -8,15 +8,13 @@ import { MapPin } from 'lucide-react';
 
 import { useEffect, useMemo, useState } from 'react';
 
-
 import { OptionForSelect } from '@models';
 import LocationsPickerFormV2 from '@desktop/components/form-fields/LocationsPickerFormV2';
-
 
 const LocationFormV2: React.FC<A> = ({ form }) => {
   const [isFirstLoad, setIsFirstLoad] = useState(false);
   const { city_id, district_id, ward_id, street_id } = form.getValues();
-
+  console.log('city_id', city_id);
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>({ value: city_id, text: '' });
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>({ value: district_id, text: '' });
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>({ value: ward_id, text: '' });
@@ -37,34 +35,24 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   const onSelectCity = (city?: OptionForSelect) => {
     console.log('onSelectCity', city)
     setCurCity(city);
-    updateFullAddress({ city: city });
   }
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     console.log('onSelectDistrict', district)
     setCurDistrict(district);
-    updateFullAddress({ district: district });
   }
 
   const onSelectWard = (ward?: OptionForSelect) => {
     console.log('onSelectWard', ward)
     setCurWard(ward);
-    updateFullAddress({ ward: ward });
   }
 
   const onSelectStreet = (street?: OptionForSelect) => {
     console.log('onSelectStreet', street)
     setCurStreet(street)
-    updateFullAddress({ street: street });
   }
 
-  const updateFullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }) => {
-    const address = [
-      street?.text || curStreet?.text,
-      ward?.text || curWard?.text,
-      district?.text || curDistrict?.text,
-      city?.text || curCity?.text
-    ].filter((text) => (text || '').length > 0).join(', ')
+  const onChangedFullAddress = (address: string) => {
     setFullAddress(address)
   }
 
@@ -90,7 +78,9 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
           onChangeCity={onSelectCity}
           onChangeDistrict={onSelectDistrict}
           onChangeWard={onSelectWard}
-          onChangeStreet={onSelectStreet} />
+          onChangeStreet={onSelectStreet}
+          onChangedFullAddress={onChangedFullAddress}
+        />
 
         <div className="grid gap-2">
           <Label htmlFor="subject">Vị trí trên bản đồ</Label>

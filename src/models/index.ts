@@ -1,5 +1,10 @@
 import { HttpStatusCode } from 'axios';
 
+export interface Image {
+  id: number;
+  url: string;
+}
+
 /* eslint-disable no-unused-vars */
 export type Range = {
   min?: number;

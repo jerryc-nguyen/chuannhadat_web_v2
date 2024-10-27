@@ -1,8 +1,12 @@
 
 import { API_ROUTES } from '@common/router';
 import axiosInstance from '@api/axiosInstance';
+import { IManageProductDetail } from '../../types';
 
-const ProductApiService = {
+const ManageProductApis = {
+  getDetail: async (product_uid: string): Promise<{ data: IManageProductDetail }> => {
+    return axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.DETAIL}/${product_uid}`);
+  },
   Create: async (data: A) => {
 
     const params = new FormData();
@@ -30,10 +34,10 @@ const ProductApiService = {
     data.image_ids && params.append('image_ids', data.image_ids);
     data.youtube_url && params.append('youtube_url', data.youtube_url);
 
-    const response = await axiosInstance.post(API_ROUTES.PRODUCTS.END_POINT, data);
+    const response = await axiosInstance.post(API_ROUTES.MANAGE_PRODUCTS.END_POINT, data);
 
     return response;
   },
 };
 
-export default ProductApiService;
+export default ManageProductApis;

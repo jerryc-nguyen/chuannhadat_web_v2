@@ -31,7 +31,7 @@ const ProductDescriptionForm: React.FC<A> = ({ form }) => {
                   placeholder="Nhập tiêu đề..."
                   endAdornment={
                     <span className="absolute right-1 top-0 text-2xs">
-                      {form.getValues("title").length}/99
+                      {(form.getValues("title") || '').length}/99
                     </span>
                   }
                 />
@@ -57,7 +57,7 @@ const ProductDescriptionForm: React.FC<A> = ({ form }) => {
                   placeholder="Nhập mô tả..."
                   endAdornment={
                     <span className="absolute right-1 top-1 text-2xs">
-                      {form.getValues("description").length}/3000
+                      {(form.getValues("description") || '').length}/3000
                     </span>
                   }
                 />

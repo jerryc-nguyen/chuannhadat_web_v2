@@ -1,3 +1,5 @@
+import { Image } from '@models';
+
 export interface IProduct {
   bathrooms_count: number | null;
   bedrooms_count: number;
@@ -17,11 +19,6 @@ export interface IProduct {
   title: string;
   uid: string;
   name?: string;
-}
-
-export interface Image {
-  id: number;
-  url: string;
 }
 
 export interface Author {
