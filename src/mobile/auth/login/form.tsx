@@ -23,14 +23,15 @@ import { services } from '@api/services';
 import { setTokenServer } from '@app/action';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 type LoginFormProps = {
   onClose: () => void;
 };
 const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
   const { handleLogin } = useAuth();
+  const router = useRouter()
   const { loadMore } = usePaginatedNotifications();
-
   const { mutate: signInMutate, isPending } = useMutation({
     mutationFn: services.auth.signIn,
     onSuccess: (response: LoginResponse) => {
@@ -48,6 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
         toast.error('Mật khẩu hoặc tài khoản không chính xác');
       }
       reset();
+
     },
     onError: (error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
@@ -70,6 +72,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
       phone: data.phone,
       password: data.password,
     });
+    router.refresh()
   };
 
   return (

@@ -20,12 +20,14 @@ import { Input } from '@components/ui/input';
 import useAuth from '../hooks/useAuth';
 import { setTokenServer } from '@app/action';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
+import { useRouter } from 'next/navigation';
 type RegisterFormProps = {
   onClose: () => void;
 };
 export default function RegisterForm({ onClose }: RegisterFormProps) {
   const { handleLogin } = useAuth();
   const { loadMore } = usePaginatedNotifications();
+  const router = useRouter()
   const { mutate: registerMutate, isPending: isRegister } = useMutation({
     mutationFn: services.auth.signUp,
     onSuccess: (response: IRegisterResponse) => {
@@ -57,6 +59,7 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
       phone: data.phone,
       password: data.password,
     });
+    router.refresh()
   };
 
   return (
