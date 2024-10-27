@@ -4,16 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { UseFormReturn } from "react-hook-form";
 import { Separator } from "@components/ui/separator";
 import { BadgeInfo } from "lucide-react";
-import { IProductForm } from "../../type";
 
-interface IProductDescriptionForm {
-  form: UseFormReturn<IProductForm>;
-}
-
-const ProductDescriptionForm: React.FC<IProductDescriptionForm> = ({ form }) => {
+const ProductDescriptionForm: React.FC<A> = ({ form }) => {
 
   return (
     <Card>

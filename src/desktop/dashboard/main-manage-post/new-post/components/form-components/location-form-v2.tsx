@@ -4,22 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@components/ui/separator';
-import { MapPin, CircleAlert } from 'lucide-react';
-import { UseFormReturn } from 'react-hook-form';
+import { MapPin } from 'lucide-react';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 
 import { OptionForSelect } from '@models';
 import LocationsPickerFormV2 from '@desktop/components/form-fields/LocationsPickerFormV2';
-import LocationsPickerForm from '@desktop/components/form-fields/LocationsPickerForm';
-import { IProductForm } from '../../type';
 
-interface ILocationForm {
-  form: UseFormReturn<IProductForm>;
-}
 
-const LocationFormV2: React.FC<ILocationForm> = ({ form }) => {
+const LocationFormV2: React.FC<A> = ({ form }) => {
   const [isFirstLoad, setIsFirstLoad] = useState(false);
   const { city_id, district_id, ward_id, street_id } = form.getValues();
 

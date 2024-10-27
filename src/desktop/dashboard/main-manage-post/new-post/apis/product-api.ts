@@ -1,10 +1,9 @@
 
 import { API_ROUTES } from '@common/router';
-import { IProductForm } from '../type';
 import axiosInstance from '@api/axiosInstance';
 
 const ProductApiService = {
-  Create: async (data: IProductForm) => {
+  Create: async (data: A) => {
 
     const params = new FormData();
     data.business_type && params.append('business_type', data.business_type);

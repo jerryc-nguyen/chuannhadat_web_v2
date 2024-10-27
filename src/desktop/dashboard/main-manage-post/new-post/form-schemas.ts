@@ -1,17 +1,6 @@
 import * as yup from 'yup';
 
-// const ImgSchema = yup.object().shape({
-//     fileName: yup.string().required(),
-//     name: yup.string().required(),
-//     fileSize: yup.number().required(),
-//     size: yup.number().required(),
-//     fileKey: yup.string().required(),
-//     key: yup.string().required(),
-//     fileUrl: yup.string().required(),
-//     url: yup.string().required(),
-// });
-
-export const FormSchemaTransactionType = yup.object().shape({
+export const PostFormSchema = yup.object().shape({
   business_type: yup.string().required(),
   category_type: yup.string().required(),
   title: yup
@@ -35,8 +24,8 @@ export const FormSchemaTransactionType = yup.object().shape({
   full_address: yup.string(),
   bedrooms_count: yup.string(),
   bathrooms_count: yup.string(),
-  facade: yup.number(),
-  entrance: yup.number(),
+  facade: yup.string(),
+  entrance: yup.string(),
   floors_count: yup.string(),
   entrance_direction: yup.string(),
   view_direction: yup.string(),

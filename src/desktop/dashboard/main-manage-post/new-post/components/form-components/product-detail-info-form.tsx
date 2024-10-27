@@ -24,14 +24,12 @@ import React from "react";
 import { Button } from "@components/ui/button";
 import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
 import { ReceiptText } from "lucide-react";
-import { IProductForm } from "../../type";
-import { furnitureTypeOptions, viewDirectionTypeOptions } from "../../constant";
 
-interface IProductDetailInfoForm {
-  form: UseFormReturn<IProductForm>;
-}
+import { furnitureTypeOptions, directionOptions } from "../../constant";
 
-const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
+
+
+const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
@@ -185,7 +183,7 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
                                 />
                               </SelectTrigger>
                               <SelectContent>
-                                {viewDirectionTypeOptions.map((item, index) => (
+                                {directionOptions.map((item, index) => (
                                   <SelectItem key={index} value={item.value}>
                                     {item.label}
                                   </SelectItem>
@@ -227,7 +225,7 @@ const ProductDetailInfoForm: React.FC<IProductDetailInfoForm> = ({ form }) => {
                                 />
                               </SelectTrigger>
                               <SelectContent>
-                                {viewDirectionTypeOptions.map((item, index) => (
+                                {directionOptions.map((item, index) => (
                                   <SelectItem key={index} value={item.value}>
                                     {item.label}
                                   </SelectItem>

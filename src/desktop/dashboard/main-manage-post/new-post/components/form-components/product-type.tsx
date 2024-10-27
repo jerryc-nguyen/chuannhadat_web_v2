@@ -16,10 +16,9 @@ import {
   businessTypeOptions,
   categoryTypeOptions,
 } from "../../constant";
-import { IProductForm } from "../../type";
 
 interface IProductTypeForm {
-  form: UseFormReturn<IProductForm>;
+  form: UseFormReturn<A>;
 }
 
 const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {

@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
+import { ControllerRenderProps } from "react-hook-form";
 import { Separator } from "@components/ui/separator";
 import { Checkbox } from "@components/ui/checkbox";
 import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
@@ -21,16 +21,11 @@ import { BadgeInfo } from "lucide-react";
 import {
   furnitureTypeOptions,
   phapLyTypeOptions,
-  viewDirectionTypeOptions,
+  directionOptions,
 } from "../../constant";
-import { IProductForm } from "../../type";
 import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
 
-interface IProductInfoForm {
-  form: UseFormReturn<IProductForm>;
-}
-
-const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
+const ProductInfoForm: React.FC<A> = ({ form }) => {
   const price_in_vnd = form.watch("price_in_vnd");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
@@ -305,7 +300,7 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {viewDirectionTypeOptions.map((item, index) => (
+                      {directionOptions.map((item, index) => (
                         <SelectItem key={index} value={item.value}>
                           {item.label}
                         </SelectItem>
@@ -347,7 +342,7 @@ const ProductInfoForm: React.FC<IProductInfoForm> = ({ form }) => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {viewDirectionTypeOptions.map((item, index) => (
+                      {directionOptions.map((item, index) => (
                         <SelectItem key={index} value={item.value}>
                           {item.label}
                         </SelectItem>

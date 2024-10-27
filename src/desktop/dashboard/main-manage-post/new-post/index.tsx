@@ -4,12 +4,9 @@ import ProductInfoForm from "./components/form-components/product-info-form";
 import { businessTypeOptions, categoryTypeOptions } from "./constant";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  FormSchemaTransactionType,
-} from "./components/form-components/form-schema";
+
 import { Form } from "@/components/ui/form";
 import ImageForm from "./components/form-components/image-form";
-import { IProductForm } from "./type";
 import { Button } from "@components/ui/button";
 import ProductApiService from "./apis/product-api";
 import ProductTypeForm from "./components/form-components/product-type";
@@ -17,60 +14,60 @@ import ProductDescriptionForm from "./components/form-components/product-descrip
 import Link from "next/link";
 import LocationFormV2 from "./components/form-components/location-form-v2";
 import { toast } from 'sonner';
+import { PostFormSchema } from "./form-schemas";
+import { IProductForm } from "../types";
+
+const defaultValues: IProductForm = {
+  description: "",
+  business_type: businessTypeOptions[0].value,
+  category_type: categoryTypeOptions[0].value,
+  title: "",
+  area: "",
+  phap_ly: "",
+  price_in_vnd: "",
+  city_id: "",
+  district_id: "",
+  ward_id: "",
+  street_id: "",
+  project_id: "",
+  full_address: "",
+  bedrooms_count: "5",
+  bathrooms_count: "3",
+  facade: "",
+  entrance: "",
+  floors_count: "",
+  entrance_direction: "",
+  view_direction: "",
+  furniture: "",
+  image_ids: "",
+  youtube_url: ""
+};
 
 const NewPost: React.FC = () => {
-  const defaultValues = {
-    name: "",
-    description: "",
-    price: 0,
-    imgUrl: [],
-    category: "",
-    //
-    business_type: businessTypeOptions[0].value,
-    category_type: categoryTypeOptions[0].value,
-    title: "",
-    area: "",
-    phap_ly: "",
-    price_in_vnd: "",
-    city_id: "",
-    district_id: "",
-    ward_id: "",
-    street_id: "",
-    project_id: "",
-    full_address: "",
-    bedrooms_count: "5",
-    bathrooms_count: "3",
-    facade: 0,
-    entrance: 0,
-    floors_count: "",
-    entrance_direction: "",
-    view_direction: "",
-    furniture: "",
-    image_ids: "",
-    youtube_url: ""
-  };
-
   const form = useForm({
-    resolver: yupResolver(FormSchemaTransactionType),
+    // @ts-ignore: ok
+    resolver: yupResolver(PostFormSchema),
     defaultValues,
     reValidateMode: "onChange"
   });
 
-  const onSubmit = async (data: IProductForm) => {
+  const onSubmit = async () => {
     try {
-      const res = await ProductApiService.Create(data);
-      console.log("resssssssss", res);
+      const params = form.getValues();
+      console.log('params', params);
+      // const res = await ProductApiService.Create(params);
+      // console.log("resssssssss", res);
 
-      if (res.status) {
-        toast.success('Đăng tin thành công');
-        setTimeout(() => {
-          window.location.href = '/dashboard/manage-post/collection-post'
-        }, 1500)
+      // if (res.status) {
+      //   toast.success('Đăng tin thành công');
+      //   setTimeout(() => {
+      //     window.location.href = '/dashboard/manage-post/collection-post'
+      //   }, 1500)
 
-      } else {
-        // @ts-ignore: ok
-        toast.error(res.message || 'Đăng tin không thành công');
-      }
+      // } else {
+      //   // @ts-ignore: ok
+      //   toast.error(res.message || 'Đăng tin không thành công');
+      // }
     } catch (error) {
       console.log("error", error);
     } finally {

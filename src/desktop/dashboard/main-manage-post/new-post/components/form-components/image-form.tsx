@@ -4,18 +4,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@components/ui/separator";
 import { Image } from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
 import { FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { IProductForm } from "../../type";
+
 import { Input } from "@components/ui/input";
 import { IUploadedImage } from "@components/image-uploader/types";
 import ImageUploader from "@components/image-uploader";
 
-interface IImageForm {
-  form: UseFormReturn<IProductForm>;
-}
-
-const ImageForm: React.FC<IImageForm> = ({ form }) => {
+const ImageForm: React.FC<A> = ({ form }) => {
 
   return (
     <Card>
