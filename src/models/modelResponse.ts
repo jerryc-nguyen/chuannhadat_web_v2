@@ -8,10 +8,11 @@ export interface IViewedPostResonpse extends IResponseData {
 }
 export interface IFormResponse<T> {
   code: number;
-  data: T;
+  data: T[];
   status: boolean | number;
   message: string;
 }
+export type IConnectOauthsResponse = IFormResponse<A>;
 
 export interface INotificationResponse {
   id: number;

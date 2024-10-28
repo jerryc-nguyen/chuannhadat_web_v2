@@ -12,8 +12,8 @@ import {
 } from '@mobile/auth/types';
 import { Author, IProductDetail } from '@mobile/searchs/type';
 import { IResponseData } from '@models';
-import { IViewedPostsPayload } from '@models/modelPayload';
-import { IViewedPostResonpse } from '@models/modelResponse';
+import { IConnectOauthsPayload, IViewedPostsPayload } from '@models/modelPayload';
+import { IConnectOauthsResponse, IViewedPostResonpse } from '@models/modelResponse';
 import {
   ISavedProductsResponse,
   ISaveProductPayload,
@@ -98,6 +98,17 @@ export const services = {
     },
     signUp: async (data: Partial<IFormPropsRegister>): Promise<IRegisterResponse> => {
       return axiosInstance.post(API_ROUTES.AUTH.REGISTER_BY_PHONE, data);
+    },
+  },
+  oauths: {
+    connectGoogle: async (data: IConnectOauthsPayload): Promise<IConnectOauthsResponse> => {
+      return axiosInstance.post(API_ROUTES.OAUTHS.CONNECT_GOOGLE, data);
+    },
+    connectFacebook: async (data: IConnectOauthsPayload): Promise<IConnectOauthsResponse> => {
+      return axiosInstance.post(API_ROUTES.OAUTHS.CONNECT_FACEBOOK, data);
+    },
+    getOauths: async (): Promise<IConnectOauthsResponse> => {
+      return axiosInstance.get(API_ROUTES.OAUTHS.GET_OAUTHS);
     },
   },
   saves: {

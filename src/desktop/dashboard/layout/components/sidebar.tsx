@@ -10,7 +10,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { LuCreditCard } from 'react-icons/lu';
-import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { cn } from '@common/utils';
 import { usePathname } from 'next/navigation';
 import styles from '../styles/sidebar.module.scss';
@@ -18,11 +17,12 @@ import useAuth from '@mobile/auth/hooks/useAuth';
 import { useBalanceRequest } from '@api/balance';
 import { listNavDashboard } from '../constants';
 import Logo from '@components/logo';
+import Image from 'next/image';
+import { Skeleton } from '@components/ui/skeleton';
 
-type SidebarDashboardProps = object;
-
-const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
+const SidebarDashboard: React.FC = () => {
   const { currentUser } = useAuth();
+
   const [accordionActive, setAccordianActive] = React.useState('');
   const genKey = (index: number) => index;
   const pathname = usePathname();
@@ -70,59 +70,70 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
           <Logo />
         </div>
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">
-          <div>
-            <div className="my-2 flex w-full flex-col items-center">
-              <Avatar className="h-[100px] w-[100px]">
-                <AvatarImage src={currentUser?.avatar_url} />
-                <AvatarFallback>{currentUser?.full_name?.slice(0, 2) || 'No name'}</AvatarFallback>
-              </Avatar>
+          <div className="my-2 flex w-full flex-col items-center">
+            {currentUser?.avatar_url ? (
+              <Image
+                width={100}
+                height={100}
+                src={currentUser?.avatar_url || ''}
+                alt="avatar_image"
+                className="h-[100px] w-[100px] rounded-full bg-slate-300"
+              />
+            ) : (
+              <Skeleton className="h-[100px] w-[100px] rounded-full" />
+            )}
+
+            {currentUser?.full_name ? (
               <b className="mt-2">{currentUser?.full_name}</b>
-            </div>
-            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              <Accordion value={accordionActive} type="single" collapsible>
-                {listNavDashboard.map((nav, index) => (
-                  <AccordionItem
-                    key={genKey(index)}
-                    value={`item${index}`}
-                    className="mb-2 justify-between border-none"
-                  >
-                    <AccordionTrigger
-                      onClick={() =>
-                        setAccordianActive((state) =>
-                          state === `item${index}` ? '' : `item${index}`,
-                        )
-                      }
-                      className={cn(
-                        'whitespace-nowrap rounded-sm px-3 py-[10px] hover:no-underline',
-                        isMenuActive(index) ? 'nav-active' : '',
-                      )}
-                    >
-                      <span className="flex items-center gap-3 rounded-lg px-3 pl-0 text-lg">
-                        <nav.icon className="h-5 w-5" />
-                        {nav.name}
-                      </span>
-                    </AccordionTrigger>
-                    <div className="sub-menu">
-                      <AccordionContent className="sub-menu_list">
-                        {nav.links?.map((navLink, index) => (
-                          <Link
-                            key={genKey(index)}
-                            href={`/dashboard/${navLink.url}`}
-                            className={cn(
-                              'whitespace-nowrap rounded-sm py-2 text-base transition-all dark:hover:!bg-white dark:hover:!text-muted',
-                              getActiveLink(navLink.url),
-                            )}
-                          >
-                            {navLink.name}
-                          </Link>
-                        ))}
-                      </AccordionContent>
-                    </div>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </nav>
+            ) : (
+              <Skeleton className="mt-2 h-6 w-[120px]" />
+            )}
           </div>
+          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            <Accordion value={accordionActive} type="single" collapsible>
+              {listNavDashboard.map((nav, index) => (
+                <AccordionItem
+                  key={genKey(index)}
+                  value={`item${index}`}
+                  className="mb-2 justify-between border-none"
+                >
+                  <AccordionTrigger
+                    onClick={() =>
+                      setAccordianActive((state) =>
+                        state === `item${index}` ? '' : `item${index}`,
+                      )
+                    }
+                    className={cn(
+                      'whitespace-nowrap rounded-sm px-3 py-[10px] hover:no-underline',
+                      isMenuActive(index) ? 'nav-active' : '',
+                    )}
+                  >
+                    <span className="flex items-center gap-3 rounded-lg px-3 pl-0 text-lg">
+                      <nav.icon className="h-5 w-5" />
+                      {nav.name}
+                    </span>
+                  </AccordionTrigger>
+                  <div className="sub-menu">
+                    <AccordionContent className="sub-menu_list">
+                      {nav.links?.map((navLink, index) => (
+                        <Link
+                          key={genKey(index)}
+                          href={`/dashboard/${navLink.url}`}
+                          className={cn(
+                            'whitespace-nowrap rounded-sm py-2 text-base transition-all dark:hover:!bg-white dark:hover:!text-muted',
+                            getActiveLink(navLink.url),
+                          )}
+                        >
+                          {navLink.name}
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </div>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </nav>
+
           <div className="mt-auto p-4 pr-2">
             <Card className="rounded-sm p-3" x-chunk="dashboard-02-chunk-0">
               <CardHeader className="rounded-sm border p-2 text-center hover:bg-slate-50">

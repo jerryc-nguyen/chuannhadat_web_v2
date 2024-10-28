@@ -7,6 +7,11 @@ export const API_ROUTES = {
     CHANGE_PASSWORD: 'auth/reset-password',
     LOGOUT: 'auth/logout',
   },
+  OAUTHS: {
+    CONNECT_GOOGLE: 'api/v1/oauths/connect_google',
+    CONNECT_FACEBOOK: 'api/v1/oauths/connect_facebook',
+    GET_OAUTHS: 'api/v1/oauths',
+  },
   POSTS: {
     DETAIL_POST: 'api/v1/products',
     VIEWD_PRODUCTS: 'api/v1/products/viewed_products',
