@@ -1,16 +1,16 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-import { services } from '@api/services';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import NewPost from '@desktop/dashboard/main-manage-post/new-post';
+import EditPost from '@desktop/dashboard/main-manage-post/manage-post/edit_post';
+import ManageProductApis from '@desktop/dashboard/main-manage-post/manage-post/apis/product-api';
 
 export default async function PostDetailPage({ params }: { params: { slug: string } }) {
-  const productUid = params.slug[0].split('-').slice(-1)[0];
+  const productUid = params.slug
 
   const queryClient = new QueryClient();
   // Prefetch api in server
   await queryClient.prefetchQuery({
-    queryKey: ['get-detail-post', productUid],
-    queryFn: () => services.posts.getDetailPost(productUid),
+    queryKey: ['get-detail-manage-post', productUid],
+    queryFn: () => ManageProductApis.getDetail(productUid),
   });
 
   const { isMobile } = useGetUserAgentInfo();
@@ -20,10 +20,10 @@ export default async function PostDetailPage({ params }: { params: { slug: strin
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
         <div className="c-mobileApp">
-          <NewPost />
+          <EditPost params={params} />
         </div>
       ) : (
-        <NewPost />
+        <EditPost params={params} />
       )}
     </HydrationBoundary>
   );

@@ -20,7 +20,8 @@ interface ILocationForm {
   onChangeCity: (city?: OptionForSelect) => void;
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
-  onChangeStreet: (street?: OptionForSelect) => void
+  onChangeStreet: (street?: OptionForSelect) => void;
+  onChangedFullAddress?: (address: string) => void;
 }
 
 export default function LocationsPickerFormV2({
@@ -32,7 +33,8 @@ export default function LocationsPickerFormV2({
   onChangeCity,
   onChangeDistrict,
   onChangeWard,
-  onChangeStreet
+  onChangeStreet,
+  onChangedFullAddress
 }: ILocationForm) {
 
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
@@ -44,8 +46,6 @@ export default function LocationsPickerFormV2({
   const [openDistrictDropdown, setOpenDistrictDropdown] = useState(false);
   const [openWardDropdown, setOpenWardDropdown] = useState(false);
   const [openStreetDropdown, setOpenStreetDropdown] = useState(false);
-
-  const [districtOptions, setDistrictOptions] = useState([]);
 
   const resetDistrict = () => {
     setCurDistrict(undefined);
@@ -62,53 +62,17 @@ export default function LocationsPickerFormV2({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const populateOptions = () => {
     if (city?.value) {
-      setDistrictOptions(
-        //@ts-ignore: read field of object
-        citiesDistricts[city.value + ''],
-      );
+      populateCity();
+      populateDistrict();
+      populateWard();
+      populateStreet();
     }
   };
 
-  const onSelectCity = (city?: OptionForSelect) => {
-    const finalOption = city?.value != 'all' ? city : undefined;
-
-    resetDistrict();
-    resetWard();
-    resetStreet();
-
-    setDistrictOptions(
-      //@ts-ignore: read field of object
-      citiesDistricts[finalOption?.value + ''] || [],
-    );
-    setCurCity(finalOption);
-    setOpenCityDropdown(false);
-    onChangeCity(finalOption);
-  };
-
-  const onSelectDistrict = (district?: OptionForSelect) => {
-    const finalOption = district?.value != 'all' ? district : undefined;
-
-    resetWard();
-    resetStreet();
-
-    setCurDistrict(finalOption);
-    setOpenDistrictDropdown(false);
-    onChangeDistrict(finalOption);
-  };
-
-  const onSelectWard = (option?: OptionForSelect) => {
-    const finalOption = option?.value != 'all' ? option : undefined;
-    setCurWard(finalOption);
-    setOpenWardDropdown(false);
-    onChangeWard(finalOption);
-  };
-
-  const onSelectStreet = (option?: OptionForSelect) => {
-    const finalOption = option?.value != 'all' ? option : undefined;
-    setCurStreet(finalOption);
-    setOpenStreetDropdown(false);
-    onChangeStreet(finalOption);
-  };
+  const districtOptions = useMemo(() => {
+    //@ts-ignore: read field of object
+    return citiesDistricts[city.value + '']
+  }, [city?.value])
 
   const wardOptions = useMemo(() => {
     return curDistrict?.value
@@ -121,6 +85,96 @@ export default function LocationsPickerFormV2({
       // @ts-ignore: ok
       ? districtStreets[curDistrict?.value + ''] : []
   }, [curDistrict?.value])
+
+  const populateCity = () => {
+    if (curCity?.value && !curCity?.text) {
+      city = cities.find((option) => option.value.toString() == curCity?.value)
+      setCurCity(city)
+    }
+  }
+
+  const populateDistrict = () => {
+    if (curCity?.value && curDistrict?.value && !curDistrict?.text) {
+      district = districtOptions.find((option: A) => option.value.toString() == curDistrict?.value)
+      setCurDistrict(district)
+    }
+  }
+
+  const populateWard = () => {
+    if (curDistrict?.value && curWard?.value && !curWard?.text) {
+      ward = wardOptions.find((option: A) => option.value.toString() == curWard?.value)
+      setCurWard(ward)
+    }
+  }
+
+  const populateStreet = () => {
+    if (curStreet?.value && !curStreet?.text) {
+      street = streetOptions.find((option: A) => option.value.toString() == curStreet?.value)
+      setCurStreet(street)
+    }
+  }
+
+  const onSelectCity = (city?: OptionForSelect) => {
+    const finalOption = city?.value != 'all' ? city : undefined;
+
+    resetDistrict();
+    resetWard();
+    resetStreet();
+    setCurCity(finalOption);
+    setOpenCityDropdown(false);
+    onChangeCity(finalOption);
+    updateFullAddress({ city: finalOption });
+    form.setValue('city_id', finalOption?.value);
+  };
+
+  const fullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }): string => {
+    const address = [
+      street?.text || curStreet?.text,
+      ward?.text || curWard?.text,
+      district?.text || curDistrict?.text,
+      city?.text || curCity?.text
+    ].filter((text) => (text || '').length > 0).join(', ')
+    return address;
+  }
+
+  const updateFullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }) => {
+    const newAdress = fullAddress({ city, district, ward, street });
+    if (onChangedFullAddress) {
+      onChangedFullAddress(newAdress)
+    }
+  }
+
+  const onSelectDistrict = (district?: OptionForSelect) => {
+    const finalOption = district?.value != 'all' ? district : undefined;
+
+    resetWard();
+    resetStreet();
+
+    setCurDistrict(finalOption);
+    setOpenDistrictDropdown(false);
+    onChangeDistrict(finalOption);
+    updateFullAddress({ district: finalOption });
+    form.setValue('district_id', finalOption?.value);
+  };
+
+  const onSelectWard = (option?: OptionForSelect) => {
+    const finalOption = option?.value != 'all' ? option : undefined;
+    setCurWard(finalOption);
+    setOpenWardDropdown(false);
+    onChangeWard(finalOption);
+    updateFullAddress({ ward: finalOption });
+    form.setValue('ward_id', finalOption?.value);
+  };
+
+  const onSelectStreet = (option?: OptionForSelect) => {
+    const finalOption = option?.value != 'all' ? option : undefined;
+    setCurStreet(finalOption);
+    setOpenStreetDropdown(false);
+    onChangeStreet(finalOption);
+    updateFullAddress({ street: finalOption });
+    console.log('onSelectStreet', finalOption)
+    form.setValue('street_id', finalOption?.value);
+  };
 
   useEffect(() => {
     populateOptions();

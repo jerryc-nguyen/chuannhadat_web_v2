@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AutoComplete } from '@components/autocomplete';
 import { LoadingSpinner } from '@components/icons/loading-spinner';
 import { OptionForSelect } from '@models';
-import { citiesData, cityDistrictsData, districtsStreetsData, districtsWardsData } from '@desktop/dashboard/main-manage-post/new-post/constant';
+import { citiesData, cityDistrictsData, districtsStreetsData, districtsWardsData } from '@desktop/dashboard/main-manage-post/manage-post/constant';
 
 interface ILocationForm {
   form: UseFormReturn<A>;

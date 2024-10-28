@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import NewPost from '@desktop/dashboard/main-manage-post/new-post';
+import NewPost from '@desktop/dashboard/main-manage-post/manage-post/new_post';
 
 const NewPostPage: React.FC = () => {
   const { isMobile } = useGetUserAgentInfo();

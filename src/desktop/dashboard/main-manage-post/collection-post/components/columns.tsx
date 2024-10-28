@@ -52,14 +52,14 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "images",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Mô tả" className="container"/>
+      <DataTableColumnHeader column={column} title="Mô tả" className="container" />
     ),
     cell: ({ row }) => {
       const hide_on_frontend_reason = row.original.hide_on_frontend_reason;
 
       const images = row.original.images;
       const imageUrl = images?.[0]?.url || "/default-image.jpg";
-      
+
       const images_count = row.original.images_count;
       const visible = row.original.visible;
 
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Product>[] = [
             ) : <></>
           }
           <div className="flex w-full gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center min-h-[180px]">
-            <ImageProduct 
+            <ImageProduct
               title={title}
               imageUrl={imageUrl}
               images_count={images_count}
@@ -148,24 +148,24 @@ export const columns: ColumnDef<Product>[] = [
               </div>
 
               <div className="flex gap-16">
-                <ButtonUpVip productId={productId} adsType={adsType}/>
+                <ButtonUpVip productId={productId} adsType={adsType} />
 
-                <CheckboxAutoRefresh productId={productId} auto_refresh_product={auto_refresh_product}/>
-                
+                <CheckboxAutoRefresh productId={productId} auto_refresh_product={auto_refresh_product} />
+
               </div>
             </div>
             <div className="flex flex-col space-y-1 col-span-2 h-full">
               <div className="flex flex-col">
                 <ButtonRefresh productId={productId} />
 
-                <Link href={`/dashboard/manage-post/edit-${productUid}`} target="_blank">
+                <Link href={`/dashboard/manage-post/${productUid}`} target="_blank">
                   <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-2">
-                    <SquarePen size={16}/> <span className="text-sm">Cập nhật tin</span> 
+                    <SquarePen size={16} /> <span className="text-sm">Cập nhật tin</span>
                   </Button>
                 </Link>
 
                 <Separator className="h-[1px]" />
-                
+
                 <ButtonDelete productId={productId} />
               </div>
             </div>
@@ -202,7 +202,7 @@ export const columns: ColumnDef<Product>[] = [
               #{id}
             </Link>
           </span>
-          
+
           <div className="flex flex-col gap-1 text-xs">
             <span className="font-medium">
               Ngày đăng:
@@ -225,22 +225,21 @@ export const columns: ColumnDef<Product>[] = [
             <span className="font-medium">
               Loại tin:
             </span>
-            <span className={`${
-              ads_type === "vip_1" ? "text-[#dc3545]"  :
-              ads_type === "vip_2" ? "text-[#fd7e14]"  :
-              ads_type === "vip_3" ? "text-[#0052ea]"  : "text-muted-foreground"
-            }`}>
+            <span className={`${ads_type === "vip_1" ? "text-[#dc3545]" :
+              ads_type === "vip_2" ? "text-[#fd7e14]" :
+                ads_type === "vip_3" ? "text-[#0052ea]" : "text-muted-foreground"
+              }`}>
               {
                 ads_type === "vip_1" ? "TIN VIP 1" :
-                ads_type === "vip_2" ? "TIN VIP 2" :
-                ads_type === "vip_3" ? "TIN VIP 3" : "Tin thường"
+                  ads_type === "vip_2" ? "TIN VIP 2" :
+                    ads_type === "vip_3" ? "TIN VIP 3" : "Tin thường"
               }
               {
-                (expires_after_days && ads_type !== "normal") ? 
+                (expires_after_days && ads_type !== "normal") ?
                   <span className="text-muted-foreground">{` (hết hạn sau ${expires_after_days})`}</span> : <></>
               }
             </span>
-            
+
           </div>
         </div>
       );
@@ -250,7 +249,7 @@ export const columns: ColumnDef<Product>[] = [
   },
 ];
 
-const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: string } ) => {
+const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: string }) => {
   const { openModal, closeModal } = useModals();
 
   const showModalUpVipProduct = () => {
@@ -258,7 +257,7 @@ const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: strin
       name: 'ModalUpVipProduct',
       title: 'Cấu hình tin đăng',
       content: (
-        <UpVipProductForm productId={productId} closeModal={closeModal}/>
+        <UpVipProductForm productId={productId} closeModal={closeModal} />
       ),
       footer: <></>,
       showAsDialog: true,
@@ -269,23 +268,23 @@ const ButtonUpVip = ({ productId, adsType }: { productId: string, adsType: strin
     <Button variant="outline" size="sm" className="h-8" onClick={() => {
       showModalUpVipProduct();
     }} disabled={adsType !== "normal"}>
-      <ChevronsUp color="#28a745" size={16}/>
+      <ChevronsUp color="#28a745" size={16} />
       <span className="text-sm text-[#28a745]">
         UP VIP
       </span>
-      <ChevronsUp color="#28a745" size={16}/>
+      <ChevronsUp color="#28a745" size={16} />
     </Button>
   )
 }
 
-const SwitchButtonToggleShowOnFrontEnd = ({ productId, visible }: { productId: string, visible: boolean } ) => {
+const SwitchButtonToggleShowOnFrontEnd = ({ productId, visible }: { productId: string, visible: boolean }) => {
   const [checked, setChecked] = useState<boolean>(visible);
 
   const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
     try {
       const res: A = await ProductApiService.ShowOnFrontend(data);
       console.log("handleShowOnFrontend success response", res);
-      if ( res.status === true && res.message ) {
+      if (res.status === true && res.message) {
         toast.success(res.message);
       } else {
         toast.error(res.message);
@@ -316,7 +315,7 @@ const SwitchButtonToggleShowOnFrontEnd = ({ productId, visible }: { productId: s
   )
 }
 
-const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: string, auto_refresh_product: boolean } ) => {
+const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: string, auto_refresh_product: boolean }) => {
   const [checked, setChecked] = useState<boolean>(auto_refresh_product);
 
   const handleSetUpAutoRefresh = async (data: SetUpAutoRefreshProductInput) => {
@@ -324,7 +323,7 @@ const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: s
       const res: A = await ProductApiService.SetUpAutoRefresh(data);
       console.log("handleSetUpAutoRefresh success response", res);
 
-      if ( res.status === true && res.message ) {
+      if (res.status === true && res.message) {
         toast.success(res.message);
       } else {
         toast.error(res.message);
@@ -361,7 +360,7 @@ const CheckboxAutoRefresh = ({ productId, auto_refresh_product }: { productId: s
   )
 }
 
-const ButtonRefresh = ({ productId }: { productId: string } ) => {
+const ButtonRefresh = ({ productId }: { productId: string }) => {
   const { productActionSettings, decreaseTotalRefreshsCount } = useProductActionSetting();
 
   const handleRefresh = async () => {
@@ -371,7 +370,7 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
       });
       console.log("handleRefresh success response", res);
 
-      if ( res.status === true && res.message ) {
+      if (res.status === true && res.message) {
         toast.success(res.message);
         decreaseTotalRefreshsCount();
       } else {
@@ -389,12 +388,12 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
       <Tooltip>
         <TooltipTrigger>
           <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mb-1" onClick={handleRefresh}>
-            <RefreshCw size={16}/> <span className="text-sm">Làm mới tin</span> 
+            <RefreshCw size={16} /> <span className="text-sm">Làm mới tin</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>
           {
-            ( productActionSettings && productActionSettings.total_refreshs_count ) ?
+            (productActionSettings && productActionSettings.total_refreshs_count) ?
               <p>Làm mới tin thủ công. Bạn còn lần {productActionSettings.total_refreshs_count} làm mới</p> :
               <></>
           }
@@ -404,7 +403,7 @@ const ButtonRefresh = ({ productId }: { productId: string } ) => {
   )
 }
 
-const ButtonDelete = ({ productId }: { productId: string } ) => {
+const ButtonDelete = ({ productId }: { productId: string }) => {
   const { openModal, closeModal } = useModals();
 
   const queryClient = useQueryClient();
@@ -416,7 +415,7 @@ const ButtonDelete = ({ productId }: { productId: string } ) => {
 
       if (res.status === 200 && res.success === true && res.message) {
         toast.success(res.message);
-        queryClient.invalidateQueries({queryKey: ['collection-post']}); // Invalidate cache to refetch product list
+        queryClient.invalidateQueries({ queryKey: ['collection-post'] }); // Invalidate cache to refetch product list
         closeModal(); // Close modal on success
       } else {
         toast.error(res.message);
@@ -446,15 +445,15 @@ const ButtonDelete = ({ productId }: { productId: string } ) => {
 
   return (
     <Button variant="outline" size="sm" className="h-8 justify-start gap-2 mt-2" onClick={showConfirmDelete}>
-      <Trash2 size={16}/>  <span className="text-sm">Xóa tin</span>
+      <Trash2 size={16} />  <span className="text-sm">Xóa tin</span>
     </Button>
   )
 }
 
-const ImageProduct = ({ imageUrl, images_count, title, visible, productId, productUid }: { imageUrl: string, images_count: number, title: string, visible: boolean, productId: string, productUid: string } ) => {
+const ImageProduct = ({ imageUrl, images_count, title, visible, productId, productUid }: { imageUrl: string, images_count: number, title: string, visible: boolean, productId: string, productUid: string }) => {
   const postId = useAtomValue(selectedPostId);
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
-  
+
   return (
     <div className="group inline-flex rounded-lg flex-col gap-3 h-full">
       <div className="relative h-36 w-48">
@@ -470,13 +469,13 @@ const ImageProduct = ({ imageUrl, images_count, title, visible, productId, produ
         />
 
         <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-black/60 font-semibold inline-flex items-center left-[50%] px-2.5 py-0.5 rounded-full text-white text-xs top-1/2 transform gap-1">
-          <ImageIcon  size={16}/>
+          <ImageIcon size={16} />
           <span>{images_count}</span>
           <span>hình</span>
         </div>
       </div>
-      <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible}/>
-      
+      <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible} />
+
       {isLoadingCardProduct && postId === productUid && (
         <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
           <div role="status">
@@ -489,7 +488,7 @@ const ImageProduct = ({ imageUrl, images_count, title, visible, productId, produ
   )
 }
 
-const TitleTriggerOpenProductDetail = ({ title, visible, productUid }: { title: string, visible: boolean, productUid: string } ) => {
+const TitleTriggerOpenProductDetail = ({ title, visible, productUid }: { title: string, visible: boolean, productUid: string }) => {
   const queryClient = useQueryClient();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_postId, setSelectedPostId] = useAtom(selectedPostId);
@@ -508,11 +507,11 @@ const TitleTriggerOpenProductDetail = ({ title, visible, productUid }: { title: 
     >
       {title}
       <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
-        <span className="mx-2"> · </span> 
+        <span className="mx-2"> · </span>
         <span className="space-x-1">
-          <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+          <TriangleAlert className="inline-block" color="#dc3545" size={16} />
           <span>{" "}Tin đang bị ẩn!{" "}</span>
-          <TriangleAlert className="inline-block" color="#dc3545" size={16}/>
+          <TriangleAlert className="inline-block" color="#dc3545" size={16} />
         </span>
       </span>
     </span>

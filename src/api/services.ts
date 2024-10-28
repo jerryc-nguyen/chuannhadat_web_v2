@@ -69,6 +69,11 @@ export const services = {
       return axiosInstance.put(`${API_ROUTES.NOTIFICATION.READ}`, { id });
     },
   },
+  manage_posts: {
+    getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
+      return axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.DETAIL}/${product_uid}`);
+    }
+  },
   posts: {
     getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
       return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);

@@ -4,18 +4,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@components/ui/separator";
 import { Image } from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
 import { FormDescription, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { IProductForm } from "../../type";
+
 import { Input } from "@components/ui/input";
 import { IUploadedImage } from "@components/image-uploader/types";
-import ImageUploader from "@components/image-uploader";
+import ImageUploader, { convertToUploadedImages } from "@components/image-uploader";
 
-interface IImageForm {
-  form: UseFormReturn<IProductForm>;
+type ImageFormProps = {
+  form: A
 }
 
-const ImageForm: React.FC<IImageForm> = ({ form }) => {
+const ImageForm = ({ form }: ImageFormProps) => {
 
   return (
     <Card>
@@ -54,9 +53,13 @@ const ImageForm: React.FC<IImageForm> = ({ form }) => {
               field.onChange(imageIds)
             }
 
+            console.log("form.images", form.getValues('images'));
+
+            const uploadedImages = convertToUploadedImages(form.getValues('images'));
+
             return (
               <FormItem className="grid gap-2">
-                <ImageUploader uploadedImages={[]} onUploaded={onImagesChanged} />
+                <ImageUploader uploadedImages={uploadedImages} onUploaded={onImagesChanged} />
                 <FormMessage />
               </FormItem>
             )

@@ -8,9 +8,10 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
-import { Image } from './type';
+
 import useResizeImage from '@hooks/useResizeImage';
-export default function SliderImage({ listImg }: { listImg: Image[] }) {
+import { TPhoto } from '@models';
+export default function SliderImage({ listImg }: { listImg: TPhoto[] }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const { buildThumbnailUrl } = useResizeImage();
   return (
@@ -29,7 +30,7 @@ export default function SliderImage({ listImg }: { listImg: Image[] }) {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper2"
       >
-        {listImg.map((img: Image, index: number) => {
+        {listImg.map((img: TPhoto, index: number) => {
           return (
             <SwiperSlide key={index}>
               <AspectRatio.Root ratio={16 / 9}>

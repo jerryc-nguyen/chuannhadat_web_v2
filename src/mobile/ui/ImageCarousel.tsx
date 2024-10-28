@@ -3,9 +3,9 @@ import React from 'react';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
-import { Image } from '@mobile/searchs/type';
+import { TPhoto } from '@models';
 
-const ImageCarousel: React.FC<{ images: Image[]; onClick: (id: number) => void }> = ({ images, onClick }) => {
+const ImageCarousel: React.FC<{ images: TPhoto[]; onClick: (id: number) => void }> = ({ images, onClick }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const { buildThumbnailUrl } = useResizeImage();
   const [current, setCurrent] = React.useState(0);
@@ -35,7 +35,7 @@ const ImageCarousel: React.FC<{ images: Image[]; onClick: (id: number) => void }
     <div className="relative w-full max-w-lg mx-auto">
       <Carousel setApi={setApi} className="w-full" loop={true}>
         <CarouselContent>
-          {images.map((image: Image, index: number) => (
+          {images.map((image: TPhoto, index: number) => (
             <CarouselItem
               onClick={() => onClick(index)}
               key={image.id || index}

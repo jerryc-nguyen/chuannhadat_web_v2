@@ -38,7 +38,7 @@ export const roundedOptionsInputVariants = cva(
 
 export interface RoundedOptionsInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof roundedOptionsInputVariants> {
+  VariantProps<typeof roundedOptionsInputVariants> {
   endAdornment?: React.ReactNode
 }
 
@@ -47,21 +47,22 @@ const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOpti
     { className, rounded, variant, endAdornment, value, onChange, ...props },
     ref
   ) => {
-    const [inputValue, setInputValue] = React.useState<string>("");
+    const defaultInputValue = parseInt(value + '') < 6 ? '' : value + '';
+    const [inputValue, setInputValue] = React.useState<string>(defaultInputValue);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
       const regex = /^(?![.,])\d+([.,]\d{0,})?$/;
 
-      if ( regex.test(value) || value === "" ) {
+      if (regex.test(value) || value === "") {
         setInputValue(e.target.value);
         onChange?.(e);
       }
     };
 
     const handleInputBlur = () => {
-      if (defaultOption.some((option) => option.value === inputValue)) {
+      if (defaultOption.some((option) => option.value === inputValue.toString())) {
         // If inputValue matches one of the options, clear the input field
         setInputValue("");
       }
@@ -72,8 +73,9 @@ const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOpti
         <div className="flex items-center gap-2">
           {
             defaultOption.map((item, index) => {
+              const selected = value?.toString() === item.value
               return (
-                <div key={index} className={`cnd-chip min-w-7 min-h-7 flex justify-center ${value === item.value ? "bg-slate-500 text-gray-100" : ""}`}
+                <div key={index} className={`cnd-chip min-w-7 min-h-7 flex justify-center ${selected ? "bg-slate-500 text-gray-100" : ""}`}
                   onClick={() => {
                     setInputValue("");
                     onChange?.({
@@ -93,7 +95,7 @@ const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOpti
             roundedOptionsInputVariants({ variant, rounded, className }),
             className
           )}
-          style={{minWidth: "100px"}}
+          style={{ minWidth: "100px" }}
         >
           <input
             ref={ref}

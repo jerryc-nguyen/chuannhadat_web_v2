@@ -4,16 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { UseFormReturn } from "react-hook-form";
 import { Separator } from "@components/ui/separator";
 import { BadgeInfo } from "lucide-react";
-import { IProductForm } from "../../type";
 
-interface IProductDescriptionForm {
-  form: UseFormReturn<IProductForm>;
-}
-
-const ProductDescriptionForm: React.FC<IProductDescriptionForm> = ({ form }) => {
+const ProductDescriptionForm: React.FC<A> = ({ form }) => {
 
   return (
     <Card>
@@ -37,7 +31,7 @@ const ProductDescriptionForm: React.FC<IProductDescriptionForm> = ({ form }) => 
                   placeholder="Nhập tiêu đề..."
                   endAdornment={
                     <span className="absolute right-1 top-0 text-2xs">
-                      {form.getValues("title").length}/99
+                      {(form.getValues("title") || '').length}/99
                     </span>
                   }
                 />
@@ -63,7 +57,7 @@ const ProductDescriptionForm: React.FC<IProductDescriptionForm> = ({ form }) => 
                   placeholder="Nhập mô tả..."
                   endAdornment={
                     <span className="absolute right-1 top-1 text-2xs">
-                      {form.getValues("description").length}/3000
+                      {(form.getValues("description") || '').length}/3000
                     </span>
                   }
                 />

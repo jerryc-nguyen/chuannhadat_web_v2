@@ -1,7 +1,7 @@
 import PageContainer from "@components/page-container/page-container";
 import { Metadata } from "next";
 import { IBreadcrumbItem } from "@desktop/dashboard/states/breadcrumbAtom";
-import Breadcrumb from "@desktop/dashboard/main-manage-post/new-post/components/breadcrumb";
+import Breadcrumb from "@desktop/dashboard/main-manage-post/manage-post/components/breadcrumb";
 
 type NewPostPageLayoutProps = {
   children: React.ReactNode;
@@ -36,7 +36,7 @@ const NewPostPageLayout: React.FC<NewPostPageLayoutProps> = ({ children }) => {
     <PageContainer scrollable>
       <div className="flex-1 space-y-4">
         <div className="flex items-center">
-          <Breadcrumb breadcrumbs={currentBreadcrumb}/>
+          <Breadcrumb breadcrumbs={currentBreadcrumb} />
         </div>
 
         <div className="space-y-4">

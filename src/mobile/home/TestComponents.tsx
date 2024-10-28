@@ -4,7 +4,7 @@ import { useState } from "react";
 import ListItemBtsPicker from "../bts-pickers/ListItemBtsPicker";
 import ListItemBtsInput from "@mobile/bts-pickers/ListItemBtsInput";
 import useModals from "@mobile/modals/hooks";
-import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/new-post/components/form-components/fields/price-autocomplete";
+import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/manage-post/components/form-components/fields/price-autocomplete";
 import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
 import { Input } from "@components/ui/input";
 import LocationsPicker from "@mobile/ui/LocationsPicker";

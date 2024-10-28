@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import { Image } from './type';
+
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@hooks/useResizeImage';
-export default function SliderImage2({ listImg }: { listImg: Image[] }) {
+import { TPhoto } from '@models';
+export default function SliderImage2({ listImg }: { listImg: TPhoto[] }) {
   const { buildThumbnailUrl } = useResizeImage();
 
   return (
@@ -16,7 +17,7 @@ export default function SliderImage2({ listImg }: { listImg: Image[] }) {
         className="w-full max-w-sm"
       >
         <CarouselContent>
-          {listImg.map((img: Image, index: number) => {
+          {listImg.map((img: TPhoto, index: number) => {
             return (
               <CarouselItem key={index}>
                 <AspectRatio.Root ratio={16 / 9}>

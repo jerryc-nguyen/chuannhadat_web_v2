@@ -29,13 +29,13 @@ const ProductApiService = {
     data.page && params.append('page', data.page.toString());
     data.per_page && params.append('per_page', data.per_page.toString());
 
-    const response = await axiosInstance.get(`${API_ROUTES.PRODUCTS.END_POINT}?${params.toString()}`);
+    const response = await axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.END_POINT}?${params.toString()}`);
 
     return response;
   },
 
   GetProductActionSettings: async () => {
-    const response = await axiosInstance.get(`${API_ROUTES.PRODUCTS.GET_PRODUCT_ACTION_SETTINGS}`);
+    const response = await axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.GET_PRODUCT_ACTION_SETTINGS}`);
 
     return response;
   },
@@ -46,7 +46,7 @@ const ProductApiService = {
     formData.append('ads_type', data.ads_type);
     formData.append('number_of_day', data.number_of_day);
 
-    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.UP_VIP}`, formData);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.UP_VIP}`, formData);
 
     return response;
   },
@@ -57,7 +57,7 @@ const ProductApiService = {
     formData.append('ads_type', data.ads_type);
     formData.append('number_of_day', data.number_of_day);
 
-    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.VALIDATE_UP_VIP}`, formData);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.VALIDATE_UP_VIP}`, formData);
 
     return response;
   },
@@ -66,7 +66,7 @@ const ProductApiService = {
     const formData = new FormData();
     formData.append('show_on_frontend', String(data.showOnFrontEnd));
 
-    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.SHOW_ON_FRONTEND.replace("{product_id}", data.productId)}`, formData);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.SHOW_ON_FRONTEND.replace("{product_id}", data.productId)}`, formData);
 
     return response;
   },
@@ -74,7 +74,7 @@ const ProductApiService = {
   Refresh: async (data: {
     productId: string;
   }) => {
-    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.REFRESH.replace("{product_id}", data.productId)}`);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.REFRESH.replace("{product_id}", data.productId)}`);
 
     return response;
   },
@@ -83,7 +83,7 @@ const ProductApiService = {
     const formData = new FormData();
     formData.append('auto_refresh', String(data.autoRefresh));
 
-    const response = await axiosInstance.postForm(`${API_ROUTES.PRODUCTS.SETUP_AUTO_REFRESH.replace("{product_id}", data.productId)}`, formData);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.SETUP_AUTO_REFRESH.replace("{product_id}", data.productId)}`, formData);
 
     return response;
   },
@@ -91,7 +91,7 @@ const ProductApiService = {
   Delete: async (data: {
     productId: string;
   }) => {
-    const response = await axiosInstance.delete(`${API_ROUTES.PRODUCTS.DELETE.replace("{product_id}", data.productId)}`);
+    const response = await axiosInstance.delete(`${API_ROUTES.MANAGE_PRODUCTS.DELETE.replace("{product_id}", data.productId)}`);
 
     return response;
   },
