@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { CircleX } from 'lucide-react';
+import { useState } from 'react';
 import ImageWithFallback from '@components/image-with-fallback';
 import { IUploadedImage } from '../types';
 
@@ -13,7 +12,7 @@ const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
     <div className="relative group inline-flex h-52 w-52 cursor-grab rounded-lg border-2 border-secondary p-2 transition-transform duration-300 hover:scale-110">
       <div className="w-full image-fill-wrapper relative rounded-lg overflow-hidden flex items-center justify-center flex-col bg-grey-50 duration-300">
         <ImageWithFallback
-          className="block h-full w-auto"
+          className="block h-full w-auto object-cover"
           src={image.url}
           alt={`Hình ảnh ${image.id}`}
           fill
@@ -23,7 +22,6 @@ const PreviewThumb: React.FC<IPreviewThumb> = ({ image }) => {
           isError={isError}
           setIsError={setIsError}
         />
-        <CircleX className="absolute right-0 top-0 z-10 text-[#596570] opacity-0 transition-opacity duration-300 group-hover:opacity-100 cursor-pointer" />
 
         {
           image.uploading ? (

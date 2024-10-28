@@ -79,7 +79,8 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
       const newImages = oldImages.map((img: IUploadedImage) => {
         // @ts-ignore: check new attr
         const matched = img.uploadedFile && img.uploadedFile.new_id == result.file?.new_id
-        if (matched) {
+        const uploaded = oldImages.filter((item) => item.id == result.id).length > 0;
+        if (matched && !uploaded) {
           return {
             ...img,
             uploading: false,
@@ -106,7 +107,6 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
 
     uploadPromises.forEach((uploading) => {
       uploading.then((result) => {
-        console.log('Uploaded', result);
         handleUploadCompleted(result);
       }).catch((err) => {
         console.error('Error in one or more uploads:', err);

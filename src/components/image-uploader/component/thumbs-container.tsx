@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { CircleX } from 'lucide-react';
 import { IUploadedImage } from '../types';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
@@ -35,6 +36,13 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
     return image.id + "";
   }
 
+  const onRemoveImageClick = (image: IUploadedImage) => {
+    if (!confirm('Bạn muốn xoá hình này?')) {
+      return;
+    }
+    onChange(images.filter((img) => img.id != image.id));
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" direction="horizontal" type="group">
@@ -53,7 +61,7 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
                 >
                   {(provided: any, snapshot: any) => (
                     <div
-                      className="w-min"
+                      className="w-min relative"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -61,6 +69,8 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
                       elevation={4}
                     >
                       <PreviewThumb image={image} />
+                      <CircleX onClick={() => onRemoveImageClick(image)} className="absolute right-0 top-0 z-10 text-[#596570] transition-opacity duration-300 group-hover:opacity-100 cursor-pointer" />
+                      {index == 0 && (<span className='absolute left-1/2 transform -translate-x-1/2 bottom-4 text-white border px-1 whitespace-nowrap rounded'>Hình đại diện</span>)}
                     </div>
                   )}
                 </Draggable>
