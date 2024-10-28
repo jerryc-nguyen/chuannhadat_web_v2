@@ -21,7 +21,7 @@ const defaultValues: IProductForm = {
   description: "",
   business_type: businessTypeOptions[0].value,
   category_type: categoryTypeOptions[0].value,
-  title: "test",
+  title: "",
   area: "",
   phap_ly: "",
   price_in_vnd: "",
@@ -54,20 +54,19 @@ const NewPost: React.FC = () => {
   const onSubmit = async () => {
     try {
       const params = form.getValues();
-      console.log('params', params);
-      // const res = await ProductApiService.Create(params);
-      // console.log("resssssssss", res);
+      const res = await ProductApiService.Create(params);
+      console.log("resssssssss", res);
 
-      // if (res.status) {
-      //   toast.success('Đăng tin thành công');
-      //   setTimeout(() => {
-      //     window.location.href = '/dashboard/manage-post/collection-post'
-      //   }, 1500)
+      if (res.status) {
+        toast.success('Đăng tin thành công');
+        setTimeout(() => {
+          window.location.href = '/dashboard/manage-post/collection-post'
+        }, 1500)
 
-      // } else {
-      //   // @ts-ignore: ok
-      //   toast.error(res.message || 'Đăng tin không thành công');
-      // }
+      } else {
+        // @ts-ignore: ok
+        toast.error(res.message || 'Đăng tin không thành công');
+      }
     } catch (error) {
       console.log("error", error);
     } finally {
