@@ -53,8 +53,6 @@ const ImageForm = ({ form }: ImageFormProps) => {
               field.onChange(imageIds)
             }
 
-            console.log("form.images", form.getValues('images'));
-
             const uploadedImages = convertToUploadedImages(form.getValues('images'));
 
             return (
