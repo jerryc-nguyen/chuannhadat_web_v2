@@ -1,14 +1,7 @@
 'use client';
 import { cn, genKey } from '@common/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
-import {
-  ContactInfor,
-  EmailTab,
-  PasswordTab,
-  PersonalTab,
-  ReferFriend,
-  PhoneNumberTab,
-} from './components';
+
 import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -64,7 +57,7 @@ const AccountSettingsDesktop: React.FC = () => {
               className={cn(
                 'w-full items-center justify-start gap-x-4 rounded-none border-none px-4 py-2 text-base font-medium !shadow-none transition-all',
                 tabActive === item.tabValue
-                  ? '!bg-blue-100 !text-blue-500 dark:!bg-white dark:!text-slate-900'
+                  ? '!bg-blue-100 !text-primary_color dark:!bg-white dark:!text-slate-900'
                   : '',
               )}
               key={genKey(index)}
@@ -73,7 +66,7 @@ const AccountSettingsDesktop: React.FC = () => {
               <span
                 className={cn(
                   'aspect-square rounded-md border bg-white p-2 shadow-sm dark:border-slate-400 dark:bg-slate-900',
-                  tabActive === item.tabValue ? 'text-blue-500 dark:text-white' : '',
+                  tabActive === item.tabValue ? 'text-primary_color dark:text-white' : '',
                 )}
               >
                 <item.icon />
@@ -83,24 +76,11 @@ const AccountSettingsDesktop: React.FC = () => {
           ))}
         </TabsList>
         <div className="flex h-full min-h-[297px] max-w-screen-lg flex-1 flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
-          <TabsContent className="p-4" value="personal-wall">
-            <PersonalTab />
-          </TabsContent>
-          <TabsContent className="p-4" value="contact-infor">
-            <ContactInfor />
-          </TabsContent>
-          <TabsContent className="relative flex-1 p-4" value="email">
-            <EmailTab />
-          </TabsContent>
-          <TabsContent className="relative flex-1 p-4" value="phone-number">
-            <PhoneNumberTab />
-          </TabsContent>
-          <TabsContent className="p-4" value="password">
-            <PasswordTab />
-          </TabsContent>
-          <TabsContent className="p-4" value="refer-friend">
-            <ReferFriend />
-          </TabsContent>
+          {listTabAccountSetting.map((tab) => (
+            <TabsContent key={tab.title} className="p-4" value={tab.tabValue}>
+              <tab.tabComponent />
+            </TabsContent>
+          ))}
         </div>
       </Tabs>
     </section>

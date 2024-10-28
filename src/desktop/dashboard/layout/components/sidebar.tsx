@@ -66,7 +66,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
       )}
     >
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center justify-center border-b bg-white/30 px-4 backdrop-blur-md lg:h-[60px] lg:px-6">
+        <div className="box-content flex h-16 items-center justify-center border-b bg-white/30 px-4 py-2 backdrop-blur-md lg:px-6">
           <Logo />
         </div>
         <div className="sidebar-content flex w-[300px] flex-1 flex-col overflow-y-scroll">

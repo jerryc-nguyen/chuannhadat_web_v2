@@ -24,7 +24,7 @@ const EmailTab: React.FC = () => {
     console.log(values);
   }
   return (
-    <>
+    <section className="flex h-full flex-1 flex-col justify-between">
       <div className="border-b pb-4">
         <h3 className="text-xl font-semibold">Thay đổi email</h3>
       </div>
@@ -50,12 +50,12 @@ const EmailTab: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button className="w-fit sm:absolute sm:bottom-0 sm:-translate-y-4" type="submit">
+          <Button className="relative w-fit sm:bottom-0" type="submit">
             Lưu thay đổi
           </Button>
         </form>
       </Form>
-    </>
+    </section>
   );
 };
 
