@@ -2,37 +2,67 @@ import { LuContact, LuLock, LuMail, LuPhone, LuUserCog2, LuUserPlus2 } from 'rea
 import broker from '@assets/images/broker.png';
 import personal from '@assets/images/personal.png';
 import { CustomerGender, CustomerType } from '@common/types';
-
+import { IoShareSocial } from 'react-icons/io5';
+import {
+  ContactInfor,
+  EmailTab,
+  PasswordTab,
+  PersonalTab,
+  PhoneNumberTab,
+  ReferFriend,
+} from '../account-settings/components';
+import ConnectSocial from '../account-settings/components/connect-social';
+export enum AccountSettingTab {
+  PERSONAL_WALL = 'personal-wall',
+  CONNECT_SOCIAL = 'connect-social',
+  CONTACT_INFO = 'contact-infor',
+  EMAIL = 'email',
+  PHONE_NUMBER = 'phone-number',
+  PASSWORD = 'password',
+  REFER_FRIEND = 'refer-friend',
+}
 export const listTabAccountSetting = [
   {
     title: 'Trang cá nhân',
-    tabValue: 'personal-wall',
+    tabValue: AccountSettingTab.PERSONAL_WALL,
     icon: LuUserCog2,
+    tabComponent: PersonalTab,
+  },
+  {
+    title: 'Liên kết tài khoản',
+    tabValue: AccountSettingTab.CONNECT_SOCIAL,
+    icon: IoShareSocial,
+    tabComponent: ConnectSocial,
   },
   {
     title: 'Thông tin liên hệ',
-    tabValue: 'contact-infor',
+    tabValue: AccountSettingTab.CONTACT_INFO,
     icon: LuContact,
+    tabComponent: ContactInfor,
   },
   {
     title: 'Email',
-    tabValue: 'email',
+    tabValue: AccountSettingTab.EMAIL,
     icon: LuMail,
+    tabComponent: EmailTab,
   },
   {
     title: 'Số điện thoại',
-    tabValue: 'phone-number',
+    tabValue: AccountSettingTab.PHONE_NUMBER,
     icon: LuPhone,
+    tabComponent: PhoneNumberTab,
   },
   {
     title: 'Mật khẩu',
-    tabValue: 'password',
+    tabValue: AccountSettingTab.PASSWORD,
     icon: LuLock,
+    tabComponent: PasswordTab,
   },
   {
     title: 'Giới thiệu bạn bè',
-    tabValue: 'refer-friend',
+    tabValue: AccountSettingTab.REFER_FRIEND,
     icon: LuUserPlus2,
+    tabComponent: ReferFriend,
   },
 ];
 export const listCustomerType = [

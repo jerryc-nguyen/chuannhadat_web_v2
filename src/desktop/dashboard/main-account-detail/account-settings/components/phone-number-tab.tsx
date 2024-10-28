@@ -101,11 +101,7 @@ export const PhoneNumberTab: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button
-            disabled={isUpdateMyPhonePending}
-            className="w-fit sm:absolute sm:bottom-0 sm:-translate-y-4"
-            type="submit"
-          >
+          <Button disabled={isUpdateMyPhonePending} className="w-fit sm:bottom-0" type="submit">
             {isUpdateMyPhonePending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>

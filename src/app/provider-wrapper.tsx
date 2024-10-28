@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { QueryProvider } from '@components/providers';
 import SessionTimeOutPopup from '@components/timeout-popup/SessionTimeOutPopup';
 import ListModal from '@components/ListModal';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 type ProviderWrapperProps = {
   children: React.ReactNode;
@@ -19,9 +20,11 @@ const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
   return (
     <QueryProvider>
       <JotaiProvider>
-        {children}
-        <ListModal />
-        <SessionTimeOutPopup isLogged={isLogged} />
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_ID as string}>
+          {children}
+          <ListModal />
+          <SessionTimeOutPopup isLogged={isLogged} />
+        </GoogleOAuthProvider>
       </JotaiProvider>
       <Toaster theme="light" richColors />
       <ToastContainer

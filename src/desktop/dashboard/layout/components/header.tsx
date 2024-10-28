@@ -9,7 +9,7 @@ type HeaderDashboardProps = object;
 const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
   const isLogged = cookies().has(API_TOKEN_SERVER);
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+    <header className="box-content flex h-16 items-center gap-4 border-b bg-muted/40 px-4 py-2 lg:px-6">
       <div className="w-full flex-1">
         <form>
           <div className="relative">
