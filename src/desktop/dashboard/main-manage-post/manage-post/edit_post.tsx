@@ -14,36 +14,11 @@ import Link from "next/link";
 import LocationFormV2 from "./components/form-components/location-form-v2";
 import { toast } from 'sonner';
 import { PostFormSchema } from "./form-schemas";
-import { IProductForm } from "../types";
+
 import ManageProductApis from "./apis/product-api";
 import { useQuery } from "@tanstack/react-query";
 
-
-const defaultValues: IProductForm = {
-  description: "",
-  title: "test",
-  area: "",
-  phap_ly: "",
-  price_in_vnd: "",
-  city_id: "",
-  district_id: "",
-  ward_id: "",
-  street_id: "",
-  project_id: "",
-  full_address: "",
-  bedrooms_count: "5",
-  bathrooms_count: "3",
-  facade: "",
-  entrance: "",
-  floors_count: "",
-  entrance_direction: "",
-  view_direction: "",
-  furniture: "",
-  image_ids: "",
-  youtube_url: ""
-};
-
-const EditPost = ({ params }: { params: { slug: string } }) => {
+const EditPost = ({ params }: { params: A }) => {
   const productUid = params.slug
 
   const { data: product, isSuccess } = useQuery({
@@ -64,23 +39,27 @@ const EditPost = ({ params }: { params: { slug: string } }) => {
     reValidateMode: "onChange"
   });
 
-  const onSubmit = async () => {
+  console.log('form errors', form.formState.errors);
+
+  const onSubmit = async (data: A) => {
+    console.log('onSubmit', data);
+    if (!product) {
+      toast.error('Tin đăng đã bị xoá');
+      return;
+    }
+
     try {
       const params = form.getValues();
       console.log('params', params);
-      // const res = await ProductApiService.Create(params);
-      // console.log("resssssssss", res);
+      const res = await ProductApiService.Update(product.id, params);
+      console.log("resssssssss", res);
 
-      // if (res.status) {
-      //   toast.success('Đăng tin thành công');
-      //   setTimeout(() => {
-      //     window.location.href = '/dashboard/manage-post/collection-post'
-      //   }, 1500)
-
-      // } else {
-      //   // @ts-ignore: ok
-      //   toast.error(res.message || 'Đăng tin không thành công');
-      // }
+      if (res.status) {
+        toast.success('Cập nhật tin thành công');
+      } else {
+        // @ts-ignore: ok
+        toast.error(res.message || 'Cập nhật tin không thành công');
+      }
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -110,7 +89,7 @@ const EditPost = ({ params }: { params: { slug: string } }) => {
           <Link href={`/dashboard/manage-post/collection-post`}>
             <Button type="button" variant="ghost">Trở lại</Button>
           </Link>
-          <Button type="submit">Đăng tin và thanh toán</Button>
+          <Button type="submit">Cập nhật tin</Button>
         </div>
       </form>
     </Form>

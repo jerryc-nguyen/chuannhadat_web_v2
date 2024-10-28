@@ -5,6 +5,7 @@ import ThumbDragAndDropZone from './component/thumbs-container';
 import { IUploadedImage } from './types';
 import ImageUploadApiService, { UploadFolders } from '@components/image-uploader/apis';
 import Image from 'next/image';
+import { TPhoto } from '@models';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',
@@ -33,6 +34,10 @@ interface IImageUploader {
 }
 
 export const convertToUploadedImages = (images: TPhoto[]): IUploadedImage[] => {
+  if (!Array.isArray(images)) {
+    return [];
+  }
+
   return images.map((img: TPhoto) => {
     return {
       ...img,
@@ -51,6 +56,7 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
     })
     onUploaded(uploadedImgs)
   }
+
   const updateUploadProgress = (file: File, progress: number) => {
     setImages((oldImages: IUploadedImage[]) => {
       return oldImages.map((img: IUploadedImage) => {
@@ -146,7 +152,20 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
 
   const onImagesChanged = (images: IUploadedImage[]) => {
     setImages(images)
+    onUploaded(images)
+    // debugImagesNth()
   }
+
+  // const debugImagesNth = () => {
+  //   const imageIds = images.map((item) => item.id);
+  //   console.log('debugImagesNth', imageIds)
+  // }
+
+  useEffect(() => {
+    if (Array.isArray(uploadedImages) && uploadedImages.length > 0) {
+      onUploaded(uploadedImages);
+    }
+  }, [])
 
   return (
     <section className="">

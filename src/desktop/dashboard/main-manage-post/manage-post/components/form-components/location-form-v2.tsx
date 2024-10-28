@@ -5,32 +5,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@components/ui/separator';
 import { MapPin } from 'lucide-react';
-
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { OptionForSelect } from '@models';
 import LocationsPickerFormV2 from '@desktop/components/form-fields/LocationsPickerFormV2';
+import { FormField, FormItem, FormLabel } from '@components/ui/form';
 
 const LocationFormV2: React.FC<A> = ({ form }) => {
-  const [isFirstLoad, setIsFirstLoad] = useState(false);
   const { city_id, district_id, ward_id, street_id } = form.getValues();
-  console.log('city_id', city_id);
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>({ value: city_id, text: '' });
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>({ value: district_id, text: '' });
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>({ value: ward_id, text: '' });
   const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>({ value: street_id, text: '' });
 
-  useEffect(() => {
-    setIsFirstLoad(true);
-  }, []);
-
-  const [fullAddress, setFullAddress] = useState<string>('');
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log('isLoading', isLoading);
-  }, [isLoading]);
+  const [fullAddress, setFullAddress] = useState<string>(form.getValues('full_address'));
 
   const onSelectCity = (city?: OptionForSelect) => {
     console.log('onSelectCity', city)
@@ -54,6 +42,7 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
 
   const onChangedFullAddress = (address: string) => {
     setFullAddress(address)
+    form.setValue('full_address', address)
   }
 
   const mapSrc = useMemo(() => {
@@ -93,13 +82,27 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="subject">Địa chỉ cụ thể</Label>
-          <Input
-            id="subject"
-            placeholder="Nhập Địa chỉ..."
-            value={fullAddress}
-            onChange={(e) => { setFullAddress(e.target.value) }}
+          <FormField
+            control={form.control}
+            name="full_address"
+            render={({ field }) => (
+              <FormItem className="grid gap-2">
+                <FormLabel>
+                  Địa chỉ cụ thể
+                </FormLabel>
+                <Input
+                  value={fullAddress}
+                  onChange={(e) => {
+                    field.onChange(e.target.value)
+                    setFullAddress(e.target.value)
+                  }}
+                  className="relative"
+                  placeholder="Nhập địa chỉ cụ thể"
+                />
+              </FormItem>
+            )}
           />
+
         </div>
 
       </CardContent>

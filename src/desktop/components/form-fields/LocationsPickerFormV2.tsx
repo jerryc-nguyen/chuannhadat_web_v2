@@ -108,7 +108,7 @@ export default function LocationsPickerFormV2({
   }
 
   const populateStreet = () => {
-    if (curDistrict?.value && curStreet?.value && !curStreet?.text) {
+    if (curStreet?.value && !curStreet?.text) {
       street = streetOptions.find((option: A) => option.value.toString() == curStreet?.value)
       setCurStreet(street)
     }
@@ -124,6 +124,7 @@ export default function LocationsPickerFormV2({
     setOpenCityDropdown(false);
     onChangeCity(finalOption);
     updateFullAddress({ city: finalOption });
+    form.setValue('city_id', finalOption?.value);
   };
 
   const fullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }): string => {
@@ -153,6 +154,7 @@ export default function LocationsPickerFormV2({
     setOpenDistrictDropdown(false);
     onChangeDistrict(finalOption);
     updateFullAddress({ district: finalOption });
+    form.setValue('district_id', finalOption?.value);
   };
 
   const onSelectWard = (option?: OptionForSelect) => {
@@ -161,6 +163,7 @@ export default function LocationsPickerFormV2({
     setOpenWardDropdown(false);
     onChangeWard(finalOption);
     updateFullAddress({ ward: finalOption });
+    form.setValue('ward_id', finalOption?.value);
   };
 
   const onSelectStreet = (option?: OptionForSelect) => {
@@ -169,8 +172,9 @@ export default function LocationsPickerFormV2({
     setOpenStreetDropdown(false);
     onChangeStreet(finalOption);
     updateFullAddress({ street: finalOption });
+    console.log('onSelectStreet', finalOption)
+    form.setValue('street_id', finalOption?.value);
   };
-
 
   useEffect(() => {
     populateOptions();

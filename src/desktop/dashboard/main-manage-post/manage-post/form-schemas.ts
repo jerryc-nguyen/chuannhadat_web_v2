@@ -18,9 +18,9 @@ export const PostFormSchema = yup.object().shape({
   price_in_vnd: yup.string().required("Đây là trường bắt buộc."),
   city_id: yup.string().required("Đây là trường bắt buộc."),
   district_id: yup.string().required("Đây là trường bắt buộc."),
-  ward_id: yup.string(),
-  street_id: yup.string(),
-  project_id: yup.string(),
+  ward_id: yup.string().nullable(),
+  street_id: yup.string().nullable(),
+  project_id: yup.string().nullable(),
   full_address: yup.string(),
   bedrooms_count: yup.string(),
   bathrooms_count: yup.string(),
@@ -30,5 +30,5 @@ export const PostFormSchema = yup.object().shape({
   entrance_direction: yup.string(),
   view_direction: yup.string(),
   furniture: yup.string(),
-  image_ids: yup.string().required("Đăng tối thiểu 1 ảnh.")
+  image_ids: yup.string().required("Đăng tối thiểu 1 ảnh.").nullable()
 });
