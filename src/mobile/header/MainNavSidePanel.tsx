@@ -1,53 +1,66 @@
 'use client';
-import useModals from '@mobile/modals/hooks';
 import React from 'react';
-import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import Link from 'next/link';
 import { Button } from '@components/ui/button';
-import useSidePanels from '@components/SidePanel/hooks';
-
+import { removeTokenServer } from '@app/action';
+import { useRouter } from 'next/navigation';
+const listMenubar = [
+  {
+    id: 0,
+    href: '/dashboard',
+    title: 'Trang quản lý',
+  },
+  {
+    id: 1,
+    href: '/dashboard/manage-post/collection-post',
+    title: 'Quản lý tin đăng',
+  },
+  {
+    id: 2,
+    href: '/dashboard/account-setting',
+    title: 'Cài đặt tài khoản',
+  },
+  {
+    id: 3,
+    href: '/tao-tin-moi',
+    title: 'Đăng tin',
+  },
+  {
+    id: 4,
+    href: '/dashboard/top-up',
+    title: 'Nạp tiền',
+  },
+];
 export default function MainNavSidePanel() {
   const { currentUser, signOut } = useAuth();
-  const { openModal, closeModal } = useModals();
-  const { closePanel } = useSidePanels();
 
-  const handleShowModalLoginAndRegister = () => {
-    closePanel();
-    openModal({
-      name: 'loginAndRegister',
-      content: <ModalSelectRegisterOrLogin onClose={closeModal} />,
-      title: 'Đăng nhập / Đăng ký',
-      maxHeightPercent: 0.9,
-      btsContentWrapClass: 'mt-2 bg-white p-4',
-    });
+  const router = useRouter();
+
+  const handleLogout = () => {
+    signOut();
+    removeTokenServer();
+    router.refresh();
   };
-
   return (
     <>
-      {!currentUser && (
-        <div className="flex flex-col gap-4">
-          <Button className="h-12" onClick={() => handleShowModalLoginAndRegister()}>
-            Đăng nhập/Đăng ký
-          </Button>
-        </div>
-      )}
-
-      {currentUser && (
-        <div className="flex flex-col gap-4">
-          <Link href="/dashboard">
-            <Button className="h-12">Trang quản lý</Button>
-          </Link>
-        </div>
-      )}
-
-      {currentUser && (
-        <div className="flex flex-col gap-4">
-          <Button className="h-12" onClick={() => signOut()}>
-            Đăng xuất
-          </Button>
-        </div>
-      )}
+      <div className="flex flex-col">
+        <h2 className="font-bold text-primary_color">{currentUser?.full_name}</h2>
+        <span className="text-sm text-muted-foreground">ID {currentUser?.id}</span>
+      </div>
+      <ul>
+        {listMenubar.map((menu) => (
+          <li
+            className="border-b py-3 font-medium hover:bg-slate-100 hover:underline"
+            key={menu.id}
+          >
+            <Link href={menu.href}>{menu.title}</Link>
+          </li>
+        ))}
+      </ul>
+      <Button className="flex items-center gap-x-2" onClick={handleLogout}>
+        Đăng xuất
+      </Button>
     </>
   );
 }

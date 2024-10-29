@@ -6,12 +6,12 @@ import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCfoH_s6A1wYC40LYQYAjlDlyrhHfnfD6w',
-  authDomain: 'johnwick21.firebaseapp.com',
-  projectId: 'johnwick21',
-  storageBucket: 'johnwick21.appspot.com',
-  messagingSenderId: '51366769810',
-  appId: '1:51366769810:web:dd99d287eff7d8033fa24b',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase

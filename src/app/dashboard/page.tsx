@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Quản lý tài khoản',
 };
 const DashboardPage: React.FC<DashboardPageProps> = () => {
-  return <div className="liver text-">DashboardPage</div>;
+  return <section>DashboardPage</section>;
 };
 
 export default DashboardPage;
