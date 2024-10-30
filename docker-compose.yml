@@ -1,17 +1,62 @@
 version: '2'
 
 services:
+  nginx-proxy:
+    image: nginx:1.26-alpine
+    container_name: nginx-proxy
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      # The vhost volume is only required if you
+      # plan to obtain standalone certificates
+      - vhost:/etc/nginx/vhost.d
+      - conf:/etc/nginx/conf.d
+      - html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs:ro
+      - ./deploy/http.conf:/etc/nginx/conf.d/http.conf
+
+  docker-gen:
+    image: nginxproxy/docker-gen
+    container_name: nginx-proxy-gen
+    command: -notify-sighup nginx-proxy -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./deploy/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro
+    labels:
+      - 'com.github.nginx-proxy.docker-gen'
+
+  acme-companion:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    environment:
+      - DEFAULT_EMAIL=jerryc.nguyen91@gmail.com
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   chuannhadat_next:
     restart: always
     image: registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next
     container_name: chuannhadat_next
     ports:
-      - '3400:3000'
+      - '4500:4500'
     environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://46.250.233.174:3300
-      - VIRTUAL_HOST=api.chuannhadat.com
+      - VIRTUAL_HOST=nextjs.chuannhadat.com
       - VIRTUAL_NETWORK=nginx-proxy
-      - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=api.chuannhadat.com
+      - VIRTUAL_PORT=4500
+      - LETSENCRYPT_HOST=nextjs.chuannhadat.com
       - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
     command: 'node server.js'
+
+volumes:
+  vhost:
+  conf:
+  html:
+  acme:
+  certs:

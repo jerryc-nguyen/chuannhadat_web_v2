@@ -26,7 +26,7 @@ type AvatarIconProps = {
 
 const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const router = useRouter();
-  const { currentUser } = useAuth();
+  const { currentUser, signOut } = useAuth();
   const { openModal, closeModal } = useModals();
   const showModalLoginAndRegister = () => {
     openModal({
@@ -40,6 +40,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   };
 
   const handleLogOut = () => {
+    signOut();
     removeTokenServer();
     router.refresh();
   };
@@ -65,6 +66,10 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
           )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Link href={`/profile/${currentUser?.slug}`}>Trang cá nhân</Link>
+              <DropdownMenuShortcut>⇧⌘R</DropdownMenuShortcut>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <Link href="/dashboard">Trang quản lý</Link>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
