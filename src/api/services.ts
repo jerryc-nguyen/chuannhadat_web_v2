@@ -72,7 +72,7 @@ export const services = {
   manage_posts: {
     getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
       return axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.DETAIL}/${product_uid}`);
-    }
+    },
   },
   posts: {
     getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
@@ -114,6 +114,9 @@ export const services = {
     },
     getOauths: async (): Promise<IConnectOauthsResponse> => {
       return axiosInstance.get(API_ROUTES.OAUTHS.GET_OAUTHS);
+    },
+    deleteOauth: async (oauthId: string) => {
+      return axiosInstance.delete(`${API_ROUTES.OAUTHS.GET_OAUTHS}/${oauthId}`);
     },
   },
   saves: {

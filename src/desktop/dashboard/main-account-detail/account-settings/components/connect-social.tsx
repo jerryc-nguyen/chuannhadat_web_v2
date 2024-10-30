@@ -20,7 +20,7 @@ import { auth, facebookProvider, googleProvider } from '@common/firebase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { Skeleton } from '@components/ui/skeleton';
-import { Button } from '@components/ui/button';
+
 interface IDataConnectResponse {
   uid: string;
   name: string;
@@ -39,33 +39,39 @@ const ConnectSocial: React.FC = () => {
     queryFn: services.oauths.getOauths,
     select: (data) => data.data,
   });
+  const { mutate: deleteMutation } = useMutation({
+    mutationFn: services.oauths.deleteOauth,
+    onSuccess: () => {
+      toast.success('Hủy liên kết thành công');
+    },
+    onError: (err) => {
+      toast.error('Hủy liên kết thất bại' + err);
+    },
+  });
+
   React.useEffect(() => {
-    if (!isFetching && !dataFacebook && !dataGoogle) {
+    if (!isFetching) {
       const dataFacebook = oauthsData?.find((item: A) => item.provider === 'facebook');
       const dataGoogle = oauthsData?.find((item: A) => item.provider === 'google_oauth2');
-      setDataGoogle((data) => {
-        return data
-          ? data
-          : {
-              email: dataGoogle.email,
-              name: dataGoogle.oauth_name,
-              photo: dataGoogle.oauth_avatar,
-              uid: dataGoogle.uid,
-            };
-      });
-      setDataFacebook((data) => {
-        return data
-          ? data
-          : {
-              email: dataFacebook.email,
-              name: dataFacebook.oauth_name,
-              photo: dataFacebook.oauth_avatar,
-              uid: dataFacebook.uid,
-            };
-      });
+      if (dataFacebook) {
+        setDataFacebook({
+          email: dataFacebook.email,
+          name: dataFacebook.oauth_name,
+          photo: dataFacebook.oauth_avatar,
+          uid: dataFacebook.id,
+        });
+      }
+      if (dataGoogle) {
+        setDataGoogle({
+          email: dataGoogle.email,
+          name: dataGoogle.oauth_name,
+          photo: dataGoogle.oauth_avatar,
+          uid: dataGoogle.id,
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetching]);
+  }, [isFetching, oauthsData]);
 
   const { mutate: connectGoogle } = useMutation({
     mutationFn: services.oauths.connectGoogle,
@@ -113,12 +119,6 @@ const ConnectSocial: React.FC = () => {
           photo: data.photoURL,
           uid: data.uid,
         });
-        setDataFacebook({
-          email: data.email,
-          name: data.displayName,
-          photo: data.photoURL,
-          uid: data.uid,
-        });
       } catch (error) {
         toast.error(
           'Liên kết facebook thất bại, tài khoản facebook chứa email đã liên kết với ứng dụng',
@@ -128,16 +128,11 @@ const ConnectSocial: React.FC = () => {
     } else {
       setDataFacebook(undefined);
       await signOut(auth).then(() => {
-        toast.success('Hủy liên kết thành công');
+        deleteMutation(dataFacebook?.uid as string);
       });
     }
   };
-  const handleSignOut = async () => {
-    await signOut(auth).then(() => {
-      toast.success('Hủy liên kết thành công');
-    });
-    await auth.signOut();
-  };
+
   const handleConnectGoogle = async (checked: boolean) => {
     if (checked) {
       try {
@@ -150,19 +145,13 @@ const ConnectSocial: React.FC = () => {
           photo: data.photoURL,
           uid: data.uid,
         });
-        setDataGoogle({
-          email: data.email,
-          name: data.displayName,
-          photo: data.photoURL,
-          uid: data.uid,
-        });
       } catch (error) {
         toast.error('Liên kết google thất bại ' + error);
       }
     } else {
       setDataGoogle(undefined);
       await signOut(auth).then(() => {
-        toast.success('Hủy liên kết thành công');
+        deleteMutation(dataGoogle?.uid as string);
       });
     }
   };
@@ -190,7 +179,7 @@ const ConnectSocial: React.FC = () => {
     </TableRow>
   );
   const onRenderTableBody = () => {
-    if (isFetching && !dataFacebook && !dataGoogle) {
+    if (!oauthsData && !dataFacebook && !dataGoogle) {
       return (
         <TableBody>
           {renderLoadingData()}
@@ -318,7 +307,6 @@ const ConnectSocial: React.FC = () => {
     <section>
       <div className="border-b pb-4">
         <h3 className="text-xl font-semibold">Liên kết tài khoản</h3>
-        <Button onClick={handleSignOut}>Sign out</Button>
       </div>
       <Table className="mt-8">
         <TableHeader>
