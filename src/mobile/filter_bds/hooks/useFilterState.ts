@@ -18,7 +18,6 @@ export default function useFilterState() {
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
   const pathname = usePathname();
-  console.log('pathname', pathname);
 
   const resetDataFilter = () => {
     setFilterState(defaultFilterStateAtom);
@@ -142,7 +141,7 @@ export default function useFilterState() {
   };
 
   const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
-    let queryOptions = buildFilterParams(filterParams);
+    let queryOptions = buildFilterParams({ withLocal: false, overrideStates: filterParams });
     queryOptions = {
       ...queryOptions,
       ...extraSearchParams,
