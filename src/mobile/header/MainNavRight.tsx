@@ -18,8 +18,7 @@ type MainNavRightProps = {
   isLogged: boolean;
 };
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
-  console.log('🚀 ~ MainNavRight ~ isLogged:', isLogged);
-  const { signOut, currentUser } = useAuth();
+  const { currentUser } = useAuth();
   const { openModal, closeModal } = useModals();
   React.useEffect(() => {
     const hasFrontendToken = getCookie(FRONTEND_TOKEN);
@@ -27,12 +26,6 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
       setFrontendToken(uuidv4());
     }
   }, []);
-  React.useEffect(() => {
-    if (!isLogged) {
-      signOut();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged]);
 
   const showModalLoginAndRegister = () => {
     openModal({
@@ -44,18 +37,7 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
     });
   };
   const renderAvatarIcon = () => {
-    if (!isLogged) {
-      return (
-        <Button
-          onClick={showModalLoginAndRegister}
-          variant="outline"
-          size="icon"
-          className="rounded-full"
-        >
-          <LuUserCircle className="h-5 w-5" />
-        </Button>
-      );
-    } else {
+    if (isLogged || currentUser) {
       return currentUser?.avatar_url ? (
         <Link href={`/profile/${currentUser?.slug}`}>
           <Image
@@ -68,6 +50,17 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
         </Link>
       ) : (
         <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
+      );
+    } else {
+      return (
+        <Button
+          onClick={showModalLoginAndRegister}
+          variant="outline"
+          size="icon"
+          className="rounded-full"
+        >
+          <LuUserCircle className="h-5 w-5" />
+        </Button>
       );
     }
   };

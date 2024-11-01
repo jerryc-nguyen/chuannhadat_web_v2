@@ -96,7 +96,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         </CardHeader>
       )}
       <CardContent className="card-content">
-        {product.images.length > 0 &&
+        {product.images.length > 0 && (
           <Carousel
             opts={{ loop: true }}
             setApi={setImageSliderApi}
@@ -118,12 +118,12 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
             <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
             <ButtonSave postUid={product.uid} />
           </Carousel>
-        }
+        )}
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="limit-2-line cursor-pointer text-base font-semibold capitalize text-[#16192C] hover:text-primary_color"
+          className="we line-clamp-2 cursor-pointer text-base font-semibold capitalize text-[#16192C] hover:text-primary_color"
         >
           {product?.title}
         </h3>

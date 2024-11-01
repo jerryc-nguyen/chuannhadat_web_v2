@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { QueryProvider } from '@components/providers';
 import SessionTimeOutPopup from '@components/timeout-popup/SessionTimeOutPopup';
 import ListModal from '@components/ListModal';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 type ProviderWrapperProps = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ type ProviderWrapperProps = {
 
 const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
   const isLogged = cookies().has(API_TOKEN_SERVER);
-
+  const { isMobile } = useGetUserAgentInfo();
   return (
     <QueryProvider>
       <JotaiProvider>
@@ -23,7 +24,7 @@ const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
         <ListModal />
         <SessionTimeOutPopup isLogged={isLogged} />
       </JotaiProvider>
-      <Toaster theme="light" richColors />
+      <Toaster position={isMobile ? 'top-center' : 'top-right'} theme="light" richColors />
       <ToastContainer
         position="top-center"
         autoClose={5000}

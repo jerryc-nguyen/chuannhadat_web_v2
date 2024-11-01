@@ -1,3 +1,4 @@
+'use client';
 import { removeTokenServer } from '@app/action';
 import { Button } from '@components/ui/button';
 import {
@@ -40,11 +41,16 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   };
 
   const handleLogOut = () => {
-    signOut();
     removeTokenServer();
     router.refresh();
   };
-  if (isLogged)
+  React.useEffect(() => {
+    if (!isLogged) {
+      signOut();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged]);
+  if (isLogged || currentUser)
     return (
       <DropdownMenu>
         <DropdownMenuTrigger className="cursor-pointer" asChild>
@@ -66,23 +72,23 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
           )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
               <Link href={`/profile/${currentUser?.slug}`}>Trang cá nhân</Link>
               <DropdownMenuShortcut>⇧⌘R</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard">Trang quản lý</Link>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard/manage-post/collection-post">Quản lý tin đăng</Link>
               <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard/account-settings">Cài đặt tài khoản</Link>
               <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard/top-up">Nạp tiền</Link>
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>

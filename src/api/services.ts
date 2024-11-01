@@ -104,6 +104,9 @@ export const services = {
     signUp: async (data: Partial<IFormPropsRegister>): Promise<IRegisterResponse> => {
       return axiosInstance.post(API_ROUTES.AUTH.REGISTER_BY_PHONE, data);
     },
+    loginGoogle: async (data: IConnectOauthsPayload): Promise<LoginResponse> => {
+      return axiosInstance.post(API_ROUTES.AUTH.LOGIN_BY_GOOGLE, data);
+    },
   },
   oauths: {
     connectGoogle: async (data: IConnectOauthsPayload): Promise<IConnectOauthsResponse> => {

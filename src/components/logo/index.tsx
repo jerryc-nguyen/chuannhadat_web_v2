@@ -11,7 +11,7 @@ const Logo: React.FC = () => {
         width={40}
         alt="Logo"
       />
-      <div className="hidden gap-x-1 md:flex">
+      <div className="flex gap-x-1">
         <h2 className="text-xl font-semibold text-blue-600">Chuẩn </h2>
         <h2 className="text-xl font-semibold text-pink-600">Nhà đất</h2>
       </div>
