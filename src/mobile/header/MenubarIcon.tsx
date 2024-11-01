@@ -1,66 +1,81 @@
 import { removeTokenServer } from '@app/action';
 import { Button } from '@components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '@components/ui/sheet';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { LuMenu, LuUserCircle } from 'react-icons/lu';
 
-const listMenubar = [
-  {
-    id: 0,
-    href: '/dashboard',
-    title: 'Trang quản lý',
-  },
-  {
-    id: 1,
-    href: '/dashboard/manage-post/collection-post',
-    title: 'Quản lý tin đăng',
-  },
-  {
-    id: 2,
-    href: '/dashboard/account-setting',
-    title: 'Cài đặt tài khoản',
-  },
-  {
-    id: 3,
-    href: '/tao-tin-moi',
-    title: 'Đăng tin',
-  },
-  {
-    id: 4,
-    href: '/dashboard/top-up',
-    title: 'Nạp tiền',
-  },
-];
 type MenubarIconProps = {
   isLogged: boolean;
 };
 const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
   const [openMenuBar, setOpenMenuBar] = React.useState<boolean>(false);
+  const pathName = usePathname();
+  const isDashboardPage = pathName.includes('dashboard');
   const { currentUser, signOut } = useAuth();
   const router = useRouter();
   const { openModal, closeModal } = useModals();
+  const listMenubar = [
+    {
+      id: 0,
+      href: isDashboardPage ? '/' : '/dashboard',
+      title: isDashboardPage ? 'Trang chủ' : 'Trang quản lý',
+    },
+    {
+      id: 1,
+      href: '/dashboard/manage-post/collection-post',
+      title: 'Quản lý tin đăng',
+    },
+    {
+      id: 2,
+      href: '/dashboard/account-setting',
+      title: 'Cài đặt tài khoản',
+    },
+    {
+      id: 3,
+      href: '/tao-tin-moi',
+      title: 'Đăng tin',
+    },
+    {
+      id: 4,
+      href: '/dashboard/top-up',
+      title: 'Nạp tiền',
+    },
+  ];
   React.useEffect(() => {
     if (!currentUser && !isLogged) {
       setOpenMenuBar(false);
     }
   }, [currentUser, isLogged]);
   const handleLogout = () => {
-    signOut();
     removeTokenServer();
     router.refresh();
   };
+  React.useEffect(() => {
+    if (!isLogged) {
+      signOut();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged]);
   const onRenderMenuWhenLogged = () => {
     return (
       <section>
         <div className="flex flex-col p-6">
-          <h2 className="font-bold text-primary_color">{currentUser?.full_name}</h2>
-          <span className="text-sm text-muted-foreground">ID {currentUser?.id}</span>
+          <SheetTitle className="font-bold text-primary_color">{currentUser?.full_name}</SheetTitle>
+          <SheetDescription className="text-sm text-muted-foreground">
+            ID {currentUser?.id}
+          </SheetDescription>
         </div>
         <ul>
           {listMenubar.map((menu) => (
@@ -95,7 +110,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
       <section>
         <div className="flex items-center gap-x-2 px-6 pt-3">
           <LuUserCircle className="h-6 w-6" />
-          <span>Xin chào, quý khách</span>
+          <SheetTitle className="text-sm">Xin chào, quý khách</SheetTitle>
         </div>
         <div className="my-4 px-6">
           <Button
@@ -108,9 +123,9 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
             Đăng nhập
           </Button>
         </div>
-        <p className="px-6 text-center text-sm font-medium">
+        <SheetDescription className="px-6 text-center text-sm font-medium">
           Bạn vui lòng đăng nhập để sử dụng đầy đủ dịch vụ.
-        </p>
+        </SheetDescription>
       </section>
     );
   };
@@ -127,7 +142,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
         </Button>
       </SheetTrigger>
       <SheetContent className="p-0">
-        {isLogged ? onRenderMenuWhenLogged() : onRenderMenuNotLoggin()}
+        {isLogged || currentUser ? onRenderMenuWhenLogged() : onRenderMenuNotLoggin()}
       </SheetContent>
     </Sheet>
   );
