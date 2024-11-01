@@ -9,7 +9,7 @@ import PostList from '@desktop/home/components/PostList';
 import PostControls from '@desktop/home/components/PostControls';
 import { searchApi } from '@api/searchApi';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-
+import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
 import NotFound from '@app/not-found';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
@@ -47,7 +47,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-primary_color">Tin đã đăng</h2>
               <div className="my-2">
-                <PostControls isRedirectAfterApplyFilter={false} pagination={data?.pagination} />
+                <PostControls chipOptions={listFilterProfileDesktop} pagination={data?.pagination} />
               </div>
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"

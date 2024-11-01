@@ -3,7 +3,6 @@ import {
   defaultFilterStateAtom,
   filterFieldOptionsAtom,
   filterStateAtom,
-  isRedirectWhenApplyFilter,
   localFilterStateAtom,
 } from '../states';
 import { OptionForSelect } from '@models';
@@ -18,13 +17,10 @@ export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
-  const isRedirect = useAtomValue(isRedirectWhenApplyFilter);
-  const setIsRedirect = useSetAtom(isRedirectWhenApplyFilter);
   const pathname = usePathname();
   const resetDataFilter = () => {
     setFilterState(defaultFilterStateAtom);
     setLocalFilterState({});
-    setIsRedirect(true);
   };
   const copyFilterStatesToLocalByFieldId = (fieldNames: Array<FilterFieldName>) => {
     let values: Record<string, A> = {};
@@ -81,12 +77,7 @@ export default function useFilterState() {
     };
 
     setFilterState(allFilterState);
-    if (isRedirect) {
-      syncSelectedParamsToUrl();
-    } else {
-      const syncParamUrl = objectToQueryParams(allFilterState);
-      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
-    }
+    syncSelectedParamsToUrl();
   };
 
   const buildFilterParams = ({ withLocal = true }: { withLocal?: boolean } = {}): Record<
@@ -144,12 +135,7 @@ export default function useFilterState() {
     }
     const allFilterState = { ...filterState, ...localValue };
     setFilterState(allFilterState);
-    if (isRedirect) {
-      syncSelectedParamsToUrl();
-    } else {
-      const syncParamUrl = objectToQueryParams(allFilterState);
-      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
-    }
+    syncSelectedParamsToUrl();
   };
 
   const syncSelectedParamsToUrl = async () => {
@@ -168,14 +154,10 @@ export default function useFilterState() {
     };
     applyFilterToSyncParams(newFilterState);
   };
+
   const applyFilterToSyncParams = (newFilterState: FilterState) => {
     setFilterState(newFilterState);
-    if (isRedirect) {
-      syncSelectedParamsToUrl();
-    } else {
-      const syncParamUrl = objectToQueryParams(newFilterState);
-      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
-    }
+    syncSelectedParamsToUrl();
   };
 
   const selectedSortText = useMemo((): string | undefined => {
@@ -195,7 +177,6 @@ export default function useFilterState() {
     resetDataFilter,
     applySortFilter,
     selectedSortText,
-    setIsRedirect,
     removeFilterValue,
   };
 }

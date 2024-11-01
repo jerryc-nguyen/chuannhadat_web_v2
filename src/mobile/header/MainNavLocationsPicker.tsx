@@ -6,23 +6,18 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
-import { usePathname } from 'next/navigation';
 import React from 'react';
 import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
   const { openModal, closeModal } = useModals();
-  const pathName = usePathname();
-  const isRedirectAfterApplyFilter = pathName === '/';
-  const { copyFilterStatesToLocal, applySingleFilter, setIsRedirect } = useFilterState();
+  const { copyFilterStatesToLocal, applySingleFilter } = useFilterState();
   const applySelectLocations = useRefCallback(() => {
     applySingleFilter({ id: FilterFieldName.Locations, text: 'Khu vực' });
     closeModal();
   });
-  React.useEffect(() => {
-    setIsRedirect(isRedirectAfterApplyFilter);
-  }, []);
+
   const renderFooterApply = () => (
     <Button className="w-full" onClick={() => applySelectLocations()}>
       Áp dụng

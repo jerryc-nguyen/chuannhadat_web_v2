@@ -27,12 +27,10 @@ type FilterChipsProp = {
 };
 export default function FilterChips({ isRedirectWhenApplyFilter = true }: FilterChipsProp) {
   const [filterState] = useAtom(filterStateAtom);
-  const { copyFilterStatesToLocal, setIsRedirect } = useFilterState();
+  const { copyFilterStatesToLocal } = useFilterState();
   const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
-  React.useEffect(() => {
-    setIsRedirect(isRedirectWhenApplyFilter);
-  }, []);
+
   const selectedRoomText = (): string => {
     const results = [];
     if (filterState.bed) {

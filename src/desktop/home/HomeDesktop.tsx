@@ -13,6 +13,7 @@ import { cardAuthors } from '@api/searchApi';
 import { useQuery } from '@tanstack/react-query';
 import { useHydrateAtoms } from 'jotai/utils';
 import { loadedCardAuthorsAtom } from './states';
+import { listFilterDesktop } from '@mobile/filter_bds/constants';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
@@ -60,7 +61,7 @@ const HomeDesktop: React.FC = () => {
   return (
     <section className="my-10">
       <h1 className="mb-4 text-2xl font-semibold text-primary_color">{data?.title}</h1>
-      <PostControls pagination={data?.pagination} />
+      <PostControls chipOptions={listFilterDesktop} pagination={data?.pagination} />
       <PostList dataPostList={products} />
       {data?.pagination.total_count !== products.length &&
         (currentPage > 2 && !isLoading && products.length > 0 ? (

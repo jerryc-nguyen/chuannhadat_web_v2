@@ -49,6 +49,7 @@ export const enum FilterFieldName {
   District = 'district',
   Ward = 'ward',
   Sort = 'sort',
+  BusCatType = 'busCatType'
 }
 
 export const FILTER_FIELDS_TO_PARAMS = [
@@ -63,6 +64,7 @@ export const FILTER_FIELDS_TO_PARAMS = [
   'district',
   'ward',
   'sort',
+  'busCatType'
 ];
 
 export const FILTER_FIELDS_PARAMS_MAP: Record<string, A> = {
