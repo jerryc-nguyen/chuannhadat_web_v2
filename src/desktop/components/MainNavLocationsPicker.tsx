@@ -20,7 +20,6 @@ const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
 };
 
 export default function MainNavLocationsPicker() {
-  const pathname = usePathname();
   const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
   const { openModal, closeModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();

@@ -10,14 +10,16 @@ import { FilterFieldName, FILTER_FIELDS_TO_PARAMS, FILTER_FIELDS_PARAMS_MAP } fr
 import { searchApi } from '@api/searchApi';
 import { useMemo } from 'react';
 import { FilterChipOption, FilterState } from '../types';
-import { objectToQueryParams } from '@common/utils';
 import { usePathname } from 'next/navigation';
+import { AuthUtils } from '@common/auth';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
   const pathname = usePathname();
+  console.log('pathname', pathname);
+
   const resetDataFilter = () => {
     setFilterState(defaultFilterStateAtom);
     setLocalFilterState({});
@@ -63,11 +65,12 @@ export default function useFilterState() {
     });
   };
   const removeFilterValue = (fieldId: FilterFieldName) => {
-    setLocalFilterState({
-      ...localFilterState,
+    const newFilteState = {
+      ...filterState,
       [fieldId]: undefined,
-    });
-    applyAllFilters({ [fieldId]: undefined });
+    }
+    setFilterState(newFilteState)
+    syncSelectedParamsToUrl(newFilteState);
   };
 
   const applyAllFilters = (filters?: A) => {
@@ -77,16 +80,16 @@ export default function useFilterState() {
     };
 
     setFilterState(allFilterState);
-    syncSelectedParamsToUrl();
+    syncSelectedParamsToUrl(allFilterState);
   };
 
-  const buildFilterParams = ({ withLocal = true }: { withLocal?: boolean } = {}): Record<
-    string,
-    A
-  > => {
+  const buildFilterParams = ({ withLocal = true, overrideStates = {} }: {
+    withLocal?: boolean, overrideStates?: Record<string, A>
+  }): Record<string, A> => {
     let results: Record<string, A> = {};
     let allCurrentFilters: Record<string, A> = {
       ...filterState,
+      ...overrideStates
     };
     if (withLocal) {
       allCurrentFilters = {
@@ -135,16 +138,38 @@ export default function useFilterState() {
     }
     const allFilterState = { ...filterState, ...localValue };
     setFilterState(allFilterState);
-    syncSelectedParamsToUrl();
+    syncSelectedParamsToUrl(allFilterState);
   };
 
-  const syncSelectedParamsToUrl = async () => {
-    const filterParams = buildFilterParams();
-    filterParams.only_url = true;
-    const response = await searchApi(filterParams);
+  const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
+    let queryOptions = buildFilterParams(filterParams);
+    queryOptions = {
+      ...queryOptions,
+      ...extraSearchParams,
+      only_url: true,
+    };
+    const response = await searchApi(queryOptions);
     const { listing_url } = response;
     window.history.pushState({}, '', listing_url);
   };
+
+  const extraSearchParams = useMemo(() => {
+    if (pathname.indexOf('profile/')) {
+      return {
+        search_scope: 'profile',
+        author_slug: pathname.split('profile/')[1]
+      };
+    } else if (pathname.indexOf('/new-post') && AuthUtils.getCurrentUser()) {
+      return {
+        search_scope: 'manage',
+        author_slug: AuthUtils.getCurrentUser()?.slug
+      };
+    } else {
+      return {
+        search_scope: 'search'
+      };
+    }
+  }, [pathname])
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
@@ -152,12 +177,7 @@ export default function useFilterState() {
       ...filterState,
       sort: localFilterState.sort,
     };
-    applyFilterToSyncParams(newFilterState);
-  };
-
-  const applyFilterToSyncParams = (newFilterState: FilterState) => {
-    setFilterState(newFilterState);
-    syncSelectedParamsToUrl();
+    syncSelectedParamsToUrl(newFilterState);
   };
 
   const selectedSortText = useMemo((): string | undefined => {
@@ -178,5 +198,6 @@ export default function useFilterState() {
     applySortFilter,
     selectedSortText,
     removeFilterValue,
+    extraSearchParams
   };
 }
