@@ -9,6 +9,11 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "npm": ">=10.0.0",
+    "yarn": "please-use-npm",
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^3.9.0",
@@ -53,7 +58,6 @@
     "firebase": "^11.0.1",
     "jotai": "^2.8.4",
     "js-cookie": "^3.0.5",
-    "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "leaflet-gesture-handling": "^1.2.2",
     "lodash-es": "^4.17.21",
