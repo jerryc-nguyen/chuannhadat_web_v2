@@ -13,9 +13,11 @@ import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
 import NotFound from '@app/not-found';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
+  useSyncParamsToState();
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],

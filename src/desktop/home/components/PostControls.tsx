@@ -1,9 +1,7 @@
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 import React from 'react';
 
 import FilterChip from './FilterChip';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { FilterChipOption } from '@mobile/filter_bds/types';
 
 type PostControlsProps = {
@@ -17,7 +15,6 @@ const PostControls: React.FC<PostControlsProps> = ({
   pagination,
   isShowListChips = true,
 }) => {
-  useSyncParamsToState();
 
   return (
     <div className="my-2 flex flex-col gap-x-3 lg:flex-row lg:items-center">

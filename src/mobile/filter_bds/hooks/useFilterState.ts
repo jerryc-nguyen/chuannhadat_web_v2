@@ -110,7 +110,8 @@ export default function useFilterState() {
         results[paramName] = [option?.range?.min, option?.range?.max].join(',');
       }
     });
-    return results;
+
+    return { ...results, ...extraSearchParams };
   };
 
   const applySingleFilter = (filterOption: FilterChipOption) => {
@@ -144,7 +145,6 @@ export default function useFilterState() {
     let queryOptions = buildFilterParams({ withLocal: false, overrideStates: filterParams });
     queryOptions = {
       ...queryOptions,
-      ...extraSearchParams,
       only_url: true,
     };
     const response = await searchApi(queryOptions);
@@ -153,12 +153,12 @@ export default function useFilterState() {
   };
 
   const extraSearchParams = useMemo(() => {
-    if (pathname.indexOf('profile/')) {
+    if (pathname.indexOf('profile/') != -1) {
       return {
         search_scope: 'profile',
         author_slug: pathname.split('profile/')[1]
       };
-    } else if (pathname.indexOf('/new-post') && AuthUtils.getCurrentUser()) {
+    } else if (pathname.indexOf('/new-post') != -1 && AuthUtils.getCurrentUser()) {
       return {
         search_scope: 'manage',
         author_slug: AuthUtils.getCurrentUser()?.slug
