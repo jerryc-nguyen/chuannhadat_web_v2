@@ -14,10 +14,12 @@ import NotFound from '@app/not-found';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import useSearchAggs from '@components/search-aggs/hooks';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
   useSyncParamsToState();
+  const { setProfileSearchAggs } = useSearchAggs();
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
@@ -27,14 +29,19 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
 
   const { buildFilterParams } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: false });
-  const { data } = useSuspenseQuery({
+  const { data: { data: products, pagination, aggs: aggreations } } = useSuspenseQuery({
     queryKey: ['profile-post', { filterParams, profileSlug }],
     queryFn: () =>
       searchApi({
         ...filterParams,
         author_slug: profileSlug,
+        aggs_for: 'profile'
       }),
   });
+
+  if (aggreations) {
+    setProfileSearchAggs(aggreations)
+  }
 
   return (
     <>
@@ -49,11 +56,11 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-primary_color">Tin đã đăng</h2>
               <div className="my-2">
-                <PostControls chipOptions={listFilterProfileDesktop} pagination={data?.pagination} />
+                <PostControls chipOptions={listFilterProfileDesktop} pagination={pagination} />
               </div>
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
-                dataPostList={data?.data}
+                dataPostList={products}
                 isShowAuthor={false}
               />
             </div>

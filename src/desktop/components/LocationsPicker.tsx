@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 
 import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
@@ -17,14 +17,26 @@ export default function LocationsPicker({
   district,
   ward,
   theme,
-  onChangeCity,
+  city_ids = [],
+  district_ids = [],
+  ward_ids = [],
+  city_counts,
+  district_counts,
+  ward_counts,
   onChangeDistrict,
   onChangeWard,
+  onChangeCity,
 }: {
   theme?: string;
   city?: OptionForSelect;
   district?: OptionForSelect;
   ward?: OptionForSelect;
+  city_ids?: string[];
+  district_ids?: string[];
+  ward_ids?: string[];
+  city_counts?: Record<string, number>;
+  district_counts?: Record<string, number>;
+  ward_counts?: Record<string, number>;
   onChangeCity: (city?: OptionForSelect) => void;
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
@@ -38,9 +50,6 @@ export default function LocationsPicker({
   const [openDistrictDropdown, setOpenDistrictDropdown] = useState(false);
   const [openWardDropdown, setOpenWardDropdown] = useState(false);
 
-  const [districtOptions, setDistrictOptions] = useState([]);
-  const [wardOptions, setWardOptions] = useState([]);
-
   const resetDistrict = () => {
     setCurDistrict(undefined);
   };
@@ -49,32 +58,12 @@ export default function LocationsPicker({
     setCurWard(undefined);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const populateOptions = () => {
-    if (city) {
-      setDistrictOptions(
-        //@ts-ignore: read field of object
-        citiesDistricts[city.value + ''],
-      );
-    }
-    if (district) {
-      setWardOptions(
-        //@ts-ignore: read field of object
-        districtWards[district.value + ''],
-      );
-    }
-  };
-
   const onSelectCity = (city?: OptionForSelect) => {
     const finalOption = city?.value != 'all' ? city : undefined;
 
     resetDistrict();
     resetWard();
 
-    setDistrictOptions(
-      //@ts-ignore: read field of object
-      citiesDistricts[finalOption?.value + ''] || [],
-    );
     setCurCity(finalOption);
     setOpenCityDropdown(false);
     onChangeCity(finalOption);
@@ -85,10 +74,6 @@ export default function LocationsPicker({
 
     resetWard();
 
-    setWardOptions(
-      //@ts-ignore: read field of object
-      districtWards[finalOption?.value + ''] || [],
-    );
     setCurDistrict(finalOption);
     setOpenDistrictDropdown(false);
     onChangeDistrict(finalOption);
@@ -101,9 +86,36 @@ export default function LocationsPicker({
     onChangeWard(finalOption);
   };
 
-  useEffect(() => {
-    populateOptions();
-  }, [populateOptions]);
+  const citiesOptions = useMemo(() => {
+    if (Array.isArray(city_ids) && city_ids.length > 0) {
+      return cities.filter((item: OptionForSelect) => city_ids.includes(item.value + ''))
+    } else {
+      return cities
+    }
+  }, [city_ids])
+
+  const districtOptions = useMemo(() => {
+    //@ts-ignore: read field of object
+    const districts = citiesDistricts[curCity?.value + ''] || []
+    if (Array.isArray(district_ids) && district_ids.length > 0) {
+      return districts.filter((item: OptionForSelect) => district_ids.includes(item.value + ''))
+    } else {
+      return districts
+    }
+  }, [curCity?.value, district_ids])
+
+  const wardOptions = useMemo(() => {
+    const wards = curDistrict?.value
+      // @ts-ignore: ok
+      ? districtWards[curDistrict?.value + ''] : []
+
+    if (Array.isArray(ward_ids) && ward_ids.length > 0) {
+      return wards.filter((item: OptionForSelect) => ward_ids.includes(item.value + ''))
+    } else {
+      return wards
+    }
+
+  }, [curDistrict?.value, ward_ids])
 
   const containerRef = useRef(null);
 
@@ -125,7 +137,7 @@ export default function LocationsPicker({
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
           <OptionPicker
             searchable
-            options={[ALL_OPTION, ...cities]}
+            options={[ALL_OPTION, ...citiesOptions]}
             value={curCity}
             onSelect={onSelectCity}
           />

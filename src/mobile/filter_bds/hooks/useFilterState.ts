@@ -26,7 +26,8 @@ export default function useFilterState() {
   const copyFilterStatesToLocalByFieldId = (fieldNames: Array<FilterFieldName>) => {
     let values: Record<string, A> = {};
     fieldNames?.forEach((fieldName) => {
-      if (fieldName == FilterFieldName.Locations) {
+      if (fieldName == FilterFieldName.Locations ||
+        fieldName == FilterFieldName.ProfileLocations) {
         values = {
           city: filterState.city,
           district: filterState.district,
@@ -64,10 +65,29 @@ export default function useFilterState() {
     });
   };
   const removeFilterValue = (fieldId: FilterFieldName) => {
-    const newFilteState = {
-      ...filterState,
-      [fieldId]: undefined,
+    let newFilteState = {};
+
+    if (fieldId == FilterFieldName.Locations ||
+      fieldId == FilterFieldName.ProfileLocations) {
+      newFilteState = {
+        ...filterState,
+        city: undefined,
+        district: undefined,
+        ward: undefined,
+      };
+    } else if (fieldId == FilterFieldName.Rooms) {
+      newFilteState = {
+        ...filterState,
+        bath: undefined,
+        bed: undefined,
+      };
+    } else {
+      newFilteState = {
+        ...filterState,
+        [fieldId]: undefined,
+      }
     }
+
     setFilterState(newFilteState)
     syncSelectedParamsToUrl(newFilteState);
   };
@@ -117,7 +137,8 @@ export default function useFilterState() {
   const applySingleFilter = (filterOption: FilterChipOption) => {
     let localValue: Record<string, A> = {};
 
-    if (filterOption.id == FilterFieldName.Locations) {
+    if (filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations) {
       localValue = {
         city: localFilterState.city,
         district: localFilterState.district,

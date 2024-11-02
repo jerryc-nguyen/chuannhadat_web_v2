@@ -19,6 +19,7 @@ export type OptionForSelect = {
   text: string;
   range?: Range;
   params?: Record<string, A>;
+  count?: number;
 };
 
 export const PARAM_BUSINESS_TYPE = 'business_type';
@@ -38,6 +39,7 @@ export const enum FilterFieldName {
   FilterOverview = 'filterOverview',
   BusinessType = 'businessType',
   CategoryType = 'categoryType',
+  ProfileLocations = 'profileLocations',
   Locations = 'locations',
   Price = 'price',
   Area = 'area',

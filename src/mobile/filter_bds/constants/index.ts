@@ -216,7 +216,7 @@ export const listFilterDesktop: Array<FilterChipOption> = [
 ];
 
 export const listFilterProfileDesktop: Array<FilterChipOption> = [
-  { id: FilterFieldName.Locations, text: 'Khu vực' },
+  { id: FilterFieldName.ProfileLocations, text: 'Khu vực' },
   {
     id: FilterFieldName.BusCatType,
     text: 'Phân loại',
