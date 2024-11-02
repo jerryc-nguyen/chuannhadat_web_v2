@@ -8,6 +8,7 @@ export const removeTokenServer = () => {
   'use server';
   cookies().delete(API_TOKEN_SERVER);
 };
+
 export const setTokenServer = (token: string) => {
   ('use server');
   cookies().set({

@@ -44,7 +44,7 @@ const AccountSettingsDesktop: React.FC = () => {
   }, []);
   return (
     <section>
-      <h1 className="mb-4 text-4xl font-bold">Cài đặt tài khoản </h1>
+      <h1 className="mb-4 text-2xl font-bold">Cài đặt tài khoản </h1>
       <Tabs
         onValueChange={handleChangeTab}
         value={tabActive}
@@ -57,7 +57,7 @@ const AccountSettingsDesktop: React.FC = () => {
               className={cn(
                 'w-full items-center justify-start gap-x-4 rounded-none border-none px-4 py-2 text-base font-medium !shadow-none transition-all',
                 tabActive === item.tabValue
-                  ? '!bg-blue-100 !text-primary_color dark:!bg-white dark:!text-slate-900'
+                  ? '!bg-slate-200 !text-black dark:!bg-white dark:!text-slate-900'
                   : '',
               )}
               key={genKey(index)}
@@ -66,7 +66,7 @@ const AccountSettingsDesktop: React.FC = () => {
               <span
                 className={cn(
                   'aspect-square rounded-md border bg-white p-2 shadow-sm dark:border-slate-400 dark:bg-slate-900',
-                  tabActive === item.tabValue ? 'text-primary_color dark:text-white' : '',
+                  tabActive === item.tabValue ? 'text-black dark:text-white' : '',
                 )}
               >
                 <item.icon />

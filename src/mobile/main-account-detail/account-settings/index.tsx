@@ -58,47 +58,37 @@ const AccountSettingsMobile: React.FC = () => {
         className="flex w-full flex-col gap-y-4"
         orientation="horizontal"
       >
-        <TabsList className="flex h-fit flex-row overflow-hidden rounded-lg border bg-white p-0 dark:bg-slate-900">
+        <TabsList className="flex h-fit flex-row overflow-hidden rounded-lg border bg-white p-0">
           {listTabAccountSetting.map((item, index) => (
             <TabsTrigger
               className={cn(
-                'w-full items-center justify-start gap-x-4 rounded-none border-none px-4 py-2 text-base font-medium !shadow-none transition-all',
-                tabActive === item.tabValue
-                  ? '!bg-blue-50 !text-blue-500 dark:!bg-white dark:!text-slate-900'
-                  : '',
+                'm-2 aspect-square rounded-md border p-2 shadow-sm',
+                tabActive === item.tabValue ? '!bg-blue-50 !text-blue-500' : 'bg-white',
               )}
               key={genKey(index)}
               value={item.tabValue}
             >
-              <span
-                className={cn(
-                  'aspect-square rounded-md border bg-white p-2 shadow-sm dark:border-slate-400 dark:bg-slate-900',
-                  tabActive === item.tabValue ? 'text-blue-500 dark:text-white' : '',
-                )}
-              >
-                <item.icon />
-              </span>
-              <span className="hidden lg:block">{item.title}</span>
+              <item.icon />
             </TabsTrigger>
           ))}
         </TabsList>
         <div className="flex max-w-screen-lg flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
-          <TabsContent className="p-4" value="personal-wall">
+          <TabsContent value="personal-wall">
             <PersonalTab />
           </TabsContent>
-          <TabsContent className="p-4" value="contact-infor">
+          <TabsContent value="contact-infor">
             <ContactInfor />
           </TabsContent>
-          <TabsContent className="relative flex-1 p-4" value="email">
+          <TabsContent className="relative flex-1" value="email">
             <EmailTab />
           </TabsContent>
-          <TabsContent className="relative flex-1 p-4" value="phone-number">
+          <TabsContent className="relative flex-1" value="phone-number">
             <PhoneNumberTab />
           </TabsContent>
-          <TabsContent className="p-4" value="password">
+          <TabsContent value="password">
             <PasswordTab />
           </TabsContent>
-          <TabsContent className="p-4" value="refer-friend">
+          <TabsContent value="refer-friend">
             <ReferFriend />
           </TabsContent>
         </div>

@@ -1,3 +1,4 @@
+'use client';
 import { cn } from '@common/utils';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
@@ -19,8 +20,8 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   };
 
   const showBadge = useMemo(() => {
-    return total !== null && total > 0
-  }, [total])
+    return total !== null && total > 0;
+  }, [total]);
 
   const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
   if (!isLogged) return null;
@@ -32,7 +33,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <LucideBell className="h-5 w-5" />
           </Button>
 
-          {showBadge &&
+          {showBadge && (
             <Badge
               className={cn(
                 'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
@@ -50,7 +51,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                 </span>
               )}
             </Badge>
-          }
+          )}
         </div>
       </PopoverTrigger>
       <PopoverContent className="left-1/2 w-[23rem] -translate-x-1/2 p-0">

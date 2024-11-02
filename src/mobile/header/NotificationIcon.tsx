@@ -1,3 +1,4 @@
+'use client';
 import { cn } from '@common/utils';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
@@ -23,6 +24,7 @@ import { BsCheck2All } from 'react-icons/bs';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 type NotificationIconProps = {
   isLogged: boolean;
 };
@@ -31,6 +33,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const [openModalNotifications, setOpenModalNotifications] = React.useState<boolean>(false);
   const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
   const { currentUser } = useAuth();
+  const router = useRouter();
   const [isMarkAllRead, setIsMarkAllRead] = React.useState(false);
   const [isReaded, setReaded] = React.useState<boolean>(false);
   const { mutateAsync: makeMarkReadAll } = useMutation({
@@ -58,19 +61,19 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
     <section className="flex flex-col items-center justify-center">
       <Image className="w-3/4" src={no_notification} alt="no-notification" />
       <h3 className="text-lg font-bold">Không có thông báo nào</h3>
-      <p className="mt-2 text-center text-sm text-foreground">
+      <p className="mt-2 px-4 text-center text-sm text-foreground">
         Bạn hiện không có thông báo nào, hãy quay lại sau.
       </p>
     </section>
   );
 
-  const handleRedirect = (id: number, is_read: boolean) => {
-    return;
+  const handleRedirect = () => {
+    router.push('/dashboard/notifications');
   };
 
   const showBadge = useMemo(() => {
-    return total !== null && total > 0
-  }, [total])
+    return total !== null && total > 0;
+  }, [total]);
 
   React.useEffect(() => {
     loadMore();
@@ -93,7 +96,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <LucideBell className="h-5 w-5" />
           </Button>
 
-          {showBadge &&
+          {showBadge && (
             <Badge
               className={cn(
                 'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
@@ -111,7 +114,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                 </span>
               )}
             </Badge>
-          }
+          )}
         </div>
       </SheetTrigger>
       <SheetContent className="flex w-[90vw] flex-col gap-y-0 p-0">
@@ -131,7 +134,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                 <section
                   key={notify.id}
                   className="relative cursor-pointer border-b px-4 py-3 transition-all hover:rounded-lg hover:bg-slate-50 hover:shadow-sm"
-                  onClick={() => handleRedirect(notify.id, notify.is_read)}
+                  onClick={handleRedirect}
                 >
                   {!notify.is_read && (
                     <span className="z-2 absolute right-3 top-3 h-2 w-2 rounded-[100%] bg-primary_color" />

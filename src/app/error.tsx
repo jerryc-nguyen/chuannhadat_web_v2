@@ -17,10 +17,10 @@ export default function GlobalError() {
         'flex h-screen w-screen flex-col items-center justify-center gap-y-4 bg-[#fefdf9] selection:bg-black',
       )}
     >
-      <h2 className="text-center text-[150px] leading-[150px] [-webkit-text-fill-color:#fefdf9] [-webkit-text-stroke:2px]">
+      <h2 className="text-center text-[100px] leading-[100px] [-webkit-text-fill-color:#fefdf9] [-webkit-text-stroke:2px] md:text-[140px] md:leading-[150px]">
         500-Internal server error
       </h2>
-      <p className="selection:text-[#fefdf9]">Oop, Please reload to try again!</p>
+      <p className="text-lg selection:text-[#fefdf9]">Oop, Please reload to try again!</p>
       <Button
         onClick={() => window.location.reload()}
         className="flex items-center gap-x-4 rounded-full border-2 border-black bg-transparent px-6 py-2 text-2xl text-black transition-all hover:bg-black hover:text-[#fefdf9]"

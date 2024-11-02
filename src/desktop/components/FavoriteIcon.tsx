@@ -1,3 +1,4 @@
+'use client';
 import { services } from '@api/services';
 import { cn, timeAgo } from '@common/utils';
 import { Badge } from '@components/ui/badge';
