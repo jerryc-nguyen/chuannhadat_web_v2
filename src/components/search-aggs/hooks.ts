@@ -6,6 +6,16 @@ export default function useSearchAggs() {
   const [searchAggs, setSearchAggs] = useAtom(searchAggsAtom);
   const [profileSearchAggs, setProfileSearchAggs] = useAtom(searchAggsAtom);
 
+  const updateProfileSearchAggs = (agg: Record<string, A>) => {
+    setProfileSearchAggs(agg);
+  }
+
+  const busCatTypeOptions = useMemo(() => {
+    return (profileSearchAggs.bus_cat_types || []).map((option: A) => {
+      return option;
+    })
+  }, [profileSearchAggs])
+
   const locationAgg = (agg: Record<string, A>) => {
     let district_ids: number[] = [];
     let ward_ids: number[] = [];
@@ -53,6 +63,7 @@ export default function useSearchAggs() {
     searchAggs,
     setSearchAggs,
     profileSearchAggs,
-    setProfileSearchAggs
+    updateProfileSearchAggs,
+    busCatTypeOptions
   }
 }

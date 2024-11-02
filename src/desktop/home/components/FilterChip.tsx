@@ -26,6 +26,7 @@ import { BiArea } from 'react-icons/bi';
 import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import { BsSortUp } from 'react-icons/bs';
 import ProfileLocations from '@desktop/product-filters/ProfileLocations';
+import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
 };
@@ -99,6 +100,8 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
         return <BusinessTypeButtons />;
       case FilterFieldName.CategoryType:
         return <CategoryType />;
+      case FilterFieldName.BusCatType:
+        return <BusCatType />;
       case FilterFieldName.Price:
         return <Price />;
       case FilterFieldName.Area:

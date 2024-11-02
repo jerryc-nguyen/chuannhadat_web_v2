@@ -19,7 +19,7 @@ import useSearchAggs from '@components/search-aggs/hooks';
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
   useSyncParamsToState();
-  const { setProfileSearchAggs } = useSearchAggs();
+  const { updateProfileSearchAggs } = useSearchAggs();
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
@@ -40,7 +40,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   });
 
   if (aggreations) {
-    setProfileSearchAggs(aggreations)
+    updateProfileSearchAggs(aggreations)
   }
 
   return (
