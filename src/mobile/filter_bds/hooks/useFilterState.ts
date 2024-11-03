@@ -12,12 +12,14 @@ import { useMemo } from 'react';
 import { FilterChipOption, FilterState } from '../types';
 import { usePathname } from 'next/navigation';
 import { AuthUtils } from '@common/auth';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
   const pathname = usePathname();
+  const { searchScope } = useSearchScope();
 
   const resetDataFilter = () => {
     setFilterState(defaultFilterStateAtom);
@@ -174,22 +176,22 @@ export default function useFilterState() {
   };
 
   const extraSearchParams = useMemo(() => {
-    if (pathname.indexOf('profile/') != -1) {
+    if (searchScope == SearchScopeEnums.Profile) {
       return {
-        search_scope: 'profile',
+        search_scope: searchScope,
         author_slug: pathname.split('profile/')[1]
       };
-    } else if (pathname.indexOf('/new-post') != -1 && AuthUtils.getCurrentUser()) {
+    } else if (searchScope == SearchScopeEnums.ManagePosts) {
       return {
-        search_scope: 'manage',
+        search_scope: searchScope,
         author_slug: AuthUtils.getCurrentUser()?.slug
       };
     } else {
       return {
-        search_scope: 'search'
+        search_scope: searchScope
       };
     }
-  }, [pathname])
+  }, [pathname, searchScope])
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {

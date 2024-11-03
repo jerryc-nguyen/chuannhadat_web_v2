@@ -12,6 +12,7 @@ export interface FilterState {
   district?: OptionForSelect;
   ward?: OptionForSelect;
   sort?: OptionForSelect;
+  busCatType?: OptionForSelect
 }
 
 export interface FilterFieldOptions {

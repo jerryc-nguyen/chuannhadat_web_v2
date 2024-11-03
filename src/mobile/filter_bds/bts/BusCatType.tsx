@@ -8,8 +8,8 @@ export default function BusCatType({
 }: {
   onSelect?: (option: OptionForSelect) => void;
 }) {
-  const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
-  const value = getLocalFieldValue(FilterFieldName.CategoryType);
+  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.BusCatType);
   const { busCatTypeOptions } = useSearchAggs();
 
   return (
@@ -18,7 +18,7 @@ export default function BusCatType({
         options={busCatTypeOptions}
         selectedOption={value}
         onSelect={(option: OptionForSelect) => {
-          setLocalFieldValue(FilterFieldName.CategoryType, option);
+          setLocalFieldValue(FilterFieldName.BusCatType, option);
           if (onSelect) {
             onSelect(option);
           }
