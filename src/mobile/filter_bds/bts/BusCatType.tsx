@@ -8,7 +8,7 @@ export default function BusCatType({
 }: {
   onSelect?: (option: OptionForSelect) => void;
 }) {
-  const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
+  const { getLocalFieldValue, localFilterState, setLocalFilterState } = useFilterState();
   const value = getLocalFieldValue(FilterFieldName.BusCatType);
   const { busCatTypeOptions } = useSearchAggs();
 
@@ -18,7 +18,15 @@ export default function BusCatType({
         options={busCatTypeOptions}
         selectedOption={value}
         onSelect={(option: OptionForSelect) => {
-          setLocalFieldValue(FilterFieldName.BusCatType, option);
+          const newStates = {
+            ...localFilterState,
+            busCatType: option,
+            city: undefined,
+            district: undefined,
+            ward: undefined
+          }
+
+          setLocalFilterState({ ...newStates });
           if (onSelect) {
             onSelect(option);
           }

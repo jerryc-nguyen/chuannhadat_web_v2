@@ -216,11 +216,11 @@ export const listFilterDesktop: Array<FilterChipOption> = [
 ];
 
 export const listFilterProfileDesktop: Array<FilterChipOption> = [
-  { id: FilterFieldName.ProfileLocations, text: 'Khu vực' },
   {
     id: FilterFieldName.BusCatType,
     text: 'Phân loại',
   },
+  { id: FilterFieldName.ProfileLocations, text: 'Khu vực' },
   {
     id: FilterFieldName.Price,
     text: 'Mức giá',

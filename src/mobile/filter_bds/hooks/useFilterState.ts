@@ -13,6 +13,7 @@ import { FilterChipOption, FilterState } from '../types';
 import { usePathname } from 'next/navigation';
 import { AuthUtils } from '@common/auth';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import BusCatType from '../bts/BusCatType';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -151,6 +152,13 @@ export default function useFilterState() {
         bed: localFilterState.bed,
         bath: localFilterState.bath,
       };
+    } else if (filterOption.id == FilterFieldName.BusCatType) {
+      localValue = {
+        busCatType: localFilterState.busCatType,
+        city: undefined,
+        district: undefined,
+        ward: undefined
+      };
     } else {
       const fieldName = filterOption.id;
 
@@ -212,6 +220,7 @@ export default function useFilterState() {
     filterFieldOptions,
     getLocalFieldValue,
     setLocalFieldValue,
+    setLocalFilterState,
     applyAllFilters,
     buildFilterParams,
     applySingleFilter,
