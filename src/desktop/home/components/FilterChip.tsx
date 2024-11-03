@@ -25,6 +25,8 @@ import { LuX } from 'react-icons/lu';
 import { BiArea } from 'react-icons/bi';
 import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import { BsSortUp } from 'react-icons/bs';
+import ProfileLocations from '@desktop/product-filters/ProfileLocations';
+import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
 };
@@ -60,7 +62,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
 
   const selectedFilterText = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
-    if (filterOption.id == FilterFieldName.Locations) {
+    if (filterOption.id == FilterFieldName.Locations || filterOption.id == FilterFieldName.ProfileLocations) {
       return selectedLocationText ?? 'Khu vực';
     } else if (filterOption.id == FilterFieldName.Rooms) {
       return selectedRoomText() || 'Số phòng';
@@ -78,6 +80,9 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
       case FilterFieldName.Locations:
         if (selectedLocationText) isActive = true;
         break;
+      case FilterFieldName.ProfileLocations:
+        if (selectedLocationText) isActive = true;
+        break;
       case FilterFieldName.Rooms:
         if (selectedRoomText()) isActive = true;
         break;
@@ -89,10 +94,14 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
   };
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
+      case FilterFieldName.ProfileLocations:
+        return <ProfileLocations />
       case FilterFieldName.BusinessType:
         return <BusinessTypeButtons />;
       case FilterFieldName.CategoryType:
         return <CategoryType />;
+      case FilterFieldName.BusCatType:
+        return <BusCatType />;
       case FilterFieldName.Price:
         return <Price />;
       case FilterFieldName.Area:

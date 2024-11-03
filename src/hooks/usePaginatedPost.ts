@@ -3,7 +3,7 @@ import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 
 interface FilterParams {
-  [key: string]: any; 
+  [key: string]: any;
   per_page?: number;
   page?: number;
 }
@@ -35,7 +35,7 @@ function usePaginatedData(filterParams: FilterParams, initialPage = 1, itemsPerP
     if (hasChanged) {
       setCurrentPage(1);
       setShouldReset(true);
-      setPrevFilterParams(filterParams); 
+      setPrevFilterParams(filterParams);
     }
   }, [filterParams]);
 
@@ -57,7 +57,7 @@ function usePaginatedData(filterParams: FilterParams, initialPage = 1, itemsPerP
 
   const handleLoadMore = () => {
     setLoading(true);
-    setTimeout(() => setCurrentPage((prevPage) => prevPage + 1), 1000);
+    setTimeout(() => setCurrentPage((prevPage) => prevPage + 1), 5);
   };
 
   return { products, isLoading, handleLoadMore, data, currentPage };

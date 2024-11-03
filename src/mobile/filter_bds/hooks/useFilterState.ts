@@ -3,7 +3,6 @@ import {
   defaultFilterStateAtom,
   filterFieldOptionsAtom,
   filterStateAtom,
-  isRedirectWhenApplyFilter,
   localFilterStateAtom,
 } from '../states';
 import { OptionForSelect } from '@models';
@@ -11,25 +10,27 @@ import { FilterFieldName, FILTER_FIELDS_TO_PARAMS, FILTER_FIELDS_PARAMS_MAP } fr
 import { searchApi } from '@api/searchApi';
 import { useMemo } from 'react';
 import { FilterChipOption, FilterState } from '../types';
-import { objectToQueryParams } from '@common/utils';
 import { usePathname } from 'next/navigation';
+import { AuthUtils } from '@common/auth';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import BusCatType from '../bts/BusCatType';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
-  const isRedirect = useAtomValue(isRedirectWhenApplyFilter);
-  const setIsRedirect = useSetAtom(isRedirectWhenApplyFilter);
   const pathname = usePathname();
+  const { searchScope } = useSearchScope();
+
   const resetDataFilter = () => {
     setFilterState(defaultFilterStateAtom);
     setLocalFilterState({});
-    setIsRedirect(true);
   };
   const copyFilterStatesToLocalByFieldId = (fieldNames: Array<FilterFieldName>) => {
     let values: Record<string, A> = {};
     fieldNames?.forEach((fieldName) => {
-      if (fieldName == FilterFieldName.Locations) {
+      if (fieldName == FilterFieldName.Locations ||
+        fieldName == FilterFieldName.ProfileLocations) {
         values = {
           city: filterState.city,
           district: filterState.district,
@@ -67,11 +68,31 @@ export default function useFilterState() {
     });
   };
   const removeFilterValue = (fieldId: FilterFieldName) => {
-    setLocalFilterState({
-      ...localFilterState,
-      [fieldId]: undefined,
-    });
-    applyAllFilters({ [fieldId]: undefined });
+    let newFilteState = {};
+
+    if (fieldId == FilterFieldName.Locations ||
+      fieldId == FilterFieldName.ProfileLocations) {
+      newFilteState = {
+        ...filterState,
+        city: undefined,
+        district: undefined,
+        ward: undefined,
+      };
+    } else if (fieldId == FilterFieldName.Rooms) {
+      newFilteState = {
+        ...filterState,
+        bath: undefined,
+        bed: undefined,
+      };
+    } else {
+      newFilteState = {
+        ...filterState,
+        [fieldId]: undefined,
+      }
+    }
+
+    setFilterState(newFilteState)
+    syncSelectedParamsToUrl(newFilteState);
   };
 
   const applyAllFilters = (filters?: A) => {
@@ -81,21 +102,16 @@ export default function useFilterState() {
     };
 
     setFilterState(allFilterState);
-    if (isRedirect) {
-      syncSelectedParamsToUrl();
-    } else {
-      const syncParamUrl = objectToQueryParams(allFilterState);
-      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
-    }
+    syncSelectedParamsToUrl(allFilterState);
   };
 
-  const buildFilterParams = ({ withLocal = true }: { withLocal?: boolean } = {}): Record<
-    string,
-    A
-  > => {
+  const buildFilterParams = ({ withLocal = true, overrideStates = {} }: {
+    withLocal?: boolean, overrideStates?: Record<string, A>
+  }): Record<string, A> => {
     let results: Record<string, A> = {};
     let allCurrentFilters: Record<string, A> = {
       ...filterState,
+      ...overrideStates
     };
     if (withLocal) {
       allCurrentFilters = {
@@ -117,13 +133,15 @@ export default function useFilterState() {
         results[paramName] = [option?.range?.min, option?.range?.max].join(',');
       }
     });
-    return results;
+
+    return { ...results, ...extraSearchParams };
   };
 
   const applySingleFilter = (filterOption: FilterChipOption) => {
     let localValue: Record<string, A> = {};
 
-    if (filterOption.id == FilterFieldName.Locations) {
+    if (filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations) {
       localValue = {
         city: localFilterState.city,
         district: localFilterState.district,
@@ -133,6 +151,13 @@ export default function useFilterState() {
       localValue = {
         bed: localFilterState.bed,
         bath: localFilterState.bath,
+      };
+    } else if (filterOption.id == FilterFieldName.BusCatType) {
+      localValue = {
+        busCatType: localFilterState.busCatType,
+        city: undefined,
+        district: undefined,
+        ward: undefined
       };
     } else {
       const fieldName = filterOption.id;
@@ -144,21 +169,37 @@ export default function useFilterState() {
     }
     const allFilterState = { ...filterState, ...localValue };
     setFilterState(allFilterState);
-    if (isRedirect) {
-      syncSelectedParamsToUrl();
-    } else {
-      const syncParamUrl = objectToQueryParams(allFilterState);
-      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
-    }
+    syncSelectedParamsToUrl(allFilterState);
   };
 
-  const syncSelectedParamsToUrl = async () => {
-    const filterParams = buildFilterParams();
-    filterParams.only_url = true;
-    const response = await searchApi(filterParams);
+  const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
+    let queryOptions = buildFilterParams({ withLocal: false, overrideStates: filterParams });
+    queryOptions = {
+      ...queryOptions,
+      only_url: true,
+    };
+    const response = await searchApi(queryOptions);
     const { listing_url } = response;
     window.history.pushState({}, '', listing_url);
   };
+
+  const extraSearchParams = useMemo(() => {
+    if (searchScope == SearchScopeEnums.Profile) {
+      return {
+        search_scope: searchScope,
+        author_slug: pathname.split('profile/')[1]
+      };
+    } else if (searchScope == SearchScopeEnums.ManagePosts) {
+      return {
+        search_scope: searchScope,
+        author_slug: AuthUtils.getCurrentUser()?.slug
+      };
+    } else {
+      return {
+        search_scope: searchScope
+      };
+    }
+  }, [pathname, searchScope])
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
@@ -166,16 +207,7 @@ export default function useFilterState() {
       ...filterState,
       sort: localFilterState.sort,
     };
-    applyFilterToSyncParams(newFilterState);
-  };
-  const applyFilterToSyncParams = (newFilterState: FilterState) => {
-    setFilterState(newFilterState);
-    if (isRedirect) {
-      syncSelectedParamsToUrl();
-    } else {
-      const syncParamUrl = objectToQueryParams(newFilterState);
-      window.history.pushState(null, '', `${pathname}?${syncParamUrl}`);
-    }
+    syncSelectedParamsToUrl(newFilterState);
   };
 
   const selectedSortText = useMemo((): string | undefined => {
@@ -188,6 +220,7 @@ export default function useFilterState() {
     filterFieldOptions,
     getLocalFieldValue,
     setLocalFieldValue,
+    setLocalFilterState,
     applyAllFilters,
     buildFilterParams,
     applySingleFilter,
@@ -195,7 +228,7 @@ export default function useFilterState() {
     resetDataFilter,
     applySortFilter,
     selectedSortText,
-    setIsRedirect,
     removeFilterValue,
+    extraSearchParams
   };
 }

@@ -14,10 +14,8 @@ import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
 import useDebounce from '@hooks/useDebounce';
 
-type PostListProps = {
-  isRedirectAfterApplyFilter?: boolean;
-};
-export default function PostList({ isRedirectAfterApplyFilter = true }: PostListProps) {
+
+export default function PostList() {
   useSyncParamsToState();
   const { openModal3, closeModals } = useModals();
   const {
@@ -25,12 +23,8 @@ export default function PostList({ isRedirectAfterApplyFilter = true }: PostList
     selectedSortText,
     copyFilterStatesToLocal,
     applySortFilter,
-    setIsRedirect,
   } = useFilterState();
 
-  useEffect(() => {
-    setIsRedirect(isRedirectAfterApplyFilter);
-  }, []);
 
   const filterParams = buildFilterParams({
     withLocal: false,

@@ -17,6 +17,7 @@ export const defaultFilterStateAtom = {
   district: undefined,
   ward: undefined,
   sort: undefined,
+  busCatType: undefined
 };
 export const filterStateAtom = atom<FilterState>(defaultFilterStateAtom);
 

@@ -140,7 +140,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
   const porfileListPost = () => (
     <div>
       <h2 className="mb-2 mt-12 text-xl font-semibold text-primary_color">Tin đã đăng</h2>
-      <PostList isRedirectAfterApplyFilter={false} />
+      <PostList />
     </div>
   );
   return (

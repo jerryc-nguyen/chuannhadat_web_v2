@@ -20,14 +20,10 @@ const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
 };
 
 export default function MainNavLocationsPicker() {
-  const pathname = usePathname();
-  const isRedirectApplyLocation = pathname === '/';
   const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
   const { openModal, closeModal } = useModals();
-  const { copyFilterStatesToLocal, setIsRedirect } = useFilterState();
-  React.useEffect(() => {
-    setIsRedirect(isRedirectApplyLocation);
-  }, []);
+  const { copyFilterStatesToLocal } = useFilterState();
+
   const showModalPickLocations = () => {
     copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
