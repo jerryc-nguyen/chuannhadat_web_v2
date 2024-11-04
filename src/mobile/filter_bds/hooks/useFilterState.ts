@@ -13,7 +13,6 @@ import { FilterChipOption, FilterState } from '../types';
 import { usePathname } from 'next/navigation';
 import { AuthUtils } from '@common/auth';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import BusCatType from '../bts/BusCatType';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -26,6 +25,7 @@ export default function useFilterState() {
     setFilterState(defaultFilterStateAtom);
     setLocalFilterState({});
   };
+
   const copyFilterStatesToLocalByFieldId = (fieldNames: Array<FilterFieldName>) => {
     let values: Record<string, A> = {};
     fieldNames?.forEach((fieldName) => {

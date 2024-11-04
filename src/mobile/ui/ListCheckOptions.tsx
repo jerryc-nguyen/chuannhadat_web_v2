@@ -24,6 +24,7 @@ const ListCheckOptions = ({
               link
               title={item.text}
               chevron={false}
+              after={item.count ? item.count : ''}
               media={
                 <Checkbox
                   component="div"

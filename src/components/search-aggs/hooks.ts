@@ -28,6 +28,11 @@ export default function useSearchAggs() {
     })
   }, [searchAggs])
 
+  const directionsOptions = useMemo(() => {
+    return (searchAggs.directions || []).map((option: A) => {
+      return option;
+    })
+  }, [searchAggs])
 
   const locationAgg = (agg: Record<string, A>) => {
     const city_counts: Record<string, A> = {};
@@ -75,6 +80,7 @@ export default function useSearchAggs() {
     busCatTypeOptions,
     priceOptions,
     areasOptions,
+    directionsOptions,
     isUseAggOptions,
     setIsUseAggOptions
   }
