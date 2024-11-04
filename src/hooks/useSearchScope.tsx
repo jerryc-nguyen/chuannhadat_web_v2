@@ -21,7 +21,13 @@ export default function useSearchScope() {
     }
   }, [pathname])
 
+  const isProfileAgg = useMemo(() => {
+    return searchScope == SearchScopeEnums.Profile || searchScope == SearchScopeEnums.ManagePosts
+  }, [searchScope])
+
+
   return {
-    searchScope
+    searchScope,
+    isProfileAgg
   }
 }
