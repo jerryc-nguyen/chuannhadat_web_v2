@@ -60,8 +60,12 @@ const HomeDesktop: React.FC = () => {
 
   return (
     <section className="my-10">
-      <h1 className="mb-4 text-2xl font-semibold text-primary_color">{data?.title}</h1>
-      <PostControls chipOptions={listFilterDesktop} pagination={data?.pagination} />
+      <h1 className="mb-8 text-2xl font-semibold text-primary_color">{data?.title}</h1>
+      <PostControls
+        className="w-[calc(100vw-8px)] -translate-x-5 px-5 md:-translate-x-10 md:px-10"
+        chipOptions={listFilterDesktop}
+        pagination={data?.pagination}
+      />
       <PostList dataPostList={products} />
       {data?.pagination.total_count !== products.length &&
         (currentPage > 2 && !isLoading && products.length > 0 ? (
