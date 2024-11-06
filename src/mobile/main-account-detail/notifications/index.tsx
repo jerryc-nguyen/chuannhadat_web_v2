@@ -1,5 +1,9 @@
 'use client';
-import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/states/breadcrumbAtom';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import React from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter hook
@@ -21,9 +25,9 @@ const NotificationsMobile: React.FC = () => {
     ];
     setBreadCrumb((state) => [...state, ...currentBreadCrumb]);
     return () => {
-      setBreadCrumb((state) => state.slice(0, -2));
+      setBreadCrumb(defaultBreadcrumb);
     };
-  }, [setBreadCrumb]);
+  }, []);
 
   const handleNotificationClick = (redirectUrl: string) => {
     // Redirect to the notification URL

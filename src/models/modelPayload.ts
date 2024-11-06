@@ -8,3 +8,10 @@ export interface IConnectOauthsPayload {
   name: string;
   photo: string;
 }
+export interface IRequestCallbackPayload {
+  product_uid: string;
+  phone: string;
+  full_name: string;
+  email?: string;
+  content?: string;
+}

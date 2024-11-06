@@ -1,19 +1,14 @@
-import { HttpStatusCode } from 'axios';
-
 export type TPhoto = {
   id: number;
   url: string;
-}
+};
 
 /* eslint-disable no-unused-vars */
 export type Range = {
   min?: number;
   max?: number;
 };
-export interface IResponseData {
-  code: HttpStatusCode;
-  status: boolean;
-}
+
 export type OptionForSelect = {
   value: number | string | undefined;
   text: string;
@@ -51,7 +46,7 @@ export const enum FilterFieldName {
   District = 'district',
   Ward = 'ward',
   Sort = 'sort',
-  BusCatType = 'busCatType'
+  BusCatType = 'busCatType',
 }
 
 export const FILTER_FIELDS_TO_PARAMS = [
@@ -66,7 +61,7 @@ export const FILTER_FIELDS_TO_PARAMS = [
   'district',
   'ward',
   'sort',
-  'busCatType'
+  'busCatType',
 ];
 
 export const FILTER_FIELDS_PARAMS_MAP: Record<string, A> = {

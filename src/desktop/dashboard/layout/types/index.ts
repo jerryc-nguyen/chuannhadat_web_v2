@@ -1,7 +1,7 @@
 import { IconType } from 'react-icons/lib';
 
 export interface INavLinkGroup {
-  name?: string;
+  name: string;
   links?: INavLink[];
   url?: string;
   isExpanded?: boolean;

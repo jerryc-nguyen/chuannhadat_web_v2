@@ -1,18 +1,18 @@
 import { IProductDetail } from '@mobile/searchs/type';
-import { IResponseData } from '@models';
 import { Pagination } from './savesPostModel';
+import { HttpStatusCode } from 'axios';
 
-export interface IViewedPostResonpse extends IResponseData {
-  data: IProductDetail[];
+export interface IViewedPostResonpse extends IResponseData<IProductDetail[]> {
   pagination: Pagination;
 }
-export interface IFormResponse<T> {
-  code: number;
-  data: T[];
+export interface IResponseData<T> {
+  code: HttpStatusCode;
   status: boolean | number;
-  message: string;
+  message?: string;
+  data: T;
 }
-export type IConnectOauthsResponse = IFormResponse<A>;
+
+export type IConnectOauthsResponse = IResponseData<A>;
 
 export interface INotificationResponse {
   id: number;
@@ -22,3 +22,13 @@ export interface INotificationResponse {
   is_read: boolean;
   redirect_url: string;
 }
+export type IRequestCallbackResponse = IResponseData<A>;
+export type RequestCallbackContent = {
+  content: string;
+  email: string;
+  formatted_created_at: string;
+  full_name: string;
+  id: number;
+  phone: string;
+};
+export type IListRequestResponse = IResponseData<RequestCallbackContent[]>;

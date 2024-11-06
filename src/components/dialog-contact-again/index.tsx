@@ -26,9 +26,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { useMutation } from '@tanstack/react-query';
+import { services } from '@api/services';
+import { toast } from 'sonner';
+import { IRequestCallbackPayload } from '@models/modelPayload';
+import { Loader2 } from 'lucide-react';
 
 type DialogContactAgainProps = {
   postId: string | number;
+  postUid: string;
   title: string;
   elementTrigger: () => React.ReactNode;
 };
@@ -37,8 +43,27 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
   elementTrigger,
   postId,
   title,
+  postUid,
 }) => {
   const [isAcceptCapcha, setIsAcceptCapcha] = React.useState<boolean>(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const { mutate: requestMutate, isPending } = useMutation({
+    mutationKey: ['request-callbacks'],
+    mutationFn: services.manage_contacts.requestCallback,
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success('Gửi yêu cầu thành công');
+        setIsAcceptCapcha(false);
+        setOpenDialog(false);
+        reset();
+      } else {
+        toast.error('Gửi yêu cầu thất bại');
+      }
+    },
+    onError: () => {
+      toast.error('Gửi yêu cầu thất bại');
+    },
+  });
   const formSchema = z.object({
     fullname: z.string().min(2, {
       message: 'Vui lòng nhập đầy đủ họ tên',
@@ -75,21 +100,22 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
   });
   const { handleSubmit, control, reset } = form;
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('🚀 ~ onSubmit ~ values:', values);
-    setIsAcceptCapcha(false);
+    const payload: IRequestCallbackPayload = {
+      full_name: values.fullname,
+      phone: values.phoneNumber,
+      content: values.message,
+      email: values.email,
+      product_uid: postUid,
+    };
+    requestMutate(payload);
   }
   const onChageCapcha = (value: A) => {
-    console.log('🚀 ~ onChageCapcha ~ value:', value);
-    setIsAcceptCapcha(true);
+    setIsAcceptCapcha(!!value);
   };
   return (
-    <Dialog
-      onOpenChange={() => {
-        reset();
-      }}
-    >
+    <Dialog onOpenChange={setOpenDialog} open={openDialog}>
       <DialogTrigger asChild>{elementTrigger()}</DialogTrigger>
-      <DialogContent className="pt-4 sm:max-w-[425px]">
+      <DialogContent className="max-h-[80vh] overflow-y-auto pt-4 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Thông tin liên hệ lại</DialogTitle>
           <DialogDescription>
@@ -174,6 +200,9 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_CAPCHA_SITE_KEY as string}
               onChange={onChageCapcha}
+              onExpired={() => {
+                setIsAcceptCapcha(false);
+              }}
               hl="vi"
             />
             <DialogFooter>
@@ -187,8 +216,8 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
                 className="flex items-center gap-x-2"
                 type="submit"
               >
-                Gửi yêu cầu
-                <LuSendHorizonal />
+                {isPending ? 'Đang xác thực' : 'Gửi yêu cầu'}
+                {isPending ? <Loader2 className="animate-spin" /> : <LuSendHorizonal />}
               </Button>
             </DialogFooter>
           </form>

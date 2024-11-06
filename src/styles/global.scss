@@ -112,6 +112,7 @@ label[aria-required='true']::after {
 
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
   background-color: transparent;
   opacity: 0;
   transition: opacity 0.3s ease;

@@ -9,7 +9,11 @@ import {
   ReferFriend,
   PhoneNumberTab,
 } from '@desktop/dashboard/main-account-detail/account-settings/components';
-import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/states/breadcrumbAtom';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -43,9 +47,12 @@ const AccountSettingsMobile: React.FC = () => {
         isActive: true,
       },
     ];
-    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    console.log(currentBreadCrumn);
+    setBreadCrumb((state) => {
+      return [...state, ...currentBreadCrumn];
+    });
     return () => {
-      setBreadCrumb((state) => state.slice(0, -2));
+      setBreadCrumb(defaultBreadcrumb);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
