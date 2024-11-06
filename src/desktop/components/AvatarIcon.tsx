@@ -17,7 +17,7 @@ import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin'
 import useModals from '@mobile/modals/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { LuUserCircle } from 'react-icons/lu';
 
@@ -27,6 +27,8 @@ type AvatarIconProps = {
 
 const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const router = useRouter();
+  const pathName = usePathname();
+  const isDashboardPage = pathName.includes('dashboard');
   const { currentUser, signOut } = useAuth();
   const { openModal, closeModal } = useModals();
   const showModalLoginAndRegister = () => {
@@ -77,7 +79,9 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
               <DropdownMenuShortcut>⇧⌘R</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard">Trang quản lý</Link>
+              <Link href={isDashboardPage ? '/' : '/dashboard'}>
+                {isDashboardPage ? 'Trang chủ' : 'Trang quản lý'}
+              </Link>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">

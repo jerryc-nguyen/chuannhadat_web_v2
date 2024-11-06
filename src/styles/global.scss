@@ -128,7 +128,12 @@ label[aria-required='true']::after {
   background-color: silver;
   cursor: pointer;
 }
-
+.shadow-dropdown {
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    0 8px 24px #0000001f;
+}
 .cnd-chip {
   border-radius: 50%;
   border-width: 1px;

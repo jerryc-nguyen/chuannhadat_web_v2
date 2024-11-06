@@ -51,7 +51,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   return (
     <Sidebar className={styles.sidebarWrapper} collapsible="offcanvas">
       <SidebarHeader className="flex h-[70px] items-center justify-center">
-        <Logo />
+        <Logo isDashboard />
       </SidebarHeader>
       <SidebarContent className="sidebar-content">
         <SidebarGroup>
