@@ -11,9 +11,18 @@ import {
   LoginResponse,
 } from '@mobile/auth/types';
 import { Author, IProductDetail } from '@mobile/searchs/type';
-import { IResponseData } from '@models';
-import { IConnectOauthsPayload, IViewedPostsPayload } from '@models/modelPayload';
-import { IConnectOauthsResponse, IViewedPostResonpse } from '@models/modelResponse';
+import {
+  IConnectOauthsPayload,
+  IRequestCallbackPayload,
+  IViewedPostsPayload,
+} from '@models/modelPayload';
+import {
+  IConnectOauthsResponse,
+  IListRequestResponse,
+  IRequestCallbackResponse,
+  IResponseData,
+  IViewedPostResonpse,
+} from '@models/modelResponse';
 import {
   ISavedProductsResponse,
   ISaveProductPayload,
@@ -74,6 +83,16 @@ export const services = {
       return axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.DETAIL}/${product_uid}`);
     },
   },
+  manage_contacts: {
+    requestCallback: async (
+      payload: IRequestCallbackPayload,
+    ): Promise<IRequestCallbackResponse> => {
+      return axiosInstance.post(API_ROUTES.MANAGE_CONTACTS.REQUEST_CALLBACK, payload);
+    },
+    getListRequest: async (): Promise<IListRequestResponse> => {
+      return axiosInstance.get(API_ROUTES.MANAGE_CONTACTS.GET_REQUESTS);
+    },
+  },
   posts: {
     getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
       return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
@@ -123,7 +142,7 @@ export const services = {
     },
   },
   saves: {
-    savePost: async (payload: ISaveProductPayload): Promise<IResponseData> => {
+    savePost: async (payload: ISaveProductPayload): Promise<IResponseData<A>> => {
       return axiosInstance.post(API_ROUTES.SAVES.SAVE_POST, payload, {
         headers: {
           'Frontend-Token': getCookie(FRONTEND_TOKEN),

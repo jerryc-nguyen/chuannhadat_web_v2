@@ -86,6 +86,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
           <div className="flex flex-col gap-y-2">
             <ButtonPhone phoneNumberProfile={profileData?.phone as string} />
             <DialogContactAgain
+              postUid={data.uid}
               elementTrigger={buttonContactAgain}
               postId={data?.id}
               title={data.title}

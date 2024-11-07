@@ -1,7 +1,12 @@
-import { LuBadgeDollarSign, LuFileText, LuRepeat, LuUserCircle } from 'react-icons/lu';
+import { LuBadgeDollarSign, LuFileText, LuHome, LuRepeat, LuUserCircle } from 'react-icons/lu';
 import { INavLinkGroup } from '../types';
 
 export const listNavDashboard: INavLinkGroup[] = [
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    icon: LuHome,
+  },
   {
     name: 'Thông tin cá nhân',
     url: '',

@@ -188,12 +188,12 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   // Render components
   const addTimeRefresh = () => (
     <div>
-      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Thêm thời gian</h2>
+      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-lg font-medium">Thêm thời gian</h2>
       <Button
         onClick={handleAddScheduleTime}
-        className="flex items-center gap-x-2 bg-blue-500 text-lg hover:bg-blue-600"
+        className="flex items-center gap-x-2 bg-blue-500 hover:bg-blue-600"
       >
-        <LuPlus className="text-xl font-bold" />
+        <LuPlus />
         Thêm thời gian
       </Button>
     </div>
@@ -201,7 +201,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
 
   const numberRefreshPost = () => (
     <div>
-      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Số lần làm mới</h2>
+      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-lg font-medium">Số lần làm mới</h2>
       <div className="mt-2 flex w-full justify-between gap-x-4 md:w-2/3 lg:w-1/2">
         <Card className="flex-1 hover:bg-blue-50">
           <CardHeader>
@@ -233,7 +233,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
 
   const refreshSettingsTable = () => (
     <div>
-      <h2 className="bg-sl mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">
+      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-lg font-medium">
         Bảng cài đặt thời gian
       </h2>
 
@@ -290,14 +290,11 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   const cardPackage = (unit: number, countRefresh: number, index: number) => (
     <Card className="max-w-[300px] flex-1 border-2 hover:border-blue-300">
       <CardHeader className="pb-[15px]">
-        <CardTitle className="font-bold text-slate-500">GÓI {index}</CardTitle>
+        <CardTitle className="text-lg font-bold text-primary_color">GÓI {index}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="pb-4 text-xl font-bold text-[#596570]">
-          <strong className="mr-2 text-[28px] font-bold text-black dark:text-white">
-            {unit} Xu
-          </strong>
-          / tháng
+          <strong className="mr-2 text-[28px] font-bold text-yellow-500">{unit} Xu</strong>/ tháng
         </p>
         <p className="text-sm font-medium">
           Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top
@@ -318,7 +315,9 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   );
   const refeshListPackage = () => (
     <div>
-      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Các gói đăng tin</h2>
+      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-lg font-medium">
+        Các gói đăng tin
+      </h2>
       <div className="flex flex-col gap-x-4 gap-y-4 lg:flex-row">
         {cardPackage(100, 300, 1)}
         {cardPackage(200, 800, 2)}
@@ -359,8 +358,8 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     </AlertDialog>
   );
   return (
-    <section className="flex flex-col gap-y-6">
-      <h1 className="text-4xl font-bold">Cài đặt tự động làm mới </h1>
+    <section className="flex flex-col gap-y-6 rounded-md bg-white p-6 shadow-sm">
+      <h1 className="mb-2 text-2xl font-bold">Cài đặt tự động làm mới</h1>
       {addTimeRefresh()}
       {numberRefreshPost()}
       {refreshSettingsTable()}

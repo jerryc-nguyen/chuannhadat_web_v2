@@ -51,50 +51,68 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   return (
     <Sidebar className={styles.sidebarWrapper} collapsible="offcanvas">
       <SidebarHeader className="flex h-[70px] items-center justify-center">
-        <Logo />
+        <Logo isDashboard />
       </SidebarHeader>
       <SidebarContent className="sidebar-content">
         <SidebarGroup>
           <SidebarGroupLabel>Danh sách cài đặt</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {listNavDashboard.map((nav) => (
-                <Collapsible key={nav.name} defaultOpen className="group/collapsible">
-                  <SidebarMenuItem>
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton
-                        isActive={pathname.includes(nav.name as string)}
-                        className="h-10 cursor-pointer transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10"
-                        asChild
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-x-2">
-                            <nav.icon className="!h-6 !w-6" />
-                            <span className="text-base font-medium">{nav.name}</span>
-                          </div>
-                          <FaAngleRight className="icon-arrow transition-all" />
-                        </div>
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="pl-1">
-                      <SidebarMenuSub>
-                        {nav.links?.map((navLink, index) => (
-                          <SidebarMenuSubItem
-                            onClick={() => setOpenMobile(false)}
-                            className={cn(
-                              'rounded-md px-4 py-2 !text-base transition-all hover:cursor-pointer hover:bg-slate-200 hover:text-black',
-                              getActiveLink(navLink.url),
-                            )}
-                            key={genKey(index)}
+              {listNavDashboard.map((nav) => {
+                if (nav.links) {
+                  return (
+                    <Collapsible key={nav.name} defaultOpen className="group/collapsible">
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            isActive={pathname.includes(nav.name as string)}
+                            className="h-10 cursor-pointer transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10"
+                            asChild
                           >
-                            <Link href={`/dashboard/${navLink.url}`}>{navLink.name}</Link>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              ))}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-x-2">
+                                <nav.icon className="!h-6 !w-6" />
+                                <span className="text-base font-medium">{nav.name}</span>
+                              </div>
+                              <FaAngleRight className="icon-arrow transition-all" />
+                            </div>
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="pl-1">
+                          <SidebarMenuSub>
+                            {nav.links?.map((navLink, index) => (
+                              <SidebarMenuSubItem
+                                onClick={() => setOpenMobile(false)}
+                                className={cn(
+                                  'rounded-md px-4 py-2 !text-base transition-all hover:cursor-pointer hover:bg-slate-200 hover:text-black',
+                                  getActiveLink(navLink.url),
+                                )}
+                                key={genKey(index)}
+                              >
+                                <Link href={`/dashboard/${navLink.url}`}>{navLink.name}</Link>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+                } else {
+                  return (
+                    <SidebarMenuButton
+                      key={nav.name}
+                      isActive={pathname.includes(nav.name as string)}
+                      className="h-10 cursor-pointer transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10"
+                      asChild
+                    >
+                      <Link href={nav.url as string} className="flex items-center gap-x-2">
+                        <nav.icon className="!h-6 !w-6" />
+                        <span className="text-base font-medium">{nav.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  );
+                }
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

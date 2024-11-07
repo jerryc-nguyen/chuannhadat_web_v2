@@ -11,6 +11,7 @@ import {
 import { useAtomValue } from 'jotai';
 import { genKey } from '@common/utils';
 import { breadcrumbAtom } from '@desktop/dashboard/states/breadcrumbAtom';
+import Link from 'next/link';
 type BreadcrumbProps = object;
 
 const Breadcrumb: React.FC<BreadcrumbProps> = () => {
@@ -25,10 +26,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = () => {
               <React.Fragment key={genKey(index)}>
                 <BreadcrumbItem>
                   {item.isActive ? (
-                    <BreadcrumbPage className="text-lg">{item.title}</BreadcrumbPage>
+                    <BreadcrumbPage className="text-base">{item.title}</BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink className="text-lg" href={item.link}>
-                      {item.title}
+                    <BreadcrumbLink asChild className="breadcrumb-link text-base" href={item.link}>
+                      <Link href={item.link}>{item.title}</Link>
                     </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
@@ -38,7 +39,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = () => {
           } else {
             return (
               <BreadcrumbItem key={item.title}>
-                <BreadcrumbPage className="text-lg">{item.title}</BreadcrumbPage>
+                <BreadcrumbPage className="text-base">{item.title}</BreadcrumbPage>
               </BreadcrumbItem>
             );
           }

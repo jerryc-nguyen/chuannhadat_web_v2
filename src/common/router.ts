@@ -61,6 +61,10 @@ export const API_ROUTES = {
     SETUP_AUTO_REFRESH: 'api/v1/manage_products/{product_id}/setup_auto_refresh',
     SHOW_ON_FRONTEND: 'api/v1/manage_products/{product_id}/show_on_frontend',
   },
+  MANAGE_CONTACTS: {
+    REQUEST_CALLBACK: 'api/v1/products/request_callback',
+    GET_REQUESTS: 'api/v1/contacts/request_callbacks',
+  },
   SAVES: {
     SAVE_POST: 'api/v1/saves/save_product',
     SAVED_PRODUCTS: 'api/v1/saves/saved_products',

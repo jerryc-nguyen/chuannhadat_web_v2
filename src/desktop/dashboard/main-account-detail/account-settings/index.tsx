@@ -2,7 +2,11 @@
 import { cn, genKey } from '@common/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
-import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/states/breadcrumbAtom';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -38,7 +42,7 @@ const AccountSettingsDesktop: React.FC = () => {
     ];
     setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
     return () => {
-      setBreadCrumb((state) => state.slice(0, -2));
+      setBreadCrumb(defaultBreadcrumb);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

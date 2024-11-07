@@ -4,9 +4,10 @@ export interface IBreadcrumbItem {
   link: string;
   isActive?: boolean;
 }
-export const breadcrumbAtom = atom<IBreadcrumbItem[]>([
+export const defaultBreadcrumb = [
   {
     title: 'Dashboard',
     link: '/dashboard',
   },
-]);
+];
+export const breadcrumbAtom = atom<IBreadcrumbItem[]>(defaultBreadcrumb);

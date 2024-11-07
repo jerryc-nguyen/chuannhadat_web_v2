@@ -29,18 +29,20 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
 
   const { buildFilterParams } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: false });
-  const { data: { data: products, pagination, aggs: aggreations } } = useSuspenseQuery({
+  const {
+    data: { data: products, pagination, aggs: aggreations },
+  } = useSuspenseQuery({
     queryKey: ['profile-post', { filterParams, profileSlug }],
     queryFn: () =>
       searchApi({
         ...filterParams,
         author_slug: profileSlug,
-        aggs_for: 'profile'
+        aggs_for: 'profile',
       }),
   });
 
   if (aggreations) {
-    updateSearchAggs(aggreations)
+    updateSearchAggs(aggreations);
     setIsUseAggOptions(true);
   }
 
@@ -54,11 +56,13 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
           <div className="flex flex-col gap-x-10 gap-y-10 sm:flex-row">
             <ProfileInfo profileData={profileData} />
 
-            <div className="flex-1">
+            <div className="relative flex-1">
               <h2 className="text-2xl font-bold text-primary_color">Tin đã đăng</h2>
-              <div className="my-2">
-                <PostControls chipOptions={listFilterProfileDesktop} pagination={pagination} />
-              </div>
+              <PostControls
+                className="mx-1"
+                chipOptions={listFilterProfileDesktop}
+                pagination={pagination}
+              />
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
                 dataPostList={products}
