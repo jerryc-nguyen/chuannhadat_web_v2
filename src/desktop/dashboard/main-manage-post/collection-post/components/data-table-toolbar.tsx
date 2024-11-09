@@ -23,6 +23,9 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
+  console.log({ table });
+  
+
   const [selectedOption, setSelectedOption] = useState(0);
   const options = [
     {

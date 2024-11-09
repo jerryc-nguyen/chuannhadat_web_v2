@@ -1,34 +1,64 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import * as React from 'react';
+
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
-import { DataTablePagination } from "../components/data-table-pagination";
-import { DataTableToolbar } from "../components/data-table-toolbar";
-import { 
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
- } from "@/components/ui/table";
-import { columns } from "./columns";
-import { needUpdateProductsListAtom, productQueryFormAtom, productsListAppliedAtom } from "../states";
-import { useAtom, useAtomValue } from "jotai";
-import { useQueryClient } from "@tanstack/react-query";
-import { CollectionPost } from "../constant/use-query-key";
+} from '@/components/ui/table';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAtom, useAtomValue } from 'jotai';
+import { DataTablePagination } from '../components/data-table-pagination';
+import { DataTableToolbar } from '../components/data-table-toolbar';
+import { CollectionPost } from '../constant/use-query-key';
+import {
+  needUpdateProductsListAtom,
+  productQueryFormAtom,
+  productsListAppliedAtom,
+} from '../states';
+
+import { ColumnDef } from '@tanstack/react-table';
+import { Product } from '../data/schemas/product-schema';
+import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
+import { DataTableColumnHeader } from './data-table-column-header';
+
+const columns: ColumnDef<Product>[] = [
+  {
+    id: 'select',
+    header: CellHeaderSelectAll,
+    cell: CellSelect,
+  },
+
+  {
+    accessorKey: 'images',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Mô tả" className="container" />
+    ),
+    cell: CellMainContent,
+    enableSorting: false,
+    enableHiding: false,
+  },
+
+  {
+    accessorKey: 'id',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Thông tin khác" />,
+    cell: CellStatus,
+    enableSorting: false,
+    enableHiding: false,
+  },
+];
 
 export function DataTable() {
   const [needUpdateProductsList, setNeedUpdateProductsList] = useAtom(needUpdateProductsListAtom);
 
   const productQueryForm = useAtomValue(productQueryFormAtom);
-  const page = productQueryForm?.watch("page") ?? 0;
-  const pageSize = productQueryForm?.watch("per_page") ?? 0;
+  const page = productQueryForm?.watch('page') ?? 0;
+  const pageSize = productQueryForm?.watch('per_page') ?? 0;
 
   const queryClient = useQueryClient();
 
@@ -40,48 +70,47 @@ export function DataTable() {
   const [productsListApplied, setProductsListApplied] = useAtom(productsListAppliedAtom);
 
   React.useEffect(() => {
-    if ( !cachedData || !needUpdateProductsList) return;
-    
+    if (!cachedData || !needUpdateProductsList) return;
+
     setProductsListApplied({
       productsList,
       totalRecords,
-      totalPages
+      totalPages,
     });
     setNeedUpdateProductsList(false);
+  }, [cachedData, setProductsListApplied]);
 
-  }, [cachedData, setProductsListApplied])
-  
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data: productsListApplied.productsList,
     columns: columns,
     state: {
-        rowSelection,
-        pagination: {
-            pageIndex: page - 1,
-            pageSize: pageSize,
-        }
+      rowSelection,
+      pagination: {
+        pageIndex: page - 1,
+        pageSize: pageSize,
+      },
     },
     manualPagination: true,
     pageCount: productsListApplied.totalPages,
     enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: (updater) => {
-        const newPagination = typeof updater === 'function' 
-            ? updater({ pageIndex: page - 1, pageSize }) 
-            : updater;
-        
-        // Update both page and per_page values in the form
-        productQueryForm?.setValue('page', newPagination.pageIndex + 1); // update form's page value (1-based index)
-        productQueryForm?.setValue('per_page', newPagination.pageSize);   // update form's per_page value
+      const newPagination =
+        typeof updater === 'function' ? updater({ pageIndex: page - 1, pageSize }) : updater;
+
+      // Update both page and per_page values in the form
+      productQueryForm?.setValue('page', newPagination.pageIndex + 1); // update form's page value (1-based index)
+      productQueryForm?.setValue('per_page', newPagination.pageSize); // update form's per_page value
     },
     onRowSelectionChange: setRowSelection,
-    getRowId: row => row.id,
+    getRowId: (row) => row.id,
   });
 
   return (
     <div className="space-y-4">
+      {/* ... */}
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table className="bg-white/30">
@@ -93,10 +122,7 @@ export function DataTable() {
                     <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -106,26 +132,17 @@ export function DataTable() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   Chưa có bản ghi
                 </TableCell>
               </TableRow>
