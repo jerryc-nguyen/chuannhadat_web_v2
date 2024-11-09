@@ -1,7 +1,5 @@
 'use client';
-
 import { Button } from '@components/ui/button';
-
 import useModals from '@mobile/modals/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';

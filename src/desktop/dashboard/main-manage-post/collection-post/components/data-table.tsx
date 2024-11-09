@@ -1,8 +1,5 @@
 'use client';
 
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import * as React from 'react';
-
 import {
   Table,
   TableBody,
@@ -12,18 +9,18 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useQueryClient } from '@tanstack/react-query';
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useAtom, useAtomValue } from 'jotai';
+import * as React from 'react';
 import { DataTablePagination } from '../components/data-table-pagination';
 import { DataTableToolbar } from '../components/data-table-toolbar';
 import { CollectionPost } from '../constant/use-query-key';
+import { Product } from '../data/schemas/product-schema';
 import {
   needUpdateProductsListAtom,
   productQueryFormAtom,
   productsListAppliedAtom,
 } from '../states';
-
-import { ColumnDef } from '@tanstack/react-table';
-import { Product } from '../data/schemas/product-schema';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
 import { DataTableColumnHeader } from './data-table-column-header';
 

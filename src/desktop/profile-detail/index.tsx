@@ -46,9 +46,6 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     setIsUseAggOptions(true);
   }
 
-  console.log({ aggreations, listFilterProfileDesktop, pagination});
-  
-
   return (
     <>
       {!profileData ? (

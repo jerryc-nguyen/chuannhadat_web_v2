@@ -1,12 +1,8 @@
 'use client';
-
 import { Button } from '@components/ui/button';
-
 import useModals from '@mobile/modals/hooks';
-
 import { ChevronsUp } from 'lucide-react';
 import UpVipProductForm from '../up-vip-form';
-
 
 export const ButtonUpVip = ({ productId, adsType }: { productId: string; adsType: string }) => {
   const { openModal, closeModal } = useModals();

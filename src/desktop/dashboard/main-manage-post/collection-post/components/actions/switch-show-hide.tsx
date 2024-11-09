@@ -1,11 +1,9 @@
 'use client';
 
-
-import { toast } from 'react-toastify';
-import ProductApiService from '../../apis/product-api';
-
 import { Switch } from '@components/ui/switch';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import ProductApiService from '../../apis/product-api';
 import {
     ShowOnFrontEndProductInput
 } from '../../data/schemas';

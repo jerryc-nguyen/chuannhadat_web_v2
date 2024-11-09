@@ -1,11 +1,8 @@
 'use client';
-
-
-import { toast } from 'react-toastify';
-import ProductApiService from '../../apis/product-api';
-
 import { Checkbox } from '@components/ui/checkbox';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import ProductApiService from '../../apis/product-api';
 import {
     SetUpAutoRefreshProductInput
 } from '../../data/schemas';
