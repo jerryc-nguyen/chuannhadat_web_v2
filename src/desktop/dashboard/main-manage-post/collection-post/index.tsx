@@ -13,6 +13,7 @@ import { CollectionPost } from './constant/use-query-key';
 import { ProductQuery, productQuerySchema } from './data/schemas/product-query-schema';
 import { productQueryFromDefaultValues } from './data/type/product-query';
 import useProductActionSetting from './hooks/product-action-setting';
+import { useAdminCollectionPost } from './hooks/use-collection-post';
 
 function paramsToObjState(searchParams: ReadonlyURLSearchParams) {
   try {
@@ -41,11 +42,7 @@ export default function TaskDataTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { data, isLoading } = useQuery({
-    queryKey: [CollectionPost, paramsToObjState(searchParams)],
-    queryFn: () => ProductApiService.Filter(paramsToObjState(searchParams)),
-    placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
-  });
+  const result = useAdminCollectionPost()
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -60,7 +57,7 @@ export default function TaskDataTable() {
   useEffect(() => {
     const query = createQueryString('search', JSON.stringify(formValue));
     router.push(pathname + '?' + query);
-  }, [formValue, pathname, createQueryString, router]);
+  }, [formValue, pathname, createQueryString, router]);  
 
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">

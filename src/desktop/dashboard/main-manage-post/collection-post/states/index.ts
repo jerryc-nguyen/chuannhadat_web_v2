@@ -12,5 +12,3 @@ export const productsListAppliedAtom = atom<{
     totalPages: 0,
     totalRecords: 0,
 });
-
-export const needUpdateProductsListAtom = atom<boolean>(true);

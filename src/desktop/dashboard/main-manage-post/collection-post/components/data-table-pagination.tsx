@@ -3,29 +3,26 @@ import {
   ChevronRightIcon,
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
+} from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useAtomValue, useSetAtom } from "jotai";
-import { needUpdateProductsListAtom, productsListAppliedAtom } from "../states";
+} from '@/components/ui/select';
+import { useAtomValue } from 'jotai';
+import { productsListAppliedAtom } from '../states';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTablePagination<TData>({
-  table,
-}: DataTablePaginationProps<TData>) {
+export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
   const productsListApplied = useAtomValue(productsListAppliedAtom);
-  const setNeedUpdateProductsList = useSetAtom(needUpdateProductsListAtom);
 
   return (
     <div className="flex items-center justify-between px-2">
@@ -41,7 +38,6 @@ export function DataTablePagination<TData>({
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
-              setNeedUpdateProductsList(true);
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -57,8 +53,7 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Trang {table.getState().pagination.pageIndex + 1} /{" "}
-          {productsListApplied.totalPages}
+          Trang {table.getState().pagination.pageIndex + 1} / {productsListApplied.totalPages}
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -66,7 +61,6 @@ export function DataTablePagination<TData>({
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => {
               table.setPageIndex(0);
-              setNeedUpdateProductsList(true);
             }}
             disabled={!table.getCanPreviousPage()}
           >
@@ -78,7 +72,6 @@ export function DataTablePagination<TData>({
             className="h-8 w-8 p-0"
             onClick={() => {
               table.previousPage();
-              setNeedUpdateProductsList(true);
             }}
             disabled={!table.getCanPreviousPage()}
           >
@@ -90,7 +83,6 @@ export function DataTablePagination<TData>({
             className="h-8 w-8 p-0"
             onClick={() => {
               table.nextPage();
-              setNeedUpdateProductsList(true);
             }}
             disabled={!table.getCanNextPage()}
           >
@@ -102,7 +94,6 @@ export function DataTablePagination<TData>({
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => {
               table.setPageIndex(table.getPageCount() - 1);
-              setNeedUpdateProductsList(true);
             }}
             disabled={!table.getCanNextPage()}
           >

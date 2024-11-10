@@ -8,20 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useAtom } from 'jotai';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { DataTablePagination } from '../components/data-table-pagination';
 import { DataTableToolbar } from '../components/data-table-toolbar';
-import { CollectionPost } from '../constant/use-query-key';
 import { ProductQuery } from '../data/schemas';
 import { Product } from '../data/schemas/product-schema';
-import {
-  needUpdateProductsListAtom,
-  productsListAppliedAtom,
-} from '../states';
+import { useAdminCollectionPost } from '../hooks/use-collection-post';
+import { productsListAppliedAtom } from '../states';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
 import { DataTableColumnHeader } from './data-table-column-header';
 
@@ -52,15 +48,12 @@ const columns: ColumnDef<Product>[] = [
 ];
 
 export function DataTable() {
-  const [needUpdateProductsList, setNeedUpdateProductsList] = useAtom(needUpdateProductsListAtom);
-  const { watch, setValue, getValues } = useFormContext<ProductQuery>();
+  const { watch, setValue } = useFormContext<ProductQuery>();
 
   const page = watch('page') ?? 0;
   const pageSize = watch('per_page') ?? 0;
-
-  const queryClient = useQueryClient();
-
-  const cachedData: A = queryClient.getQueryData([CollectionPost, getValues()]);
+  
+  const { data: cachedData } = useAdminCollectionPost();
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
   const totalRecords = cachedData?.pagination?.total_count ?? 0;
   const totalPages = cachedData?.pagination?.total_pages ?? 0;
@@ -68,14 +61,13 @@ export function DataTable() {
   const [productsListApplied, setProductsListApplied] = useAtom(productsListAppliedAtom);
 
   React.useEffect(() => {
-    if (!cachedData || !needUpdateProductsList) return;
+    if (!cachedData) return;
 
     setProductsListApplied({
       productsList,
       totalRecords,
       totalPages,
     });
-    setNeedUpdateProductsList(false);
   }, [cachedData, setProductsListApplied]);
 
   const [rowSelection, setRowSelection] = React.useState({});
