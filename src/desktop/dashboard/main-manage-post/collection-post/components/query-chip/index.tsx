@@ -9,22 +9,24 @@ import { LuX } from 'react-icons/lu';
 // import { BsSortUp } from 'react-icons/bs';
 import { QueryChipOption } from '../../constant/list_chips_query';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
-import { productQueryFormAtom, productsListAppliedAtom } from '../../states';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { productsListAppliedAtom } from '../../states';
+import { useSetAtom } from 'jotai';
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ProductQueryFieldName, productQueryFromDefaultValues } from '../../data/type/product-query';
 import { CollectionPost } from '../../constant/use-query-key';
 import ProductApiService from '../../apis/product-api';
 import { get } from 'lodash-es';
+import { useFormContext } from 'react-hook-form';
+import { ProductQuery } from '../../data/schemas';
 
 const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) => {
-  const productQueryForm = useAtomValue(productQueryFormAtom);
   const queryClient = useQueryClient();
+  const { watch, setValue, getValues } = useFormContext<ProductQuery>();
   
   const { data, isFetching } = useQuery(
     queryOptions({
-        queryKey: [CollectionPost, productQueryForm?.getValues()],
-        queryFn: () => ProductApiService.Filter(productQueryForm?.getValues() || productQueryFromDefaultValues),
+        queryKey: [CollectionPost, getValues()],
+        queryFn: () => ProductApiService.Filter(getValues() || productQueryFromDefaultValues),
         placeholderData: keepPreviousData
     }),
   );
@@ -42,7 +44,7 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
 
   useEffect(() => {
     if ( !isOpenPopover && !wasCloseWithApply) {
-      productQueryForm?.setValue(queryChipItem.id, prevFormValue);
+      setValue(queryChipItem.id, prevFormValue);
       setWasCloseWithApply(false);
     }
   }, [isOpenPopover, wasCloseWithApply])
@@ -50,8 +52,8 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   const containerChipsRef = useRef(null);
 
   const setProductsListApplied = useSetAtom(productsListAppliedAtom);
-  const formValue = productQueryForm?.watch(queryChipItem.id) ?? "";
-  const [prevFormValue, setPrevFormValue] = useState<string>(productQueryForm?.getValues(queryChipItem.id) || "");
+  const formValue = watch(queryChipItem.id) ?? "";
+  const [prevFormValue, setPrevFormValue] = useState<string>(getValues(queryChipItem.id) || "");
 
   const onApplyFilter = () => {
     setProductsListApplied({
@@ -65,8 +67,8 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   
   const selectedRoomText = (): string => {
     const results = [];
-    const bedRoomVal = productQueryForm?.getValues(ProductQueryFieldName.BedroomsCount);
-    const bathRoomVal = productQueryForm?.getValues(ProductQueryFieldName.BathroomsCount);
+    const bedRoomVal = getValues(ProductQueryFieldName.BedroomsCount);
+    const bathRoomVal = getValues(ProductQueryFieldName.BathroomsCount);
     if (bedRoomVal) {
       results.push(`${bedRoomVal} PN`);
     }
@@ -90,7 +92,7 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
     //   );
     // }
     
-    return productQueryForm?.getValues(fieldName) || queryChipItem.text;
+    return getValues(fieldName) || queryChipItem.text;
   };
 
   const isActiveChip = () => {
@@ -106,7 +108,7 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
         if (selectedRoomText()) isActive = true;
         break;
       default:
-        if ( productQueryForm?.getValues(fieldName) ) isActive = true;
+        if ( getValues(fieldName) ) isActive = true;
         break;
     }
     return isActive;
@@ -116,10 +118,10 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
     switch (queryChipItem.id) {
       case ProductQueryFieldName.BusinessType:
         return <BusinessTypeButtons
-          value={productQueryForm?.getValues(ProductQueryFieldName.BusinessType) ?? get(productQueryFromDefaultValues, ProductQueryFieldName.BusinessType)}
+          value={getValues(ProductQueryFieldName.BusinessType) ?? get(productQueryFromDefaultValues, ProductQueryFieldName.BusinessType)}
           onChange={(val: string) => {
-            productQueryForm?.setValue("page", 1)
-            productQueryForm?.setValue(ProductQueryFieldName.BusinessType, val)
+            setValue("page", 1)
+            setValue(ProductQueryFieldName.BusinessType, val)
           }}
         />;
       case ProductQueryFieldName.CategoryType:
@@ -152,10 +154,10 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   // };
 
   const handleRemoveFilter = () => {
-    productQueryForm?.setValue(queryChipItem.id, "");
-    productQueryForm?.setValue("page", 1);
+    setValue(queryChipItem.id, "");
+    setValue("page", 1);
 
-    const cachedData: A = queryClient.getQueryData(['collection-post', productQueryForm?.getValues()]);
+    const cachedData: A = queryClient.getQueryData(['collection-post', getValues()]);
     console.log("cachedData", cachedData);
     
     

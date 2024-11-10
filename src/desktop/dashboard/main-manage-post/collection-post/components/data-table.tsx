@@ -10,15 +10,16 @@ import {
 } from '@/components/ui/table';
 import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import * as React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { DataTablePagination } from '../components/data-table-pagination';
 import { DataTableToolbar } from '../components/data-table-toolbar';
 import { CollectionPost } from '../constant/use-query-key';
+import { ProductQuery } from '../data/schemas';
 import { Product } from '../data/schemas/product-schema';
 import {
   needUpdateProductsListAtom,
-  productQueryFormAtom,
   productsListAppliedAtom,
 } from '../states';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
@@ -52,14 +53,14 @@ const columns: ColumnDef<Product>[] = [
 
 export function DataTable() {
   const [needUpdateProductsList, setNeedUpdateProductsList] = useAtom(needUpdateProductsListAtom);
+  const { watch, setValue, getValues } = useFormContext<ProductQuery>();
 
-  const productQueryForm = useAtomValue(productQueryFormAtom);
-  const page = productQueryForm?.watch('page') ?? 0;
-  const pageSize = productQueryForm?.watch('per_page') ?? 0;
+  const page = watch('page') ?? 0;
+  const pageSize = watch('per_page') ?? 0;
 
   const queryClient = useQueryClient();
 
-  const cachedData: A = queryClient.getQueryData([CollectionPost, productQueryForm?.getValues()]);
+  const cachedData: A = queryClient.getQueryData([CollectionPost, getValues()]);
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
   const totalRecords = cachedData?.pagination?.total_count ?? 0;
   const totalPages = cachedData?.pagination?.total_pages ?? 0;
@@ -98,8 +99,8 @@ export function DataTable() {
         typeof updater === 'function' ? updater({ pageIndex: page - 1, pageSize }) : updater;
 
       // Update both page and per_page values in the form
-      productQueryForm?.setValue('page', newPagination.pageIndex + 1); // update form's page value (1-based index)
-      productQueryForm?.setValue('per_page', newPagination.pageSize); // update form's per_page value
+      setValue('page', newPagination.pageIndex + 1); // update form's page value (1-based index)
+      setValue('per_page', newPagination.pageSize); // update form's per_page value
     },
     onRowSelectionChange: setRowSelection,
     getRowId: (row) => row.id,

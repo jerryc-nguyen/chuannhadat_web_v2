@@ -3,18 +3,16 @@
 import ModalPostDetail from '@desktop/post-detail/components/modal-post-detail';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useSetAtom } from 'jotai';
 import { merge } from 'lodash-es';
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import ProductApiService from './apis/product-api';
 import { DataTable } from './components/data-table';
 import { CollectionPost } from './constant/use-query-key';
-import { productQuerySchema } from './data/schemas/product-query-schema';
+import { ProductQuery, productQuerySchema } from './data/schemas/product-query-schema';
 import { productQueryFromDefaultValues } from './data/type/product-query';
 import useProductActionSetting from './hooks/product-action-setting';
-import { productQueryFormAtom } from './states';
 
 function paramsToObjState(searchParams: ReadonlyURLSearchParams) {
   try {
@@ -27,12 +25,11 @@ function paramsToObjState(searchParams: ReadonlyURLSearchParams) {
 
 export default function TaskDataTable() {
   const { handleGetProductActionSettings } = useProductActionSetting();
-  const setProductQueryFormAtom = useSetAtom(productQueryFormAtom);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  const form = useForm({
+  const form = useForm<ProductQuery>({
     resolver: zodResolver(productQuerySchema),
     defaultValues: merge(productQueryFromDefaultValues, paramsToObjState(searchParams)),
   });
@@ -41,7 +38,6 @@ export default function TaskDataTable() {
 
   useEffect(() => {
     handleGetProductActionSettings();
-    setProductQueryFormAtom(form);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,8 +64,10 @@ export default function TaskDataTable() {
 
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
-      <ModalPostDetail />
-      <DataTable />
+      <FormProvider {...form}>
+        <ModalPostDetail />
+        <DataTable />
+      </FormProvider>
     </div>
   );
 }
