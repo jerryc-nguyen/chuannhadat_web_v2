@@ -1,34 +1,30 @@
 import { cn } from '@common/utils';
-import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import { useState, FC, useRef, useEffect } from 'react';
 import { Button } from '@components/ui/button';
-import { LuLoader2 } from 'react-icons/lu';
-import { LuX } from 'react-icons/lu';
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
+import { FC, useEffect, useRef, useState } from 'react';
+import { LuLoader2, LuX } from 'react-icons/lu';
 // import { BiArea } from 'react-icons/bi';
 // import { PiCurrencyCircleDollar } from 'react-icons/pi';
 // import { BsSortUp } from 'react-icons/bs';
-import { QueryChipOption } from '../../constant/list_chips_query';
-import BusinessTypeButtons from './bts/BusinessTypeButtons';
-import { productQueryFormAtom, productsListAppliedAtom } from '../../states';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { keepPreviousData, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ProductQueryFieldName, productQueryFromDefaultValues } from '../../data/type/product-query';
-import { CollectionPost } from '../../constant/use-query-key';
-import ProductApiService from '../../apis/product-api';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSetAtom } from 'jotai';
 import { get } from 'lodash-es';
+import { useFormContext } from 'react-hook-form';
+import { QueryChipOption } from '../../constant/list_chips_query';
+import { ProductQuery } from '../../data/schemas';
+import {
+  ProductQueryFieldName,
+  productQueryFromDefaultValues,
+} from '../../data/type/product-query';
+import { useAdminCollectionPost } from '../../hooks/use-collection-post';
+import { productsListAppliedAtom } from '../../states';
+import BusinessTypeButtons from './bts/BusinessTypeButtons';
 
 const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) => {
-  const productQueryForm = useAtomValue(productQueryFormAtom);
   const queryClient = useQueryClient();
-  
-  const { data, isFetching } = useQuery(
-    queryOptions({
-        queryKey: [CollectionPost, productQueryForm?.getValues()],
-        queryFn: () => ProductApiService.Filter(productQueryForm?.getValues() || productQueryFromDefaultValues),
-        placeholderData: keepPreviousData
-    }),
-  );
-  
+  const { watch, setValue, getValues } = useFormContext<ProductQuery>();
+  const { data, isFetching } = useAdminCollectionPost();
+
   const productsList = Array.isArray(data?.data) ? data.data : [];
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -41,32 +37,32 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   const [wasCloseWithApply, setWasCloseWithApply] = useState<boolean>(false);
 
   useEffect(() => {
-    if ( !isOpenPopover && !wasCloseWithApply) {
-      productQueryForm?.setValue(queryChipItem.id, prevFormValue);
+    if (!isOpenPopover && !wasCloseWithApply) {
+      setValue(queryChipItem.id, prevFormValue);
       setWasCloseWithApply(false);
     }
-  }, [isOpenPopover, wasCloseWithApply])
+  }, [isOpenPopover, wasCloseWithApply]);
 
   const containerChipsRef = useRef(null);
 
   const setProductsListApplied = useSetAtom(productsListAppliedAtom);
-  const formValue = productQueryForm?.watch(queryChipItem.id) ?? "";
-  const [prevFormValue, setPrevFormValue] = useState<string>(productQueryForm?.getValues(queryChipItem.id) || "");
+  const formValue = watch(queryChipItem.id) ?? '';
+  const [prevFormValue, setPrevFormValue] = useState<string>(getValues(queryChipItem.id) || '');
 
   const onApplyFilter = () => {
     setProductsListApplied({
       productsList,
       totalRecords,
-      totalPages
+      totalPages,
     });
     setWasCloseWithApply(true);
     setIsOpenPopover(false);
   };
-  
+
   const selectedRoomText = (): string => {
     const results = [];
-    const bedRoomVal = productQueryForm?.getValues(ProductQueryFieldName.BedroomsCount);
-    const bathRoomVal = productQueryForm?.getValues(ProductQueryFieldName.BathroomsCount);
+    const bedRoomVal = getValues(ProductQueryFieldName.BedroomsCount);
+    const bathRoomVal = getValues(ProductQueryFieldName.BathroomsCount);
     if (bedRoomVal) {
       results.push(`${bedRoomVal} PN`);
     }
@@ -89,8 +85,8 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
     //     filterState[fieldName]?.text ?? filterOption.text
     //   );
     // }
-    
-    return productQueryForm?.getValues(fieldName) || queryChipItem.text;
+
+    return getValues(fieldName) || queryChipItem.text;
   };
 
   const isActiveChip = () => {
@@ -106,7 +102,7 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
         if (selectedRoomText()) isActive = true;
         break;
       default:
-        if ( productQueryForm?.getValues(fieldName) ) isActive = true;
+        if (getValues(fieldName)) isActive = true;
         break;
     }
     return isActive;
@@ -115,13 +111,18 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   const buildContent = () => {
     switch (queryChipItem.id) {
       case ProductQueryFieldName.BusinessType:
-        return <BusinessTypeButtons
-          value={productQueryForm?.getValues(ProductQueryFieldName.BusinessType) ?? get(productQueryFromDefaultValues, ProductQueryFieldName.BusinessType)}
-          onChange={(val: string) => {
-            productQueryForm?.setValue("page", 1)
-            productQueryForm?.setValue(ProductQueryFieldName.BusinessType, val)
-          }}
-        />;
+        return (
+          <BusinessTypeButtons
+            value={
+              getValues(ProductQueryFieldName.BusinessType) ??
+              get(productQueryFromDefaultValues, ProductQueryFieldName.BusinessType)
+            }
+            onChange={(val: string) => {
+              setValue('page', 1);
+              setValue(ProductQueryFieldName.BusinessType, val);
+            }}
+          />
+        );
       case ProductQueryFieldName.CategoryType:
         return <div>CategoryType </div>;
       case ProductQueryFieldName.Price:
@@ -152,13 +153,12 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   // };
 
   const handleRemoveFilter = () => {
-    productQueryForm?.setValue(queryChipItem.id, "");
-    productQueryForm?.setValue("page", 1);
+    setValue(queryChipItem.id, '');
+    setValue('page', 1);
 
-    const cachedData: A = queryClient.getQueryData(['collection-post', productQueryForm?.getValues()]);
-    console.log("cachedData", cachedData);
-    
-    
+    const cachedData: A = queryClient.getQueryData(['collection-post', getValues()]);
+    console.log('cachedData', cachedData);
+
     if (cachedData) {
       setProductsListApplied({
         productsList: cachedData.data,
@@ -210,10 +210,7 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
             </span>
           </PopoverTrigger>
           {isActiveChip() && (
-            <LuX
-              onClick={() => handleRemoveFilter()}
-              className="cursor-pointer text-xl"
-            />
+            <LuX onClick={() => handleRemoveFilter()} className="cursor-pointer text-xl" />
           )}
         </Button>
 
@@ -222,24 +219,26 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
           sideOffset={5}
           align="center"
           side="bottom"
-          className={cn('!relative mt-4 w-80 z-10')}
+          className={cn('!relative z-10 mt-4 w-80')}
         >
           <h2 className="text-left text-lg font-semibold">{queryChipItem.text}</h2>
           <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
             {buildContent()}
           </section>
           <Button disabled={isFetching} className="w-full" onClick={() => onApplyFilter()}>
-            {
-              !formValue ? "Đóng" : <>
+            {!formValue ? (
+              'Đóng'
+            ) : (
+              <>
                 {isFetching ? (
-                    <>
-                      <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {" "}Đang tải
-                    </>
-                  ) : <span>Xem {totalRecords} kết quả</span>
-                }
+                  <>
+                    <LuLoader2 className="mr-2 h-4 w-4 animate-spin" /> Đang tải
+                  </>
+                ) : (
+                  <span>Xem {totalRecords} kết quả</span>
+                )}
               </>
-            }
+            )}
           </Button>
         </PopoverContent>
       </Popover>

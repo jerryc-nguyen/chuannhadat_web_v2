@@ -7,7 +7,6 @@ import {
     SetUpAutoRefreshProductInput
 } from '../../data/schemas';
 
-
 export const CheckboxAutoRefresh = ({
   productId,
   auto_refresh_product,

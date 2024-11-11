@@ -14,6 +14,8 @@ export const enum ProductQueryFieldName {
     BedroomsCount  = 'bedrooms_count',
     BathroomsCount = 'bathrooms_count',
     Furnitures = 'furnitures',
+    Keyword = "keyword",
+    Visibility = "visibility"
 }
 
 export const productQueryFromDefaultValues = {
@@ -32,7 +34,8 @@ export const productQueryFromDefaultValues = {
     [ProductQueryFieldName.BedroomsCount]: "",
     [ProductQueryFieldName.BathroomsCount]: "",
     [ProductQueryFieldName.Furnitures]: "",
-
+    [ProductQueryFieldName.Keyword]: "",
+    [ProductQueryFieldName.Visibility]: "",
     // trường này ko dùng - trong api có
     selected_ids: "",
   

@@ -29,6 +29,9 @@ const ProductApiService = {
     data.page && params.append('page', data.page.toString());
     data.per_page && params.append('per_page', data.per_page.toString());
 
+    data.keyword && params.append("keyword", data.keyword);
+    data.visibility && params.append("visibility", data.visibility);
+
     const response = await axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.END_POINT}?${params.toString()}`);
 
     return response;

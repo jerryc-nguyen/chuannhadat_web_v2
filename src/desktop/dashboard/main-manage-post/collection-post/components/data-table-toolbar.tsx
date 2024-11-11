@@ -1,56 +1,61 @@
-"use client";
+'use client';
 
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-import { ButtonGroup } from "@components/ui/button-group";
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
-import { Separator } from "@components/ui/separator";
+import { ButtonGroup } from '@components/ui/button-group';
 import { Radio } from '@components/ui/Radio';
-import { useState } from "react";
-import Link from "next/link";
-import { DataTableViewOptions } from "./data-table-view-options";
-import QueryChip from "./query-chip";
-import { listChipsQuery } from "../constant/list_chips_query";
+import { Separator } from '@components/ui/separator';
+import { Plus, Search } from 'lucide-react';
+import Link from 'next/link';
+import { useFormContext } from 'react-hook-form';
+import { listChipsQuery } from '../constant/list_chips_query';
+import { ProductQuery } from '../data/schemas';
+import { DataTableViewOptions } from './data-table-view-options';
+import QueryChip from './query-chip';
+import React from 'react';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTableToolbar<TData>({
-  table,
-}: DataTableToolbarProps<TData>) {
+const options = [
+  {
+    label: 'Tất cả',
+    value: '',
+  },
+  {
+    label: 'Tin ẩn',
+    value: 'hidden',
+  },
+  {
+    label: 'Tin hiện',
+    value: 'visible',
+  },
+] as const;
 
-  const [selectedOption, setSelectedOption] = useState(0);
-  const options = [
-    {
-      label: "Tất cả",
-      value: 0
-    },
-    {
-      label: "Tin ẩn",
-      value: 1
-    },
-    {
-      label: "Tin hiện",
-      value: 2
-    },
-  ]
+export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
+  const form = useFormContext<ProductQuery>();
+  const selectedOption = form.watch('visibility');
+
+  const resetFilter = React.useCallback(() => {
+    form.setValue('keyword', '');
+    form.setValue('visibility', '');
+  }, []);
+
+  const showClearFilter = (['keyword', 'visibility'] as const).some((key) => !!form.getValues(key));
 
   return (
     <div className="flex flex-col space-y-3">
-      <div className="grid md:grid-cols-2 space-x-2">
+      <div className="grid space-x-2 md:grid-cols-2">
         <div className="flex items-center space-x-2">
           <ButtonGroup className="flex-1">
             <Input
               placeholder="Tìm theo mã tin, tiêu đề hoặc ghi chú..."
-              // value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-              // onChange={(event) =>
-              //   table.getColumn("title")?.setFilterValue(event.target.value)
-              // }
+              {...form.register('keyword')}
               className="w-full"
             />
             <Button variant="default">
@@ -59,22 +64,21 @@ export function DataTableToolbar<TData>({
           </ButtonGroup>
         </div>
 
-        <div className={`flex ${!selectedOption ? "justify-end" : "justify-between"}`}>
-          {selectedOption ? (
-            <Button
-              variant="ghost"
-              onClick={() => table.resetColumnFilters()}
-              className="px-2 lg:px-3"
-            >
+        <div className={`flex ${!showClearFilter ? 'justify-end' : 'justify-between'}`}>
+          {showClearFilter ? (
+            <Button variant="ghost" onClick={resetFilter} className="px-2 lg:px-3">
               Xóa lọc
               <Cross2Icon className="ml-2 h-4 w-4" />
-            </Button> ): <></>
-          }
+            </Button>
+          ) : (
+            <></>
+          )}
 
           <Link href="/dashboard/manage-post/new-post" target="_blank">
             <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <span className="bg-primary text-primary-foreground hover:bg-primary/90 space-x-2">
-                <Plus /><p>Đăng tin bán & cho thuê</p>
+              <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                <Plus />
+                <p>Đăng tin bán & cho thuê</p>
               </span>
             </Button>
           </Link>
@@ -88,39 +92,38 @@ export function DataTableToolbar<TData>({
       </div>
 
       <Separator className="h-[1px]" />
-      
-      <div className="space-x-10 flex">
-        <span>Lọc theo:{" "}</span>
+
+      <div className="flex space-x-10">
+        <span>Lọc theo: </span>
         {options.map((option) => (
           <Radio
             key={option.value}
             label={option.label}
             checked={selectedOption === option.value}
-            onChange={() => setSelectedOption(option.value)}
+            onChange={() => form.setValue('visibility', option.value)}
           />
         ))}
       </div>
 
-      {
-        table.getFilteredSelectedRowModel().rows.length > 0 ? (
-          <div className="space-x-10 flex">
-            <div className="text-sm text-muted-foreground content-center">
-              <span>
-                {table.getFilteredSelectedRowModel().rows.length} /{" "}
-                {table.getFilteredRowModel().rows.length} đã chọn.
-              </span>
-            </div>
+      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+        <div className="flex space-x-10">
+          <div className="content-center text-sm text-muted-foreground">
+            <span>
+              {table.getFilteredSelectedRowModel().rows.length} /{' '}
+              {table.getFilteredRowModel().rows.length} đã chọn.
+            </span>
+          </div>
 
-
-            <DataTableViewOptions table={table}/>
-            {/* <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <DataTableViewOptions table={table} />
+          {/* <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
               <span className="bg-primary text-primary-foreground hover:bg-primary/90 space-x-2">
                 <p>Thao tác hàng loạt</p>
               </span>
             </Button> */}
-          </div> 
-        ) : <></>
-      }
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
