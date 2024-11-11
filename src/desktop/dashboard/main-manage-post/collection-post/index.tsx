@@ -2,14 +2,11 @@
 
 import ModalPostDetail from '@desktop/post-detail/components/modal-post-detail';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { merge } from 'lodash-es';
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import ProductApiService from './apis/product-api';
 import { DataTable } from './components/data-table';
-import { CollectionPost } from './constant/use-query-key';
 import { ProductQuery, productQuerySchema } from './data/schemas/product-query-schema';
 import { productQueryFromDefaultValues } from './data/type/product-query';
 import useProductActionSetting from './hooks/product-action-setting';
@@ -60,7 +57,7 @@ export default function TaskDataTable() {
   }, [formValue, pathname, createQueryString, router]);  
 
   return (
-    <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
+    <div className="h-full flex-1 flex-col space-y-8 flex">
       <FormProvider {...form}>
         <ModalPostDetail />
         <DataTable />

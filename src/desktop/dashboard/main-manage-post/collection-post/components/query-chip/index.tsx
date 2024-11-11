@@ -3,11 +3,6 @@ import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { FC, useEffect, useRef, useState } from 'react';
 import { LuLoader2, LuX } from 'react-icons/lu';
-// import { BiArea } from 'react-icons/bi';
-// import { PiCurrencyCircleDollar } from 'react-icons/pi';
-// import { BsSortUp } from 'react-icons/bs';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSetAtom } from 'jotai';
 import { get } from 'lodash-es';
 import { useFormContext } from 'react-hook-form';
 import { QueryChipOption } from '../../constant/list_chips_query';
@@ -17,21 +12,13 @@ import {
   productQueryFromDefaultValues,
 } from '../../data/type/product-query';
 import { useAdminCollectionPost } from '../../hooks/use-collection-post';
-import { productsListAppliedAtom } from '../../states';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
 
 const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) => {
-  const queryClient = useQueryClient();
   const { watch, setValue, getValues } = useFormContext<ProductQuery>();
   const { data, isFetching } = useAdminCollectionPost();
 
-  const productsList = Array.isArray(data?.data) ? data.data : [];
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const totalRecords = data?.pagination?.total_count ?? 0;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const totalPages = data?.pagination?.total_pages ?? 0;
 
   const [isOpenPopover, setIsOpenPopover] = useState<boolean>(false);
   const [wasCloseWithApply, setWasCloseWithApply] = useState<boolean>(false);
@@ -45,16 +32,10 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
 
   const containerChipsRef = useRef(null);
 
-  const setProductsListApplied = useSetAtom(productsListAppliedAtom);
   const formValue = watch(queryChipItem.id) ?? '';
   const [prevFormValue, setPrevFormValue] = useState<string>(getValues(queryChipItem.id) || '');
 
   const onApplyFilter = () => {
-    setProductsListApplied({
-      productsList,
-      totalRecords,
-      totalPages,
-    });
     setWasCloseWithApply(true);
     setIsOpenPopover(false);
   };
@@ -155,17 +136,6 @@ const QueryChip: FC<{ queryChipItem: QueryChipOption }> = ({ queryChipItem }) =>
   const handleRemoveFilter = () => {
     setValue(queryChipItem.id, '');
     setValue('page', 1);
-
-    const cachedData: A = queryClient.getQueryData(['collection-post', getValues()]);
-    console.log('cachedData', cachedData);
-
-    if (cachedData) {
-      setProductsListApplied({
-        productsList: cachedData.data,
-        totalRecords: cachedData.pagination.total_count,
-        totalPages: cachedData.pagination.total_pages,
-      });
-    }
   };
 
   // const onRenderIconChip = (filterOption: FilterChipOption) => {
