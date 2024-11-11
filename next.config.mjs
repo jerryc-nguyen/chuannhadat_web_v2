@@ -50,11 +50,15 @@ const nextConfig = {
     return [
       {
         source: '/robots.txt',
-        destination: '/api/proxy/robots.txt',
+        destination: '/api/seo_proxy/robots.txt',
       },
       {
         source: '/:path*.xml',
-        destination: '/api/proxy/:path*.xml',
+        destination: '/api/seo_proxy/:path*.xml',
+      },
+      {
+        source: '/:path*.xml.gz',
+        destination: '/api/seo_proxy/:path*.xml.gz',
       },
     ];
   },
