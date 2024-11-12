@@ -11,6 +11,7 @@ import { Product } from '../data/schemas/product-schema';
 import { useAdminCollectionPost } from '../hooks/use-collection-post';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
 import { DataTableColumnHeader } from './data-table-column-header';
+import useSearchAggs from '@components/search-aggs/hooks';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -39,6 +40,8 @@ const columns: ColumnDef<Product>[] = [
 ];
 
 export function DataTable() {
+  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+
   const { watch, setValue } = useFormContext<ProductQuery>();
 
   const page = watch('page') ?? 0;
@@ -48,6 +51,11 @@ export function DataTable() {
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
   const totalRecords: number = cachedData?.pagination?.total_count ?? 0;
   const totalPages: number = cachedData?.pagination?.total_pages ?? 0;
+
+  if (cachedData?.aggs) {
+    updateSearchAggs(cachedData.aggs);
+    setIsUseAggOptions(true);
+  }
 
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -81,10 +89,14 @@ export function DataTable() {
     },
   });
 
+  const onFilterChipsChanged = (state: Record<string, A>) => {
+    console.log('onFilterChanged', state)
+  }
+
   return (
     <div className="space-y-4">
       {/* ... */}
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} onFilterChipsChanged={onFilterChipsChanged} />
       <div className="rounded-md border">
         <Table className="bg-white/30">
           <DataGridHeader table={table} />

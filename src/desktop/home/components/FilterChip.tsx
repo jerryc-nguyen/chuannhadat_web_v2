@@ -29,9 +29,10 @@ import ProfileLocations from '@desktop/product-filters/ProfileLocations';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
+  onChange?: (filterState: Record<string, A>) => void
 };
 
-const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
+const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => {
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const containerChipsRef = React.useRef(null);
   const [filterState] = useAtom(filterStateAtom);
@@ -46,8 +47,12 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem }) => {
 
   const onApplyFilter = () => {
     setIsOpenPopover(false);
-    applySingleFilter(filterChipItem);
+    const newFilterState = applySingleFilter(filterChipItem);
+    if (onChange) {
+      onChange(newFilterState)
+    }
   };
+
   const selectedRoomText = (): string => {
     const results = [];
     if (filterState.bed) {

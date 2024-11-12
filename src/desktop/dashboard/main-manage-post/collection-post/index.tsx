@@ -11,6 +11,7 @@ import { ProductQuery, productQuerySchema } from './data/schemas/product-query-s
 import { productQueryFromDefaultValues } from './data/type/product-query';
 import useProductActionSetting from './hooks/product-action-setting';
 import { useAdminCollectionPost } from './hooks/use-collection-post';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 
 function paramsToObjState(searchParams: ReadonlyURLSearchParams) {
   try {
@@ -54,7 +55,7 @@ export default function TaskDataTable() {
   useEffect(() => {
     const query = createQueryString('search', JSON.stringify(formValue));
     router.push(pathname + '?' + query);
-  }, [formValue, pathname, createQueryString, router]);  
+  }, [formValue, pathname, createQueryString, router]);
 
   return (
     <div className="h-full flex-1 flex-col space-y-8 flex">

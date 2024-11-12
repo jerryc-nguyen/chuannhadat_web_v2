@@ -137,7 +137,7 @@ export default function useFilterState() {
     return { ...results, ...extraSearchParams };
   };
 
-  const applySingleFilter = (filterOption: FilterChipOption) => {
+  const applySingleFilter = (filterOption: FilterChipOption): FilterState => {
     let localValue: Record<string, A> = {};
 
     if (filterOption.id == FilterFieldName.Locations ||
@@ -170,9 +170,15 @@ export default function useFilterState() {
     const allFilterState = { ...filterState, ...localValue };
     setFilterState(allFilterState);
     syncSelectedParamsToUrl(allFilterState);
+    return allFilterState;
   };
 
   const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
+    // disable auto sync state to url for manage post page
+    if (searchScope == SearchScopeEnums.ManagePosts) {
+      return;
+    }
+
     let queryOptions = buildFilterParams({ withLocal: false, overrideStates: filterParams });
     queryOptions = {
       ...queryOptions,

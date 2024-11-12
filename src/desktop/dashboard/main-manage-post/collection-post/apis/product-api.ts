@@ -31,7 +31,7 @@ const ProductApiService = {
 
     data.keyword && params.append("keyword", data.keyword);
     data.visibility && params.append("visibility", data.visibility);
-
+    params.append("aggs_for", 'profile');
     const response = await axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.END_POINT}?${params.toString()}`);
 
     return response;

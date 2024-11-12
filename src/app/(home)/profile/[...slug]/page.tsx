@@ -17,6 +17,7 @@ type ProfileDetailPage = {
 };
 export default async function ProfileDetailPage({ params }: ProfileDetailPage) {
   const profileSlug = params.slug[0];
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { isMobile } = useGetUserAgentInfo();
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({

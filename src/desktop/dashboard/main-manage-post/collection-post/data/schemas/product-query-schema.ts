@@ -43,6 +43,7 @@ export const productQuerySchema = z.object({
 
   keyword: z.string(),
   visibility: z.enum(['hidden', 'visible', '']),
+  aggs_for: z.string()
 });
 
 export type ProductQuery = z.infer<typeof productQuerySchema>;

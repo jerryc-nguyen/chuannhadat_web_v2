@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 
@@ -15,12 +15,8 @@ import { useFormContext } from 'react-hook-form';
 import { listChipsQuery } from '../constant/list_chips_query';
 import { ProductQuery } from '../data/schemas';
 import { DataTableViewOptions } from './data-table-view-options';
-import QueryChip from './query-chip';
-import React from 'react';
 
-interface DataTableToolbarProps<TData> {
-  table: Table<TData>;
-}
+import FilterChip from '@desktop/home/components/FilterChip';
 
 const options = [
   {
@@ -37,7 +33,12 @@ const options = [
   },
 ] as const;
 
-export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
+interface DataTableToolbarProps<TData> {
+  table: Table<TData>;
+  onFilterChipsChanged?: (state: Record<string, A>) => void
+}
+
+export function DataTableToolbar<TData>({ table, onFilterChipsChanged }: DataTableToolbarProps<TData>) {
   const form = useFormContext<ProductQuery>();
   const selectedOption = form.watch('visibility');
 
@@ -87,7 +88,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 
       <div className="relative my-2 flex flex-wrap gap-2">
         {listChipsQuery.map((item) => (
-          <QueryChip queryChipItem={item} key={item.id} />
+          <FilterChip filterChipItem={item} key={item.id} onChange={onFilterChipsChanged} />
         ))}
       </div>
 
