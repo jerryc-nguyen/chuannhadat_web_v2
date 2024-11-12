@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { API_TOKEN_SERVER } from '@common/auth';
-import { redirectTokens } from '@components/redirect-urls/constants';
+import { shouldRedirect } from '@components/redirect-urls';
 
 // Specify protected and public routes
 const protectedRoutes = ['/dashboard'];
-
-// Api endpoint to check for redirect
-const checkForRedirectEndpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/xxxx`;
 
 export async function middleware(req: NextRequest) {
   // Check if the current route is protected or public
@@ -24,10 +21,11 @@ export async function middleware(req: NextRequest) {
 
   // Check if the path needs to redirect
   try {
-    if (redirectTokens.some((path) => path.startsWith(pathname))) {
+    if (shouldRedirect(pathname)) {
+      const checkForRedirectEndpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/seos/check_url_redirect?path=${pathname}`;
       const redirectUrlResponse = await fetch(checkForRedirectEndpoint);
       const redirectUrl = await redirectUrlResponse.json();
-      return NextResponse.redirect(new URL(redirectUrl, req.nextUrl));
+      return NextResponse.redirect(new URL(redirectUrl, req.nextUrl), { status: 301 });
     }
   } catch {
     return NextResponse.next();
