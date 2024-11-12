@@ -46,6 +46,22 @@ const nextConfig = {
       },
     ],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: '/robots.txt',
+        destination: '/api/seo_proxy/robots.txt',
+      },
+      {
+        source: '/:path*.xml',
+        destination: '/api/seo_proxy/:path*.xml',
+      },
+      {
+        source: '/:path*.xml.gz',
+        destination: '/api/seo_proxy/:path*.xml.gz',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
