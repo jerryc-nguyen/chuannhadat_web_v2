@@ -23,7 +23,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
   const [openMenuBar, setOpenMenuBar] = React.useState<boolean>(false);
   const pathName = usePathname();
   const isDashboardPage = pathName.includes('dashboard');
-  const { currentUser, signOut } = useAuth();
+  const { currentUser, handleSignOut } = useAuth();
   const router = useRouter();
   const { openModal, closeModal } = useModals();
   const listMenubar = [
@@ -64,7 +64,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
   };
   React.useEffect(() => {
     if (!isLogged) {
-      signOut();
+      handleSignOut();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);

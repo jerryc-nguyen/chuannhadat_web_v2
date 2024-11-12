@@ -6,6 +6,7 @@ export const CURRENT_USER_KEY = 'current_user';
 export const FRONTEND_TOKEN = 'frontend-token';
 export const API_TOKEN_SERVER = 'token-server';
 export const API_TOKEN_CIENT = 'token-client';
+export const REFERRAL_CODE = 'referral-code';
 
 export class AuthUtils {
   static updateCurrentUser(user: ILoginResponse) {

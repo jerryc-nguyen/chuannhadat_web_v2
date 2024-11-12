@@ -29,6 +29,7 @@ export default async function PostDetailPage({ params }: { params: { slug: strin
     queryKey: ['get-detail-post', productUid],
     queryFn: () => services.posts.getDetailPost(productUid),
   });
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { isMobile } = useGetUserAgentInfo();
   const dehydratedState = dehydrate(queryClient);
   return (
