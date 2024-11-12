@@ -92,6 +92,9 @@ export function DataTable() {
   const onFilterChipsChanged = (state: Record<string, A>) => {
     console.log('onFilterChanged', state)
   }
+  const onChangeValue = (value: any) => {
+    console.log({ value });
+  };
 
   return (
     <div className="space-y-4">
