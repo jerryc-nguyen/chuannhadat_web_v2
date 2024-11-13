@@ -1,7 +1,7 @@
 'use client';
-import React from 'react';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
+import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,16 @@ import { ProductQuery } from '../../data/schemas';
 import { DataTableViewOptions } from './view-options';
 
 import FilterChip from '@desktop/home/components/FilterChip';
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const options = [
   {
@@ -54,11 +64,22 @@ export function DataTableToolbar<TData>({
 
   const showClearFilter = (['keyword', 'visibility'] as const).some((key) => !!form.getValues(key));
 
+  const onSearchTargetChange = (value: string) => {
+    console.log('onSearchTargetChange', value);
+    form.setValue('search_by', value as A);
+  };
+
+  const selectSearchTarget = form.watch('search_by');
+
   return (
     <div className="flex flex-col space-y-3">
       <div className="grid space-x-2 md:grid-cols-2">
         <div className="flex items-center space-x-2">
           <ButtonGroup className="flex-1">
+            <SelectSearchTarget
+              onChange={onSearchTargetChange}
+              selectSearchTarget={selectSearchTarget}
+            />
             <Input
               placeholder="Tìm theo mã tin, tiêu đề hoặc ghi chú..."
               {...form.register('keyword')}
@@ -131,5 +152,30 @@ export function DataTableToolbar<TData>({
         <></>
       )}
     </div>
+  );
+}
+
+export function SelectSearchTarget({
+  onChange,
+  selectSearchTarget,
+}: {
+  onChange?: (value: string) => void;
+  selectSearchTarget: string;
+}) {
+  return (
+    <Select onValueChange={onChange} value={selectSearchTarget}>
+      <SelectTrigger className="w-[160px]">
+        <SelectValue placeholder="Tất cả" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Tìm kiếm theo</SelectLabel>
+          <SelectItem value="all">Tất cả</SelectItem>
+          <SelectItem value="code">Mã tin</SelectItem>
+          <SelectItem value="title">Tiêu đề</SelectItem>
+          <SelectItem value="note">Ghi chú</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }

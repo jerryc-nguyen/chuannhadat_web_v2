@@ -43,6 +43,7 @@ export const productQuerySchema = z.object({
 
   keyword: z.string(),
   visibility: z.enum(['hidden', 'visible', '']),
+  search_by: z.enum(['code', 'title', 'note', 'all', '']),
   aggs_for: z.string(),
 
   min_price: z.number(),
