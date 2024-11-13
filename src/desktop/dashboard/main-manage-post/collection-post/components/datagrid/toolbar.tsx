@@ -36,11 +36,13 @@ const options = [
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   onFilterChipsChanged?: (state: Record<string, A>) => void;
+  onClickSearch: () => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
   onFilterChipsChanged,
+  onClickSearch,
 }: DataTableToolbarProps<TData>) {
   const form = useFormContext<ProductQuery>();
   const selectedOption = form.watch('visibility');
@@ -62,7 +64,7 @@ export function DataTableToolbar<TData>({
               {...form.register('keyword')}
               className="w-full"
             />
-            <Button variant="default">
+            <Button variant="default" onClick={onClickSearch}>
               <Search size={16} />
             </Button>
           </ButtonGroup>

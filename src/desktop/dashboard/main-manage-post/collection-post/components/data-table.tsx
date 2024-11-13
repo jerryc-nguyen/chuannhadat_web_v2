@@ -10,8 +10,10 @@ import { ProductQuery } from '../data/schemas';
 import { Product } from '../data/schemas/product-schema';
 import { useAdminCollectionPost } from '../hooks/use-collection-post';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
-import { DataTableColumnHeader } from './data-table-column-header';
+import { DataTableColumnHeader } from './datagrid/column-header';
 import useSearchAggs from '@components/search-aggs/hooks';
+import { FilterFieldName } from '@models';
+import { get } from 'lodash-es';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -44,10 +46,10 @@ export function DataTable() {
 
   const { watch, setValue } = useFormContext<ProductQuery>();
 
-  const page = watch('page') ?? 0;
-  const pageSize = watch('per_page') ?? 0;
+  const page = watch('page') ?? 1;
+  const pageSize = watch('per_page') ?? 10;
 
-  const { data: cachedData } = useAdminCollectionPost();
+  const { data: cachedData, refetch } = useAdminCollectionPost();
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
   const totalRecords: number = cachedData?.pagination?.total_count ?? 0;
   const totalPages: number = cachedData?.pagination?.total_pages ?? 0;
@@ -91,12 +93,67 @@ export function DataTable() {
 
   const onFilterChipsChanged = (state: Record<string, A>) => {
     console.log('onFilterChanged', state);
+    const listKey = Object.keys(state);
+    console.log({ listKey });
+    listKey.forEach((key) => {
+      switch (key) {
+        case FilterFieldName.Area: {
+          setValue("min_area", get(state, [key, 'params', "min_area"]));
+          setValue("max_area", get(state, [key, 'params', "max_area"]));
+          break;
+        }
+        case FilterFieldName.Bath: {
+          setValue('bathrooms_count', get(state, [key, 'value']));
+          break;
+        }
+        case FilterFieldName.Bed: {
+          setValue('bedrooms_count', get(state, [key, 'value']));
+          break;
+        }
+        case FilterFieldName.BusCatType: {
+          setValue('business_type', get(state, [key, 'params', "business_type"]));
+          setValue('category_type', get(state, [key, 'params', "category_type"]));
+          break;
+        }
+        case FilterFieldName.BusinessType: {
+          break;
+        }
+        case FilterFieldName.CategoryType: {
+          break;
+        }
+        case FilterFieldName.City: {
+          setValue("city_id", get(state, [key, 'value']));
+          break;
+        }
+        case FilterFieldName.Direction: {
+          setValue("directions", get(state, [key, 'params', "direction"]));
+          break;
+        }
+        case FilterFieldName.District: {
+          setValue("district_id", get(state, [key, 'value']));
+          break;
+        }
+        case FilterFieldName.Price: {
+          setValue("min_price", get(state, [key, 'params', "min_price"]));
+          setValue("max_price", get(state, [key, 'params', "max_price"]));
+          break;
+        }
+        case FilterFieldName.Sort: {
+          setValue("sort_direction", get(state, [key, 'value']));
+          break;
+        }
+        case FilterFieldName.Ward: {
+          setValue("ward_id", get(state, [key, 'value']));
+          break;
+        }
+      }
+    });
   };
 
   return (
     <div className="space-y-4">
       {/* ... */}
-      <DataTableToolbar table={table} onFilterChipsChanged={onFilterChipsChanged} />
+      <DataTableToolbar table={table} onFilterChipsChanged={onFilterChipsChanged} onClickSearch={refetch} />
       <div className="rounded-md border">
         <Table className="bg-white/30">
           <DataGridHeader table={table} />
