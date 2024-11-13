@@ -5,7 +5,7 @@ import { DataGridContent, DataGridHeader, DataTablePagination } from '@component
 import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { DataTableToolbar } from '../components/data-table-toolbar';
+import { DataTableToolbar } from './datagrid/toolbar';
 import { ProductQuery } from '../data/schemas';
 import { Product } from '../data/schemas/product-schema';
 import { useAdminCollectionPost } from '../hooks/use-collection-post';
@@ -90,10 +90,7 @@ export function DataTable() {
   });
 
   const onFilterChipsChanged = (state: Record<string, A>) => {
-    console.log('onFilterChanged', state)
-  }
-  const onChangeValue = (value: any) => {
-    console.log({ value });
+    console.log('onFilterChanged', state);
   };
 
   return (

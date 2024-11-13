@@ -12,9 +12,9 @@ import { Separator } from '@components/ui/separator';
 import { Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
-import { listChipsQuery } from '../constant/list_chips_query';
-import { ProductQuery } from '../data/schemas';
-import { DataTableViewOptions } from './data-table-view-options';
+import { listChipsQuery } from '../../constant/list_chips_query';
+import { ProductQuery } from '../../data/schemas';
+import { DataTableViewOptions } from './view-options';
 
 import FilterChip from '@desktop/home/components/FilterChip';
 
@@ -35,10 +35,13 @@ const options = [
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  onFilterChipsChanged?: (state: Record<string, A>) => void
+  onFilterChipsChanged?: (state: Record<string, A>) => void;
 }
 
-export function DataTableToolbar<TData>({ table, onFilterChipsChanged }: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({
+  table,
+  onFilterChipsChanged,
+}: DataTableToolbarProps<TData>) {
   const form = useFormContext<ProductQuery>();
   const selectedOption = form.watch('visibility');
 

@@ -1,6 +1,6 @@
-import { FilterFieldName } from "@models";
-import { ProductQueryFieldName } from "../data/type/product-query";
-import { FilterChipOption } from "@mobile/filter_bds/types";
+import { FilterFieldName } from '@models';
+import { ProductQueryFieldName } from '../data/type/product-query';
+import { FilterChipOption } from '@mobile/filter_bds/types';
 
 export interface QueryChipOption {
   id: ProductQueryFieldName;

@@ -27,6 +27,7 @@ import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import { BsSortUp } from 'react-icons/bs';
 import ProfileLocations from '@desktop/product-filters/ProfileLocations';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
+
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
   onChange?: (filterState: Record<string, A>) => void
@@ -48,7 +49,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   const onApplyFilter = () => {
     setIsOpenPopover(false);
     const newFilterState = applySingleFilter(filterChipItem);
-    if (onChange) {
+    if (typeof onChange === "function") {
       onChange(newFilterState)
     }
   };

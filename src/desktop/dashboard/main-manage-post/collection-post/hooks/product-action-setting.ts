@@ -1,41 +1,30 @@
-import { useState } from 'react';
-import { useAtom } from 'jotai';
-import { ProductActionSetting } from '../data/type/products-action-settings';
+import { getQueryClient } from '@api/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { get } from 'lodash-es';
 import ProductApiService from '../apis/product-api';
-import { productActionSetting } from '../states';
-import { AxiosResponse } from 'axios';
+import { ProductActionSetting } from '../data/type/products-action-settings';
 
 export default function useProductActionSetting() {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [productActionSettings, setProductActionSettings] = useAtom(productActionSetting);
+  const { isLoading, data } = useQuery({
+    queryKey: ['productActionSettings'],
+    queryFn: async () => {
+      const result = await ProductApiService.GetProductActionSettings();
+      return result.data as ProductActionSetting;
+    },
+  });
 
-    const handleGetProductActionSettings = async () => {
-        setIsLoading(true);
-        try {
-            const res: AxiosResponse<ProductActionSetting> = await ProductApiService.GetProductActionSettings();
-            setProductActionSettings(res.data);
-        } catch (err) {
-            console.error("handleFilter error", err);
-            setProductActionSettings(undefined);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  const decreaseTotalRefreshsCount = () => {
+    const cache = getQueryClient().getQueryData(['productActionSettings']);
+    if (get(cache, 'total_refreshs_count', 0) <= 0) return;
 
-    const decreaseTotalRefreshsCount = () => {
-        if ( !productActionSettings || productActionSettings.total_refreshs_count <= 0) return;
-        
-        setProductActionSettings(prev => {
-            if (!prev) return prev;
-            
-            return {...prev, total_refreshs_count: prev.total_refreshs_count -1}
-        })
-    }
+    getQueryClient().setQueryData(['productActionSettings'], (prev: ProductActionSetting) => {
+      return { ...prev, total_refreshs_count: prev.total_refreshs_count - 1 };
+    });
+  };
 
-    return {
-        isLoadingProductActionSetting: isLoading,
-        handleGetProductActionSettings,
-        productActionSettings,
-        decreaseTotalRefreshsCount
-    };
+  return {
+    isLoadingProductActionSetting: isLoading,
+    productActionSettings: data,
+    decreaseTotalRefreshsCount,
+  };
 }

@@ -1,46 +1,30 @@
 'use client';
 
+import { objectToQueryString, searchParamsToObj } from '@common/utils';
 import ModalPostDetail from '@desktop/post-detail/components/modal-post-detail';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { merge } from 'lodash-es';
-import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { DataTable } from './components/data-table';
 import { ProductQuery, productQuerySchema } from './data/schemas/product-query-schema';
 import { productQueryFromDefaultValues } from './data/type/product-query';
-import useProductActionSetting from './hooks/product-action-setting';
 import { useAdminCollectionPost } from './hooks/use-collection-post';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-
-function paramsToObjState(searchParams: ReadonlyURLSearchParams) {
-  try {
-    const params = searchParams.get('search') ?? '';
-    return JSON.parse(params);
-  } catch (error) {
-    return null;
-  }
-}
 
 export default function TaskDataTable() {
-  const { handleGetProductActionSettings } = useProductActionSetting();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const form = useForm<ProductQuery>({
     resolver: zodResolver(productQuerySchema),
-    defaultValues: merge(productQueryFromDefaultValues, paramsToObjState(searchParams)),
+    defaultValues: merge(productQueryFromDefaultValues, searchParamsToObj(searchParams) as A),
   });
 
   const formValue = form.watch();
 
-  useEffect(() => {
-    handleGetProductActionSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const result = useAdminCollectionPost()
+  const result = useAdminCollectionPost();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -53,12 +37,11 @@ export default function TaskDataTable() {
   );
 
   useEffect(() => {
-    const query = createQueryString('search', JSON.stringify(formValue));
-    router.push(pathname + '?' + query);
+    router.push(pathname + '?' + objectToQueryString(formValue, searchParams));
   }, [formValue, pathname, createQueryString, router]);
 
   return (
-    <div className="h-full flex-1 flex-col space-y-8 flex">
+    <div className="flex h-full flex-1 flex-col space-y-8">
       <FormProvider {...form}>
         <ModalPostDetail />
         <DataTable />
