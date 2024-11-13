@@ -73,4 +73,5 @@ export const API_ROUTES = {
   TRACKINGS: {
     VIEW_PRODUCT: 'api/v1/trackings/view_product',
   },
+  SEOS: 'api/v1/seos/metadata',
 };
