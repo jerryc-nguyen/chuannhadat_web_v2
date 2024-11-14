@@ -1,7 +1,9 @@
 'use client';
 import { services } from '@api/services';
-import { setTokenServer } from '@app/action';
+import { REFERRAL_CODE } from '@common/auth';
+import { getCookie, removeCookie } from '@common/cookies';
 import { auth, googleProvider } from '@common/firebase';
+import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { LoginResponse } from '@mobile/auth/types';
@@ -16,20 +18,18 @@ import { toast } from 'sonner';
 
 type LoginSocialProps = {
   handleSuccessLogin?: () => void;
+  className?: string;
 };
 
-const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin }) => {
+const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className }) => {
   const [loadingLoginGoogle, setLoadingLoginGoogle] = React.useState(false);
-  const { handleLogin } = useAuth();
+  const { handleSignIn } = useAuth();
   const { mutate: loginGoogle } = useMutation({
     mutationFn: services.auth.loginGoogle,
     onSuccess: (response: LoginResponse) => {
       if (response.status) {
         const userData = response.data;
-        const handleSetToken = setTokenServer.bind(null, userData.api_token);
-        handleSetToken();
-        handleLogin(userData);
-        // loadMore();
+        handleSignIn(userData);
         toast.success(
           `Xin chào, ${userData.full_name || userData.phone} bạn đã đăng nhập thành công!`,
         );
@@ -37,6 +37,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin }) => {
       } else {
         toast.error('Đăng nhập bằng google không thành công');
       }
+      removeCookie(REFERRAL_CODE);
       setLoadingLoginGoogle(false);
     },
     onError: (error) => {
@@ -44,7 +45,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin }) => {
       setLoadingLoginGoogle(false);
     },
   });
-  const handleLoginGoogle = async () => {
+  const handleSignInGoogle = async () => {
     try {
       setLoadingLoginGoogle(true);
       const response = (await signInWithPopup(auth, googleProvider)) as A;
@@ -54,6 +55,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin }) => {
         name: data.displayName,
         photo: data.photoURL,
         uid: data.uid,
+        referral_code: getCookie(REFERRAL_CODE),
       });
     } catch (error) {
       toast.error('Đăng nhập google thất bại ' + error);
@@ -62,10 +64,10 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin }) => {
   };
 
   return (
-    <section className="mb-4 flex items-center justify-center gap-x-3 text-sm">
+    <section className={cn('mb-4 flex items-center justify-center gap-x-3 text-sm', className)}>
       <Button
         disabled={loadingLoginGoogle}
-        onClick={handleLoginGoogle}
+        onClick={handleSignInGoogle}
         className="flex h-full flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border border-primary_color/30 bg-white px-0 py-3 text-black shadow-lg hover:bg-white"
       >
         {loadingLoginGoogle ? (

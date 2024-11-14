@@ -14,7 +14,7 @@ import { Input } from '@components/ui/input';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import forgot_password from '@assets/images/forgot-password.png';
+import forgot_password from '@assets/icons/Forgot password-bro.svg';
 import Image from 'next/image';
 import { IoIosArrowBack } from 'react-icons/io';
 import { z } from 'zod';

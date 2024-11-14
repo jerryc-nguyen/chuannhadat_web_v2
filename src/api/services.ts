@@ -19,6 +19,8 @@ import {
 import {
   IConnectOauthsResponse,
   IListRequestResponse,
+  IReferralListResponse,
+  IReferralsDetailResponse,
   IRequestCallbackResponse,
   IResponseData,
   IViewedPostResonpse,
@@ -171,6 +173,14 @@ export const services = {
           'Frontend-Token': getCookie(FRONTEND_TOKEN),
         },
       });
+    },
+  },
+  referralls: {
+    getReferralDetail: async (referral_code: string): Promise<IReferralsDetailResponse> => {
+      return axiosInstance.get(`${API_ROUTES.REFERRALS}/${referral_code}`);
+    },
+    getListReferralFriend: async (): Promise<IReferralListResponse> => {
+      return axiosInstance.get(API_ROUTES.REFERRALS);
     },
   },
 };

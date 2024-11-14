@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
-import { removeTokenClient, setTokenClient } from '@common/cookies';
+import { removeCookie, removeTokenClient, setTokenClient } from '@common/cookies';
 import { currentUserAtom } from '@mobile/auth/states';
 import { useAtom } from 'jotai';
-import { AuthUtils } from '@common/auth';
+import { AuthUtils, REFERRAL_CODE } from '@common/auth';
 import { ILoginResponse } from '../types';
 import { BalanceUtils } from '@common/balance';
+import { setTokenServer } from '@app/action';
 
 export default function useAuth() {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
-
   const isLogged = useMemo(() => {
     return currentUser?.id != undefined;
   }, [currentUser]);
@@ -19,16 +19,18 @@ export default function useAuth() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const signOut = () => {
+  const handleSignOut = () => {
     setCurrentUser(null);
     AuthUtils.removeCurrentUser();
     removeTokenClient();
     BalanceUtils.removeBalanceInfo();
   };
 
-  const handleLogin = (user: ILoginResponse) => {
+  const handleSignIn = (user: ILoginResponse) => {
+    setTokenServer.call(null, user.api_token);
     updateCurrentUser(user);
     setTokenClient(user.api_token);
+    removeCookie(REFERRAL_CODE);
   };
 
   const updateCurrentUser = (user: ILoginResponse) => {
@@ -40,8 +42,8 @@ export default function useAuth() {
     currentUser,
     setCurrentUser,
     isLogged,
-    signOut,
-    handleLogin,
+    handleSignOut,
+    handleSignIn,
     updateCurrentUser,
   };
 }

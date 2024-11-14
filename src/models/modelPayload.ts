@@ -7,6 +7,7 @@ export interface IConnectOauthsPayload {
   email: string;
   name: string;
   photo: string;
+  referral_code?: string;
 }
 export interface IRequestCallbackPayload {
   product_uid: string;

@@ -2,11 +2,22 @@ import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import React from 'react';
 import { LuCheck, LuClipboard } from 'react-icons/lu';
-import { Table, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import EmptyTable from '@components/empty-table';
+
+import useAuth from '@mobile/auth/hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { services } from '@api/services';
+import CommonTableView from '@components/common-table/CommonTableView';
+import { IColumnTable } from '@components/common-table';
+import { IReferralData } from '@models/modelResponse';
 
 const ReferFriend: React.FC = () => {
   const [isCopy, setIsCopy] = React.useState(false);
+  const { currentUser } = useAuth();
+  const { data: listReferral, isPending } = useQuery({
+    queryKey: ['list-referral'],
+    queryFn: services.referralls.getListReferralFriend,
+    select: (data) => data.data,
+  });
   const handleCopyUrlRefer = async () => {
     const text = document.getElementById('url-refer')?.innerHTML;
     try {
@@ -16,7 +27,6 @@ const ReferFriend: React.FC = () => {
       console.error('Failed to copy: ', err);
     }
   };
-
   React.useEffect(() => {
     let timeId: NodeJS.Timeout;
     if (isCopy) {
@@ -28,6 +38,43 @@ const ReferFriend: React.FC = () => {
       clearTimeout(timeId);
     };
   }, [isCopy]);
+  const columns: IColumnTable[] = [
+    {
+      key: 'order',
+      name: 'Số thứ tự',
+      onRenderItemColumn: (_item, index) => {
+        return index;
+      },
+    },
+    {
+      key: 'email',
+      name: 'Email',
+      onRenderItemColumn: (item) => {
+        return item.email;
+      },
+    },
+    {
+      key: 'phone',
+      name: 'Số điện thoại',
+      onRenderItemColumn: (item) => {
+        return item.phone;
+      },
+    },
+    {
+      key: 'fullname',
+      name: 'Tên đầy đủ',
+      onRenderItemColumn: (item) => {
+        return item.fullname;
+      },
+    },
+    {
+      key: 'status',
+      name: 'Trạng thái',
+      onRenderItemColumn: (item) => {
+        return item.success ? 'Thành công' : 'Chưa thành công';
+      },
+    },
+  ];
   return (
     <>
       <section className="flex flex-col gap-y-6">
@@ -41,7 +88,7 @@ const ReferFriend: React.FC = () => {
               id="url-refer"
               className="overflow-hidden text-ellipsis whitespace-nowrap rounded-md rounded-r-none bg-slate-200 p-3 px-4 text-sm dark:bg-slate-700 lg:text-base"
             >
-              https://chuannhadat.com/gioi-thieu-ban-be/PVM507
+              {`${process.env.NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN}/gioi-thieu-ban-be/${currentUser?.referral_code}`}
             </span>
             <Button
               onClick={handleCopyUrlRefer}
@@ -117,22 +164,16 @@ const ReferFriend: React.FC = () => {
         </div>
       </section>
       <section className="mt-6">
-        <div className="mb-4 border-b pb-4">
+        <div className="mb-4 pb-4">
           <h3 className="text-center text-xl font-semibold xl:text-start">
             Danh sách bạn bè đã giới thiệu
           </h3>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Số thứ tự</TableHead>
-              <TableHead>Người giới thiệu</TableHead>
-              <TableHead>Người tham gia</TableHead>
-              <TableHead>Trạng thái</TableHead>
-            </TableRow>
-          </TableHeader>
-          <EmptyTable />
-        </Table>
+        <CommonTableView
+          isLoading={isPending}
+          columns={columns}
+          items={listReferral as IReferralData[]}
+        />
       </section>
     </>
   );
