@@ -43,7 +43,7 @@ const ReferFriend: React.FC = () => {
       key: 'order',
       name: 'Số thứ tự',
       onRenderItemColumn: (_item, index) => {
-        return index;
+        return index != undefined ? index + 1 : index
       },
     },
     {
