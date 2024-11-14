@@ -58,11 +58,11 @@ export function DataTableToolbar<TData>({
   const selectedOption = form.watch('visibility');
 
   const resetFilter = React.useCallback(() => {
-    form.setValue('keyword', '');
+    form.setValue('search_value', '');
     form.setValue('visibility', '');
   }, []);
 
-  const showClearFilter = (['keyword', 'visibility'] as const).some((key) => !!form.getValues(key));
+  const showClearFilter = (['search_value', 'visibility'] as const).some((key) => !!form.getValues(key));
 
   const onSearchTargetChange = (value: string) => {
     console.log('onSearchTargetChange', value);
@@ -82,7 +82,7 @@ export function DataTableToolbar<TData>({
             />
             <Input
               placeholder="Tìm theo mã tin, tiêu đề hoặc ghi chú..."
-              {...form.register('keyword')}
+              {...form.register('search_value')}
               className="w-full"
             />
             <Button variant="default" onClick={onClickSearch}>

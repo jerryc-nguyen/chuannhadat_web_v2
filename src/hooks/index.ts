@@ -1,7 +1,6 @@
 export * from './use-mobile';
 export * from './useSyncParamsToState';
 export * from './useSyncQueryToUrl';
-export * from './useCheckLoggedUser';
 export * from './useDebounce';
 export * from './usePaginatedNotifications';
 export * from './usePaginatedPost';

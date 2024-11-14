@@ -15,7 +15,11 @@ const ProductApiService = {
     data.street_id && params.append('street_id', data.street_id);
     data.project_id && params.append('project_id', data.project_id);
     data.price && params.append('price', data.price);
+    data.min_price && params.append('min_price', data.min_price);
+    data.max_price && params.append('max_price', data.max_price);
     data.area && params.append('area', data.area);
+    data.min_area && params.append('min_area', data.min_area);
+    data.max_area && params.append('max_area', data.max_area);
     data.floors_count && params.append('floors_count', data.floors_count);
     data.directions && params.append('directions', data.directions);
     data.furnitures && params.append('furnitures', data.furnitures);
@@ -29,9 +33,9 @@ const ProductApiService = {
     data.page && params.append('page', data.page.toString());
     data.per_page && params.append('per_page', data.per_page.toString());
 
-    data.keyword && params.append("keyword", data.keyword);
     data.visibility && params.append("visibility", data.visibility);
     data.search_by && params.append("search_by", data.search_by === "all" ? "" : data.search_by);
+    data.search_value && params.append("search_value", data.search_value);
     params.append("aggs_for", 'profile');
     const response = await axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.END_POINT}?${params.toString()}`);
 
