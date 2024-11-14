@@ -33,12 +33,12 @@ const listMenubar = [
   },
 ];
 export default function MainNavSidePanel() {
-  const { currentUser, signOut } = useAuth();
+  const { currentUser, handleSignOut } = useAuth();
 
   const router = useRouter();
 
   const handleLogout = () => {
-    signOut();
+    handleSignOut();
     removeTokenServer();
     router.refresh();
   };

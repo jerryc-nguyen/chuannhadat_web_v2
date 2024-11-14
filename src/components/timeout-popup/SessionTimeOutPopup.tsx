@@ -14,7 +14,6 @@ import { isShowSessionTimout } from './session-timeout-atoms';
 import { Separator } from '@components/ui/separator';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { getTokenClient } from '@common/cookies';
-import { AuthUtils } from '@common/auth';
 import { useIdleTimer } from 'react-idle-timer';
 import { useRouter } from 'next/navigation';
 import { timeOutDuration } from '@common/constants';
@@ -30,8 +29,7 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
   const { openModal, closeModal } = useModals();
   const router = useRouter();
   const tokenCookie = getTokenClient();
-  const currentUser = AuthUtils.getCurrentUser();
-  const { signOut } = useAuth();
+  const { handleSignOut, currentUser } = useAuth();
 
   const handleCloseTimoutPopup = () => {
     setShowSessionTimeout(false);
@@ -83,7 +81,7 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
   });
   React.useEffect(() => {
     if (!isLogged) {
-      signOut();
+      handleSignOut();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);

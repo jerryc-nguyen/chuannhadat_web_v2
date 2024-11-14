@@ -1,12 +1,10 @@
 'use client';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { IFormPropsRegister, IRegisterResponse } from '../types';
 import registerSchema from './resolver';
 import { Button } from '@components/ui/button';
 import { services } from '@api/services';
-import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import {
   Form,
@@ -18,30 +16,29 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import useAuth from '../hooks/useAuth';
-import { setTokenServer } from '@app/action';
-import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { getCookie, removeCookie } from '@common/cookies';
+import { REFERRAL_CODE } from '@common/auth';
+import { toast } from 'sonner';
 type RegisterFormProps = {
   onClose: () => void;
 };
 export default function RegisterForm({ onClose }: RegisterFormProps) {
-  const { handleLogin } = useAuth();
-  const { loadMore } = usePaginatedNotifications();
-  const router = useRouter()
+  const { handleSignIn } = useAuth();
+  const router = useRouter();
   const { mutate: registerMutate, isPending: isRegister } = useMutation({
     mutationFn: services.auth.signUp,
     onSuccess: (response: IRegisterResponse) => {
       if (response.code === 200 && response.status) {
         const userData = response.data;
-        handleLogin(userData);
-        loadMore();
-        const handleSetToken = setTokenServer.bind(null, userData.api_token);
-        handleSetToken();
-        toast.success('Đăng ký thàng công');
+        handleSignIn(userData);
+        toast.success('Đăng ký tài khoản thàng công');
       } else {
         toast.error(response.message ?? 'Lỗi đăng ký');
         reset();
       }
+      removeCookie(REFERRAL_CODE);
       onClose();
     },
     onError: (error) => {
@@ -51,15 +48,22 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
     },
   });
   const form = useForm({
-    resolver: yupResolver(registerSchema),
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      password: '',
+      phone: '',
+      confirmPassword: '',
+    },
   });
   const { control, handleSubmit, reset } = form;
   const onSubmit = (data: IFormPropsRegister) => {
     registerMutate({
       phone: data.phone,
       password: data.password,
+      confirmPassword: data.confirmPassword,
+      referral_code: getCookie(REFERRAL_CODE),
     });
-    router.refresh()
+    router.refresh();
   };
 
   return (

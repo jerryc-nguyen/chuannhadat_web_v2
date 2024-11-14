@@ -14,10 +14,8 @@ import { FRONTEND_TOKEN } from '@common/auth';
 import FavoriteIcon from './FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
 import AvatarIcon from './AvatarIcon';
-import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
-  const { signOut, currentUser } = useAuth();
-  const { loadMore } = usePaginatedNotifications();
+  const { handleSignOut } = useAuth();
   React.useEffect(() => {
     const hasFrontendToken = getCookie(FRONTEND_TOKEN);
     if (!hasFrontendToken) {
@@ -26,14 +24,10 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
   }, []);
   React.useEffect(() => {
     if (!isLogged) {
-      signOut();
+      handleSignOut();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
-  React.useEffect(() => {
-    loadMore();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
 
   return (
     <div className="header-icon justify-betweens flex gap-x-2">

@@ -7,6 +7,7 @@ export interface IFormPropsLogin {
 
 export interface IFormPropsRegister extends IFormPropsLogin {
   confirmPassword: string;
+  referral_code?: string;
 }
 
 export interface IFormResponse<T> {
@@ -33,6 +34,7 @@ export interface ILoginResponse {
   gender: CustomerGender;
   id: number;
   job_title: string | null;
+  referral_code: string;
   phone: string;
   post_token: string;
   posts_count: number;
