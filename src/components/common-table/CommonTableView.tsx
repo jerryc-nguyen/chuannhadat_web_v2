@@ -54,7 +54,9 @@ const CommonTableView: React.FC<CommonTableViewProps> = (props) => {
                     {column.onRenderItemColumn ? (
                       column.onRenderItemColumn(item, index)
                     ) : (
-                      <TooltipHost content={item[column.key]}>{item[column.key]}</TooltipHost>
+                      <TooltipHost isOverflow content={item[column.key]}>
+                        {item[column.key]}
+                      </TooltipHost>
                     )}
                   </TableCell>
                 ))}
@@ -71,7 +73,9 @@ const CommonTableView: React.FC<CommonTableViewProps> = (props) => {
         <TableRow className="whitespace-nowrap font-semibold">
           {columns.map((item) => (
             <TableHead key={item.key} className={item.className}>
-              <TooltipHost content={item.name}>{item.name}</TooltipHost>
+              <TooltipHost isOverflow content={item.name}>
+                {item.name}
+              </TooltipHost>
             </TableHead>
           ))}
         </TableRow>

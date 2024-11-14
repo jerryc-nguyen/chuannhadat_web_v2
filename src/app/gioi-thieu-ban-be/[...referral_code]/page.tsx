@@ -100,10 +100,10 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = ({
     router.refresh();
   };
   return (
-    <section className="flex h-screen w-screen items-start justify-center bg-white md:items-center md:bg-primary_color/20">
-      <section className="shadow-dropdown h-full w-full rounded-xl bg-transparent p-6 md:h-fit md:w-4/5 md:bg-white md:p-10 lg:w-2/3">
-        <Logo isDashboard />
-        <section className="mt-10 flex items-center gap-x-10 md:mt-5">
+    <section className="flex h-screen w-screen items-start justify-center overflow-hidden bg-white md:items-center md:bg-primary_color/20">
+      <section className="shadow-dropdown h-full w-full overflow-y-auto rounded-xl bg-transparent p-6 md:h-fit md:max-h-[85vh] md:w-4/5 md:bg-white md:p-10 lg:w-2/3">
+        <Logo isAlwaysShow />
+        <section className="mt-10 flex items-end gap-x-10 md:mt-5">
           <section className="flex-1">
             <Link href="/" className="mb-4 flex items-center gap-x-2 font-medium hover:underline">
               <IoIosArrowBack />
@@ -207,7 +207,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = ({
                 </Button>
               </form>
             </Form>
-            <div className="my-6 flex w-full items-center justify-between gap-x-2">
+            <div className="my-4 flex w-full items-center justify-between gap-x-2">
               <span className="block h-[1px] flex-1 bg-slate-300" />
               <span className="px-2 text-center text-sm text-gray-500">Hoặc </span>
               <span className="block h-[1px] flex-1 bg-slate-300" />
