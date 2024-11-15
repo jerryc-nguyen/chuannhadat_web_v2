@@ -44,7 +44,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   return (
     <section className="flex h-screen w-screen items-start justify-center bg-[#fefdf9] md:items-center">
       <section className="shadow-dropdown h-full w-full rounded-xl bg-transparent px-5 py-10 md:h-fit md:w-4/5 md:bg-white md:p-10 lg:w-2/3">
-        <Logo isDashboard />
+        <Logo isAlwaysShow />
         <section className="mt-10 flex items-center gap-x-10 md:mt-5">
           <section className="flex-1">
             <Link

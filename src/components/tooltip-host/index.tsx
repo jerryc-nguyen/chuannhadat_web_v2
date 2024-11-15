@@ -9,12 +9,7 @@ type TooltipHostProps = {
   isOverflow?: boolean;
 };
 
-const TooltipHost: React.FC<TooltipHostProps> = ({
-  children,
-  content,
-  className,
-  isOverflow = true,
-}) => {
+const TooltipHost: React.FC<TooltipHostProps> = ({ children, content, className, isOverflow }) => {
   const textRef = React.useRef<HTMLButtonElement>(null);
   const [isTextOverflow, setIsTextOverflow] = React.useState(false);
 
@@ -55,7 +50,7 @@ const TooltipHost: React.FC<TooltipHostProps> = ({
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
-        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipTrigger>{children}</TooltipTrigger>
         <TooltipContent
           side="top"
           align="center"

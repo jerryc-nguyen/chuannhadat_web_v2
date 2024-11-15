@@ -2,6 +2,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import HeaderMobile from '@mobile/header/HeaderMobile';
 import HeaderDesktop from '@desktop/components/HeaderDeskop';
+import Footer from '@desktop/components/Footer';
 
 export default function HomeLayout({
   children,
@@ -15,6 +16,7 @@ export default function HomeLayout({
     <>
       {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
       <main className={`z-5 relative h-fit ${mobileClass}`}>{children}</main>
+      <Footer />
     </>
   );
 }

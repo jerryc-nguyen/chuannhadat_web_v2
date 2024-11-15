@@ -27,7 +27,7 @@ export default function RootLayout({
           inter.className,
           isMobile ? 'isMobile' : '',
           'bg-white',
-          'selection:bg-primary_color selection:text-white',
+          'selection:bg-primary_color/20 selection:text-primary_color',
         )}
       >
         <ProviderWrapper>{children}</ProviderWrapper>
