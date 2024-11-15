@@ -12,8 +12,8 @@ import { useAdminCollectionPost } from '../hooks/use-collection-post';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
 import { DataTableColumnHeader } from './datagrid/column-header';
 import useSearchAggs from '@components/search-aggs/hooks';
-import { FilterFieldName } from '@models';
-import { get } from 'lodash-es';
+import { searchApi } from '@api/searchApi';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -43,6 +43,7 @@ const columns: ColumnDef<Product>[] = [
 
 export function DataTable() {
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+  const { buildFilterParams } = useFilterState();
 
   const { watch, setValue } = useFormContext<ProductQuery>();
 
@@ -91,63 +92,18 @@ export function DataTable() {
     },
   });
 
-  const onFilterChipsChanged = (state: Record<string, A>) => {
-    console.log('onFilterChanged', state);
-    const listKey = Object.keys(state);
-    console.log({ listKey });
-    listKey.forEach((key) => {
-      switch (key) {
-        case FilterFieldName.Area: {
-          setValue("min_area", get(state, [key, 'params', "min_area"]));
-          setValue("max_area", get(state, [key, 'params', "max_area"]));
-          break;
-        }
-        case FilterFieldName.Bath: {
-          setValue('bathrooms_count', get(state, [key, 'value']));
-          break;
-        }
-        case FilterFieldName.Bed: {
-          setValue('bedrooms_count', get(state, [key, 'value']));
-          break;
-        }
-        case FilterFieldName.BusCatType: {
-          setValue('business_type', get(state, [key, 'params', "business_type"]));
-          setValue('category_type', get(state, [key, 'params', "category_type"]));
-          break;
-        }
-        case FilterFieldName.BusinessType: {
-          break;
-        }
-        case FilterFieldName.CategoryType: {
-          break;
-        }
-        case FilterFieldName.City: {
-          setValue("city_id", get(state, [key, 'value']));
-          break;
-        }
-        case FilterFieldName.Direction: {
-          setValue("directions", get(state, [key, 'params', "direction"]));
-          break;
-        }
-        case FilterFieldName.District: {
-          setValue("district_id", get(state, [key, 'value']));
-          break;
-        }
-        case FilterFieldName.Price: {
-          setValue("min_price", get(state, [key, 'params', "min_price"]));
-          setValue("max_price", get(state, [key, 'params', "max_price"]));
-          break;
-        }
-        case FilterFieldName.Sort: {
-          setValue("sort_direction", get(state, [key, 'value']));
-          break;
-        }
-        case FilterFieldName.Ward: {
-          setValue("ward_id", get(state, [key, 'value']));
-          break;
-        }
+  const onFilterChipsChanged = async (state: Record<string, A>) => {
+    const filterParams = buildFilterParams({ withLocal: false, overrideStates: state })
+    const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' }
+    try {
+      const response = await searchApi(queryOptions);
+      if (!response.listing_url) {
+        return;
       }
-    });
+      setValue("filter_chips", response.listing_url);
+    } catch (error) {
+      console.log('ERROR', error)
+    }
   };
 
   return (

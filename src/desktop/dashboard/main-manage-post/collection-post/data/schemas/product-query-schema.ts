@@ -40,6 +40,7 @@ export const productQuerySchema = z.object({
   sort_direction: z.string(),
   page: z.number(),
   per_page: z.number(),
+  filter_chips: z.string(),
 
   visibility: z.enum(['hidden', 'visible', '']),
   search_by: z.enum(['code', 'title', 'note', 'all', '']),

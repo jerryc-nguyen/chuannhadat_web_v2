@@ -36,6 +36,7 @@ const ProductApiService = {
     data.visibility && params.append("visibility", data.visibility);
     data.search_by && params.append("search_by", data.search_by === "all" ? "" : data.search_by);
     data.search_value && params.append("search_value", data.search_value);
+    data.filter_chips && params.append("filter_chips", data.filter_chips);
     params.append("aggs_for", 'profile');
     const response = await axiosInstance.get(`${API_ROUTES.MANAGE_PRODUCTS.END_POINT}?${params.toString()}`);
 

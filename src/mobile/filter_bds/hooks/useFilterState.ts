@@ -67,6 +67,7 @@ export default function useFilterState() {
       [fieldId]: finalOption,
     });
   };
+
   const removeFilterValue = (fieldId: FilterFieldName) => {
     let newFilteState = {};
 
@@ -93,6 +94,7 @@ export default function useFilterState() {
 
     setFilterState(newFilteState)
     syncSelectedParamsToUrl(newFilteState);
+    return newFilteState;
   };
 
   const applyAllFilters = (filters?: A) => {
@@ -222,6 +224,7 @@ export default function useFilterState() {
 
   return {
     filterState,
+    setFilterState,
     localFilterState,
     filterFieldOptions,
     getLocalFieldValue,

@@ -27,6 +27,7 @@ import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import { BsSortUp } from 'react-icons/bs';
 import ProfileLocations from '@desktop/product-filters/ProfileLocations';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -45,6 +46,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
     queryKey: ['FooterBtsButton', filterParams],
     queryFn: () => searchApi(filterParams),
   });
+  const { searchScope } = useSearchScope();
 
   const onApplyFilter = () => {
     setIsOpenPopover(false);
@@ -136,8 +138,13 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   };
   const handleRemoveFilter = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
-    removeFilterValue(fieldName);
+    const newFilterState = removeFilterValue(fieldName);
+    console.log('newFilterState', newFilterState);
+    if (typeof onChange === "function") {
+      onChange(newFilterState)
+    }
   };
+
   const onRenderIconChip = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.Price:
@@ -196,10 +203,17 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
           <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
             {buildContent(filterChipItem)}
           </section>
-          <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>
-            {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
-          </Button>
+          {searchScope != SearchScopeEnums.ManagePosts && (
+            <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>
+              {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
+            </Button>
+          )}
+          {searchScope == SearchScopeEnums.ManagePosts && (
+            <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>
+              Áp dụng
+            </Button>
+          )}
         </PopoverContent>
       </Popover>
     </div>
