@@ -6,6 +6,7 @@ import { FilterFieldName } from '@models';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
+
 import Locations from './bts/Locations';
 
 import useModals from '@mobile/modals/hooks';
@@ -22,14 +23,19 @@ import { cn } from '@common/utils';
 import { listFilterMobile } from './constants';
 import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import ManagePostsFooterBtsButton from './ManagePostFooterBtsButton';
+
 type FilterChipsProp = {
   isRedirectWhenApplyFilter?: boolean;
 };
+
 export default function FilterChips({ isRedirectWhenApplyFilter = true }: FilterChipsProp) {
   const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
   const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
+  const { searchScope } = useSearchScope();
 
   const selectedRoomText = (): string => {
     const results = [];
@@ -96,6 +102,10 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
   };
 
   const buildBtsFooter = (filterOption: FilterChipOption) => {
+    if (searchScope == SearchScopeEnums.ManagePosts) {
+      return <ManagePostsFooterBtsButton filterOption={filterOption} />
+    }
+
     switch (filterOption.id) {
       case FilterFieldName.FilterOverview:
         return <FooterOverviewBtsButton isRedirect={isRedirectWhenApplyFilter} />;

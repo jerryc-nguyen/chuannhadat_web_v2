@@ -17,6 +17,8 @@ const PostControls: React.FC<PostControlsProps> = ({
   isShowListChips = true,
   className,
 }) => {
+  console.log('PostControls', chipOptions);
+  
   return (
     <div
       id="post-control-desktop"

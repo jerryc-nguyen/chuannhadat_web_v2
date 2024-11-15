@@ -1,25 +1,19 @@
 'use client';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useAtom } from 'jotai';
+import { Table } from '@/components/ui/table';
+import { DataGridContent, DataGridHeader, DataTablePagination } from '@components/data-grid';
+import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { DataTablePagination } from '../components/data-table-pagination';
-import { DataTableToolbar } from '../components/data-table-toolbar';
+import { DataTableToolbar } from './datagrid/toolbar';
 import { ProductQuery } from '../data/schemas';
 import { Product } from '../data/schemas/product-schema';
 import { useAdminCollectionPost } from '../hooks/use-collection-post';
-import { productsListAppliedAtom } from '../states';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
-import { DataTableColumnHeader } from './data-table-column-header';
+import { DataTableColumnHeader } from './datagrid/column-header';
+import useSearchAggs from '@components/search-aggs/hooks';
+import { searchApi } from '@api/searchApi';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -48,32 +42,28 @@ const columns: ColumnDef<Product>[] = [
 ];
 
 export function DataTable() {
+  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+  const { buildFilterParams } = useFilterState();
+
   const { watch, setValue } = useFormContext<ProductQuery>();
 
-  const page = watch('page') ?? 0;
-  const pageSize = watch('per_page') ?? 0;
-  
-  const { data: cachedData } = useAdminCollectionPost();
+  const page = watch('page') ?? 1;
+  const pageSize = watch('per_page') ?? 10;
+
+  const { data: cachedData, refetch } = useAdminCollectionPost();
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
-  const totalRecords = cachedData?.pagination?.total_count ?? 0;
-  const totalPages = cachedData?.pagination?.total_pages ?? 0;
+  const totalRecords: number = cachedData?.pagination?.total_count ?? 0;
+  const totalPages: number = cachedData?.pagination?.total_pages ?? 0;
 
-  const [productsListApplied, setProductsListApplied] = useAtom(productsListAppliedAtom);
-
-  React.useEffect(() => {
-    if (!cachedData) return;
-
-    setProductsListApplied({
-      productsList,
-      totalRecords,
-      totalPages,
-    });
-  }, [cachedData, setProductsListApplied]);
+  if (cachedData?.aggs) {
+    updateSearchAggs(cachedData.aggs);
+    setIsUseAggOptions(true);
+  }
 
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: productsListApplied.productsList,
+    data: productsList,
     columns: columns,
     state: {
       rowSelection,
@@ -83,7 +73,7 @@ export function DataTable() {
       },
     },
     manualPagination: true,
-    pageCount: productsListApplied.totalPages,
+    pageCount: totalPages,
     enableRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: (updater) => {
@@ -96,48 +86,34 @@ export function DataTable() {
     },
     onRowSelectionChange: setRowSelection,
     getRowId: (row) => row.id,
+    meta: {
+      totalRecords,
+      totalPages,
+    },
   });
+
+  const onFilterChipsChanged = async (state: Record<string, A>) => {
+    const filterParams = buildFilterParams({ withLocal: false, overrideStates: state })
+    const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' }
+    try {
+      const response = await searchApi(queryOptions);
+      if (!response.listing_url) {
+        return;
+      }
+      setValue("filter_chips", response.listing_url);
+    } catch (error) {
+      console.log('ERROR', error)
+    }
+  };
 
   return (
     <div className="space-y-4">
       {/* ... */}
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} onFilterChipsChanged={onFilterChipsChanged} onClickSearch={refetch} />
       <div className="rounded-md border">
         <Table className="bg-white/30">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Chưa có bản ghi
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+          <DataGridHeader table={table} />
+          <DataGridContent table={table} columns={columns} />
         </Table>
       </div>
       <DataTablePagination table={table} />

@@ -14,7 +14,7 @@ export default function useSearchScope() {
   const searchScope = useMemo(() => {
     if (pathname.indexOf('profile/') != -1) {
       return SearchScopeEnums.Profile
-    } else if (pathname.indexOf('/new-post') != -1 && AuthUtils.getCurrentUser()) {
+    } else if (pathname.indexOf('/dashboard/') != -1 && AuthUtils.getCurrentUser()) {
       return SearchScopeEnums.ManagePosts
     } else {
       return SearchScopeEnums.Search

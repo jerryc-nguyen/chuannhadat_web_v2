@@ -148,7 +148,7 @@ const ReferFriend: React.FC = () => {
               đăng ký bằng mã giới thiệu ở trên và cập nhật đầy đủ thông tin cá nhân, số điện thoại.
             </li>
             <li>
-              3 tháng Mỗi phần quà có thời hạn sử dụng <strong>3 tháng</strong> tính từ lúc nhận.
+              Mỗi phần quà có thời hạn sử dụng <strong>3 tháng</strong> tính từ lúc nhận.
             </li>
             <li>Các phần quà còn thời hạn sử dụng sẽ được cộng dồn.</li>
             <li>Tất cả phần quà không được quy đổi ra tiền mặt hoặc cho tặng người khác.</li>
