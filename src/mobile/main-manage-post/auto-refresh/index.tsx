@@ -1,6 +1,6 @@
 'use client';
 import React, { MouseEvent } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@components/ui/button';
-import { LuCheck, LuClipboardEdit, LuPlus, LuTrash2 } from 'react-icons/lu';
+import { LuClipboardEdit, LuPlus, LuTrash2 } from 'react-icons/lu';
 import { useAtom, useSetAtom } from 'jotai';
 import { breadcrumbAtom, IBreadcrumbItem } from '@desktop/dashboard/states/breadcrumbAtom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -38,6 +38,7 @@ import {
 import EmptyTable from '@components/empty-table';
 import { DialogTimePicker } from '@desktop/dashboard/main-manage-post/auto-refresh/components';
 import { services } from '@desktop/dashboard/main-manage-post/apis';
+import CardPackage from '@components/ui/CardPackage';
 
 const AutoRefreshMobile: React.FC = () => {
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
@@ -292,42 +293,32 @@ const AutoRefreshMobile: React.FC = () => {
       </Table>
     </div>
   );
-  const cardPackage = (unit: number, countRefresh: number, index: number) => (
-    <Card className="max-w-[300px] flex-1 border-2 hover:border-blue-300">
-      <CardHeader className="pb-[15px]">
-        <CardTitle className="font-bold text-slate-500">GÓI {index}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="pb-4 text-xl font-bold text-[#596570]">
-          <strong className="mr-2 text-[28px] font-bold text-black dark:text-white">
-            {unit} Xu
-          </strong>
-          / tháng
-        </p>
-        <p className="text-sm font-medium">
-          Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top
-        </p>
-        <Button className="mt-5 w-full bg-blue-600 hover:bg-blue-500">Mua ngay</Button>
 
-        <div>
-          <span className="inline-block pt-3 text-sm text-slate-500">Ưu đãi bao gồm :</span>
-          <ul className="mt-4">
-            <li className="mb-2 flex items-center gap-x-2 text-sm">
-              <LuCheck className="text-blue-400" />
-              <span>Số lần làm mới tin: {countRefresh}</span>
-            </li>
-          </ul>
-        </div>
-      </CardContent>
-    </Card>
-  );
   const refeshListPackage = () => (
     <div>
       <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Các gói đăng tin</h2>
       <div className="flex flex-col gap-x-4 gap-y-4 lg:flex-row">
-        {cardPackage(100, 300, 1)}
-        {cardPackage(200, 800, 2)}
-        {cardPackage(500, 2000, 3)}
+        <CardPackage
+          cardTitle="Gói làm mới 1"
+          pricePackage="100 Xu"
+          unitTime="tháng"
+          description="Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top"
+          listPreferential={['Số lần làm mới tin: 300']}
+        />
+        <CardPackage
+          cardTitle="Gói làm mới 2"
+          pricePackage="200 Xu"
+          unitTime="tháng"
+          description="Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top"
+          listPreferential={['Số lần làm mới tin: 800']}
+        />
+        <CardPackage
+          cardTitle="Gói làm mới 3"
+          pricePackage="500 Xu"
+          unitTime="tháng"
+          description="Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top"
+          listPreferential={['Số lần làm mới tin: 2000']}
+        />
       </div>
     </div>
   );
