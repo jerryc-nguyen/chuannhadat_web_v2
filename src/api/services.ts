@@ -3,6 +3,7 @@ import { FRONTEND_TOKEN } from '@common/auth';
 import { getCookie } from '@common/cookies';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
+import { INews } from '@desktop/news/types';
 import { IProductSummary } from '@desktop/post-detail/type';
 import {
   IFormPropsLogin,
@@ -30,6 +31,11 @@ import {
 } from '@models/savesPostModel';
 
 export const services = {
+  news: {
+    getNews: async (): Promise<{ data: INews }> => {
+      return axiosInstance.get(API_ROUTES.NEWS.GET_NEWS);
+    },
+  },
   profiles: {
     getMyProfile: async (headers?: A): Promise<A> => {
       return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE, { headers: headers });

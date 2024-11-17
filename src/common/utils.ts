@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 import queryString from 'query-string';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
+import { FormatDistanceToken, vi } from 'date-fns/locale';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,7 +15,7 @@ export function concatStrings(...string: string[]) {
 
 /**
  * Creates metadata for SEO, including Twitter metadata.
- * 
+ *
  * @param {Metadata} rawMetadata - The raw metadata object.
  * @returns {object} metadata object with Twitter metadata included.
  */
@@ -27,6 +29,45 @@ export const createMetadata = (rawMetadata: Metadata) => {
       images: rawMetadata.openGraph?.images,
     },
   };
+};
+
+const customViLocale = {
+  ...vi,
+  formatDistance: (token: FormatDistanceToken, count: number) => {
+    const customTranslations = {
+      lessThanXSeconds: 'Vừa xong',
+      xSeconds: 'Vừa xong',
+      halfAMinute: 'Vừa xong',
+      lessThanXMinutes: 'Vừa xong',
+      xMinutes: `${count} phút`,
+      aboutXHours: `1 giờ`,
+      xHours: `${count} giờ`,
+      xDays: `${count} ngày`,
+      aboutXWeeks: `${count} tuần`,
+      xWeeks: `${count} tuần`,
+      aboutXMonths: `${count} tháng`,
+      xMonths: `${count} tháng`,
+      aboutXYears: `${count} năm`,
+      xYears: `${count} năm`,
+      overXYears: `${count} năm`,
+      almostXYears: `${count} năm`,
+    };
+
+    return customTranslations[token];
+  },
+};
+/**
+ * Formats a given date to a relative time string (e.g., "2 days ago").
+ *
+ * @param {Date} date - The date to be formatted.
+ * @returns {string} - A string representing the relative time from the given date to now,
+ *                     with a suffix (e.g., "ago") in Vietnamese locale.
+ */
+export const formatRelativeTime = (date: Date | string) => {
+  return formatDistanceToNowStrict(date, {
+    addSuffix: true,
+    locale: customViLocale,
+  });
 };
 
 export function stringToSlug(str?: string) {

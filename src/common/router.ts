@@ -74,4 +74,7 @@ export const API_ROUTES = {
     VIEW_PRODUCT: 'api/v1/trackings/view_product',
   },
   SEOS: 'api/v1/seos/metadata',
+  NEWS: {
+    GET_NEWS: 'api/v1/news',
+  },
 };
