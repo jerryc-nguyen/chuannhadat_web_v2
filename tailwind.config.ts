@@ -158,6 +158,7 @@ const config = {
     plugin(function ({ addVariant }) {
       addVariant('disabled-within', '&:has(input:is(:disabled), button:is(:disabled))');
     }),
+	require('tailwind-scrollbar-hide'),
   ],
 };
 export default config;
