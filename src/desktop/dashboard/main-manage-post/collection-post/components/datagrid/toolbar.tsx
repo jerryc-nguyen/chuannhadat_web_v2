@@ -27,6 +27,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import HorizontalScroller from '@mobile/ui/HorizontalScroller';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { createPortal } from 'react-dom';
+import { cn } from '@common/utils';
+import { useIsMobile } from '@hooks';
 
 const options = [
   {
@@ -62,7 +67,9 @@ export function DataTableToolbar<TData>({
     form.setValue('visibility', '');
   }, []);
 
-  const showClearFilter = (['search_value', 'visibility'] as const).some((key) => !!form.getValues(key));
+  const showClearFilter = (['search_value', 'visibility'] as const).some(
+    (key) => !!form.getValues(key),
+  );
 
   const onSearchTargetChange = (value: string) => {
     console.log('onSearchTargetChange', value);
@@ -101,35 +108,30 @@ export function DataTableToolbar<TData>({
             <></>
           )}
 
-          <Link href="/dashboard/manage-post/new-post" target="_blank">
-            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-              <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                <Plus />
-                <p>Đăng tin bán & cho thuê</p>
-              </span>
-            </Button>
-          </Link>
+          <ButtonPostArticle />
         </div>
       </div>
 
-      <div className="relative my-2 flex flex-wrap gap-2">
+      <HorizontalScroller className="relative my-2 flex gap-2">
         {listChipsQuery.map((item) => (
           <FilterChip filterChipItem={item} key={item.id} onChange={onFilterChipsChanged} />
         ))}
-      </div>
+      </HorizontalScroller>
 
       <Separator className="h-[1px]" />
 
-      <div className="flex space-x-10">
-        <span>Lọc theo: </span>
-        {options.map((option) => (
-          <Radio
-            key={option.value}
-            label={option.label}
-            checked={selectedOption === option.value}
-            onChange={() => form.setValue('visibility', option.value)}
-          />
-        ))}
+      <div className="flex gap-2 md:gap-10 text-sm md:text-base">
+        <div>Lọc theo: </div>
+        <div className="flex gap-2 md:gap-10">
+          {options.map((option) => (
+            <Radio
+              key={option.value}
+              label={option.label}
+              checked={selectedOption === option.value}
+              onChange={() => form.setValue('visibility', option.value)}
+            />
+          ))}
+        </div>
       </div>
 
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
@@ -164,10 +166,10 @@ export function SelectSearchTarget({
 }) {
   return (
     <Select onValueChange={onChange} value={selectSearchTarget}>
-      <SelectTrigger className="w-[160px]">
+      <SelectTrigger className="w-[130px] md:w-[160px] pl-2 md:pl-3 pr-0 text-sm md:text-base border-r-0 rounded-r-none">
         <SelectValue placeholder="Tất cả" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className='text-sm md:text-base'>
         <SelectGroup>
           <SelectLabel>Tìm kiếm theo</SelectLabel>
           <SelectItem value="all">Tất cả</SelectItem>
@@ -179,3 +181,35 @@ export function SelectSearchTarget({
     </Select>
   );
 }
+
+const ButtonPostArticle = () => {
+  const isMobile = useIsMobile();
+
+  const ContentButton = ({ className }: { className?: string }) => {
+    return (
+      <Link href="/dashboard/manage-post/new-post" target="_blank" className={className}>
+        <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
+            <Plus />
+            <p>Đăng tin bán & cho thuê</p>
+          </span>
+        </Button>
+      </Link>
+    );
+  };
+
+  if (isMobile) {
+    return createPortal(
+      <div
+        className={cn(
+          'sticky bottom-0 z-50 flex w-full items-center justify-center bg-white pb-4 pt-4',
+        )}
+      >
+        <ContentButton />
+      </div>,
+      document.body,
+    );
+  }
+
+  return <ContentButton />;
+};
