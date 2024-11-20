@@ -77,4 +77,5 @@ export const API_ROUTES = {
   NEWS: {
     GET_NEWS: 'api/v1/news',
   },
+  REFERRALS: 'api/v1/referrals',
 };

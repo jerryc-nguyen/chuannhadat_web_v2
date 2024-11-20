@@ -5,6 +5,7 @@ import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import NotificationsList from '@desktop/notification/NotificationsList';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
+import useAuth from '@mobile/auth/hooks/useAuth';
 import { LucideBell } from 'lucide-react';
 import React, { useMemo } from 'react';
 
@@ -14,11 +15,14 @@ type NotificationIconProps = {
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
-
+  const { currentUser } = useAuth();
   const handleRedirect = () => {
     return;
   };
-
+  React.useEffect(() => {
+    loadMore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
   const showBadge = useMemo(() => {
     return total !== null && total > 0;
   }, [total]);

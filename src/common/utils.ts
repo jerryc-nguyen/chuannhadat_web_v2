@@ -1,4 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
+import { merge } from 'lodash-es';
+import { ReadonlyURLSearchParams } from 'next/navigation';
 import { Metadata } from 'next';
 import queryString from 'query-string';
 import { toast } from 'sonner';
@@ -218,4 +220,16 @@ export const timeAgo = (date: string) => {
     }
   }
   return 'Vừa xong';
+};
+
+export const objectToQueryString = (
+  obj: Record<string, A>,
+  currentSearch: ReadonlyURLSearchParams,
+) => {
+  const prev = queryString.parse(currentSearch.toString());
+  return queryString.stringify(removeEmpty(merge(prev, obj)));
+};
+
+export const searchParamsToObj = (searchParams: ReadonlyURLSearchParams) => {
+  return queryString.parse(searchParams.toString()) as Record<A, A>;
 };

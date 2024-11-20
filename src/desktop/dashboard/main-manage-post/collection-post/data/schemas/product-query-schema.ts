@@ -40,9 +40,17 @@ export const productQuerySchema = z.object({
   sort_direction: z.string(),
   page: z.number(),
   per_page: z.number(),
+  filter_chips: z.string(),
 
-  keyword: z.string(),
   visibility: z.enum(['hidden', 'visible', '']),
+  search_by: z.enum(['code', 'title', 'note', 'all', '']),
+  search_value: z.string(),
+  aggs_for: z.string(),
+
+  min_price: z.string(),
+  max_price: z.string(),
+  min_area: z.string(),
+  max_area: z.string(),
 });
 
 export type ProductQuery = z.infer<typeof productQuerySchema>;

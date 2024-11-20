@@ -1,1 +1,1 @@
-export const CollectionPost = "collection-post";
+export const CollectionPost = 'collection-post';

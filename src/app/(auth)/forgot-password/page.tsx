@@ -14,7 +14,7 @@ import { Input } from '@components/ui/input';
 import Link from 'next/link';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import forgot_password from '@assets/images/forgot-password.png';
+import forgot_password from '@assets/icons/Forgot password-bro.svg';
 import Image from 'next/image';
 import { IoIosArrowBack } from 'react-icons/io';
 import { z } from 'zod';
@@ -44,7 +44,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   return (
     <section className="flex h-screen w-screen items-start justify-center bg-[#fefdf9] md:items-center">
       <section className="shadow-dropdown h-full w-full rounded-xl bg-transparent px-5 py-10 md:h-fit md:w-4/5 md:bg-white md:p-10 lg:w-2/3">
-        <Logo isDashboard />
+        <Logo isAlwaysShow />
         <section className="mt-10 flex items-center gap-x-10 md:mt-5">
           <section className="flex-1">
             <Link

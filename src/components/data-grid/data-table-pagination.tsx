@@ -14,22 +14,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useAtomValue } from 'jotai';
-import { productsListAppliedAtom } from '../states';
 
-interface DataTablePaginationProps<TData> {
-  table: Table<TData>;
+interface DataTablePaginationProps<T> {
+  table: Table<T>;
 }
 
-export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
-  const productsListApplied = useAtomValue(productsListAppliedAtom);
+export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
+  const listLength = table.getFilteredRowModel().rows.length;
+  const meta = {
+    ...{ totalRecords: 0, totalPages: 0 },
+    ...table.options.meta,
+  } as const;
 
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
         {/* {table.getFilteredSelectedRowModel().rows.length} /{" "}
         {table.getFilteredRowModel().rows.length} đã chọn. */}
-        {`Hiển thị ${productsListApplied.productsList.length} / ${productsListApplied.totalRecords} bản ghi.`}
+        {`Hiển thị ${listLength} / ${meta?.totalRecords ?? 0} bản ghi.`}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
@@ -53,7 +55,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Trang {table.getState().pagination.pageIndex + 1} / {productsListApplied.totalPages}
+          Trang {table.getState().pagination.pageIndex + 1} / {meta?.totalPages}
         </div>
         <div className="flex items-center space-x-2">
           <Button

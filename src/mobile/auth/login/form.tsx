@@ -17,8 +17,6 @@ import { Button } from '@components/ui/button';
 import useAuth from '../hooks/useAuth';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
-import { setTokenServer } from '@app/action';
-import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -28,18 +26,14 @@ type LoginFormProps = {
   onClose: () => void;
 };
 const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
-  const { handleLogin } = useAuth();
+  const { handleSignIn } = useAuth();
   const router = useRouter();
-  const { loadMore } = usePaginatedNotifications();
   const { mutate: signInMutate, isPending } = useMutation({
     mutationFn: services.auth.signIn,
     onSuccess: (response: LoginResponse) => {
       if (response.status) {
         const userData = response.data;
-        const handleSetToken = setTokenServer.bind(null, userData.api_token);
-        handleSetToken();
-        handleLogin(userData);
-        loadMore();
+        handleSignIn(userData);
         onClose();
         toast.success(
           `Xin chào, ${userData.full_name || userData.phone} bạn đã đăng nhập thành công!`,

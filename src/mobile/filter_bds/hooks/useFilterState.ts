@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   defaultFilterStateAtom,
   filterFieldOptionsAtom,
@@ -67,6 +67,7 @@ export default function useFilterState() {
       [fieldId]: finalOption,
     });
   };
+
   const removeFilterValue = (fieldId: FilterFieldName) => {
     let newFilteState = {};
 
@@ -93,6 +94,7 @@ export default function useFilterState() {
 
     setFilterState(newFilteState)
     syncSelectedParamsToUrl(newFilteState);
+    return newFilteState;
   };
 
   const applyAllFilters = (filters?: A) => {
@@ -137,7 +139,7 @@ export default function useFilterState() {
     return { ...results, ...extraSearchParams };
   };
 
-  const applySingleFilter = (filterOption: FilterChipOption) => {
+  const applySingleFilter = (filterOption: FilterChipOption): FilterState => {
     let localValue: Record<string, A> = {};
 
     if (filterOption.id == FilterFieldName.Locations ||
@@ -170,9 +172,15 @@ export default function useFilterState() {
     const allFilterState = { ...filterState, ...localValue };
     setFilterState(allFilterState);
     syncSelectedParamsToUrl(allFilterState);
+    return allFilterState;
   };
 
   const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
+    // disable auto sync state to url for manage post page
+    if (searchScope == SearchScopeEnums.ManagePosts) {
+      return;
+    }
+
     let queryOptions = buildFilterParams({ withLocal: false, overrideStates: filterParams });
     queryOptions = {
       ...queryOptions,
@@ -216,6 +224,7 @@ export default function useFilterState() {
 
   return {
     filterState,
+    setFilterState,
     localFilterState,
     filterFieldOptions,
     getLocalFieldValue,

@@ -32,3 +32,17 @@ export type RequestCallbackContent = {
   phone: string;
 };
 export type IListRequestResponse = IResponseData<RequestCallbackContent[]>;
+export type IReferralsDetailResponse = IResponseData<{
+  description: string;
+  image: string;
+  title: string;
+}>;
+export interface IReferralData {
+  avatar: string;
+  email: string;
+  formatted_created_at: string;
+  full_name: string;
+  phone: string;
+  success: false;
+}
+export type IReferralListResponse = IResponseData<IReferralData[]>;

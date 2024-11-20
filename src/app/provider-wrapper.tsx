@@ -24,7 +24,7 @@ const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
         <ListModal />
         <SessionTimeOutPopup isLogged={isLogged} />
       </JotaiProvider>
-      <Toaster position={isMobile ? 'top-center' : 'top-right'} theme="light" richColors />
+      <Toaster position={isMobile ? 'top-center' : 'bottom-right'} theme="light" richColors />
       <ToastContainer
         position="top-center"
         autoClose={5000}

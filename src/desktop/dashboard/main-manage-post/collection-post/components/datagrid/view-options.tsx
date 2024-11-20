@@ -8,8 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
 import { ChevronDownIcon } from "lucide-react";
 

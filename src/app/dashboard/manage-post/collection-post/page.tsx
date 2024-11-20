@@ -12,7 +12,7 @@ const NewPostPage: React.FC = () => {
   const { isMobile } = useGetUserAgentInfo();
   if (isMobile) {
     return (
-      <div className="c-mobileApp">
+      <div className="">
         <TaskDataTable />
       </div>
     );
