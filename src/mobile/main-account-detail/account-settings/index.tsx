@@ -47,7 +47,6 @@ const AccountSettingsMobile: React.FC = () => {
         isActive: true,
       },
     ];
-    console.log(currentBreadCrumn);
     setBreadCrumb((state) => {
       return [...state, ...currentBreadCrumn];
     });

@@ -38,7 +38,7 @@ const HomeDesktop: React.FC = () => {
       data.pagination.total_count !== products.length &&
       window.innerHeight + window.scrollY >= document.body.offsetHeight
     ) {
-      handleLoadMore();
+      // handleLoadMore();
     }
   }, 200);
   const { data: missingAuthors, isSuccess } = useQuery({
