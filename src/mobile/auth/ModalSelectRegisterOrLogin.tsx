@@ -28,12 +28,12 @@ export default function ModalSelectRegisterOrLogin({
 
   return (
     <Tabs defaultValue={activeTab}>
-      <TabsList className="flex w-full">
+      <TabsList className="flex w-full h-11">
         {authOptions.map((option) => {
           return (
             <TabsTrigger
               key={option.value}
-              className="flex-1"
+              className="flex-1 rounded-md py-2"
               value={option.value}
               onClick={() => {
                 handleShowModalLoginAndRegister(option.value);
@@ -46,12 +46,12 @@ export default function ModalSelectRegisterOrLogin({
       </TabsList>
       <TabsContent value="login">
         <div className="mt-8">
-          <LoginForm  onClose={onClose} />
+          <LoginForm onClose={onClose} />
         </div>
       </TabsContent>
       <TabsContent value="register">
         <div className="mt-8">
-          <RegisterForm  onClose={onClose} />
+          <RegisterForm onClose={onClose} />
         </div>
       </TabsContent>
     </Tabs>
