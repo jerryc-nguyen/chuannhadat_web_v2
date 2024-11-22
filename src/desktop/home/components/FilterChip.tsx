@@ -177,7 +177,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
               }}
               className={cn(
                 'flex cursor-pointer items-center gap-x-1',
-                isActiveChip(filterChipItem) ? '' : 'text-slate-600 hover:text-black',
+                isActiveChip(filterChipItem) ? '' : 'text-secondary hover:text-black',
               )}
             >
               {onRenderIconChip(filterChipItem)}

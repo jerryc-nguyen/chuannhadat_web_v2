@@ -10,12 +10,15 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --primary: #080809;
+    --primary-text: #080809;
+    --secondary-text: #65686c;
+    --secondary-dark-text: #4e5154;
+    --primary-foreground: hsl(210 40% 98%);
+    --secondary: #65686c;
+    --secondary-foreground: #65686c;
+    --muted: #65686c;
+    --muted-foreground: #65686c;
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
@@ -86,6 +89,11 @@
 
 .text-gray {
   color: hsl(var(--muted-foreground));
+  color: var(--secondary);
+}
+
+.text-dark-gray {
+  color: rgb(55 65 81);
 }
 
 .Image {

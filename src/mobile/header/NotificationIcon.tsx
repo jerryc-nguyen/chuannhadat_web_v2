@@ -121,7 +121,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
         <SheetHeader>
           <SheetTitle className="flex justify-start gap-x-2 p-3">
             Thông báo
-            <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500 hover:bg-slate-100">
+            <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-secondary hover:bg-slate-100">
               {total}
             </Badge>
           </SheetTitle>
@@ -142,7 +142,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                   <h3 className="pr-5 text-sm font-semibold">{notify.title}</h3>
                   <div className="mt-2">
                     <p className="text-sm">{notify.description}</p>
-                    <p className="text-right text-xs font-medium text-muted-foreground">
+                    <p className="text-right text-xs font-medium text-secondary">
                       {notify.formatted_created_at}
                     </p>
                   </div>

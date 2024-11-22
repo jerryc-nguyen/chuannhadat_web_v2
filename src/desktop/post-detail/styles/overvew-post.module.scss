@@ -1,3 +1,11 @@
+[role='dialog'] .overview_post {
+  :global {
+    .list-image {
+      aspect-ratio: 4/2 !important;
+    }
+  }
+}
+
 .overview_post {
   :global {
     .list-image {

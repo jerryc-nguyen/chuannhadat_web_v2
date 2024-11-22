@@ -29,10 +29,10 @@ export default function CardAuthor({ product }: { product: A }) {
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                      imageUrl: imgSrc,
-                      width: 40,
-                      ratio: 1,
-                    })
+                    imageUrl: imgSrc,
+                    width: 40,
+                    ratio: 1,
+                  })
                   : imgSrc
               }
               onError={() => {
@@ -57,19 +57,17 @@ export default function CardAuthor({ product }: { product: A }) {
             {fullName}
           </Link>
         </HoverCardAuthor>
-        <p className="mt-1 flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-muted-foreground">
+        <p className="flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-secondary">
           <Link target="_blank" className="hover:underline" href={`/post/${product.slug}`}>
             {product?.formatted_publish_at}
           </Link>
           ·
-          <TooltipHost content={product?.short_location_name}>
-            <span className="overflow-hidden text-ellipsis text-nowrap">
-              {product?.short_location_name}
-            </span>
-          </TooltipHost>
+          <span className="overflow-hidden text-ellipsis text-nowrap">
+            {product?.short_location_name}
+          </span>
         </p>
       </div>
-      <LuMoreHorizontal className="ml-2 h-5 w-5 rounded-full text-muted-foreground hover:bg-blue-50" />
+      <LuMoreHorizontal className="ml-2 h-5 w-5 rounded-full text-secondary hover:bg-blue-50" />
     </div>
   );
 }

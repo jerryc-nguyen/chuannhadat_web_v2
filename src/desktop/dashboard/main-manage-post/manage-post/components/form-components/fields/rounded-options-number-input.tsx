@@ -11,7 +11,7 @@ const defaultOption = [
   { value: "5", label: "5" },
 ]
 export const roundedOptionsInputVariants = cva(
-  "flex flex-1 items-center h-10 w-full px-3 py-2 text-sm bg-transparent file:border-0 file:text-sm file:font-medium placeholder:text-muted-foreground disabled-within:cursor-not-allowed disabled-within:opacity-50 disabled-within:bg-muted border border-transparent focus-within:outline-none aria-invalid:ring-1 aria-invalid:ring-destructive aria-invalid:focus-within:ring-2 aria-invalid:focus-within:ring-destructive",
+  "flex flex-1 items-center h-10 w-full px-3 py-2 text-sm bg-transparent file:border-0 file:text-sm file:font-medium placeholder:text-secondary disabled-within:cursor-not-allowed disabled-within:opacity-50 disabled-within:bg-muted border border-transparent focus-within:outline-none aria-invalid:ring-1 aria-invalid:ring-destructive aria-invalid:focus-within:ring-2 aria-invalid:focus-within:ring-destructive",
 
   {
     variants: {
@@ -21,7 +21,7 @@ export const roundedOptionsInputVariants = cva(
       },
       variant: {
         outline:
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2 disabled-within:cursor-not-allowed disabled-within:opacity-50",
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2 disabled-within:cursor-not-allowed disabled-within:opacity-50",
         filled:
           "border-2 bg-background focus-within:border-primary focus-within:bg-transparent",
         underlined:
@@ -111,7 +111,7 @@ const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOpti
             )}
           />
           {endAdornment && (
-            <span className="flex items-center text-muted-foreground">
+            <span className="flex items-center text-secondary">
               {endAdornment}
             </span>
           )}

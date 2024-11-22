@@ -263,7 +263,7 @@ const AboutChuanNhaDat: React.FC = () => {
           <div className="hidden md:block">
             <h3 className="mt-2 text-xl font-semibold md:mt-4">
               Chúng tôi rất muốn nghe từ bạn{' '}
-              <p className="text-base font-medium text-muted-foreground">
+              <p className="text-base font-medium text-secondary">
                 hoặc chỉ cần liên hệ trực tiếp với chúng tôi qua :
               </p>
             </h3>

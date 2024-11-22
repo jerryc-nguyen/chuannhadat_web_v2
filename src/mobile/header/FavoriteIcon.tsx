@@ -138,7 +138,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
             <p className="line-clamp-2 text-xs font-semibold hover:text-primary_color">
               {post.product.title}
             </p>
-            <span className="mb-1 text-xs text-muted-foreground">{timeAgo(post.created_at)}</span>
+            <span className="mb-1 text-xs text-secondary">{timeAgo(post.created_at)}</span>
           </div>
         </Link>
         {loadingRemovePost.find((item) => item.id === post.product.uid)?.status ? (

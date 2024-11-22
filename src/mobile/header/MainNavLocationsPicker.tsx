@@ -36,18 +36,18 @@ export default function MainNavLocationsPicker() {
     });
   };
 
-  const btnActiveClass = isSelectedLocation ? 'font-bold text-black' : 'text-slate-600';
+  const btnActiveClass = isSelectedLocation ? 'font-bold text-black' : 'text-secondary';
 
   return (
     <>
       <Button
         variant="outline"
         role="combobox"
-        className={`text-md w-full items-center justify-between gap-x-2 rounded-full text-slate-600 md:w-full ${btnActiveClass}`}
+        className={`text-md w-full items-center justify-between gap-x-2 rounded-full text-secondary md:w-full ${btnActiveClass}`}
         onClick={() => showModalPickLocations()}
       >
         <span className="flex flex-1 items-center overflow-hidden">
-          <LuMapPin className={`mr-1 h-4 w-4 shrink-0 text-slate-600 ${btnActiveClass}`} />
+          <LuMapPin className={`mr-1 h-4 w-4 shrink-0 text-secondary ${btnActiveClass}`} />
           <span className="w-full overflow-hidden text-ellipsis text-nowrap font-medium">
             {selectedLocationFullText || 'Chọn khu vực'}
           </span>

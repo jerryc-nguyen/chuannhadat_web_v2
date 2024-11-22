@@ -73,7 +73,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
       <section>
         <div className="flex flex-col p-6">
           <SheetTitle className="font-bold text-primary_color">{currentUser?.full_name}</SheetTitle>
-          <SheetDescription className="text-sm text-muted-foreground">
+          <SheetDescription className="text-sm text-secondary">
             ID {currentUser?.id}
           </SheetDescription>
         </div>

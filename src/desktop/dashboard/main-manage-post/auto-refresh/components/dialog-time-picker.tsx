@@ -62,7 +62,7 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
                     required
                   />
                 </div>
-                <p className="text-lg font-bold text-slate-500">{formatTime(timeRefresh)}</p>
+                <p className="text-lg font-bold text-secondary">{formatTime(timeRefresh)}</p>
               </div>
             </DialogDescription>
           </DialogHeader>

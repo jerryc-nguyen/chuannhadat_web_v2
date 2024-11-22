@@ -58,19 +58,19 @@ export function AutoComplete<T extends string>({
   }
 
   useEffect(() => {
-    if ( !disabled ) return;
+    if (!disabled) return;
     setSearchText("");
   }, [disabled])
 
   useEffect(() => {
-    setRerenderedTimes(val => val+1)
+    setRerenderedTimes(val => val + 1)
   }, [searchText])
 
   useEffect(() => {
     const selectedOption = options.find((item) => item.value == selectedValue);
-    if ( !selectedOption ) return;
+    if (!selectedOption) return;
     setSearchText(selectedOption?.label || "");
-    if ( onSelectedValueCallback ) {
+    if (onSelectedValueCallback) {
       onSelectedValueCallback(selectedOption);
     }
   }, [selectedValue, options]);
@@ -81,7 +81,7 @@ export function AutoComplete<T extends string>({
   };
 
   return (
-    <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
+    <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
       <Popover open={open} onOpenChange={setOpen}>
         <Command shouldFilter={false}>
           <PopoverAnchor asChild>
@@ -103,8 +103,8 @@ export function AutoComplete<T extends string>({
                   endAdornment ||
                   (
                     searchText ?
-                      <CircleX className="cursor-pointer" onClick={reset}/> :
-                      <ChevronDown className="h-4 w-4 opacity-50"/>
+                      <CircleX className="cursor-pointer" onClick={reset} /> :
+                      <ChevronDown className="h-4 w-4 opacity-50" />
                   )
                 }
                 disabled={disabled}
@@ -113,7 +113,7 @@ export function AutoComplete<T extends string>({
           </PopoverAnchor>
           {!open && <CommandList aria-hidden="true" className="hidden" />}
           <PopoverContent
-            style={{zIndex: 99999}}
+            style={{ zIndex: 99999 }}
             sideOffset={15}
             asChild
             onOpenAutoFocus={(e) => e.preventDefault()}
@@ -137,31 +137,31 @@ export function AutoComplete<T extends string>({
               )}
               {
                 !isLoading ?
-                <>
-                  {
-                    options.length > 0 ?
-                    options.filter(item => (item.label?.toLowerCase() || "").includes((searchText?.toLowerCase() || ""))).map((option, index) => (
-                      <CommandItem
-                        key={index * rerenderedTimes}
-                        // key={index}
-                        value={option.value || ""}
-                        onMouseDown={(e) => e.preventDefault()}
-                        onSelect={() => onSelectItem(option)}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            selectedValue === option.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {option.label}
-                      </CommandItem>
-                    )): <CommandEmpty>{emptyMessage ?? "No items."}</CommandEmpty>
-                  }
-                </>
-                : null
+                  <>
+                    {
+                      options.length > 0 ?
+                        options.filter(item => (item.label?.toLowerCase() || "").includes((searchText?.toLowerCase() || ""))).map((option, index) => (
+                          <CommandItem
+                            key={index * rerenderedTimes}
+                            // key={index}
+                            value={option.value || ""}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onSelect={() => onSelectItem(option)}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedValue === option.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {option.label}
+                          </CommandItem>
+                        )) : <CommandEmpty>{emptyMessage ?? "No items."}</CommandEmpty>
+                    }
+                  </>
+                  : null
               }
             </CommandList>
           </PopoverContent>
