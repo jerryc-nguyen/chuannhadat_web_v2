@@ -112,10 +112,11 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
                   item={item}
                   detailPath={product.detail_path || ''}
                   index={index}
+                  onClick={() => openModalPostDetail(product.uid)}
                 />
               ))}
             </CarouselContent>
-            <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
+            <ImageSliderAction api={imageSliderApi} countImages={product.images.length} onClick={() => openModalPostDetail(product.uid)} />
             <ButtonSave postUid={product.uid} />
           </Carousel>
         )}

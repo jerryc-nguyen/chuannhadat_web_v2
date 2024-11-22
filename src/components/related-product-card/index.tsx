@@ -32,7 +32,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
   };
   return (
     <div className={styles.related_product_card}>
-      <h3 className="mb-3 line-clamp-3 h-[60px] text-ellipsis text-sm font-semibold text-blue-500">
+      <h3 className="mb-4 line-clamp-2 h-[40px] text-ellipsis text-sm font-semibold text-gray">
         {product?.title}
       </h3>
       <div className="card-content">

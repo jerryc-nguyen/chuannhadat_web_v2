@@ -57,24 +57,24 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
       {isLoading || !data?.author?.slug ? (
         loadingAuthor()
       ) : (
-        <div className="rounded-lg border bg-white p-6">
-          <h3 className="text-lg font-semibold">Liên hệ</h3>
-          <div className="my-6 flex items-center gap-x-3">
+        <div className="rounded-lg border bg-white p-4">
+          <h3 className="text-lg font-semibold">Liên hệ:</h3>
+          <div className="my-4 flex items-center gap-x-3">
             <Avatar
               onClick={() => router.push(`/profile/${data.author.slug}`)}
-              className="h-[80px] w-[80px] cursor-pointer"
+              className="h-[50px] w-[50px] cursor-pointer"
             >
               <AvatarImage src={profileData?.avatar_url} />
               <AvatarFallback>{getInitialsName(profileData?.full_name as string)}</AvatarFallback>
             </Avatar>
             <div>
-              <strong
-                onClick={() => router.push(`/profile/${data.author.slug}`)}
-                className="cursor-pointer text-blue-500"
+              <a
+                href={`/profile/${data.author.slug}`}
+                className="cursor-pointer hover:underline font-bold"
               >
                 {profileData?.full_name}
-              </strong>
-              <p className="text-slate-400">Đã đăng {profileData?.posts_count} tin</p>
+              </a>
+              <p className="text-gray text-sm">Đã đăng {profileData?.posts_count} tin</p>
             </div>
           </div>
           <div className="my-4">
