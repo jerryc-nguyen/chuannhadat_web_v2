@@ -25,26 +25,25 @@ export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
 
       <div className="flex flex-col gap-1 text-xs">
         <span className="font-medium">Ngày đăng:</span>
-        <span className="text-muted-foreground">{formatted_created_at}</span>
+        <span className="text-secondary">{formatted_created_at}</span>
       </div>
 
       <div className="flex flex-col gap-1 text-xs">
         <span className="font-medium">Ngày làm mới:</span>
-        <span className="text-muted-foreground">{formatted_published_at}</span>
+        <span className="text-secondary">{formatted_published_at}</span>
       </div>
 
       <div className="flex flex-col gap-1 text-xs">
         <span className="font-medium">Loại tin:</span>
         <span
-          className={`${
-            ads_type === 'vip_1'
+          className={`${ads_type === 'vip_1'
               ? 'text-[#dc3545]'
               : ads_type === 'vip_2'
                 ? 'text-[#fd7e14]'
                 : ads_type === 'vip_3'
                   ? 'text-[#0052ea]'
-                  : 'text-muted-foreground'
-          }`}
+                  : 'text-secondary'
+            }`}
         >
           {ads_type === 'vip_1'
             ? 'TIN VIP 1'
@@ -54,7 +53,7 @@ export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
                 ? 'TIN VIP 3'
                 : 'Tin thường'}
           {expires_after_days && ads_type !== 'normal' ? (
-            <span className="text-muted-foreground">{` (hết hạn sau ${expires_after_days})`}</span>
+            <span className="text-secondary">{` (hết hạn sau ${expires_after_days})`}</span>
           ) : (
             <></>
           )}

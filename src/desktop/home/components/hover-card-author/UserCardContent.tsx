@@ -71,7 +71,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
         </Avatar>
         <div>
           <h4 className="text-base font-semibold">{authorData?.full_name}</h4>
-          <p className="mt-1 w-fit rounded-sm border px-2 py-1 text-xs font-medium text-slate-600 hover:bg-foreground hover:text-slate-100">
+          <p className="mt-1 w-fit rounded-sm border px-2 py-1 text-xs font-medium text-secondary hover:bg-foreground hover:text-slate-100">
             {authorData?.profile_tags[0]}
           </p>
         </div>
@@ -82,25 +82,25 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
         </p>
         <div className="flex gap-x-4">
           <div className="flex items-center gap-x-2">
-            <span className="text-sm text-muted-foreground">Số bài đăng</span>
+            <span className="text-sm text-secondary">Số bài đăng</span>
             <b>{authorData?.posts_count}</b>
           </div>
           <div className="flex items-center gap-x-2">
-            <span className="text-sm text-muted-foreground">Giới tính</span>
+            <span className="text-sm text-secondary">Giới tính</span>
             <b>{authorData?.gender === CustomerGender.Male ? 'Nam' : 'Nữ'}</b>
           </div>
         </div>
       </div>
       <div className="flex items-center pt-2">
         <CalendarDays className="mr-2 h-4 w-4 opacity-70" />
-        <span className="text-xs text-muted-foreground">{authorData?.formatted_joined_at}</span>
+        <span className="text-xs text-secondary">{authorData?.formatted_joined_at}</span>
       </div>
       {authorData?.facebook_url && (
         <div className="flex items-center pt-2">
           <LuFacebook className="mr-2 h-4 w-4 opacity-70" />
           <Link
             href={authorData.facebook_url}
-            className="text-xs text-muted-foreground hover:text-black"
+            className="text-xs text-secondary hover:text-black"
           >
             Liên kết facebook
           </Link>
@@ -111,7 +111,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
           <LuYoutube className="mr-2 h-4 w-4 opacity-70" />
           <Link
             href={authorData.youtube_url}
-            className="text-xs text-muted-foreground hover:text-black"
+            className="text-xs text-secondary hover:text-black"
           >
             Liên kết youtube
           </Link>
@@ -120,7 +120,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       {authorData?.address && (
         <div className="flex items-center pt-2">
           <LuMapPin className="mr-2 h-4 w-4 opacity-70" />
-          <span className="text-xs text-muted-foreground">{authorData?.address}</span>
+          <span className="text-xs text-secondary">{authorData?.address}</span>
         </div>
       )}
       <Link href={`/profile/${authorData?.slug}`} target="_blank">

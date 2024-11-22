@@ -69,7 +69,7 @@ export default function PostList() {
   return (
     <div className="relative mx-auto w-full">
       <div className="flex items-center justify-between">
-        <div className="text-slate-600">Có {data?.pagination?.total_count} tin đăng</div>
+        <div className="text-secondary">Có {data?.pagination?.total_count} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
             {selectedSortText || 'Sắp xếp'}

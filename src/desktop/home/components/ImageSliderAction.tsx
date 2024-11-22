@@ -13,7 +13,7 @@ const ImageSliderAction: React.FC<ImageSliderActionProps> = ({ countImages, api,
   const [current, setCurrent] = React.useState(0);
 
   const handleOnClick = (event: A) => {
-    if (event.target && event.target.classList.contains('slider_button')) {
+    if (event.target && event.target.classList.contains('js-sliderControls')) {
       onClick();
     }
   }
@@ -45,7 +45,7 @@ const ImageSliderAction: React.FC<ImageSliderActionProps> = ({ countImages, api,
   }, [api]);
   return (
     <>
-      <div className="slider_button absolute top-1/2 flex w-full -translate-y-1/2 justify-between px-4" onClick={handleOnClick}>
+      <div className="js-sliderControls slider_button absolute top-1/2 flex w-full -translate-y-1/2 justify-between px-4 cursor-pointer" onClick={handleOnClick}>
         <CarouselPrevious className="static translate-y-0" />
         <CarouselNext className="static translate-y-0" />
       </div>

@@ -135,7 +135,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
       <h2 className="mb-2 mt-4 text-2xl font-bold">{data?.title}</h2>
-      <p className="my-2 flex items-center gap-x-2 text-lg text-slate-600">
+      <p className="my-2 flex items-center gap-x-2 text-lg text-secondary">
         <LuMapPin />
         {data?.full_address}
       </p>
@@ -144,12 +144,12 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           <div className="price flex flex-col">
             <p className="font-medium">Mức giá</p>
             <strong>{data?.formatted_price}</strong>
-            <span className="text-xs italic text-slate-500">{data?.formatted_price_per_m2}</span>
+            <span className="text-xs italic text-secondary">{data?.formatted_price_per_m2}</span>
           </div>
           <div className="area flex flex-col">
             <p className="font-medium">Diện tích</p>
             <strong>{data?.formatted_area}</strong>
-            <span className="text-xs italic text-slate-500">{data?.formatted_kt}</span>
+            <span className="text-xs italic text-secondary">{data?.formatted_kt}</span>
           </div>
         </div>
         <div className="action flex gap-x-4">

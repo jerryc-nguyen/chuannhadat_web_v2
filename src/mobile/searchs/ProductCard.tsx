@@ -106,7 +106,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
         <Link
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}
-          className="mb-2 cursor-pointer font-bold text-slate-600 hover:text-blue-500"
+          className="mb-2 cursor-pointer font-bold text-secondary hover:text-blue-500"
         >
           {product?.title}
         </Link>
@@ -114,12 +114,12 @@ export default function ProductCard({ product }: { product: IProduct }) {
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col items-start justify-center">
             <span className="text-xl font-semibold">{product?.formatted_price}</span>
-            <span className="text-sm text-slate-600">{product?.formatted_price_per_m2}</span>
+            <span className="text-sm text-secondary">{product?.formatted_price_per_m2}</span>
           </div>
 
           <div className="flex flex-col items-start justify-center">
             <span className="text-xl font-semibold">{product?.formatted_area}</span>
-            <span className="text-sm text-slate-600">{product?.formatted_kt || '...'}</span>
+            <span className="text-sm text-secondary">{product?.formatted_kt || '...'}</span>
           </div>
 
           <div className="flex flex-col items-start justify-center">
@@ -135,8 +135,8 @@ export default function ProductCard({ product }: { product: IProduct }) {
           </div>
         </div>
         <div className="mt-3 flex flex-row items-center justify-between">
-          <div className="text-slate-600">{product?.short_location_name}</div>
-          <div className="text-slate-600">{product?.formatted_publish_at}</div>
+          <div className="text-secondary">{product?.short_location_name}</div>
+          <div className="text-secondary">{product?.formatted_publish_at}</div>
         </div>
       </div>
     </div>

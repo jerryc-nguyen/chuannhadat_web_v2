@@ -32,7 +32,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
   };
   return (
     <div className={styles.related_product_card}>
-      <h3 className="mb-4 line-clamp-2 h-[40px] text-ellipsis text-sm font-semibold text-gray">
+      <h3 className="mb-4 line-clamp-2 h-[40px] text-ellipsis text-sm font-semibold text-dark-gray">
         {product?.title}
       </h3>
       <div className="card-content">
@@ -53,11 +53,11 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
         </div>
         <div className="flex flex-col overflow-hidden [grid-area:price]">
           <span className="text-xs font-bold">{product?.formatted_price}</span>
-          <span className="text-muted-foreground">{product?.formatted_price_per_m2}</span>
+          <span className="text-secondary">{product?.formatted_price_per_m2}</span>
         </div>
         <div className="flex flex-col overflow-hidden [grid-area:square]">
           <span className="text-xs font-bold [grid-area:price]">{product?.formatted_area}</span>
-          <span className="text-muted-foreground [grid-area:price]">{product?.formatted_kt}</span>
+          <span className="text-secondary [grid-area:price]">{product?.formatted_kt}</span>
         </div>
         {product?.bedrooms_count && (
           <span className="font-bold [grid-area:bedroom]">{product?.bedrooms_count} pn</span>
@@ -65,7 +65,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
         {product?.bathrooms_count && (
           <span className="font-bold [grid-area:wc]">{product?.bathrooms_count} pt</span>
         )}
-        <p className="text-sm text-muted-foreground [grid-area:address]">
+        <p className="text-sm text-secondary [grid-area:address]">
           {product?.short_location_name}
         </p>
       </div>

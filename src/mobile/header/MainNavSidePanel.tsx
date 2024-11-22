@@ -46,7 +46,7 @@ export default function MainNavSidePanel() {
     <>
       <div className="flex flex-col">
         <h2 className="font-bold text-primary_color">{currentUser?.full_name}</h2>
-        <span className="text-sm text-muted-foreground">ID {currentUser?.id}</span>
+        <span className="text-sm text-secondary">ID {currentUser?.id}</span>
       </div>
       <ul>
         {listMenubar.map((menu) => (

@@ -136,7 +136,7 @@ export function DataTableToolbar<TData>({
 
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <div className="flex space-x-10">
-          <div className="content-center text-sm text-muted-foreground">
+          <div className="content-center text-sm text-secondary">
             <span>
               {table.getFilteredSelectedRowModel().rows.length} /{' '}
               {table.getFilteredRowModel().rows.length} đã chọn.

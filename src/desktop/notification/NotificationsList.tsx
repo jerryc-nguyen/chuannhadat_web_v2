@@ -68,7 +68,7 @@ const NotificationsList: React.FC<IProps> = ({
       <div className="c-notification__header">
         <div className="flex items-center gap-x-2">
           <h4 className="py-2 pl-5 text-lg font-semibold">Thông báo</h4>
-          <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500 hover:bg-slate-100">
+          <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-secondary hover:bg-slate-100">
             {total}
           </Badge>
         </div>
@@ -88,7 +88,7 @@ const NotificationsList: React.FC<IProps> = ({
               <h3 className="pr-5 text-sm font-semibold">{notify.title}</h3>
               <div className="mt-2">
                 <p className="text-sm">{notify.description}</p>
-                <p className="text-right text-xs font-medium text-muted-foreground">
+                <p className="text-right text-xs font-medium text-secondary">
                   {notify.formatted_created_at}
                 </p>
               </div>

@@ -194,7 +194,7 @@ const ConnectSocial: React.FC = () => {
               <FaFacebook className="text-3xl text-primary_color" />
               <div className="flex flex-col">
                 <p className="font-semibold text-primary_color">Facebook</p>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-secondary">
                   {dataFacebook ? dataFacebook.name : 'Facebook chưa được liên kết'}
                 </span>
               </div>
@@ -249,7 +249,7 @@ const ConnectSocial: React.FC = () => {
               <FcGoogle className="text-3xl" />
               <div className="flex flex-col">
                 <p className="font-semibold text-success_color">Google</p>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-secondary">
                   {dataGoogle ? dataGoogle.email : 'Google chưa được liên kết'}
                 </span>
               </div>

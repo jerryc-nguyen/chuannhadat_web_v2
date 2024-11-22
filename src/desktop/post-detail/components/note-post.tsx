@@ -6,7 +6,7 @@ const NotePost: React.FC<NotePostProps> = () => {
   return (
     <div className="important-note">
       <h2 className="pb-2 text-lg font-semibold">Lưu ý : </h2>
-      <p className="mb-2 text-xs text-slate-500">
+      <p className="mb-2 text-xs text-secondary">
         Quý vị đang xem nội dung tin rao{' '}
         <strong>
           &quot;Bán căn nhà đường Võ Oanh, Hẻm xe hơi 5x15,1 Trệt 2 lầu/ 1 tum, nhà kiên cố ở liền, Giá 15ty &quot; - Mã

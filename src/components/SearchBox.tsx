@@ -30,11 +30,11 @@ export default function SearchBox(props: TSearchBoxProps) {
 
   return (
     <div className="relative mt-2" onClick={props.onClick}>
-      <LuSearch className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+      <LuSearch className="absolute left-3 top-2.5 h-4 w-4 text-secondary" />
 
       {curValue.length > 0 && (
         <LuXCircle
-          className="absolute right-3 top-2.5 h-4 w-4 cursor-pointer text-muted-foreground"
+          className="absolute right-3 top-2.5 h-4 w-4 cursor-pointer text-secondary"
           onClick={onClear}
         />
       )}

@@ -33,7 +33,7 @@ const CardPackage: React.FC<CardPackageProps> = ({
         <Button className="mt-5 w-full bg-blue-600 hover:bg-blue-500">Mua ngay</Button>
 
         <div>
-          <span className="inline-block pt-3 text-sm text-slate-500">Ưu đãi bao gồm :</span>
+          <span className="inline-block pt-3 text-sm text-secondary">Ưu đãi bao gồm :</span>
           <ul className="mt-4">
             {listPreferential &&
               listPreferential.map((item) => (

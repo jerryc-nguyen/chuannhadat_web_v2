@@ -53,7 +53,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
     </Button>
   );
   return (
-    <div className={cn('author-post z-3 sticky top-16 h-fit min-w-[310px] flex-1', className)}>
+    <div className={cn('author-post z-3 sticky top-16 h-fit min-w-[350px] flex-1', className)}>
       {isLoading || !data?.author?.slug ? (
         loadingAuthor()
       ) : (
@@ -74,7 +74,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
               >
                 {profileData?.full_name}
               </a>
-              <p className="text-gray text-sm">Đã đăng {profileData?.posts_count} tin</p>
+              <p className="text-secondary text-sm">Đã đăng {profileData?.posts_count} tin</p>
             </div>
           </div>
           <div className="my-4">

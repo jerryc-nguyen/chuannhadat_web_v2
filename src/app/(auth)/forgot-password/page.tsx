@@ -55,7 +55,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
               Đăng nhập
             </Link>
             <h1 className="text-2xl font-semibold md:text-3xl xl:text-4xl">Quên mật khẩu ?</h1>
-            <p className="mt-4 text-muted-foreground">
+            <p className="mt-4 text-secondary">
               Đừng lo lắng, điều này xảy ra với tất cả chúng ta. Nhập email của bạn dưới đây để khôi
               phục mật khẩu của bạn
             </p>

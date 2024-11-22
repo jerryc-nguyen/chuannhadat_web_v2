@@ -28,7 +28,7 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
 
   return (
     <div className="flex items-center justify-between px-2">
-      <div className="flex-1 text-sm text-muted-foreground">
+      <div className="flex-1 text-sm text-secondary">
         {/* {table.getFilteredSelectedRowModel().rows.length} /{" "}
         {table.getFilteredRowModel().rows.length} đã chọn. */}
         {`Hiển thị ${listLength} / ${meta?.totalRecords ?? 0} bản ghi.`}

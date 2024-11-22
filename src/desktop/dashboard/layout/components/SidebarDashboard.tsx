@@ -120,7 +120,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
       <SidebarFooter className="p-4">
         <Card className="rounded-md p-3" x-chunk="dashboard-02-chunk-0">
           <CardHeader className="rounded-sm border p-2 text-center hover:bg-slate-50">
-            <CardDescription className="font-medium text-slate-600">
+            <CardDescription className="font-medium text-secondary">
               Tài khoản chính
             </CardDescription>
             <CardTitle className="!mt-0 text-lg font-bold text-green-600">
@@ -128,7 +128,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
             </CardTitle>
           </CardHeader>
           <CardHeader className="my-2 rounded-sm border p-2 text-center hover:bg-slate-50">
-            <CardDescription className="font-medium text-slate-600">Tài khoản KM</CardDescription>
+            <CardDescription className="font-medium text-secondary">Tài khoản KM</CardDescription>
             <CardTitle className="!mt-0 text-lg font-bold text-yellow-600">
               {balanceData?.tk_km}
             </CardTitle>
