@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LuPhoneIncoming } from 'react-icons/lu';
 import { AuthorPostProps } from '../type';
 import DialogContactAgain from '@components/dialog-contact-again';
@@ -19,6 +19,11 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
     enabled: !!data?.author?.slug,
     select: (data) => data.data,
   });
+
+  const badgesCount = useMemo(() => {
+    return (profileData?.formatted_badges || []).length
+  }, [])
+
   const router = useRouter();
   const loadingAuthor = () => {
     return (
@@ -77,12 +82,12 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
               <p className="text-secondary text-sm">Đã đăng {profileData?.posts_count} tin</p>
             </div>
           </div>
-          <div className="my-4">
-            {profileData?.formatted_badges &&
-              profileData?.formatted_badges.map((item, index) => (
-                <li key={genKey(index)}>{item}</li>
-              ))}
-          </div>
+          {badgesCount > 0 && (
+            <div className="my-4 text-secondary">
+              🏆 Đã đạt {badgesCount} danh hiệu môi giới
+            </div>
+          )}
+
           <div className="flex flex-col gap-y-2">
             <ButtonPhone phoneNumberProfile={profileData?.phone as string} />
             <DialogContactAgain

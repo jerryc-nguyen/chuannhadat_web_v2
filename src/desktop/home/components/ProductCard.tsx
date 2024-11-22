@@ -124,7 +124,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
       <CardFooter className="flex-col p-0 pt-4">
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="we line-clamp-2 cursor-pointer text-base font-semibold text-dark-gray hover:text-black"
+          className="we line-clamp-2 cursor-pointer text-base font-semibold text-primary"
         >
           {product?.title}
         </h3>
