@@ -18,21 +18,18 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
   const DEFAULT_THUMB_IMAGE =
     'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
   const { buildThumbnailUrl } = useResizeImage();
-  const pathname = usePathname();
-  const router = useRouter();
   const { handleOpenModal, postIdModal, isLoadingDataModal, postDetailDataModal } =
     useModalPostDetail();
 
   const handleViewDetailPost = (product: IProductSummary) => {
-    if (postDetailDataModal && pathname.includes(postDetailDataModal.detail_path)) {
-      router.push(product.slug);
-    } else {
-      handleOpenModal(product.uid);
-    }
+    handleOpenModal(product.uid);
   };
+
   return (
     <div className={styles.related_product_card}>
-      <h3 className="mb-4 line-clamp-2 h-[40px] text-ellipsis text-sm font-semibold text-dark-gray">
+      <h3
+        onClick={() => handleViewDetailPost(product)}
+        className="cursor-pointer mb-4 line-clamp-2 h-[40px] text-ellipsis text-sm font-semibold text-dark-gray">
         {product?.title}
       </h3>
       <div className="card-content">
@@ -75,13 +72,6 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
           Đang tải
         </div>
       )}
-      <Button
-        onClick={() => handleViewDetailPost(product)}
-        variant={'link'}
-        className="mt-2 w-full border bg-blue-500 text-white hover:bg-primary_color/80"
-      >
-        Xem chi tiết
-      </Button>
     </div>
   );
 };

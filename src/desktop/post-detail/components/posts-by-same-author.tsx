@@ -1,6 +1,5 @@
 import { services } from '@api/services';
 import RelatedCard from '@components/related-product-card';
-import TooltipHost from '@components/tooltip-host';
 import { Card, CardContent } from '@components/ui/card';
 import {
   Carousel,

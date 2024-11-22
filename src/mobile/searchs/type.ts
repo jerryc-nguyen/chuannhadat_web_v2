@@ -69,4 +69,5 @@ export interface IProductDetail {
   price_per_m2: number;
   formatted_kt: string;
   author: Author;
+  breadcrumb: A
 }
