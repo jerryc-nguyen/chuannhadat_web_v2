@@ -15,6 +15,15 @@ type BreadcrumbProps = {
   breadcrumbs: IBreadcrumbItem[];
 };
 
+export const ConvertFromBreadcrumbListJSONLd = (breadcrumb: A) => {
+  return ((breadcrumb || {}).itemListElement || []).map((item: A) => {
+    return {
+      title: item.name,
+      link: item.item
+    }
+  })
+}
+
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
 
   return (

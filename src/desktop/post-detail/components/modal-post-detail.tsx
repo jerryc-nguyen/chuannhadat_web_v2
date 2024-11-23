@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/sheet';
 import { useAtom, useSetAtom } from 'jotai';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
@@ -14,6 +14,8 @@ import AuthorPost from './author-post';
 import { useBrowserPushState } from '@components/popstate-handler/hooks';
 import { useQuery } from '@tanstack/react-query';
 import ViewedPosts from './ViewedPosts';
+import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@desktop/components/breadcrumb';
+
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
@@ -54,6 +56,10 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
     }
   };
 
+  const breadcrumbsData = useMemo(() => {
+    return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
+  }, [data?.breadcrumb])
+
   return (
     <Sheet open={isOpenModal} onOpenChange={onOpenChange}>
       <SheetContent
@@ -61,7 +67,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
         className={cn('flex !w-3/4 flex-col bg-gray-100', styles.modal_content_post)}
       >
         <SheetHeader>
-          <SheetTitle>Đường dẫn</SheetTitle>
+          <SheetTitle><Breadcrumb breadcrumbs={breadcrumbsData} /></SheetTitle>
         </SheetHeader>
         <section
           ref={postContentRef}
