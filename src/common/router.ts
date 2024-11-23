@@ -75,4 +75,7 @@ export const API_ROUTES = {
   },
   SEOS: 'api/v1/seos/metadata',
   REFERRALS: 'api/v1/referrals',
+  DASHBOARD: {
+    ACCOUNT_SUMMARY: 'api/v1/dashboards',
+  }
 };
