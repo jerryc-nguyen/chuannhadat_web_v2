@@ -15,12 +15,12 @@ import Link from "next/link";
 import LocationFormV2 from "./components/form-components/location-form-v2";
 import { toast } from 'sonner';
 import { PostFormSchema } from "./form-schemas";
-import { IProductForm } from "../types";
+import { IPostForm } from "../types";
 
-const defaultValues: IProductForm = {
+const defaultValues: IPostForm = {
   description: "",
-  business_type: businessTypeOptions[0].value,
-  category_type: categoryTypeOptions[0].value,
+  business_type: businessTypeOptions[0].value ?? "",
+  category_type: categoryTypeOptions[0].value ?? "",
   title: "",
   area: "",
   phap_ly: "",
@@ -41,11 +41,10 @@ const defaultValues: IProductForm = {
   furniture: "",
   image_ids: "",
   youtube_url: ""
-};
+} as const;
 
 const NewPost: React.FC = () => {
-  const form = useForm({
-    // @ts-ignore: ok
+  const form = useForm<IPostForm>({
     resolver: yupResolver(PostFormSchema),
     defaultValues,
     reValidateMode: "onChange"
@@ -74,6 +73,8 @@ const NewPost: React.FC = () => {
     }
   };
 
+  console.log({ errors: form.formState.errors, values: form.watch() });
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -90,7 +91,7 @@ const NewPost: React.FC = () => {
             <ProductConfigForm />
           </div> */}
         </div>
-        <div className="bg-card border bottom-2 flex justify-between mt-6 p-3 rounded-lg sticky z-[999999]">
+        <div className="bg-card border bottom-2 flex justify-between mt-6 p-3 rounded-lg sticky z-[40]">
           <Link href={`/dashboard/manage-post/collection-post`}>
             <Button type="button" variant="ghost">Trở lại</Button>
           </Link>
