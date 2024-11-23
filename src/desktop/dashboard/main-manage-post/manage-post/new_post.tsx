@@ -45,6 +45,7 @@ const defaultValues: IPostForm = {
 
 const NewPost: React.FC = () => {
   const form = useForm<IPostForm>({
+    // @ts-expect-error: ok
     resolver: yupResolver(PostFormSchema),
     defaultValues,
     reValidateMode: "onChange"

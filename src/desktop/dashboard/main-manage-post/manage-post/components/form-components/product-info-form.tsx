@@ -346,7 +346,6 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                     options={[{ label: 'Không xác định', value: '' }, ...furnitureTypeOptions]}
                     actions={
                       <>
-                        {' '}
                         <SelectSeparator />
                         <Button
                           className="w-full px-2"
