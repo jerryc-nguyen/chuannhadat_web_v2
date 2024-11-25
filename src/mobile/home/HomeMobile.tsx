@@ -16,7 +16,7 @@ export default function HomeMobile() {
 
   return (
     <div className="content-bg-color">
-      {/* <TestComponents /> */}
+      <TestComponents />
       <FilterChips />
 
       <QueryClientProvider client={queryClient}>

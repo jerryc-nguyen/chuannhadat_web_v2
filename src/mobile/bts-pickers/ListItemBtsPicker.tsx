@@ -36,6 +36,7 @@ export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, 
           name: `ListItemBtsPicker_${btsTitle}`,
           title: btsTitle,
           content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={options} />,
+          supportPushState: false
         });
       }}
       after={selectedOption?.text}

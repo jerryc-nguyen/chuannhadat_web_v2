@@ -5,7 +5,7 @@ import ListItemBtsPicker from "../bts-pickers/ListItemBtsPicker";
 import ListItemBtsInput from "@mobile/bts-pickers/ListItemBtsInput";
 import useModals from "@mobile/modals/hooks";
 import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/manage-post/components/form-components/fields/price-autocomplete";
-import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
+import { buildOptionsPrice, maskNumber, readMoney } from "@common/priceHelpers";
 import { Input } from "@components/ui/input";
 import LocationsPicker from "@mobile/ui/LocationsPicker";
 
@@ -81,7 +81,7 @@ export default function TestComponents() {
   }
 
   const priceFieldOption = {
-    displayText: price,
+    displayText: readMoney(parseInt(price || '')),
     openModal: openModal,
     closeModal: closeModal,
 
@@ -89,7 +89,8 @@ export default function TestComponents() {
       name: '',
       title: 'Giá',
       content: <PriceInputField value={price} onChange={onPriceChanged} />,
-      showAsDialog: true
+      showAsDialog: true,
+      supportPushState: false
     }
   }
 
@@ -97,7 +98,9 @@ export default function TestComponents() {
     <List strongIos outlineIos>
       <ListItemBtsPicker {...directionFieldOption} />
       <ListItemBtsInput {...priceFieldOption} />
-      {/* <ListItemBtsPicker {...bedFieldOption} /> */}
+
+      {/* @ts-ignore: ok */}
+      <ListItemBtsPicker {...bedFieldOption} />
     </List>
 
     <LocationsPicker
