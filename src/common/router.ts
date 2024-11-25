@@ -42,6 +42,8 @@ export const API_ROUTES = {
     GET_PROFILE_ID: 'api/v1/profiles',
     UPDATE_PASSWORD: 'api/v1/profiles/update_password',
     UPDATE_PHONE: 'api/v1/profiles/update_phone',
+    UPDATE_EMAIL: 'api/v1/profiles/update_email',
+    CONFIRM_EMAIL: 'api/v1/profiles/confirm_email',
   },
   IMAGE_UPLOAD: {
     SIGN_S3: 'api/v1/product_images/sign-s3',
@@ -77,5 +79,5 @@ export const API_ROUTES = {
   REFERRALS: 'api/v1/referrals',
   DASHBOARD: {
     ACCOUNT_SUMMARY: 'api/v1/dashboards',
-  }
+  },
 };

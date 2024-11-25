@@ -6,19 +6,15 @@ import { dehydrate, HydrationBoundary, QueryClientProvider } from '@tanstack/rea
 import { getQueryClient } from '@api/react-query';
 import '@styles/pages/mobile/home.scss';
 
-import TestComponents from './TestComponents';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 
 export default function HomeMobile() {
   useSyncParamsToState();
   const queryClient = getQueryClient();
 
-
   return (
     <div className="content-bg-color">
-      <TestComponents />
       <FilterChips />
-
       <QueryClientProvider client={queryClient}>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <PostList />
