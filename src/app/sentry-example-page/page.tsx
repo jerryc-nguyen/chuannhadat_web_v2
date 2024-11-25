@@ -76,7 +76,7 @@ export default function Page() {
             margin: "18px",
           }}
           onClick={async () => {
-            const sampleObj = { }; 
+            const sampleObj = {};
             // Func that crash 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -88,7 +88,7 @@ export default function Page() {
 
         <p>
           Next, look for the error on the{" "}
-          <a href="https://chuan-nha-at.sentry.io/issues/?project=4508353850114048">Issues Page</a>.
+          <a href="https://chuan-nha-dat.sentry.io/issues/?project=4508353850114048">Issues Page</a>.
         </p>
         <p style={{ marginTop: "24px" }}>
           For more information, see{" "}
