@@ -85,7 +85,7 @@ const EditPost = ({ params }: { params: A }) => {
             <ProductConfigForm />
           </div> */}
         </div>
-        <div className="bg-card border bottom-2 flex justify-between mt-6 p-3 rounded-lg sticky z-[999999]">
+        <div className="bg-card border bottom-2 flex justify-between mt-6 p-3 rounded-lg sticky z-[40]">
           <Link href={`/dashboard/manage-post/collection-post`}>
             <Button type="button" variant="ghost">Trở lại</Button>
           </Link>

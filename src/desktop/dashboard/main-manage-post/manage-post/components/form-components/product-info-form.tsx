@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+'use client';
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -11,28 +11,25 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { ControllerRenderProps } from "react-hook-form";
-import { Separator } from "@components/ui/separator";
-import { Checkbox } from "@components/ui/checkbox";
-import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
-import { PriceAutoComplete } from "./fields/price-autocomplete";
-import { BadgeInfo } from "lucide-react";
-import {
-  furnitureTypeOptions,
-  phapLyTypeOptions,
-  directionOptions,
-} from "../../constant";
-import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
+} from '@/components/ui/select';
+import { ControllerRenderProps } from 'react-hook-form';
+import { Separator } from '@components/ui/separator';
+import { Checkbox } from '@components/ui/checkbox';
+import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
+import { PriceAutoComplete } from './fields/price-autocomplete';
+import { BadgeInfo } from 'lucide-react';
+import { furnitureTypeOptions, phapLyTypeOptions, directionOptions } from '../../constant';
+import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
+import { CommonSelect } from '../CommonSelect';
 
 const ProductInfoForm: React.FC<A> = ({ form }) => {
-  const price_in_vnd = form.watch("price_in_vnd");
+  const price_in_vnd = form.watch('price_in_vnd');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
     const regex = /^(?![.,])\d+([.,]\d{0,})?$/;
 
-    if (regex.test(value) || value === "") {
+    if (regex.test(value) || value === '') {
       field.onChange(value); // Update the value only if it matches the regex
     }
   };
@@ -40,7 +37,9 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-md flex gap-2"><BadgeInfo /> Thông tin Bất động sản</CardTitle>
+        <CardTitle className="text-md flex gap-2">
+          <BadgeInfo /> Thông tin Bất động sản
+        </CardTitle>
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
@@ -75,34 +74,26 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel>Giấy tờ pháp lý</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
+                  <CommonSelect
+                    onChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue defaultValue={field.value} placeholder="Không xác định" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {phapLyTypeOptions.map((item, index) => (
-                        <SelectItem key={index} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                      <SelectSeparator />
-                      <Button
-                        className="w-full px-2"
-                        variant="secondary"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          form.setValue("phap_ly", "");
-                        }}
-                      >
-                        Xóa lựa chọn
-                      </Button>
-                    </SelectContent>
-                  </Select>
+                    options={[{ label: 'Không xác định', value: '' }, ...phapLyTypeOptions]}
+                    actions={
+                      <>
+                        <SelectSeparator />
+                        <Button
+                          className="w-full px-2"
+                          variant="default"
+                          size="sm"
+                          onClick={(e) => {
+                            form.setValue('phap_ly', '');
+                          }}
+                        >
+                          Xóa lựa chọn
+                        </Button>
+                      </>
+                    }
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -125,7 +116,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   }}
                   items={buildOptionsPrice({
                     searchText: price_in_vnd,
-                    businessType: form.getValues("business_type"),
+                    businessType: form.getValues('business_type'),
                   })}
                   emptyMessage="Nhập giá bán"
                   InputRender={
@@ -138,13 +129,13 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                         onChangeFieldNumber(field, rawValue);
                       }}
                       maxLength={12}
-                      disabled={form.getValues("price_in_vnd") === "Thỏa thuận"}
+                      disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
                     />
                   }
                 />
 
                 <div
-                  className={`flex ${form.formState.errors.price_in_vnd ? "justify-between" : "justify-end"}`}
+                  className={`flex ${form.formState.errors.price_in_vnd ? 'justify-between' : 'justify-end'}`}
                 >
                   <FormMessage />
 
@@ -153,9 +144,9 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                       id="terms"
                       onCheckedChange={(value) => {
                         if (value) {
-                          form.setValue("price_in_vnd", "Thỏa thuận");
+                          form.setValue('price_in_vnd', 'Thỏa thuận');
                         } else {
-                          form.setValue("price_in_vnd", "");
+                          form.setValue('price_in_vnd', '');
                         }
                       }}
                     />
@@ -288,37 +279,25 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel>Hướng nhà/ đất</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
+                  <CommonSelect
+                    onChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        defaultValue={field.value}
-                        placeholder="Không xác định"
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {directionOptions.map((item, index) => (
-                        <SelectItem key={index} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                      <SelectSeparator />
-                      <Button
-                        className="w-full px-2"
-                        variant="secondary"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          form.setValue("entrance_direction", "");
-                        }}
-                      >
-                        Xóa lựa chọn
-                      </Button>
-                    </SelectContent>
-                  </Select>
+                    options={[{ label: 'Không xác định', value: '' }, ...directionOptions]}
+                    actions={
+                      <>
+                        <SelectSeparator />
+                        <Button
+                          className="w-full px-2"
+                          size="sm"
+                          onClick={(e) => {
+                            form.setValue('entrance_direction', '');
+                          }}
+                        >
+                          Xóa lựa chọn
+                        </Button>
+                      </>
+                    }
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -330,37 +309,26 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel>Hướng ban công</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
+                  <CommonSelect
+                    onChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        defaultValue={field.value}
-                        placeholder="Không xác định"
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {directionOptions.map((item, index) => (
-                        <SelectItem key={index} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                      <SelectSeparator />
-                      <Button
-                        className="w-full px-2"
-                        variant="secondary"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          form.setValue("view_direction", "");
-                        }}
-                      >
-                        Xóa lựa chọn
-                      </Button>
-                    </SelectContent>
-                  </Select>
+                    options={[{ label: 'Không xác định', value: '' }, ...directionOptions]}
+                    actions={
+                      <>
+                        {' '}
+                        <SelectSeparator />
+                        <Button
+                          className="w-full px-2"
+                          size="sm"
+                          onClick={(e) => {
+                            form.setValue('view_direction', '');
+                          }}
+                        >
+                          Xóa lựa chọn
+                        </Button>
+                      </>
+                    }
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -372,37 +340,25 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel>Nội thất</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
+                  <CommonSelect
+                    onChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        defaultValue={field.value}
-                        placeholder="Không xác định"
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {furnitureTypeOptions.map((item, index) => (
-                        <SelectItem key={index} value={item.value}>
-                          {item.label}
-                        </SelectItem>
-                      ))}
-                      <SelectSeparator />
-                      <Button
-                        className="w-full px-2"
-                        variant="secondary"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          form.setValue("furniture", "");
-                        }}
-                      >
-                        Xóa lựa chọn
-                      </Button>
-                    </SelectContent>
-                  </Select>
+                    options={[{ label: 'Không xác định', value: '' }, ...furnitureTypeOptions]}
+                    actions={
+                      <>
+                        <SelectSeparator />
+                        <Button
+                          className="w-full px-2"
+                          size="sm"
+                          onClick={(e) => {
+                            form.setValue('furniture', '');
+                          }}
+                        >
+                          Xóa lựa chọn
+                        </Button>
+                      </>
+                    }
+                  />
                   <FormMessage />
                 </FormItem>
               )}

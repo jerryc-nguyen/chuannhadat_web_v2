@@ -52,3 +52,10 @@ export const QUERY_KEY = {
 };
 
 export const timeOutDuration = 15 * 3600 * 1000; // 15 days
+
+export const CND_TEXT_COLORS = {
+  Success: "text-green-600",
+  Warning: "text-amber-500",
+  Error: "text-rose-700",
+  Info: "text-cyan-500"
+}
