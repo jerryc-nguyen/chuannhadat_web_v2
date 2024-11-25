@@ -1,7 +1,10 @@
 'use client';
+import { useEffect } from 'react';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Marcellus } from 'next/font/google';
+import * as Sentry from "@sentry/nextjs";
+import Error from "next/error";
 
 // Error boundaries must be Client Components
 const readex_pro = Marcellus({
@@ -9,7 +12,12 @@ const readex_pro = Marcellus({
   weight: '400',
   preload: false,
 });
-export default function GlobalError() {
+export default function GlobalError({ error }: { error: Error }) {
+
+  useEffect(() => {
+    Sentry.captureException(error);
+  }, [error]);
+
   return (
     <section
       className={cn(
