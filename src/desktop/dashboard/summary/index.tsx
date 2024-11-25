@@ -1,34 +1,42 @@
 'use client';
 import { get } from 'lodash-es';
 import { useAccountSummary } from './hooks/useAccountSummary';
-import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
-import { twMerge } from 'tailwind-merge';
+import FigureCard, { CardIcons } from '../components/FigureCard';
+import useAuth from '@mobile/auth/hooks/useAuth';
+import { CND_TEXT_COLORS } from '@common/constants';
 
 type SummaryDashboardProps = object;
 
 export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
   const { data, isLoading } = useAccountSummary();
+  const { currentUser } = useAuth();
+
 
   return (
     <section>
-      <h1 className="mb-4 text-lg font-semibold md:text-xl">Xin chào </h1>
+      <h1 className="mb-4 text-lg font-semibold md:text-xl">Xin chào {currentUser?.full_name}</h1>
       {!isLoading && (
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mt-6">
             <div className={styles.titleH2}>
               <h2>Tài chính</h2>
             </div>
             <div className={styles.wrapCard}>
-              <FigureCard title="Tài khoản chính" content={get(data, 'balances.tk_chinh')} />
+              <FigureCard
+                title="Số dư"
+                contentClassName={CND_TEXT_COLORS.Success}
+                content={get(data, 'balances.total')}
+                icon={CardIcons.Money}
+              />
+              <FigureCard
+                title="Tài khoản chính"
+                content={get(data, 'balances.tk_chinh')}
+                icon={CardIcons.Money} />
+
               <FigureCard
                 title="Tài khoản khuyến mãi"
                 content={get(data, 'balances.tk_km')}
-                contentClassName="text-yellow-500"
-              />
-              <FigureCard
-                title="Tổng"
-                contentClassName="text-green-500"
-                content={get(data, 'balances.total')}
+                icon={CardIcons.Money}
               />
             </div>
           </div>
@@ -37,11 +45,15 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
               <h2>Tin đăng</h2>
             </div>
             <div className={styles.wrapCard}>
-              <FigureCard title="Tin bán" content={get(data, 'posts.sell_count')} />
+              <FigureCard
+                title="Tin bán"
+                content={get(data, 'posts.sell_count')}
+                icon={CardIcons.Document}
+              />
               <FigureCard
                 title="Tin cho thuê"
                 content={get(data, 'posts.rent_count')}
-                contentClassName="text-green-500"
+                icon={CardIcons.Document}
               />
             </div>
           </div>
@@ -53,6 +65,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
               <FigureCard
                 title="Yêu cầu liên hệ lại"
                 content={get(data, 'requests.callbacks_count')}
+                icon={CardIcons.PhoneOutgoing}
               />
             </div>
           </div>
@@ -64,26 +77,5 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
 
 const styles = {
   titleH2: 'text-base font-semibold md:text-xl',
-  wrapCard: 'flex gap-4 flex-col lg:flex-row',
+  wrapCard: 'grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4 mb-4',
 } as const;
-
-interface FigureCardProps {
-  title: React.ReactNode;
-  content: React.ReactNode;
-  contentClassName?: string;
-}
-
-function FigureCard({ title, content, contentClassName }: FigureCardProps) {
-  return (
-    <Card className="flex-1">
-      <CardHeader className="mt-4 p-4 pb-0">
-        <CardTitle className="uppercase text-slate-400">{title}</CardTitle>
-      </CardHeader>
-      <CardContent
-        className={twMerge('p-4 text-xl font-bold text-[#007bff]', contentClassName)}
-      >
-        {content}
-      </CardContent>
-    </Card>
-  );
-}
