@@ -40,7 +40,7 @@ const config = {
         neutral_07: '#141718',
         ...mauve,
         ...violet,
-        border: 'hsl(var(--border))',
+        border: 'var(--border)',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',

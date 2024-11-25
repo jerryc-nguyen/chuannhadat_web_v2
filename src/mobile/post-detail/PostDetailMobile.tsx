@@ -10,7 +10,8 @@ import PhotosCarousel from '@mobile/post-detail/components/PhotosCarousel';
 import ProductDescription from './components/ProductDescription';
 import Section from '@mobile/ui/Section';
 import { FeaturesList } from '@desktop/post-detail/components/features-post';
-import ViewedPostsMobile from './components/ViewedPostsMobile';
+import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
+import './PostDetailMobile.scss';
 
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);
@@ -27,6 +28,11 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
   const { mutate: addViewPost } = useMutation({
     mutationFn: services.trackings.viewProduct,
   });
+
+  if (product) {
+    setAuthor(product.author);
+  }
+
   React.useEffect(() => {
     if (productUid) {
       addViewPost({
@@ -34,9 +40,9 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
       });
     }
   }, [productUid]);
+
   useEffect(() => {
     if (product) {
-      setAuthor(product?.author);
       setPostDetail(product);
     }
   }, [product, setPostDetail]);
@@ -55,7 +61,9 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
         <FeaturesList data={product} />
       </Section>
       <ProductDescription product={product} />
-      <ViewedPostsMobile productUid={product?.uid as string} />
+      <div className='c-mblAuthorInfo p-4'>
+        <AuthorInfo />
+      </div>
     </div>
   );
 }

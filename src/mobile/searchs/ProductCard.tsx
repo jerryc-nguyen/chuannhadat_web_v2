@@ -4,7 +4,7 @@ import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
-import PostDetailMobile from '../post-detail/PostDetailMobile ';
+import PostDetailMobile from '../post-detail/PostDetailMobile';
 import Image from 'next/image';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
@@ -65,7 +65,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       maxHeightPercent: 0.95,
       footer: <AuthorInfo />,
       headerHeight: 74.59,
-      footerHeight: 67,
+      footerHeight: 74.59,
       pushToPath: `/post/${product.slug}`,
     });
   };

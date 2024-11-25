@@ -14,7 +14,6 @@ import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
 import useDebounce from '@hooks/useDebounce';
 
-
 export default function PostList() {
   useSyncParamsToState();
   const { openModal3, closeModals } = useModals();
@@ -24,7 +23,6 @@ export default function PostList() {
     copyFilterStatesToLocal,
     applySortFilter,
   } = useFilterState();
-
 
   const filterParams = buildFilterParams({
     withLocal: false,
