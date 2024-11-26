@@ -1,6 +1,7 @@
 import { IProductDetail } from '@mobile/searchs/type';
 import { Pagination } from './savesPostModel';
 import { HttpStatusCode } from 'axios';
+import { ILoginResponse } from '@mobile/auth/types';
 
 export interface IViewedPostResonpse extends IResponseData<IProductDetail[]> {
   pagination: Pagination;
@@ -46,3 +47,4 @@ export interface IReferralData {
   success: false;
 }
 export type IReferralListResponse = IResponseData<IReferralData[]>;
+export type IProfileMeResponse = IResponseData<ILoginResponse>;

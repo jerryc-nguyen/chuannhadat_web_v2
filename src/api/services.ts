@@ -19,6 +19,7 @@ import {
 import {
   IConnectOauthsResponse,
   IListRequestResponse,
+  IProfileMeResponse,
   IReferralListResponse,
   IReferralsDetailResponse,
   IRequestCallbackResponse,
@@ -33,8 +34,8 @@ import {
 
 export const services = {
   profiles: {
-    getMyProfile: async (headers?: A): Promise<A> => {
-      return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE, { headers: headers });
+    getMyProfile: async (): Promise<IProfileMeResponse> => {
+      return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE);
     },
     getProfileSlug: async (slug: string): Promise<{ data: Author }> => {
       return axiosInstance.get(concatStrings(API_ROUTES.PROFILES.GET_MY_PROFILE_SLUG, slug), {
@@ -45,6 +46,16 @@ export const services = {
     },
     getProfileId: async (id: number): Promise<A> => {
       return axiosInstance.get(`${API_ROUTES.PROFILES.GET_PROFILE_ID}/${id}`);
+    },
+    updateEmail: async (email: string): Promise<A> => {
+      return axiosInstance.post(`${API_ROUTES.PROFILES.UPDATE_EMAIL}`, {
+        email: email,
+      });
+    },
+    confirmEmail: async (confirm_email_token: string): Promise<A> => {
+      return axiosInstance.post(`${API_ROUTES.PROFILES.CONFIRM_EMAIL}`, {
+        confirm_email_token: confirm_email_token,
+      });
     },
   },
   subscription_plans: {

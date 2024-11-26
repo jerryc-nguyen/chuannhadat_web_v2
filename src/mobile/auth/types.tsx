@@ -44,6 +44,8 @@ export interface ILoginResponse {
   website_url?: string;
   youtube_url?: string;
   facebook_url?: string;
+  email?: string;
+  unconfirmed_email?: A;
 }
 export type IRegisterResponse = LoginResponse;
 export enum ILoginAndRegisterModalType {
