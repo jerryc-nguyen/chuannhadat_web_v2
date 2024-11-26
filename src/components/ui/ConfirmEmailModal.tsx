@@ -3,19 +3,18 @@ import React from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from './alert-dialog';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
-import { AxiosError } from 'axios';
 import useAuth from '@mobile/auth/hooks/useAuth';
 
 const ConfirmEmailModal: React.FC = () => {
@@ -24,7 +23,8 @@ const ConfirmEmailModal: React.FC = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const emailToken = params.get('confirm_email_token');
-  const [showConfirmEmail, setShowConfirmEmail] = React.useState(!!emailToken);
+  const [showConfirmEmail, setShowConfirmEmail] = React.useState(false);
+  const [isConfirmSuccess, setIsConfirmSuccess] = React.useState(false);
   const { data: profileMe } = useQuery({
     queryKey: ['get-profile-me'],
     queryFn: services.profiles.getMyProfile,
@@ -36,46 +36,69 @@ const ConfirmEmailModal: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileMe]);
+
   const { mutate: confirmEmail, isPending } = useMutation({
     mutationFn: services.profiles.confirmEmail,
-    onError: (err: AxiosError<A>) => {
-      toast.error(`Xác thực email không thành công ${err.message}`);
+    onError: () => {
+      router.replace('/', undefined);
     },
     onSuccess: (data: A) => {
       if (data.status) {
-        toast.success('Xác thực email thành công');
+        setIsConfirmSuccess(true)
+        setShowConfirmEmail(true)
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
-        router.replace('/', undefined);
       } else {
-        toast.error(data.message);
+        setShowConfirmEmail(true)
+        setIsConfirmSuccess(false)
       }
     },
   });
-  const handleConfirmEmail = () => {
-    confirmEmail(emailToken as string);
-  };
+
+  React.useEffect(() => {
+    if (emailToken) {
+      confirmEmail(emailToken as string);
+    }
+  }, [confirmEmail, emailToken])
+
   return (
     <AlertDialog open={showConfirmEmail} onOpenChange={setShowConfirmEmail}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xác Nhận Cập Nhật Email</AlertDialogTitle>
-          <AlertDialogDescription>
-            Bạn có chắc chắn muốn xác nhận cập nhật email? Hành động này sẽ hoàn tất quá trình thay
-            đổi địa chỉ email của bạn.
-          </AlertDialogDescription>
+          {isConfirmSuccess && (
+            <>
+              <AlertDialogTitle>Xác nhận email thành công!</AlertDialogTitle>
+              <AlertDialogDescription>
+                <p>
+                  Địa chỉ email <b>{profileMe?.unconfirmed_email || profileMe?.email}</b> đã được xác thực thành công.
+                </p>
+              </AlertDialogDescription>
+            </>
+          )}
+
+          {!isConfirmSuccess && (
+            <>
+              <AlertDialogTitle>Xác nhận email không thành công!</AlertDialogTitle>
+              <AlertDialogDescription>
+                <p>
+                  Mã xác thực email không tồn tại.
+                </p>
+                <p>
+                  Bạn có thể gửi lại mã xác thực email tại mục <b>Cài đặt tài khoản</b> / <b>Email</b>
+                </p>
+              </AlertDialogDescription>
+            </>
+          )}
+
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel
+          <AlertDialogAction
             onClick={() => {
               router.replace('/', undefined);
               setShowConfirmEmail(false);
             }}
-          >
-            Hủy bỏ
-          </AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirmEmail} disabled={isPending}>
+            disabled={isPending}>
             {isPending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Xác nhận
+            OK
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

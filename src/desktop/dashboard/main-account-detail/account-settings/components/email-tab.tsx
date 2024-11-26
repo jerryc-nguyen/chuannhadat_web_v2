@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LuLoader2 } from 'react-icons/lu';
 import { toast } from 'sonner';
@@ -28,8 +28,10 @@ const EmailTab: React.FC = () => {
       newEmail: '',
     },
   });
+
   const queryClient = useQueryClient();
   const { handleSubmit, control, reset } = form;
+  const [unconfirmEmail, setUnconfirmEmail] = useState<string | undefined>(currentUser?.unconfirmed_email);
   const { mutate: updateEmail, isPending } = useMutation({
     mutationFn: services.profiles.updateEmail,
     onError: (err: AxiosError<A>) => {
@@ -50,20 +52,27 @@ const EmailTab: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    setUnconfirmEmail(currentUser?.unconfirmed_email)
+  }, [currentUser])
+
   function onSubmit(values: Yup.InferType<typeof formSchema>) {
-    console.log(values);
     updateEmail(values.newEmail as string);
+    if (values.newEmail != currentUser?.email) {
+      setUnconfirmEmail(values.newEmail)
+    }
   }
+
   return (
     <section className="flex h-full flex-1 flex-col justify-between">
       <div className="border-b pb-4">
         <h3 className="text-xl font-semibold">Thay đổi email</h3>
       </div>
-      {currentUser?.unconfirmed_email && (
+      {unconfirmEmail && (
         <div className="mt-4 rounded-md border bg-primary_color/10 p-6">
           <p>
-            Hệ thống đang chờ bạn xác thực email mới{' '}
-            <b className="text-yellow-500">{currentUser.unconfirmed_email}</b>
+            Hệ thống đã gửi một email xác thực đến email {' '}
+            <b className="text-yellow-500">{unconfirmEmail}</b>
           </p>
           <p>Nếu chưa nhận được email, bạn có thể yêu cầu lại bằng form bên dưới</p>
         </div>
