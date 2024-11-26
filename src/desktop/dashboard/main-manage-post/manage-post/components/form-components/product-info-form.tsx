@@ -1,26 +1,21 @@
 'use client';
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
+  SelectSeparator
 } from '@/components/ui/select';
-import { ControllerRenderProps } from 'react-hook-form';
-import { Separator } from '@components/ui/separator';
-import { Checkbox } from '@components/ui/checkbox';
 import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
-import { PriceAutoComplete } from './fields/price-autocomplete';
+import { Checkbox } from '@components/ui/checkbox';
+import { Separator } from '@components/ui/separator';
 import { BadgeInfo } from 'lucide-react';
-import { furnitureTypeOptions, phapLyTypeOptions, directionOptions } from '../../constant';
-import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
+import React from 'react';
+import { ControllerRenderProps } from 'react-hook-form';
+import { directionOptions, furnitureTypeOptions, phapLyTypeOptions } from '../../constant';
 import { CommonSelect } from '../CommonSelect';
+import { PriceAutoComplete } from './fields/price-autocomplete';
+import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
 
 const ProductInfoForm: React.FC<A> = ({ form }) => {
   const price_in_vnd = form.watch('price_in_vnd');
@@ -77,7 +72,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '' }, ...phapLyTypeOptions]}
+                    options={[{ label: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
                     actions={
                       <>
                         <SelectSeparator />
@@ -282,7 +277,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '' }, ...directionOptions]}
+                    options={[{ label: 'Không xác định', value: '__default' }, ...directionOptions]}
                     actions={
                       <>
                         <SelectSeparator />
@@ -312,7 +307,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '' }, ...directionOptions]}
+                    options={[{ label: 'Không xác định', value: '__default' }, ...directionOptions]}
                     actions={
                       <>
                         {' '}
@@ -343,7 +338,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '' }, ...furnitureTypeOptions]}
+                    options={[{ label: 'Không xác định', value: '__default' }, ...furnitureTypeOptions]}
                     actions={
                       <>
                         <SelectSeparator />
