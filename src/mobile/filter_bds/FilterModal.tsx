@@ -46,15 +46,15 @@ const FilterModal = () => {
 
   return (
     <>
-      <p>Loại tin</p>
+      <p className='px-4 mt-6 mb-2'><b>Loại tin</b></p>
 
-      <div className="bg-white p-4">
+      <div className="bg-white">
         <BusinessTypeButtons />
       </div>
 
-      <p>Loại bất động sản</p>
+      <p className='px-4 mt-6 mb-0'><b>Loại bất động sản</b></p>
 
-      <List strongIos>
+      <List strongIos outlineIos margin={'my-2'}>
         <ListItem
           link
           title="Loại BĐS"
@@ -69,13 +69,13 @@ const FilterModal = () => {
         />
       </List>
 
-      <p>Khu vực</p>
+      <p className='px-4 mt-6 mb-0'><b>Khu vực</b></p>
 
       <Locations />
 
-      <p>Thông tin chi tiết</p>
+      <p className='px-4'><b>Thông tin chi tiết</b></p>
 
-      <List strongIos outlineIos>
+      <List strongIos outlineIos margin={'my-2'}>
         <ListItem
           link
           title="Mức giá"

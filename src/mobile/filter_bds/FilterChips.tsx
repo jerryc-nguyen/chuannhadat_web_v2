@@ -25,6 +25,7 @@ import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import ManagePostsFooterBtsButton from './ManagePostFooterBtsButton';
+import { Modal } from '@mobile/modals/states/types';
 
 type FilterChipsProp = {
   isRedirectWhenApplyFilter?: boolean;
@@ -121,7 +122,7 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
       copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
 
-    openModal({
+    let modalOptions: Modal = {
       name: filterOption.id,
       title: filterOption.text,
       content: buildContent(filterOption),
@@ -131,7 +132,13 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
         //@ts-ignore: read value
         DEFAULT_MODAL_HEIGHTS[filterOption.id],
       supportPushState: false
-    });
+    }
+
+    if (filterOption.id == FilterFieldName.FilterOverview) {
+      modalOptions = { ...modalOptions, headerHeight: 58, footerHeight: 67 }
+    }
+
+    openModal(modalOptions);
   };
 
   const isActiveChip = (filterOption: FilterChipOption): boolean => {

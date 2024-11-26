@@ -68,7 +68,7 @@ export function BtsModals1() {
 
     setModal(undefined);
 
-    if (modal?.supportPushState || modal?.supportPushState == undefined) {
+    if (modal?.supportPushState) {
       historyBack();
     }
   };
@@ -99,7 +99,7 @@ export function BtsModals1() {
       >
         <Drawer.Portal>
           <Drawer.Overlay className="c-bts__overlay1 fixed inset-0 bg-black/40" />
-          <Drawer.Content className="fixed bottom-0 left-0 right-0 z-[1002] mt-24 flex flex-col rounded-t-[10px]">
+          <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
               {isStringTitle && (
                 <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>

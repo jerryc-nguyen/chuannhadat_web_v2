@@ -107,7 +107,7 @@ export default function LocationsPicker({
 
   return (
     <div>
-      <List strongIos className="mt-4">
+      <List strongIos margin="mt-2 mb-8">
         <ListItem
           link
           title="Thành Phố"
