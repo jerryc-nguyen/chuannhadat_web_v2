@@ -96,6 +96,7 @@ export function BtsModals1() {
         open={modal != undefined}
         onOpenChange={onOpenChange}
         onClose={onClose}
+        repositionInputs={false}
       >
         <Drawer.Portal>
           <Drawer.Overlay className="c-bts__overlay1 fixed inset-0 bg-black/40" />
@@ -179,7 +180,7 @@ export function BtsModals2() {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (
-      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose}>
+      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose} repositionInputs={false}>
         <Drawer.Portal>
           <Drawer.Overlay className={`c-bts__overlay2 fixed inset-0 bg-black/40`} />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
@@ -234,7 +235,7 @@ export function BtsModals3() {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (
-      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose}>
+      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose} repositionInputs={false}>
         <Drawer.Portal>
           <Drawer.Overlay className={`c-bts__overlay3 fixed inset-0 bg-black/40`} />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">

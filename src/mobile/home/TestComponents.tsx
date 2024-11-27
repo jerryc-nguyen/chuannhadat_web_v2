@@ -108,6 +108,9 @@ export default function TestComponents() {
       onChangeCity={(city) => { console.log('aa'); closeModal() }}
       onChangeDistrict={(district) => { closeModal() }}
       onChangeWard={(ward) => { closeModal() }}
+      onChangeStreet={(street) => { closeModal() }}
+      withStreet={true}
     />
+
   </>
 }
