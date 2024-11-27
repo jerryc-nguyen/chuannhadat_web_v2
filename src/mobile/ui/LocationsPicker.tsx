@@ -125,6 +125,8 @@ export default function LocationsPicker({
 
     setCurCity(finalOption);
     onChangeCity(finalOption);
+
+    updateFullAddress({ city: finalOption });
   };
 
   const onSelectDistrict = (option?: OptionForSelect) => {
@@ -135,13 +137,14 @@ export default function LocationsPicker({
 
     setCurDistrict(finalOption);
     onChangeDistrict(finalOption);
+    updateFullAddress({ city: curCity, district: finalOption });
   };
 
   const onSelectWard = (option?: OptionForSelect) => {
     const finalOption = option?.value != 'all' ? option : undefined;
     setCurWard(finalOption);
     onChangeWard(finalOption);
-    updateFullAddress({ ward: finalOption });
+    updateFullAddress({ city: curCity, district: curDistrict, ward: finalOption });
   };
 
   const onSelectStreet = (option?: OptionForSelect) => {
@@ -151,7 +154,7 @@ export default function LocationsPicker({
       onChangeStreet(finalOption);
     }
 
-    updateFullAddress({ street: finalOption });
+    updateFullAddress({ city: curCity, district: curDistrict, ward: curWard, street: finalOption });
   };
 
   const updateFullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }) => {
@@ -163,10 +166,10 @@ export default function LocationsPicker({
 
   const fullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }): string => {
     const address = [
-      street?.text || curStreet?.text,
-      ward?.text || curWard?.text,
-      district?.text || curDistrict?.text,
-      city?.text || curCity?.text
+      street?.text,
+      ward?.text,
+      district?.text,
+      city?.text
     ].filter((text) => (text || '').length > 0).join(', ')
     return address;
   }

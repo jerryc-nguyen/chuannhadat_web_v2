@@ -1,6 +1,6 @@
 import List from "@components/konsta/List";
 import { directionsOptions, roomsOptions } from "@mobile/filter_bds/constants";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ListItemBtsPicker from "../bts-pickers/ListItemBtsPicker";
 import ListItemBtsInput from "@mobile/bts-pickers/ListItemBtsInput";
 import useModals from "@mobile/modals/hooks";
@@ -8,6 +8,7 @@ import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/manage-po
 import { buildOptionsPrice, maskNumber, readMoney } from "@common/priceHelpers";
 import { Input } from "@components/ui/input";
 import LocationsPicker from "@mobile/ui/LocationsPicker";
+import { Label } from "@components/ui/label";
 
 const PriceInputField = ({ value, onChange }: A) => {
   const [val, setVal] = useState(value);
@@ -94,6 +95,18 @@ export default function TestComponents() {
     }
   }
 
+
+  const [fullAddress, setFullAddress] = useState('')
+
+  const onChangedFullAddress = (newAddress: string) => {
+    console.log('newAddress', newAddress)
+    setFullAddress(newAddress)
+  }
+
+  const mapSrc = useMemo(() => {
+    return `https://maps.google.com/maps?&q=${fullAddress}&output=embed`
+  }, [fullAddress])
+
   return <>
     <List strongIos outlineIos>
       <ListItemBtsPicker {...directionFieldOption} />
@@ -110,7 +123,28 @@ export default function TestComponents() {
       onChangeWard={(ward) => { closeModal() }}
       onChangeStreet={(street) => { closeModal() }}
       withStreet={true}
+      onChangedFullAddress={onChangedFullAddress}
     />
+    <div className='p-4'>
+      <Label>Địa chỉ:</Label>
+      <Input
+        value={fullAddress}
+        placeholder="Nhập địa chỉ"
+        onChange={(e) => {
+          setFullAddress(e.target.value)
+        }}
+      />
+      <br />
+      <Label>Vị trí trên bản đồ</Label>
+
+      <iframe
+        className='w-full min-h-64'
+        style={{ border: 0 }}
+        loading="lazy"
+        src={mapSrc}></iframe>
+
+    </div>
+
 
   </>
 }
