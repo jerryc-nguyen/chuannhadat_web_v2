@@ -175,7 +175,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                             <CommonSelect
                               onChange={field.onChange}
                               options={[
-                                { value: '', label: 'Không xác định' },
+                                { value: '', text: 'Không xác định' },
                                 ...directionOptions,
                               ]}
                               value={field.value}
@@ -220,7 +220,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                               <SelectContent>
                                 {directionOptions.map((item, index) => (
                                   <SelectItem key={index} value={item.value}>
-                                    {item.label}
+                                    {item.text}
                                   </SelectItem>
                                 ))}
                                 <SelectSeparator />
@@ -262,7 +262,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                               <SelectContent>
                                 {furnitureTypeOptions.map((item, index) => (
                                   <SelectItem key={index} value={item.value}>
-                                    {item.label}
+                                    {item.text}
                                   </SelectItem>
                                 ))}
                                 <SelectSeparator />

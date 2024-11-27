@@ -19,47 +19,47 @@ export const defaultMapOptions = {
 };
 
 export const businessTypeOptions = [
-  { value: "sell", label: "Bán" },
-  { value: "rent", label: "Cho thuê" },
+  { value: "sell", text: "Bán" },
+  { value: "rent", text: "Cho thuê" },
 ]
 
 export const categoryTypeOptions = [
-  { value: "can_ho_chung_cu", label: "Căn hộ chung cư" },
-  { value: "nha_rieng", label: "Nhà riêng" },
-  { value: "biet_thu_lien_ke", label: "Biệt thự liền kề" },
-  { value: "nha_mat_pho", label: "Nhà mặt phố" },
-  { value: "dat_nen_du_an", label: "Đất nền dự án" },
-  { value: "dat", label: "Đất" },
-  { value: "trang_trai_khu_nghi_duong", label: "Trang trại/ Khu nghỉ dưỡng" },
-  { value: "kho_nha_xuong", label: "Kho/ Nhà xưởng" },
-  { value: "nha_tro_phong_tro", label: "Nhà trọ/ Phòng trọ" },
-  { value: "van_phong", label: "Văn phòng" },
-  { value: "cua_hang_kiot", label: "Cửa hàng/ Ki-ốt" },
-  { value: "bat_dong_san_khac", label: "Bất động sản khác" },
+  { value: "can_ho_chung_cu", text: "Căn hộ chung cư" },
+  { value: "nha_rieng", text: "Nhà riêng" },
+  { value: "biet_thu_lien_ke", text: "Biệt thự liền kề" },
+  { value: "nha_mat_pho", text: "Nhà mặt phố" },
+  { value: "dat_nen_du_an", text: "Đất nền dự án" },
+  { value: "dat", text: "Đất" },
+  { value: "trang_trai_khu_nghi_duong", text: "Trang trại/ Khu nghỉ dưỡng" },
+  { value: "kho_nha_xuong", text: "Kho/ Nhà xưởng" },
+  { value: "nha_tro_phong_tro", text: "Nhà trọ/ Phòng trọ" },
+  { value: "van_phong", text: "Văn phòng" },
+  { value: "cua_hang_kiot", text: "Cửa hàng/ Ki-ốt" },
+  { value: "bat_dong_san_khac", text: "Bất động sản khác" },
 ]
 
 export const phapLyTypeOptions = [
-  { value: "sohong_sodo", label: "Sổ hồng/ Sổ đỏ" },
-  { value: "hop_dong_mua_ban", label: "Hợp đồng mua bán" },
-  { value: "giay_to_chung_minh_nguon_goc", label: "Giấy tờ chứng minh nguồn gốc" },
-  { value: "giay_viet_tay", label: "Giấy viết tay" },
+  { value: "sohong_sodo", text: "Sổ hồng/ Sổ đỏ" },
+  { value: "hop_dong_mua_ban", text: "Hợp đồng mua bán" },
+  { value: "giay_to_chung_minh_nguon_goc", text: "Giấy tờ chứng minh nguồn gốc" },
+  { value: "giay_viet_tay", text: "Giấy viết tay" },
 ]
 
 export const directionOptions = [
-  { value: "west", label: "Hướng Tây" },
-  { value: "west_south", label: "Hướng Tây Nam" },
-  { value: "west_north", label: "Hướng Tây Bắc" },
-  { value: "east", label: "Hướng Đông" },
-  { value: "east_south", label: "Hướng Đông Nam" },
-  { value: "east_north", label: "Hướng Đông Bắc" },
-  { value: "south", label: "Hướng Nam" },
-  { value: "north", label: "Hướng Bắc" }
+  { value: "west", text: "Hướng Tây" },
+  { value: "west_south", text: "Hướng Tây Nam" },
+  { value: "west_north", text: "Hướng Tây Bắc" },
+  { value: "east", text: "Hướng Đông" },
+  { value: "east_south", text: "Hướng Đông Nam" },
+  { value: "east_north", text: "Hướng Đông Bắc" },
+  { value: "south", text: "Hướng Nam" },
+  { value: "north", text: "Hướng Bắc" }
 ]
 
 export const furnitureTypeOptions = [
-  { value: "full_furniture", label: "Nội thất đầy đủ" },
-  { value: "basic_furniture", label: "Hoàn thiện cơ bản" },
-  { value: "unfinished_furniture", label: "Bàn giao thô" }
+  { value: "full_furniture", text: "Nội thất đầy đủ" },
+  { value: "basic_furniture", text: "Hoàn thiện cơ bản" },
+  { value: "unfinished_furniture", text: "Bàn giao thô" }
 ]
 
 type LocationData = {

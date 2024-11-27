@@ -16,10 +16,10 @@ export interface IPostForm {
   area: string;
   phap_ly?: string;
   price_in_vnd: string;
-  city_id: string;
-  district_id: string;
-  ward_id: string;
-  street_id?: string;
+  city_id?: number;
+  district_id?: number;
+  ward_id?: number;
+  street_id?: number;
   project_id: string;
   full_address?: string;
   bedrooms_count?: string;

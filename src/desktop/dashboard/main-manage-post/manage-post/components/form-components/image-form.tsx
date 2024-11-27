@@ -18,13 +18,13 @@ const ImageForm = ({ form }: ImageFormProps) => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="p-4 md:p-6">
         <CardTitle className="text-md flex gap-2">
           <Image /> Hình ảnh, Video
         </CardTitle>
         <Separator />
       </CardHeader>
-      <CardContent className="grid gap-6">
+      <CardContent className="grid gap-4 md:gap-6 p-4 md:p-6">
         <FormField
           control={form.control}
           name="youtube_url"
