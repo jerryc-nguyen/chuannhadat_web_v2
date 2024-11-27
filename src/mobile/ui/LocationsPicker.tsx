@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
 import districtWards from 'src/configs/locations/districts_wards.json';
+import districtStreets from 'src/configs/locations/districts_streets.json';
 
 import { OptionForSelect } from '@models';
 import OptionPicker from '@mobile/ui/OptionPicker';
@@ -12,25 +13,33 @@ import { List, ListItem } from '@components/konsta';
 import { Modal } from '@mobile/modals/states/types';
 
 type LocationsPickerProps = {
+  withStreet?: boolean;
   modalOption?: Record<A, A>;
   openModal: (modal: Modal) => void;
   city?: OptionForSelect;
   district?: OptionForSelect;
   ward?: OptionForSelect;
+  street?: OptionForSelect;
   onChangeCity: (city?: OptionForSelect) => void;
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
+  onChangeStreet?: (street?: OptionForSelect) => void;
+  onChangedFullAddress?: (address: string) => void;
 }
 
 export default function LocationsPicker({
   city,
   district,
   ward,
+  street,
   onChangeCity,
   onChangeDistrict,
   onChangeWard,
+  onChangeStreet,
+  onChangedFullAddress,
   openModal,
-  modalOption
+  modalOption,
+  withStreet
 }: LocationsPickerProps) {
   if (!modalOption) {
     modalOption = {}
@@ -39,9 +48,24 @@ export default function LocationsPicker({
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>(ward);
+  const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>(street);
 
-  const [districtOptions, setDistrictOptions] = useState([]);
-  const [wardOptions, setWardOptions] = useState([]);
+  const districtOptions = useMemo(() => {
+    //@ts-ignore: read field of object
+    return citiesDistricts[curCity?.value + '']
+  }, [curCity?.value])
+
+  const wardOptions = useMemo(() => {
+    return curDistrict?.value
+      // @ts-ignore: ok
+      ? districtWards[curDistrict?.value + ''] : []
+  }, [curDistrict?.value])
+
+  const streetOptions = useMemo(() => {
+    return curDistrict?.value
+      // @ts-ignore: ok
+      ? districtStreets[curDistrict?.value + ''] : []
+  }, [curDistrict?.value])
 
   const resetDistrict = () => {
     setCurDistrict(undefined);
@@ -51,19 +75,44 @@ export default function LocationsPicker({
     setCurWard(undefined);
   };
 
+  const resetStreet = () => {
+    setCurStreet(undefined);
+  };
+
+  const populateCity = () => {
+    if (curCity?.value && !curCity?.text) {
+      city = cities.find((option) => option.value.toString() == curCity?.value)
+      setCurCity(city)
+    }
+  }
+
+  const populateDistrict = () => {
+    if (curCity?.value && curDistrict?.value && !curDistrict?.text) {
+      district = districtOptions.find((option: A) => option.value.toString() == curDistrict?.value)
+      setCurDistrict(district)
+    }
+  }
+
+  const populateWard = () => {
+    if (curDistrict?.value && curWard?.value && !curWard?.text) {
+      ward = wardOptions.find((option: A) => option.value.toString() == curWard?.value)
+      setCurWard(ward)
+    }
+  }
+
+  const populateStreet = () => {
+    if (curStreet?.value && !curStreet?.text) {
+      street = streetOptions.find((option: A) => option.value.toString() == curStreet?.value)
+      setCurStreet(street)
+    }
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const populateOptions = () => {
-    if (city) {
-      setDistrictOptions(
-        //@ts-ignore: read field of object
-        citiesDistricts[city.value + ''],
-      );
-    }
-    if (district) {
-      setWardOptions(
-        //@ts-ignore: read field of object
-        districtWards[district.value + ''],
-      );
+    if (city?.value) {
+      populateCity();
+      populateDistrict();
+      populateWard();
+      populateStreet();
     }
   };
 
@@ -72,33 +121,59 @@ export default function LocationsPicker({
 
     resetDistrict();
     resetWard();
+    resetStreet();
 
-    setDistrictOptions(
-      //@ts-ignore: read field of object
-      citiesDistricts[finalOption?.value + ''] || [],
-    );
     setCurCity(finalOption);
     onChangeCity(finalOption);
+
+    updateFullAddress({ city: finalOption });
   };
 
-  const onSelectDistrict = (district?: OptionForSelect) => {
-    const finalOption = district?.value != 'all' ? district : undefined;
+  const onSelectDistrict = (option?: OptionForSelect) => {
+    const finalOption = option?.value != 'all' ? option : undefined;
 
     resetWard();
+    resetStreet();
 
-    setWardOptions(
-      //@ts-ignore: read field of object
-      districtWards[finalOption?.value + ''] || [],
-    );
     setCurDistrict(finalOption);
     onChangeDistrict(finalOption);
+    updateFullAddress({ city: curCity, district: finalOption });
   };
 
-  const onSelectWard = (ward?: OptionForSelect) => {
-    const finalOption = ward?.value != 'all' ? ward : undefined;
+  const onSelectWard = (option?: OptionForSelect) => {
+    const finalOption = option?.value != 'all' ? option : undefined;
     setCurWard(finalOption);
     onChangeWard(finalOption);
+    updateFullAddress({ city: curCity, district: curDistrict, ward: finalOption });
   };
+
+  const onSelectStreet = (option?: OptionForSelect) => {
+    const finalOption = option?.value != 'all' ? option : undefined;
+    setCurStreet(finalOption);
+    if (onChangeStreet) {
+      onChangeStreet(finalOption);
+    }
+
+    updateFullAddress({ city: curCity, district: curDistrict, ward: curWard, street: finalOption });
+  };
+
+  const updateFullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }) => {
+    const newAdress = fullAddress({ city, district, ward, street });
+    if (onChangedFullAddress) {
+      onChangedFullAddress(newAdress)
+    }
+  }
+
+  const fullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }): string => {
+    const address = [
+      street?.text,
+      ward?.text,
+      district?.text,
+      city?.text
+    ].filter((text) => (text || '').length > 0).join(', ')
+    return address;
+  }
+
 
   useEffect(() => {
     populateOptions();
@@ -178,6 +253,33 @@ export default function LocationsPicker({
             });
           }}
         />
+
+        {withStreet && (
+          <ListItem
+            link
+            title="Đường/ Phố"
+            after={curStreet?.text}
+            onClick={() => {
+              openModal({
+                name: 'street',
+                title: 'Đường/ Phố',
+                content: (
+                  <OptionPicker
+                    theme="ios"
+                    searchable
+                    options={[ALL_OPTION, ...streetOptions]}
+                    value={curStreet}
+                    onSelect={onSelectStreet}
+                    emptyMessage="Vui lòng chọn trước Quận / Huyện"
+                  />
+                ),
+                maxHeightPercent: 0.6,
+                ...modalOption
+              });
+            }}
+          />
+        )}
+
       </List>
     </div>
   );

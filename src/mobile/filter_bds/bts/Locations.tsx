@@ -37,8 +37,8 @@ export default function Locations() {
     closeModal3();
   };
 
-  const onChangeWard = (ward?: OptionForSelect) => {
-    const finalOption = ward?.value != 'all' ? ward : undefined;
+  const onChangeWard = (option?: OptionForSelect) => {
+    const finalOption = option?.value != 'all' ? option : undefined;
     setLocalFieldValue(FilterFieldName.Ward, finalOption);
     closeModal3();
   };
