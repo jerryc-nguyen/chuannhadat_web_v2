@@ -1,7 +1,7 @@
 "use client";
 
 import ProductInfoForm from "./components/form-components/product-info-form";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Form } from "@/components/ui/form";
@@ -68,7 +68,7 @@ const EditPost = ({ params }: { params: A }) => {
   };
 
   return (
-    <Form {...form}>
+    <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
@@ -92,7 +92,7 @@ const EditPost = ({ params }: { params: A }) => {
           <Button type="submit">Cập nhật tin</Button>
         </div>
       </form>
-    </Form>
+    </FormProvider>
   );
 };
 
