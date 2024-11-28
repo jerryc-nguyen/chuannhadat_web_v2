@@ -46,6 +46,7 @@ export interface ILoginResponse {
   facebook_url?: string;
   email?: string;
   unconfirmed_email?: A;
+  phone_confirmed?: boolean;
 }
 export type IRegisterResponse = LoginResponse;
 export enum ILoginAndRegisterModalType {
