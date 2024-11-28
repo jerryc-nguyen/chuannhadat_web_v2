@@ -34,20 +34,22 @@ import TooltipHost from '@components/tooltip-host';
 import { services } from '@api/services';
 import { ILoginResponse } from '@mobile/auth/types';
 import { FaCircleCheck } from 'react-icons/fa6';
+import { SMS_PHONE_NUMBER } from '@common/constants';
 
 export const PhoneNumberTab: React.FC = () => {
   const [openPopupVerifyPhone, setOpenPopupVerifyPhone] = React.useState(false);
   const { currentUser, updateCurrentUser } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
-  const isConfirmedPhone = currentUser?.phone_confirmed;
+  const isConfirmedPhone = currentUser ? currentUser?.phone_confirmed : true;
   const queryClient = useQueryClient();
   const { data: profileMe } = useQuery({
     queryKey: ['get-profile-me'],
     queryFn: services.profiles.getMyProfile,
     select: (data) => data.data,
     enabled: openPopupVerifyPhone && !isConfirmedPhone,
-    refetchInterval: 10000,
+    refetchInterval: 2000,
   });
+
   React.useEffect(() => {
     updateCurrentUser(profileMe as ILoginResponse);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,9 +96,8 @@ export const PhoneNumberTab: React.FC = () => {
 
   const handleCopy = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(text);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      await navigator.clipboard.writeText(text.replaceAll('.', ''));
+      toast.success('Đã copy');
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -122,15 +123,19 @@ export const PhoneNumberTab: React.FC = () => {
                 <div className="flex flex-col items-center justify-center gap-y-3">
                   <AiFillMessage className="text-5xl text-muted-foreground" />
                   <div>
-                    Để xác thực thay đổi số điện thoại. Vui lòng soạn tin nhắn với cú pháp sau :{' '}
-                    <b className="text-primary_color/80">xt</b> gửi đến{' '}
+                    Để xác thực, vui lòng soạn tin nhắn với cú pháp sau :
+                    <br />
+                    <br />
+                    <b className="text-primary_color/80 text-2xl">xt</b> &nbsp;&nbsp; gửi đến &nbsp;&nbsp;
                     <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
                       <b
-                        onClick={() => handleCopy('0967.354.632')}
-                        className="text-primary_color/80"
+                        onClick={() => handleCopy(SMS_PHONE_NUMBER)}
+                        className="text-primary_color/80 text-2xl"
                       >
-                        0967.354.632
+                        {SMS_PHONE_NUMBER}
                       </b>
+                      {' '}
+                      (<i onClick={() => handleCopy(SMS_PHONE_NUMBER)}>Sao chép</i>)
                     </TooltipHost>
                   </div>
                 </div>
@@ -172,6 +177,8 @@ export const PhoneNumberTab: React.FC = () => {
         currentUser.phone && (
           <p className="mt-4">
             Số điện thoại hiện tại của bạn là <b>{currentUser?.phone}</b>
+            {' '}
+            {!isConfirmedPhone && (<i>(chưa được xác thực)</i>)}
           </p>
         )
       )}
