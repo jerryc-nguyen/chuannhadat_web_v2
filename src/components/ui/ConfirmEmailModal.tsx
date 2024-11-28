@@ -13,7 +13,6 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
-import { toast } from 'sonner';
 import { LuLoader2 } from 'react-icons/lu';
 import useAuth from '@mobile/auth/hooks/useAuth';
 
@@ -44,12 +43,12 @@ const ConfirmEmailModal: React.FC = () => {
     },
     onSuccess: (data: A) => {
       if (data.status) {
-        setIsConfirmSuccess(true)
-        setShowConfirmEmail(true)
+        setIsConfirmSuccess(true);
+        setShowConfirmEmail(true);
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
       } else {
-        setShowConfirmEmail(true)
-        setIsConfirmSuccess(false)
+        setShowConfirmEmail(true);
+        setIsConfirmSuccess(false);
       }
     },
   });
@@ -58,7 +57,7 @@ const ConfirmEmailModal: React.FC = () => {
     if (emailToken) {
       confirmEmail(emailToken as string);
     }
-  }, [confirmEmail, emailToken])
+  }, [confirmEmail, emailToken]);
 
   return (
     <AlertDialog open={showConfirmEmail} onOpenChange={setShowConfirmEmail}>
@@ -69,7 +68,8 @@ const ConfirmEmailModal: React.FC = () => {
               <AlertDialogTitle>Xác nhận email thành công!</AlertDialogTitle>
               <AlertDialogDescription>
                 <p>
-                  Địa chỉ email <b>{profileMe?.unconfirmed_email || profileMe?.email}</b> đã được xác thực thành công.
+                  Địa chỉ email <b>{profileMe?.unconfirmed_email || profileMe?.email}</b> đã được
+                  xác thực thành công.
                 </p>
               </AlertDialogDescription>
             </>
@@ -79,16 +79,14 @@ const ConfirmEmailModal: React.FC = () => {
             <>
               <AlertDialogTitle>Xác nhận email không thành công!</AlertDialogTitle>
               <AlertDialogDescription>
+                <p>Mã xác thực email không tồn tại.</p>
                 <p>
-                  Mã xác thực email không tồn tại.
-                </p>
-                <p>
-                  Bạn có thể gửi lại mã xác thực email tại mục <b>Cài đặt tài khoản</b> / <b>Email</b>
+                  Bạn có thể gửi lại mã xác thực email tại mục <b>Cài đặt tài khoản</b> /{' '}
+                  <b>Email</b>
                 </p>
               </AlertDialogDescription>
             </>
           )}
-
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction
@@ -96,7 +94,8 @@ const ConfirmEmailModal: React.FC = () => {
               router.replace('/', undefined);
               setShowConfirmEmail(false);
             }}
-            disabled={isPending}>
+            disabled={isPending}
+          >
             {isPending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
             OK
           </AlertDialogAction>
