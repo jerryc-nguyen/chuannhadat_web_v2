@@ -36,6 +36,8 @@ import { directionOptions, furnitureTypeOptions, phapLyTypeOptions } from './con
 import { CommonSelect } from './components/CommonSelect';
 import { PriceAutoComplete } from './components/form-components/fields/price-autocomplete';
 import { RoundedOptionsNumberInput } from './components/form-components/fields/rounded-options-number-input';
+import LocationsPicker from '@mobile/ui/LocationsPicker';
+import { Label } from '@components/ui/label';
 
 const defaultValues: IPostForm = {
   description: '',
@@ -45,8 +47,8 @@ const defaultValues: IPostForm = {
   area: '',
   phap_ly: '',
   price_in_vnd: '',
-  city_id: undefined,
-  district_id: undefined,
+  city_id: 1,
+  district_id: 55,
   ward_id: undefined,
   street_id: undefined,
   project_id: '',
@@ -154,7 +156,7 @@ const FormMobile: React.FC = () => {
       form.setValue('category_type', option.value);
     },
     options: categoryTypeOptions,
-    btsTitle: 'Loại bất động sản (*)',
+    btsTitle: 'Loại BĐS (*)',
     value: category_type,
   };
 
@@ -193,26 +195,27 @@ const FormMobile: React.FC = () => {
       </List>
       <ImageForm form={form} />
 
-      <LocationFormV2 form={form} />
-      {/* <List strongIos outlineIos>
+      <List strongIos outlineIos>
         <LocationsPicker
           openModal={openModal}
-          city={find(cities, (city) => city.value == city_id)}
-          district={find(citiesDistricts[city_id] ?? [], (district) => district.value == district_id)}
+          city={{ text: '', value: city_id }}
+          district={{ text: '', value: district_id }}
+          ward={{ text: '', value: ward_id }}
+          street={{ text: '', value: street_id }}
           onChangeCity={(city) => {
-            if (typeof city?.value === 'number') form.setValue('city_id', city?.value);
+            form.setValue('city_id', city?.value);
             closeModal();
           }}
           onChangeDistrict={(district) => {
-            if (typeof district?.value === 'number') form.setValue('district_id', district?.value);
+            form.setValue('district_id', district?.value);
             closeModal();
           }}
           onChangeWard={(ward) => {
-            if (typeof ward?.value === 'number') form.setValue('ward_id', ward?.value);
+            form.setValue('ward_id', ward?.value);
             closeModal();
           }}
           onChangeStreet={(street) => {
-            if (typeof street?.value === 'number') form.setValue('street_id', street?.value);
+            form.setValue('street_id', street?.value);
             closeModal();
           }}
           withStreet={true}
@@ -231,7 +234,7 @@ const FormMobile: React.FC = () => {
             src={mapSrc}
           ></iframe>
         </div>
-      </List> */}
+      </List>
       <ProductDescriptionForm form={form} />
 
       <List strongIos outlineIos>
