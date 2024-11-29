@@ -17,24 +17,16 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LuLoader2 } from 'react-icons/lu';
-import { service } from '../../apis';
 import { Skeleton } from '@components/ui/skeleton';
 import { AiFillMessage } from 'react-icons/ai';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@components/ui/alert-dialog';
+import { AlertDialogAction } from '@components/ui/alert-dialog';
 import TooltipHost from '@components/tooltip-host';
 import { services } from '@api/services';
 import { ILoginResponse } from '@mobile/auth/types';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { SMS_PHONE_NUMBER } from '@common/constants';
+import CommonAlertDialog from '@components/common-dialog';
 
 export const PhoneNumberTab: React.FC = () => {
   const [openPopupVerifyPhone, setOpenPopupVerifyPhone] = React.useState(false);
@@ -76,7 +68,7 @@ export const PhoneNumberTab: React.FC = () => {
   const { handleSubmit, control, reset } = form;
 
   const { mutate: updateMyPhone, isPending: isUpdateMyPhonePending } = useMutation({
-    mutationFn: service.profiles.updateMyPhone,
+    mutationFn: services.profiles.updateMyPhone,
     onError: (err: AxiosError<A>) => {
       console.error('Có lỗi khi gửi yêu cầu', err);
     },
@@ -104,49 +96,36 @@ export const PhoneNumberTab: React.FC = () => {
   };
   const popupVerifyPhone = () => {
     return (
-      <AlertDialog open={openPopupVerifyPhone} onOpenChange={setOpenPopupVerifyPhone}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {isConfirmedPhone ? 'Xác thực thành công' : 'Xác thực số điện thoại'}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {isConfirmedPhone ? (
-                <div className="flex flex-col items-center justify-center gap-y-3">
-                  <FaCircleCheck className="text-5xl text-success_color" />
-                  <p>
-                    SĐT <b className="text-success_color">{currentUser?.phone}</b> của bạn đã được
-                    xác thực thành công.
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-y-3">
-                  <AiFillMessage className="text-5xl text-muted-foreground" />
-                  <div>
-                    Để xác thực, vui lòng soạn tin nhắn với cú pháp sau :
-                    <br />
-                    <br />
-                    <b className="text-primary_color/80 text-2xl">xt</b> &nbsp;&nbsp; gửi đến &nbsp;&nbsp;
-                    <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
-                      <b
-                        onClick={() => handleCopy(SMS_PHONE_NUMBER)}
-                        className="text-primary_color/80 text-2xl"
-                      >
-                        {SMS_PHONE_NUMBER}
-                      </b>
-                      {' '}
-                      (<i onClick={() => handleCopy(SMS_PHONE_NUMBER)}>Sao chép</i>)
-                    </TooltipHost>
-                  </div>
-                </div>
-              )}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction>Đóng</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <CommonAlertDialog
+        isOpen={openPopupVerifyPhone}
+        handleOpenChange={setOpenPopupVerifyPhone}
+        title={isConfirmedPhone ? 'Xác thực thành công' : 'Xác thực số điện thoại'}
+        description={
+          isConfirmedPhone ? (
+            <div className="flex flex-col items-center justify-center gap-y-3">
+              <FaCircleCheck className="text-5xl text-success_color" />
+              <p>
+                SĐT <b className="text-success_color">{currentUser?.phone}</b> của bạn đã được xác
+                thực thành công.
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-y-3">
+              <AiFillMessage className="text-5xl text-muted-foreground" />
+              <div>
+                Để xác thực thay đổi số điện thoại. Vui lòng soạn tin nhắn với cú pháp sau :{' '}
+                <b className="text-primary_color/80">xt</b> gửi đến{' '}
+                <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
+                  <b onClick={() => handleCopy(SMS_PHONE_NUMBER)} className="text-primary_color/80">
+                  {SMS_PHONE_NUMBER}
+                  </b>
+                </TooltipHost>
+              </div>
+            </div>
+          )
+        }
+        textButtonRight="Đóng"
+      />
     );
   };
   function onSubmit(values: z.infer<typeof formSchema>) {

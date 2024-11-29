@@ -5,6 +5,8 @@ export const API_ROUTES = {
     REGISTER_BY_PHONE: 'api/v1/authentications/register_by_phone',
     FORGOT_PASSWORD: 'auth/forgot-password',
     VERIFY_CODE: 'auth/verify-reset-password-token',
+    VERIFY_PHONE: '/api/v1/authentications/check_phone',
+    CHECK_RESET_PASSWORD: 'api/v1/authentications/check_reset_password',
     CHANGE_PASSWORD: 'auth/reset-password',
     LOGOUT: 'auth/logout',
   },
