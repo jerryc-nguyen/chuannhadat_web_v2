@@ -1,6 +1,6 @@
 import { services } from '@api/services';
 import { Button } from '@components/ui/button';
-import { Form, FormControl, FormField, FormItem } from '@components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { Skeleton } from '@components/ui/skeleton';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,7 +31,9 @@ const EmailTab: React.FC = () => {
 
   const queryClient = useQueryClient();
   const { handleSubmit, control, reset } = form;
-  const [unconfirmEmail, setUnconfirmEmail] = useState<string | undefined>(currentUser?.unconfirmed_email);
+  const [unconfirmEmail, setUnconfirmEmail] = useState<string | undefined>(
+    currentUser?.unconfirmed_email,
+  );
   const { mutate: updateEmail, isPending } = useMutation({
     mutationFn: services.profiles.updateEmail,
     onError: (err: AxiosError<A>) => {
@@ -53,13 +55,13 @@ const EmailTab: React.FC = () => {
   });
 
   useEffect(() => {
-    setUnconfirmEmail(currentUser?.unconfirmed_email)
-  }, [currentUser])
+    setUnconfirmEmail(currentUser?.unconfirmed_email);
+  }, [currentUser]);
 
   function onSubmit(values: Yup.InferType<typeof formSchema>) {
     updateEmail(values.newEmail as string);
     if (values.newEmail != currentUser?.email) {
-      setUnconfirmEmail(values.newEmail)
+      setUnconfirmEmail(values.newEmail);
     }
   }
 
@@ -71,7 +73,7 @@ const EmailTab: React.FC = () => {
       {unconfirmEmail && (
         <div className="mt-4 rounded-md border bg-primary_color/10 p-6">
           <p>
-            Hệ thống đã gửi một email xác thực đến email {' '}
+            Hệ thống đã gửi một email xác thực đến email{' '}
             <b className="text-yellow-500">{unconfirmEmail}</b>
           </p>
           <p>Nếu chưa nhận được email, bạn có thể yêu cầu lại bằng form bên dưới</p>
@@ -93,6 +95,7 @@ const EmailTab: React.FC = () => {
             name="newEmail"
             render={({ field }) => (
               <FormItem>
+                <FormLabel aria-required>Email mới</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
