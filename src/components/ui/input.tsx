@@ -32,7 +32,7 @@ export const inputVariants = cva(
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-  VariantProps<typeof inputVariants> {
+    VariantProps<typeof inputVariants> {
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
 }
@@ -44,13 +44,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <div className={cn(inputVariants({ variant, rounded, className }), className)}>
           {startAdornment && (
-            <span className="text-2xs flex items-center text-secondary">
-              {startAdornment}
-            </span>
+            <span className="text-2xs flex items-center text-secondary">{startAdornment}</span>
           )}
           <input
             ref={ref}
             {...props}
+            type={typeInput}
             className={cn(
               'w-full bg-transparent outline-none focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
               {
@@ -59,9 +58,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               },
             )}
           />
-          {endAdornment && (
-            <span className="flex items-center text-secondary">{endAdornment}</span>
-          )}
+          {endAdornment && <span className="flex items-center text-secondary">{endAdornment}</span>}
         </div>
       );
     }

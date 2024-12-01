@@ -48,3 +48,7 @@ export interface IReferralData {
 }
 export type IReferralListResponse = IResponseData<IReferralData[]>;
 export type IProfileMeResponse = IResponseData<ILoginResponse>;
+export type IVerifyPhoneResponse = IResponseData<{
+  name: string;
+  avatar: string;
+}>;
