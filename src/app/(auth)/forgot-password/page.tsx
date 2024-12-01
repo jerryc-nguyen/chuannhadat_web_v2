@@ -27,8 +27,8 @@ import { AiFillMessage } from 'react-icons/ai';
 import TooltipHost from '@components/tooltip-host';
 import { FaCircleCheck } from 'react-icons/fa6';
 import CommonAlertDialog from '@components/common-dialog';
-import { AlertDialogAction } from '@components/ui/alert-dialog';
 import { IVerifyPhoneResponse } from '@models/modelResponse';
+import { SMS_PHONE_NUMBER } from '@common/constants';
 
 type ForgotPasswordProps = object;
 enum PopupType {
@@ -73,14 +73,14 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   });
 
   React.useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    intervalId = setInterval(() => {
+    const intervalId: NodeJS.Timeout = setInterval(() => {
       openPopupResetPassword && resetPassword(resetPhone);
-    }, 10000);
+    }, 2000);
+
     return () => {
       clearInterval(intervalId);
     };
-  }, [openPopupResetPassword]);
+  }, [openPopupResetPassword, resetPassword, resetPhone]);
 
   //Schema and Submit
   const formSchema = z.object({
@@ -111,7 +111,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
 
   const handleCopy = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(text.replaceAll('.', ''));
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
@@ -125,21 +125,18 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
         handleOpenChange={setOpenPopupResetPassword}
         title={
           typePopup === PopupType.VerifySuccess
-            ? ' Khôi phục mật khẩu thành công'
-            : 'Hướng dẫn khôi phục mật khẩu'
+            ? 'Tạo lại mật khẩu thành công'
+            : 'Hướng dẫn tạo lại mật khẩu'
         }
         description={
           typePopup === PopupType.VerifySuccess ? (
             <div className="flex flex-col items-center justify-center gap-y-3">
               <FaCircleCheck className="text-5xl text-success_color" />
               <p>
-                Tài khoản với SĐT <b className="text-primary_color">{resetPhone}</b> sau khi reset,
-                mật khẩu mới của bạn là: <b className="text-success_color">123456</b>, vui lòng trờ
-                về{' '}
-                <Link className="text-primary_color hover:underline" href={'/'}>
-                  trang chủ
-                </Link>{' '}
-                và đăng nhập để thay đổi mật khẩu của bạn.
+                Tài khoản với SĐT <b className="text-primary_color">{resetPhone}</b> đã được cấp lại mật khẩu mới: <b className="text-success_color">123456</b>,
+                vui lòng đăng nhập và thay đổi mật khẩu của bạn tại:
+                <br />
+                <b>Cài đặt tài khoản</b> / <b>Mật khẩu</b>
               </p>
             </div>
           ) : (
@@ -151,8 +148,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
                   reset lại mật khẩu, vui lòng soạn tin nhắn theo cú pháp sau :
                   <b className="text-primary_color/80"> reset</b> gửi đến{' '}
                   <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
-                    <b onClick={() => handleCopy('0967.354.632')} className="text-primary_color/80">
-                      0967.354.632
+                    <b onClick={() => handleCopy(SMS_PHONE_NUMBER)} className="text-primary_color/80">
+                      {SMS_PHONE_NUMBER}
                     </b>
                   </TooltipHost>
                 </p>

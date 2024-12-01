@@ -20,7 +20,6 @@ import { LuLoader2 } from 'react-icons/lu';
 import { Skeleton } from '@components/ui/skeleton';
 import { AiFillMessage } from 'react-icons/ai';
 
-import { AlertDialogAction } from '@components/ui/alert-dialog';
 import TooltipHost from '@components/tooltip-host';
 import { services } from '@api/services';
 import { ILoginResponse } from '@mobile/auth/types';
@@ -117,7 +116,7 @@ export const PhoneNumberTab: React.FC = () => {
                 <b className="text-primary_color/80">xt</b> gửi đến{' '}
                 <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
                   <b onClick={() => handleCopy(SMS_PHONE_NUMBER)} className="text-primary_color/80">
-                  {SMS_PHONE_NUMBER}
+                    {SMS_PHONE_NUMBER}
                   </b>
                 </TooltipHost>
               </div>
