@@ -75,7 +75,7 @@ const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOpti
             defaultOption.map((item, index) => {
               const selected = value?.toString() === item.value
               return (
-                <div key={index} className={`cnd-chip min-w-7 min-h-7 flex justify-center ${selected ? "bg-slate-500 text-gray-100" : ""}`}
+                <div key={index} className={`cnd-chip min-w-9 min-h-9 flex justify-center ${selected ? "bg-slate-500 text-gray-100" : ""}`}
                   onClick={() => {
                     setInputValue("");
                     onChange?.({

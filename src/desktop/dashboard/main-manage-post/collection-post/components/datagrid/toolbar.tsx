@@ -187,7 +187,7 @@ const ButtonPostArticle = () => {
 
   const ContentButton = ({ className }: { className?: string }) => {
     return (
-      <Link href="/dashboard/manage-post/new-post" target="_blank" className={className}>
+      <Link href="/dashboard/manage-post/new-post" className={className}>
         <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
           <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <Plus />
