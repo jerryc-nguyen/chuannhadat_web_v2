@@ -20,7 +20,7 @@ import { CaretSortIcon } from '@radix-ui/react-icons';
 import { find } from 'lodash-es';
 
 interface CommonSelectProps {
-  options: { label: string; value: string }[];
+  options: { text: string; value: string }[];
   onChange: (value: string) => void;
   value: string;
   actions?: React.ReactNode;
@@ -33,7 +33,7 @@ export function CommonSelect({ options, onChange, value, actions }: CommonSelect
       <Drawer>
         <DrawerTrigger asChild>
           <Button variant="outline" className="flex justify-between">
-            <span className='truncate'>{find(options, { value })?.label}</span>
+            <span className='truncate'>{find(options, { value })?.text}</span>
             <CaretSortIcon className="h-4 w-4 opacity-50" />
           </Button>
         </DrawerTrigger>
@@ -47,7 +47,7 @@ export function CommonSelect({ options, onChange, value, actions }: CommonSelect
                     key={index}
                   >
                     <Label className="flex-1" htmlFor={item.value}>
-                      {item.label}
+                      {item.text}
                     </Label>
                     <RadioGroupItem value={item.value} id={item.value} />
                   </div>
@@ -74,7 +74,7 @@ export function CommonSelect({ options, onChange, value, actions }: CommonSelect
       <SelectContent>
         {options.map((item, index) => (
           <SelectItem key={index} value={item.value}>
-            {item.label}
+            {item.text}
           </SelectItem>
         ))}
       </SelectContent>

@@ -11,9 +11,10 @@ type IListItemBtsPickerProps = {
   value?: string,
   btsTitle?: string,
   closeAfterSelect?: boolean
+  dividers?: boolean
 }
 
-export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect }: IListItemBtsPickerProps) {
+export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect, dividers }: IListItemBtsPickerProps) {
   const { openModal, closeModal } = useModals();
   const selectedOption = options.find((item: OptionForSelect) => (item.value + '') == value)
 
@@ -40,6 +41,7 @@ export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, 
         });
       }}
       after={selectedOption?.text}
+      dividers={dividers}
     />
 
   )
