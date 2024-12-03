@@ -75,9 +75,11 @@ export default function ProductCard({ product }: { product: IProduct }) {
       imageUrl: product?.featured_image_url,
     });
   }, [buildThumbnailUrl, product?.featured_image_url]);
+
   if (!product) {
     return <LoadingProductCard />;
   }
+
   return (
     <div className="my-4 overflow-hidden bg-white shadow-lg">
       <AspectRatio.Root ratio={16 / 9}>
@@ -108,7 +110,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
           href={`/post/${product.slug}`}
           className="mb-2 cursor-pointer font-bold text-secondary hover:text-blue-500"
         >
-          {product?.title}
+          {product?.title}{' '}
         </Link>
 
         <div className="flex flex-row items-center justify-between">
