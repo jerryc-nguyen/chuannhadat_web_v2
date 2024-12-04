@@ -57,7 +57,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
             <ProfileInfo profileData={profileData} />
 
             <div className="relative flex-1">
-              <h2 className="text-2xl font-bold text-primary_color">Tin đã đăng</h2>
+              <h2 className="text-2xl font-bold">Tin đã đăng</h2>
               <PostControls
                 className="mx-1"
                 chipOptions={listFilterProfileDesktop}

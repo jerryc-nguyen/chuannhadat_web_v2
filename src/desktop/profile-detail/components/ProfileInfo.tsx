@@ -51,24 +51,23 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
     );
   };
 
-
   const listInfoProfileIcon = () => (
-    <div className="flex flex-col items-center gap-y-3 sm:items-start">
+    <div className="flex flex-col items-center gap-y-3 sm:items-start mt-4">
       {profileData?.address && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
-          <LuMapPin className="mr-2 h-5 w-5" />
+          <LuMapPin className="mr-2 h-5 w-5 text-secondary" />
           <span className="text-sm text-secondary">{profileData?.address}</span>
         </span>
       )}
       {profileData?.formatted_joined_at && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
-          <CalendarDays className="mr-2 h-5 w-5" />
+          <CalendarDays className="mr-2 h-5 w-5 text-secondary" />
           <span className="text-sm text-secondary">{profileData?.formatted_joined_at}</span>
         </span>
       )}
       {profileData?.gender && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
-          <PiGenderIntersexBold className="mr-2 h-5 w-5" />
+          <PiGenderIntersexBold className="mr-2 h-5 w-5 text-secondary" />
           <span className="text-sm text-secondary">
             Giới tính {profileData?.gender === CustomerGender.Male ? 'nam' : 'nữ'}
           </span>
@@ -76,32 +75,36 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
       )}
       {profileData?.posts_count && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
-          <RiArticleLine className="mr-2 h-5 w-5" />
+          <RiArticleLine className="mr-2 h-5 w-5 text-secondary" />
           <span className="text-sm text-secondary">
             Số bài đăng {profileData?.posts_count}
           </span>
         </span>
       )}
+
       {profileData?.facebook_url && (
         <div className="flex items-center pt-2">
-          <LuFacebook className="mr-2 h-4 w-4" />
-          <Link
+          <LuFacebook className="mr-2 h-5 w-5 text-secondary" />
+          <a
             href={profileData.facebook_url}
-            className="text-xs text-secondary hover:text-black"
+            className="text-secondary hover:text-black"
+            target='_blank'
           >
-            Liên kết facebook
-          </Link>
+            {profileData.facebook_url}
+          </a>
         </div>
       )}
+
       {profileData?.youtube_url && (
         <div className="flex items-center pt-2">
-          <LuYoutube className="mr-2 h-4 w-4 opacity-70" />
-          <Link
+          <LuYoutube className="mr-2 h-5 w-5 text-secondary" />
+          <a
             href={profileData.youtube_url}
-            className="text-xs text-secondary hover:text-black"
+            className="text-secondary hover:text-black"
+            target='_blank'
           >
-            Liên kết youtube
-          </Link>
+            {profileData.youtube_url}
+          </a>
         </div>
       )}
     </div>
@@ -124,7 +127,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
           isVisible ? 'show_avatar' : 'hidden_avatar',
         )}
       />
-      <h2 className="mt-2 text-xl font-semibold">{profileData?.full_name}</h2>
+      <h2 className="mt-4 text-2xl font-semibold">{profileData?.full_name}</h2>
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         {profileData?.profile_tags.map((item: A) => (
           <span
@@ -135,10 +138,17 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
           </span>
         ))}
       </div>
-      <p className="text-sm">{profileData?.job_title || profileData?.description}</p>
+
+      {profileData?.job_title && (<p className="mt-4 font-semibold">{profileData?.job_title}</p>)}
+      {
+        profileData?.description && (
+          <p className={profileData?.job_title ? 'text-secondary' : 'mt-4 text-secondary'} > {profileData?.description}</p>
+        )
+      }
+
       {listInfoProfileIcon()}
-      <ButtonPhone className="w-full" phoneNumberProfile={profileData?.phone as string} />
+      <ButtonPhone className="w-full mt-4" phoneNumberProfile={profileData?.phone as string} />
       {profileBadges()}
-    </div>
+    </div >
   )
 }
