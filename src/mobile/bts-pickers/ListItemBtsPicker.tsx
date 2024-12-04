@@ -2,20 +2,21 @@ import ListItem from "@components/konsta/ListItem";
 import useModals from "@mobile/modals/hooks";
 
 import { OptionForSelect } from "@models";
-import { directionsOptions } from "@mobile/filter_bds/constants";
 import ListCheckOptions from "@mobile/ui/ListCheckOptions";
+import { Modal } from "@mobile/modals/states/types";
 
 type IListItemBtsPickerProps = {
   options: Array<OptionForSelect>,
   onSelect?: (option: OptionForSelect) => void,
   value?: string,
-  btsTitle?: string,
   closeAfterSelect?: boolean
   dividers?: boolean
-  footer?: React.ReactNode
+  footer?: React.ReactNode,
+  modalOptions?: Modal,
+  formattedValue?: string
 }
 
-export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect, dividers, footer }: IListItemBtsPickerProps) {
+export default function ListItemBtsPicker({ onSelect, value, options, closeAfterSelect, dividers, footer, modalOptions, formattedValue }: IListItemBtsPickerProps) {
   const { openModal, closeModal } = useModals();
   const selectedOption = options.find((item: OptionForSelect) => (item.value + '') == value)
 
@@ -32,16 +33,16 @@ export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, 
   return (
     <ListItem
       link
-      title={btsTitle}
+      title={modalOptions?.title}
       onClick={() => {
         openModal({
-          name: `ListItemBtsPicker_${btsTitle}`,
-          title: btsTitle,
-          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={options} footer={footer}/>,
-          supportPushState: false
+          name: `ListItemBtsPicker_${modalOptions?.title}`,
+          title: modalOptions?.title,
+          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={options} footer={footer} />,
+          ...(modalOptions || {})
         });
       }}
-      after={selectedOption?.text}
+      after={formattedValue || selectedOption?.text}
       dividers={dividers}
     />
 
