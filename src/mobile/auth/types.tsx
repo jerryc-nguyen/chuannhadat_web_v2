@@ -23,6 +23,7 @@ export type LoginResponse = {
   code: number;
   message?: string;
 };
+
 export interface ILoginResponse {
   address: string;
   api_token: string;

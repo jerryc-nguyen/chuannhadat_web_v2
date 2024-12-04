@@ -72,7 +72,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
+                    options={[{ text: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
                     actions={
                       <>
                         <SelectSeparator />
@@ -277,7 +277,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '__default' }, ...directionOptions]}
+                    options={[{ text: 'Không xác định', value: '__default' }, ...directionOptions]}
                     actions={
                       <>
                         <SelectSeparator />
@@ -307,7 +307,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '__default' }, ...directionOptions]}
+                    options={[{ text: 'Không xác định', value: '__default' }, ...directionOptions]}
                     actions={
                       <>
                         {' '}
@@ -338,7 +338,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ label: 'Không xác định', value: '__default' }, ...furnitureTypeOptions]}
+                    options={[{ text: 'Không xác định', value: '__default' }, ...furnitureTypeOptions]}
                     actions={
                       <>
                         <SelectSeparator />

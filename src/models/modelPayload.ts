@@ -16,3 +16,4 @@ export interface IRequestCallbackPayload {
   email?: string;
   content?: string;
 }
+export type ISeachAuthorPayload = Record<string, A>;

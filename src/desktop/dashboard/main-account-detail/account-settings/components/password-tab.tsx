@@ -48,8 +48,8 @@ const PasswordTab: React.FC = () => {
       .min(1, {
         message: 'Mật khẩu hiện tại không được để trống, vui lòng điền để tiếp tục ',
       })
-      .min(8, {
-        message: 'Mật khẩu hiện tại phải tối thiểu 8 kí tự ',
+      .min(6, {
+        message: 'Mật khẩu hiện tại phải tối thiểu 6 kí tự ',
       }),
     newPassowrd: z
       .string()

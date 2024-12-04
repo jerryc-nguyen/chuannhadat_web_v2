@@ -14,6 +14,7 @@ import { Author, IProductDetail } from '@mobile/searchs/type';
 import {
   IConnectOauthsPayload,
   IRequestCallbackPayload,
+  ISeachAuthorPayload,
   IViewedPostsPayload,
 } from '@models/modelPayload';
 import {
@@ -24,13 +25,16 @@ import {
   IReferralsDetailResponse,
   IRequestCallbackResponse,
   IResponseData,
+  IVerifyPhoneResponse,
   IViewedPostResonpse,
+  TopAuthorsResponse,
 } from '@models/modelResponse';
 import {
   ISavedProductsResponse,
   ISaveProductPayload,
   ISavesSummaryResponse,
 } from '@models/savesPostModel';
+import { HttpStatusCode } from 'axios';
 
 export const services = {
   profiles: {
@@ -56,6 +60,9 @@ export const services = {
       return axiosInstance.post(`${API_ROUTES.PROFILES.CONFIRM_EMAIL}`, {
         confirm_email_token: confirm_email_token,
       });
+    },
+    updateMyPhone: async (data: { phone: string }) => {
+      return axiosInstance.post(API_ROUTES.PROFILES.UPDATE_PHONE, data);
     },
   },
   subscription_plans: {
@@ -139,6 +146,18 @@ export const services = {
     loginGoogle: async (data: IConnectOauthsPayload): Promise<LoginResponse> => {
       return axiosInstance.post(API_ROUTES.AUTH.LOGIN_BY_GOOGLE, data);
     },
+    verifyPhone: async (phone: string): Promise<IVerifyPhoneResponse> => {
+      return axiosInstance.post(API_ROUTES.AUTH.VERIFY_PHONE, {
+        phone: phone,
+      });
+    },
+    checkResetPassword: async (
+      phone: string,
+    ): Promise<{ status: boolean; code: HttpStatusCode }> => {
+      return axiosInstance.post(API_ROUTES.AUTH.CHECK_RESET_PASSWORD, {
+        phone: phone,
+      });
+    },
   },
   oauths: {
     connectGoogle: async (data: IConnectOauthsPayload): Promise<IConnectOauthsResponse> => {
@@ -192,6 +211,13 @@ export const services = {
     },
     getListReferralFriend: async (): Promise<IReferralListResponse> => {
       return axiosInstance.get(API_ROUTES.REFERRALS);
+    },
+  },
+  searchs: {
+    topAuthors: async (data: ISeachAuthorPayload): Promise<TopAuthorsResponse> => {
+      return axiosInstance.get(API_ROUTES.SEARCHS.TOP_AUTHORS, {
+        params: data,
+      });
     },
   },
 };

@@ -15,13 +15,13 @@ interface IProductTypeForm {
 const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className='p-4 md:p-6'>
         <CardTitle className="text-md flex gap-2">
           <BadgeInfo /> Loại giao dịch
         </CardTitle>
         <Separator />
       </CardHeader>
-      <CardContent className="grid gap-6">
+      <CardContent className="grid gap-4 md:gap-6 p-4 md:p-6">
         <div className="grid gap-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormField

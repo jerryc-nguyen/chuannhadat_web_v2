@@ -69,7 +69,7 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
                       elevation={4}
                     >
                       <PreviewThumb image={image} />
-                      <CircleX onClick={() => onRemoveImageClick(image)} className="absolute right-0 top-0 z-10 text-[#596570] transition-opacity duration-300 group-hover:opacity-100 cursor-pointer" />
+                      <CircleX onClick={() => onRemoveImageClick(image)} className="absolute right-1 top-1 z-10 text-[#596570] transition-opacity duration-300 group-hover:opacity-100 cursor-pointer" />
                       {index == 0 && (<span className='absolute left-1/2 transform -translate-x-1/2 bottom-4 text-white border px-1 whitespace-nowrap rounded'>Hình đại diện</span>)}
                     </div>
                   )}
