@@ -1,6 +1,6 @@
 'use client';
 
-import { ControllerRenderProps, useFormContext } from 'react-hook-form';
+import { ControllerRenderProps, Form, useFormContext } from 'react-hook-form';
 
 import { FormField } from '@/components/ui/form';
 import List from '@components/konsta/List';
@@ -34,6 +34,8 @@ import ProductDescriptionForm, {
 } from '../components/form-components/product-description';
 import { PriceAutoComplete } from '../components/form-components/fields/price-autocomplete';
 import { RoundedOptionsNumberInput } from '../components/form-components/fields/rounded-options-number-input';
+import { roomsOptions } from '@mobile/filter_bds/constants';
+import { Button } from '@components/ui/button';
 
 /**
  * TODO: Split file to smaller components
@@ -196,7 +198,7 @@ export const FormMobile: React.FC = () => {
           render={({ field }) => (
             <FormItem className="grid gap-2 border-b pb-2">
               <div className={twMerge(styles.rowItemInput, 'border-b-0 pb-0')}>
-                <FormLabel className='w-2/5'>
+                <FormLabel className="w-2/5">
                   <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
                 </FormLabel>
                 <PriceAutoComplete
@@ -252,6 +254,40 @@ export const FormMobile: React.FC = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="bedrooms_count"
+          render={({ field }) => (
+            <FormItem>
+              <ListItemBtsPicker
+                onSelect={(option: A) => {
+                  console.log('onSelect bedrooms_count', option);
+                  field.onChange(option.value);
+                }}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                options={roomsOptions}
+                btsTitle="Phòng ngủ"
+                value={field.value}
+                footer={
+                  <div className="p-4 gap-4 flex flex-col">
+                    <Label>Số khác:</Label>
+                    <RoundedOptionsNumberInput
+                      {...field}
+                      className="relative"
+                      placeholder="Nhập số"
+                      onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                      maxLength={3}
+                      hiddenSelect
+                    />
+                    <Button variant="default" className='w-full' onClick={closeModal}>OK</Button>
+                  </div>
+                }
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="grid gap-4 md:grid-cols-2">
           <FormField
@@ -259,7 +295,7 @@ export const FormMobile: React.FC = () => {
             name="bedrooms_count"
             render={({ field }) => (
               <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className='w-2/5'>Số phòng ngủ</FormLabel>
+                <FormLabel className="w-2/5">Số phòng ngủ</FormLabel>
                 <RoundedOptionsNumberInput
                   {...field}
                   className="relative"
@@ -277,7 +313,7 @@ export const FormMobile: React.FC = () => {
             name="bathrooms_count"
             render={({ field }) => (
               <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className='w-2/5'>Số phòng tắm</FormLabel>
+                <FormLabel className="w-2/5">Số phòng tắm</FormLabel>
                 <RoundedOptionsNumberInput
                   {...field}
                   className="relative"
@@ -295,7 +331,7 @@ export const FormMobile: React.FC = () => {
             name="facade"
             render={({ field }) => (
               <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className='w-2/5'>Mặt tiền</FormLabel>
+                <FormLabel className="w-2/5">Mặt tiền</FormLabel>
                 <Input
                   {...field}
                   value={maskNumber(field.value).formattedValue}
@@ -321,7 +357,7 @@ export const FormMobile: React.FC = () => {
             name="entrance"
             render={({ field }) => (
               <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className='w-2/5'>Đường rộng</FormLabel>
+                <FormLabel className="w-2/5">Đường rộng</FormLabel>
                 <Input
                   {...field}
                   value={maskNumber(field.value).formattedValue}
@@ -349,7 +385,7 @@ export const FormMobile: React.FC = () => {
             name="floors_count"
             render={({ field }) => (
               <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className='w-2/5'>Số tầng</FormLabel>
+                <FormLabel className="w-2/5">Số tầng</FormLabel>
                 <RoundedOptionsNumberInput
                   {...field}
                   className="relative"
@@ -390,6 +426,7 @@ export const FormMobile: React.FC = () => {
           }}
           dividers={false}
         />
+        <TestComponents />
       </List>
     </div>
   );

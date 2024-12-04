@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@components/ui/separator';
 import { BadgeInfo } from 'lucide-react';
+import { useIsMobile } from '@hooks';
 
 // TODO: Remove ProductDescriptionForm component, use single field, add Typescript
 
@@ -36,6 +37,8 @@ interface InputTitleProps {
 }
 
 export function InputTitle({ form }: InputTitleProps) {
+  const isMobile = useIsMobile();
+
   return (
     <FormField
       control={form.control}
@@ -45,16 +48,18 @@ export function InputTitle({ form }: InputTitleProps) {
           <FormLabel>
             <span className="text-red-600">*</span> Tiêu đề
           </FormLabel>
-          <Input
-            {...field}
-            className="relative"
-            placeholder="Nhập tiêu đề..."
-            endAdornment={
-              <span className="text-2xs absolute right-1 top-0">
-                {(form.getValues('title') || '').length}/99
-              </span>
-            }
-          />
+          <Textarea
+              {...field}
+              className="relative"
+              rows={isMobile ? 3 : 1}
+              placeholder="Nhập tiêu đề..."
+              endAdornment={
+                <span className="text-2xs absolute right-1 top-1">
+                  {(form.getValues('title') || '').length}/99
+                </span>
+              }
+            />
+
           <FormDescription>
             Tiêu đề ngắn gọn dễ hiểu, tối thiểu 30 ký tự và không được dài quá 99 ký tự.
           </FormDescription>

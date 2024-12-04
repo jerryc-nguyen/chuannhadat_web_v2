@@ -12,9 +12,10 @@ type IListItemBtsPickerProps = {
   btsTitle?: string,
   closeAfterSelect?: boolean
   dividers?: boolean
+  footer?: React.ReactNode
 }
 
-export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect, dividers }: IListItemBtsPickerProps) {
+export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, closeAfterSelect, dividers, footer }: IListItemBtsPickerProps) {
   const { openModal, closeModal } = useModals();
   const selectedOption = options.find((item: OptionForSelect) => (item.value + '') == value)
 
@@ -36,7 +37,7 @@ export default function ListItemBtsPicker({ onSelect, value, options, btsTitle, 
         openModal({
           name: `ListItemBtsPicker_${btsTitle}`,
           title: btsTitle,
-          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={options} />,
+          content: <ListCheckOptions selectedOption={selectedOption} onSelect={onLocalSelect} options={options} footer={footer}/>,
           supportPushState: false
         });
       }}

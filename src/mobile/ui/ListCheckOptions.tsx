@@ -2,15 +2,18 @@ import { Checkbox, List, ListItem } from '@components/konsta';
 
 import { ReactElement, useState } from 'react';
 import { OptionForSelect } from '@models';
+import * as React from 'react';
 
 const ListCheckOptions = ({
   options,
   selectedOption,
   onSelect,
+  footer,
 }: {
   options: OptionForSelect[];
   selectedOption?: OptionForSelect | A;
   onSelect?: (arg: A) => void;
+  footer?: React.ReactNode;
 }): ReactElement => {
   const [curOption, setCurOption] = useState(selectedOption);
 
@@ -42,6 +45,7 @@ const ListCheckOptions = ({
           );
         })}
       </List>
+      {footer}
     </>
   );
 };
