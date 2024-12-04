@@ -52,3 +52,12 @@ export type IVerifyPhoneResponse = IResponseData<{
   name: string;
   avatar: string;
 }>;
+export interface ITopAuthor {
+  avatar_url: string;
+  full_name: string;
+  id: number;
+  phone: string;
+  slug: string;
+  top_position: number;
+}
+export type TopAuthorsResponse = IResponseData<ITopAuthor[]>;
