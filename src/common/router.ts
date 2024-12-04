@@ -82,4 +82,7 @@ export const API_ROUTES = {
   DASHBOARD: {
     ACCOUNT_SUMMARY: 'api/v1/dashboards',
   },
+  SEARCHS: {
+    TOP_AUTHORS: 'api/v1/searchs/top_authors',
+  },
 };

@@ -14,6 +14,7 @@ import { Author, IProductDetail } from '@mobile/searchs/type';
 import {
   IConnectOauthsPayload,
   IRequestCallbackPayload,
+  ISeachAuthorPayload,
   IViewedPostsPayload,
 } from '@models/modelPayload';
 import {
@@ -26,6 +27,7 @@ import {
   IResponseData,
   IVerifyPhoneResponse,
   IViewedPostResonpse,
+  TopAuthorsResponse,
 } from '@models/modelResponse';
 import {
   ISavedProductsResponse,
@@ -209,6 +211,13 @@ export const services = {
     },
     getListReferralFriend: async (): Promise<IReferralListResponse> => {
       return axiosInstance.get(API_ROUTES.REFERRALS);
+    },
+  },
+  searchs: {
+    topAuthors: async (data: ISeachAuthorPayload): Promise<TopAuthorsResponse> => {
+      return axiosInstance.get(API_ROUTES.SEARCHS.TOP_AUTHORS, {
+        params: data,
+      });
     },
   },
 };

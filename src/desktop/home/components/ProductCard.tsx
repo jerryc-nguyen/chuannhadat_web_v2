@@ -27,6 +27,7 @@ type ProductCardProps = {
 };
 export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
+
   const [imageSliderViewPortRef] = useEmblaCarousel();
   const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
   const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
