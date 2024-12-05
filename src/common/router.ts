@@ -80,6 +80,7 @@ export const API_ROUTES = {
   SEOS: 'api/v1/seos/metadata',
   NEWS: {
     GET_NEWS: 'api/v1/news',
+    GET_NEWS_DETAIL: 'api/v1/news/detail',
   },
   REFERRALS: 'api/v1/referrals',
   DASHBOARD: {

@@ -1,5 +1,5 @@
 import { formatRelativeTime } from '@common/utils';
-import { IArticle } from '@desktop/news/types';
+import { IArticle } from '@views/news/types';
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,7 +8,7 @@ interface ArticleProps extends IArticle {}
 function PrimaryArticleCard(props: ArticleProps) {
   const { path, thumb_url, title, posted_at } = props;
   return (
-    <div className="group relative col-span-2 h-full overflow-hidden rounded-md border shadow">
+    <div className="group relative col-span-2 h-full overflow-hidden rounded-md border shadow hover:shadow-xl">
       <Link href={path}>
         <img
           loading="lazy"

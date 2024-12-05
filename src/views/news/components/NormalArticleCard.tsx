@@ -1,14 +1,14 @@
 import { formatRelativeTime } from '@common/utils';
-import { IArticle } from '@desktop/news/types';
+import { IArticle } from '@views/news/types';
 import Link from 'next/link';
 import React from 'react';
 
 interface ArticleProps extends IArticle {}
 
-function ArticleCard(props: ArticleProps) {
+function NormalArticleCard(props: ArticleProps) {
   const { path, thumb_url, title, posted_at } = props;
   return (
-    <div className="group relative h-full overflow-hidden rounded-md border shadow">
+    <div className="group relative h-full overflow-hidden rounded-md border shadow hover:shadow-xl">
       <Link href={path} className="flex h-full flex-col">
         <div className="aspect-video w-full shrink-0 grow overflow-hidden">
           <img
@@ -19,7 +19,7 @@ function ArticleCard(props: ArticleProps) {
           />
         </div>
 
-        <div className="flex shrink-0 flex-col p-4">
+        <div className="flex min-h-[99px] shrink-0 flex-col p-4">
           <p className="line-clamp-2 text-18 font-semibold" title={title}>
             {title}
           </p>
@@ -30,4 +30,4 @@ function ArticleCard(props: ArticleProps) {
   );
 }
 
-export default ArticleCard;
+export default NormalArticleCard;

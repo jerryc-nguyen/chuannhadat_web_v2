@@ -3,7 +3,7 @@ import { FRONTEND_TOKEN } from '@common/auth';
 import { getCookie } from '@common/cookies';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { INews } from '@desktop/news/types';
+import { IArticleDetail, INews } from '@views/news/types';
 import { IProductSummary } from '@desktop/post-detail/type';
 import {
   IFormPropsLogin,
@@ -42,6 +42,9 @@ export const services = {
     getNews: async (): Promise<{ data: INews }> => {
       return axiosInstance.get(API_ROUTES.NEWS.GET_NEWS);
     },
+    getNewsDetail: async (news_id: string): Promise<{ data: IArticleDetail }> => {
+      return axiosInstance.get(`${API_ROUTES.NEWS.GET_NEWS_DETAIL}/${news_id}`);
+    }
   },
   autocompletes: {
     projects: async (params: { keyword: string; limit: number }): Promise<A> => {
