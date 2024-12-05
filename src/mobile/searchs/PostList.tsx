@@ -14,21 +14,24 @@ import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
 import useDebounce from '@hooks/useDebounce';
 
+import ReactPaginate from 'react-paginate';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@common/utils';
+
+// TODO: Tách ReactPaginate ra thành một component riêng
+
 export default function PostList() {
   useSyncParamsToState();
   const { openModal3, closeModals } = useModals();
-  const {
-    buildFilterParams,
-    selectedSortText,
-    copyFilterStatesToLocal,
-    applySortFilter,
-  } = useFilterState();
+  const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
+    useFilterState();
 
   const filterParams = buildFilterParams({
     withLocal: false,
   });
 
-  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams);
+  const { products, isLoading, handleLoadMore, data, currentPage, setCurrentPage } =
+    usePaginatedData(filterParams);
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -49,20 +52,22 @@ export default function PostList() {
     });
   };
 
-  const handleScroll = useDebounce(() => {
-    if (
-      currentPage <= 2 &&
-      data?.pagination.total_count !== products.length &&
-      window.innerHeight + window.scrollY >= document.body.offsetHeight
-    ) {
-      handleLoadMore();
-    }
-  }, 200);
+  // const handleScroll = useDebounce(() => {
+  //   if (
+  //     currentPage <= 2 &&
+  //     data?.pagination.total_count !== products.length &&
+  //     window.innerHeight + window.scrollY >= document.body.offsetHeight
+  //   ) {
+  //     handleLoadMore();
+  //   }
+  // }, 200);
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentPage, handleScroll]);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [currentPage, handleScroll]);
+
+  console.log('data', data);
 
   return (
     <div className="relative mx-auto w-full">
@@ -80,7 +85,32 @@ export default function PostList() {
         return <ProductCard key={product?.id} product={product} />;
       })}
 
-      {data?.pagination.total_count !== products.length &&
+      <ReactPaginate
+        className="mb-10 mt-4 flex justify-center gap-1"
+        breakLabel="..."
+        nextLabel={
+          <Button variant={'link'} className='p-1'>
+            <ChevronRight />
+          </Button>
+        }
+        onPageChange={(page) => {
+          console.log('page', page);
+          setCurrentPage(page.selected + 1);
+        }}
+        pageRangeDisplayed={2}
+        pageCount={data?.pagination.total_pages}
+        pageLinkClassName={cn('text-bold h-full flex justify-center items-center p-1')}
+        activeLinkClassName={cn('text-blue-500')}
+        disabledLinkClassName="opacity-25"
+        previousLabel={
+          <Button variant={'link'} className='p-1'>
+            <ChevronLeft />
+          </Button>
+        }
+        renderOnZeroPageCount={null}
+      />
+
+      {/* {data?.pagination.total_count !== products.length &&
         (currentPage > 2 && !isLoading && products.length > 0 ? (
           <Button
             className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
@@ -93,7 +123,7 @@ export default function PostList() {
           <div className="m-auto mt-2 flex w-full justify-center">
             <Spinner />
           </div>
-        ))}
+        ))} */}
     </div>
   );
 }

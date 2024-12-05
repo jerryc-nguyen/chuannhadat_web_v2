@@ -60,7 +60,7 @@ function usePaginatedData(filterParams: FilterParams, initialPage = 1, itemsPerP
     setTimeout(() => setCurrentPage((prevPage) => prevPage + 1), 5);
   };
 
-  return { products, isLoading, handleLoadMore, data, currentPage };
+  return { products, isLoading, handleLoadMore, data, currentPage, setCurrentPage };
 }
 
 export default usePaginatedData;
