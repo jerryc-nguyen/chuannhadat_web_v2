@@ -37,6 +37,11 @@ import {
 import { HttpStatusCode } from 'axios';
 
 export const services = {
+  autocompletes: {
+    projects: async (params: { keyword: string, limit: number }): Promise<A> => {
+      return axiosInstance.get(API_ROUTES.AUTOCOMPLETES.PROJECTS, { params });
+    },
+  },
   profiles: {
     getMyProfile: async (): Promise<IProfileMeResponse> => {
       return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE);

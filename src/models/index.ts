@@ -45,6 +45,7 @@ export const enum FilterFieldName {
   City = 'city',
   District = 'district',
   Ward = 'ward',
+  Project = 'project',
   Sort = 'sort',
   BusCatType = 'busCatType',
 }

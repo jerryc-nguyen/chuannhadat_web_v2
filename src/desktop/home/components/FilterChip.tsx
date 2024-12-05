@@ -27,6 +27,7 @@ import ProfileLocations from '@desktop/product-filters/ProfileLocations';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import { useTopAuthors } from '../hooks/useTopAuthors';
+import Projects from '@mobile/filter_bds/bts/desktop/Projects';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -37,13 +38,13 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   //State !
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const containerChipsRef = React.useRef(null);
-  const {filterState} = useTopAuthors();
+  const { filterState } = useTopAuthors();
 
   const { copyFilterStatesToLocal } = useFilterState();
   const { selectedLocationText } = useFilterLocations();
   const { applySingleFilter, buildFilterParams, removeFilterValue } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: true });
-  
+
   const { data, isLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],
     queryFn: () => searchApi(filterParams),
@@ -123,6 +124,8 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
         return <FilterModal />;
       case FilterFieldName.Locations:
         return <Locations />;
+      case FilterFieldName.Project:
+        return <Projects />;
       case FilterFieldName.Rooms:
         return <Rooms />;
       case FilterFieldName.Direction:
