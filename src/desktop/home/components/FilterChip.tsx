@@ -145,6 +145,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
       copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
   };
+
   const handleRemoveFilter = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
     const newFilterState = removeFilterValue(fieldName);
@@ -164,7 +165,6 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
         return <BiArea className="text-xl" />;
       case FilterFieldName.Sort:
         return <BsSortUp className="text-xl" />;
-
       default:
         break;
     }

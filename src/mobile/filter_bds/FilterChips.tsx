@@ -25,6 +25,7 @@ import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import ManagePostsFooterBtsButton from './ManagePostFooterBtsButton';
 import { Modal } from '@mobile/modals/states/types';
 import { useTopAuthors } from '@desktop/home/hooks/useTopAuthors';
+import Projects from './bts/desktop/Projects';
 
 export default function FilterChips() {
   const { filterState } = useTopAuthors();
@@ -71,6 +72,8 @@ export default function FilterChips() {
         );
       case FilterFieldName.CategoryType:
         return <CategoryType />;
+      case FilterFieldName.Project:
+        return <Projects />;
       case FilterFieldName.Price:
         return <Price />;
       case FilterFieldName.Area:
