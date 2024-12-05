@@ -85,4 +85,7 @@ export const API_ROUTES = {
   SEARCHS: {
     TOP_AUTHORS: 'api/v1/searchs/top_authors',
   },
+  AUTOCOMPLETES: {
+    PROJECTS: 'api/v1/autocompletes/projects'
+  }
 };

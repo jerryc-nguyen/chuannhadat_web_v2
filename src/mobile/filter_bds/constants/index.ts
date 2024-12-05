@@ -2,6 +2,37 @@ import { ALL_OPTION } from '@common/constants';
 import { FilterFieldName, OptionForSelect } from '@models';
 import { FilterChipOption } from '../types';
 
+export const defaultProjects: OptionForSelect[] = [
+  {
+    "value": 815,
+    "text": "Celadon City"
+  },
+  {
+    "value": 369,
+    "text": "The Harmona"
+  },
+  {
+    "value": 712,
+    "text": "Ruby Garden"
+  },
+  {
+    "value": 895,
+    "text": "Carillon Apartment"
+  },
+  {
+    "value": 2067,
+    "text": "The Botanica"
+  },
+  {
+    "value": 2774,
+    "text": "Vinhomes Ocean Park Gia Lâm"
+  },
+  {
+    "value": 5336,
+    "text": "The Origami - Vinhomes Grand Park"
+  }
+]
+
 export const businessTypesOptions: OptionForSelect[] = [
   {
     value: 'sell',
@@ -208,7 +239,7 @@ export const listFilterDesktop: Array<FilterChipOption> = [
     id: FilterFieldName.CategoryType,
     text: 'Loại nhà đất',
   },
-  // { id: FilterFieldName.locations, text: 'Khu vực' },
+  { id: FilterFieldName.Project, text: 'Dự án' },
   {
     id: FilterFieldName.Price,
     text: 'Mức giá',

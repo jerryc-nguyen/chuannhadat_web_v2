@@ -27,6 +27,7 @@ export const PARAM_DIRECTION = 'direction';
 export const PARAM_CITY = 'city_id';
 export const PARAM_DISTRICT = 'district_id';
 export const PARAM_WARD = 'ward_id';
+export const PARAM_PROJECT = 'project_id';
 export const PARAM_SORT = 'sort';
 
 export const enum FilterFieldName {
@@ -45,6 +46,7 @@ export const enum FilterFieldName {
   City = 'city',
   District = 'district',
   Ward = 'ward',
+  Project = 'project',
   Sort = 'sort',
   BusCatType = 'busCatType',
 }
@@ -60,6 +62,7 @@ export const FILTER_FIELDS_TO_PARAMS = [
   'city',
   'district',
   'ward',
+  'project',
   'sort',
   'busCatType',
 ];
@@ -75,5 +78,6 @@ export const FILTER_FIELDS_PARAMS_MAP: Record<string, A> = {
   city: PARAM_CITY,
   district: PARAM_DISTRICT,
   ward: PARAM_WARD,
+  project: PARAM_PROJECT,
   sort: PARAM_SORT,
 };
