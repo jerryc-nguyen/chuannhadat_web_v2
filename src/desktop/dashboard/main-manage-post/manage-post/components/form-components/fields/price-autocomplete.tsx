@@ -46,7 +46,7 @@ export function PriceAutoComplete<T extends string>({
   }
 
   return (
-    <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
+    <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
       <Popover open={open} onOpenChange={setOpen}>
         <Command shouldFilter={false}>
           <PopoverAnchor asChild>
@@ -62,7 +62,7 @@ export function PriceAutoComplete<T extends string>({
               }}
             >
               {
-                InputRender || 
+                InputRender ||
                 <Input
                   value={searchText}
                   placeholder={placeholder}

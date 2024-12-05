@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -10,24 +10,23 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
-import { Separator } from "@components/ui/separator";
-import { maskNumber } from "@common/priceHelpers";
-import React from "react";
-import { Button } from "@components/ui/button";
-import { RoundedOptionsNumberInput } from "./fields/rounded-options-number-input";
-import { ReceiptText } from "lucide-react";
+} from '@/components/ui/accordion';
+import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
+import { Separator } from '@components/ui/separator';
+import { maskNumber } from '@common/priceHelpers';
+import React from 'react';
+import { Button } from '@components/ui/button';
+import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
+import { ReceiptText } from 'lucide-react';
 
-import { furnitureTypeOptions, directionOptions } from "../../constant";
-
-
+import { furnitureTypeOptions, directionOptions } from '../../constant';
+import { CommonSelect } from '../CommonSelect';
 
 const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,7 +34,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
     const regex = /^(?![.,])\d+([.,]\d{0,})?$/;
 
-    if (regex.test(value) || value === "") {
+    if (regex.test(value) || value === '') {
       field.onChange(value); // Update the value only if it matches the regex
     }
   };
@@ -43,7 +42,9 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-md flex gap-2"><ReceiptText /> Chi tiết Bất động sản</CardTitle>
+        <CardTitle className="text-md flex gap-2">
+          <ReceiptText /> Chi tiết Bất động sản
+        </CardTitle>
         <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
@@ -171,37 +172,29 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                         render={({ field }) => (
                           <FormItem className="grid gap-2">
                             <FormLabel>Hướng nhà/ đất</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
+                            <CommonSelect
+                              onChange={field.onChange}
+                              options={[
+                                { value: '', text: 'Không xác định' },
+                                ...directionOptions,
+                              ]}
                               value={field.value}
-                              defaultValue={field.value}
-                            >
-                              <SelectTrigger>
-                                <SelectValue
-                                  defaultValue={field.value}
-                                  placeholder="Không xác định"
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {directionOptions.map((item, index) => (
-                                  <SelectItem key={index} value={item.value}>
-                                    {item.label}
-                                  </SelectItem>
-                                ))}
-                                <SelectSeparator />
-                                <Button
-                                  className="w-full px-2"
-                                  variant="secondary"
-                                  size="sm"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    form.setValue("entrance_direction", "");
-                                  }}
-                                >
-                                  Xóa lựa chọn
-                                </Button>
-                              </SelectContent>
-                            </Select>
+                              actions={
+                                <>
+                                  <SelectSeparator />
+                                  <Button
+                                    className="w-full px-2"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      form.setValue('entrance_direction', '');
+                                    }}
+                                  >
+                                    Xóa lựa chọn
+                                  </Button>
+                                </>
+                              }
+                            />
                             <FormMessage />
                           </FormItem>
                         )}
@@ -227,7 +220,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                               <SelectContent>
                                 {directionOptions.map((item, index) => (
                                   <SelectItem key={index} value={item.value}>
-                                    {item.label}
+                                    {item.text}
                                   </SelectItem>
                                 ))}
                                 <SelectSeparator />
@@ -237,7 +230,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                                   size="sm"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    form.setValue("view_direction", "");
+                                    form.setValue('view_direction', '');
                                   }}
                                 >
                                   Xóa lựa chọn
@@ -269,7 +262,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                               <SelectContent>
                                 {furnitureTypeOptions.map((item, index) => (
                                   <SelectItem key={index} value={item.value}>
-                                    {item.label}
+                                    {item.text}
                                   </SelectItem>
                                 ))}
                                 <SelectSeparator />
@@ -279,7 +272,7 @@ const ProductDetailInfoForm: React.FC<A> = ({ form }) => {
                                   size="sm"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    form.setValue("furniture", "");
+                                    form.setValue('furniture', '');
                                   }}
                                 >
                                   Xóa lựa chọn

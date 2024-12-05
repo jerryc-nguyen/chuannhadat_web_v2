@@ -67,19 +67,19 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
       {profileData?.address && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <LuMapPin className="mr-2 h-5 w-5" />
-          <span className="text-sm text-muted-foreground">{profileData?.address}</span>
+          <span className="text-sm text-secondary">{profileData?.address}</span>
         </span>
       )}
       {profileData?.formatted_joined_at && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <CalendarDays className="mr-2 h-5 w-5" />
-          <span className="text-sm text-muted-foreground">{profileData?.formatted_joined_at}</span>
+          <span className="text-sm text-secondary">{profileData?.formatted_joined_at}</span>
         </span>
       )}
       {profileData?.gender && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <PiGenderIntersexBold className="mr-2 h-5 w-5" />
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-secondary">
             Giới tính {profileData?.gender === CustomerGender.Male ? 'nam' : 'nữ'}
           </span>
         </span>
@@ -87,7 +87,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
       {profileData?.posts_count && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <RiArticleLine className="mr-2 h-5 w-5" />
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-secondary">
             Số bài đăng {profileData?.posts_count}
           </span>
         </span>
@@ -97,7 +97,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           <LuFacebook className="mr-2 h-4 w-4" />
           <Link
             href={profileData.facebook_url}
-            className="text-xs text-muted-foreground hover:text-black"
+            className="text-xs text-secondary hover:text-black"
           >
             Liên kết facebook
           </Link>
@@ -108,7 +108,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           <LuYoutube className="mr-2 h-4 w-4 opacity-70" />
           <Link
             href={profileData.youtube_url}
-            className="text-xs text-muted-foreground hover:text-black"
+            className="text-xs text-secondary hover:text-black"
           >
             Liên kết youtube
           </Link>

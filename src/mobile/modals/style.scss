@@ -8,23 +8,24 @@
   right: 0;
   z-index: 900;
 }
+
 [vaul-drawer] {
   z-index: 999;
   width: 100vw;
 }
 
 .c-bts__overlay1,
-.c-bts__overlay1 + [vaul-drawer] {
+.c-bts__overlay1 + [data-vaul-drawer] {
   z-index: 999;
 }
 
 .c-bts__overlay2,
-.c-bts__overlay2 + [vaul-drawer] {
+.c-bts__overlay2 + [data-vaul-drawer] {
   z-index: 1000;
 }
 
 .c-bts__overlay3,
-.c-bts__overlay3 + [vaul-drawer] {
+.c-bts__overlay3 + [data-vaul-drawer] {
   z-index: 1001;
 }
 

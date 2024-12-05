@@ -1,6 +1,6 @@
-import { IProductForm } from "../types";
+import { IPostForm } from "../types";
 
-export const convertToProductFormData = (productData: A): IProductForm => {
+export const convertToProductFormData = (productData: A): IPostForm => {
   return {
     business_type: productData.business_type,
     category_type: productData.category_type,

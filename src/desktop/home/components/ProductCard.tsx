@@ -27,6 +27,7 @@ type ProductCardProps = {
 };
 export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
+
   const [imageSliderViewPortRef] = useEmblaCarousel();
   const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
   const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
@@ -112,10 +113,11 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
                   item={item}
                   detailPath={product.detail_path || ''}
                   index={index}
+                  onClick={() => openModalPostDetail(product.uid)}
                 />
               ))}
             </CarouselContent>
-            <ImageSliderAction api={imageSliderApi} countImages={product.images.length} />
+            <ImageSliderAction api={imageSliderApi} countImages={product.images.length} onClick={() => openModalPostDetail(product.uid)} />
             <ButtonSave postUid={product.uid} />
           </Carousel>
         )}
@@ -123,7 +125,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
       <CardFooter className="flex-col p-0 pt-4">
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="we line-clamp-2 cursor-pointer text-base font-semibold capitalize text-[#16192C] hover:text-primary_color"
+          className="we line-clamp-2 cursor-pointer text-base font-semibold text-primary"
         >
           {product?.title}
         </h3>
@@ -132,21 +134,21 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
           {isShowInfoPrice && (
             <div className="flex flex-col gap-y-1 text-sm">
               <span className="text-base font-bold text-black">{product?.formatted_price}</span>
-              <span className="alic text-muted-foreground">{product?.formatted_price_per_m2}</span>
+              <span className="alic text-secondary">{product?.formatted_price_per_m2}</span>
             </div>
           )}
           <div className="flex flex-col gap-y-1 text-sm">
             <span className="text-base font-bold text-black">{product?.formatted_area}</span>
-            <span className="italic text-muted-foreground">{product?.formatted_kt || '...'}</span>
+            <span className="italic text-secondary">{product?.formatted_kt || '...'}</span>
           </div>
           <div className="flex flex-col gap-y-1">
-            <div className="flex w-fit gap-x-1 rounded-full border px-2 py-1 text-muted-foreground">
+            <div className="flex w-fit gap-x-1 rounded-full border px-2 py-1 text-secondary">
               <BedRoomIcon />
               {product?.bedrooms_count && (
                 <span className="text-nowrap font-medium leading-5">{product.bedrooms_count}</span>
               )}
             </div>
-            <div className="flex w-fit gap-x-1 rounded-full border px-2 py-1 text-muted-foreground">
+            <div className="flex w-fit gap-x-1 rounded-full border px-2 py-1 text-secondary">
               <BadRoomIcon />
               {product?.bathrooms_count && (
                 <span className="text-nowrap font-medium leading-5">{product.bathrooms_count}</span>

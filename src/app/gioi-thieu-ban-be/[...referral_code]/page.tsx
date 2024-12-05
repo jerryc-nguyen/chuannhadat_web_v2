@@ -109,7 +109,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = ({
               <IoIosArrowBack />
               Trang chủ
             </Link>
-            <p className="mb-4 block text-sm text-muted-foreground lg:hidden">
+            <p className="mb-4 block text-sm text-secondary lg:hidden">
               {data.description} {' sau khi'}
               <strong className="text-primary_color"> đăng ký thành công</strong>
             </p>

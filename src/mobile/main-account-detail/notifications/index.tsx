@@ -41,7 +41,7 @@ const NotificationsMobile: React.FC = () => {
         <div className="my-4 border-b border-gray-200"></div>
         <Card className="m-auto mt-3 h-full w-full">
           <CardHeader className="pb-[15px]">
-            <CardTitle className="font-bold text-slate-500">Danh sách thông báo</CardTitle>
+            <CardTitle className="font-bold text-secondary">Danh sách thông báo</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4 p-3 text-12">
             {notificationsList.map((notification) => (

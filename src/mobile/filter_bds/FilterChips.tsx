@@ -1,7 +1,5 @@
 'use client';
 import React from 'react';
-import { filterStateAtom } from './states';
-import { useAtom } from 'jotai';
 import { FilterFieldName } from '@models';
 import Price from './bts/Price';
 import Area from './bts/Area';
@@ -25,13 +23,12 @@ import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import ManagePostsFooterBtsButton from './ManagePostFooterBtsButton';
+import { Modal } from '@mobile/modals/states/types';
+import { useTopAuthors } from '@desktop/home/hooks/useTopAuthors';
 
-type FilterChipsProp = {
-  isRedirectWhenApplyFilter?: boolean;
-};
+export default function FilterChips() {
+  const { filterState } = useTopAuthors();
 
-export default function FilterChips({ isRedirectWhenApplyFilter = true }: FilterChipsProp) {
-  const [filterState] = useAtom(filterStateAtom);
   const { copyFilterStatesToLocal } = useFilterState();
   const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
@@ -103,12 +100,12 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
 
   const buildBtsFooter = (filterOption: FilterChipOption) => {
     if (searchScope == SearchScopeEnums.ManagePosts) {
-      return <ManagePostsFooterBtsButton filterOption={filterOption} />
+      return <ManagePostsFooterBtsButton filterOption={filterOption} />;
     }
 
     switch (filterOption.id) {
       case FilterFieldName.FilterOverview:
-        return <FooterOverviewBtsButton isRedirect={isRedirectWhenApplyFilter} />;
+        return <FooterOverviewBtsButton />;
       default:
         return <FooterBtsButton filterOption={filterOption} />;
     }
@@ -121,7 +118,7 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
       copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
 
-    openModal({
+    let modalOptions: Modal = {
       name: filterOption.id,
       title: filterOption.text,
       content: buildContent(filterOption),
@@ -130,8 +127,14 @@ export default function FilterChips({ isRedirectWhenApplyFilter = true }: Filter
       defaultContentHeight:
         //@ts-ignore: read value
         DEFAULT_MODAL_HEIGHTS[filterOption.id],
-      supportPushState: false
-    });
+      supportPushState: false,
+    };
+
+    if (filterOption.id == FilterFieldName.FilterOverview) {
+      modalOptions = { ...modalOptions, headerHeight: 58, footerHeight: 67 };
+    }
+
+    openModal(modalOptions);
   };
 
   const isActiveChip = (filterOption: FilterChipOption): boolean => {

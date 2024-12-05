@@ -4,7 +4,7 @@ import { IoImage } from 'react-icons/io5';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
-import PostDetailMobile from '../post-detail/PostDetailMobile ';
+import PostDetailMobile from '../post-detail/PostDetailMobile';
 import Image from 'next/image';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
@@ -65,7 +65,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       maxHeightPercent: 0.95,
       footer: <AuthorInfo />,
       headerHeight: 74.59,
-      footerHeight: 67,
+      footerHeight: 74.59,
       pushToPath: `/post/${product.slug}`,
     });
   };
@@ -75,9 +75,11 @@ export default function ProductCard({ product }: { product: IProduct }) {
       imageUrl: product?.featured_image_url,
     });
   }, [buildThumbnailUrl, product?.featured_image_url]);
+
   if (!product) {
     return <LoadingProductCard />;
   }
+
   return (
     <div className="my-4 overflow-hidden bg-white shadow-lg">
       <AspectRatio.Root ratio={16 / 9}>
@@ -106,20 +108,20 @@ export default function ProductCard({ product }: { product: IProduct }) {
         <Link
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}
-          className="mb-2 cursor-pointer font-bold text-slate-600 hover:text-blue-500"
+          className="mb-2 cursor-pointer font-bold text-secondary hover:text-blue-500"
         >
-          {product?.title}
+          {product?.title}{' '}
         </Link>
 
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-col items-start justify-center">
             <span className="text-xl font-semibold">{product?.formatted_price}</span>
-            <span className="text-sm text-slate-600">{product?.formatted_price_per_m2}</span>
+            <span className="text-sm text-secondary">{product?.formatted_price_per_m2}</span>
           </div>
 
           <div className="flex flex-col items-start justify-center">
             <span className="text-xl font-semibold">{product?.formatted_area}</span>
-            <span className="text-sm text-slate-600">{product?.formatted_kt || '...'}</span>
+            <span className="text-sm text-secondary">{product?.formatted_kt || '...'}</span>
           </div>
 
           <div className="flex flex-col items-start justify-center">
@@ -135,8 +137,8 @@ export default function ProductCard({ product }: { product: IProduct }) {
           </div>
         </div>
         <div className="mt-3 flex flex-row items-center justify-between">
-          <div className="text-slate-600">{product?.short_location_name}</div>
-          <div className="text-slate-600">{product?.formatted_publish_at}</div>
+          <div className="text-secondary">{product?.short_location_name}</div>
+          <div className="text-secondary">{product?.formatted_publish_at}</div>
         </div>
       </div>
     </div>

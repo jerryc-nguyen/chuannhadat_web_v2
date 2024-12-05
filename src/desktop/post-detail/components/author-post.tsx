@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LuPhoneIncoming } from 'react-icons/lu';
 import { AuthorPostProps } from '../type';
 import DialogContactAgain from '@components/dialog-contact-again';
@@ -19,6 +19,11 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
     enabled: !!data?.author?.slug,
     select: (data) => data.data,
   });
+
+  const badgesCount = useMemo(() => {
+    return (profileData?.formatted_badges || []).length
+  }, [])
+
   const router = useRouter();
   const loadingAuthor = () => {
     return (
@@ -53,36 +58,36 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
     </Button>
   );
   return (
-    <div className={cn('author-post z-3 sticky top-16 h-fit min-w-[310px] flex-1', className)}>
+    <div className={cn('author-post z-3 sticky top-16 h-fit min-w-[350px] flex-1', className)}>
       {isLoading || !data?.author?.slug ? (
         loadingAuthor()
       ) : (
-        <div className="rounded-lg border bg-white p-6">
-          <h3 className="text-lg font-semibold">Liên hệ</h3>
-          <div className="my-6 flex items-center gap-x-3">
+        <div className="rounded-lg border bg-white p-4">
+          <h3 className="text-lg font-semibold">Liên hệ:</h3>
+          <div className="my-4 flex items-center gap-x-3">
             <Avatar
               onClick={() => router.push(`/profile/${data.author.slug}`)}
-              className="h-[80px] w-[80px] cursor-pointer"
+              className="h-[50px] w-[50px] cursor-pointer"
             >
               <AvatarImage src={profileData?.avatar_url} />
               <AvatarFallback>{getInitialsName(profileData?.full_name as string)}</AvatarFallback>
             </Avatar>
             <div>
-              <strong
-                onClick={() => router.push(`/profile/${data.author.slug}`)}
-                className="cursor-pointer text-blue-500"
+              <a
+                href={`/profile/${data.author.slug}`}
+                className="cursor-pointer hover:underline font-bold"
               >
                 {profileData?.full_name}
-              </strong>
-              <p className="text-slate-400">Đã đăng {profileData?.posts_count} tin</p>
+              </a>
+              <p className="text-secondary text-sm">Đã đăng {profileData?.posts_count} tin</p>
             </div>
           </div>
-          <div className="my-4">
-            {profileData?.formatted_badges &&
-              profileData?.formatted_badges.map((item, index) => (
-                <li key={genKey(index)}>{item}</li>
-              ))}
-          </div>
+          {badgesCount > 0 && (
+            <div className="my-4 text-secondary">
+              🏆 Đã đạt {badgesCount} danh hiệu môi giới
+            </div>
+          )}
+
           <div className="flex flex-col gap-y-2">
             <ButtonPhone phoneNumberProfile={profileData?.phone as string} />
             <DialogContactAgain

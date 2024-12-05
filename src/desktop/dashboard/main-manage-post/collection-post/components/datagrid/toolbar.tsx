@@ -136,7 +136,7 @@ export function DataTableToolbar<TData>({
 
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <div className="flex space-x-10">
-          <div className="content-center text-sm text-muted-foreground">
+          <div className="content-center text-sm text-secondary">
             <span>
               {table.getFilteredSelectedRowModel().rows.length} /{' '}
               {table.getFilteredRowModel().rows.length} đã chọn.
@@ -187,7 +187,7 @@ const ButtonPostArticle = () => {
 
   const ContentButton = ({ className }: { className?: string }) => {
     return (
-      <Link href="/dashboard/manage-post/new-post" target="_blank" className={className}>
+      <Link href="/dashboard/manage-post/new-post" className={className}>
         <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
           <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <Plus />

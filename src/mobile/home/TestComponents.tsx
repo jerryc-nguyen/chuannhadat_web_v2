@@ -1,13 +1,14 @@
 import List from "@components/konsta/List";
 import { directionsOptions, roomsOptions } from "@mobile/filter_bds/constants";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ListItemBtsPicker from "../bts-pickers/ListItemBtsPicker";
 import ListItemBtsInput from "@mobile/bts-pickers/ListItemBtsInput";
 import useModals from "@mobile/modals/hooks";
 import { PriceAutoComplete } from "@desktop/dashboard/main-manage-post/manage-post/components/form-components/fields/price-autocomplete";
-import { buildOptionsPrice, maskNumber } from "@common/priceHelpers";
+import { buildOptionsPrice, maskNumber, readMoney } from "@common/priceHelpers";
 import { Input } from "@components/ui/input";
 import LocationsPicker from "@mobile/ui/LocationsPicker";
+import { Label } from "@components/ui/label";
 
 const PriceInputField = ({ value, onChange }: A) => {
   const [val, setVal] = useState(value);
@@ -81,7 +82,7 @@ export default function TestComponents() {
   }
 
   const priceFieldOption = {
-    displayText: price,
+    displayText: readMoney(parseInt(price || '')),
     openModal: openModal,
     closeModal: closeModal,
 
@@ -89,15 +90,30 @@ export default function TestComponents() {
       name: '',
       title: 'Giá',
       content: <PriceInputField value={price} onChange={onPriceChanged} />,
-      showAsDialog: true
+      showAsDialog: true,
+      supportPushState: false
     }
   }
+
+
+  const [fullAddress, setFullAddress] = useState('')
+
+  const onChangedFullAddress = (newAddress: string) => {
+    console.log('newAddress', newAddress)
+    setFullAddress(newAddress)
+  }
+
+  const mapSrc = useMemo(() => {
+    return `https://maps.google.com/maps?&q=${fullAddress}&output=embed`
+  }, [fullAddress])
 
   return <>
     <List strongIos outlineIos>
       <ListItemBtsPicker {...directionFieldOption} />
       <ListItemBtsInput {...priceFieldOption} />
-      {/* <ListItemBtsPicker {...bedFieldOption} /> */}
+
+      {/* @ts-ignore: ok */}
+      <ListItemBtsPicker {...bedFieldOption} />
     </List>
 
     <LocationsPicker
@@ -105,6 +121,30 @@ export default function TestComponents() {
       onChangeCity={(city) => { console.log('aa'); closeModal() }}
       onChangeDistrict={(district) => { closeModal() }}
       onChangeWard={(ward) => { closeModal() }}
+      onChangeStreet={(street) => { closeModal() }}
+      withStreet={true}
+      onChangedFullAddress={onChangedFullAddress}
     />
+    <div className='p-4'>
+      <Label>Địa chỉ:</Label>
+      <Input
+        value={fullAddress}
+        placeholder="Nhập địa chỉ"
+        onChange={(e) => {
+          setFullAddress(e.target.value)
+        }}
+      />
+      <br />
+      <Label>Vị trí trên bản đồ</Label>
+
+      <iframe
+        className='w-full min-h-64'
+        style={{ border: 0 }}
+        loading="lazy"
+        src={mapSrc}></iframe>
+
+    </div>
+
+
   </>
 }

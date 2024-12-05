@@ -16,6 +16,7 @@ export const defaultFilterStateAtom = {
   city: undefined,
   district: undefined,
   ward: undefined,
+  project: undefined,
   sort: undefined,
   busCatType: undefined
 };

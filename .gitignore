@@ -40,3 +40,6 @@ backup.tsx
 next-env.d.ts
 
 certificates
+
+# Sentry Config File
+.env.sentry-build-plugin

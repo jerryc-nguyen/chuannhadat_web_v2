@@ -172,7 +172,7 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
       <div
         {...getRootProps({
           className:
-            'flex flex-1 flex-col cursor-pointer border-2 rounded-lg border bg-secondary text-muted-foreground',
+            'flex flex-1 flex-col cursor-pointer border-2 rounded-lg border bg-secondary text-secondary',
           style: style,
         })}
       >

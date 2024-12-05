@@ -1,6 +1,6 @@
 export const DEFAULT_BG_CLASS = 'bg-ios-light-surface dark:bg-ios-dark-surface';
 export const CURRENT_USER_KEY = 'current_user';
-
+export const SMS_PHONE_NUMBER = '0967.354.632';
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
 export const ALL_OPTION = {
@@ -52,3 +52,10 @@ export const QUERY_KEY = {
 };
 
 export const timeOutDuration = 15 * 3600 * 1000; // 15 days
+
+export const CND_TEXT_COLORS = {
+  Success: "text-green-600",
+  Warning: "text-amber-500",
+  Error: "text-rose-700",
+  Info: "text-cyan-500"
+}

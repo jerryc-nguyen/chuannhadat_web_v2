@@ -1,6 +1,5 @@
 import { services } from '@api/services';
 import RelatedCard from '@components/related-product-card';
-import TooltipHost from '@components/tooltip-host';
 import { Card, CardContent } from '@components/ui/card';
 import {
   Carousel,
@@ -73,12 +72,14 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
   if (isLoading || !productId) return loadingRelatedCard();
   return (
     <>
-      <TooltipHost content={'Chỉ hiện tin có ngày đăng trong 2 tuần gần nhất'}>
-        <h3 className="my-2 mt-4 cursor-pointer text-lg text-slate-500">
-          Tin khác của {fullNameAuthor}
-        </h3>
-      </TooltipHost>
-      <Carousel className="w-full">
+      <h3 className="mt-6 cursor-pointer text-lg font-bold">
+        Tin khác của {fullNameAuthor}
+      </h3>
+      <span className='text-gray text-xs italic'>
+        Chỉ hiện tin có ngày đăng trong 2 tuần gần nhất
+      </span>
+
+      <Carousel className="w-full mt-4">
         <CarouselContent>
           {relatedPosts?.slice(0, 2)?.map((post, index) => (
             <CarouselItem key={index}>
@@ -89,6 +90,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
               </Card>
             </CarouselItem>
           ))}
+
           {relatedPosts && relatedPosts?.length > 1 && (
             <CarouselItem>
               <Card>

@@ -23,6 +23,7 @@ export type LoginResponse = {
   code: number;
   message?: string;
 };
+
 export interface ILoginResponse {
   address: string;
   api_token: string;
@@ -44,6 +45,9 @@ export interface ILoginResponse {
   website_url?: string;
   youtube_url?: string;
   facebook_url?: string;
+  email?: string;
+  unconfirmed_email?: A;
+  phone_confirmed?: boolean;
 }
 export type IRegisterResponse = LoginResponse;
 export enum ILoginAndRegisterModalType {

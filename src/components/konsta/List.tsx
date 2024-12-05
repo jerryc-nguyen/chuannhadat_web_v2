@@ -7,7 +7,28 @@ import { ListClasses } from './ListClasses.js';
 import { useThemeClasses } from './use-theme-classes.js';
 import { ListColors } from './ListColors.js';
 
-const List = forwardRef((props: A, ref: A) => {
+interface ListProps {
+  component?: string;
+  className?: string;
+  colors?: typeof ListColors;
+  margin?: string;
+  menuList?: boolean;
+  inset?: boolean;
+  insetIos?: boolean;
+  insetMaterial?: boolean;
+  strong?: boolean;
+  strongIos?: boolean;
+  strongMaterial?: boolean;
+  outline?: boolean;
+  outlineIos?: boolean;
+  outlineMaterial?: boolean;
+  ios?: boolean;
+  material?: boolean;
+  children?: React.ReactNode;
+  [key: string]: any; // For the rest of the props
+}
+
+const List = forwardRef<HTMLDivElement, ListProps>((props, ref) => {
   const {
     component = 'div',
     className,

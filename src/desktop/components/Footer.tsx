@@ -26,18 +26,14 @@ const listMenuFooter = [
         value: 'Quy định đăng tin',
         link: 'quy-dinh-dang-tin',
       },
+
       {
         key: 3,
-        value: 'Chính sách và quy định',
-        link: 'chinh-sach-va-quy-dinh',
-      },
-      {
-        key: 4,
         value: 'Giới thiệu các loại tin VIP',
         link: 'gioi-thieu-tin-vip',
       },
       {
-        key: 5,
+        key: 4,
         value: 'Bảng giá dịch vụ',
         link: 'bang-gia-dich-vu',
       },
@@ -66,7 +62,7 @@ const listMenuFooter = [
   },
   {
     key: 3,
-    title: 'Thông tin khác',
+    title: 'Chính sách',
     menu: [
       {
         key: 1,
@@ -77,6 +73,11 @@ const listMenuFooter = [
         key: 2,
         value: 'Chính sách khiếu nại',
         link: 'chinh-sach-khieu-nai',
+      },
+      {
+        key: 3,
+        value: 'Chính sách và quy định',
+        link: 'chinh-sach-va-quy-dinh',
       },
     ],
   },
@@ -114,7 +115,7 @@ const Footer: React.FC<FooterProps> = () => {
       <section className="relative flex flex-col justify-between pb-10 pt-12 md:flex-row md:gap-x-6 lg:gap-x-10">
         <div className="relative z-[1] md:max-w-[400px]">
           <Logo className="justify-center md:justify-start" isAlwaysShow />
-          <div className="my-4 flex flex-col gap-y-1 text-center text-sm text-muted-foreground md:text-start">
+          <div className="my-4 flex flex-col gap-y-1 text-center text-sm text-secondary md:text-start">
             <p>Trang chuyên đăng tin bất động sản miễn phí.</p>
             <p>
               Nếu bạn muốn góp ý, phản ánh vấn đề, yêu cầu xoá tin, vui lòng liên hệ với chúng tôi
@@ -139,7 +140,7 @@ const Footer: React.FC<FooterProps> = () => {
               <ul>
                 {menuPart.menu.map((menuItem) => (
                   <li
-                    className="text-nowrap text-muted-foreground transition-all hover:text-white hover:underline"
+                    className="text-nowrap text-secondary transition-all hover:text-white hover:underline"
                     key={menuItem.key}
                   >
                     <Link href={menuItem.link}>{menuItem.value}</Link>
