@@ -19,7 +19,7 @@ import { LuLoader2 } from 'react-icons/lu';
 import { useQuery } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
-import { LuX } from 'react-icons/lu';
+import { LuX, LuBuilding } from 'react-icons/lu';
 import { BiArea } from 'react-icons/bi';
 import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import { BsSortUp } from 'react-icons/bs';
@@ -106,6 +106,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
     }
     return isActive;
   };
+
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.ProfileLocations:
@@ -155,6 +156,8 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
 
   const onRenderIconChip = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
+      case FilterFieldName.Project:
+        return <LuBuilding className="text-xl" />;
       case FilterFieldName.Price:
         return <PiCurrencyCircleDollar className="text-xl" />;
       case FilterFieldName.Area:

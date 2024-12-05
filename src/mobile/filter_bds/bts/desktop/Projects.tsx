@@ -8,6 +8,9 @@ import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
 
 export default function Projects() {
+  const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
+  const value = getLocalFieldValue(FilterFieldName.Project);
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const params = {
@@ -24,6 +27,7 @@ export default function Projects() {
 
   const onSelect = (option: OptionForSelect) => {
     console.log('onSelect option', option)
+    setLocalFieldValue(FilterFieldName.Project, option);
   }
 
   const onSearchQueryChange = (term: string) => {
@@ -36,6 +40,7 @@ export default function Projects() {
   return (
     <CmdkOptionPicker
       searchable={true}
+      value={value}
       options={searchQuery.length > 0 ? response?.data : defaultProjects}
       onSelect={onSelect}
       emptyMessage={emptyMessage}

@@ -11,6 +11,7 @@ export interface FilterState {
   city?: OptionForSelect;
   district?: OptionForSelect;
   ward?: OptionForSelect;
+  project?: OptionForSelect;
   sort?: OptionForSelect;
   busCatType?: OptionForSelect
 }
