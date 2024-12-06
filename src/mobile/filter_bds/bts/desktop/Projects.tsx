@@ -1,4 +1,3 @@
-import useModals from '@mobile/modals/hooks';
 import useFilterState from '../../hooks/useFilterState';
 import { FilterFieldName, OptionForSelect } from '@models';
 import CmdkOptionPicker from '@mobile/ui/CmdkOptionPicker';
@@ -23,15 +22,11 @@ export default function Projects() {
     queryFn: () => services.autocompletes.projects(params),
   });
 
-  console.log('response', response)
-
   const onSelect = (option: OptionForSelect) => {
-    console.log('onSelect option', option)
     setLocalFieldValue(FilterFieldName.Project, option);
   }
 
   const onSearchQueryChange = (term: string) => {
-    console.log('onSearchQueryChange option', term)
     setSearchQuery(term);
   }
 

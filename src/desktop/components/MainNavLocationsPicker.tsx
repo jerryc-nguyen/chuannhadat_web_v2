@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import Locations from '@desktop/product-filters/Locations';
+import Locations from '@components/main-content-navigator/desktop';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import useModals from '@mobile/modals/hooks';
@@ -8,6 +8,7 @@ import { FilterFieldName } from '@models';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
+import MainContentNavigator from '@components/main-content-navigator/desktop';
 
 const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
   const { applySingleFilter } = useFilterState();
@@ -29,8 +30,7 @@ export default function MainNavLocationsPicker() {
     openModal({
       name: 'ModalPickLocations',
       title: 'Chọn khu vực',
-      content: <Locations />,
-      footer: <ApplyButton closeModal={closeModal} />,
+      content: <MainContentNavigator closeModal={closeModal} />,
       showAsDialog: true,
       allowChildOverflow: true
     });
