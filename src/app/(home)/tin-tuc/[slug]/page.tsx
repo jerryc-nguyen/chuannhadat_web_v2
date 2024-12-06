@@ -69,7 +69,7 @@ export default async function Page({ params, searchParams }: Props) {
     return (
       <>
         {newDetail && (
-          <div className="flex flex-col gap-4 py-4">
+          <div className="flex flex-col gap-4 pb-4">
             <div className="text-xl font-semibold">
               {newDetail?.title}
             </div>
@@ -100,7 +100,7 @@ export default async function Page({ params, searchParams }: Props) {
 
   const ListNewByCategory = () => {
     return (
-      <div className={cn("mt-4 flex flex-col gap-4", newDetail && "border-t pt-4 mt-10")}>
+      <div className={cn("flex flex-col gap-4", newDetail && "border-t pt-4 mt-10")}>
         <div className="mb-4 text-xl font-semibold">{newsByCategory?.title}</div>
         {newsByCategory.articles.map((article) => {
           return <ArticleCard key={article.id} article={article} />;
@@ -110,7 +110,7 @@ export default async function Page({ params, searchParams }: Props) {
   };
 
   return (
-    <section className="grid max-w-screen-lg grid-cols-1 gap-4 py-4 md:grid-cols-3">
+    <section className="grid max-w-screen-lg grid-cols-1 gap-4 py-4 md:grid-cols-3 mx-auto">
       <div className="px-4 md:col-span-2">
         <NewDetailArticle />
         <ListNewByCategory />
