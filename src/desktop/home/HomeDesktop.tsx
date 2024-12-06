@@ -17,9 +17,13 @@ import { listFilterDesktop } from '@mobile/filter_bds/constants';
 import ReactPaginate from 'react-paginate';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@common/utils';
+import { usePathname, useRouter } from 'next/navigation';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { buildFilterParams } = useFilterState();
   const { appendCardAuthors } = useCardAuthors();
   const filterParams = buildFilterParams({ withLocal: false });
@@ -36,15 +40,7 @@ const HomeDesktop: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.users]);
-  // const handleScroll = useDebounce(() => {
-  //   if (
-  //     currentPage <= 2 &&
-  //     data.pagination.total_count !== products.length &&
-  //     window.innerHeight + window.scrollY >= document.body.offsetHeight
-  //   ) {
-  //     // handleLoadMore();
-  //   }
-  // }, 200);
+
   const { data: missingAuthors, isSuccess } = useQuery({
     queryKey: ['missing-card-authors', data.missing_user_ids],
     queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
@@ -58,10 +54,6 @@ const HomeDesktop: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, [currentPage, handleScroll]);
 
   return (
     <section className="my-10">
@@ -81,8 +73,8 @@ const HomeDesktop: React.FC = () => {
           </Button>
         }
         onPageChange={(page) => {
-          console.log('page', page);
-          setCurrentPage(page.selected + 1);
+          const selected = page.selected + 1;
+          router.push(pathname + '?page=' + selected);
         }}
         pageRangeDisplayed={2}
         pageCount={data?.pagination.total_pages}
@@ -96,21 +88,6 @@ const HomeDesktop: React.FC = () => {
         }
         renderOnZeroPageCount={null}
       />
-
-      {/* {data?.pagination.total_count !== products.length &&
-        (currentPage > 2 && !isLoading && products.length > 0 ? (
-          <Button
-            className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
-            variant={'link'}
-            onClick={handleLoadMore}
-          >
-            Xem thêm
-          </Button>
-        ) : (
-          <div className="m-auto mt-2 flex w-full justify-center">
-            <Spinner />
-          </div>
-        ))} */}
     </section>
   );
 };

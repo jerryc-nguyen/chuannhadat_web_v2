@@ -17,11 +17,15 @@ import useDebounce from '@hooks/useDebounce';
 import ReactPaginate from 'react-paginate';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@common/utils';
+import { usePathname, useRouter } from 'next/navigation';
 
 // TODO: Tách ReactPaginate ra thành một component riêng
 
 export default function PostList() {
   useSyncParamsToState();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { openModal3, closeModals } = useModals();
   const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
     useFilterState();
@@ -37,6 +41,7 @@ export default function PostList() {
     applySortFilter();
     closeModals();
   });
+
   const renderFooterSortButton = () => (
     <Button className="w-full" onClick={onApplySort}>
       Áp dụng
@@ -51,23 +56,6 @@ export default function PostList() {
       footer: renderFooterSortButton(),
     });
   };
-
-  // const handleScroll = useDebounce(() => {
-  //   if (
-  //     currentPage <= 2 &&
-  //     data?.pagination.total_count !== products.length &&
-  //     window.innerHeight + window.scrollY >= document.body.offsetHeight
-  //   ) {
-  //     handleLoadMore();
-  //   }
-  // }, 200);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => window.removeEventListener('scroll', handleScroll);
-  // }, [currentPage, handleScroll]);
-
-  console.log('data', data);
 
   return (
     <div className="relative mx-auto w-full">
@@ -94,8 +82,8 @@ export default function PostList() {
           </Button>
         }
         onPageChange={(page) => {
-          console.log('page', page);
-          setCurrentPage(page.selected + 1);
+          const selected = page.selected + 1;
+          router.push(pathname + "?page=" + selected);
         }}
         pageRangeDisplayed={2}
         pageCount={data?.pagination.total_pages}
@@ -109,21 +97,6 @@ export default function PostList() {
         }
         renderOnZeroPageCount={null}
       />
-
-      {/* {data?.pagination.total_count !== products.length &&
-        (currentPage > 2 && !isLoading && products.length > 0 ? (
-          <Button
-            className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
-            variant={'link'}
-            onClick={handleLoadMore}
-          >
-            Xem thêm
-          </Button>
-        ) : (
-          <div className="m-auto mt-2 flex w-full justify-center">
-            <Spinner />
-          </div>
-        ))} */}
     </div>
   );
 }
