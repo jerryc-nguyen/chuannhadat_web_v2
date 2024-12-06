@@ -10,15 +10,6 @@ import React from 'react';
 import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
 import MainContentNavigator from '@components/main-content-navigator/desktop';
 
-const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
-  const { applySingleFilter } = useFilterState();
-
-  const applySelectLocations = () => {
-    applySingleFilter({ id: FilterFieldName.Locations, text: 'Khu vực' });
-    closeModal();
-  };
-  return <Button onClick={() => applySelectLocations()}>Áp dụng</Button>;
-};
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
@@ -29,7 +20,7 @@ export default function MainNavLocationsPicker() {
     copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
       name: 'ModalPickLocations',
-      title: 'Chọn khu vực',
+      title: 'Bạn đang quan tâm nội dung gì?',
       content: <MainContentNavigator closeModal={closeModal} />,
       showAsDialog: true,
       allowChildOverflow: true

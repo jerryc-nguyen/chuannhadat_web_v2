@@ -4,10 +4,10 @@ import LocationsPicker from '@desktop/components/LocationsPicker';
 import { OptionForSelect } from '@models';
 import { useState } from 'react';
 import useMainContentNavigator from '../hooks';
+import OptionsTabList from '@mobile/ui/OptionsTabList';
 
 export default function MainContentNavigator({ closeModal }: { closeModal: () => void }) {
   const { submit, selectedLocationFullText } = useMainContentNavigator();
-
   const [city, setCity] = useState<OptionForSelect | undefined>();
   const [district, setDistrict] = useState<OptionForSelect | undefined>();
   const [ward, setWard] = useState<OptionForSelect | undefined>();
@@ -44,9 +44,34 @@ export default function MainContentNavigator({ closeModal }: { closeModal: () =>
     closeModal();
   };
 
+  const postBdsType = {
+    value: 'posts',
+    text: 'Tin đăng'
+  }
+
+  const contentOptions = [postBdsType, {
+    value: 'news',
+    text: 'Tin tức'
+  },
+    {
+      value: 'price_history',
+      text: 'Lịch sử giá'
+    }]
+
+  const [contentType, setContentType] = useState<OptionForSelect | undefined>(postBdsType);
+
+  const onContentTypeChanged = (option: A) => {
+    console.log('option', option);
+    setContentType(option)
+  }
+
   return (
     <div>
       {selectedLocationFullText}
+      <p className='mb-1'><b>Nội dung:</b></p>
+      <OptionsTabList value={contentType} options={contentOptions} onChange={onContentTypeChanged} />
+
+      <p className='mt-4 mb-1'><b>Khu vực:</b></p>
       <LocationsPicker
         city={city}
         district={district}

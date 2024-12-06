@@ -8,7 +8,6 @@ import CategoryType from '@mobile/filter_bds/bts/CategoryType';
 import Price from '@mobile/filter_bds/bts/Price';
 import Area from '@mobile/filter_bds/bts/Area';
 import FilterModal from '@mobile/filter_bds/FilterModal';
-import Locations from '@components/main-content-navigator/desktop';
 import Rooms from '@mobile/filter_bds/bts/Rooms';
 import Direction from '@mobile/filter_bds/bts/Direction';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
@@ -123,8 +122,6 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
         return <Area />;
       case FilterFieldName.FilterOverview:
         return <FilterModal />;
-      case FilterFieldName.Locations:
-        return <Locations />;
       case FilterFieldName.Project:
         return <Projects />;
       case FilterFieldName.Rooms:
