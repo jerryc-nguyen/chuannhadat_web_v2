@@ -3,7 +3,7 @@ import { FRONTEND_TOKEN } from '@common/auth';
 import { getCookie } from '@common/cookies';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { IArticleDetail, INews } from '@views/news/types';
+import { IArticleDetail, INews, ResponseNewsByCategory } from '@views/news/types';
 import { IProductSummary } from '@desktop/post-detail/type';
 import {
   IFormPropsLogin,
@@ -44,6 +44,9 @@ export const services = {
     },
     getNewsDetail: async (news_id: string): Promise<{ data: IArticleDetail }> => {
       return axiosInstance.get(`${API_ROUTES.NEWS.GET_NEWS_DETAIL}/${news_id}`);
+    },
+    getNewsByCategory: async (slug: string): Promise<ResponseNewsByCategory> => {
+      return axiosInstance.get(`${API_ROUTES.NEWS.GET_NEWS_BY_CATEGORY}/${slug}`);
     }
   },
   autocompletes: {
@@ -234,4 +237,9 @@ export const services = {
       });
     },
   },
+  seo: {
+    getSeoMetadata : async (path: string): Promise<A> => {
+      return axiosInstance.get(API_ROUTES.SEOS, { params: { path } });
+    }
+  }
 };

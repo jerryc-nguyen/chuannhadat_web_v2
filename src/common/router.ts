@@ -81,6 +81,7 @@ export const API_ROUTES = {
   NEWS: {
     GET_NEWS: 'api/v1/news',
     GET_NEWS_DETAIL: 'api/v1/news/detail',
+    GET_NEWS_BY_CATEGORY: 'api/v1/news/category',
   },
   REFERRALS: 'api/v1/referrals',
   DASHBOARD: {

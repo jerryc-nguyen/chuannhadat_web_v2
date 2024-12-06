@@ -23,3 +23,28 @@ export interface IArticleDetail {
   origin_link: string;
   location: string;
 }
+
+
+export interface ResponseNewsByCategory {
+  status: boolean;
+  code: number;
+  page_id: number;
+  title: string;
+  articles: Article[];
+  related_locations: Relatedlocation[];
+}
+
+interface Relatedlocation {
+  id: number;
+  name: string;
+  path: string;
+}
+
+interface Article {
+  id: number;
+  title: string;
+  path: string;
+  excerpt: string;
+  posted_at: string;
+  thumb_url: string;
+}
