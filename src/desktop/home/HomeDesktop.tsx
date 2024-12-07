@@ -2,7 +2,6 @@
 import { cardAuthors } from '@api/searchApi';
 import PostControls from '@desktop/home/components/PostControls';
 import PostList from '@desktop/home/components/PostList';
-import usePaginatedData from '@hooks/usePaginatedPost';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { listFilterDesktop } from '@mobile/filter_bds/constants';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
@@ -13,21 +12,27 @@ import React, { useEffect } from 'react';
 import { PostPagination } from './components/PostPagination';
 import useCardAuthors from './hooks/useCardAuthors';
 import { loadedCardAuthorsAtom } from './states';
+import useQueryPosts from '@hooks/useQueryPosts';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
   const router = useRouter();
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
+  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
   const { buildFilterParams } = useFilterState();
   const { appendCardAuthors } = useCardAuthors();
-  const filterParams = buildFilterParams({ withLocal: false });
-  filterParams.with_title = true;
-  filterParams.with_users = true;
+  let filterParams = buildFilterParams({ withLocal: false });
 
-  const { products, isLoading, handleLoadMore, data, currentPage, setCurrentPage } =
-    usePaginatedData(filterParams);
+  filterParams = {
+    ...filterParams,
+    with_title: true,
+    with_users: true,
+    page: currentPage
+  }
+
+  const { products, data } = useQueryPosts(filterParams);
 
   useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);
   useEffect(() => {
@@ -63,9 +68,10 @@ const HomeDesktop: React.FC = () => {
 
       <PostPagination
         total_pages={data.pagination.total_pages}
-        currentPage={searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1}
+        currentPage={currentPage}
         onPageChange={(page) => {
           const selected = page.selected + 1;
+          // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
           router.push(pathname + '?page=' + selected);
         }}
       />
@@ -74,4 +80,3 @@ const HomeDesktop: React.FC = () => {
 };
 
 export default HomeDesktop;
-
