@@ -1,30 +1,25 @@
 'use client';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { IoChevronDown } from 'react-icons/io5';
-import useModals from '@mobile/modals/hooks';
-import SortOptions from '@mobile/filter_bds/bts/SortOptions';
-import { FilterFieldName } from '@models';
-import { useEffect } from 'react';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-import ProductCard from './ProductCard';
 import { Button } from '@components/ui/button';
-import React from 'react';
-import { useRefCallback } from '@hooks/useRefCallback';
-import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
-import useDebounce from '@hooks/useDebounce';
+import { useRefCallback } from '@hooks/useRefCallback';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import SortOptions from '@mobile/filter_bds/bts/SortOptions';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import useModals from '@mobile/modals/hooks';
+import { FilterFieldName } from '@models';
+import { IoChevronDown } from 'react-icons/io5';
+import ProductCard from './ProductCard';
 
-import ReactPaginate from 'react-paginate';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '@common/utils';
-import { usePathname, useRouter } from 'next/navigation';
+import { PostPagination } from '@desktop/home/components/PostPagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-// TODO: Tách ReactPaginate ra thành một component riêng
+// TODO: Move to views/home
 
 export default function PostList() {
   useSyncParamsToState();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const { openModal3, closeModals } = useModals();
   const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
@@ -73,29 +68,13 @@ export default function PostList() {
         return <ProductCard key={product?.id} product={product} />;
       })}
 
-      <ReactPaginate
-        className="mb-10 mt-4 flex justify-center gap-1"
-        breakLabel="..."
-        nextLabel={
-          <Button variant={'link'} className='p-1'>
-            <ChevronRight />
-          </Button>
-        }
+      <PostPagination
+        total_pages={data.pagination.total_pages}
+        currentPage={searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1}
         onPageChange={(page) => {
           const selected = page.selected + 1;
-          router.push(pathname + "?page=" + selected);
+          router.push(pathname + '?page=' + selected);
         }}
-        pageRangeDisplayed={2}
-        pageCount={data?.pagination.total_pages}
-        pageLinkClassName={cn('text-bold h-full flex justify-center items-center p-1')}
-        activeLinkClassName={cn('text-blue-500')}
-        disabledLinkClassName="opacity-25"
-        previousLabel={
-          <Button variant={'link'} className='p-1'>
-            <ChevronLeft />
-          </Button>
-        }
-        renderOnZeroPageCount={null}
       />
     </div>
   );

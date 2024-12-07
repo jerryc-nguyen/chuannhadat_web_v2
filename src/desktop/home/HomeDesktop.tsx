@@ -1,28 +1,24 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-import PostList from '@desktop/home/components/PostList';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import PostControls from '@desktop/home/components/PostControls';
-import { Button } from '@components/ui/button';
-import Spinner from '@components/ui/spinner';
-import usePaginatedData from '@hooks/usePaginatedPost';
-import useDebounce from '@hooks/useDebounce';
-import useCardAuthors from './hooks/useCardAuthors';
 import { cardAuthors } from '@api/searchApi';
+import PostControls from '@desktop/home/components/PostControls';
+import PostList from '@desktop/home/components/PostList';
+import usePaginatedData from '@hooks/usePaginatedPost';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import { listFilterDesktop } from '@mobile/filter_bds/constants';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import { useHydrateAtoms } from 'jotai/utils';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { PostPagination } from './components/PostPagination';
+import useCardAuthors from './hooks/useCardAuthors';
 import { loadedCardAuthorsAtom } from './states';
-import { listFilterDesktop } from '@mobile/filter_bds/constants';
-import ReactPaginate from 'react-paginate';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '@common/utils';
-import { usePathname, useRouter } from 'next/navigation';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const { buildFilterParams } = useFilterState();
   const { appendCardAuthors } = useCardAuthors();
@@ -64,32 +60,18 @@ const HomeDesktop: React.FC = () => {
         pagination={data?.pagination}
       />
       <PostList dataPostList={products} />
-      <ReactPaginate
-        className="mb-10 mt-4 flex justify-center gap-1"
-        breakLabel="..."
-        nextLabel={
-          <Button variant={'link'} className="p-1">
-            <ChevronRight />
-          </Button>
-        }
+
+      <PostPagination
+        total_pages={data.pagination.total_pages}
+        currentPage={searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1}
         onPageChange={(page) => {
           const selected = page.selected + 1;
           router.push(pathname + '?page=' + selected);
         }}
-        pageRangeDisplayed={2}
-        pageCount={data?.pagination.total_pages}
-        pageLinkClassName={cn('text-bold h-full flex justify-center items-center p-1')}
-        activeLinkClassName={cn('text-blue-500')}
-        disabledLinkClassName="opacity-25"
-        previousLabel={
-          <Button variant={'link'} className="p-1">
-            <ChevronLeft />
-          </Button>
-        }
-        renderOnZeroPageCount={null}
       />
     </section>
   );
 };
 
 export default HomeDesktop;
+
