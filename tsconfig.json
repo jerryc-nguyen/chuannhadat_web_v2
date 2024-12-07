@@ -28,7 +28,8 @@
       "@mobile/*": ["src/mobile/*"],
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@views/*": ["src/views/*"]
     },
     "target": "ES2017"
   },

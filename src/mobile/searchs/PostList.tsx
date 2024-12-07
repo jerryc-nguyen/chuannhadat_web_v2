@@ -1,39 +1,42 @@
 'use client';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { IoChevronDown } from 'react-icons/io5';
-import useModals from '@mobile/modals/hooks';
-import SortOptions from '@mobile/filter_bds/bts/SortOptions';
-import { FilterFieldName } from '@models';
-import { useEffect } from 'react';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-import ProductCard from './ProductCard';
 import { Button } from '@components/ui/button';
-import React from 'react';
-import { useRefCallback } from '@hooks/useRefCallback';
-import Spinner from '@components/ui/spinner';
 import usePaginatedData from '@hooks/usePaginatedPost';
-import useDebounce from '@hooks/useDebounce';
+import { useRefCallback } from '@hooks/useRefCallback';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import SortOptions from '@mobile/filter_bds/bts/SortOptions';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import useModals from '@mobile/modals/hooks';
+import { FilterFieldName } from '@models';
+import { IoChevronDown } from 'react-icons/io5';
+import ProductCard from './ProductCard';
+
+import { PostPagination } from '@desktop/home/components/PostPagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+// TODO: Move to views/home
 
 export default function PostList() {
   useSyncParamsToState();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const { openModal3, closeModals } = useModals();
-  const {
-    buildFilterParams,
-    selectedSortText,
-    copyFilterStatesToLocal,
-    applySortFilter,
-  } = useFilterState();
+  const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
+    useFilterState();
 
   const filterParams = buildFilterParams({
     withLocal: false,
   });
 
-  const { products, isLoading, handleLoadMore, data, currentPage } = usePaginatedData(filterParams);
+  const { products, isLoading, handleLoadMore, data, currentPage, setCurrentPage } =
+    usePaginatedData(filterParams);
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
     closeModals();
   });
+
   const renderFooterSortButton = () => (
     <Button className="w-full" onClick={onApplySort}>
       Áp dụng
@@ -48,21 +51,6 @@ export default function PostList() {
       footer: renderFooterSortButton(),
     });
   };
-
-  const handleScroll = useDebounce(() => {
-    if (
-      currentPage <= 2 &&
-      data?.pagination.total_count !== products.length &&
-      window.innerHeight + window.scrollY >= document.body.offsetHeight
-    ) {
-      handleLoadMore();
-    }
-  }, 200);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentPage, handleScroll]);
 
   return (
     <div className="relative mx-auto w-full">
@@ -80,20 +68,14 @@ export default function PostList() {
         return <ProductCard key={product?.id} product={product} />;
       })}
 
-      {data?.pagination.total_count !== products.length &&
-        (currentPage > 2 && !isLoading && products.length > 0 ? (
-          <Button
-            className="load-more-button m-auto mt-2 w-full animate-bounce text-[24px] text-blue-400"
-            variant={'link'}
-            onClick={handleLoadMore}
-          >
-            Xem thêm
-          </Button>
-        ) : (
-          <div className="m-auto mt-2 flex w-full justify-center">
-            <Spinner />
-          </div>
-        ))}
+      <PostPagination
+        total_pages={data.pagination.total_pages}
+        currentPage={searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1}
+        onPageChange={(page) => {
+          const selected = page.selected + 1;
+          router.push(pathname + '?page=' + selected);
+        }}
+      />
     </div>
   );
 }
