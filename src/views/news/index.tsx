@@ -1,11 +1,11 @@
-'use client';
+'use server';
 
-import { useIsMobile } from '@hooks';
 import NewsMobile from '@views/news/mobile/NewsMobile';
 import NormalArticleCard from '@views/news/components/NormalArticleCard';
 import PrimaryArticleCard from '@views/news/components/PrimaryArticleCard';
-import useNewsData from '@views/news/hooks/useGetNewsList';
-import { CardNewSkeleton } from './components/Skeleton';
+import { getQueryClient } from '@api/react-query';
+import { services } from '@api/services';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 /**
  * TODO: Chuyển component này sang dạng mobile-first
@@ -13,20 +13,16 @@ import { CardNewSkeleton } from './components/Skeleton';
  *
  */
 
-export function NewsList() {
-  const { data, isFetching } = useNewsData();
-  const isMobile = useIsMobile();
+export async function NewsList() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { isMobile } = useGetUserAgentInfo();
 
-  if (isFetching)
-    return (
-      <div className="md:grid-cols-4 grid grid-cols-1 p-4 gap-4">
-        {[...Array(12)].map((_, index) => (
-          <CardNewSkeleton key={index} />
-        ))}
-      </div>
-    );
+  const { data } = await getQueryClient().fetchQuery({
+    queryKey: ['get-news'],
+    queryFn: services.news.getNews,
+  });
 
-  if (isMobile) return <NewsMobile />;
+  if (isMobile) return <NewsMobile data={data} />;
 
   return (
     <section className="container pt-4">

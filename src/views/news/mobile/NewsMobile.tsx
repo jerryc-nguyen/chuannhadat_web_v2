@@ -1,11 +1,9 @@
-'use client';
+'use server';
 
-import useNewsData from '@views/news/hooks/useGetNewsList';
 import ArticleCard from './components/ArticleCard';
+import { INews } from '../types';
 
-function NewsMobile() {
-  const { data } = useNewsData();
-
+function NewsMobile({ data }: { data: INews }) {
   return (
     <section className="p-4 pt-4">
       {data?.map((item, index) => (
