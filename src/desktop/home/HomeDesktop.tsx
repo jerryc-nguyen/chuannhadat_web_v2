@@ -13,6 +13,7 @@ import { PostPagination } from './components/PostPagination';
 import useCardAuthors from './hooks/useCardAuthors';
 import { loadedCardAuthorsAtom } from './states';
 import useQueryPosts from '@hooks/useQueryPosts';
+import { ListTopAuthor } from './components/ListTopAuthor';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
@@ -64,6 +65,7 @@ const HomeDesktop: React.FC = () => {
         chipOptions={listFilterDesktop}
         pagination={data?.pagination}
       />
+      <ListTopAuthor />
       <PostList dataPostList={products} />
 
       <PostPagination
