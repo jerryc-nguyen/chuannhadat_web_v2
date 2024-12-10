@@ -1,4 +1,3 @@
-import { ITopAuthor } from '@models/modelResponse';
 import { atom } from 'jotai';
 export type TCardAuthor = {
   id: number;
@@ -40,4 +39,3 @@ export const seoInfoAtom = atom<TSeoInfo | Record<string, A>>({});
 
 export const listPostIdSavedAtom = atom<string[]>([]);
 
-export const listTopAuthorsAtom = atom<ITopAuthor[]>([]);
