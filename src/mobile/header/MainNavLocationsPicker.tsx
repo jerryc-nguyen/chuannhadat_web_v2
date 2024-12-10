@@ -1,16 +1,17 @@
 'use client';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
 import { Button } from '@components/ui/button';
 import { useRefCallback } from '@hooks/useRefCallback';
 import Locations from '@mobile/filter_bds/bts/Locations';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useFilterLocations } from '@mobile/locations/hooks';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
 import React from 'react';
 import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
 
 export default function MainNavLocationsPicker() {
-  const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
+  const { selectedLocationFullText } = useMainContentNavigator();
+
   const { openModal, closeModal } = useModals();
   const { copyFilterStatesToLocal, applySingleFilter } = useFilterState();
   const applySelectLocations = useRefCallback(() => {
@@ -36,7 +37,7 @@ export default function MainNavLocationsPicker() {
     });
   };
 
-  const btnActiveClass = isSelectedLocation ? 'font-bold text-black' : 'text-secondary';
+  const btnActiveClass = selectedLocationFullText ? 'font-bold text-black' : 'text-secondary';
 
   return (
     <>

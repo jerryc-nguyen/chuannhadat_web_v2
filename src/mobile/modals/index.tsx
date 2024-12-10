@@ -117,10 +117,18 @@ export function BtsModals1() {
             >
               <div className={`${modal?.btsContentWrapClass}`}>{modal?.content}</div>
             </div>
-            {modal?.footer && (
+            {modal?.footer && !modal?.portalFooter && (
               <div data-vaul-no-drag className="c-bts__footer">
                 {modal?.footer}
               </div>
+            )}
+
+            {modal?.footer && modal?.portalFooter && (
+              <Drawer.Portal>
+                <div data-vaul-no-drag className="c-bts__footer is-portal">
+                  {modal?.footer}
+                </div>
+              </Drawer.Portal>
             )}
           </Drawer.Content>
         </Drawer.Portal>

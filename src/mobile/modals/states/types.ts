@@ -29,7 +29,8 @@ export interface DefaultModal {
   headerHeight?: number;
   footerHeight?: number;
   pushToPath?: string;
-  supportPushState?: boolean
+  supportPushState?: boolean;
+  portalFooter?: boolean
 }
 
 export type Modal = DefaultModal;

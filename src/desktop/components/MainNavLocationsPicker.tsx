@@ -1,26 +1,15 @@
 'use client';
 import { Button } from '@components/ui/button';
-import Locations from '@desktop/product-filters/Locations';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useFilterLocations } from '@mobile/locations/hooks';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
-import { usePathname } from 'next/navigation';
 import React from 'react';
 import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
-
-const ApplyButton = ({ closeModal }: { closeModal: IFunction }) => {
-  const { applySingleFilter } = useFilterState();
-
-  const applySelectLocations = () => {
-    applySingleFilter({ id: FilterFieldName.Locations, text: 'Khu vực' });
-    closeModal();
-  };
-  return <Button onClick={() => applySelectLocations()}>Áp dụng</Button>;
-};
+import MainContentNavigator from '@components/main-content-navigator/desktop';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
 
 export default function MainNavLocationsPicker() {
-  const { selectedLocationFullText, isSelectedLocation } = useFilterLocations();
+  const { selectedLocationFullText } = useMainContentNavigator();
   const { openModal, closeModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();
 
@@ -28,15 +17,14 @@ export default function MainNavLocationsPicker() {
     copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
       name: 'ModalPickLocations',
-      title: 'Chọn khu vực',
-      content: <Locations />,
-      footer: <ApplyButton closeModal={closeModal} />,
+      title: 'Bạn đang quan tâm nội dung gì?',
+      content: <MainContentNavigator closeModal={closeModal} />,
       showAsDialog: true,
       allowChildOverflow: true
     });
   };
 
-  const btnActiveClass = isSelectedLocation ? 'font-bold text-black' : 'text-secondary';
+  const btnActiveClass = selectedLocationFullText ? 'font-bold text-black' : 'text-secondary';
 
   return (
     <>
