@@ -6,6 +6,7 @@ import PrimaryArticleCard from '@views/news/components/PrimaryArticleCard';
 import { getQueryClient } from '@api/react-query';
 import { services } from '@api/services';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import SyncParamsToState from '@components/SyncParamsToState';
 
 /**
  * TODO: Chuyển component này sang dạng mobile-first
@@ -26,6 +27,7 @@ export async function NewsList() {
 
   return (
     <section className="container pt-4">
+      <SyncParamsToState />
       {data?.map((item, index) => (
         <div key={index} className="mb-6">
           <h2 className="mb-2 text-[20px] font-semibold">{item.title}</h2>

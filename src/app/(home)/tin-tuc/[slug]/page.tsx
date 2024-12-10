@@ -4,9 +4,10 @@ import { cn, createMetadata, formatRelativeTime } from '@common/utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import parse, { attributesToProps, domToReact } from 'html-react-parser';
-import type { DOMNode, HTMLReactParserOptions } from 'html-react-parser';
+import type { HTMLReactParserOptions } from 'html-react-parser';
 import { IArticle } from '@views/news/types';
 import { DotIcon, ExternalLink } from 'lucide-react';
+import SyncParamsToState from '@components/SyncParamsToState';
 
 // TODO: Tách component ra các file riêng biệt, tái sử dụng
 // TODO: Handle not found page
@@ -40,11 +41,12 @@ const optionsParser: HTMLReactParserOptions = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
   const path = `/tin-tuc/${slug}`;
-  const rawMetadata = await services.seo.getSeoMetadata(path);  
+  const rawMetadata = await services.seo.getSeoMetadata(path);
   return createMetadata(rawMetadata?.data);
 }
 
 export default async function Page({ params, searchParams }: Props) {
+
   const { slug } = params;
   const queryClient = getQueryClient();
 
@@ -99,13 +101,18 @@ export default async function Page({ params, searchParams }: Props) {
   };
 
   const ListNewByCategory = () => {
+
     return (
-      <div className={cn("flex flex-col gap-4", newDetail && "border-t pt-4 mt-10")}>
-        <div className="mb-4 text-xl font-semibold">{newsByCategory?.title}</div>
-        {newsByCategory.articles.map((article) => {
-          return <ArticleCard key={article.id} article={article} />;
-        })}
-      </div>
+      <>
+        <SyncParamsToState />
+        <div className={cn("flex flex-col gap-4", newDetail && "border-t pt-4 mt-10")}>
+          <div className="mb-4 text-xl font-semibold">{newsByCategory?.title}</div>
+          {newsByCategory.articles.map((article) => {
+            return <ArticleCard key={article.id} article={article} />;
+          })}
+        </div>
+      </>
+
     );
   };
 

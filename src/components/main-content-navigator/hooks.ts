@@ -38,6 +38,10 @@ export default function useMainContentNavigator() {
   }
 
   return {
+    contentType,
+    city,
+    district,
+    ward,
     submit,
     selectedLocationFullText
   }

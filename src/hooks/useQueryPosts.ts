@@ -11,13 +11,12 @@ interface FilterParams {
 function useQueryPosts(filterParams: FilterParams) {
   const { data } = useSuspenseQuery(
     queryOptions({
-      queryKey: ['home', filterParams],
+      queryKey: ['useQueryPosts', filterParams],
       queryFn: () => searchApi(filterParams),
     }),
   );
 
   const products = useMemo(() => { return data.data }, [data.data])
-
 
   return { products, data };
 }

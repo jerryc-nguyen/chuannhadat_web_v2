@@ -6,13 +6,13 @@ import { useState } from 'react';
 import useMainContentNavigator from '../hooks';
 import OptionsTabList from '@mobile/ui/OptionsTabList';
 import { navigatorApi } from '../apis';
-import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION, PRICE_HISTORY_TYPE_OPTION } from '../constants';
+import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from '../constants';
 
 export default function MainContentNavigator({ closeModal }: { closeModal: () => void }) {
-  const { submit, selectedLocationFullText } = useMainContentNavigator();
-  const [city, setCity] = useState<OptionForSelect | undefined>();
-  const [district, setDistrict] = useState<OptionForSelect | undefined>();
-  const [ward, setWard] = useState<OptionForSelect | undefined>();
+  const { submit, city: sCity, district: sDistrict, ward: sWard, contentType: sContentType } = useMainContentNavigator();
+  const [city, setCity] = useState<OptionForSelect | undefined>(sCity);
+  const [district, setDistrict] = useState<OptionForSelect | undefined>(sDistrict);
+  const [ward, setWard] = useState<OptionForSelect | undefined>(sWard);
 
   const resetDistrict = () => {
     setDistrict(undefined)
@@ -44,10 +44,10 @@ export default function MainContentNavigator({ closeModal }: { closeModal: () =>
   const contentOptions = [
     POSTS_TYPE_OPTION,
     NEWS_TYPE_OPTION,
-    PRICE_HISTORY_TYPE_OPTION
+    // PRICE_HISTORY_TYPE_OPTION
   ]
 
-  const [contentType, setContentType] = useState<OptionForSelect | undefined>(POSTS_TYPE_OPTION);
+  const [contentType, setContentType] = useState<OptionForSelect | undefined>(sContentType);
 
   const onContentTypeChanged = (option: A) => {
     setContentType(option)
@@ -81,11 +81,9 @@ export default function MainContentNavigator({ closeModal }: { closeModal: () =>
 
   return (
     <div>
-      {selectedLocationFullText}
-      {/* <p className='mb-1'><b>Nội dung:</b></p> */}
       <OptionsTabList value={contentType} options={contentOptions} onChange={onContentTypeChanged} />
 
-      <p className='mt-4 mb-1'><b>Tại khu vực:</b></p>
+      <p className='mt-4 mb-2 text-l'><b>Tại khu vực nào?</b></p>
       <LocationsPicker
         city={city}
         district={district}
