@@ -2,23 +2,25 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { StatusPhoneNumber } from '@desktop/post-detail/type';
 import React from 'react';
-import { LuPhoneCall } from 'react-icons/lu';
+import { FaPhone } from 'react-icons/fa6';
 
 type ButtonPhoneProps = {
   phoneNumberProfile: string;
   className?: string;
+  isMobile?: boolean;
 };
 
-const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className }) => {
+const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className, isMobile }) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>(
     phoneNumberProfile.slice(0, -4) + 'xxxx',
   );
-  const [textButtonPhone, setTextButtonPhone] = React.useState<string>(StatusPhoneNumber.normal);
+  const [textButtonPhone, setTextButtonPhone] = React.useState<string>(
+    isMobile ? StatusPhoneNumber.copy : StatusPhoneNumber.normal,
+  );
   const handleClickButtonPhone = async () => {
     if (textButtonPhone === StatusPhoneNumber.copy) {
-      const text = document.getElementById('phone-number')?.innerHTML;
       try {
-        await navigator.clipboard.writeText(text || '');
+        await navigator.clipboard.writeText(phoneNumberProfile);
         setTextButtonPhone(StatusPhoneNumber.copied);
       } catch (err) {
         console.error('Failed to copy: ', err);
@@ -46,10 +48,10 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
       variant={'outline'}
     >
       <span className="flex items-center gap-x-2">
-        <LuPhoneCall />
-        <span id="phone-number">{phoneNumber}</span>
+        <FaPhone />
+        <span id="phone-number">{isMobile ? textButtonPhone : phoneNumber}</span>
       </span>
-      <span>{textButtonPhone}</span>
+      {!isMobile && <span>{textButtonPhone}</span>}
     </Button>
   );
 };

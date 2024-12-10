@@ -4,7 +4,7 @@ import { throttle } from 'lodash-es';
 import { cn, genKey } from '@common/utils';
 import ButtonPhone from '@components/button-phone';
 import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
-import { CalendarDays, Link } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 import { PiGenderIntersexBold } from 'react-icons/pi';
 import { CustomerGender } from '@common/types';
 import { RiArticleLine } from 'react-icons/ri';
@@ -52,11 +52,13 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
   };
 
   const listInfoProfileIcon = () => (
-    <div className="flex flex-col items-center gap-y-3 sm:items-start mt-4">
+    <div className="mt-4 flex w-full flex-col items-center gap-y-3 truncate sm:items-start">
       {profileData?.address && (
-        <span className="flex items-center gap-x-1 whitespace-nowrap">
+        <span className="flex w-full items-center gap-x-1 whitespace-nowrap">
           <LuMapPin className="mr-2 h-5 w-5 text-secondary" />
-          <span className="text-sm text-secondary">{profileData?.address}</span>
+          <span className="block w-full truncate text-sm text-secondary">
+            {profileData?.address}
+          </span>
         </span>
       )}
       {profileData?.formatted_joined_at && (
@@ -76,9 +78,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
       {profileData?.posts_count && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <RiArticleLine className="mr-2 h-5 w-5 text-secondary" />
-          <span className="text-sm text-secondary">
-            Số bài đăng {profileData?.posts_count}
-          </span>
+          <span className="text-sm text-secondary">Số bài đăng {profileData?.posts_count}</span>
         </span>
       )}
 
@@ -88,7 +88,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
           <a
             href={profileData.facebook_url}
             className="text-secondary hover:text-black"
-            target='_blank'
+            target="_blank"
           >
             {profileData.facebook_url}
           </a>
@@ -101,7 +101,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
           <a
             href={profileData.youtube_url}
             className="text-secondary hover:text-black"
-            target='_blank'
+            target="_blank"
           >
             {profileData.youtube_url}
           </a>
@@ -111,7 +111,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
   );
 
   return (
-    <div className="profile-content_info z-4 top-[10vh] flex h-fit w-full min-w-[250px] flex-col items-center gap-y-2 sm:sticky sm:w-[18vw] sm:items-start">
+    <div className="profile-content_info z-4 top-[10vh] flex h-fit w-full min-w-[250px] flex-col items-center gap-y-2 overflow-hidden sm:sticky sm:w-[18vw] sm:items-start">
       <Image
         draggable="false"
         alt="avatar-profile"
@@ -139,16 +139,17 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
         ))}
       </div>
 
-      {profileData?.job_title && (<p className="mt-4 font-semibold">{profileData?.job_title}</p>)}
-      {
-        profileData?.description && (
-          <p className={profileData?.job_title ? 'text-secondary' : 'mt-4 text-secondary'} > {profileData?.description}</p>
-        )
-      }
+      {profileData?.job_title && <p className="mt-4 font-semibold">{profileData?.job_title}</p>}
+      {profileData?.description && (
+        <p className={profileData?.job_title ? 'text-secondary' : 'mt-4 text-secondary'}>
+          {' '}
+          {profileData?.description}
+        </p>
+      )}
 
       {listInfoProfileIcon()}
-      <ButtonPhone className="w-full mt-4" phoneNumberProfile={profileData?.phone as string} />
+      <ButtonPhone className="mt-4 w-full" phoneNumberProfile={profileData?.phone as string} />
       {profileBadges()}
-    </div >
-  )
+    </div>
+  );
 }
