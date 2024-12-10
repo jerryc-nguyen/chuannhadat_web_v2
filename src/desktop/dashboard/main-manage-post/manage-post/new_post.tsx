@@ -7,7 +7,7 @@ import { businessTypeOptions, categoryTypeOptions } from './constant';
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@components/ui/button';
-import { useIsMobile } from '@hooks';
+import { useIsMobile, useSyncQueryToUrl } from '@hooks';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { IPostForm } from '../types';
@@ -54,6 +54,8 @@ const defaultValues: IPostForm = {
 } as const;
 
 const NewPost: React.FC = () => {
+  useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
+  
   const isMobile = useIsMobile();
 
   const form = useForm<IPostForm>({

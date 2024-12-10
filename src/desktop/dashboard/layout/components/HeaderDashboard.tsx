@@ -1,15 +1,16 @@
-import React from 'react';
-import { cookies } from 'next/headers';
 import { API_TOKEN_SERVER } from '@common/auth';
 import { SidebarTrigger } from '@components/ui/sidebar';
-import NotificationIcon from '@desktop/components/NotificationIcon';
-import FavoriteIcon from '@desktop/components/FavoriteIcon';
-import Link from 'next/link';
-import { Button } from '@components/ui/button';
-import { LucidePenSquare } from 'lucide-react';
 import AvatarIcon from '@desktop/components/AvatarIcon';
+import FavoriteIcon from '@desktop/components/FavoriteIcon';
+import NotificationIcon from '@desktop/components/NotificationIcon';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import MainNavRight from '@mobile/header/MainNavRight';
+import dynamic from 'next/dynamic';
+import { cookies } from 'next/headers';
+import React from 'react';
+
+const ButtonCreatePost = dynamic(async () => (await import('./ButtonCreatePost')).default, { ssr: false });
+
 type HeaderDashboardProps = object;
 
 const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
@@ -25,17 +26,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
           <NotificationIcon isLogged={isLogged} />
           <FavoriteIcon />
           <AvatarIcon isLogged={isLogged} />
-          <Link href="/dashboard/manage-post/new-post" target="_blank">
-            <Button
-              asChild
-              className="text-md ml-2 hidden items-center gap-x-2 rounded-md border bg-primary_color/80 px-6 py-2 font-medium text-white hover:bg-primary_color md:flex"
-            >
-              <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                <p>Đăng tin</p>
-                <LucidePenSquare className="h-5 w-5" />
-              </span>
-            </Button>
-          </Link>
+          <ButtonCreatePost />
         </section>
       )}
     </header>

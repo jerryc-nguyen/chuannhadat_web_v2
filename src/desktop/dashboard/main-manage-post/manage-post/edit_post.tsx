@@ -1,28 +1,27 @@
 'use client';
 
-import ProductInfoForm from './components/form-components/product-info-form';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { Form } from '@/components/ui/form';
-import ImageForm from './components/form-components/image-form';
 import { Button } from '@components/ui/button';
-import ProductApiService from './apis/product-api';
-import ProductTypeForm from './components/form-components/product-type';
-import ProductDescriptionForm from './components/form-components/product-description';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
-import LocationFormV2 from './components/form-components/location-form-v2';
+import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import ProductApiService from './apis/product-api';
+import ImageForm from './components/form-components/image-form';
+import LocationFormV2 from './components/form-components/location-form-v2';
+import ProductDescriptionForm from './components/form-components/product-description';
+import ProductInfoForm from './components/form-components/product-info-form';
+import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 
-import ManageProductApis from './apis/product-api';
+import { useIsMobile, useSyncQueryToUrl } from '@hooks';
 import { useQuery } from '@tanstack/react-query';
-import { useIsMobile } from '@hooks';
+import ManageProductApis from './apis/product-api';
 import { FormMobile } from './mobile/form-create';
 
 const EditPost = ({ params }: { params: A }) => {
-  const isMobile = useIsMobile();
+  useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
 
+  const isMobile = useIsMobile();
   const productUid = params.slug;
 
   const { data: product, isSuccess } = useQuery({
