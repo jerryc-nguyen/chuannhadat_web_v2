@@ -35,15 +35,13 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
 
   const breadcrumbsData = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
-  }, [data?.breadcrumb])
-
+  }, [data?.breadcrumb]);
 
   return (
     <>
-      <div className="mx-auto flex justify-between gap-x-4 mt-5">
+      <div className="mx-auto mt-5 flex justify-between gap-x-4">
         <Breadcrumb breadcrumbs={breadcrumbsData} />
       </div>
-
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">
           <OverviewPost data={data as IProductDetail} />
@@ -52,7 +50,7 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
           <ViewedPosts productUid={data?.uid as string} />
           <NotePost />
         </div>
-        <AuthorPost data={data as IProductDetail} />
+        <AuthorPost className="!top-16" data={data as IProductDetail} />
       </div>
     </>
   );

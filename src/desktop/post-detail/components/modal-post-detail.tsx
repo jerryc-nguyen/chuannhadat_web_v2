@@ -58,7 +58,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
 
   const breadcrumbsData = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
-  }, [data?.breadcrumb])
+  }, [data?.breadcrumb]);
 
   return (
     <Sheet open={isOpenModal} onOpenChange={onOpenChange}>
@@ -67,11 +67,13 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
         className={cn('flex !w-3/4 flex-col bg-gray-100', styles.modal_content_post)}
       >
         <SheetHeader>
-          <SheetTitle><Breadcrumb breadcrumbs={breadcrumbsData} /></SheetTitle>
+          <SheetTitle>
+            <Breadcrumb breadcrumbs={breadcrumbsData} />
+          </SheetTitle>
         </SheetHeader>
         <section
           ref={postContentRef}
-          className="post-content relative flex flex-1 justify-between gap-x-4 overflow-x-hidden p-0"
+          className="post-content relative flex flex-1 justify-between gap-x-4 overflow-x-auto p-0"
         >
           <div className="content-post flex flex-[3] flex-col gap-y-4">
             <OverviewPost isInsideModal data={data as IProductDetail} />
@@ -80,7 +82,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
             <ViewedPosts isInsideModal productUid={data?.uid as string} />
             <NotePost />
           </div>
-          <AuthorPost className="!top-0" data={data as IProductDetail} />
+          <AuthorPost data={data as IProductDetail} />
         </section>
       </SheetContent>
     </Sheet>

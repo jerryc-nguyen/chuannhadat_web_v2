@@ -11,21 +11,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
-import { LuArrowRight } from 'react-icons/lu';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
 import { listPostIdSavedAtom } from '@desktop/home/states';
 import { AxiosError } from 'axios';
 import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet';
 import { toast } from 'sonner';
 
 type FavoriteIconProps = object;
@@ -189,16 +181,6 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
             {isFetching ? onRenderLoadingListPost() : onRenderListPost()}
           </section>
         </section>
-        <SheetFooter>
-          {savedSummary && savedSummary?.saved_product_uids?.length > 0 && (
-            <Link
-              href={''}
-              className="flex w-full items-center justify-center gap-x-2 py-3 text-center text-sm font-medium text-error_color hover:underline"
-            >
-              Xem tất cả <LuArrowRight />
-            </Link>
-          )}
-        </SheetFooter>
       </SheetContent>
     </Sheet>
   );
