@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import useModalPostDetail from '../hooks/useModalPostDetail';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
+import TooltipHost from '@components/tooltip-host';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -95,7 +96,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               <Button
                 onClick={() => setIsOpenSlideImage(true)}
                 variant={'outline'}
-                className="relative z-10"
+                className="relative z-[7]"
               >
                 Xem thêm {data?.images.length - 3} hình
               </Button>
@@ -135,18 +136,20 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
       <h2 className="mb-2 mt-4 text-2xl font-bold">{data?.title}</h2>
-      <p className="my-2 flex items-center gap-x-2 text-lg text-secondary">
+      <p className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
         <LuMapPin />
-        {data?.full_address}
+        <TooltipHost isOverflow content={data?.full_address}>
+          {data?.full_address}
+        </TooltipHost>
       </p>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-y-2">
         <div className="flex gap-x-10">
-          <div className="price flex flex-col">
+          <div className="price flex flex-col text-nowrap">
             <p className="font-medium">Mức giá</p>
             <strong>{data?.formatted_price}</strong>
             <span className="text-xs italic text-secondary">{data?.formatted_price_per_m2}</span>
           </div>
-          <div className="area flex flex-col">
+          <div className="area flex flex-col text-nowrap">
             <p className="font-medium">Diện tích</p>
             <strong>{data?.formatted_area}</strong>
             <span className="text-xs italic text-secondary">{data?.formatted_kt}</span>

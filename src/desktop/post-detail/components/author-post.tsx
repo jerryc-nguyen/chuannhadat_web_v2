@@ -21,8 +21,8 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
   });
 
   const badgesCount = useMemo(() => {
-    return (profileData?.formatted_badges || []).length
-  }, [])
+    return (profileData?.formatted_badges || []).length;
+  }, []);
 
   const router = useRouter();
   const loadingAuthor = () => {
@@ -58,7 +58,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
     </Button>
   );
   return (
-    <div className={cn('author-post z-3 sticky top-16 h-fit min-w-[350px] flex-1', className)}>
+    <div className={cn('author-post z-3 sticky top-0 h-fit min-w-[350px] flex-1', className)}>
       {isLoading || !data?.author?.slug ? (
         loadingAuthor()
       ) : (
@@ -75,17 +75,15 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
             <div>
               <a
                 href={`/profile/${data.author.slug}`}
-                className="cursor-pointer hover:underline font-bold"
+                className="cursor-pointer font-bold hover:underline"
               >
                 {profileData?.full_name}
               </a>
-              <p className="text-secondary text-sm">Đã đăng {profileData?.posts_count} tin</p>
+              <p className="text-sm text-secondary">Đã đăng {profileData?.posts_count} tin</p>
             </div>
           </div>
           {badgesCount > 0 && (
-            <div className="my-4 text-secondary">
-              🏆 Đã đạt {badgesCount} danh hiệu môi giới
-            </div>
+            <div className="my-4 text-secondary">🏆 Đã đạt {badgesCount} danh hiệu môi giới</div>
           )}
 
           <div className="flex flex-col gap-y-2">
