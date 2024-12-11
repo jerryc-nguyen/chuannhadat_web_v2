@@ -24,11 +24,12 @@ import { Button } from '@components/ui/button';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import ManagePostsFooterBtsButton from './ManagePostFooterBtsButton';
 import { Modal } from '@mobile/modals/states/types';
-import { useTopAuthors } from '@desktop/home/hooks/useTopAuthors';
 import Projects from './bts/desktop/Projects';
+import { useAtom } from 'jotai';
+import { filterStateAtom } from './states';
 
 export default function FilterChips() {
-  const { filterState } = useTopAuthors();
+  const [filterState] = useAtom(filterStateAtom);
 
   const { copyFilterStatesToLocal } = useFilterState();
   const { openModal } = useModals();

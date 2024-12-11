@@ -7,6 +7,7 @@ import { getQueryClient } from '@api/react-query';
 import '@styles/pages/mobile/home.scss';
 
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import { ListTopAuthor } from '@desktop/home/components/ListTopAuthor';
 
 export default function HomeMobile() {
   useSyncParamsToState();
@@ -17,6 +18,7 @@ export default function HomeMobile() {
       <FilterChips />
       <QueryClientProvider client={queryClient}>
         <HydrationBoundary state={dehydrate(queryClient)}>
+          <ListTopAuthor />
           <PostList />
         </HydrationBoundary>
       </QueryClientProvider>

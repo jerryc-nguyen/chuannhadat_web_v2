@@ -25,8 +25,9 @@ import { BsSortUp } from 'react-icons/bs';
 import ProfileLocations from '@desktop/product-filters/ProfileLocations';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import { useTopAuthors } from '../hooks/useTopAuthors';
 import Projects from '@mobile/filter_bds/bts/desktop/Projects';
+import { useAtom } from 'jotai';
+import { filterStateAtom } from '@mobile/filter_bds/states';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -37,7 +38,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   //State !
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const containerChipsRef = React.useRef(null);
-  const { filterState } = useTopAuthors();
+  const [filterState] = useAtom(filterStateAtom);
 
   const { copyFilterStatesToLocal } = useFilterState();
   const { selectedLocationText } = useFilterLocations();

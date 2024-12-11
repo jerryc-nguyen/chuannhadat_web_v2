@@ -7,25 +7,29 @@ import React from 'react';
 import default_avatar from '@assets/images/default_avatar.png';
 import Link from 'next/link';
 import useResizeImage from '@hooks/useResizeImage';
-import { useAtomValue } from 'jotai';
-import { listTopAuthorsAtom } from '../states';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import { cn } from '@common/utils';
 import TooltipHost from '@components/tooltip-host';
+import { useTopAuthors } from '../hooks/useTopAuthors';
+import { useAtom } from 'jotai';
+import { filterStateAtom } from '@mobile/filter_bds/states';
+
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
   weight: ['400', '700', '600', '500'],
 });
 export default function CardAuthor({ product }: { product: A }) {
   const { getAuthorById } = useCardAuthors();
+  const [filterState] = useAtom(filterStateAtom);
+  const { isFetching, topAuthors } = useTopAuthors(filterState);
+
   const author = product.author ?? getAuthorById(product.user_id);
   const { buildThumbnailUrl } = useResizeImage();
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
     author?.avatar_url || default_avatar,
   );
   const fullName = author?.full_name ? author.full_name : 'Loading';
-  const listTopAuthors = useAtomValue(listTopAuthorsAtom);
-  const topAuthor = listTopAuthors.find((author) => author.id === product.user_id);
+  const topAuthor = topAuthors.find((author) => author.id === product.user_id);
   const renderIconTopAuthor = (position: number) => {
     switch (position) {
       case 1:
