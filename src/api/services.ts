@@ -47,7 +47,7 @@ export const services = {
     },
     getNewsByCategory: async (slug: string): Promise<ResponseNewsByCategory> => {
       return axiosInstance.get(`${API_ROUTES.NEWS.GET_NEWS_BY_CATEGORY}/${slug}`);
-    }
+    },
   },
   autocompletes: {
     projects: async (params: { keyword: string; limit: number }): Promise<A> => {
@@ -238,8 +238,8 @@ export const services = {
     },
   },
   seo: {
-    getSeoMetadata : async (path: string): Promise<A> => {
+    getSeoMetadata: async (path: string): Promise<A> => {
       return axiosInstance.get(API_ROUTES.SEOS, { params: { path } });
-    }
-  }
+    },
+  },
 };

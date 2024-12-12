@@ -97,7 +97,18 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         </CardHeader>
       )}
       <CardContent className="card-content">
-        {product.images.length > 1 ? (
+        {product.images_count < 2 ? (
+          <>
+            <ImageCard
+              key={product.images[0].id}
+              countImages={product.images_count}
+              item={product.images[0]}
+              detailPath={product.detail_path || ''}
+              onClick={() => openModalPostDetail(product.uid)}
+            />
+            <ButtonSave postUid={product.uid} />
+          </>
+        ) : (
           <Carousel
             opts={{ loop: true }}
             setApi={setImageSliderApi}
@@ -109,7 +120,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
                 <ImageCard
                   key={item.id}
                   inView={slidesInView.indexOf(index) > -1}
-                  countImages={product.lenght}
+                  countImages={product.images_count}
                   item={item}
                   detailPath={product.detail_path || ''}
                   index={index}
@@ -124,17 +135,6 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
             />
             <ButtonSave postUid={product.uid} />
           </Carousel>
-        ) : (
-          <div>
-            <ImageCard
-              key={product.images[0].id}
-              countImages={product.images.lenght}
-              item={product.images[0]}
-              detailPath={product.detail_path || ''}
-              onClick={() => openModalPostDetail(product.uid)}
-            />
-            <ButtonSave postUid={product.uid} />
-          </div>
         )}
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">

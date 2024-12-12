@@ -22,6 +22,7 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
 
   React.useEffect(() => {
     const hasFrontendToken = getCookie(FRONTEND_TOKEN);
+
     if (!hasFrontendToken) {
       setFrontendToken(uuidv4());
     }
@@ -51,10 +52,7 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
       <FavoriteIcon />
       <AvatarIcon isLogged={isLogged} />
       {currentUser ? (
-        <Link
-          href="/dashboard/manage-post/new-post"
-          target="_blank"
-        >
+        <Link href="/dashboard/manage-post/new-post" target="_blank">
           <Button
             asChild
             className="text-md ml-2 hidden items-center gap-x-2 rounded-md border bg-primary_color/80 px-6 py-2 font-medium text-white hover:bg-primary_color md:flex"
