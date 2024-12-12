@@ -4,7 +4,7 @@ import useAuth from '@mobile/auth/hooks/useAuth';
 import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@components/ui/button';
 import { LuUserCircle } from 'react-icons/lu';
-import { getCookie, setFrontendToken } from '@common/cookies';
+import { removeCookie, setFrontendToken } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import FavoriteIcon from './FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
@@ -21,11 +21,11 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { currentUser } = useAuth();
   const { openModal, closeModal } = useModals();
   React.useEffect(() => {
-    const hasFrontendToken = getCookie(FRONTEND_TOKEN);
-    if (!hasFrontendToken) {
-      setFrontendToken(uuidv4());
-    }
-  }, []);
+    setFrontendToken(uuidv4());
+    return () => {
+      removeCookie(FRONTEND_TOKEN);
+    };
+  }, [currentUser?.api_token]);
 
   const showModalLoginAndRegister = () => {
     openModal({

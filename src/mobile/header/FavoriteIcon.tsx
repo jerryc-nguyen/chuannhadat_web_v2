@@ -19,6 +19,7 @@ import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet';
 import { toast } from 'sonner';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
@@ -27,11 +28,12 @@ type PostLoadingType = {
 };
 const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [openSavedPost, setOpenSavePost] = React.useState<boolean>(false);
+  const { currentUser } = useAuth();
   const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
   const { data: savedSummary } = useQuery({
-    queryKey: ['save_summary'],
+    queryKey: ['save_summary', currentUser?.api_token],
     queryFn: () => services.saves.savedSummary(),
     select: (data) => data.data,
   });
