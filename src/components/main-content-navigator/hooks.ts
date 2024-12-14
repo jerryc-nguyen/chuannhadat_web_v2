@@ -37,12 +37,23 @@ export default function useMainContentNavigator() {
     setWard(ward);
   }
 
+  const autocompleteProjectParams = useMemo(() => {
+    const results: Record<string, A> = {};
+    if (district) {
+      results.district_id = district.value;
+    } else if (city) {
+      results.city_id = city.value;
+    }
+    return results;
+  }, [city, district])
+
   return {
     contentType,
     city,
     district,
     ward,
     submit,
-    selectedLocationFullText
+    selectedLocationFullText,
+    autocompleteProjectParams
   }
 }
