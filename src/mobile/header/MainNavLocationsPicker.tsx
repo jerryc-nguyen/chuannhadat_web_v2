@@ -1,38 +1,22 @@
 'use client';
 import useMainContentNavigator from '@components/main-content-navigator/hooks';
+import MainContentNavigator from '@components/main-content-navigator/mobile';
 import { Button } from '@components/ui/button';
-import { useRefCallback } from '@hooks/useRefCallback';
-import Locations from '@mobile/filter_bds/bts/Locations';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import useModals from '@mobile/modals/hooks';
-import { FilterFieldName } from '@models';
 import React from 'react';
 import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText } = useMainContentNavigator();
 
-  const { openModal, closeModal } = useModals();
-  const { copyFilterStatesToLocal, applySingleFilter } = useFilterState();
-  const applySelectLocations = useRefCallback(() => {
-    applySingleFilter({ id: FilterFieldName.Locations, text: 'Khu vực' });
-    closeModal();
-  });
-
-  const renderFooterApply = () => (
-    <Button className="w-full" onClick={() => applySelectLocations()}>
-      Áp dụng
-    </Button>
-  );
+  const { openModal, openModal2, closeModal2 } = useModals();
 
   const showModalPickLocations = () => {
-    copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
       name: 'ModalPickLocations',
-      title: 'Chọn khu vực',
-      content: <Locations />,
-      footer: renderFooterApply(),
-      maxHeightPercent: 0.5,
+      title: 'Bạn muốn xem nội dung gì?',
+      content: <MainContentNavigator openModal={openModal2} closeModal={closeModal2} />,
+      maxHeightPercent: 0.7,
       supportPushState: false
     });
   };
