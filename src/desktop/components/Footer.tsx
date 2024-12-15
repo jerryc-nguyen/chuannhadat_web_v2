@@ -29,12 +29,12 @@ const listMenuFooter = [
       {
         key: 3,
         value: 'Hướng dẫn tự động làm mới',
-        link: '/huong-dan-tu-dong-lam-moi',
+        link: 'huong-dan-tu-dong-lam-moi',
       },
       {
         key: 4,
         value: 'Giới thiệu các loại tin VIP',
-        link: '/gioi-thieu-tin-vip',
+        link: 'gioi-thieu-tin-vip',
       },
       {
         key: 5,

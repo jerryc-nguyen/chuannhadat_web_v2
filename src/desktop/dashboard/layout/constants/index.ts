@@ -37,7 +37,7 @@ export const listNavDashboard: INavLinkGroup[] = [
       },
       {
         name: 'Hashtag của bạn',
-        url: '/manage-post/your-hashtag',
+        url: 'manage-post/your-hashtag',
       },
       {
         name: 'Thời gian tự động làm mới',

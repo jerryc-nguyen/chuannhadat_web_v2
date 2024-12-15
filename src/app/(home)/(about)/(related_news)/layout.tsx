@@ -25,17 +25,17 @@ const RelatedNewsLayout: React.FC<RelatedNewsLayoutProps> = ({ children }) => {
   const menuPolicy = [
     {
       id: 1,
-      link: '/huong-dan-tu-dong-lam-moi',
+      link: 'huong-dan-tu-dong-lam-moi',
       title: 'Hướng dẫn tự động làm mới',
     },
     {
       id: 2,
-      link: '/gioi-thieu-tin-vip',
+      link: 'gioi-thieu-tin-vip',
       title: 'Giới thiệu tin vip',
     },
     {
       id: 3,
-      link: '/bang-gia-dich-vu',
+      link: 'bang-gia-dich-vu',
       title: 'Bảng giá dịch vụ',
     },
   ];
