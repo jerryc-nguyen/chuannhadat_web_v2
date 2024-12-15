@@ -80,7 +80,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
   }, [imageSliderApi, updateSlidesInView]);
 
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
-  if (!product) {
+  if (!product || product.images.length == 0) {
     return <LoadingProductCard />;
   }
   return (
