@@ -20,11 +20,11 @@ const CardPackage: React.FC<CardPackageProps> = ({
   description,
 }) => {
   return (
-    <Card className="min-w-[300px] max-w-[330px] flex-1 border-2 hover:border-blue-300">
-      <CardHeader className="pb-[15px]">
+    <Card className="min-w-[250px] max-w-[300px] flex-1 border-2 hover:border-blue-300">
+      <CardHeader className="p-4 pb-2 lg:p-6 lg:pb-[15px]">
         <CardTitle className="text-lg font-bold text-primary_color">{cardTitle}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-4 !pt-0 lg:p-6">
         <p className="pb-4 text-xl font-bold text-[#596570]">
           <strong className="mr-2 text-[28px] font-bold text-primary_color">{pricePackage}</strong>/
           {unitTime}
@@ -34,7 +34,7 @@ const CardPackage: React.FC<CardPackageProps> = ({
 
         <div>
           <span className="inline-block pt-3 text-sm text-secondary">Ưu đãi bao gồm :</span>
-          <ul className="mt-4">
+          <ul className="mt-1 lg:mt-2">
             {listPreferential &&
               listPreferential.map((item) => (
                 <li key={item} className="mb-2 flex items-center gap-x-2 text-sm">

@@ -1,14 +1,9 @@
-import { cn } from '@common/utils';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import React from 'react';
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
+
 const PostingRegulations: React.FC = () => {
   return (
-    <section className={cn(vietnam.className, 'py-10 text-lg')}>
-      <h1 className="mb-10 text-5xl font-bold">Quy định đăng tin tại website</h1>
+    <section className="py-10 text-lg">
+      <h1 className="mb-10 text-3xl font-bold lg:text-5xl">Quy định đăng tin tại website</h1>
       <p>
         Để đảm bảo nội dung tin đăng chuyên nghiệp, dễ đọc và phù hợp với tiêu chí của nền tảng,
         người đăng cần tuân thủ các quy định về cách viết. Các tin đăng phải được trình bày rõ ràng,
