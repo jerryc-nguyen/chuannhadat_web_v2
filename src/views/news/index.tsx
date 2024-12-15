@@ -1,28 +1,22 @@
-'use server';
+'use client';
 
-import NewsMobile from '@views/news/mobile/NewsMobile';
+import { services } from '@api/services';
+import SyncParamsToState from '@components/SyncParamsToState';
+import { useIsMobile } from '@hooks';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import NormalArticleCard from '@views/news/components/NormalArticleCard';
 import PrimaryArticleCard from '@views/news/components/PrimaryArticleCard';
-import { getQueryClient } from '@api/react-query';
-import { services } from '@api/services';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import SyncParamsToState from '@components/SyncParamsToState';
+import NewsMobile from '@views/news/mobile/NewsMobile';
 
-/**
- * TODO: Chuyển component này sang dạng mobile-first
- * TODO: Cải thiện skeleton loading
- *
- */
+export function NewsList() {
+  const isMobile = useIsMobile();
 
-export async function NewsList() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { isMobile } = useGetUserAgentInfo();
-
-  const { data } = await getQueryClient().fetchQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['get-news'],
     queryFn: services.news.getNews,
+    select: (data) => data.data,
   });
-
+  
   if (isMobile) return <NewsMobile data={data} />;
 
   return (
