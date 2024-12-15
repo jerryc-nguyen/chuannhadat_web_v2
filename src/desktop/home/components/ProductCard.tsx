@@ -138,9 +138,13 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         )}
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
+        {!isShowAuthor && (
+          <div className="text-secondary w-full">{product.bus_cat_type} · {product?.formatted_publish_at}</div>
+        )}
+
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="we line-clamp-2 cursor-pointer text-base font-semibold text-primary"
+          className="mt-2 line-clamp-2 cursor-pointer text-base font-semibold text-primary"
         >
           {product?.title}
         </h3>
@@ -171,7 +175,14 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
             </div>
           </div>
         </div>
+
+        {!isShowAuthor && (
+          <div className="w-full text-secondary">
+            {product?.short_location_name}
+          </div>
+        )}
       </CardFooter>
+
       {isLoadingCardProduct && postId === product.uid && (
         <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
           <div role="status">
