@@ -17,11 +17,12 @@ import { ListTopAuthor } from './components/ListTopAuthor';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
-  const router = useRouter();
 
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
+
   const { buildFilterParams } = useFilterState();
   const { appendCardAuthors } = useCardAuthors();
   let filterParams = buildFilterParams({ withLocal: false });

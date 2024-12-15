@@ -15,10 +15,18 @@ import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import useSearchAggs from '@components/search-aggs/hooks';
+import { PostPagination } from '@desktop/home/components/PostPagination';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
   useSyncParamsToState();
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
+
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
 
   const { data: profileData } = useQuery({
@@ -32,10 +40,11 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   const {
     data: { data: products, pagination, aggs: aggreations },
   } = useSuspenseQuery({
-    queryKey: ['profile-post', { filterParams, profileSlug }],
+    queryKey: ['profile-post', { filterParams, profileSlug }, currentPage],
     queryFn: () =>
       searchApi({
         ...filterParams,
+        page: currentPage,
         author_slug: profileSlug,
         aggs_for: 'profile',
       }),
@@ -67,6 +76,16 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
                 dataPostList={products}
                 isShowAuthor={false}
+              />
+
+              <PostPagination
+                total_pages={pagination.total_pages}
+                currentPage={currentPage}
+                onPageChange={(page) => {
+                  const selected = page.selected + 1;
+                  // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
+                  router.push(pathname + '?page=' + selected);
+                }}
               />
             </div>
           </div>
