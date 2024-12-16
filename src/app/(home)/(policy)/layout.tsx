@@ -13,22 +13,22 @@ const PolicyLayout: React.FC<PolicyLayoutProps> = ({ children }) => {
   const menuPolicy = [
     {
       id: 1,
-      link: 'quy-dinh-dang-tin',
+      link: '/quy-dinh-dang-tin',
       title: 'Quy định đăng tin',
     },
     {
       id: 2,
-      link: 'chinh-sach-va-quy-dinh',
+      link: '/chinh-sach-va-quy-dinh',
       title: 'Chính sách và quy định',
     },
     {
       id: 3,
-      link: 'chinh-sach-bao-mat',
+      link: '/chinh-sach-bao-mat',
       title: 'Chính Sách Bảo Mật Thông Tin',
     },
     {
       id: 4,
-      link: 'chinh-sach-khieu-nai',
+      link: '/chinh-sach-khieu-nai',
       title: 'Chính Sách Khiếu Nại',
     },
   ];

@@ -19,23 +19,23 @@ const listMenuFooter = [
       {
         key: 1,
         value: 'Giới thiệu',
-        link: 'gioi-thieu',
+        link: '/gioi-thieu',
       },
       {
         key: 2,
         value: 'Quy định đăng tin',
-        link: 'quy-dinh-dang-tin',
+        link: '/quy-dinh-dang-tin',
       },
 
       {
         key: 3,
         value: 'Giới thiệu các loại tin VIP',
-        link: 'gioi-thieu-tin-vip',
+        link: '/gioi-thieu-tin-vip',
       },
       {
         key: 4,
         value: 'Bảng giá dịch vụ',
-        link: 'bang-gia-dich-vu',
+        link: '/bang-gia-dich-vu',
       },
     ],
   },
@@ -46,17 +46,17 @@ const listMenuFooter = [
       {
         key: 1,
         value: 'Đăng ký',
-        link: 'sign-up',
+        link: '/sign-up',
       },
       {
         key: 2,
         value: 'Đăng nhập',
-        link: 'sign-in',
+        link: '/sign-in',
       },
       {
         key: 3,
         value: 'Đăng tin mới',
-        link: 'dang-tin-moi',
+        link: '/dang-tin-moi',
       },
     ],
   },
@@ -67,17 +67,17 @@ const listMenuFooter = [
       {
         key: 1,
         value: 'Chính sách bảo mật',
-        link: 'chinh-sach-bao-mat',
+        link: '/chinh-sach-bao-mat',
       },
       {
         key: 2,
         value: 'Chính sách khiếu nại',
-        link: 'chinh-sach-khieu-nai',
+        link: '/chinh-sach-khieu-nai',
       },
       {
         key: 3,
         value: 'Chính sách và quy định',
-        link: 'chinh-sach-va-quy-dinh',
+        link: '/chinh-sach-va-quy-dinh',
       },
     ],
   },
