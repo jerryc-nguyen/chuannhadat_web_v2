@@ -1,15 +1,9 @@
-import { cn } from '@common/utils';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import React from 'react';
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <section className={cn(vietnam.className, 'py-10 text-lg')}>
-      <h1 className="mb-10 text-5xl font-bold">Chính Sách Bảo Mật Thông Tin</h1>
+    <section className="py-10 text-lg">
+      <h1 className="mb-10 text-3xl font-bold lg:text-5xl">Chính Sách Bảo Mật Thông Tin</h1>
       <p>
         Chúng tôi cam kết bảo vệ quyền riêng tư và bảo mật thông tin cá nhân của người dùng. Mọi
         thông tin được cung cấp sẽ được xử lý cẩn thận, bảo mật và chỉ sử dụng cho các mục đích được
