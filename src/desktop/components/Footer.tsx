@@ -29,7 +29,7 @@ const listMenuFooter = [
       {
         key: 3,
         value: 'Hướng dẫn tự động làm mới',
-        link: 'huong-dan-tu-dong-lam-moi',
+        link: '/huong-dan-tu-dong-lam-moi',
       },
       {
         key: 4,
