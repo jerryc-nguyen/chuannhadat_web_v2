@@ -1,15 +1,9 @@
-import { cn } from '@common/utils';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import React from 'react';
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
 
 const ComplaintPolicty: React.FC = () => {
   return (
-    <section className={cn(vietnam.className, 'py-10 text-lg')}>
-      <h1 className="mb-10 text-5xl font-bold">Chính sách giải quyết khiếu nại</h1>
+    <section className="py-10 text-lg">
+      <h1 className="mb-10 text-3xl font-bold lg:text-5xl">Chính sách giải quyết khiếu nại</h1>
       <section>
         <h2 className="mb-2 mt-4 text-2xl font-bold">
           1. Nguyên tắc giải quyết tranh chấp, khiếu nại

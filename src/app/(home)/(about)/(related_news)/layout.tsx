@@ -1,47 +1,42 @@
 'use client';
 import { cn } from '@common/utils';
-import { Button } from '@components/ui/button';
+import { Be_Vietnam_Pro } from 'next/font/google';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
+import { Button } from '@components/ui/button';
 import { LucideEllipsis } from 'lucide-react';
-import { Be_Vietnam_Pro } from 'next/font/google';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
 
-type PolicyLayoutProps = {
+type RelatedNewsLayoutProps = {
   children: React.ReactNode;
 };
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
   weight: ['400', '700', '600', '500'],
 });
-const PolicyLayout: React.FC<PolicyLayoutProps> = ({ children }) => {
+const RelatedNewsLayout: React.FC<RelatedNewsLayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const menuPolicy = [
     {
       id: 1,
-      link: '/quy-dinh-dang-tin',
-      title: 'Quy định đăng tin',
+      link: 'huong-dan-tu-dong-lam-moi',
+      title: 'Hướng dẫn tự động làm mới',
     },
     {
       id: 2,
-      link: '/chinh-sach-va-quy-dinh',
-      title: 'Chính sách và quy định',
+      link: 'gioi-thieu-tin-vip',
+      title: 'Giới thiệu tin vip',
     },
     {
       id: 3,
-      link: '/chinh-sach-bao-mat',
-      title: 'Chính Sách Bảo Mật Thông Tin',
-    },
-    {
-      id: 4,
-      link: '/chinh-sach-khieu-nai',
-      title: 'Chính Sách Khiếu Nại',
+      link: 'bang-gia-dich-vu',
+      title: 'Bảng giá dịch vụ',
     },
   ];
   const renderMenuMobile = () => {
@@ -69,7 +64,7 @@ const PolicyLayout: React.FC<PolicyLayoutProps> = ({ children }) => {
     );
   };
   return (
-    <section className={cn(vietnam.className, 'mx-auto flex w-full gap-x-3 md:w-4/5 md:gap-5')}>
+    <section className={cn(vietnam.className, 'mx-auto flex w-full gap-x-3 md:gap-5 2xl:w-4/5')}>
       {children}
       <article className="bg:neutral_00 sticky top-[5rem] z-[5] mt-10 hidden h-fit w-fit rounded-lg border bg-white p-6 shadow-md lg:block">
         <ul className="flex flex-col gap-y-2">
@@ -93,4 +88,4 @@ const PolicyLayout: React.FC<PolicyLayoutProps> = ({ children }) => {
   );
 };
 
-export default PolicyLayout;
+export default RelatedNewsLayout;

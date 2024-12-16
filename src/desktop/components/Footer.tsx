@@ -26,14 +26,18 @@ const listMenuFooter = [
         value: 'Quy định đăng tin',
         link: '/quy-dinh-dang-tin',
       },
-
       {
         key: 3,
+        value: 'Hướng dẫn tự động làm mới',
+        link: 'huong-dan-tu-dong-lam-moi',
+      },
+      {
+        key: 4,
         value: 'Giới thiệu các loại tin VIP',
         link: '/gioi-thieu-tin-vip',
       },
       {
-        key: 4,
+        key: 5,
         value: 'Bảng giá dịch vụ',
         link: '/bang-gia-dich-vu',
       },

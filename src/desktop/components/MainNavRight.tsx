@@ -4,7 +4,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FRONTEND_TOKEN } from '@common/auth';
-import { getCookie, setFrontendToken } from '@common/cookies';
+import { removeCookie, setFrontendToken } from '@common/cookies';
 import { Button } from '@components/ui/button';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
@@ -21,12 +21,11 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { handleSignOut, currentUser } = useAuth();
 
   React.useEffect(() => {
-    const hasFrontendToken = getCookie(FRONTEND_TOKEN);
-
-    if (!hasFrontendToken) {
-      setFrontendToken(uuidv4());
-    }
-  }, []);
+    setFrontendToken(uuidv4());
+    return () => {
+      removeCookie(FRONTEND_TOKEN);
+    };
+  }, [currentUser?.api_token]);
   React.useEffect(() => {
     if (!isLogged) {
       handleSignOut();
