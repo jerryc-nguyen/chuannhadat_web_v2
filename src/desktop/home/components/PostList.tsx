@@ -1,9 +1,8 @@
 'use client';
-import ProductCard from './ProductCard';
-import styles from '../styles/PostList.module.scss';
-import React from 'react';
-import { IPostProductCard } from '../states';
 import { cn } from '@common/utils';
+import { IPostProductCard } from '../states';
+import styles from '../styles/PostList.module.scss';
+import ProductCard from './ProductCard';
 
 type PostListProps = {
   isShowAuthor?: boolean;

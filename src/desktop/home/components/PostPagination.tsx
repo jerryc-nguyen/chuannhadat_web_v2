@@ -8,9 +8,10 @@ interface PostPaginationProps {
   total_pages: number;
   onPageChange?(selectedItem: { selected: number }): void;
   currentPage: number;
+  emptyComponent?: () => React.ReactNode;
 }
 
-export function PostPagination({ total_pages, onPageChange, currentPage }: PostPaginationProps) {
+export function PostPagination({ total_pages, onPageChange, currentPage, emptyComponent = () => <div>No more data</div> }: PostPaginationProps) {
   return (
     <ReactPaginate
       className="mb-10 mt-4 flex justify-center gap-1"
@@ -48,7 +49,7 @@ export function PostPagination({ total_pages, onPageChange, currentPage }: PostP
           </Button>
         </div>
       }
-      renderOnZeroPageCount={() => <div>No more data</div>}
+      renderOnZeroPageCount={emptyComponent}
     />
   );
 }
