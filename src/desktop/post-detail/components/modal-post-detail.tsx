@@ -75,7 +75,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
           ref={postContentRef}
           className="post-content relative flex flex-1 justify-between gap-x-4 overflow-x-auto p-0"
         >
-          <div className="content-post flex flex-[3] flex-col gap-y-4">
+          <div className="content-post flex h-fit flex-[3] flex-col gap-y-4 overflow-hidden">
             <OverviewPost isInsideModal data={data as IProductDetail} />
             <FeaturesPost data={data as IProductDetail} />
             <DescriptionPost data={data as IProductDetail} />
