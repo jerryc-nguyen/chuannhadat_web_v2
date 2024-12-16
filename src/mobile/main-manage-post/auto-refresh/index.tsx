@@ -112,12 +112,12 @@ const AutoRefreshMobile: React.FC = () => {
   React.useEffect(() => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
       {
-        link: 'manage-post',
+        link: '/manage-post',
         title: 'Manage-Post',
         isActive: true,
       },
       {
-        link: 'auto-refresh',
+        link: '/auto-refresh',
         title: 'Auto-Refresh',
         isActive: true,
       },
