@@ -18,7 +18,7 @@ const NotificationsDesktop: React.FC = () => {
   React.useEffect(() => {
     const currentBreadCrumb: IBreadcrumbItem[] = [
       {
-        link: 'notifications',
+        link: '/notifications',
         title: 'Thông báo',
         isActive: true,
       },

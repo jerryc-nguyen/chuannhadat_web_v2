@@ -14,11 +14,11 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Cài đặt tài khoản',
-        url: 'account-settings',
+        url: '/account-settings',
       },
       {
         name: 'Thông báo',
-        url: 'notifications',
+        url: '/notifications',
       },
     ],
   },
@@ -29,19 +29,19 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Đăng tin',
-        url: 'manage-post/new-post',
+        url: '/manage-post/new-post',
       },
       {
         name: 'Danh sách tin',
-        url: 'manage-post/collection-post',
+        url: '/manage-post/collection-post',
       },
       {
         name: 'Hashtag của bạn',
-        url: 'manage-post/your-hashtag',
+        url: '/manage-post/your-hashtag',
       },
       {
         name: 'Thời gian tự động làm mới',
-        url: 'manage-post/auto-refresh',
+        url: '/manage-post/auto-refresh',
       },
     ],
   },
@@ -52,23 +52,23 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Thông tin số dư',
-        url: 'balance-information',
+        url: '/balance-information',
       },
       {
         name: 'Nạp tiền vào tài khoản',
-        url: 'top-up',
+        url: '/top-up',
       },
       {
         name: 'Lịch sử nạp tiền',
-        url: 'recharge-history',
+        url: '/recharge-history',
       },
       {
         name: 'Mua gói dịch vụ',
-        url: 'service-package',
+        url: '/service-package',
       },
       {
         name: 'Dùng mã quà tặng / KM',
-        url: 'code-promotion',
+        url: '/code-promotion',
       },
     ],
   },
@@ -79,11 +79,11 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Yêu cầu liên hệ lại',
-        url: 'request/call-back',
+        url: '/request/call-back',
       },
       {
         name: 'Yêu cầu tư vấn',
-        url: 'request/advise',
+        url: '/request/advise',
       },
     ],
   },

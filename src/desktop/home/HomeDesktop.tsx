@@ -14,6 +14,8 @@ import useCardAuthors from './hooks/useCardAuthors';
 import { loadedCardAuthorsAtom } from './states';
 import useQueryPosts from '@hooks/useQueryPosts';
 import { ListTopAuthor } from './components/ListTopAuthor';
+import empty_city from '@assets/images/empty-city.png';
+import Image from 'next/image';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
@@ -58,6 +60,19 @@ const HomeDesktop: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
+  const EmptyPost = () => {
+    return (
+      <section className="mb-5 flex flex-col items-center justify-center p-5 min-h-[50vh]">
+        <Image className="w-2/3 mb-6" src={empty_city} alt="no-notification" />
+        <h3 className="text-2xl font-bold">Không tìm thấy bài đăng</h3>
+        <p className="mt-2 w-3/4 text-center text-base text-foreground">
+          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều
+          kiện khác.
+        </p>
+      </section>
+    );
+  };
+
   return (
     <section className="my-10">
       <h1 className="mb-4 text-2xl font-semibold text-primary">{data?.title}</h1>
@@ -79,6 +94,7 @@ const HomeDesktop: React.FC = () => {
           // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
           router.push(pathname + '?page=' + selected);
         }}
+        emptyComponent={EmptyPost}
       />
     </section>
   );

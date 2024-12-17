@@ -12,6 +12,8 @@ import ProductCard from './ProductCard';
 
 import { PostPagination } from '@desktop/home/components/PostPagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import empty_city from '@assets/images/empty-city.png';
 
 // TODO: Move to views/home
 
@@ -52,6 +54,17 @@ export default function PostList() {
     });
   };
 
+  const EmptyPost = () => {
+    return (
+      <section className="mb-5 flex flex-col items-center justify-center p-5 min-h-[50vh]">
+        <Image className="w-full" src={empty_city} alt="no-notification" />
+        <h3 className="text-lg font-bold">Không tìm thấy bài đăng</h3>
+        <p className="mt-2 w-3/4 text-center text-sm text-foreground">
+          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều kiện khác.
+        </p>
+      </section>
+    );
+  };
   return (
     <div className="relative mx-auto w-full">
       <div className="flex items-center justify-between">
@@ -75,6 +88,7 @@ export default function PostList() {
           const selected = page.selected + 1;
           router.push(pathname + '?page=' + selected);
         }}
+        emptyComponent={EmptyPost}
       />
     </div>
   );

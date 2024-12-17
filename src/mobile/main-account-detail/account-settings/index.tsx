@@ -42,7 +42,7 @@ const AccountSettingsMobile: React.FC = () => {
   React.useEffect(() => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
       {
-        link: 'account-settings',
+        link: '/account-settings',
         title: 'Account-Settings',
         isActive: true,
       },
