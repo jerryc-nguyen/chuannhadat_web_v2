@@ -31,8 +31,7 @@ export default function PostList() {
     withLocal: false,
   });
 
-  const { products, isLoading, handleLoadMore, data, currentPage, setCurrentPage } =
-    usePaginatedData(filterParams);
+  const { products, data } = usePaginatedData(filterParams);
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -56,11 +55,12 @@ export default function PostList() {
 
   const EmptyPost = () => {
     return (
-      <section className="mb-5 flex flex-col items-center justify-center p-5 min-h-[50vh]">
+      <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
         <Image className="w-full" src={empty_city} alt="no-notification" />
         <h3 className="text-lg font-bold">Không tìm thấy bài đăng</h3>
         <p className="mt-2 w-3/4 text-center text-sm text-foreground">
-          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều kiện khác.
+          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều
+          kiện khác.
         </p>
       </section>
     );

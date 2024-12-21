@@ -25,12 +25,14 @@ import { cn, genKey } from '@common/utils';
 import { usePathname } from 'next/navigation';
 import { FaAngleRight } from 'react-icons/fa6';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
+import { useBalanceRequest } from '@api/balance';
 import { Button } from '@components/ui/button';
 import { LuCreditCard } from 'react-icons/lu';
-import { useBalanceRequest } from '@api/balance';
+import { useDepositModal } from '@components/ui/DepositModal';
 type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
+  const { onOpenModalDeposit } = useDepositModal();
   const { balanceData, fetchBalance } = useBalanceRequest();
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
@@ -134,7 +136,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <Button className="w-full">
+            <Button onClick={onOpenModalDeposit} className="w-full">
               <LuCreditCard className="mr-2 h-4 w-4" /> Nạp tiền
             </Button>
           </CardContent>

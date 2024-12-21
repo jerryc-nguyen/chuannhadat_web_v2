@@ -1,4 +1,4 @@
-export * from './use-mobile';
+export * from './useMobile';
 export * from './useSyncParamsToState';
 export * from './useSyncQueryToUrl';
 export * from './useDebounce';
