@@ -48,6 +48,7 @@ export interface ILoginResponse {
   email?: string;
   unconfirmed_email?: A;
   phone_confirmed?: boolean;
+  last_deposit_id?: number;
 }
 export type IRegisterResponse = LoginResponse;
 export enum ILoginAndRegisterModalType {

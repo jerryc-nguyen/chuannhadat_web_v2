@@ -81,6 +81,11 @@ export const services = {
     updateMyPhone: async (data: { phone: string }) => {
       return axiosInstance.post(API_ROUTES.PROFILES.UPDATE_PHONE, data);
     },
+    checkDeposit: async (last_credit_id: number): Promise<IResponseData<A>> => {
+      return axiosInstance.post(API_ROUTES.PROFILES.CHECK_DEPOSIT, {
+        last_credit_id: last_credit_id || undefined,
+      });
+    },
   },
   subscription_plans: {
     getSubscriptionPlans: async (): Promise<{ data: A }> => {

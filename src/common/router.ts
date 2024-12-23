@@ -46,6 +46,7 @@ export const API_ROUTES = {
     UPDATE_PHONE: 'api/v1/profiles/update_phone',
     UPDATE_EMAIL: 'api/v1/profiles/update_email',
     CONFIRM_EMAIL: 'api/v1/profiles/confirm_email',
+    CHECK_DEPOSIT: 'api/v1/profiles/check_deposit',
   },
   IMAGE_UPLOAD: {
     SIGN_S3: 'api/v1/product_images/sign-s3',
@@ -91,6 +92,6 @@ export const API_ROUTES = {
     TOP_AUTHORS: 'api/v1/searchs/top_authors',
   },
   AUTOCOMPLETES: {
-    PROJECTS: 'api/v1/autocompletes/projects'
-  }
+    PROJECTS: 'api/v1/autocompletes/projects',
+  },
 };

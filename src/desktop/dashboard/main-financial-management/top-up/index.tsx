@@ -6,6 +6,8 @@ import '@styles/pages/desktop/finacial-management/top-up.scss';
 import TableComponent from '@components/table';
 import BalanceInfo from '../components/BalanceInfo';
 import { VN_BANK } from '../constants';
+import { useDepositModal } from '@components/ui/DepositModal';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 const TopUpView = () => {
   const defaultData = [
@@ -80,13 +82,29 @@ const TopUpView = () => {
     },
   ];
 
+  const { isOpenDepositModal, statusTransaction, checkDepositMutate } = useDepositModal();
+  const { currentUser } = useAuth();
+
+  React.useEffect(() => {
+    let timmerId: NodeJS.Timeout;
+    // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is false
+    // Avoid call API 2 times when Modal Desposit is open
+    if (!statusTransaction && !isOpenDepositModal) {
+      timmerId = setInterval(() => {
+        checkDepositMutate(currentUser?.last_deposit_id as number);
+      }, 5000);
+    }
+    return () => {
+      clearInterval(timmerId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusTransaction, isOpenDepositModal]);
   return (
     <div>
       <BalanceInfo title="Nạp tiền vào tài khoản" />
 
       <div className="c-top-up__content">
         <h3 className="my-4 mt-8 text-xl font-bold">Các phương thức nạp tiền</h3>
-
         <div className="note-transfer-bank">
           <label>Lưu ý:</label>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
@@ -123,9 +141,9 @@ const TopUpView = () => {
             <TableComponent columns={columns} data={defaultData} />
           </div>
 
-          <div className="QR-transfer-bank mb-12 mt-4 text-center">
+          <div className="QR-transfer-bank mb-12 mt-4 flex flex-col items-center gap-y-2">
             <h3>Quét mã QR bên dưới để thanh toán nhanh</h3>
-            <h5>
+            <h5 className="max-w-full px-2 text-center md:max-w-[60%]">
               Vui lòng liên hệ tổng đài hỗ trợ để cập nhật thêm tiền nếu quá 24 giờ chưa thấy thay
               đổi số dư tài khoản
             </h5>
