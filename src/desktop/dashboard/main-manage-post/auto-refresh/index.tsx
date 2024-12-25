@@ -115,12 +115,12 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
       {
         link: '/manage-post',
-        title: 'Manage-Post',
+        title: 'Quản lý tin đăng',
         isActive: true,
       },
       {
         link: '/auto-refresh',
-        title: 'Auto-Refresh',
+        title: 'Tự động làm mới',
         isActive: true,
       },
     ];

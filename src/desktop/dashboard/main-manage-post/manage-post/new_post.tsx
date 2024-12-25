@@ -18,9 +18,14 @@ import ProductDescriptionForm from './components/form-components/product-descrip
 import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 
-
 import React from 'react';
 import { FormMobile } from './mobile/form-create';
+import { useSetAtom } from 'jotai';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  type IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 
 /**
  * TODO: Split file to smaller components
@@ -55,7 +60,7 @@ const defaultValues: IPostForm = {
 
 const NewPost: React.FC = () => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
-  
+
   const isMobile = useIsMobile();
 
   const form = useForm<IPostForm>({
@@ -87,7 +92,21 @@ const NewPost: React.FC = () => {
     }
   };
 
-  console.log({ errors: form.formState.errors, values: form.watch() });
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: '/manage-post/new-post',
+        title: 'Đăng tin mới',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb(defaultBreadcrumb);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Form {...form}>

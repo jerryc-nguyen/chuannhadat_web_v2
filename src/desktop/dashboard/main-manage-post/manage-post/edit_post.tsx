@@ -12,11 +12,17 @@ import ProductDescriptionForm from './components/form-components/product-descrip
 import ProductInfoForm from './components/form-components/product-info-form';
 import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
-
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 import { useIsMobile, useSyncQueryToUrl } from '@hooks';
 import { useQuery } from '@tanstack/react-query';
 import ManageProductApis from './apis/product-api';
 import { FormMobile } from './mobile/form-create';
+import { useSetAtom } from 'jotai';
+import React from 'react';
 
 const EditPost = ({ params }: { params: A }) => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
@@ -33,16 +39,12 @@ const EditPost = ({ params }: { params: A }) => {
 
   const formData = isSuccess ? product : {};
 
-  console.log('formData', formData);
-  console.log('product', product);
   const form = useForm({
     // @ts-ignore: ok
     resolver: yupResolver(PostFormSchema),
     defaultValues: formData,
     reValidateMode: 'onChange',
   });
-
-  console.log('form errors', form.formState.errors);
 
   const onSubmit = async (data: A) => {
     console.log('onSubmit', data);
@@ -69,7 +71,22 @@ const EditPost = ({ params }: { params: A }) => {
       console.log('done');
     }
   };
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
 
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: '/manage-post/new-post',
+        title: 'Chỉnh sửa tin bán & cho thuê',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb(defaultBreadcrumb);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

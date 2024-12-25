@@ -37,7 +37,16 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
   const getActiveLink = (url: string) => {
-    return pathname.includes(url) ? 'bg-slate-200 text-black' : '';
+    if (url === '/dashboard')
+      return pathname === url
+        ? 'border-[1.5px] border-blue-300 bg-primary_color/10 text-primary_color'
+        : '';
+    return pathname.includes(url)
+      ? 'border-[1.5px] border-blue-300 bg-primary_color/10 text-primary_color'
+      : '';
+  };
+  const getClassActiveHover = () => {
+    return 'hover:!border-[1.5px] hover:!border-blue-300 hover:!bg-primary_color/10 hover:!text-primary_color';
   };
 
   React.useEffect(() => {
@@ -68,7 +77,10 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton
                             isActive={pathname.includes(nav.name as string)}
-                            className="h-10 cursor-pointer transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10"
+                            className={cn(
+                              'h-10 cursor-pointer border-[1.5px] border-transparent transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10',
+                              getClassActiveHover(),
+                            )}
                             asChild
                           >
                             <div className="flex items-center justify-between">
@@ -86,8 +98,9 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                               <SidebarMenuSubItem
                                 onClick={() => setOpenMobile(false)}
                                 className={cn(
-                                  'rounded-md px-4 py-2 !text-base transition-all hover:cursor-pointer hover:bg-slate-200 hover:text-black',
+                                  'rounded-md border-[1.5px] border-transparent px-4 py-2 text-base transition-all hover:cursor-pointer',
                                   getActiveLink(navLink.url),
+                                  getClassActiveHover(),
                                 )}
                                 key={genKey(index)}
                               >
@@ -104,7 +117,11 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                     <SidebarMenuButton
                       key={nav.name}
                       isActive={pathname.includes(nav.name as string)}
-                      className="h-10 cursor-pointer transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10"
+                      className={cn(
+                        'h-10 cursor-pointer border-[1.5px] border-transparent transition-all group-data-[collapsible=icon]:!size-10',
+                        getActiveLink(nav.url as string),
+                        getClassActiveHover(),
+                      )}
                       asChild
                     >
                       <Link href={nav.url as string} className="flex items-center gap-x-2">

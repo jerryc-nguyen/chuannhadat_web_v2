@@ -36,7 +36,7 @@ const AccountSettingsDesktop: React.FC = () => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
       {
         link: '/account-settings',
-        title: 'Account-Settings',
+        title: 'Cài đặt tài khoản',
         isActive: true,
       },
     ];
