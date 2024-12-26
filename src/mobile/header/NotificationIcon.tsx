@@ -21,32 +21,21 @@ import Image from 'next/image';
 import { Switch } from '@components/ui/switch';
 import { Label } from '@components/ui/label';
 import { BsCheck2All } from 'react-icons/bs';
-import { useMutation } from '@tanstack/react-query';
-import { services } from '@api/services';
-import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useNotificationRequest } from '@api/notification';
 type NotificationIconProps = {
   isLogged: boolean;
 };
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const [openModalNotifications, setOpenModalNotifications] = React.useState<boolean>(false);
-  const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
+  const { total, isMarkAllRead, notifications, loadMore, onFilter, totalNotificationlUnread } =
+    usePaginatedNotifications();
+  const { makeMarkReadAll } = useNotificationRequest();
   const { currentUser } = useAuth();
   const router = useRouter();
-  const [isMarkAllRead, setIsMarkAllRead] = React.useState(false);
   const [isReaded, setReaded] = React.useState<boolean>(false);
-  const { mutateAsync: makeMarkReadAll } = useMutation({
-    mutationFn: services.notifications.makeMarkReadAll,
-    onSuccess: (data) => {
-      if (data.success) {
-        setIsMarkAllRead(true);
-      }
-    },
-    onError: (err: AxiosError<A>) => {
-      console.warn('Mark all read notification api has problem', err);
-    },
-  });
+
   const handleMarkReadAll = () => {
     makeMarkReadAll();
   };
@@ -72,13 +61,14 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   };
 
   const showBadge = useMemo(() => {
-    return total !== null && total > 0;
-  }, [total]);
+    return totalNotificationlUnread !== null && totalNotificationlUnread > 0;
+  }, [totalNotificationlUnread]);
 
   React.useEffect(() => {
-    loadMore();
+    loadMore(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [currentUser?.api_token]);
+
   if (!isLogged) return null;
 
   return (
@@ -100,13 +90,13 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <Badge
               className={cn(
                 'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
-                total !== null
+                totalNotificationlUnread !== null
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',
               )}
             >
-              {total !== null ? (
-                total
+              {totalNotificationlUnread !== null ? (
+                totalNotificationlUnread
               ) : (
                 <span className="relative flex h-4 w-4 items-center justify-center">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
@@ -128,7 +118,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           <Separator className="!mt-0" />
         </SheetHeader>
         <div className="flex flex-1 flex-col overflow-y-auto">
-          {total && total > 0 && notifications.length > 0 ? (
+          {notifications.length > 0 ? (
             <div>
               {notifications.map((notify) => (
                 <section
@@ -149,7 +139,11 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                 </section>
               ))}
               {total && total > notifications.length && notifications.length > 0 ? (
-                <Button className="mx-3 mb-4" onClick={() => loadMore()}>
+                <Button
+                  className="mx-auto my-4 block w-[90%] bg-slate-50 px-5"
+                  variant={'outline'}
+                  onClick={() => loadMore()}
+                >
                   Tải thêm
                 </Button>
               ) : null}
@@ -158,27 +152,23 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             renderNoNotification()
           )}
         </div>
-        {total && total > 0 ? (
-          <SheetFooter>
-            <section className="flex justify-between p-3">
-              <div className="flex items-center gap-x-3">
-                <Switch
-                  id="airplane-mode"
-                  className={isReaded ? '!bg-success_color' : ''}
-                  checked={isReaded}
-                  onClick={handleChangeStatus}
-                />
-                <Label htmlFor="airplane-mode">Chưa đọc</Label>
-              </div>
-              <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
-                {!isMarkAllRead || notifications.some((item) => !item.is_read) ? (
-                  <BsCheck2All className="text-primary_color" />
-                ) : null}
-              </div>
-            </section>
-            <Separator />
-          </SheetFooter>
-        ) : null}
+        <SheetFooter>
+          <section className="flex justify-between p-3">
+            <div className="flex items-center gap-x-3">
+              <Switch
+                id="airplane-mode"
+                className={isReaded ? '!bg-success_color' : ''}
+                checked={isReaded}
+                onClick={handleChangeStatus}
+              />
+              <Label htmlFor="airplane-mode">Chưa đọc</Label>
+            </div>
+            <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
+              {!isMarkAllRead ? <BsCheck2All className="text-primary_color" /> : null}
+            </div>
+          </section>
+          <Separator />
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

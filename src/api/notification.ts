@@ -23,6 +23,15 @@ export function useNotificationRequest() {
 
   const { mutateAsync: makeMarkReadAll, isSuccess: isSuccessMarkReadAll } = useMutation({
     mutationFn: services.notifications.makeMarkReadAll,
+    onSuccess: (data) => {
+      if (data.success) {
+        fetchNotification({
+          page: 1,
+          per_page: 10,
+          filter_status: null,
+        });
+      }
+    },
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching balance', err);
     },

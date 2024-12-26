@@ -1,15 +1,17 @@
 import { useAtom } from 'jotai';
 
 import { useNotificationRequest } from '@api/notification';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { INotificationResponse } from '@models/modelResponse';
 import {
+  currentToltalAtom,
   filterStatusAtom,
   notificationsDataAtom,
   pageAtom,
   perPageAtom,
   totalAtom,
+  totalUnreadAtom,
 } from '@mobile/notification/states';
 
 // Custom hook to manage notifications data
@@ -18,6 +20,8 @@ export function usePaginatedNotifications() {
   const [page, setPage] = useAtom(pageAtom);
   const [perPage] = useAtom(perPageAtom);
   const [total, setTotal] = useAtom(totalAtom);
+  const [currentToltal, setCurrentTotal] = useAtom(currentToltalAtom);
+  const [totalNotificationlUnread, setTotalNotificationUnread] = useAtom(totalUnreadAtom);
   const [filter, setFilter] = useAtom(filterStatusAtom);
   const [notifications, setNotifications] = useAtom(notificationsDataAtom);
 
@@ -50,16 +54,19 @@ export function usePaginatedNotifications() {
 
           return newNotifications;
         });
-        const totalCount =
-          filter !== null
-            ? response.total_count
-            : newNotifications.filter((res: INotificationResponse) => !res.is_read).length;
-        setTotal(totalCount);
+        if (!filter) {
+          setTotal(response.total_count);
+        }
+        setCurrentTotal(response.total_count);
+        setTotalNotificationUnread(
+          newNotifications.filter((res: INotificationResponse) => !res.is_read).length,
+        );
       } catch (error) {
         console.error('Error loading notifications:', error);
       }
     },
-    [currentUser, fetchNotification, notifications, perPage, setNotifications, setTotal],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentUser, notifications, perPage, setTotal],
   );
 
   const loadMore = useCallback(
@@ -71,6 +78,10 @@ export function usePaginatedNotifications() {
     },
     [currentUser, fetchNotifications, filter, setPage],
   );
+
+  const isMarkAllRead = React.useMemo(() => {
+    return notifications.every((notification) => notification.is_read);
+  }, [notifications]);
 
   const onFilter = useCallback(
     (status: 'read' | 'unread' | null) => {
@@ -84,7 +95,10 @@ export function usePaginatedNotifications() {
   return {
     notifications,
     total,
+    currentToltal,
+    isMarkAllRead,
     loadMore,
     onFilter,
+    totalNotificationlUnread,
   };
 }

@@ -4,51 +4,31 @@ import React from 'react';
 import { Label } from '@components/ui/label';
 import { Switch } from '@components/ui/switch';
 import { BsCheck2All } from 'react-icons/bs';
-import { INotificationResponse } from './types';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import { Badge } from '@components/ui/badge';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
-import { useMutation } from '@tanstack/react-query';
-import { services } from '@api/services';
-import { AxiosError } from 'axios';
+import { usePaginatedNotifications } from '@hooks';
+import { useNotificationRequest } from '@api/notification';
 
 interface IProps {
-  notifications: INotificationResponse[];
-  total: number | null;
-  onLoadMore: () => void;
   onRedirect: (id: number, is_readed: boolean) => void;
-  onGetNotMarkRead: (status: 'read' | 'unread' | null) => void;
 }
 
-const NotificationsList: React.FC<IProps> = ({
-  notifications,
-  total,
-  onLoadMore,
-  onRedirect,
-  onGetNotMarkRead,
-}) => {
+const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
+  const { isMarkAllRead, notifications, total, currentToltal, loadMore, onFilter } =
+    usePaginatedNotifications();
+  const { makeMarkReadAll } = useNotificationRequest();
   const [isReaded, setReaded] = React.useState<boolean>(false);
-  const [isMarkAllRead, setIsMarkAllRead] = React.useState<boolean>(false);
   const handleChangeStatus = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | EventTarget>,
   ) => {
     event.stopPropagation();
     setReaded(!isReaded);
-    !isReaded ? onGetNotMarkRead('unread') : onGetNotMarkRead(null);
+    !isReaded ? onFilter('unread') : onFilter(null);
   };
-  const { mutateAsync: makeMarkReadAll } = useMutation({
-    mutationFn: services.notifications.makeMarkReadAll,
-    onSuccess: (data) => {
-      if (data.success) {
-        setIsMarkAllRead(true);
-      }
-    },
-    onError: (err: AxiosError<A>) => {
-      console.warn('Mark all read notification api has problem', err);
-    },
-  });
+
   const handleMarkReadAll = () => {
     makeMarkReadAll();
   };
@@ -69,7 +49,7 @@ const NotificationsList: React.FC<IProps> = ({
         <div className="flex items-center gap-x-2">
           <h4 className="py-2 pl-5 text-lg font-semibold">Thông báo</h4>
           <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-secondary hover:bg-slate-100">
-            {total}
+            {currentToltal}
           </Badge>
         </div>
         <Separator />
@@ -95,35 +75,35 @@ const NotificationsList: React.FC<IProps> = ({
             </section>
           ))}
           {total && total > notifications.length && notifications.length > 0 ? (
-            <Button onClick={onLoadMore}>Tải thêm</Button>
+            <Button className="bg-slate-50" variant={'outline'} onClick={() => loadMore()}>
+              Tải thêm
+            </Button>
           ) : null}
         </div>
       ) : (
         renderNoNotification()
       )}
-      {notifications.length > 0 && (
-        <>
-          <section className="flex justify-between p-3 pl-5">
-            <div className="flex items-center gap-x-3">
-              <Switch
-                id="airplane-mode"
-                className={isReaded ? '!bg-success_color' : ''}
-                checked={isReaded}
-                onClick={handleChangeStatus}
-              />
-              <Label htmlFor="airplane-mode">Chưa đọc</Label>
+      <>
+        <section className="flex justify-between p-3 pl-5">
+          <div className="flex items-center gap-x-3">
+            <Switch
+              id="airplane-mode"
+              className={isReaded ? '!bg-success_color' : ''}
+              checked={isReaded}
+              onClick={handleChangeStatus}
+            />
+            <Label htmlFor="airplane-mode">Chưa đọc</Label>
+          </div>
+          {!isMarkAllRead ? (
+            <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
+              <BsCheck2All className="text-primary_color" />
+              <p className="cursor-pointer text-xs font-semibold text-primary_color hover:underline">
+                Đánh dấu đã đọc tất cả
+              </p>
             </div>
-            {!isMarkAllRead || notifications.some((item) => !item.is_read) ? (
-              <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
-                <BsCheck2All className="text-primary_color" />
-                <p className="cursor-pointer text-xs font-semibold text-primary_color hover:underline">
-                  Đánh dấu đã đọc tất cả
-                </p>
-              </div>
-            ) : null}
-          </section>
-        </>
-      )}
+          ) : null}
+        </section>
+      </>
       <Separator />
     </>
   );
