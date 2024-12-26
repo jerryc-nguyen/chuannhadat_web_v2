@@ -26,6 +26,7 @@ import { PiSealCheckFill } from 'react-icons/pi';
 import { useBalanceRequest } from '@api/balance';
 import Confetti from 'react-confetti';
 import { cn } from '@common/utils';
+import { BANK_ACCOUNT_NAME, BANK_ACCOUNT_NUMBER, BANK_FULL_NAME, SMS_SUPPORT_NUMBER } from '@common/constants';
 
 type DepositModalProps = object;
 const vietnam = Be_Vietnam_Pro({
@@ -41,15 +42,17 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     setStatusTransaction,
     formattedAmount
   } = useDepositModal();
-  const { currentUser } = useAuth();
+  const { currentUser, bankTransferNote } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
+
   const handleCopy = () => {
-    navigator.clipboard.writeText('9021203567235');
+    navigator.clipboard.writeText(BANK_ACCOUNT_NUMBER);
     setIsCopied(true);
     setTimeout(() => {
       setIsCopied(false);
     }, 4000);
   };
+
   React.useEffect(() => {
     let timmerId: NodeJS.Timeout;
     // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is true
@@ -57,7 +60,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
 
       timmerId = setInterval(() => {
         checkDepositMutate(currentUser?.last_credit_id as number);
-      }, 5000);
+      }, 3000);
     }
     if (!isOpenDepositModal) {
       setStatusTransaction(false);
@@ -71,16 +74,15 @@ const DepositModal: React.FC<DepositModalProps> = () => {
   const guideDeposit = () => (
     <>
       <AlertDialogDescription>
-        <p> - Hiện tại chúng tôi chỉ hỗ trợ nạp tiền qua chuyển khoản ngân hàng.</p>
-        <p>
-          - Bạn vui lòng chuyển tiền với nội dùng <b className="text-primary_color">cnd15991</b>
+        <p className='my-2'>
+          Bạn vui lòng ghi đúng nội dung chuyển khoản: <b className="text-primary_color">{bankTransferNote}</b>
         </p>
-        <p>
-          - Nếu bạn gặp khó khăn hoặc cần hỗ trợ, vui lòng liên hệ với chúng tôi qua số điện thoại{' '}
-          <b className="text-primary_color">0966662192</b>
+        <p className='my-2'>
+          Nếu có vấn đề trong khi thanh toán - thường là không nhập đúng nội dung CK, bạn gọi số{' '}
+          <b className="text-primary_color">{SMS_SUPPORT_NUMBER}</b>
         </p>
       </AlertDialogDescription>
-      <h3 className="py-3 text-center font-semibold">Nạp tiền với thông tin bên dưới</h3>
+
       <section className="flex h-fit flex-col items-center justify-between gap-5 md:flex-row">
         <section className="relative w-3/4 rounded-lg border px-3 py-1 shadow-md sm:w-1/2">
           <Image alt="qr code" src={qrImage} />
@@ -89,7 +91,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
           <div>
             <p className="font-semibold text-foreground">Tài khoản</p>
             <div className="flex items-center gap-x-2">
-              <p>9021203567235</p>
+              <p>{BANK_ACCOUNT_NUMBER}</p>
               {isCopied ? (
                 <HiOutlineClipboardDocumentCheck className="text-xl" />
               ) : (
@@ -99,16 +101,17 @@ const DepositModal: React.FC<DepositModalProps> = () => {
           </div>
           <div>
             <p className="font-semibold text-foreground">Ngân hàng</p>
-            <p>Ngân hàng bản việt</p>
+            <p>{BANK_FULL_NAME}</p>
           </div>
           <div>
             <p className="font-semibold text-foreground">Tên tài khoản</p>
-            <p>Nguyễn Văn Linh</p>
+            <p>{BANK_ACCOUNT_NAME}</p>
           </div>
         </section>
       </section>
     </>
   );
+
   const transactionSuccessful = () => (
     <section className="flex flex-col items-center gap-y-2">
       <div className="mb-2 flex items-center justify-center rounded-full bg-success_color/10 p-5">
@@ -127,7 +130,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
       <AlertDialogContent className={cn(vietnam.className, 'overflow-hidden')}>
         <AlertDialogHeader className="relative z-10 mb-2">
           <AlertDialogTitle>
-            {statusTransaction ? '' : 'Hướng dẫn nạp tiền'}
+            {statusTransaction ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
           </AlertDialogTitle>
           {statusTransaction ? transactionSuccessful() : guideDeposit()}
         </AlertDialogHeader>

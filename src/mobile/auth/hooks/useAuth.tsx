@@ -41,6 +41,10 @@ export default function useAuth() {
     AuthUtils.updateCurrentUser(user);
   };
 
+  const bankTransferNote = useMemo(() => {
+    return `cnd${currentUser?.id || 'Loading...'}`;
+  }, [currentUser])
+
   return {
     currentUser,
     setCurrentUser,
@@ -48,5 +52,6 @@ export default function useAuth() {
     handleSignOut,
     handleSignIn,
     updateCurrentUser,
+    bankTransferNote
   };
 }
