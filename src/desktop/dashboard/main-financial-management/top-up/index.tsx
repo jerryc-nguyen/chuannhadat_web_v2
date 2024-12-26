@@ -90,15 +90,17 @@ const TopUpView = () => {
     // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is false
     // Avoid call API 2 times when Modal Desposit is open
     if (!statusTransaction && !isOpenDepositModal) {
+
       timmerId = setInterval(() => {
-        checkDepositMutate(currentUser?.last_deposit_id as number);
+        checkDepositMutate(currentUser?.last_credit_id as number);
       }, 5000);
     }
     return () => {
       clearInterval(timmerId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusTransaction, isOpenDepositModal]);
+  }, [statusTransaction, isOpenDepositModal, currentUser]);
+
   return (
     <div>
       <BalanceInfo title="Nạp tiền vào tài khoản" />

@@ -15,6 +15,7 @@ import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import { useAtom } from 'jotai';
 import {
+  depositAmountAtom,
   openModalDepositAtom,
   statusTransactionAtom,
 } from '@desktop/dashboard/states/depositAtoms';
@@ -38,6 +39,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     statusTransaction,
     checkDepositMutate,
     setStatusTransaction,
+    formattedAmount
   } = useDepositModal();
   const { currentUser } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
@@ -52,8 +54,9 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     let timmerId: NodeJS.Timeout;
     // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is true
     if (!statusTransaction && isOpenDepositModal) {
+
       timmerId = setInterval(() => {
-        checkDepositMutate(currentUser?.last_deposit_id as number);
+        checkDepositMutate(currentUser?.last_credit_id as number);
       }, 5000);
     }
     if (!isOpenDepositModal) {
@@ -64,6 +67,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusTransaction, isOpenDepositModal]);
+
   const guideDeposit = () => (
     <>
       <AlertDialogDescription>
@@ -111,24 +115,24 @@ const DepositModal: React.FC<DepositModalProps> = () => {
         <PiSealCheckFill className="text-5xl text-success_color" />
       </div>
       <h3 className="text-lg font-semibold">Chuyển khoản thành công</h3>
-      <p className="text-sm">Giao dịch thành công 150.000đ</p>
-      <p className="text-sm">Tài khoản của bạn được cộng 400 xu</p>
+      <p className="text-4xl my-4 text-success_color">{formattedAmount}</p>
       <p>
         Cảm ơn bạn đã sử dụng và ủng hộ <b>ChuanNhaDat</b>🤗🥰
       </p>
     </section>
   );
+
   return (
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
       <AlertDialogContent className={cn(vietnam.className, 'overflow-hidden')}>
         <AlertDialogHeader className="relative z-10 mb-2">
           <AlertDialogTitle>
-            {statusTransaction ? 'Thông báo giao dịch' : 'Hướng dẫn nạp tiền'}
+            {statusTransaction ? '' : 'Hướng dẫn nạp tiền'}
           </AlertDialogTitle>
           {statusTransaction ? transactionSuccessful() : guideDeposit()}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>Hoàn thành</AlertDialogAction>
+          <AlertDialogAction>Đóng</AlertDialogAction>
         </AlertDialogFooter>
         <Confetti
           numberOfPieces={100}
@@ -144,6 +148,8 @@ const DepositModal: React.FC<DepositModalProps> = () => {
 export const useDepositModal = () => {
   const [isOpenDepositModal, setOpenDepositModal] = useAtom(openModalDepositAtom);
   const [statusTransaction, setStatusTransaction] = useAtom(statusTransactionAtom);
+  const [depositAmount, setDepositAmount] = useAtom(depositAmountAtom);
+
   const { fetchBalance } = useBalanceRequest();
   const queryClient = useQueryClient();
   const onOpenModalDeposit = () => {
@@ -152,6 +158,7 @@ export const useDepositModal = () => {
   const onCloseModalDeposit = () => {
     setOpenDepositModal(false);
     setStatusTransaction(false);
+    setDepositAmount(undefined);
   };
   const { mutate: checkDepositMutate } = useMutation({
     mutationKey: ['check-deposit_qr'],
@@ -161,6 +168,7 @@ export const useDepositModal = () => {
         // Deposit success -> update statusTransaction to true, open modal congratulation and fetch balance
         // open modal congratulation  with case when user in page top-up
         setStatusTransaction(true);
+        setDepositAmount(data.data?.amount)
         !isOpenDepositModal && setOpenDepositModal(true);
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
         await fetchBalance();
@@ -176,6 +184,7 @@ export const useDepositModal = () => {
     statusTransaction,
     setStatusTransaction,
     checkDepositMutate,
+    formattedAmount: depositAmount
   };
 };
 export default DepositModal;
