@@ -8,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from './alert-dialog';
-import qrImage from '@assets/images/deposit_qr.png';
 import Image from 'next/image';
 import { BsCopy } from 'react-icons/bs';
 import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2';
@@ -85,7 +84,11 @@ const DepositModal: React.FC<DepositModalProps> = () => {
 
       <section className="flex h-fit flex-col items-center justify-between gap-5 md:flex-row">
         <section className="relative w-3/4 rounded-lg border px-3 py-1 shadow-md sm:w-1/2">
-          <Image alt="qr code" src={qrImage} />
+          <img
+            alt="Nguyen Van Linh"
+            src="https://img.vietqr.io/image/TPB-51938398888-compact2.png?addInfo=cnd15991&accountName=NGUYEN%20VAN%20LINH"
+            width="300"
+          />
         </section>
         <section className="box-border flex h-full w-full flex-col items-start justify-start gap-y-2 rounded-lg border bg-gradient-to-r from-blue-100 via-blue-50 to-blue-100 p-5 text-left leading-6 shadow-md md:w-1/2">
           <div>
