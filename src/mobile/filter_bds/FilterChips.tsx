@@ -28,6 +28,8 @@ import { useAtom } from 'jotai';
 import { filterStateAtom } from './states';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
+import ProfileLocations from '@desktop/product-filters/ProfileLocations';
+import BusCatType from './bts/BusCatType';
 
 export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOption[] }) {
   const [filterState] = useAtom(filterStateAtom);
@@ -52,7 +54,8 @@ export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOp
   const selectedFilterText = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.Locations) {
+    if (filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations) {
       return selectedLocationText ?? 'Khu vực';
     } else if (filterOption.id == FilterFieldName.Rooms) {
       return selectedRoomText() || 'Số phòng';
@@ -72,6 +75,10 @@ export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOp
             <BusinessTypeButtons />
           </div>
         );
+      case FilterFieldName.ProfileLocations:
+        return <ProfileLocations />;
+      case FilterFieldName.BusCatType:
+        return <BusCatType />;
       case FilterFieldName.CategoryType:
         return <CategoryType />;
       case FilterFieldName.Project:
@@ -145,7 +152,8 @@ export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOp
   const isActiveChip = (filterOption: FilterChipOption): boolean => {
     const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.Locations) {
+    if (filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations) {
       return isSelectedLocation;
     } else if (filterOption.id == FilterFieldName.Rooms) {
       return !!(filterState.bed || filterState.bath);

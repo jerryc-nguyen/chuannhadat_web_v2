@@ -195,7 +195,8 @@ export default function useFilterState() {
     if (searchScope == SearchScopeEnums.Profile) {
       return {
         search_scope: searchScope,
-        author_slug: pathname.split('profile/')[1]
+        author_slug: pathname.split('profile/')[1],
+        aggs_for: 'profile'
       };
     } else if (searchScope == SearchScopeEnums.ManagePosts) {
       return {

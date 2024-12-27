@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
 import { useRefCallback } from '@hooks/useRefCallback';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import useModals from '@mobile/modals/hooks';
@@ -15,14 +14,15 @@ import empty_city from '@assets/images/empty-city.png';
 import ProductCardV2 from './ProductCardV2';
 import useQueryPosts from '@hooks/useQueryPosts';
 import useLoadMissingAuthors from '@desktop/home/hooks/useLoadMissingAuthors';
+import useSearchAggs from '@components/search-aggs/hooks';
 
 // TODO: Move to views/home
 
 export default function PostList() {
-  useSyncParamsToState();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
 
   const { openModal3, closeModals } = useModals();
   const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
@@ -33,9 +33,14 @@ export default function PostList() {
   });
   filterParams.with_users = true
 
-  const { products, data } = useQueryPosts(filterParams);
+  const { products, data, aggreations } = useQueryPosts(filterParams);
 
   useLoadMissingAuthors(data)
+
+  if (aggreations) {
+    updateSearchAggs(aggreations);
+    setIsUseAggOptions(true);
+  }
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();

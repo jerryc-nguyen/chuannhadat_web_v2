@@ -18,7 +18,7 @@ function useQueryPosts(filterParams: FilterParams) {
 
   const products = useMemo(() => { return data.data }, [data.data])
 
-  return { products, data };
+  return { products, data, aggreations: data.aggs };
 }
 
 export default useQueryPosts;

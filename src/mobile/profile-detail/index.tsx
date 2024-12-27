@@ -20,14 +20,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
+import { listFilterProfileMobile } from '@mobile/filter_bds/constants';
 import FilterChips from '@mobile/filter_bds/FilterChips';
+import { useSyncParamsToState } from '@hooks';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
 };
 
 const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }) => {
+  useSyncParamsToState();
+
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
     queryFn: () => services.profiles.getProfileSlug(profileSlug),
@@ -155,7 +158,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     <>
       <h2 className="mb-2 mt-4 text-xl font-semibold text-primary_color ml-4">Tin đã đăng</h2>
       <div className='my-4'>
-        <FilterChips chipOptions={listFilterProfileDesktop} />
+        <FilterChips chipOptions={listFilterProfileMobile} />
       </div>
 
       <PostList />
