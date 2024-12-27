@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useAtom } from 'jotai';
 
 import { useNotificationRequest } from '@api/notification';
@@ -28,8 +29,8 @@ export function usePaginatedNotifications() {
   const { fetchNotification } = useNotificationRequest();
 
   const fetchNotifications = useCallback(
-    async (page: number, filter: 'read' | 'unread' | null, isFirstLogin = false) => {
-      if (!currentUser && !isFirstLogin) return;
+    async (page: number, filter: 'read' | 'unread' | null) => {
+      if (!currentUser) return;
 
       try {
         const response = await fetchNotification({
@@ -69,15 +70,12 @@ export function usePaginatedNotifications() {
     [currentUser, notifications, perPage, setTotal],
   );
 
-  const loadMore = useCallback(
-    (isFirstLogin?: boolean) => {
-      if (currentUser || isFirstLogin) {
-        setPage(page + 1);
-        fetchNotifications(page, filter, isFirstLogin);
-      }
-    },
-    [currentUser, fetchNotifications, filter, setPage],
-  );
+  const loadMore = useCallback(() => {
+    if (currentUser) {
+      setPage((page) => page + 1);
+      fetchNotifications(page + 1, filter);
+    }
+  }, [currentUser, filter, page]);
 
   const isMarkAllRead = React.useMemo(() => {
     return notifications.every((notification) => notification.is_read);

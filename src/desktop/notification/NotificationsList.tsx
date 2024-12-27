@@ -75,7 +75,11 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
             </section>
           ))}
           {total && total > notifications.length && notifications.length > 0 ? (
-            <Button className="bg-slate-50" variant={'outline'} onClick={() => loadMore()}>
+            <Button
+              className="flex-center bg-slate-50 font-semibold hover:bg-slate-200"
+              variant={'outline'}
+              onClick={() => loadMore()}
+            >
               Tải thêm
             </Button>
           ) : null}

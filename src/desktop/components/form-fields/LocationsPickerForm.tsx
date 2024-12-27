@@ -7,7 +7,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { AutoComplete } from '@components/autocomplete';
 import { LoadingSpinner } from '@components/icons/loading-spinner';
 import { OptionForSelect } from '@models';
-import { citiesData, cityDistrictsData, districtsStreetsData, districtsWardsData } from '@desktop/dashboard/main-manage-post/manage-post/constant';
+import {
+  citiesData,
+  cityDistrictsData,
+  districtsStreetsData,
+  districtsWardsData,
+} from '@desktop/dashboard/main-manage-post/manage-post/constant';
 
 interface ILocationForm {
   form: UseFormReturn<A>;
@@ -22,10 +27,13 @@ interface ILocationForm {
 }
 
 const LocationsPickerForm: React.FC<ILocationForm> = ({
-  form, city, district, ward, street,
-  onChangeCity, onChangeDistrict, onChangeWard, onChangeStreet
+  form,
+  onChangeCity,
+  onChangeDistrict,
+  onChangeWard,
+  onChangeStreet,
 }) => {
-  const { city_id, district_id, ward_id, street_id } = form.getValues();
+  const { city_id, district_id } = form.getValues();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -38,49 +46,41 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
         value: item.value.toString(),
         label: item.text,
       };
-    })
-  }, [])
+    });
+  }, []);
 
   const districtsOptions = useMemo(() => {
     return city_id
       ? cityDistrictsData[city_id.toString()]?.map((item) => {
-        return {
-          value: item.value.toString(),
-          label: item.text,
-        };
-      }) || []
-      : []
-  }, [city_id])
+          return {
+            value: item.value.toString(),
+            label: item.text,
+          };
+        }) || []
+      : [];
+  }, [city_id]);
 
   const wardOptions = useMemo(() => {
     return district_id
       ? districtsWardsData[district_id.toString()]?.map((item) => {
-        return {
-          value: item.value
-            ? item.value.toString()
-            : item.id
-              ? item.id.toString()
-              : '',
-          label: item.text,
-        };
-      }) || []
-      : []
-  }, [district_id])
+          return {
+            value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
+            label: item.text,
+          };
+        }) || []
+      : [];
+  }, [district_id]);
 
   const streetOptions = useMemo(() => {
     return district_id
       ? districtsStreetsData[district_id.toString()]?.map((item) => {
-        return {
-          value: item.value
-            ? item.value.toString()
-            : item.id
-              ? item.id.toString()
-              : '',
-          label: item.text,
-        };
-      }) || []
-      : []
-  }, [district_id])
+          return {
+            value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
+            label: item.text,
+          };
+        }) || []
+      : [];
+  }, [district_id]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -96,7 +96,7 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
               selectedValue={city_id}
               onSelectedValueChange={(value) => {
                 field.onChange(value?.value || '');
-                onChangeCity({ value: value?.value, text: value?.label || '' })
+                onChangeCity({ value: value?.value, text: value?.label || '' });
               }}
               items={citiesOptions}
               placeholder={'Chọn Tỉnh/ Thành phố'}
@@ -121,7 +121,7 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
               selectedValue={field.value}
               onSelectedValueChange={(value) => {
                 field.onChange(value?.value || '');
-                onChangeDistrict({ value: value?.value, text: value?.label || '' })
+                onChangeDistrict({ value: value?.value, text: value?.label || '' });
               }}
               items={districtsOptions}
               placeholder={'Chọn Quận/ Huyện'}
@@ -144,7 +144,7 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
               selectedValue={field.value || ''}
               onSelectedValueChange={(value) => {
                 field.onChange(value?.value || '');
-                onChangeWard({ value: value?.value, text: value?.label || '' })
+                onChangeWard({ value: value?.value, text: value?.label || '' });
               }}
               items={wardOptions}
               placeholder={'Chọn Phường/ Xã'}
@@ -166,7 +166,7 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
               selectedValue={field.value || ''}
               onSelectedValueChange={(value) => {
                 field.onChange(value?.value || '');
-                onChangeStreet({ value: value?.value, text: value?.label || '' })
+                onChangeStreet({ value: value?.value, text: value?.label || '' });
               }}
               items={streetOptions}
               placeholder={'Chọn Đường/ Phố'}
@@ -177,9 +177,7 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
           </FormItem>
         )}
       />
-
     </div>
-
   );
 };
 

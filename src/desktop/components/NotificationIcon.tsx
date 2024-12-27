@@ -20,9 +20,11 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
     return;
   };
   React.useEffect(() => {
-    loadMore();
+    if (currentUser?.id) {
+      loadMore();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.api_token]);
+  }, [currentUser?.id]);
   const showBadge = useMemo(() => {
     return totalNotificationlUnread !== null && totalNotificationlUnread > 0;
   }, [totalNotificationlUnread]);

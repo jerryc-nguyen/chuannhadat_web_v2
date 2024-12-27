@@ -65,9 +65,11 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   }, [totalNotificationlUnread]);
 
   React.useEffect(() => {
-    loadMore(true);
+    if (currentUser?.id) {
+      loadMore();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.api_token]);
+  }, [currentUser?.id]);
 
   if (!isLogged) return null;
 
