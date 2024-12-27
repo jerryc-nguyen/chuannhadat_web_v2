@@ -37,7 +37,7 @@ const NotificationsDesktop: React.FC = () => {
 
   return (
     <section>
-      <div className="mt-6 max-w-full">
+      <div className="max-w-full">
         <h2 className="text-xl font-semibold text-gray-900">Thông báo</h2>
         <div className="my-4 border-b border-gray-200"></div>
         <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">

@@ -1,8 +1,6 @@
 'use client';
-
 import React from 'react';
 import '@styles/pages/desktop/finacial-management/service-package.scss';
-
 import { ServicePackageInfo } from '../types';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '@mobile/auth/hooks/useAuth';
@@ -10,6 +8,12 @@ import { services } from '@api/services';
 import ServiceCard from '../components/ServiceCard';
 import { Button } from '@components/ui/button';
 import Link from 'next/link';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  type IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
+import { useSetAtom } from 'jotai';
 
 const ServicePackageView = () => {
   const { currentUser } = useAuth();
@@ -26,12 +30,25 @@ const ServicePackageView = () => {
   React.useEffect(() => {
     data && setCurrentServicePackage(data?.data[0]);
   }, [data]);
-
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: '/service-package',
+        title: 'Mua gói dịch vụ',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb(defaultBreadcrumb);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
-      <h3 className="mb-4 mt-8 text-xl font-bold">Mua gói dịch vụ</h3>
-
-      <div className="container mx-auto px-4 py-8">
+      <h3 className="mb-4 text-xl font-bold">Mua gói dịch vụ</h3>
+      <div className="pb-4">
         <h1 className="mb-2 break-words text-2xl font-bold">{currentServicePackage?.title}</h1>
         <p className="mb-0 whitespace-normal break-words text-gray-600">
           {currentServicePackage?.sub_title}

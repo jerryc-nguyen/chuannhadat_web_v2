@@ -28,7 +28,11 @@ const Breadcrumb: React.FC<BreadcrumbProps> = () => {
                   {item.isActive ? (
                     <BreadcrumbPage className="text-base">{item.title}</BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink asChild className="breadcrumb-link text-base" href={item.link}>
+                    <BreadcrumbLink
+                      asChild
+                      className="breadcrumb-link text-base font-medium transition-all hover:font-medium hover:underline"
+                      href={item.link}
+                    >
                       <Link href={item.link}>{item.title}</Link>
                     </BreadcrumbLink>
                   )}
@@ -39,7 +43,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = () => {
           } else {
             return (
               <BreadcrumbItem key={item.title}>
-                <BreadcrumbPage className="text-base">{item.title}</BreadcrumbPage>
+                <BreadcrumbPage className="text-base font-medium text-primary_color">
+                  {item.title}
+                </BreadcrumbPage>
               </BreadcrumbItem>
             );
           }
