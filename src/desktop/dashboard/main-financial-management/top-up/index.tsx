@@ -14,11 +14,11 @@ const TopUpView = () => {
 
   const defaultData = [
     {
-      bank_code: 'BvBank',
-      account_owner: 'NGUYEN VAN LINH',
-      account_number: '9021203567235',
+      bank_code: BANK_CODE,
+      account_owner: BANK_ACCOUNT_NAME,
+      account_number: BANK_ACCOUNT_NUMBER,
       branch: 'CN HỒ CHÍ MINH',
-      content: 'cnd15991',
+      content: bankTransferNote,
     },
   ];
 
@@ -64,7 +64,7 @@ const TopUpView = () => {
             textTransform: 'uppercase',
           }}
         >
-          {BANK_ACCOUNT_NUMBER}
+          {value}
         </span>
       ),
     },
