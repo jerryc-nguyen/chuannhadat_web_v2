@@ -142,9 +142,13 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
           <div className="text-secondary w-full">{product.bus_cat_type} · {product?.formatted_publish_at}</div>
         )}
 
+        {isShowAuthor && (
+          <div className="text-secondary w-full">{product.bus_cat_type}</div>
+        )}
+
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="mt-2 line-clamp-2 cursor-pointer text-base font-semibold text-primary"
+          className="mt-2 w-full line-clamp-2 cursor-pointer text-base font-semibold text-primary"
         >
           {product?.title}
         </h3>
