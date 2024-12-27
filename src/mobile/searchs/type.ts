@@ -19,6 +19,7 @@ export interface IProduct {
   title: string;
   uid: string;
   name?: string;
+  bus_cat_type?: string
 }
 
 export interface Author {

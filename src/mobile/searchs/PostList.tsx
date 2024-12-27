@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@components/ui/button';
-import usePaginatedData from '@hooks/usePaginatedPost';
 import { useRefCallback } from '@hooks/useRefCallback';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
@@ -8,12 +7,14 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
 import { IoChevronDown } from 'react-icons/io5';
-import ProductCard from './ProductCard';
 
 import { PostPagination } from '@desktop/home/components/PostPagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
+import ProductCardV2 from './ProductCardV2';
+import useQueryPosts from '@hooks/useQueryPosts';
+import useLoadMissingAuthors from '@desktop/home/hooks/useLoadMissingAuthors';
 
 // TODO: Move to views/home
 
@@ -30,8 +31,11 @@ export default function PostList() {
   const filterParams = buildFilterParams({
     withLocal: false,
   });
+  filterParams.with_users = true
 
-  const { products, data } = usePaginatedData(filterParams);
+  const { products, data } = useQueryPosts(filterParams);
+
+  useLoadMissingAuthors(data)
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -66,7 +70,7 @@ export default function PostList() {
     );
   };
   return (
-    <div className="relative mx-auto w-full">
+    <div className="c-verticalPostList relative mx-auto w-full">
       <div className="flex items-center justify-between">
         <div className="text-secondary">Có {data?.pagination?.total_count} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
@@ -78,7 +82,7 @@ export default function PostList() {
       </div>
 
       {products?.map((product: A) => {
-        return <ProductCard key={product?.id} product={product} />;
+        return <ProductCardV2 key={product?.id} product={product} />;
       })}
 
       <PostPagination

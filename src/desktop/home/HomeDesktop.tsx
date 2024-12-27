@@ -16,6 +16,7 @@ import useQueryPosts from '@hooks/useQueryPosts';
 import { ListTopAuthor } from './components/ListTopAuthor';
 import empty_city from '@assets/images/empty-city.png';
 import Image from 'next/image';
+import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
@@ -26,7 +27,7 @@ const HomeDesktop: React.FC = () => {
   const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
 
   const { buildFilterParams } = useFilterState();
-  const { appendCardAuthors } = useCardAuthors();
+
   let filterParams = buildFilterParams({ withLocal: false });
 
   filterParams = {
@@ -37,28 +38,7 @@ const HomeDesktop: React.FC = () => {
   }
 
   const { products, data } = useQueryPosts(filterParams);
-
-  useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);
-  useEffect(() => {
-    if (data?.users) {
-      appendCardAuthors(data?.users);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.users]);
-
-  const { data: missingAuthors, isSuccess } = useQuery({
-    queryKey: ['missing-card-authors', data.missing_user_ids],
-    queryFn: () => cardAuthors({ user_ids: data.missing_user_ids.join(',') }),
-    enabled: !!data.missing_user_ids,
-    select: (data) => data.data,
-  });
-
-  React.useEffect(() => {
-    if (missingAuthors && isSuccess) {
-      appendCardAuthors(missingAuthors);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  useLoadMissingAuthors(data);
 
   const EmptyPost = () => {
     return (

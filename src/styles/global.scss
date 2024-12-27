@@ -84,6 +84,16 @@
   }
 }
 
+body {
+  &.isMobile {
+    .c-verticalPostList {
+      .c-productCard {
+        border-bottom: 1em solid #e3e3e3;
+      }
+    }
+  }
+}
+
 .text-gray {
   color: hsl(var(--muted-foreground));
   color: var(--secondary);

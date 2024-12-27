@@ -113,7 +113,7 @@ const TopUpView = () => {
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             <li style={{ margin: '8px 0' }}>
               {' '}
-              Bạn vui lòng ghi đúng nội dung chuyển khoản: {' '}
+              Ghi đúng nội dung chuyển khoản: {' '}
               <strong style={{ color: 'red' }}>{bankTransferNote}</strong>
             </li>
             <li style={{ margin: '8px 0' }}>
