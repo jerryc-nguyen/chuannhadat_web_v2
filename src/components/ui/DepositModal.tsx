@@ -25,7 +25,12 @@ import { PiSealCheckFill } from 'react-icons/pi';
 import { useBalanceRequest } from '@api/balance';
 import Confetti from 'react-confetti';
 import { cn } from '@common/utils';
-import { BANK_ACCOUNT_NAME, BANK_ACCOUNT_NUMBER, BANK_FULL_NAME, SMS_SUPPORT_NUMBER } from '@common/constants';
+import {
+  BANK_ACCOUNT_NAME,
+  BANK_ACCOUNT_NUMBER,
+  BANK_FULL_NAME,
+  SMS_SUPPORT_NUMBER,
+} from '@common/constants';
 
 type DepositModalProps = object;
 const vietnam = Be_Vietnam_Pro({
@@ -39,7 +44,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     statusTransaction,
     checkDepositMutate,
     setStatusTransaction,
-    formattedAmount
+    formattedAmount,
   } = useDepositModal();
   const { currentUser, bankTransferNote } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
@@ -56,7 +61,6 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     let timmerId: NodeJS.Timeout;
     // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is true
     if (!statusTransaction && isOpenDepositModal) {
-
       timmerId = setInterval(() => {
         checkDepositMutate(currentUser?.last_credit_id as number);
       }, 3000);
@@ -73,10 +77,11 @@ const DepositModal: React.FC<DepositModalProps> = () => {
   const guideDeposit = () => (
     <>
       <AlertDialogDescription>
-        <p className='my-2'>
-          Bạn vui lòng ghi đúng nội dung chuyển khoản: <b className="text-primary_color">{bankTransferNote}</b>
+        <p className="my-2">
+          Bạn vui lòng ghi đúng nội dung chuyển khoản:{' '}
+          <b className="text-primary_color">{bankTransferNote}</b>
         </p>
-        <p className='my-2'>
+        <p className="my-2">
           Nếu có vấn đề trong khi thanh toán - thường là không nhập đúng nội dung CK, bạn gọi số{' '}
           <b className="text-primary_color">{SMS_SUPPORT_NUMBER}</b>
         </p>
@@ -121,7 +126,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
         <PiSealCheckFill className="text-5xl text-success_color" />
       </div>
       <h3 className="text-lg font-semibold">Chuyển khoản thành công</h3>
-      <p className="text-4xl my-4 text-success_color">{formattedAmount}</p>
+      <p className="my-4 text-4xl text-success_color">{formattedAmount}</p>
       <p>
         Cảm ơn bạn đã sử dụng và ủng hộ <b>ChuanNhaDat</b>🤗🥰
       </p>
@@ -130,7 +135,12 @@ const DepositModal: React.FC<DepositModalProps> = () => {
 
   return (
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
-      <AlertDialogContent className={cn(vietnam.className, 'overflow-hidden')}>
+      <AlertDialogContent
+        className={cn(
+          vietnam.className,
+          'max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[70vh]',
+        )}
+      >
         <AlertDialogHeader className="relative z-10 mb-2">
           <AlertDialogTitle>
             {statusTransaction ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
@@ -174,7 +184,7 @@ export const useDepositModal = () => {
         // Deposit success -> update statusTransaction to true, open modal congratulation and fetch balance
         // open modal congratulation  with case when user in page top-up
         setStatusTransaction(true);
-        setDepositAmount(data.data?.amount)
+        setDepositAmount(data.data?.amount);
         !isOpenDepositModal && setOpenDepositModal(true);
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
         await fetchBalance();
@@ -190,7 +200,7 @@ export const useDepositModal = () => {
     statusTransaction,
     setStatusTransaction,
     checkDepositMutate,
-    formattedAmount: depositAmount
+    formattedAmount: depositAmount,
   };
 };
 export default DepositModal;

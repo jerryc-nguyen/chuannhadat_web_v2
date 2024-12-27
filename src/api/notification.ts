@@ -5,7 +5,7 @@ import { API_ROUTES } from '@common/router';
 import { services } from './services';
 
 export function useNotificationRequest() {
-  const { mutateAsync: fetchNotification, isSuccess: isSuccessNotification } = useMutation({
+  const { mutateAsync: fetchNotification, isPending: isFetchingNotifications } = useMutation({
     mutationFn: async (params: {
       page: number;
       per_page: number;
@@ -16,13 +16,22 @@ export function useNotificationRequest() {
       });
       return response.data;
     },
+
     onError: (err: AxiosError) => {
       console.error('Error fetching notifications', err);
     },
   });
-
   const { mutateAsync: makeMarkReadAll, isSuccess: isSuccessMarkReadAll } = useMutation({
     mutationFn: services.notifications.makeMarkReadAll,
+    onSuccess: (data) => {
+      if (data.success) {
+        fetchNotification({
+          page: 1,
+          per_page: 10,
+          filter_status: null,
+        });
+      }
+    },
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching balance', err);
     },
@@ -42,6 +51,6 @@ export function useNotificationRequest() {
     makeMarkReadAll,
     makeMarkRead,
     isSuccessMarkReadAll,
-    isSuccessNotification,
+    isFetchingNotifications,
   };
 }
