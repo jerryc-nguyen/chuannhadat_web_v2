@@ -24,11 +24,11 @@ const TopUpView = () => {
 
   const defaultData = [
     {
-      bank_code: 'BvBank',
-      account_owner: 'NGUYEN VAN LINH',
-      account_number: '9021203567235',
+      bank_code: BANK_CODE,
+      account_owner: BANK_ACCOUNT_NAME,
+      account_number: BANK_ACCOUNT_NUMBER,
       branch: 'CN HỒ CHÍ MINH',
-      content: 'cnd15991',
+      content: bankTransferNote,
     },
   ];
 
@@ -74,7 +74,7 @@ const TopUpView = () => {
             textTransform: 'uppercase',
           }}
         >
-          {BANK_ACCOUNT_NUMBER}
+          {value}
         </span>
       ),
     },
@@ -136,7 +136,7 @@ const TopUpView = () => {
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             <li style={{ margin: '8px 0' }}>
               {' '}
-              Bạn vui lòng ghi đúng nội dung chuyển khoản:{' '}
+              Ghi đúng nội dung chuyển khoản: {' '}
               <strong style={{ color: 'red' }}>{bankTransferNote}</strong>
             </li>
             <li style={{ margin: '8px 0' }}>

@@ -18,7 +18,7 @@ const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
   weight: ['400', '700', '600', '500'],
 });
-export default function CardAuthor({ product }: { product: A }) {
+export default function CardAuthor({ product, isMobile }: { product: A, isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
   const [filterState] = useAtom(filterStateAtom);
   const { isFetching, topAuthors } = useTopAuthors(filterState);
@@ -48,21 +48,25 @@ export default function CardAuthor({ product }: { product: A }) {
         return '';
     }
   };
+
+  const Component = isMobile ? 'div' : HoverCardAuthor;
+  const linkTarget = isMobile ? {} : { target: '_blank' };
+
   return (
     <div className="flex items-center justify-between gap-x-2">
-      <HoverCardAuthor authorSlug={author?.slug as string}>
+      <Component authorSlug={author?.slug as string}>
         {imgSrc ? (
-          <Link target="_blank" href={`/profile/${author?.slug}`}>
+          <Link {...linkTarget} href={`/profile/${author?.slug}`}>
             <Image
               width={40}
               height={40}
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                      imageUrl: imgSrc,
-                      width: 40,
-                      ratio: 1,
-                    })
+                    imageUrl: imgSrc,
+                    width: 40,
+                    ratio: 1,
+                  })
                   : imgSrc
               }
               onError={() => {
@@ -76,18 +80,18 @@ export default function CardAuthor({ product }: { product: A }) {
         ) : (
           <Skeleton className="h-12 w-12 rounded-full" />
         )}
-      </HoverCardAuthor>
+      </Component>
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-x-1">
-          <HoverCardAuthor authorSlug={author?.slug as string}>
+          <Component authorSlug={author?.slug as string}>
             <Link
-              target="_blank"
+              {...linkTarget}
               href={`/profile/${author?.slug}`}
               className="flex items-center gap-x-2 text-sm font-semibold leading-none hover:underline"
             >
               {fullName}
             </Link>
-          </HoverCardAuthor>
+          </Component>
           {topAuthor && (
             <TooltipHost content="Xếp hạng top môi giới trong khu vực dựa theo tổng số tin mới, được refresh trong 2 tuần gần đây nhất">
               <span className="flex items-center gap-x-1 pl-2 text-lg">
@@ -100,8 +104,8 @@ export default function CardAuthor({ product }: { product: A }) {
           )}
         </div>
 
-        <p className="flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-secondary">
-          <Link target="_blank" className="hover:underline" href={`/post/${product.slug}`}>
+        <p className="flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-secondary mt-1">
+          <Link {...linkTarget} className="hover:underline" href={`/post/${product.slug}`}>
             {product?.formatted_publish_at}
           </Link>
           ·

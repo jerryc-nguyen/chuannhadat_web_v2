@@ -290,6 +290,30 @@ export const listFilterProfileDesktop: Array<FilterChipOption> = [
   },
 ];
 
+export const listFilterProfileMobile: Array<FilterChipOption> = [
+  {
+    id: FilterFieldName.BusCatType,
+    text: 'Phân loại',
+  },
+  { id: FilterFieldName.ProfileLocations, text: 'Khu vực' },
+  {
+    id: FilterFieldName.Price,
+    text: 'Mức giá',
+  },
+  {
+    id: FilterFieldName.Area,
+    text: 'Diện tích',
+  },
+  {
+    id: FilterFieldName.Rooms,
+    text: 'Số Phòng',
+  },
+  {
+    id: FilterFieldName.Direction,
+    text: 'Hướng',
+  }
+];
+
 export const listFilterMobile: FilterChipOption[] = [
   {
     id: FilterFieldName.FilterOverview,
