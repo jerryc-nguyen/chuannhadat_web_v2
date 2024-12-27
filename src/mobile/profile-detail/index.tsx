@@ -20,6 +20,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
+import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
+import FilterChips from '@mobile/filter_bds/FilterChips';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
@@ -148,12 +150,18 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
       </div>
     </div>
   );
-  const porfileListPost = () => (
-    <div>
-      <h2 className="mb-2 mt-4 text-xl font-semibold text-primary_color">Tin đã đăng</h2>
+
+  const profileListPost = () => (
+    <>
+      <h2 className="mb-2 mt-4 text-xl font-semibold text-primary_color ml-4">Tin đã đăng</h2>
+      <div className='my-4'>
+        <FilterChips chipOptions={listFilterProfileDesktop} />
+      </div>
+
       <PostList />
-    </div>
+    </>
   );
+
   return (
     <section className={styles.profile_detail_wrapper}>
       {!profileData ? (
@@ -163,7 +171,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           {profileImage()}
           <div className="-translate-y-[20px]">
             {profileInformation()}
-            {porfileListPost()}
+            {profileListPost()}
           </div>
         </section>
       )}

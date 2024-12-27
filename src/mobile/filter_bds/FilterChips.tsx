@@ -18,7 +18,6 @@ import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
 import Direction from './bts/Direction';
 import useFilterState from './hooks/useFilterState';
 import { cn } from '@common/utils';
-import { listFilterMobile } from './constants';
 import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
@@ -27,11 +26,13 @@ import { Modal } from '@mobile/modals/states/types';
 import Projects from './bts/desktop/Projects';
 import { useAtom } from 'jotai';
 import { filterStateAtom } from './states';
+import HorizontalScroller from '@mobile/ui/HorizontalScroller';
+import { LuX } from 'react-icons/lu';
 
-export default function FilterChips() {
+export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOption[] }) {
   const [filterState] = useAtom(filterStateAtom);
 
-  const { copyFilterStatesToLocal } = useFilterState();
+  const { copyFilterStatesToLocal, removeFilterValue } = useFilterState();
   const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
   const { searchScope } = useSearchScope();
@@ -156,28 +157,37 @@ export default function FilterChips() {
     }
   };
 
-  const activeChipClass = (filterOption: FilterChipOption): string => {
-    return isActiveChip(filterOption)
-      ? 'bg-black text-white hover:opacity-80'
-      : 'bg-white text-black hover:bg-slate-100';
+  const handleRemoveFilter = (filterOption: FilterChipOption) => {
+    const fieldName = filterOption.id;
+    removeFilterValue(fieldName);
   };
 
   return (
-    <div className="mt-5">
-      {listFilterMobile.map((item) => (
+    <HorizontalScroller className="relative my-2 flex gap-2">
+      {chipOptions.map((item, index) => (
         <Button
           key={item.id}
           className={cn(
-            'duration-400 relative mb-2 mr-2 cursor-pointer rounded-xl border px-4 py-2 font-medium shadow-md transition-all focus:animate-pulse',
-            activeChipClass(item),
+            'w-fit cursor-default gap-x-4 rounded-full border font-semibold transition-all',
+            isActiveChip(item)
+              ? 'bg-black text-white hover:bg-black'
+              : 'bg-white text-black hover:bg-slate-50',
+            index == 0 ? 'ml-4' : '',
           )}
           onClick={() => {
             showFilterBts(item);
           }}
         >
           {selectedFilterText(item)}
+
+          {isActiveChip(item) && (
+            <LuX
+              onClick={(e) => { e.stopPropagation(); handleRemoveFilter(item) }}
+              className="cursor-pointer text-xl"
+            />
+          )}
         </Button>
       ))}
-    </div>
+    </HorizontalScroller>
   );
 }
