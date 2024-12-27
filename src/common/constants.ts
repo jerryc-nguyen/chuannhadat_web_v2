@@ -1,6 +1,12 @@
 export const DEFAULT_BG_CLASS = 'bg-ios-light-surface dark:bg-ios-dark-surface';
 export const CURRENT_USER_KEY = 'current_user';
 export const SMS_PHONE_NUMBER = '0967.354.632';
+export const SMS_SUPPORT_NUMBER = '0966662192';
+export const BANK_ACCOUNT_NAME = 'NGUYEN VAN LINH'
+export const BANK_ACCOUNT_NUMBER = '519 3839 8888'
+export const BANK_CODE = 'TPBank'
+export const BANK_FULL_NAME = 'Ngân hàng Tiên Phong'
+
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
 export const ALL_OPTION = {

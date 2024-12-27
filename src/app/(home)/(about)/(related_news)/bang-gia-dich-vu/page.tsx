@@ -46,7 +46,7 @@ const ServicePrice: React.FC<ServicePriceProps> = () => {
           Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top
         </p>
         <Link
-          href={'#'}
+          href="/huong-dan-tu-dong-lam-moi"
           className="text-sm text-primary_color/80 transition-all hover:text-primary_color hover:underline lg:text-base"
         >
           Xem hướng dẫn cài đặt tự động làm mới tin giúp bạn tiết kiệm thời gian
