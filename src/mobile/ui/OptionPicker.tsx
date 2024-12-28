@@ -65,6 +65,7 @@ export function IosOptionPicker({
   searchPlaceHolder?: string;
   emptyMessage?: string;
 }) {
+  const [curOption, setCurOption] = useState(value);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: A) => {
@@ -100,8 +101,9 @@ export function IosOptionPicker({
       ) : (
         <ListCheckOptions
           options={filteredItems}
-          selectedOption={value}
+          selectedOption={curOption}
           onSelect={(option: OptionForSelect) => {
+            setCurOption(option);
             onSelect(option);
           }}
         ></ListCheckOptions>

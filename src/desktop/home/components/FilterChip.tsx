@@ -22,7 +22,7 @@ import { LuX, LuBuilding } from 'react-icons/lu';
 import { BiArea } from 'react-icons/bi';
 import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import { BsSortUp } from 'react-icons/bs';
-import ProfileLocations from '@desktop/product-filters/ProfileLocations';
+import ProfileLocationsV2 from '@desktop/product-filters/ProfileLocationsV2';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import Projects from '@mobile/filter_bds/bts/desktop/Projects';
@@ -110,7 +110,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.ProfileLocations:
-        return <ProfileLocations />;
+        return <ProfileLocationsV2 />;
       case FilterFieldName.BusinessType:
         return <BusinessTypeButtons />;
       case FilterFieldName.CategoryType:

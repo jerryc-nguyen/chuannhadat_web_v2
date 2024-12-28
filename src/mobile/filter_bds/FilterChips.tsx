@@ -28,7 +28,7 @@ import { useAtom } from 'jotai';
 import { filterStateAtom } from './states';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
-import ProfileLocations from '@desktop/product-filters/ProfileLocations';
+import ProfileLocationsV2 from '@desktop/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
 
 export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOption[] }) {
@@ -76,7 +76,7 @@ export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOp
           </div>
         );
       case FilterFieldName.ProfileLocations:
-        return <ProfileLocations />;
+        return <ProfileLocationsV2 />;
       case FilterFieldName.BusCatType:
         return <BusCatType />;
       case FilterFieldName.CategoryType:

@@ -51,6 +51,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   });
 
   if (aggreations) {
+    console.log('aggreations', aggreations);
     updateSearchAggs(aggreations);
     setIsUseAggOptions(true);
   }
