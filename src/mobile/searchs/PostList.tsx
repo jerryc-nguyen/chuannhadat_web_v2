@@ -1,27 +1,28 @@
 'use client';
 import { Button } from '@components/ui/button';
-import usePaginatedData from '@hooks/usePaginatedPost';
 import { useRefCallback } from '@hooks/useRefCallback';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
 import { IoChevronDown } from 'react-icons/io5';
-import ProductCard from './ProductCard';
 
 import { PostPagination } from '@desktop/home/components/PostPagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
+import ProductCardV2 from './ProductCardV2';
+import useQueryPosts from '@hooks/useQueryPosts';
+import useLoadMissingAuthors from '@desktop/home/hooks/useLoadMissingAuthors';
+import useSearchAggs from '@components/search-aggs/hooks';
 
 // TODO: Move to views/home
 
 export default function PostList() {
-  useSyncParamsToState();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
 
   const { openModal3, closeModals } = useModals();
   const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
@@ -30,8 +31,16 @@ export default function PostList() {
   const filterParams = buildFilterParams({
     withLocal: false,
   });
+  filterParams.with_users = true
 
-  const { products, data } = usePaginatedData(filterParams);
+  const { products, data, aggreations } = useQueryPosts(filterParams);
+
+  useLoadMissingAuthors(data)
+
+  if (aggreations) {
+    updateSearchAggs(aggreations);
+    setIsUseAggOptions(true);
+  }
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -66,8 +75,8 @@ export default function PostList() {
     );
   };
   return (
-    <div className="relative mx-auto w-full">
-      <div className="flex items-center justify-between">
+    <div className="c-verticalPostList relative mx-auto w-full">
+      <div className="flex items-center justify-between px-4 pt-0 pb-4">
         <div className="text-secondary">Có {data?.pagination?.total_count} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -78,7 +87,7 @@ export default function PostList() {
       </div>
 
       {products?.map((product: A) => {
-        return <ProductCard key={product?.id} product={product} />;
+        return <ProductCardV2 key={product?.id} product={product} />;
       })}
 
       <PostPagination

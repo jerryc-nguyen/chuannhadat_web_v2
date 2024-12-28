@@ -2,24 +2,30 @@
 
 import { Button } from '@components/ui/button';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useIsMobile, useSyncQueryToUrl } from '@hooks';
+import { useBreadcrumb } from '@hooks/useBreadcrumb';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import ProductApiService from './apis/product-api';
+import { default as ManageProductApis, default as ProductApiService } from './apis/product-api';
 import ImageForm from './components/form-components/image-form';
 import LocationFormV2 from './components/form-components/location-form-v2';
 import ProductDescriptionForm from './components/form-components/product-description';
 import ProductInfoForm from './components/form-components/product-info-form';
 import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
-
-import { useIsMobile, useSyncQueryToUrl } from '@hooks';
-import { useQuery } from '@tanstack/react-query';
-import ManageProductApis from './apis/product-api';
 import { FormMobile } from './mobile/form-create';
 
 const EditPost = ({ params }: { params: A }) => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
+  useBreadcrumb([
+    {
+      link: '/manage-post/new-post',
+      title: 'Chỉnh sửa tin bán & cho thuê',
+      isActive: true,
+    }
+  ]);
 
   const isMobile = useIsMobile();
   const productUid = params.slug;
@@ -33,16 +39,12 @@ const EditPost = ({ params }: { params: A }) => {
 
   const formData = isSuccess ? product : {};
 
-  console.log('formData', formData);
-  console.log('product', product);
   const form = useForm({
     // @ts-ignore: ok
     resolver: yupResolver(PostFormSchema),
     defaultValues: formData,
     reValidateMode: 'onChange',
   });
-
-  console.log('form errors', form.formState.errors);
 
   const onSubmit = async (data: A) => {
     console.log('onSubmit', data);
@@ -69,7 +71,7 @@ const EditPost = ({ params }: { params: A }) => {
       console.log('done');
     }
   };
-
+  
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

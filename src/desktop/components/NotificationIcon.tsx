@@ -14,20 +14,21 @@ type NotificationIconProps = {
 };
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
-  const { total, notifications, loadMore, onFilter } = usePaginatedNotifications();
+  const { totalNotificationlUnread, loadMore } = usePaginatedNotifications();
   const { currentUser } = useAuth();
   const handleRedirect = () => {
     return;
   };
   React.useEffect(() => {
-    loadMore();
+    if (currentUser?.id) {
+      loadMore();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [currentUser?.id]);
   const showBadge = useMemo(() => {
-    return total !== null && total > 0;
-  }, [total]);
+    return totalNotificationlUnread !== null && totalNotificationlUnread > 0;
+  }, [totalNotificationlUnread]);
 
-  const handleGetNotMarkRead = (status: 'unread' | 'read' | null) => onFilter(status);
   if (!isLogged) return null;
   return (
     <Popover>
@@ -41,13 +42,13 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <Badge
               className={cn(
                 'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
-                total !== null
+                totalNotificationlUnread !== null
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',
               )}
             >
-              {total !== null ? (
-                total
+              {totalNotificationlUnread !== null ? (
+                totalNotificationlUnread
               ) : (
                 <span className="relative flex h-4 w-4 items-center justify-center">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
@@ -59,13 +60,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
         </div>
       </PopoverTrigger>
       <PopoverContent className="left-1/2 w-[23rem] -translate-x-1/2 p-0">
-        <NotificationsList
-          notifications={notifications}
-          total={total}
-          onLoadMore={loadMore}
-          onRedirect={handleRedirect}
-          onGetNotMarkRead={handleGetNotMarkRead}
-        />
+        <NotificationsList onRedirect={handleRedirect} />
       </PopoverContent>
     </Popover>
   );

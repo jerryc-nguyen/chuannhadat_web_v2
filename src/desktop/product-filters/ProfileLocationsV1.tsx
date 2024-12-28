@@ -3,7 +3,7 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import LocationsPicker from '@desktop/components/LocationsPicker';
 import useSearchAggs from '@components/search-aggs/hooks';
 
-export default function ProfileLocations() {
+export default function ProfileLocationsV1() {
   const { setLocalFieldValue, localFilterState } = useFilterState();
   const { profileLocationAgg } = useSearchAggs();
   const city = localFilterState.city;

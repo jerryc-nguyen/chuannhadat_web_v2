@@ -9,6 +9,12 @@ import { ITransactionResponse } from '../types';
 import TableComponent from '@components/table';
 import NoteDescriptions from '../components/NoteDescription';
 import BalanceInfo from '../components/BalanceInfo';
+import { useSetAtom } from 'jotai';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  type IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();
@@ -65,13 +71,25 @@ const BalanceView = () => {
       render: (value: string) => <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>,
     },
   ];
-
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: '/balance-information',
+        title: 'Thông tin số dư',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb(defaultBreadcrumb);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
       <BalanceInfo title="Thông tin số dư" />
-
       <h3 className="mb-4 mt-8 text-xl font-bold">Biến động số dư</h3>
-
       <TableComponent columns={columns} data={transactionData} />
       <NoteDescriptions />
     </div>

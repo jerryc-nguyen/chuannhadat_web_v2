@@ -18,7 +18,7 @@ import ProductDescriptionForm from './components/form-components/product-descrip
 import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 
-
+import { useBreadcrumb } from '@hooks/useBreadcrumb';
 import React from 'react';
 import { FormMobile } from './mobile/form-create';
 
@@ -55,7 +55,14 @@ const defaultValues: IPostForm = {
 
 const NewPost: React.FC = () => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
-  
+  useBreadcrumb([
+    {
+      link: '/manage-post/new-post',
+      title: 'Đăng tin mới',
+      isActive: true,
+    },
+  ]);
+
   const isMobile = useIsMobile();
 
   const form = useForm<IPostForm>({
@@ -86,8 +93,6 @@ const NewPost: React.FC = () => {
       console.log('done');
     }
   };
-
-  console.log({ errors: form.formState.errors, values: form.watch() });
 
   return (
     <Form {...form}>
