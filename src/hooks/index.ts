@@ -11,3 +11,4 @@ export * from './useSSRCurrentUser';
 export * from './useSyncParamsToState';
 export * from './useViewportSize';
 export * from './useResizeImage';
+export * from './useBreadcrumb';
