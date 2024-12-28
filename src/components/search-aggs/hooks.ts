@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAtom } from "jotai";
 import { isUseAggOptionsAtom, searchAggsAtom } from "./states";
+import { OptionForSelect } from "@models";
 
 export default function useSearchAggs() {
   const [searchAggs, setSearchAggs] = useAtom(searchAggsAtom);
@@ -68,8 +69,30 @@ export default function useSearchAggs() {
     }
   }
 
+  const buildLocationsList = (agg: Record<string, A>) => {
+    let districtOptions: OptionForSelect[] = [];
+    let wardOptions: OptionForSelect[] = [];
+
+    for (const [, districts] of Object.entries(agg.districts || {})) {
+      districtOptions = districtOptions.concat(districts as OptionForSelect[])
+    }
+
+    for (const [, wards] of Object.entries(agg.wards || {})) {
+      wardOptions = wardOptions.concat(wards as OptionForSelect[])
+    }
+
+    return {
+      districtOptions: districtOptions,
+      wardOptions: wardOptions
+    }
+  }
+
   const profileLocationAgg = useMemo(() => {
     return locationAgg(searchAggs);
+  }, [searchAggs])
+
+  const locationsList = useMemo(() => {
+    return buildLocationsList(searchAggs);
   }, [searchAggs])
 
   return {
@@ -82,6 +105,7 @@ export default function useSearchAggs() {
     areasOptions,
     directionsOptions,
     isUseAggOptions,
-    setIsUseAggOptions
+    setIsUseAggOptions,
+    locationsList
   }
 }

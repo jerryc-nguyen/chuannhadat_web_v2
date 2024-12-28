@@ -5,6 +5,7 @@ import { OptionForSelect } from '@models';
 import { stringToSlug } from '@common/utils';
 import SearchBox from '@components/SearchBox';
 import CmdkOptionPicker from './CmdkOptionPicker';
+import ListEmptyMessage from './ListEmptyMessage';
 
 export default function OptionPicker({
   options,
@@ -65,6 +66,7 @@ export function IosOptionPicker({
   searchPlaceHolder?: string;
   emptyMessage?: string;
 }) {
+  const [curOption, setCurOption] = useState(value);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: A) => {
@@ -93,15 +95,13 @@ export function IosOptionPicker({
       )}
 
       {isEmptyList ? (
-        <div className="mt-4 flex flex-col items-center">
-          <IoFileTrayOutline color="rgb(156 163 175)" size={25} />
-          <p className="text-gray"> {emptyMessage ?? 'Không tìm thấy'}</p>
-        </div>
+        <ListEmptyMessage message={emptyMessage ?? 'Không tìm thấy'} size={35} />
       ) : (
         <ListCheckOptions
           options={filteredItems}
-          selectedOption={value}
+          selectedOption={curOption}
           onSelect={(option: OptionForSelect) => {
+            setCurOption(option);
             onSelect(option);
           }}
         ></ListCheckOptions>
