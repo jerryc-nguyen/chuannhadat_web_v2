@@ -5,6 +5,7 @@ import OptionPicker from '@mobile/ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 import { Checkbox, List, ListItem } from '@components/konsta';
 import ListEmptyMessage from '@mobile/ui/ListEmptyMessage';
+import { isMobile } from 'react-device-detect';
 
 export default function LocationsList({
   city,
@@ -71,6 +72,9 @@ export default function LocationsList({
     })
   }, [curDistrict, wardOptions])
 
+  const districtClassProp = isMobile ? 'mt-4 px-4 mb-2' : '';
+  const wardClassProp = isMobile ? 'mt-5 px-4 mb-2' : 'mt-5';
+
   return (
     <div>
       {cityOptions.length > 0 && (
@@ -88,8 +92,10 @@ export default function LocationsList({
 
       {districtOptions.length > 0 && (
         <>
-          <b>Quận / Huyện</b>
-          {selectedWardOptions.length}
+          <p className={districtClassProp}>
+            <b>Quận / Huyện</b>
+          </p>
+
           <List strongIos outlineIos margin="my-0">
             {[ALL_OPTION, ...districtOptions].map((item: OptionForSelect) => {
               return (
@@ -116,12 +122,12 @@ export default function LocationsList({
         </>
       )}
 
-      <div className='mt-4'>
+      <div className={wardClassProp}>
         <b>Phường / Xã</b>
       </div>
 
       {selectedWardOptions.length == 0 && (
-        <ListEmptyMessage message={'Vui lòng chọn Quận / Huyện trước'} />
+        <ListEmptyMessage message={curDistrict ? 'Không có dữ liệu' : 'Vui lòng chọn Quận / Huyện trước'} />
       )}
 
       {selectedWardOptions.length > 0 && (

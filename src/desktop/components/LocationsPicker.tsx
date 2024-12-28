@@ -80,7 +80,6 @@ export default function LocationsPicker({
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
-    console.log('ward', ward);
     const finalOption = ward?.value != 'all' ? ward : undefined;
     setCurWard(finalOption);
     setOpenWardDropdown(false);
