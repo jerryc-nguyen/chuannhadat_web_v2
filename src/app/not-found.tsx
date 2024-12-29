@@ -18,15 +18,15 @@ export default function NotFound(props: NotFoundProps) {
   } = props;
 
   return (
-    <section className="mb-5 flex min-h-[70vh] flex-col items-center justify-center p-5">
+    <section className={cn("mb-5 flex min-h-[70vh] flex-col items-center justify-center p-5", className)}>
       <Image className="w-full md:w-1/2" src={empty_city} alt="no-notification" />
       <h3 className="text-lg font-bold">Không tìm thấy nội dung</h3>
       <p className="mt-2 w-3/4 text-center text-sm text-foreground">
-        Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều kiện
-        khác.
+        {errorMessage ??
+          'Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều kiện khác.'}
       </p>
       <Link
-        className="flex items-center gap-x-4 rounded-full border-2 border-black px-4 py-2 text-xl transition-all hover:bg-black hover:text-neutral_03 md:text-2xl mt-4"
+        className="mt-4 flex items-center gap-x-4 rounded-full border-2 border-black px-4 py-2 text-xl transition-all hover:bg-black hover:text-neutral_03 md:text-2xl"
         href="/"
       >
         Về trang chủ

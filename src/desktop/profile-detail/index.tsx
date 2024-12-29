@@ -67,7 +67,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     return (
       <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
         <Image className="w-full md:w-1/2" src={empty_city} alt="no-notification" />
-        <h3 className="text-lg font-bold">Không tìm thấy bài đăng</h3>
+        <h3 className="text-lg font-bold">Không tìm thấy nội dung</h3>
         <p className="mt-2 w-3/4 text-center text-sm text-foreground">
           Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều
           kiện khác.
