@@ -137,7 +137,7 @@ export function BtsModals1() {
   }
 }
 
-const buildContentStyle = (modal?: Modal) => {
+export const buildContentStyle = (modal?: Modal) => {
   if (!modal) {
     return {};
   }

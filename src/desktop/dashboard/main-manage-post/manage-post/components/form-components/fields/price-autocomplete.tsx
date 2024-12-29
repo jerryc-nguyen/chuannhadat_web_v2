@@ -1,17 +1,17 @@
-import { cn } from "@common/utils"
-import { Command as CommandPrimitive } from "cmdk";
-import { Check } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { cn } from '@common/utils';
+import { Command as CommandPrimitive } from 'cmdk';
+import { Check } from 'lucide-react';
+import { ReactNode, useState } from 'react';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@components/ui/command";
-import { Input } from "@components/ui/input";
-import { Popover, PopoverAnchor, PopoverContent } from "@components/ui/popover";
-import { Skeleton } from "@components/ui/skeleton";
+} from '@components/ui/command';
+import { Input } from '@components/ui/input';
+import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
+import { Skeleton } from '@components/ui/skeleton';
 
 type Props<T extends string> = {
   selectedValue: T;
@@ -22,6 +22,7 @@ type Props<T extends string> = {
   emptyMessage?: string;
   placeholder?: string;
   InputRender?: ReactNode;
+  onCompleted?: () => void;
 };
 
 export function PriceAutoComplete<T extends string>({
@@ -29,9 +30,9 @@ export function PriceAutoComplete<T extends string>({
   onSelectedValueChange,
   items,
   isLoading,
-  emptyMessage = "No items.",
-  placeholder = "Search...",
-  InputRender
+  emptyMessage = 'No items.',
+  placeholder = 'Search...',
+  InputRender,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
 
@@ -40,10 +41,10 @@ export function PriceAutoComplete<T extends string>({
     setOpen(false);
   };
 
-  const [searchText, setSearchText] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>('');
   const onSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
-  }
+  };
 
   return (
     <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
@@ -55,20 +56,15 @@ export function PriceAutoComplete<T extends string>({
               value={selectedValue}
               onValueChange={onSelectedValueChange}
               onKeyDown={(e) => {
-                setOpen(e.key !== "Escape")
+                setOpen(e.key !== 'Escape');
               }}
               onMouseDown={() => {
-                if (selectedValue) setOpen((open) => !!selectedValue || !open)
+                if (selectedValue) setOpen((open) => !!selectedValue || !open);
               }}
             >
-              {
-                InputRender ||
-                <Input
-                  value={searchText}
-                  placeholder={placeholder}
-                  onChange={onSearchTextChange}
-                />
-              }
+              {InputRender || (
+                <Input value={searchText} placeholder={placeholder} onChange={onSearchTextChange} />
+              )}
             </CommandPrimitive.Input>
           </PopoverAnchor>
           {!open && <CommandList aria-hidden="true" className="hidden" />}
@@ -77,10 +73,7 @@ export function PriceAutoComplete<T extends string>({
             asChild
             onOpenAutoFocus={(e) => e.preventDefault()}
             onInteractOutside={(e) => {
-              if (
-                e.target instanceof Element &&
-                e.target.hasAttribute("cmdk-input")
-              ) {
+              if (e.target instanceof Element && e.target.hasAttribute('cmdk-input')) {
                 e.preventDefault();
               }
             }}
@@ -105,10 +98,8 @@ export function PriceAutoComplete<T extends string>({
                     >
                       <Check
                         className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedValue === option.value
-                            ? "opacity-100"
-                            : "opacity-0"
+                          'mr-2 h-4 w-4',
+                          selectedValue === option.value ? 'opacity-100' : 'opacity-0',
                         )}
                       />
                       {option.label}
@@ -116,13 +107,83 @@ export function PriceAutoComplete<T extends string>({
                   ))}
                 </CommandGroup>
               ) : null}
-              {!isLoading ? (
-                <CommandEmpty>{emptyMessage ?? "No items."}</CommandEmpty>
-              ) : null}
+              {!isLoading ? <CommandEmpty>{emptyMessage ?? 'No items.'}</CommandEmpty> : null}
             </CommandList>
           </PopoverContent>
         </Command>
       </Popover>
+    </div>
+  );
+}
+
+export function PriceAutoCompleteListView<T extends string>({
+  selectedValue,
+  onSelectedValueChange,
+  items,
+  isLoading,
+  emptyMessage = 'No items.',
+  placeholder = 'Search...',
+  InputRender,
+  onCompleted,
+}: Props<T>) {
+  const onSelectItem = (inputValue: string) => {
+    onSelectedValueChange(inputValue as T);
+    onCompleted && onCompleted();
+  };
+
+  const [searchText, setSearchText] = useState<string>('');
+  const onSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const isShowSelectList = items.length > 0 && !isLoading && selectedValue !== 'Thỏa thuận';
+  const showEmptyMessage = !isLoading && selectedValue !== 'Thỏa thuận';
+
+  return (
+    <div className="flex w-full rounded-md text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
+      <Command shouldFilter={false}>
+        <div>
+          <CommandPrimitive.Input
+            asChild
+            value={selectedValue}
+            onValueChange={onSelectedValueChange}
+          >
+            {InputRender || (
+              <Input value={searchText} placeholder={placeholder} onChange={onSearchTextChange} />
+            )}
+          </CommandPrimitive.Input>
+        </div>
+        <CommandList>
+          {isLoading && (
+            <CommandPrimitive.Loading>
+              <div className="p-1">
+                <Skeleton className="h-6 w-full" />
+              </div>
+            </CommandPrimitive.Loading>
+          )}
+          {isShowSelectList ? (
+            <CommandGroup>
+              {items.map((option) => (
+                <CommandItem
+                  key={option.value}
+                  value={option.value}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onSelect={onSelectItem}
+                >
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4',
+                      selectedValue === option.value ? 'opacity-100' : 'opacity-0',
+                    )}
+                  />
+                  {option.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          ) : null}
+          {showEmptyMessage ? <CommandEmpty>{emptyMessage ?? 'No items.'}</CommandEmpty> : null}
+        </CommandList>
+      </Command>
     </div>
   );
 }
