@@ -140,7 +140,7 @@ export function PriceAutoCompleteListView<T extends string>({
   const showEmptyMessage = !isLoading && selectedValue !== 'Thỏa thuận';
 
   return (
-    <div className="flex w-full rounded-md text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
+    <div className="flex w-full rounded-md text-sm">
       <Command shouldFilter={false}>
         <div>
           <CommandPrimitive.Input
@@ -169,14 +169,17 @@ export function PriceAutoCompleteListView<T extends string>({
                   value={option.value}
                   onMouseDown={(e) => e.preventDefault()}
                   onSelect={onSelectItem}
+                  className="justify-between flex w-full"
                 >
-                  <Check
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      selectedValue === option.value ? 'opacity-100' : 'opacity-0',
-                    )}
-                  />
-                  {option.label}
+                  <div>{option.label}</div>
+                  <div>
+                    <Check
+                      className={cn(
+                        'mr-2 h-4 w-4',
+                        selectedValue === option.value ? 'opacity-100' : 'opacity-0',
+                      )}
+                    />
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>
