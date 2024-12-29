@@ -1,7 +1,7 @@
 import axiosInstance from '@api/axiosInstance';
 import CategoryPage from '@app/(home)/page';
 import { API_ROUTES } from '@common/router';
-import { createMetadata } from '@common/utils';
+import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
 
 type Props = {

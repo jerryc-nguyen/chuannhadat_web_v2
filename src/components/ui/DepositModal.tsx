@@ -11,7 +11,6 @@ import {
 import Image from 'next/image';
 import { BsCopy } from 'react-icons/bs';
 import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import { useAtom } from 'jotai';
 import {
   depositAmountAtom,
@@ -33,10 +32,7 @@ import {
 } from '@common/constants';
 
 type DepositModalProps = object;
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
+
 const DepositModal: React.FC<DepositModalProps> = () => {
   const {
     isOpenDepositModal,
@@ -137,7 +133,6 @@ const DepositModal: React.FC<DepositModalProps> = () => {
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
       <AlertDialogContent
         className={cn(
-          vietnam.className,
           'max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[70vh]',
         )}
       >

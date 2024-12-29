@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import { CardTitle } from '@components/ui/card';
 
 import { FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
+import { buildOptionsPrice, maskNumber, readMoney } from '@common/priceHelpers';
 import { Checkbox } from '@components/ui/checkbox';
 import { Label } from '@components/ui/label';
 import LocationsPicker from '@mobile/ui/LocationsPicker';
@@ -32,10 +32,14 @@ import ProductDescriptionForm, {
   InputDescription,
   InputTitle,
 } from '../components/form-components/product-description';
-import { PriceAutoComplete } from '../components/form-components/fields/price-autocomplete';
+import {
+  PriceAutoComplete,
+  PriceAutoCompleteListView,
+} from '../components/form-components/fields/price-autocomplete';
 import { RoundedOptionsNumberInput } from '../components/form-components/fields/rounded-options-number-input';
 import { roomsOptionsForCreate, facadeOptionsForCreate } from '@mobile/filter_bds/constants';
 import { Button } from '@components/ui/button';
+import { ListItemPickCustomUI } from '@mobile/bts-pickers/ListItemPickCustomUI';
 
 /**
  * TODO: Split file to smaller components
@@ -87,7 +91,7 @@ export const FormMobile: React.FC = () => {
   const price_in_vnd = form.watch('price_in_vnd');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
-    console.log("field", field, value)
+    console.log('field', field, value);
     field.onChange(value); // Update the value only if it matches the regex
   };
 
@@ -192,64 +196,74 @@ export const FormMobile: React.FC = () => {
           control={form.control}
           name="price_in_vnd"
           render={({ field }) => (
-            <FormItem className="grid gap-2 border-b pb-2">
-              <div className={twMerge(styles.rowItemInput, 'border-b-0 pb-0')}>
-                <FormLabel className="w-2/5">
-                  <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
-                </FormLabel>
-                <PriceAutoComplete
-                  selectedValue={price_in_vnd}
-                  onSelectedValueChange={(value) => {
-                    const { rawValue } = maskNumber(value);
-                    onChangeFieldNumber(field, rawValue);
-                  }}
-                  items={buildOptionsPrice({
-                    searchText: price_in_vnd,
-                    businessType: form.getValues('business_type'),
-                  })}
-                  emptyMessage="Nhập giá bán"
-                  InputRender={
-                    <Input
-                      {...field}
-                      value={maskNumber(field.value).formattedValue}
-                      placeholder="Nhập giá bán"
-                      onChange={(e) => {
-                        const { rawValue } = maskNumber(e.target.value);
-                        onChangeFieldNumber(field, rawValue);
-                      }}
-                      maxLength={12}
-                      disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
-                    />
-                  }
-                />
-              </div>
-              <div
-                className={`flex ${form.formState.errors.price_in_vnd ? 'justify-between' : 'justify-end'}`}
-              >
-                <FormMessage />
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="terms"
-                    onCheckedChange={(value) => {
-                      if (value) {
-                        form.setValue('price_in_vnd', 'Thỏa thuận');
-                      } else {
-                        form.setValue('price_in_vnd', '');
-                      }
+            <ListItemPickCustomUI
+              modalOptions={{ title: 'Giá bán/ thuê (VNĐ)' }}
+              trigger={
+                <FormItem className="grid gap-2 border-b pb-2">
+                  <div className={twMerge(styles.rowItemInput, 'justify-between border-b-0 pb-0')}>
+                    <FormLabel className="w-3/5">
+                      <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
+                    </FormLabel>
+                    <div className="text-right">
+                      {field.value !== 'Thỏa thuận' ? readMoney(field.value) : field.value}
+                    </div>
+                  </div>
+                </FormItem>
+              }
+              content={({ isOpen, setIsOpen }) => (
+                <div className="flex flex-col gap-4">
+                  <PriceAutoCompleteListView
+                    selectedValue={price_in_vnd}
+                    onSelectedValueChange={(value) => {
+                      const { rawValue } = maskNumber(value);
+                      onChangeFieldNumber(field, rawValue);
                     }}
+                    items={buildOptionsPrice({
+                      searchText: price_in_vnd,
+                      businessType: form.getValues('business_type'),
+                    })}
+                    emptyMessage="Nhập giá bán"
+                    InputRender={
+                      <Input
+                        {...field}
+                        value={maskNumber(field.value).formattedValue}
+                        placeholder="Nhập giá bán"
+                        onChange={(e) => {
+                          const { rawValue } = maskNumber(e.target.value);
+                          onChangeFieldNumber(field, rawValue);
+                        }}
+                        maxLength={12}
+                        disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
+                      />
+                    }
+                    onCompleted={() => setIsOpen(false)}
                   />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Giá Thương lượng
-                  </label>
+                  <div className="flex w-full items-center space-x-2">
+                    <Checkbox
+                      id="terms"
+                      checked={form.getValues('price_in_vnd') === 'Thỏa thuận'}
+                      onCheckedChange={(value) => {
+                        if (value) {
+                          form.setValue('price_in_vnd', 'Thỏa thuận');
+                        } else {
+                          form.setValue('price_in_vnd', '');
+                        }
+                        setIsOpen(false); // Close when selected
+                      }}
+                    />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Giá Thương lượng
+                    </label>
+                  </div>
                 </div>
-              </div>
-            </FormItem>
+              )}
+            />
           )}
         />
+
         <FormField
           control={form.control}
           name="bedrooms_count"
@@ -267,7 +281,7 @@ export const FormMobile: React.FC = () => {
                 modalOptions={{ title: 'Phòng ngủ', maxHeightPercent: 0.7 }}
                 formattedValue={field.value ? `${field.value} PN` : ''}
                 footer={
-                  <div className="p-4 gap-4 flex flex-col">
+                  <div className="flex flex-col gap-4 p-4">
                     <Label>Số khác:</Label>
                     <RoundedOptionsNumberInput
                       {...field}
@@ -277,7 +291,9 @@ export const FormMobile: React.FC = () => {
                       maxLength={3}
                       hiddenSelect
                     />
-                    <Button variant="default" className='w-full' onClick={closeModal}>OK</Button>
+                    <Button variant="default" className="w-full" onClick={closeModal}>
+                      OK
+                    </Button>
                   </div>
                 }
               />
@@ -303,7 +319,7 @@ export const FormMobile: React.FC = () => {
                 modalOptions={{ title: 'Phòng tắm', maxHeightPercent: 0.7 }}
                 formattedValue={field.value ? `${field.value} WC` : ''}
                 footer={
-                  <div className="p-4 gap-4 flex flex-col">
+                  <div className="flex flex-col gap-4 p-4">
                     <Label>Số khác:</Label>
                     <RoundedOptionsNumberInput
                       {...field}
@@ -313,7 +329,9 @@ export const FormMobile: React.FC = () => {
                       maxLength={3}
                       hiddenSelect
                     />
-                    <Button variant="default" className='w-full' onClick={closeModal}>OK</Button>
+                    <Button variant="default" className="w-full" onClick={closeModal}>
+                      OK
+                    </Button>
                   </div>
                 }
               />
@@ -339,7 +357,7 @@ export const FormMobile: React.FC = () => {
                 modalOptions={{ title: 'Mặt tiền', maxHeightPercent: 0.7 }}
                 formattedValue={field.value ? `${field.value} m` : ''}
                 footer={
-                  <div className="p-4 gap-4 flex flex-col">
+                  <div className="flex flex-col gap-4 p-4">
                     <Label>Số khác:</Label>
                     <RoundedOptionsNumberInput
                       {...field}
@@ -349,7 +367,9 @@ export const FormMobile: React.FC = () => {
                       maxLength={3}
                       hiddenSelect
                     />
-                    <Button variant="default" className='w-full' onClick={closeModal}>OK</Button>
+                    <Button variant="default" className="w-full" onClick={closeModal}>
+                      OK
+                    </Button>
                   </div>
                 }
               />
@@ -357,80 +377,6 @@ export const FormMobile: React.FC = () => {
             </FormItem>
           )}
         />
-
-        {/* <div className="grid gap-4 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="facade"
-            render={({ field }) => (
-              <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className="w-2/5">Mặt tiền</FormLabel>
-                <Input
-                  {...field}
-                  value={maskNumber(field.value).formattedValue}
-                  onChange={(e) => {
-                    const { rawValue } = maskNumber(e.target.value);
-                    onChangeFieldNumber(field, rawValue);
-                  }}
-                  placeholder="Nhập số"
-                  endAdornment={
-                    <span>
-                      <b>m</b>
-                    </span>
-                  }
-                  maxLength={8}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="entrance"
-            render={({ field }) => (
-              <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className="w-2/5">Đường rộng</FormLabel>
-                <Input
-                  {...field}
-                  value={maskNumber(field.value).formattedValue}
-                  onChange={(e) => {
-                    const { rawValue } = maskNumber(e.target.value);
-                    onChangeFieldNumber(field, rawValue);
-                  }}
-                  placeholder="Nhập số"
-                  endAdornment={
-                    <span>
-                      <b>m</b>
-                    </span>
-                  }
-                  maxLength={8}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div> */}
-
-        {/* <div className="grid gap-4 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="floors_count"
-            render={({ field }) => (
-              <FormItem className={twMerge(styles.rowItemInput)}>
-                <FormLabel className="w-2/5">Số tầng</FormLabel>
-                <RoundedOptionsNumberInput
-                  {...field}
-                  className="relative"
-                  placeholder="Nhập số"
-                  onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                  maxLength={3}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div> */}
 
         <ListItemBtsPicker
           options={directionOptions}

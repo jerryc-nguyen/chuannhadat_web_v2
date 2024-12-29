@@ -7,7 +7,6 @@ import faceBookIcon from '@assets/icons/Facebook.svg';
 import zaloIcon from '@assets/icons/icons8-zalo.svg';
 import { HiMail } from 'react-icons/hi';
 import { FaTiktok } from 'react-icons/fa';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import { cn } from '@common/utils';
 
 type FooterProps = object;
@@ -103,17 +102,12 @@ const listMenuIcon = [
     icon: <FaTiktok className="text-base" />,
   },
 ];
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
 
 const Footer: React.FC<FooterProps> = () => {
   return (
     <footer
       className={cn(
         'relative overflow-hidden bg-[#030712] px-5 text-white shadow-md md:px-10',
-        vietnam.className,
       )}
     >
       <section className="relative flex flex-col justify-between pb-10 pt-12 md:flex-row md:gap-x-6 lg:gap-x-10">

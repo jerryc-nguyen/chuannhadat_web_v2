@@ -2,16 +2,9 @@
 import { useEffect } from 'react';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
-import { Marcellus } from 'next/font/google';
 import * as Sentry from "@sentry/nextjs";
 import Error from "next/error";
 
-// Error boundaries must be Client Components
-const readex_pro = Marcellus({
-  display: 'auto',
-  weight: '400',
-  preload: false,
-});
 export default function GlobalError({ error }: { error: Error }) {
 
   useEffect(() => {
@@ -21,7 +14,6 @@ export default function GlobalError({ error }: { error: Error }) {
   return (
     <section
       className={cn(
-        readex_pro.className,
         'flex h-screen w-screen flex-col items-center justify-center gap-y-4 selection:bg-black',
       )}
     >
