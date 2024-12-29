@@ -1,7 +1,7 @@
 import axiosInstance from '@api/axiosInstance';
 import { services } from '@api/services';
 import { API_ROUTES } from '@common/router';
-import { createMetadata } from '@common/utils';
+import { createMetadata } from '@common/seo';
 import ProfileDetailDesktop from '@desktop/profile-detail';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import ProfileDetailMobile from '@mobile/profile-detail';

@@ -5,7 +5,7 @@ import PostDetailDesktop from '@desktop/post-detail';
 import { Metadata } from 'next';
 import PostDetailMobile from '@mobile/post-detail/PostDetailMobile';
 import { API_ROUTES } from '@common/router';
-import { createMetadata } from '@common/utils';
+import { createMetadata } from '@common/seo';
 import axiosInstance from '@api/axiosInstance';
 
 type Props = {

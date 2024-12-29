@@ -1,5 +1,5 @@
 import { services } from '@api/services';
-import { createMetadata } from '@common/utils';
+import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
 import { NewsDetail } from './components/NewsDetail';
 

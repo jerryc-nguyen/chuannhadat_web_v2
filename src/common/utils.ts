@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { merge } from 'lodash-es';
 import { ReadonlyURLSearchParams } from 'next/navigation';
-import { Metadata } from 'next';
 import queryString from 'query-string';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
@@ -14,24 +13,6 @@ export function cn(...inputs: ClassValue[]) {
 export function concatStrings(...string: string[]) {
   return string.join('');
 }
-
-/**
- * Creates metadata for SEO, including Twitter metadata.
- *
- * @param {Metadata} rawMetadata - The raw metadata object.
- * @returns {object} metadata object with Twitter metadata included.
- */
-
-export const createMetadata = (rawMetadata: Metadata) => {
-  return {
-    ...rawMetadata,
-    twitter: {
-      title: rawMetadata.title as string,
-      description: rawMetadata.description as string,
-      images: rawMetadata.openGraph?.images,
-    },
-  };
-};
 
 const customViLocale = {
   ...vi,

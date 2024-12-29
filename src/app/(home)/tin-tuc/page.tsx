@@ -1,6 +1,6 @@
 import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { createMetadata } from '@common/utils';
+import { createMetadata } from '@common/seo';
 import { NewsList } from '@views';
 import { Metadata } from 'next';
 import React from 'react';

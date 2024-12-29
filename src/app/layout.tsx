@@ -5,6 +5,7 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { cn } from '@common/utils';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
+import { defaultJsonLd, JsonLdScript } from '@common/seo';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="vi-VN" suppressHydrationWarning={true}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+      <JsonLdScript jsonLd={defaultJsonLd} />
       <body
         className={cn(
           inter.className,
