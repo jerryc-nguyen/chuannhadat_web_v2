@@ -1,4 +1,5 @@
 import { getServerSideURL } from '@common/getURL';
+import Script from 'next/script';
 import { Organization, Thing, WithContext } from 'schema-dts';
 
 export const defaultJsonLd: WithContext<Organization> = {
@@ -20,11 +21,11 @@ type PropsJsonLdScript<T extends Thing> = {
   jsonLd: WithContext<T>;
 };
 
-export function JsonLdScript<T extends Thing>({ jsonLd }: PropsJsonLdScript<T>) {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    ></script>
-  );
-};
+export function generateJsonld<T extends Thing>({
+  jsonLd,
+}: PropsJsonLdScript<T>): JSX.Element {
+  return {
+    '@context': 'https://schema.org',
+    ...jsonLd,
+  }
+}
