@@ -75,6 +75,9 @@ const NewPost: React.FC = () => {
   const onSubmit = async () => {
     try {
       const params = form.getValues();
+      params.user_agent = window.navigator.userAgent;
+      params.create_source = isMobile ? 'mobile_web' : 'desktop';
+
       const res = await ProductApiService.Create(params);
       console.log('resssssssss', res);
 
