@@ -20,7 +20,7 @@ export default function RootLayout({
   const { isMobile } = useGetUserAgentInfo();
 
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="vi-VN" suppressHydrationWarning={true}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
       <body
         className={cn(
