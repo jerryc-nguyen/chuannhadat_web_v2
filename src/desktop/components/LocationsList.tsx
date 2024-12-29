@@ -6,6 +6,7 @@ import { ALL_OPTION } from '@common/constants';
 import { Checkbox, List, ListItem } from '@components/konsta';
 import ListEmptyMessage from '@mobile/ui/ListEmptyMessage';
 import { isMobile } from 'react-device-detect';
+import { shortenLocationName } from '@common/stringHelpers';
 
 export default function LocationsList({
   city,
@@ -102,7 +103,7 @@ export default function LocationsList({
                 <ListItem
                   key={item.text}
                   link
-                  title={item.long_text || item.text}
+                  title={shortenLocationName(item.long_text) || item.text}
                   chevron={false}
                   after={item.count ? item.count : ''}
                   media={
