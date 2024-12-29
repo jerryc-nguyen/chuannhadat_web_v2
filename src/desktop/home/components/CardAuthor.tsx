@@ -7,17 +7,12 @@ import React from 'react';
 import default_avatar from '@assets/images/default_avatar.png';
 import Link from 'next/link';
 import useResizeImage from '@hooks/useResizeImage';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import { cn } from '@common/utils';
 import TooltipHost from '@components/tooltip-host';
 import { useTopAuthors } from '../hooks/useTopAuthors';
 import { useAtom } from 'jotai';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
 export default function CardAuthor({ product, isMobile }: { product: A, isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
   const [filterState] = useAtom(filterStateAtom);
@@ -96,7 +91,7 @@ export default function CardAuthor({ product, isMobile }: { product: A, isMobile
             <TooltipHost content="Xếp hạng top môi giới trong khu vực dựa theo tổng số tin mới, được refresh trong 2 tuần gần đây nhất">
               <span className="flex items-center gap-x-1 pl-2 text-lg">
                 🏆{' '}
-                <span className={cn(vietnam.className, 'text-sm font-semibold')}>
+                <span className={cn('text-sm font-semibold')}>
                   {renderIconTopAuthor(topAuthor?.top_position as number)}
                 </span>
               </span>

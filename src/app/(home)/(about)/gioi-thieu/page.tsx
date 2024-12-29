@@ -7,7 +7,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@components/u
 import { Input } from '@components/ui/input';
 import { Textarea } from '@components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import Image from 'next/image';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,10 +16,6 @@ import { MdManageAccounts } from 'react-icons/md';
 import { RiMenuSearchLine, RiVipCrown2Fill } from 'react-icons/ri';
 import { z } from 'zod';
 
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
 const listFeedback = [
   {
     key: 1,
@@ -117,7 +112,6 @@ const AboutChuanNhaDat: React.FC = () => {
   return (
     <section
       className={cn(
-        vietnam.className,
         'flex flex-col gap-y-10 px-5 py-10 text-lg md:w-4/5 lg:mx-auto lg:px-0',
       )}
     >

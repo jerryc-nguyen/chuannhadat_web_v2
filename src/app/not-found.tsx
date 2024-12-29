@@ -1,38 +1,36 @@
 import { cn } from '@common/utils';
 import { HttpStatusCode } from 'axios';
-import { Marcellus } from 'next/font/google';
+import Image from 'next/image';
 import Link from 'next/link';
+import empty_city from '@assets/images/empty-city.png';
 
-const readex_pro = Marcellus({
-  display: 'auto',
-  weight: '400',
-  preload: false,
-});
 type NotFoundProps = {
   errorCode?: HttpStatusCode;
   errorMessage?: string;
   className?: string;
 };
+
 export default function NotFound(props: NotFoundProps) {
-  const { errorCode = HttpStatusCode.NotFound, errorMessage = 'Page not found', className } = props;
+  const {
+    errorCode = HttpStatusCode.NotFound,
+    errorMessage = 'Đã có lỗi xảy ra, vui lòng thử lại sau',
+    className,
+  } = props;
+
   return (
-    <div
-      className={cn(
-        'flex h-screen w-full flex-col items-center justify-center gap-y-4 overflow-hidden selection:bg-black',
-        readex_pro.className,
-        className,
-      )}
-    >
-      <h2 className="text-center text-7xl [-webkit-text-fill-color:#fefdf9] [-webkit-text-stroke:1px] md:text-[150px] md:leading-[150px] md:[-webkit-text-stroke:2px]">
-        {errorCode}-Something went wrong
-      </h2>
-      <p className="selection:text-neutral_03 text-xl">Oop, {errorMessage}!</p>
+    <section className="mb-5 flex min-h-[70vh] flex-col items-center justify-center p-5">
+      <Image className="w-full md:w-1/2" src={empty_city} alt="no-notification" />
+      <h3 className="text-lg font-bold">Không tìm thấy nội dung</h3>
+      <p className="mt-2 w-3/4 text-center text-sm text-foreground">
+        Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều kiện
+        khác.
+      </p>
       <Link
-        className="hover:text-neutral_03 flex items-center gap-x-4 rounded-full border-2 border-black px-4 py-2 text-xl transition-all hover:bg-black md:text-2xl"
+        className="flex items-center gap-x-4 rounded-full border-2 border-black px-4 py-2 text-xl transition-all hover:bg-black hover:text-neutral_03 md:text-2xl mt-4"
         href="/"
       >
-        Back to home
+        Về trang chủ
       </Link>
-    </div>
+    </section>
   );
 }

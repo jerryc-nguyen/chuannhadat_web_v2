@@ -1,6 +1,5 @@
 'use client';
 import { cn } from '@common/utils';
-import { Be_Vietnam_Pro } from 'next/font/google';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -16,10 +15,7 @@ import { LucideEllipsis } from 'lucide-react';
 type RelatedNewsLayoutProps = {
   children: React.ReactNode;
 };
-const vietnam = Be_Vietnam_Pro({
-  subsets: ['vietnamese'],
-  weight: ['400', '700', '600', '500'],
-});
+
 const RelatedNewsLayout: React.FC<RelatedNewsLayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const menuPolicy = [
@@ -64,7 +60,7 @@ const RelatedNewsLayout: React.FC<RelatedNewsLayoutProps> = ({ children }) => {
     );
   };
   return (
-    <section className={cn(vietnam.className, 'mx-auto flex w-full gap-x-3 md:gap-5 2xl:w-4/5')}>
+    <section className={cn('mx-auto flex w-full gap-x-3 md:gap-5 2xl:w-4/5')}>
       {children}
       <article className="bg:neutral_00 sticky top-[5rem] z-[5] mt-10 hidden h-fit w-fit rounded-lg border bg-white p-6 shadow-md lg:block">
         <ul className="flex flex-col gap-y-2">

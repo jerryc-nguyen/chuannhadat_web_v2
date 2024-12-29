@@ -1,19 +1,13 @@
 'use client';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
-import { Marcellus } from 'next/font/google';
 
 // Error boundaries must be Client Components
-const readex_pro = Marcellus({
-  display: 'auto',
-  weight: '400',
-  preload: false,
-});
+
 export default function GlobalError() {
   return (
     <section
       className={cn(
-        readex_pro.className,
         'flex h-screen w-screen flex-col items-center justify-center gap-y-4 bg-[#fefdf9] selection:bg-black',
       )}
     >

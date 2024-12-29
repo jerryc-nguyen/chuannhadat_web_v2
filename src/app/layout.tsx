@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Be_Vietnam_Pro } from 'next/font/google';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { cn } from '@common/utils';
@@ -9,7 +10,10 @@ import { defaultJsonLd, createMetadata } from '@common/seo';
 import { getServerSideURL } from '@common/getURL';
 import Head from 'next/head';
 
-const inter = Inter({ subsets: ['latin'] });
+const vietnam = Be_Vietnam_Pro({
+  subsets: ['vietnamese'],
+  weight: ['300', '400', '700', '600', '500', '800', '900'],
+});
 
 export const metadata: Metadata = createMetadata({
   title: 'Đăng tin nhà đất, bất động sản chuyên nghiệp | Chuẩn Nhà Đất',
@@ -50,7 +54,7 @@ export default function RootLayout({
       {/* ---------------- */}
       <body
         className={cn(
-          inter.className,
+          vietnam.className,
           isMobile ? 'isMobile' : '',
           'bg-white',
           'selection:bg-primary_color/20 selection:text-primary_color',
