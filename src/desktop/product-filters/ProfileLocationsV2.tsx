@@ -4,11 +4,11 @@ import useSearchAggs from '@components/search-aggs/hooks';
 import LocationsList from '@desktop/components/LocationsList';
 
 export default function ProfileLocationsV2() {
-  const { setLocalFieldValue, localFilterState } = useFilterState();
+  const { setLocalFieldValue, localFilterState, getLocalFieldValue } = useFilterState();
   const { locationsList } = useSearchAggs();
-  const city = localFilterState.city;
-  const district = localFilterState.district;
-  const ward = localFilterState.ward;
+  const city = getLocalFieldValue(FilterFieldName.City);
+  const district = getLocalFieldValue(FilterFieldName.District);
+  const ward = getLocalFieldValue(FilterFieldName.Ward);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
@@ -32,13 +32,11 @@ export default function ProfileLocationsV2() {
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     resetWard();
-
     const finalOption = district?.value != 'all' ? district : undefined;
     setLocalFieldValue(FilterFieldName.District, finalOption);
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
-    resetDistrict();
     const finalOption = ward?.value != 'all' ? ward : undefined;
     setLocalFieldValue(FilterFieldName.Ward, finalOption);
   };
