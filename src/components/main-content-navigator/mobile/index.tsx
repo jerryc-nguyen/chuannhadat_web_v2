@@ -11,7 +11,7 @@ import LocationsPicker from '@mobile/ui/LocationsPicker';
 import { Modal } from '@mobile/modals/states/types';
 
 export default function MainContentNavigator({ openModal, closeModal }: { openModal: (modal: Modal) => void, closeModal: () => void }) {
-  const { submit, city: sCity, district: sDistrict, ward: sWard, contentType: sContentType } = useMainContentNavigator();
+  const { updateValues, city: sCity, district: sDistrict, ward: sWard, contentType: sContentType } = useMainContentNavigator();
   const [city, setCity] = useState<OptionForSelect | undefined>(sCity);
   const [district, setDistrict] = useState<OptionForSelect | undefined>(sDistrict);
   const [ward, setWard] = useState<OptionForSelect | undefined>(sWard);
@@ -75,7 +75,7 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
   }
 
   const onSubmit = async () => {
-    submit({ city, district, ward })
+    updateValues({ city, district, ward })
     try {
       const path = await navigatorApi(navigatorParams())
       window.location.href = path

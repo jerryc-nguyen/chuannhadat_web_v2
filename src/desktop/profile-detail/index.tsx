@@ -17,6 +17,7 @@ import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import useSearchAggs from '@components/search-aggs/hooks';
 import { PostPagination } from '@desktop/home/components/PostPagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
@@ -26,6 +27,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
+  const { updateValues } = useMainContentNavigator();
 
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
 
@@ -55,6 +57,10 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     setIsUseAggOptions(true);
   }
 
+  const onFilterChanged = (filterState: Record<string, A>) => {
+    updateValues({ city: filterState.city, district: filterState.district, ward: filterState.ward })
+  }
+
   return (
     <>
       {!profileData ? (
@@ -71,6 +77,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
                 className="mx-1"
                 chipOptions={listFilterProfileDesktop}
                 pagination={pagination}
+                onFilterChange={onFilterChanged}
               />
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"

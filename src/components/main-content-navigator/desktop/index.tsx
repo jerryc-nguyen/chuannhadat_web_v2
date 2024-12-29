@@ -9,7 +9,7 @@ import { navigatorApi } from '../apis';
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from '../constants';
 
 export default function MainContentNavigator({ closeModal }: { closeModal: () => void }) {
-  const { submit, city: sCity, district: sDistrict, ward: sWard, contentType: sContentType } = useMainContentNavigator();
+  const { updateValues, city: sCity, district: sDistrict, ward: sWard, contentType: sContentType } = useMainContentNavigator();
   const [city, setCity] = useState<OptionForSelect | undefined>(sCity);
   const [district, setDistrict] = useState<OptionForSelect | undefined>(sDistrict);
   const [ward, setWard] = useState<OptionForSelect | undefined>(sWard);
@@ -70,7 +70,7 @@ export default function MainContentNavigator({ closeModal }: { closeModal: () =>
   }
 
   const onSubmit = async () => {
-    submit({ city, district, ward })
+    updateValues({ city, district, ward })
     try {
       const path = await navigatorApi(navigatorParams())
       window.location.href = path

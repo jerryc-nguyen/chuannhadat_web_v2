@@ -9,6 +9,7 @@ type PostControlsProps = {
   pagination: A;
   isShowListChips?: boolean;
   className?: string;
+  onFilterChange?: (filterState: Record<string, A>) => void;
 };
 
 const PostControls: React.FC<PostControlsProps> = ({
@@ -16,6 +17,7 @@ const PostControls: React.FC<PostControlsProps> = ({
   pagination,
   isShowListChips = true,
   className,
+  onFilterChange
 }) => {
   return (
     <div
@@ -30,7 +32,7 @@ const PostControls: React.FC<PostControlsProps> = ({
       {isShowListChips && (
         <div className="relative my-2 flex flex-wrap gap-2">
           {chipOptions.map((item: FilterChipOption) => (
-            <FilterChip filterChipItem={item} key={item.id} />
+            <FilterChip filterChipItem={item} key={item.id} onChange={onFilterChange} />
           ))}
         </div>
       )}
