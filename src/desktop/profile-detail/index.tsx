@@ -18,6 +18,8 @@ import useSearchAggs from '@components/search-aggs/hooks';
 import { PostPagination } from '@desktop/home/components/PostPagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useMainContentNavigator from '@components/main-content-navigator/hooks';
+import Image from 'next/image';
+import empty_city from '@assets/images/empty-city.png';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
@@ -61,6 +63,19 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     updateValues({ city: filterState.city, district: filterState.district, ward: filterState.ward })
   }
 
+  const EmptyPost = () => {
+    return (
+      <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
+        <Image className="w-full md:w-1/2" src={empty_city} alt="no-notification" />
+        <h3 className="text-lg font-bold">Không tìm thấy bài đăng</h3>
+        <p className="mt-2 w-3/4 text-center text-sm text-foreground">
+          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều
+          kiện khác.
+        </p>
+      </section>
+    );
+  };
+
   return (
     <>
       {!profileData ? (
@@ -93,6 +108,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
                   // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
                   router.push(pathname + '?page=' + selected);
                 }}
+                emptyComponent={EmptyPost}
               />
             </div>
           </div>
