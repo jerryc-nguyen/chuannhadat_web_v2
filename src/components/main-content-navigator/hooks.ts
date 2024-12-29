@@ -30,7 +30,7 @@ export default function useMainContentNavigator() {
     return results.join(', ');
   }, [city, district, ward]);
 
-  const submit = ({ contentType, city, district, ward }: TSubmitProps) => {
+  const updateValues = ({ contentType, city, district, ward }: TSubmitProps) => {
     setContentType(contentType);
     setCity(city);
     setDistrict(district);
@@ -52,7 +52,7 @@ export default function useMainContentNavigator() {
     city,
     district,
     ward,
-    submit,
+    updateValues,
     selectedLocationFullText,
     autocompleteProjectParams
   }

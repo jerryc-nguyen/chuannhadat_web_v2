@@ -1,6 +1,5 @@
 import { cn } from '@common/utils';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 type LogoProps = {
   isAlwaysShow?: boolean;
@@ -8,7 +7,7 @@ type LogoProps = {
 };
 const Logo: React.FC<LogoProps> = ({ isAlwaysShow = false, className }) => {
   return (
-    <Link href="/" className={cn('header-logo mr-4 flex items-center space-x-2', className)}>
+    <a href="/" className={cn('header-logo mr-4 flex items-center space-x-2', className)}>
       <Image
         height={40}
         src="https://chuannhadat.com/images/logo_mobile@2x.png"
@@ -19,7 +18,7 @@ const Logo: React.FC<LogoProps> = ({ isAlwaysShow = false, className }) => {
         <h2 className="text-xl font-semibold text-blue-600">Chuẩn </h2>
         <h2 className="text-xl font-semibold text-pink-600">Nhà đất</h2>
       </div>
-    </Link>
+    </a>
   );
 };
 
