@@ -1,8 +1,6 @@
 import { getServerSideURL } from '@common/getURL';
-import Script from 'next/script';
-import { Organization, Thing, WithContext } from 'schema-dts';
 
-export const defaultJsonLd: WithContext<Organization> = {
+export const defaultJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'ChuanNhaDat',
@@ -17,15 +15,17 @@ export const defaultJsonLd: WithContext<Organization> = {
   },
 };
 
-type PropsJsonLdScript<T extends Thing> = {
-  jsonLd: WithContext<T>;
-};
+export const generateBreadcrumbJsonLd = (breadcrumbs: { name: string; uri: string }[]) => {
+  const itemListElement = breadcrumbs.map((item, index) => ({
+    '@type': 'BreadcrumbList',
+    position: index + 1,
+    name: item.name,
+    item: `${getServerSideURL()}${item.uri.startsWith('/') ? item.uri : `/${item.uri}`}`,
+  }));
 
-export function generateJsonld<T extends Thing>({
-  jsonLd,
-}: PropsJsonLdScript<T>): JSX.Element {
   return {
     '@context': 'https://schema.org',
-    ...jsonLd,
-  }
-}
+    '@type': 'BreadcrumbList',
+    itemListElement,
+  };
+};
