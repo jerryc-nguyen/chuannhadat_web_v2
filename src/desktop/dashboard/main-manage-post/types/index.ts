@@ -32,6 +32,8 @@ export interface IPostForm {
   furniture?: string;
   image_ids: string;
   youtube_url?: string;
+  user_agent?: string;
+  create_source?: string;
 }
 
 export interface IManageProductDetail {
