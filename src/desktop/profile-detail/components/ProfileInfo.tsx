@@ -40,7 +40,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
   const profileBadges = () => {
     return (
       profileData?.formatted_badges && (
-        <div className="text-md mt-5 rounded-md border bg-white p-4">
+        <div className="text-md mt-5 rounded-md border bg-white p-4 mb-6">
           <ul className="list-inside list-disc">
             {profileData?.formatted_badges.map((item: A, index: number) => (
               <li key={genKey(index)}>{item}</li>
