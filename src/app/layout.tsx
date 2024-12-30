@@ -1,13 +1,13 @@
-import type { Metadata } from 'next';
-import { Be_Vietnam_Pro } from 'next/font/google';
-import 'react-toastify/dist/ReactToastify.css';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { getServerSideURL } from '@common/getURL';
+import { createMetadata, defaultJsonLd } from '@common/seo';
 import { cn } from '@common/utils';
+import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import type { Metadata, Viewport } from 'next';
+import { Be_Vietnam_Pro } from 'next/font/google';
+import Head from 'next/head';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
-import { defaultJsonLd, createMetadata } from '@common/seo';
-import { getServerSideURL } from '@common/getURL';
-import Head from 'next/head';
 
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="vi-VN" suppressHydrationWarning={true}>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(defaultJsonLd) }}
