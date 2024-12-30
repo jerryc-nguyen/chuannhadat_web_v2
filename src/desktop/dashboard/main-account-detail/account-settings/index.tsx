@@ -30,8 +30,8 @@ const AccountSettingsDesktop: React.FC = () => {
     },
     [searchParams],
   );
-  const setBreadCrumb = useSetAtom(breadcrumbAtom);
 
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
   React.useEffect(() => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
       {

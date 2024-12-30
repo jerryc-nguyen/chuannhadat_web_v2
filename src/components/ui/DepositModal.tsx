@@ -23,7 +23,6 @@ import useAuth from '@mobile/auth/hooks/useAuth';
 import { PiSealCheckFill } from 'react-icons/pi';
 import { useBalanceRequest } from '@api/balance';
 import Confetti from 'react-confetti';
-import { cn } from '@common/utils';
 import {
   BANK_ACCOUNT_NAME,
   BANK_ACCOUNT_NUMBER,
@@ -32,7 +31,6 @@ import {
 } from '@common/constants';
 
 type DepositModalProps = object;
-
 const DepositModal: React.FC<DepositModalProps> = () => {
   const {
     isOpenDepositModal,
@@ -131,11 +129,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
 
   return (
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
-      <AlertDialogContent
-        className={cn(
-          'max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[70vh]',
-        )}
-      >
+      <AlertDialogContent className="max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[70vh]">
         <AlertDialogHeader className="relative z-10 mb-2">
           <AlertDialogTitle>
             {statusTransaction ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
