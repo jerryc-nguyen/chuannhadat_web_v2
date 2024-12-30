@@ -31,7 +31,7 @@ const TooltipHost: React.FC<TooltipHostProps> = ({ children, content, className,
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild ref={textRef}>
-            <p className="truncate">{children}</p>
+            <p className="w-full truncate">{children}</p>
           </TooltipTrigger>
           <TooltipContent
             side="top"

@@ -39,14 +39,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
           `Xin chào, ${userData.full_name || userData.phone} bạn đã đăng nhập thành công!`,
         );
       } else {
-        toast.error('Mật khẩu hoặc tài khoản không chính xác');
+        toast.error('Tài khoản hoặc mật khẩu không chính xác');
       }
-      reset();
     },
     onError: (error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
       console.debug(error);
-      reset();
     },
   });
 
@@ -57,7 +55,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
       phone: '',
     },
   });
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit } = form;
 
   const onSubmit = (data: IFormPropsLogin) => {
     signInMutate({

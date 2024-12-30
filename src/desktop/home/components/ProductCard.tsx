@@ -27,7 +27,6 @@ type ProductCardProps = {
 };
 export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
-
   const [imageSliderViewPortRef] = useEmblaCarousel();
   const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
   const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
@@ -139,7 +138,9 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
         {!isShowAuthor && (
-          <div className="text-secondary w-full">{product.bus_cat_type} · {product?.formatted_publish_at}</div>
+          <div className="w-full text-secondary">
+            {product.bus_cat_type} · {product?.formatted_publish_at}
+          </div>
         )}
 
         {isShowAuthor && (
@@ -152,7 +153,6 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         >
           {product?.title}
         </h3>
-
         <div className="mt-4 flex w-full justify-between">
           {isShowInfoPrice && (
             <div className="flex flex-col gap-y-1 text-sm">
@@ -181,9 +181,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         </div>
 
         {!isShowAuthor && (
-          <div className="w-full text-secondary">
-            {product?.short_location_name}
-          </div>
+          <div className="w-full text-secondary">{product?.short_location_name}</div>
         )}
       </CardFooter>
 

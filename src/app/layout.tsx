@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
-
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { cn } from '@common/utils';
@@ -53,6 +52,7 @@ export default function RootLayout({
       </Head>
       {/* ---------------- */}
       <body
+        id="body-root"
         className={cn(
           vietnam.className,
           isMobile ? 'isMobile' : '',

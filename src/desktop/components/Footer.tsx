@@ -7,7 +7,6 @@ import faceBookIcon from '@assets/icons/Facebook.svg';
 import zaloIcon from '@assets/icons/icons8-zalo.svg';
 import { HiMail } from 'react-icons/hi';
 import { FaTiktok } from 'react-icons/fa';
-import { cn } from '@common/utils';
 
 type FooterProps = object;
 const listMenuFooter = [
@@ -105,11 +104,7 @@ const listMenuIcon = [
 
 const Footer: React.FC<FooterProps> = () => {
   return (
-    <footer
-      className={cn(
-        'relative overflow-hidden bg-[#030712] px-5 text-white shadow-md md:px-10',
-      )}
-    >
+    <footer className="relative overflow-hidden bg-[#030712] px-5 text-white shadow-md md:px-10">
       <section className="relative flex flex-col justify-between pb-10 pt-12 md:flex-row md:gap-x-6 lg:gap-x-10">
         <div className="relative z-[1] md:max-w-[400px]">
           <Logo className="justify-center md:justify-start" isAlwaysShow />
