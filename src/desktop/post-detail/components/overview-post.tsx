@@ -1,7 +1,7 @@
 import { Button } from '@components/ui/button';
 import { IProductDetail } from '@mobile/searchs/type';
 import React from 'react';
-import { LuHeart, LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
+import { LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
 import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
 import NextJsImage from './next-image';
 import Image from 'next/image';
@@ -21,6 +21,9 @@ import useModalPostDetail from '../hooks/useModalPostDetail';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
 import TooltipHost from '@components/tooltip-host';
+import ButtonSave, { type ButtonSaveHandle } from '@desktop/home/components/ButtonSave';
+import { toast } from 'sonner';
+import useAuth from '@mobile/auth/hooks/useAuth';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -29,8 +32,12 @@ type OverviewPostProps = {
 
 const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false }) => {
   const [openSlideImage, setIsOpenSlideImage] = React.useState<boolean>(false);
+  const refButtonSave = React.useRef<ButtonSaveHandle>(null);
+  const { currentUser } = useAuth();
   const [indexImageActive, setIndexImageActive] = React.useState<number>(0);
   const router = useRouter();
+  const [isCopied, setIsCopied] = React.useState(false);
+
   const { mutate: addViewPost } = useMutation({
     mutationFn: services.trackings.viewProduct,
   });
@@ -51,6 +58,21 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         return 'grid-two-items';
       default:
         return 'grid-multiple-items';
+    }
+  };
+  const handleSharePost = async () => {
+    if (!currentUser) {
+      toast.warning('Vui lòng đăng nhập để sử dụng chức năng này');
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href || '');
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 4000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
     }
   };
   const onClickImage = (indexImage: number) => {
@@ -135,7 +157,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         }}
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
-      <h2 className="mb-2 mt-4 text-2xl font-bold">{data?.title}</h2>
+      <h2 className="mb-2 mt-4 line-clamp-2 whitespace-normal text-2xl font-bold">{data?.title}</h2>
       <p className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
         <LuMapPin />
         <TooltipHost isOverflow content={data?.full_address}>
@@ -159,8 +181,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant={'outline'}>
-                  Chia sẻ
+                <Button onClick={handleSharePost} variant={'outline'}>
+                  {isCopied ? 'Đã sao chép' : 'Chia sẻ'}
                   <LuShare2 className="ml-2" />
                 </Button>
               </TooltipTrigger>
@@ -173,10 +195,19 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-
-          <Button variant={'outline'}>
+          <Button
+            onClick={() => {
+              refButtonSave.current?.onSaved();
+            }}
+            className="relative"
+            variant={'outline'}
+          >
             Lưu tin
-            <LuHeart className="ml-2" />
+            <ButtonSave
+              ref={refButtonSave}
+              className="relative right-0 top-0 border-0 !bg-transparent"
+              postUid={data?.uid}
+            />
           </Button>
           {isInsideModal && (
             <Button

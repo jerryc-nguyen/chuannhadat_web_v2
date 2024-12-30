@@ -112,9 +112,7 @@ const AboutChuanNhaDat: React.FC = () => {
   
   return (
     <section
-      className={cn(
-        'flex flex-col gap-y-10 px-5 py-10 text-lg md:w-4/5 lg:mx-auto lg:px-0',
-      )}
+      className={cn('flex flex-col gap-y-10 px-5 py-10 text-lg md:w-4/5 lg:mx-auto lg:px-0')}
     >
       <section id="about-us" className="relative flex h-[60vh] justify-center px-5 pt-20 lg:px-10">
         <Image

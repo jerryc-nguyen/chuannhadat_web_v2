@@ -36,7 +36,6 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
         toast.success('Đăng ký tài khoản thàng công');
       } else {
         toast.error(response.message ?? 'Lỗi đăng ký');
-        reset();
       }
       removeCookie(REFERRAL_CODE);
       onClose();
@@ -44,7 +43,6 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
     onError: (error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
       console.debug(error);
-      reset();
     },
   });
   const form = useForm({
@@ -55,7 +53,7 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
       confirmPassword: '',
     },
   });
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit } = form;
   const onSubmit = (data: IFormPropsRegister) => {
     registerMutate({
       phone: data.phone,

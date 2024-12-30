@@ -2,7 +2,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@components/ui/separator';
 import { BadgeInfo } from 'lucide-react';
@@ -49,16 +48,16 @@ export function InputTitle({ form }: InputTitleProps) {
             <span className="text-red-600">*</span> Tiêu đề
           </FormLabel>
           <Textarea
-              {...field}
-              className="relative"
-              rows={isMobile ? 3 : 1}
-              placeholder="Nhập tiêu đề..."
-              endAdornment={
-                <span className="text-2xs absolute right-1 top-1">
-                  {(form.getValues('title') || '').length}/99
-                </span>
-              }
-            />
+            {...field}
+            className="relative"
+            rows={isMobile ? 3 : 1}
+            placeholder="Nhập tiêu đề..."
+            endAdornment={
+              <span className="text-2xs absolute right-1 top-1">
+                {(form.getValues('title') || '').length}/99
+              </span>
+            }
+          />
 
           <FormDescription>
             Tiêu đề ngắn gọn dễ hiểu, tối thiểu 30 ký tự và không được dài quá 99 ký tự.

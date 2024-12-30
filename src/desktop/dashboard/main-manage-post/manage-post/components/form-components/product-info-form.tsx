@@ -3,9 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  SelectSeparator
-} from '@/components/ui/select';
+import { SelectSeparator } from '@/components/ui/select';
 import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
 import { Checkbox } from '@components/ui/checkbox';
 import { Separator } from '@components/ui/separator';
@@ -62,7 +60,6 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="phap_ly"
@@ -338,7 +335,10 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ text: 'Không xác định', value: '__default' }, ...furnitureTypeOptions]}
+                    options={[
+                      { text: 'Không xác định', value: '__default' },
+                      ...furnitureTypeOptions,
+                    ]}
                     actions={
                       <>
                         <SelectSeparator />
