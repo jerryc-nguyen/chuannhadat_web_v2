@@ -31,7 +31,7 @@ export default function TaskDataTable() {
   useSyncQueryToUrl(formValue);
 
   return (
-    <div className="flex h-full flex-1 flex-col space-y-8">
+    <div className="flex h-full flex-1 flex-col space-y-8 pr-3">
       <FormProvider {...searchForm}>
         <ModalPostDetail />
         <DataTable />

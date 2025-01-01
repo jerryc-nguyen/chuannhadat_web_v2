@@ -28,6 +28,7 @@ type AvatarIconProps = {
 const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const router = useRouter();
   const pathName = usePathname();
+  const [openDropdownMenu, setOpenDropdownMenu] = React.useState(false);
   const isDashboardPage = pathName.includes('dashboard');
   const { currentUser, handleSignOut } = useAuth();
   const { openModal, closeModal } = useModals();
@@ -52,9 +53,12 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogged]);
+  React.useEffect(() => {
+    setOpenDropdownMenu(false);
+  }, [pathName]);
   if (isLogged || currentUser)
     return (
-      <DropdownMenu>
+      <DropdownMenu open={openDropdownMenu} onOpenChange={setOpenDropdownMenu}>
         <DropdownMenuTrigger className="cursor-pointer" asChild>
           {currentUser?.avatar_url ? (
             <Image

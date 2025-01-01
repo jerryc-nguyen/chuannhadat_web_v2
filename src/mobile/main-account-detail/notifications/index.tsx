@@ -36,9 +36,9 @@ const NotificationsMobile: React.FC = () => {
 
   return (
     <section>
-      <div className="mt-6 max-w-full">
-        <h2 className="text-xl font-semibold text-gray-900">Thông báo</h2>
-        <div className="my-4 border-b border-gray-200"></div>
+      <div className="max-w-full">
+        <h2 className="text-2xl font-semibold text-gray-900">Thông báo</h2>
+        <div className="my-2 border-b border-gray-200"></div>
         <Card className="m-auto mt-3 h-full w-full">
           <CardHeader className="pb-[15px]">
             <CardTitle className="font-bold text-secondary">Danh sách thông báo</CardTitle>

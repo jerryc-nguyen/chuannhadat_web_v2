@@ -9,7 +9,12 @@ import useAuth from '@mobile/auth/hooks/useAuth';
 import { services } from '@api/services';
 import ServiceCard from '../components/ServiceCard';
 import Link from 'next/link';
-
+import { useSetAtom } from 'jotai';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  type IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 const ServicePackageView = () => {
   const { currentUser } = useAuth();
   const [currentServicePackage, setCurrentServicePackage] = React.useState<ServicePackageInfo>();
@@ -25,12 +30,25 @@ const ServicePackageView = () => {
   React.useEffect(() => {
     data && setCurrentServicePackage(data?.data[0]);
   }, [data]);
-
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: '/service-package',
+        title: 'Mua gói dịch vụ',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb(defaultBreadcrumb);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
-      <h3 className="mb-4 mt-8 text-xl font-bold">Mua gói dịch vụ</h3>
-
-      <h1 className="mb-2 text-2xl font-bold">{currentServicePackage?.title}</h1>
+      <h2 className="mb-4 text-2xl font-bold">Mua gói dịch vụ</h2>
+      <h3 className="mb-2 text-lg font-bold">{currentServicePackage?.title}</h3>
       <p className="mb-0 text-gray-600">{currentServicePackage?.sub_title}</p>
 
       <Link

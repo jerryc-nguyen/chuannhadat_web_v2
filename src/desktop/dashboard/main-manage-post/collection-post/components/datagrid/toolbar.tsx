@@ -28,7 +28,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { createPortal } from 'react-dom';
 import { cn } from '@common/utils';
 import { useIsMobile } from '@hooks';
@@ -120,7 +119,7 @@ export function DataTableToolbar<TData>({
 
       <Separator className="h-[1px]" />
 
-      <div className="flex gap-2 md:gap-10 text-sm md:text-base">
+      <div className="flex gap-2 text-sm md:gap-10 md:text-base">
         <div>Lọc theo: </div>
         <div className="flex gap-2 md:gap-10">
           {options.map((option) => (
@@ -166,10 +165,10 @@ export function SelectSearchTarget({
 }) {
   return (
     <Select onValueChange={onChange} value={selectSearchTarget}>
-      <SelectTrigger className="w-[130px] md:w-[160px] pl-2 md:pl-3 pr-0 text-sm md:text-base border-r-0 rounded-r-none">
+      <SelectTrigger className="w-[130px] rounded-r-none border-r-0 pl-2 pr-0 text-sm md:w-[160px] md:pl-3 md:text-base">
         <SelectValue placeholder="Tất cả" />
       </SelectTrigger>
-      <SelectContent className='text-sm md:text-base'>
+      <SelectContent className="text-sm md:text-base">
         <SelectGroup>
           <SelectLabel>Tìm kiếm theo</SelectLabel>
           <SelectItem value="all">Tất cả</SelectItem>

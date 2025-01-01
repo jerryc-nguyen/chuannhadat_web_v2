@@ -4,7 +4,11 @@ import { ITransactionResponse } from '@mobile/main-financial-management/types';
 import { format, isToday, parseISO, isYesterday } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
-const TransactionActivity: React.FC<{ title: string; transactionsData: ITransactionResponse[]; emptyText: string }> = ({ title, transactionsData, emptyText }) => {
+const TransactionActivity: React.FC<{
+  title: string;
+  transactionsData: ITransactionResponse[];
+  emptyText: string;
+}> = ({ title, transactionsData, emptyText }) => {
   const [transactions, setTransactions] = React.useState<ITransactionResponse[]>([]);
 
   React.useEffect(() => {
@@ -48,7 +52,7 @@ const TransactionActivity: React.FC<{ title: string; transactionsData: ITransact
   ];
 
   return (
-    <div className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md pt-4">
       <Card className="mb-4">
         <CardHeader>
           <CardTitle>{title}</CardTitle>

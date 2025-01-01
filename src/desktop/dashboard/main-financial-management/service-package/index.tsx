@@ -47,9 +47,9 @@ const ServicePackageView = () => {
   }, []);
   return (
     <div>
-      <h3 className="mb-4 text-xl font-bold">Mua gói dịch vụ</h3>
+      <h3 className="mb-4 text-2xl font-bold">Mua gói dịch vụ</h3>
       <div className="pb-4">
-        <h1 className="mb-2 break-words text-2xl font-bold">{currentServicePackage?.title}</h1>
+        <h1 className="mb-2 break-words text-xl font-bold">{currentServicePackage?.title}</h1>
         <p className="mb-0 whitespace-normal break-words text-gray-600">
           {currentServicePackage?.sub_title}
         </p>
@@ -58,7 +58,7 @@ const ServicePackageView = () => {
             {'>>'} Xem hướng dẫn cài đặt tự động làm mới tin giúp bạn tiết kiệm thời gian
           </Button>
         </Link>
-        <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap gap-x-6 gap-y-6">
           {currentServicePackage &&
             currentServicePackage?.plans.map((plan) => (
               <ServiceCard key={plan.plan_id} plan={plan} />

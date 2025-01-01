@@ -8,6 +8,12 @@ import { useBalanceRequest } from '@api/balance';
 import { ITransactionResponse } from '../types';
 import BalanceInfo from '../components/BalanceInfo';
 import TransactionActivity from '../components/TransactionActivity';
+import { useSetAtom } from 'jotai';
+import {
+  breadcrumbAtom,
+  defaultBreadcrumb,
+  type IBreadcrumbItem,
+} from '@desktop/dashboard/states/breadcrumbAtom';
 
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();
@@ -27,6 +33,21 @@ const BalanceView = () => {
     loadTransaction();
   }, [fetchTransaction]);
 
+  const setBreadCrumb = useSetAtom(breadcrumbAtom);
+  React.useEffect(() => {
+    const currentBreadCrumn: IBreadcrumbItem[] = [
+      {
+        link: '/balance-information',
+        title: 'Thông tin số dư',
+        isActive: true,
+      },
+    ];
+    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
+    return () => {
+      setBreadCrumb(defaultBreadcrumb);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
       <BalanceInfo />

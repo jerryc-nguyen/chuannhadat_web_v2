@@ -194,7 +194,7 @@ const AutoRefreshMobile: React.FC = () => {
   // Render components
   const addTimeRefresh = () => (
     <div>
-      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Thêm thời gian</h2>
+      <h2 className="mb-2 text-lg font-semibold">Thêm thời gian</h2>
       <Button
         onClick={handleAddScheduleTime}
         className="flex items-center gap-x-2 bg-blue-500 text-lg hover:bg-blue-600"
@@ -207,7 +207,7 @@ const AutoRefreshMobile: React.FC = () => {
 
   const numberRefreshPost = () => (
     <div>
-      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Số lần làm mới</h2>
+      <h2 className="mb-2 text-lg font-semibold">Số lần làm mới</h2>
       <div className="mt-2 flex w-full justify-between gap-x-4 md:w-2/3 lg:w-1/2">
         <Card className="flex-1 hover:bg-blue-50">
           <CardHeader>
@@ -239,9 +239,7 @@ const AutoRefreshMobile: React.FC = () => {
 
   const refreshSettingsTable = () => (
     <div>
-      <h2 className="bg-sl mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">
-        Bảng cài đặt thời gian
-      </h2>
+      <h2 className="mb-2 text-lg font-semibold">Bảng cài đặt thời gian</h2>
 
       <Table className="max-w-2xl">
         <TableHeader>
@@ -296,7 +294,7 @@ const AutoRefreshMobile: React.FC = () => {
 
   const refeshListPackage = () => (
     <div>
-      <h2 className="mb-4 border-l-4 border-slate-500 pl-2 text-xl font-bold">Các gói đăng tin</h2>
+      <h2 className="mb-2 text-lg font-semibold">Các gói đăng tin</h2>
       <div className="flex flex-col gap-x-4 gap-y-4 lg:flex-row">
         <CardPackage
           cardTitle="Gói làm mới 1"
@@ -356,7 +354,7 @@ const AutoRefreshMobile: React.FC = () => {
   );
   return (
     <section className="flex flex-col gap-y-6">
-      <h1 className="text-4xl font-bold">Cài đặt tự động làm mới </h1>
+      <h1 className="text-2xl font-semibold text-gray-900">Cài đặt tự động làm mới </h1>
       {addTimeRefresh()}
       {numberRefreshPost()}
       {refreshSettingsTable()}

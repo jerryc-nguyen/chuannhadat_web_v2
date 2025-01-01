@@ -97,7 +97,9 @@ export const FormMobile: React.FC = () => {
 
   return (
     <div className="grid items-start gap-0 lg:col-span-3">
-      <CardTitle className="text-md flex gap-2 px-4 pb-2">Loại giao dịch</CardTitle>
+      <CardTitle className="text-md flex gap-2 px-0 pb-2 text-2xl font-semibold text-gray-900">
+        Loại giao dịch
+      </CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
         <ListItemBtsPicker {...businessTypeControl} />
         <ListItemBtsPicker {...categoryTypeControl} dividers={false} />

@@ -116,6 +116,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                   return (
                     <SidebarMenuButton
                       key={nav.name}
+                      onClick={() => setOpenMobile(false)}
                       isActive={pathname.includes(nav.name as string)}
                       className={cn(
                         'h-10 cursor-pointer border-[1.5px] border-transparent transition-all group-data-[collapsible=icon]:!size-10',

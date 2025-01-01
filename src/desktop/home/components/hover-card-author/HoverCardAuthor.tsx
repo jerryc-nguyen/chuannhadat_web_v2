@@ -18,7 +18,7 @@ const HoverCardAuthor: React.FC<HoverCardAuthorProps> = ({ authorSlug, children 
       {authorSlug && (
         <HoverCardContent
           onClick={(e) => e.stopPropagation()}
-          className="min-w-[22rem] hover:cursor-default"
+          className="z-[11] min-w-[22rem] hover:cursor-default"
         >
           <UserCardContent authorSlug={authorSlug} />
         </HoverCardContent>
