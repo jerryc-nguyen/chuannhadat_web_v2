@@ -97,7 +97,7 @@ const listMenuIcon = [
   },
   {
     key: 'icon-tiktok',
-    link: 'https://www.facebook.com/chuannhadat',
+    link: 'https://www.tiktok.com/@chuannhadat',
     icon: <FaTiktok className="text-base" />,
   },
 ];
