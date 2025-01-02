@@ -19,7 +19,7 @@ const BalanceInfo: FC<{ title: string }> = ({ title }) => {
 
   return (
     <div className="c-balanceInfo">
-      <h3 className="mb-4 text-xl font-bold">{title}</h3>
+      <h3 className="mb-4 text-2xl font-bold">{title}</h3>
 
       <div className="mb-4 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
         <FigureCard

@@ -25,7 +25,7 @@ const BalanceInfo: FC = () => {
 
   return (
     <>
-      <Card className="mt-3">
+      <Card>
         <CardContent className="pt-6">
           <h3 className="mb-4 flex justify-between text-16">
             <span className="flex items-center gap-2">
@@ -46,8 +46,8 @@ const BalanceInfo: FC = () => {
           <h1 className="text-36 font-bold">{balanceData?.tk_chinh}</h1>
         </CardContent>
       </Card>
-      <div className="mt-3 flex gap-6">
-        <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">
+      <div className="mt-3 flex gap-4">
+        <Card className="h-full w-full min-w-[45%] flex-1">
           <CardContent className="flex h-full items-center gap-4 p-3 text-12">
             <IoWalletOutline className="text-20" />
             <div>
@@ -56,7 +56,7 @@ const BalanceInfo: FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="m-auto mt-3 w-full max-[400px]:h-[12.5vh]">
+        <Card className="w-full">
           <CardContent className="flex h-full items-center gap-4 p-3 text-12">
             <MdOutlineDiscount className="text-20" />
             <div>

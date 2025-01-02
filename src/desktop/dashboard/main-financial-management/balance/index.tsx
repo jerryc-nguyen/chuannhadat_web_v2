@@ -89,7 +89,7 @@ const BalanceView = () => {
   return (
     <div>
       <BalanceInfo title="Thông tin số dư" />
-      <h3 className="mb-4 mt-8 text-xl font-bold">Biến động số dư</h3>
+      <h3 className="mb-4 text-2xl font-bold">Biến động số dư</h3>
       <TableComponent columns={columns} data={transactionData} />
       <NoteDescriptions />
     </div>

@@ -18,7 +18,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = () => {
   const breadcrumb = useAtomValue(breadcrumbAtom);
 
   return (
-    <BreadcrumbWrap className="bg-[#F5F6FA] py-4 pb-6 md:px-8">
+    <BreadcrumbWrap className="bg-[#F5F6FA] px-4 py-4 pb-6 md:px-8">
       <BreadcrumbList>
         {breadcrumb.map((item, index) => {
           if (index !== breadcrumb.length - 1) {

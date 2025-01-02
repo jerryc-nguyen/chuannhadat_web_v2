@@ -11,13 +11,12 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
   const { data, isLoading } = useAccountSummary();
   const { currentUser } = useAuth();
 
-
   return (
     <section>
       <h1 className="mb-4 text-lg font-semibold md:text-xl">Xin chào {currentUser?.full_name}</h1>
       {!isLoading && (
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4 mt-6">
+          <div className="flex flex-col gap-4">
             <div className={styles.titleH2}>
               <h2>Tài chính</h2>
             </div>
@@ -31,7 +30,8 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
               <FigureCard
                 title="Tài khoản chính"
                 content={get(data, 'balances.tk_chinh')}
-                icon={CardIcons.Money} />
+                icon={CardIcons.Money}
+              />
 
               <FigureCard
                 title="Tài khoản khuyến mãi"

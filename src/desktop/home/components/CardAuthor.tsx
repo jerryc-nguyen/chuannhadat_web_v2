@@ -13,12 +13,13 @@ import { useTopAuthors } from '../hooks/useTopAuthors';
 import { useAtom } from 'jotai';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 
-export default function CardAuthor({ product, isMobile }: { product: A, isMobile?: boolean }) {
+export default function CardAuthor({ product, isMobile }: { product: A; isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
   const [filterState] = useAtom(filterStateAtom);
-  const { isFetching, topAuthors } = useTopAuthors(filterState);
+  const { topAuthors } = useTopAuthors(filterState);
 
   const author = product.author ?? getAuthorById(product.user_id);
+
   const { buildThumbnailUrl } = useResizeImage();
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
     author?.avatar_url || default_avatar,
@@ -58,10 +59,10 @@ export default function CardAuthor({ product, isMobile }: { product: A, isMobile
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                    imageUrl: imgSrc,
-                    width: 40,
-                    ratio: 1,
-                  })
+                      imageUrl: imgSrc,
+                      width: 40,
+                      ratio: 1,
+                    })
                   : imgSrc
               }
               onError={() => {
@@ -99,7 +100,7 @@ export default function CardAuthor({ product, isMobile }: { product: A, isMobile
           )}
         </div>
 
-        <p className="flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-secondary mt-1">
+        <p className="mt-1 flex flex-1 gap-x-1 overflow-hidden text-ellipsis text-nowrap text-sm text-secondary">
           <Link {...linkTarget} className="hover:underline" href={`/post/${product.slug}`}>
             {product?.formatted_publish_at}
           </Link>
