@@ -31,6 +31,13 @@ export const metadata: Metadata = createMetadata({
   },
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1, 
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,7 +48,6 @@ export default function RootLayout({
   return (
     <html lang="vi-VN" suppressHydrationWarning={true}>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(defaultJsonLd) }}
