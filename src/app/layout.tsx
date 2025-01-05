@@ -8,6 +8,7 @@ import Head from 'next/head';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
+import NextTopLoader from 'nextjs-toploader';
 
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
@@ -149,6 +150,7 @@ export default function RootLayout({
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}
       >
+        <NextTopLoader />
         <ProviderWrapper>{children}</ProviderWrapper>
       </body>
     </html>
