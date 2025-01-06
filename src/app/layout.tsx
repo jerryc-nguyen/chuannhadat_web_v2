@@ -8,12 +8,14 @@ import Head from 'next/head';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
+import NextTopLoader from 'nextjs-toploader';
 
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
   weight: ['300', '400', '700', '600', '500', '800', '900'],
 });
 
+// GOOD to know: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#unsupported-metadata
 export const metadata: Metadata = createMetadata({
   title: 'Đăng tin nhà đất, bất động sản chuyên nghiệp | Chuẩn Nhà Đất',
   description:
@@ -29,7 +31,96 @@ export const metadata: Metadata = createMetadata({
     siteName: 'chuannhadat.com',
     url: getServerSideURL(),
   },
+  manifest: '/manifest.json',
+  themeColor: '#ffffff',
+
+  icons: {
+    icon: [
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        url: '/favicon-16x16.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        url: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '96x96',
+        url: '/favicon-96x96.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '192x192',
+        url: '/android-icon-192x192.png',
+      },
+    ],
+    apple: [
+      {
+        rel: 'apple-touch-icon',
+        sizes: '57x57',
+        url: '/apple-icon-57x57.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '60x60',
+        url: '/apple-icon-60x60.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '72x72',
+        url: '/apple-icon-72x72.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '76x76',
+        url: '/apple-icon-76x76.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '114x114',
+        url: '/apple-icon-114x114.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '120x120',
+        url: '/apple-icon-120x120.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '144x144',
+        url: '/apple-icon-144x144.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '152x152',
+        url: '/apple-icon-152x152.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        url: '/apple-icon-180x180.png',
+      },
+    ]
+  },
+  other: {
+    'msapplication-TileColor': '#ffffff',
+    'msapplication-TileImage': '/ms-icon-144x144.png',
+  },
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export default function RootLayout({
   children,
@@ -41,7 +132,6 @@ export default function RootLayout({
   return (
     <html lang="vi-VN" suppressHydrationWarning={true}>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(defaultJsonLd) }}
@@ -60,6 +150,7 @@ export default function RootLayout({
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}
       >
+        <NextTopLoader />
         <ProviderWrapper>{children}</ProviderWrapper>
       </body>
     </html>
