@@ -1,7 +1,9 @@
 import { OptionForSelect } from "@models";
-
-export const minPriceSell = 100000000;
-export const minPriceRent = 1000000;
+export const MOT_NGHIN = 1_000
+export const MOT_TRIEU = 1_000_000
+export const MOT_TY = 1_000_000_000
+export const minPriceSell = 100_000_000;
+export const minPriceRent = 1_000_000;
 
 export function formatPrice(price: string) {
   return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -9,34 +11,34 @@ export function formatPrice(price: string) {
 
 export function readMoney(value: string) {
   let result: number = 0.0;
-  const priceUnit = buildPriceUnit(`${value}`);
+  const priceUnit = buildPriceUnit(parseFloat(value));
   if (!value) {
     return '';
   }
   const number = parseFloat(value);
   let roundedLength = 0;
 
-  if (number < 1_000_000) {
-    result = number / 1000
-  } else if (number < 1000_000_000) {
-    result = number / 1_000_000
+  if (number < MOT_TRIEU) {
+    result = number / MOT_NGHIN
+  } else if (number < MOT_TY) {
+    result = number / MOT_TRIEU
     roundedLength = 1;
-  } else if (number > 1000_000_000) {
-    result = number / 1000_000_000
+  } else if (number >= MOT_TY) {
+    result = number / MOT_TY
     roundedLength = 2;
   }
 
   return `${result.toFixed(roundedLength)} ${priceUnit}`.replace('.00', '').replace('.0', '');
 }
 
-function buildPriceUnit(value: string) {
+function buildPriceUnit(value: number) {
   let result = '';
-  if (value.length >= 4 && value.length <= 6) {
-    result = 'nghìn';
-  } else if (value.length >= 7 && value.length <= 9) {
-    result = 'triệu';
-  } else if (value.length >= 10) {
+  if (value >= MOT_TY) {
     result = 'tỷ';
+  } else if (value >= MOT_TRIEU) {
+    result = 'triệu';
+  } else if (value >= MOT_NGHIN) {
+    result = 'nghìn';
   }
   return result;
 }
@@ -51,6 +53,10 @@ export const buildOptionsPrice = ({ searchText, businessType }: { searchText: st
   // Sell: min 100 triệu / Rent: min 1 triệu ------------------------------------------
   const minPrice = businessType === 'sell' ? minPriceSell : minPriceRent;
   const options = [];
+  if (businessType == 'sell' && value > MOT_TY) {
+    const valueToAdd = value / 10
+    options.push(valueToAdd);
+  }
   if (searchText.length <= `${minPrice}`.length) {
     let valueToAdd = value * Math.pow(10, `${minPrice}`.length - searchText.length);
     if (valueToAdd < minPrice) {
@@ -61,9 +67,10 @@ export const buildOptionsPrice = ({ searchText, businessType }: { searchText: st
     options.push(value);
   }
 
-  for (let i = 0; i <= 2; i++) {
-    options.push(options[i] * 10);
+  for (let i = 0; i < 2; i++) {
+    options.push(options[options.length - 1] * 10);
   }
+
   const result = options.map((value: number) => {
     return {
       value: `${value}`,

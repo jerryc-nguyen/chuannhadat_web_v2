@@ -4,6 +4,7 @@ import { ReactElement, useState } from 'react';
 import { useMemo } from 'react';
 import { Input } from '@components/ui/input';
 import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
+import { Button } from '@components/ui/button';
 
 const PriceOptions = ({
   value,
@@ -45,16 +46,27 @@ const PriceOptions = ({
     setPrice(formattedValue)
   }
 
+  const updateCustomPrice = () => {
+    updateSelectedPrice(price);
+    const { formattedValue } = maskNumber(priceNumber)
+    if (onSelect) {
+      onSelect({ text: formattedValue, value: priceNumber });
+    }
+  }
+
   return (
     <>
-      <Input
-        value={price}
-        placeholder="Nhập và chọn giá từ gợi ý"
-        onChange={(e) => {
-          updatePrice(e.target.value + '')
-        }}
-        maxLength={12}
-      />
+      <div className="flex w-full max-w-sm items-center space-x-2 p-4">
+        <Input
+          value={price}
+          placeholder="Nhập và chọn giá từ gợi ý"
+          onChange={(e) => {
+            updatePrice(e.target.value + '')
+          }}
+          maxLength={14}
+        />
+        <Button type="submit" onClick={updateCustomPrice}> Chọn</Button>
+      </div >
 
       <List strongIos outlineIos margin="my-0">
         {options.map((item) => {

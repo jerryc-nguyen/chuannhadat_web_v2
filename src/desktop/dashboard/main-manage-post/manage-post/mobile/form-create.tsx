@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import { CardTitle } from '@components/ui/card';
 
 import { FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { maskNumber } from '@common/priceHelpers';
+import { maskNumber, readMoney } from '@common/priceHelpers';
 import { Label } from '@components/ui/label';
 import LocationsPicker from '@mobile/ui/LocationsPicker';
 import React from 'react';
@@ -123,7 +123,7 @@ export const FormMobile: React.FC = () => {
                   />
                 });
               }}
-              after={form.getValues('price_in_vnd')}
+              after={readMoney(form.getValues('price_in_vnd'))}
             />
           )}
         />
