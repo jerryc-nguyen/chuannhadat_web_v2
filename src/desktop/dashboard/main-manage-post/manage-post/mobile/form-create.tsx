@@ -13,12 +13,11 @@ import { useMemo } from 'react';
 import { CardTitle } from '@components/ui/card';
 
 import { FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { buildOptionsPrice, maskNumber, readMoney } from '@common/priceHelpers';
-import { Checkbox } from '@components/ui/checkbox';
+import { maskNumber } from '@common/priceHelpers';
 import { Label } from '@components/ui/label';
 import LocationsPicker from '@mobile/ui/LocationsPicker';
 import React from 'react';
-import { twMerge } from 'tailwind-merge';
+
 import {
   businessTypeOptions,
   categoryTypeOptions,
@@ -27,19 +26,15 @@ import {
   phapLyTypeOptions,
 } from '../constant';
 import { IPostForm } from '../../types';
-import ImageForm, { InputYoutube, UploadImages } from '../components/form-components/image-form';
-import ProductDescriptionForm, {
+import { InputYoutube, UploadImages } from '../components/form-components/image-form';
+import {
   InputDescription,
   InputTitle,
 } from '../components/form-components/product-description';
-import {
-  PriceAutoComplete,
-  PriceAutoCompleteListView,
-} from '../components/form-components/fields/price-autocomplete';
+
 import { RoundedOptionsNumberInput } from '../components/form-components/fields/rounded-options-number-input';
 import { roomsOptionsForCreate, facadeOptionsForCreate } from '@mobile/filter_bds/constants';
 import { Button } from '@components/ui/button';
-import { ListItemPickCustomUI } from '@mobile/bts-pickers/ListItemPickCustomUI';
 import { OptionForSelect } from '@models';
 import PriceOptions from './PriceOptions';
 import ListItem from '@components/konsta/ListItem';
