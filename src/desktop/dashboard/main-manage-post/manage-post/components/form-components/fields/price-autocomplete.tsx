@@ -12,12 +12,13 @@ import {
 import { Input } from '@components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
 import { Skeleton } from '@components/ui/skeleton';
+import { OptionForSelect } from '@models';
 
 type Props<T extends string> = {
   selectedValue: T;
   onSelectedValueChange: (value: string) => void;
-  customItems?: { value: T; label: string }[];
-  items: { value: T; label: string }[];
+  customItems?: OptionForSelect[];
+  items: OptionForSelect[];
   isLoading?: boolean;
   emptyMessage?: string;
   placeholder?: string;
@@ -92,7 +93,7 @@ export function PriceAutoComplete<T extends string>({
                   {items.map((option) => (
                     <CommandItem
                       key={option.value}
-                      value={option.value}
+                      value={option.value as string}
                       onMouseDown={(e) => e.preventDefault()}
                       onSelect={onSelectItem}
                     >
@@ -102,7 +103,7 @@ export function PriceAutoComplete<T extends string>({
                           selectedValue === option.value ? 'opacity-100' : 'opacity-0',
                         )}
                       />
-                      {option.label}
+                      {option.text}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -166,12 +167,12 @@ export function PriceAutoCompleteListView<T extends string>({
               {items.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value}
+                  value={option.value as string}
                   onMouseDown={(e) => e.preventDefault()}
                   onSelect={onSelectItem}
                   className="justify-between flex w-full"
                 >
-                  <div>{option.label}</div>
+                  <div>{option.text}</div>
                   <div>
                     <Check
                       className={cn(

@@ -40,6 +40,9 @@ import { RoundedOptionsNumberInput } from '../components/form-components/fields/
 import { roomsOptionsForCreate, facadeOptionsForCreate } from '@mobile/filter_bds/constants';
 import { Button } from '@components/ui/button';
 import { ListItemPickCustomUI } from '@mobile/bts-pickers/ListItemPickCustomUI';
+import { OptionForSelect } from '@models';
+import PriceOptions from './PriceOptions';
+import ListItem from '@components/konsta/ListItem';
 
 /**
  * TODO: Split file to smaller components
@@ -198,70 +201,26 @@ export const FormMobile: React.FC = () => {
           control={form.control}
           name="price_in_vnd"
           render={({ field }) => (
-            <ListItemPickCustomUI
-              modalOptions={{ title: 'Giá bán/ thuê (VNĐ)' }}
-              trigger={
-                <FormItem className="grid gap-2 border-b pb-2">
-                  <div className={twMerge(styles.rowItemInput, 'justify-between border-b-0 pb-0')}>
-                    <FormLabel className="w-3/5">
-                      <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
-                    </FormLabel>
-                    <div className="text-right">
-                      {field.value !== 'Thỏa thuận' ? readMoney(field.value) : field.value}
-                    </div>
-                  </div>
-                </FormItem>
-              }
-              content={({ isOpen, setIsOpen }) => (
-                <div className="flex flex-col gap-4">
-                  <PriceAutoCompleteListView
-                    selectedValue={price_in_vnd}
-                    onSelectedValueChange={(value) => {
-                      const { rawValue } = maskNumber(value);
+
+
+            <ListItem
+              link
+              title={'Giá'}
+              onClick={() => {
+                openModal({
+                  name: `ListItemBtsPicker_price`,
+                  title: 'Giá',
+                  content: <PriceOptions
+                    value={form.getValues('price_in_vnd')}
+                    onSelect={(option: OptionForSelect) => {
+                      const { rawValue } = maskNumber(option.value + '');
                       onChangeFieldNumber(field, rawValue);
                     }}
-                    items={buildOptionsPrice({
-                      searchText: price_in_vnd,
-                      businessType: form.getValues('business_type'),
-                    })}
-                    emptyMessage="Nhập giá bán"
-                    InputRender={
-                      <Input
-                        {...field}
-                        value={maskNumber(field.value).formattedValue}
-                        placeholder="Nhập giá bán"
-                        onChange={(e) => {
-                          const { rawValue } = maskNumber(e.target.value);
-                          onChangeFieldNumber(field, rawValue);
-                        }}
-                        maxLength={12}
-                        disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
-                      />
-                    }
-                    onCompleted={() => setIsOpen(false)}
+                    businessType={form.getValues('business_type')}
                   />
-                  <div className="flex w-full items-center space-x-2">
-                    <Checkbox
-                      id="terms"
-                      checked={form.getValues('price_in_vnd') === 'Thỏa thuận'}
-                      onCheckedChange={(value) => {
-                        if (value) {
-                          form.setValue('price_in_vnd', 'Thỏa thuận');
-                        } else {
-                          form.setValue('price_in_vnd', '');
-                        }
-                        setIsOpen(false); // Close when selected
-                      }}
-                    />
-                    <label
-                      htmlFor="terms"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Giá Thương lượng
-                    </label>
-                  </div>
-                </div>
-              )}
+                });
+              }}
+              after={form.getValues('price_in_vnd')}
             />
           )}
         />
@@ -276,8 +235,6 @@ export const FormMobile: React.FC = () => {
                   console.log('onSelect bedrooms_count', option);
                   field.onChange(option.value);
                 }}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
                 options={roomsOptionsForCreate}
                 value={field.value}
                 modalOptions={{ title: 'Phòng ngủ', maxHeightPercent: 0.7 }}
@@ -314,8 +271,6 @@ export const FormMobile: React.FC = () => {
                   console.log('onSelect bathrooms_count', option);
                   field.onChange(option.value);
                 }}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
                 options={roomsOptionsForCreate}
                 value={field.value}
                 modalOptions={{ title: 'Phòng tắm', maxHeightPercent: 0.7 }}
@@ -352,8 +307,6 @@ export const FormMobile: React.FC = () => {
                   console.log('onSelect facade', option);
                   field.onChange(option.value);
                 }}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
                 options={facadeOptionsForCreate}
                 value={field.value}
                 modalOptions={{ title: 'Mặt tiền', maxHeightPercent: 0.7 }}

@@ -1,14 +1,16 @@
+import { OptionForSelect } from "@models";
+
 export const minPriceSell = 100000000;
 export const minPriceRent = 1000000;
 
-export function formatPrice(price) {
+export function formatPrice(price: string) {
   return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-export function readMoney(value) {
+export function readMoney(value: string) {
   let result = '';
-  let priceUnit = buildPriceUnit(`${value}`);
-  if (value.isEmpty) {
+  const priceUnit = buildPriceUnit(`${value}`);
+  if (!value) {
     return '';
   }
   const valueSplitted = `${value}`.split('');
@@ -40,7 +42,7 @@ export function readMoney(value) {
   return `${result} ${priceUnit}`;
 }
 
-function buildPriceUnit(value) {
+function buildPriceUnit(value: string) {
   let result = 'VNĐ';
   if (value.length >= 4 && value.length <= 6) {
     result = 'nghìn VNĐ';
@@ -54,7 +56,7 @@ function buildPriceUnit(value) {
   return result;
 }
 
-export const buildOptionsPrice = ({ searchText, businessType }) => {
+export const buildOptionsPrice = ({ searchText, businessType }: { searchText: string, businessType: string }): OptionForSelect[] => {
   if (!searchText) return [];
   const regexCheckOnlyContainZero = /^0*$/;
   if (regexCheckOnlyContainZero.test(searchText)) return [];
@@ -77,17 +79,17 @@ export const buildOptionsPrice = ({ searchText, businessType }) => {
   for (let i = 0; i <= 2; i++) {
     options.push(options[i] * 10);
   }
-  const result = options.map((value) => {
+  const result = options.map((value: number) => {
     return {
       value: `${value}`,
-      label: `${formatPrice(value)} (${readMoney(value)})`,
+      text: `${formatPrice(value.toString())} (${readMoney(value.toString())})`,
     };
   });
 
   return result.filter((item) => item.value.length <= 15);
 };
 
-export const maskNumber = (value) => {
+export const maskNumber = (value: string) => {
   value = value + '';
   if (!value)
     return {
@@ -106,7 +108,7 @@ export const maskNumber = (value) => {
   // Format the value for display
   const formattedValue = new Intl.NumberFormat('vi-VN', {
     minimumFractionDigits: 0,
-  }).format(rawValue);
+  }).format(parseInt(rawValue));
 
   return {
     rawValue,

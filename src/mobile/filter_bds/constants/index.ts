@@ -66,26 +66,26 @@ export const categoryTypesOptions = [
   },
 ];
 export const roomsOptions = [
-  { value: 1, text: 1 },
-  { value: 2, text: 2 },
-  { value: 3, text: 3 },
-  { value: 4, text: 4 },
-  { value: 5, text: 5 },
-  { value: 6, text: 6 },
+  { value: 1, text: '1' },
+  { value: 2, text: '2' },
+  { value: 3, text: '3' },
+  { value: 4, text: '4' },
+  { value: 5, text: '5' },
+  { value: 6, text: '6' },
 ];
 
-export const roomsOptionsForCreate = [
-  { value: 1, text: 1 },
-  { value: 2, text: 2 },
-  { value: 3, text: 3 },
-  { value: 4, text: 4 },
+export const roomsOptionsForCreate: OptionForSelect[] = [
+  { value: 1, text: '1' },
+  { value: 2, text: '2' },
+  { value: 3, text: '3' },
+  { value: 4, text: '4' },
 ];
 
 export const facadeOptionsForCreate = [
-  { value: 3, text: 3 },
-  { value: 4, text: 4 },
-  { value: 5, text: 5 },
-  { value: 6, text: 6 },
+  { value: 3, text: '3' },
+  { value: 4, text: '4' },
+  { value: 5, text: '5' },
+  { value: 6, text: '6' },
 ];
 
 
