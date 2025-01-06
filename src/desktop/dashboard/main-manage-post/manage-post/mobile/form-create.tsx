@@ -101,7 +101,36 @@ export const FormMobile: React.FC = () => {
       <List strongIos outlineIos className="mt-0 rounded-lg">
         <ListItemBtsPicker {...businessTypeControl} />
         <ListItemBtsPicker {...categoryTypeControl} dividers={false} />
+
+        <FormField
+          control={form.control}
+          name="price_in_vnd"
+          render={({ field }) => (
+            <ListItem
+              link
+              title={'Giá'}
+              onClick={() => {
+                openModal({
+                  name: `ListItemBtsPicker_price`,
+                  title: 'Giá',
+                  content: <PriceOptions
+                    value={form.getValues('price_in_vnd')}
+                    onSelect={(option: OptionForSelect) => {
+                      onChangeFieldNumber(field, option.value + '');
+                      closeModal();
+                    }}
+                    businessType={form.getValues('business_type')}
+                  />
+                });
+              }}
+              after={form.getValues('price_in_vnd')}
+            />
+          )}
+        />
       </List>
+
+
+
       <CardTitle className="text-md flex gap-2 px-4 pb-2">Hình ảnh, Video</CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg px-4 pt-4">
         <InputYoutube form={form} />
@@ -192,33 +221,7 @@ export const FormMobile: React.FC = () => {
           }}
         />
 
-        <FormField
-          control={form.control}
-          name="price_in_vnd"
-          render={({ field }) => (
 
-
-            <ListItem
-              link
-              title={'Giá'}
-              onClick={() => {
-                openModal({
-                  name: `ListItemBtsPicker_price`,
-                  title: 'Giá',
-                  content: <PriceOptions
-                    value={form.getValues('price_in_vnd')}
-                    onSelect={(option: OptionForSelect) => {
-                      const { rawValue } = maskNumber(option.value + '');
-                      onChangeFieldNumber(field, rawValue);
-                    }}
-                    businessType={form.getValues('business_type')}
-                  />
-                });
-              }}
-              after={form.getValues('price_in_vnd')}
-            />
-          )}
-        />
 
         <FormField
           control={form.control}

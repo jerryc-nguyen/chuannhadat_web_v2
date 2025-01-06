@@ -8,50 +8,35 @@ export function formatPrice(price: string) {
 }
 
 export function readMoney(value: string) {
-  let result = '';
+  let result: number = 0.0;
   const priceUnit = buildPriceUnit(`${value}`);
   if (!value) {
     return '';
   }
-  const valueSplitted = `${value}`.split('');
-  if (
-    valueSplitted.length === 4 ||
-    valueSplitted.length === 7 ||
-    valueSplitted.length === 10 ||
-    valueSplitted.length === 13
-  ) {
-    result = `${valueSplitted[0]}.${valueSplitted.slice(1, 3).join('')}`;
-  } else if (
-    valueSplitted.length === 5 ||
-    valueSplitted.length === 8 ||
-    valueSplitted.length === 11 ||
-    valueSplitted.length === 14
-  ) {
-    result = `${valueSplitted.slice(0, 2).join('')}.${valueSplitted.slice(2, 4).join('')}`;
-  } else if (
-    valueSplitted.length === 6 ||
-    valueSplitted.length === 9 ||
-    valueSplitted.length === 12 ||
-    valueSplitted.length === 15
-  ) {
-    result = `${valueSplitted.slice(0, 3).join('')}.${valueSplitted.slice(3, 5).join('')}`;
-  } else {
-    result = value;
+  const number = parseFloat(value);
+  let roundedLength = 0;
+
+  if (number < 1_000_000) {
+    result = number / 1000
+  } else if (number < 1000_000_000) {
+    result = number / 1_000_000
+    roundedLength = 1;
+  } else if (number > 1000_000_000) {
+    result = number / 1000_000_000
+    roundedLength = 2;
   }
 
-  return `${result} ${priceUnit}`;
+  return `${result.toFixed(roundedLength)} ${priceUnit}`.replace('.00', '').replace('.0', '');
 }
 
 function buildPriceUnit(value: string) {
-  let result = 'VNĐ';
+  let result = '';
   if (value.length >= 4 && value.length <= 6) {
-    result = 'nghìn VNĐ';
+    result = 'nghìn';
   } else if (value.length >= 7 && value.length <= 9) {
-    result = 'triệu VNĐ';
-  } else if (value.length >= 10 && value.length <= 12) {
-    result = 'tỷ VNĐ';
-  } else if (value.length >= 13 && value.length <= 15) {
-    result = 'nghìn tỷ VNĐ';
+    result = 'triệu';
+  } else if (value.length >= 10) {
+    result = 'tỷ';
   }
   return result;
 }
@@ -82,7 +67,8 @@ export const buildOptionsPrice = ({ searchText, businessType }: { searchText: st
   const result = options.map((value: number) => {
     return {
       value: `${value}`,
-      text: `${formatPrice(value.toString())} (${readMoney(value.toString())})`,
+      text: formatPrice(value.toString()),
+      description: readMoney(value.toString())
     };
   });
 

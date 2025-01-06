@@ -1,8 +1,7 @@
 import { Checkbox, List, ListItem } from '@components/konsta';
 
 import { ReactElement, useState } from 'react';
-import { OptionForSelect } from '@models';
-import * as React from 'react';
+import { useMemo } from 'react';
 import { Input } from '@components/ui/input';
 import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
 
@@ -15,20 +14,44 @@ const PriceOptions = ({
   onSelect?: (arg: A) => void;
   businessType: string
 }): ReactElement => {
-  const [priceText, setPriceText] = useState(value);
+  const { formattedValue: formattedPrice } = maskNumber(value + '')
+  const [selectedPrice, setSelectedPrice] = useState(formattedPrice);
+  const [price, setPrice] = useState(formattedPrice);
 
-  const options = buildOptionsPrice({
-    searchText: priceText,
-    businessType: businessType,
-  })
+  const priceNumber = useMemo(() => {
+    return (price + '').replace(/\D/g, '')
+  }, [price])
+
+  const selectedPriceNumber = useMemo(() => {
+    return (selectedPrice + '').replace(/\D/g, '')
+  }, [selectedPrice])
+
+  const options = useMemo(() => {
+    return buildOptionsPrice({
+      searchText: priceNumber,
+      businessType: businessType,
+    })
+  }, [businessType, priceNumber])
+
+
+  const updateSelectedPrice = (price: string) => {
+    const { formattedValue } = maskNumber(price + '')
+    setSelectedPrice(formattedValue)
+    updatePrice(price)
+  }
+
+  const updatePrice = (price: string) => {
+    const { formattedValue } = maskNumber(price + '')
+    setPrice(formattedValue)
+  }
 
   return (
     <>
       <Input
-        value={maskNumber(priceText).formattedValue}
-        placeholder="Nhập giá bán"
+        value={price}
+        placeholder="Nhập và chọn giá từ gợi ý"
         onChange={(e) => {
-          setPriceText(e.target.value)
+          updatePrice(e.target.value + '')
         }}
         maxLength={12}
       />
@@ -41,18 +64,18 @@ const PriceOptions = ({
               link
               title={item.text}
               chevron={false}
-              after={item.count ? item.count : ''}
+              after={item.description}
               media={
                 <Checkbox
                   component="div"
-                  checked={value == item.value}
+                  checked={selectedPriceNumber == item.value}
                   onChange={() => null}
                 />
               }
               onClick={() => {
                 if (onSelect) {
+                  updateSelectedPrice(item.value + '')
                   onSelect(item);
-                  setPriceText(item.text.toString())
                 }
               }}
             ></ListItem>

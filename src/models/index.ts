@@ -16,6 +16,7 @@ export type OptionForSelect = {
   params?: Record<string, A>;
   count?: number;
   long_text?: string;
+  description?: string
 };
 
 export const PARAM_BUSINESS_TYPE = 'business_type';
