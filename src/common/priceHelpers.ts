@@ -53,7 +53,7 @@ export const buildOptionsPrice = ({ searchText, businessType }: { searchText: st
   // Sell: min 100 triệu / Rent: min 1 triệu ------------------------------------------
   const minPrice = businessType === 'sell' ? minPriceSell : minPriceRent;
   const options = [];
-  if (businessType == 'sell' && value > MOT_TY) {
+  if (value > MOT_TRIEU) {
     const valueToAdd = value / 10
     options.push(valueToAdd);
   }
