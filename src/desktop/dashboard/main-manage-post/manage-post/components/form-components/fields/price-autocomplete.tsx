@@ -12,12 +12,13 @@ import {
 import { Input } from '@components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
 import { Skeleton } from '@components/ui/skeleton';
+import { OptionForSelect } from '@models';
 
 type Props<T extends string> = {
   selectedValue: T;
   onSelectedValueChange: (value: string) => void;
-  customItems?: { value: T; label: string }[];
-  items: { value: T; label: string }[];
+  customItems?: OptionForSelect[];
+  items: OptionForSelect[];
   isLoading?: boolean;
   emptyMessage?: string;
   placeholder?: string;
@@ -92,7 +93,7 @@ export function PriceAutoComplete<T extends string>({
                   {items.map((option) => (
                     <CommandItem
                       key={option.value}
-                      value={option.value}
+                      value={option.value as string}
                       onMouseDown={(e) => e.preventDefault()}
                       onSelect={onSelectItem}
                     >
@@ -102,7 +103,7 @@ export function PriceAutoComplete<T extends string>({
                           selectedValue === option.value ? 'opacity-100' : 'opacity-0',
                         )}
                       />
-                      {option.label}
+                      {option.text}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -112,81 +113,6 @@ export function PriceAutoComplete<T extends string>({
           </PopoverContent>
         </Command>
       </Popover>
-    </div>
-  );
-}
-
-export function PriceAutoCompleteListView<T extends string>({
-  selectedValue,
-  onSelectedValueChange,
-  items,
-  isLoading,
-  emptyMessage = 'No items.',
-  placeholder = 'Search...',
-  InputRender,
-  onCompleted,
-}: Props<T>) {
-  const onSelectItem = (inputValue: string) => {
-    onSelectedValueChange(inputValue as T);
-    onCompleted && onCompleted();
-  };
-
-  const [searchText, setSearchText] = useState<string>('');
-  const onSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-  };
-
-  const isShowSelectList = items.length > 0 && !isLoading && selectedValue !== 'Thỏa thuận';
-  const showEmptyMessage = !isLoading && selectedValue !== 'Thỏa thuận';
-
-  return (
-    <div className="flex w-full rounded-md text-sm">
-      <Command shouldFilter={false}>
-        <div>
-          <CommandPrimitive.Input
-            asChild
-            value={selectedValue}
-            onValueChange={onSelectedValueChange}
-          >
-            {InputRender || (
-              <Input value={searchText} placeholder={placeholder} onChange={onSearchTextChange} />
-            )}
-          </CommandPrimitive.Input>
-        </div>
-        <CommandList>
-          {isLoading && (
-            <CommandPrimitive.Loading>
-              <div className="p-1">
-                <Skeleton className="h-6 w-full" />
-              </div>
-            </CommandPrimitive.Loading>
-          )}
-          {isShowSelectList ? (
-            <CommandGroup>
-              {items.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.value}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onSelect={onSelectItem}
-                  className="justify-between flex w-full"
-                >
-                  <div>{option.label}</div>
-                  <div>
-                    <Check
-                      className={cn(
-                        'mr-2 h-4 w-4',
-                        selectedValue === option.value ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          ) : null}
-          {showEmptyMessage ? <CommandEmpty>{emptyMessage ?? 'No items.'}</CommandEmpty> : null}
-        </CommandList>
-      </Command>
     </div>
   );
 }
