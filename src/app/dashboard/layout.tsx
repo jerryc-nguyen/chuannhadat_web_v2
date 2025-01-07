@@ -12,10 +12,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <SidebarProvider>
       <SidebarDashboard />
-      <main className="flex h-screen w-full flex-1 flex-col">
+      <main className="flex min-h-screen w-full flex-1 flex-col">
         <HeaderDashboard />
         <Breadcrumb />
-        <section className="flex flex-1 flex-col gap-y-5 overflow-y-auto bg-[#F5F6FA] p-4 !pt-0 dark:bg-slate-800 md:p-8">
+        <section className="flex flex-1 flex-col gap-y-5 bg-[#F5F6FA] p-4 !pt-0 dark:bg-slate-800 md:p-8">
           {children}
         </section>
       </main>
