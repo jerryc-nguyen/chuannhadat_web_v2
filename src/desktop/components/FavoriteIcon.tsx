@@ -174,7 +174,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           </Badge>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="left-1/2 w-[23rem] -translate-x-1/2 p-0">
+      <PopoverContent className="w-[23rem] p-0" side="bottom" align="end">
         <h4 className="py-2 text-center text-lg font-semibold">Tin đăng đã lưu</h4>
         <Separator />
         <section className="max-h-[50vh] overflow-y-auto">

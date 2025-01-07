@@ -72,7 +72,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
             <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
           )}
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
+        <DropdownMenuContent className="w-56" side='bottom' align='end' sideOffset={5}>
           {currentUser?.full_name && (
             <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
           )}

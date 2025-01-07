@@ -59,7 +59,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           )}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="left-1/2 w-[23rem] -translate-x-1/2 p-0">
+      <PopoverContent className="w-[23rem] p-0" side="bottom" align='end'>
         <NotificationsList onRedirect={handleRedirect} />
       </PopoverContent>
     </Popover>
