@@ -32,7 +32,7 @@ export const inputVariants = cva(
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariants> {
+  VariantProps<typeof inputVariants> {
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
 }

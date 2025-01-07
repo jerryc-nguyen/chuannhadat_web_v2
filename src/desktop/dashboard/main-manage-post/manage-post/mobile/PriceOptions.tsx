@@ -17,7 +17,7 @@ const PriceOptions = ({
 }): ReactElement => {
   const { formattedValue: formattedPrice } = maskNumber(value + '')
   const [selectedPrice, setSelectedPrice] = useState(formattedPrice);
-  const [price, setPrice] = useState(formattedPrice);
+  const [price, setPrice] = useState(formattedPrice != '0' ? formattedPrice : '');
 
   const priceNumber = useMemo(() => {
     return (price + '').replace(/\D/g, '')

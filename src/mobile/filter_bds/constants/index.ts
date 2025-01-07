@@ -81,6 +81,13 @@ export const roomsOptionsForCreate: OptionForSelect[] = [
   { value: 4, text: '4' },
 ];
 
+export const areaOptionsForCreate: OptionForSelect[] = [
+  { value: 50, text: '50 m2' },
+  { value: 60, text: '60 m2' },
+  { value: 70, text: '70 m2' },
+  { value: 80, text: '80 m2' },
+];
+
 export const facadeOptionsForCreate = [
   { value: 3, text: '3' },
   { value: 4, text: '4' },
