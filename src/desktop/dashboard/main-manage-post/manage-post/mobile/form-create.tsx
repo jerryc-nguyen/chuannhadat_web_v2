@@ -91,7 +91,7 @@ export const FormMobile: React.FC = () => {
       </CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
         <ListItemBtsPicker {...businessTypeControl} />
-        <ListItemBtsPicker {...categoryTypeControl} dividers={false} />
+        <ListItemBtsPicker {...categoryTypeControl} dividers={true} />
 
         <FormField
           control={form.control}
@@ -115,6 +115,7 @@ export const FormMobile: React.FC = () => {
                 });
               }}
               after={readMoney(form.getValues('price_in_vnd'))}
+              dividers={true}
             />
           )}
         />
@@ -154,7 +155,6 @@ export const FormMobile: React.FC = () => {
             </FormItem>
           )}
         />
-
 
         <FormField
           control={form.control}
