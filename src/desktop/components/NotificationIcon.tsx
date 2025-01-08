@@ -7,6 +7,7 @@ import NotificationsList from '@desktop/notification/NotificationsList';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { LucideBell } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 type NotificationIconProps = {
@@ -16,6 +17,9 @@ type NotificationIconProps = {
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const { totalNotificationlUnread, loadMore } = usePaginatedNotifications();
   const { currentUser } = useAuth();
+  const searchParams = useSearchParams();
+  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+
   const handleRedirect = () => {
     return;
   };
@@ -59,7 +63,13 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           )}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[23rem] p-0" side="bottom" align='end'>
+      <PopoverContent
+        className={cn('w-[23rem] p-0', {
+          'left-1/2 -translate-x-1/2': !hideDangtinButton,
+        })}
+        side="bottom"
+        align="center"
+      >
         <NotificationsList onRedirect={handleRedirect} />
       </PopoverContent>
     </Popover>
