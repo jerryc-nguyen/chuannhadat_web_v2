@@ -212,7 +212,7 @@ const TitleTriggerOpenProductDetail = ({
       setSelectedPostId(product.uid);
       await queryClient.prefetchQuery({
         queryKey: ['get-detail-post', product.uid],
-        queryFn: () => services.posts.getDetailPost(product.uid),
+        queryFn: () => services.posts.getDetailPost(product.uid, 'manage_posts'),
       });
     }
   };
