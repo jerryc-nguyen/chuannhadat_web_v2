@@ -1,5 +1,4 @@
 'use client';
-import { cardAuthors } from '@api/searchApi';
 import PostControls from '@desktop/home/components/PostControls';
 import PostList from '@desktop/home/components/PostList';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
@@ -20,7 +19,7 @@ const HomeDesktop: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
+  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
 
   const { buildFilterParams } = useFilterState();
 
@@ -30,16 +29,16 @@ const HomeDesktop: React.FC = () => {
     ...filterParams,
     with_title: true,
     with_users: true,
-    page: currentPage
-  }
+    page: currentPage,
+  };
 
   const { products, data } = useQueryPosts(filterParams);
   useLoadMissingAuthors(data);
 
   const EmptyPost = () => {
     return (
-      <section className="mb-5 flex flex-col items-center justify-center p-5 min-h-[50vh]">
-        <Image className="w-2/3 mb-6" src={empty_city} alt="no-notification" />
+      <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
+        <Image className="mb-6 w-2/3" src={empty_city} alt="no-notification" />
         <h3 className="text-2xl font-bold">Không tìm thấy bài đăng</h3>
         <p className="mt-2 w-3/4 text-center text-base text-foreground">
           Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều

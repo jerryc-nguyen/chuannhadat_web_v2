@@ -15,12 +15,17 @@ import { Fragment } from 'react';
 import hideOnFrontendReasonConstant from '../../constant/hide_on_frontend_reason';
 import { Product } from '../../data/schemas';
 import {
-    ButtonDelete,
-    ButtonRefresh,
-    ButtonUpVip,
-    CheckboxAutoRefresh,
-    SwitchButtonToggleShowOnFrontEnd,
+  ButtonDelete,
+  ButtonRefresh,
+  ButtonUpVip,
+  CheckboxAutoRefresh,
+  SwitchButtonToggleShowOnFrontEnd,
 } from '../actions';
+import { useIsMobile } from '@hooks';
+import useModals from '@mobile/modals/hooks';
+import PostDetailMobile from '@mobile/post-detail/PostDetailMobile';
+import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
+import { ProductDetailTitleBts } from '@mobile/searchs/ProductCardV2';
 
 export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
   const hide_on_frontend_reason = row.original.hide_on_frontend_reason;
@@ -74,11 +79,7 @@ export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
         />
         <div className="flex h-full flex-1 flex-col">
           <div className="mb-2">
-            <TitleTriggerOpenProductDetail
-              title={title}
-              visible={visible}
-              productUid={productUid}
-            />
+            <TitleTriggerOpenProductDetail title={title} visible={visible} product={row.original} />
           </div>
           <div className="mb-2 flex flex-wrap gap-5">
             <span className="text-sm font-medium">{formatted_price || '--'}</span>
@@ -182,22 +183,38 @@ const ImageProduct = ({
 const TitleTriggerOpenProductDetail = ({
   title,
   visible,
-  productUid,
+  product,
 }: {
   title: string;
   visible: boolean;
-  productUid: string;
+  product: Product;
 }) => {
   const queryClient = useQueryClient();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_postId, setSelectedPostId] = useAtom(selectedPostId);
+  const isMobile = useIsMobile();
+  const { openModal } = useModals();
 
   const openModalPostDetail = async () => {
-    setSelectedPostId(productUid);
-    await queryClient.prefetchQuery({
-      queryKey: ['get-detail-post', productUid],
-      queryFn: () => services.posts.getDetailPost(productUid),
-    });
+    console.log('fffffff', product.uid);
+    if (isMobile) {
+      openModal({
+        name: title,
+        title: <ProductDetailTitleBts product={product} />,
+        content: <PostDetailMobile productUid={product.uid} />,
+        maxHeightPercent: 0.95,
+        footer: <AuthorInfo />,
+        headerHeight: 74.59,
+        footerHeight: 74.59,
+        // pushToPath: product.detail_path,
+      });
+    } else {
+      setSelectedPostId(product.uid);
+      await queryClient.prefetchQuery({
+        queryKey: ['get-detail-post', product.uid],
+        queryFn: () => services.posts.getDetailPost(product.uid),
+      });
+    }
   };
 
   return (

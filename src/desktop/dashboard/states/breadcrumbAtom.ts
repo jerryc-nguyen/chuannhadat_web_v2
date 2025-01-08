@@ -6,7 +6,7 @@ export interface IBreadcrumbItem {
 }
 export const defaultBreadcrumb = [
   {
-    title: 'Trang chủ',
+    title: 'Dashboard',
     link: '/dashboard',
   },
 ];

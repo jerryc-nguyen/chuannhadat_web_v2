@@ -33,7 +33,7 @@ export const ButtonRefresh = ({ productId }: { productId: string }) => {
   return (
     <TooltipProvider delayDuration={10}>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Button
             variant="outline"
             size="sm"

@@ -11,7 +11,7 @@ import FeaturesPost from './features-post';
 import DescriptionPost from './description-post';
 import NotePost from './note-post';
 import AuthorPost from './author-post';
-import { useBrowserPushState } from '@components/popstate-handler/hooks';
+// import { useBrowserPushState } from '@components/popstate-handler/hooks';
 import { useQuery } from '@tanstack/react-query';
 import ViewedPosts from './ViewedPosts';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@desktop/components/breadcrumb';
@@ -19,7 +19,7 @@ import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@desktop/components
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
-  const { trackPushPath, historyBack } = useBrowserPushState();
+  // const { trackPushPath, historyBack } = useBrowserPushState();
   const [isOpenModal, setIsOpenModal] = useAtom(openModalDetail);
   const setIsLoadingModal = useSetAtom(isLoadingModal);
   const [postId, setPostId] = useAtom(selectedPostId);
@@ -31,10 +31,10 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
     select: (data) => data.data,
   });
 
-  const updateBrowserPath = (product: IProductDetail) => {
-    window.history.pushState({}, '', product.detail_path);
-    trackPushPath(product.detail_path);
-  };
+  // const updateBrowserPath = (product: IProductDetail) => {
+  //   window.history.pushState({}, '', product.detail_path);
+  //   trackPushPath(product.detail_path);
+  // };
 
   React.useEffect(() => {
     if (data) {
@@ -42,7 +42,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
       if (postContentRef.current) {
         postContentRef.current.scrollTop = 0;
       }
-      updateBrowserPath(data);
+      // updateBrowserPath(data);
     }
     setIsLoadingModal(isLoading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,7 +52,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
     setIsOpenModal(isOpen);
     if (!isOpen) {
       setPostId('');
-      historyBack();
+      // historyBack();
     }
   };
 
