@@ -9,16 +9,15 @@ import {
   BreadcrumbSeparator,
 } from '@components/ui/breadcrumb';
 import { useAtomValue } from 'jotai';
-import { genKey } from '@common/utils';
 import { breadcrumbAtom } from '@desktop/dashboard/states/breadcrumbAtom';
 import Link from 'next/link';
+import { genKey } from '@common/utils';
 type BreadcrumbProps = object;
 
 const Breadcrumb: React.FC<BreadcrumbProps> = () => {
   const breadcrumb = useAtomValue(breadcrumbAtom);
-
   return (
-    <BreadcrumbWrap className="bg-[#F5F6FA] px-4 py-4 pb-6 md:px-8">
+    <BreadcrumbWrap className="bg-[#F5F6FA] p-4 sm:bg-transparent sm:!p-0">
       <BreadcrumbList>
         {breadcrumb.map((item, index) => {
           if (index !== breadcrumb.length - 1) {

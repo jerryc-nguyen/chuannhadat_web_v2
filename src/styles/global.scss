@@ -128,12 +128,13 @@ label[aria-required='true']::after {
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
+  opacity: 1;
   background-color: transparent;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: transparent;
+  // background-color: transparent;
   border-radius: 50px;
 }
 :hover::-webkit-scrollbar {

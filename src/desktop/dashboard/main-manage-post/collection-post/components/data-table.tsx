@@ -93,23 +93,27 @@ export function DataTable() {
   });
 
   const onFilterChipsChanged = async (state: Record<string, A>) => {
-    const filterParams = buildFilterParams({ withLocal: false, overrideStates: state })
-    const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' }
+    const filterParams = buildFilterParams({ withLocal: false, overrideStates: state });
+    const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' };
     try {
       const response = await searchApi(queryOptions);
       if (!response.listing_url) {
         return;
       }
-      setValue("filter_chips", response.listing_url);
+      setValue('filter_chips', response.listing_url);
     } catch (error) {
-      console.log('ERROR', error)
+      console.log('ERROR', error);
     }
   };
 
   return (
     <div className="space-y-4">
       {/* ... */}
-      <DataTableToolbar table={table} onFilterChipsChanged={onFilterChipsChanged} onClickSearch={refetch} />
+      <DataTableToolbar
+        table={table}
+        onFilterChipsChanged={onFilterChipsChanged}
+        onClickSearch={refetch}
+      />
       <div className="rounded-md border">
         <Table className="bg-white/30">
           <DataGridHeader table={table} />

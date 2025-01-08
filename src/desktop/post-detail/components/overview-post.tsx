@@ -42,7 +42,6 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
     mutationFn: services.trackings.viewProduct,
   });
   React.useEffect(() => {
-    console.log('data?.uid', data?.uid);
     if (data?.uid) {
       addViewPost({
         product_uid: data.uid,
