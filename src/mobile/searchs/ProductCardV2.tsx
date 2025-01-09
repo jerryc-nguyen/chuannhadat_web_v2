@@ -28,7 +28,7 @@ const styles: A = {
   },
 };
 
-const ProductDetailTitleBts = ({ product }: { product: A }) => {
+export const ProductDetailTitleBts = ({ product }: { product: A }) => {
   return (
     <div className="mr-4 flex flex-grow items-center justify-between">
       <div className="flex flex-col items-start justify-center">
@@ -85,7 +85,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
 
   return (
     <div className="c-productCard overflow-hidden bg-white shadow-lg">
-      <div className='p-4'>
+      <div className="p-4">
         <CardAuthor product={product} isMobile={true} />
       </div>
 
@@ -101,7 +101,6 @@ export default function ProductCard({ product }: { product: IProduct }) {
         />
 
         <div style={styles.imagesCountWrapper}>
-
           <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
             <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
               <IoImage size={20} style={{ color: '#fff' }} />
@@ -113,10 +112,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       </AspectRatio.Root>
 
       <div className="p-4">
-
-
-
-        <div className="text-secondary w-full">{product.bus_cat_type}</div>
+        <div className="w-full text-secondary">{product.bus_cat_type}</div>
 
         <Link
           onClick={showDetailPostModal}
@@ -127,7 +123,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
         </Link>
       </div>
 
-      <div className="px-4 pb-4 flex w-full justify-between">
+      <div className="flex w-full justify-between px-4 pb-4">
         <div className="flex flex-col gap-y-1 text-sm">
           <span className="text-base font-bold text-black">{product?.formatted_price}</span>
           <span className="alic text-secondary">{product?.formatted_price_per_m2}</span>
@@ -152,7 +148,6 @@ export default function ProductCard({ product }: { product: IProduct }) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

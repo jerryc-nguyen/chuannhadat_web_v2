@@ -1,7 +1,5 @@
 'use client';
-
 import { searchParamsToObj } from '@common/utils';
-import ModalPostDetail from '@desktop/post-detail/components/modal-post-detail';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useBreadcrumb, useSyncQueryToUrl } from '@hooks';
 import { merge } from 'lodash-es';
@@ -31,9 +29,8 @@ export default function TaskDataTable() {
   useSyncQueryToUrl(formValue);
 
   return (
-    <div className="flex h-full flex-1 flex-col space-y-8">
+    <div className="flex h-full flex-1 flex-col space-y-8 md:pr-3">
       <FormProvider {...searchForm}>
-        <ModalPostDetail />
         <DataTable />
       </FormProvider>
     </div>
