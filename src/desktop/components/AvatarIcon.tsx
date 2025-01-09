@@ -1,5 +1,6 @@
 'use client';
 import { removeTokenServer } from '@app/action';
+import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import {
   DropdownMenu,
@@ -17,7 +18,7 @@ import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin'
 import useModals from '@mobile/modals/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { LuUserCircle } from 'react-icons/lu';
 
@@ -32,6 +33,9 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const isDashboardPage = pathName.includes('dashboard');
   const { currentUser, handleSignOut } = useAuth();
   const { openModal, closeModal } = useModals();
+  const searchParams = useSearchParams();
+  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+
   const showModalLoginAndRegister = () => {
     openModal({
       name: 'loginAndRegister',
@@ -42,7 +46,6 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
       btsContentWrapClass: 'mt-2 bg-white p-4',
     });
   };
-
   const handleLogOut = () => {
     removeTokenServer();
     router.refresh();
@@ -72,7 +75,12 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
             <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
           )}
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
+        <DropdownMenuContent
+          className="w-56"
+          side="bottom"
+          align={hideDangtinButton ? 'end' : 'center'}
+          sideOffset={5}
+        >
           {currentUser?.full_name && (
             <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
           )}
