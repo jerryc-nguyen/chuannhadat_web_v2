@@ -15,7 +15,6 @@ import AuthorPost from './author-post';
 import { useQuery } from '@tanstack/react-query';
 import ViewedPosts from './ViewedPosts';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@desktop/components/breadcrumb';
-import useSearchScope from '@hooks/useSearchScope';
 
 type ModalPostDetailProps = object;
 
@@ -25,10 +24,9 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   const setIsLoadingModal = useSetAtom(isLoadingModal);
   const [postId, setPostId] = useAtom(selectedPostId);
   const postContentRef = React.useRef<HTMLElement>(null);
-  const { searchScope } = useSearchScope()
   const { data, isLoading } = useQuery({
-    queryKey: ['get-detail-post', postId, searchScope],
-    queryFn: () => services.posts.getDetailPost(postId, searchScope),
+    queryKey: ['get-detail-post', postId],
+    queryFn: () => services.posts.getDetailPost(postId),
     enabled: !!postId,
     select: (data) => data.data,
   });
