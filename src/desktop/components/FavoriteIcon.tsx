@@ -21,6 +21,7 @@ import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'sonner';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import { useSearchParams } from 'next/navigation';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
@@ -33,6 +34,9 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+
   const { data: savedSummary } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
     queryFn: () => services.saves.savedSummary(),
@@ -174,7 +178,13 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           </Badge>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[23rem] p-0" side="bottom" align="end">
+      <PopoverContent
+        className={cn('w-[23rem] p-0', {
+          'left-1/2 -translate-x-1/2': !hideDangtinButton,
+        })}
+        side="bottom"
+        align="center"
+      >
         <h4 className="py-2 text-center text-lg font-semibold">Tin đăng đã lưu</h4>
         <Separator />
         <section className="max-h-[50vh] overflow-y-auto">
