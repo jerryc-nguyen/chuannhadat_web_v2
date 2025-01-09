@@ -5,7 +5,11 @@ import { searchApi } from '@api/searchApi';
 import { Button } from '@components/ui/button';
 import { LuLoader2 } from 'react-icons/lu';
 
-export default function FooterOverviewBtsButton() {
+type Props = {
+  onChange?: (filterState: Record<string, A>) => void;
+}
+
+export default function FooterOverviewBtsButton({ onChange }: Props) {
   const { closeModals } = useModals();
   const { applyAllFilters, buildFilterParams } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: true });
@@ -16,7 +20,10 @@ export default function FooterOverviewBtsButton() {
   });
 
   const onApplyFilter = () => {
-    applyAllFilters();
+    const states = applyAllFilters();
+    if (onChange) {
+      onChange(states)
+    }
     closeModals();
   };
   return (
