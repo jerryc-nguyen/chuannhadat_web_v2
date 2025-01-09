@@ -105,6 +105,7 @@ export default function useFilterState() {
 
     setFilterState(allFilterState);
     syncSelectedParamsToUrl(allFilterState);
+    return allFilterState;
   };
 
   const buildFilterParams = ({ withLocal = true, overrideStates = {} }: {

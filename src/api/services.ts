@@ -136,9 +136,8 @@ export const services = {
     },
   },
   posts: {
-    getDetailPost: async (product_uid: string, view_scope?: string): Promise<{ data: IProductDetail }> => {
-      const extraParams = view_scope ? `?view_scope=${view_scope}` : ''
-      return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}${extraParams}`);
+    getDetailPost: async (product_uid: string): Promise<{ data: IProductDetail }> => {
+      return axiosInstance.get(`${API_ROUTES.POSTS.DETAIL_POST}/${product_uid}`);
     },
     getPostsSameAuthor: async (product_uid: string): Promise<{ data: IProductSummary[] }> => {
       return axiosInstance.get(

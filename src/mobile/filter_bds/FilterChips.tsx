@@ -20,8 +20,7 @@ import useFilterState from './hooks/useFilterState';
 import { cn } from '@common/utils';
 import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
-import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import ManagePostsFooterBtsButton from './ManagePostFooterBtsButton';
+
 import { Modal } from '@mobile/modals/states/types';
 import Projects from './bts/desktop/Projects';
 import { useAtom } from 'jotai';
@@ -30,14 +29,17 @@ import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
 import ProfileLocationsV2 from '@desktop/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
+type FilterChipsProps = {
+  chipOptions: FilterChipOption[];
+  onFilterChipsChanged?: (filterState: Record<string, A>) => void;
+}
 
-export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOption[] }) {
+export default function FilterChips({ chipOptions, onFilterChipsChanged }: FilterChipsProps) {
   const [filterState] = useAtom(filterStateAtom);
 
   const { copyFilterStatesToLocal, removeFilterValue } = useFilterState();
   const { openModal } = useModals();
   const { selectedLocationText, isSelectedLocation } = useFilterLocations();
-  const { searchScope } = useSearchScope();
 
   const selectedRoomText = (): string => {
     const results = [];
@@ -111,15 +113,11 @@ export default function FilterChips({ chipOptions }: { chipOptions: FilterChipOp
   };
 
   const buildBtsFooter = (filterOption: FilterChipOption) => {
-    if (searchScope == SearchScopeEnums.ManagePosts) {
-      return <ManagePostsFooterBtsButton filterOption={filterOption} />;
-    }
-
     switch (filterOption.id) {
       case FilterFieldName.FilterOverview:
-        return <FooterOverviewBtsButton />;
+        return <FooterOverviewBtsButton onChange={onFilterChipsChanged} />;
       default:
-        return <FooterBtsButton filterOption={filterOption} />;
+        return <FooterBtsButton filterOption={filterOption} onChange={onFilterChipsChanged} />;
     }
   };
 

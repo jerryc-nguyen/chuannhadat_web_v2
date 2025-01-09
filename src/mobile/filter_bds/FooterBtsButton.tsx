@@ -6,7 +6,12 @@ import { Button } from '@components/ui/button';
 import { LuLoader2 } from 'react-icons/lu';
 import { FilterChipOption } from './types';
 
-export default function FooterBtsButton({ filterOption }: { filterOption: FilterChipOption }) {
+type Props = {
+  filterOption: FilterChipOption;
+  onChange?: (filterState: Record<string, A>) => void;
+}
+
+export default function FooterBtsButton({ filterOption, onChange }: Props) {
   const { closeModals } = useModals();
   const { applySingleFilter, buildFilterParams } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: true });
@@ -17,7 +22,10 @@ export default function FooterBtsButton({ filterOption }: { filterOption: Filter
   });
 
   const onApplyFilter = (filterOption: FilterChipOption) => {
-    applySingleFilter(filterOption);
+    const states = applySingleFilter(filterOption);
+    if (onChange) {
+      onChange(states)
+    }
     closeModals();
   };
 
