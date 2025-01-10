@@ -44,7 +44,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <span className="text-red-600">*</span> Nhu cầu của bạn là
+                    <span className="text-red-600">*</span> Nhu cầu
                   </FormLabel>
 
                   <CommonSelect
@@ -80,7 +80,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
               control={form.control}
               name="price_in_vnd"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='relative'>
                   <FormLabel>
                     <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
                   </FormLabel>
