@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 import { BadgeInfo } from 'lucide-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 import { businessTypeOptions, categoryTypeOptions } from '../../constant';
 import { CommonSelect } from '../CommonSelect';
@@ -18,6 +18,7 @@ interface IProductTypeForm {
 
 const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
   const price_in_vnd = form.watch('price_in_vnd');
+  const businessType = form.watch('business_type');
 
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
@@ -27,6 +28,10 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
       field.onChange(value); // Update the value only if it matches the regex
     }
   };
+
+  const priceLabel = useMemo(() => {
+    return businessType == 'sell' ? 'Giá bán' : 'Giá cho thuê';
+  }, [businessType])
 
   return (
     <Card>
@@ -82,7 +87,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
               render={({ field }) => (
                 <FormItem className='relative'>
                   <FormLabel>
-                    <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
+                    <span className="text-red-600">*</span> {priceLabel} (VNĐ)
                   </FormLabel>
                   <PriceAutoComplete
                     selectedValue={price_in_vnd}
@@ -106,6 +111,11 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                         }}
                         maxLength={12}
                         disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
+                        endAdornment={
+                          <span>
+                            <b>VNĐ</b>
+                          </span>
+                        }
                       />
                     }
                   />
@@ -134,7 +144,12 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                       const { rawValue } = maskNumber(e.target.value);
                       onChangeFieldNumber(field, rawValue);
                     }}
-                    placeholder="Nhập diện tích (m²)"
+                    placeholder="Nhập diện tích"
+                    endAdornment={
+                      <span>
+                        <b>m²</b>
+                      </span>
+                    }
                     maxLength={10}
                   />
                   <FormMessage />
@@ -152,7 +167,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                   <RoundedOptionsNumberInput
                     {...field}
                     className="relative"
-                    placeholder="Nhập số"
+                    placeholder="Nhập số khác"
                     onChange={(e) => onChangeFieldNumber(field, e.target.value)}
                     maxLength={3}
                   />
@@ -170,7 +185,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                   <RoundedOptionsNumberInput
                     {...field}
                     className="relative"
-                    placeholder="Nhập số"
+                    placeholder="Nhập số khác"
                     onChange={(e) => onChangeFieldNumber(field, e.target.value)}
                     maxLength={3}
                   />

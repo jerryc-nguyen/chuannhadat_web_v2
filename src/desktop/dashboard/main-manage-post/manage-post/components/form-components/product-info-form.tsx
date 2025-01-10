@@ -31,39 +31,40 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
 
       </CardHeader>
       <CardContent className="grid gap-6">
+        <FormField
+          control={form.control}
+          name="phap_ly"
+          render={({ field }) => (
+            <FormItem className="grid gap-2">
+              <FormLabel>Giấy tờ pháp lý</FormLabel>
+              <CommonSelect
+                placeholder='Giấy tờ pháp lý'
+                onChange={field.onChange}
+                value={field.value}
+                options={[{ text: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
+                actions={
+                  <>
+                    <SelectSeparator />
+                    <Button
+                      className="w-full px-2"
+                      variant="default"
+                      size="sm"
+                      onClick={(e) => {
+                        form.setValue('phap_ly', '');
+                      }}
+                    >
+                      Xóa lựa chọn
+                    </Button>
+                  </>
+                }
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
-
-            <FormField
-              control={form.control}
-              name="phap_ly"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Giấy tờ pháp lý</FormLabel>
-                  <CommonSelect
-                    onChange={field.onChange}
-                    value={field.value}
-                    options={[{ text: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
-                    actions={
-                      <>
-                        <SelectSeparator />
-                        <Button
-                          className="w-full px-2"
-                          variant="default"
-                          size="sm"
-                          onClick={(e) => {
-                            form.setValue('phap_ly', '');
-                          }}
-                        >
-                          Xóa lựa chọn
-                        </Button>
-                      </>
-                    }
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <FormField
               control={form.control}
@@ -131,7 +132,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                     placeholder="Nhập số"
                     endAdornment={
                       <span>
-                        <b>m</b>
+                        <b>tầng</b>
                       </span>
                     }
                     maxLength={8}

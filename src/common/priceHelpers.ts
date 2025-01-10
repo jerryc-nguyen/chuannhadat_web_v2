@@ -86,8 +86,8 @@ export const maskNumber = (value: string) => {
   value = value + '';
   if (!value)
     return {
-      rawValue: '0',
-      formattedValue: '0',
+      rawValue: '',
+      formattedValue: '',
     };
 
   if (value === 'Thỏa thuận')

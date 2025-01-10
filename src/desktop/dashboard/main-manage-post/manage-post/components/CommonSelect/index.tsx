@@ -24,9 +24,10 @@ interface CommonSelectProps {
   onChange: (value: string) => void;
   value: string;
   actions?: React.ReactNode;
+  placeholder?: string
 }
 
-export function CommonSelect({ options, onChange, value, actions }: CommonSelectProps) {
+export function CommonSelect({ options, onChange, value, actions, placeholder }: CommonSelectProps) {
   const isMobile = useIsMobile();
   if (isMobile) {
     return (
@@ -69,7 +70,7 @@ export function CommonSelect({ options, onChange, value, actions }: CommonSelect
   return (
     <Select onValueChange={onChange} value={value} defaultValue={value}>
       <SelectTrigger>
-        <SelectValue defaultValue={value} />
+        <SelectValue defaultValue={value} placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {options.map((item, index) => (
