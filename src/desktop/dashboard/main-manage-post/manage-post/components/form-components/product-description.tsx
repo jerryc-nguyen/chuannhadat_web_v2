@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Separator } from '@components/ui/separator';
 import { BadgeInfo } from 'lucide-react';
 import { useIsMobile } from '@hooks';
 
@@ -16,7 +15,7 @@ const ProductDescriptionForm: React.FC<A> = ({ form }) => {
         <CardTitle className="text-md flex gap-2">
           <BadgeInfo /> Thông tin bài viết
         </CardTitle>
-        <Separator />
+
       </CardHeader>
       <CardContent className="grid gap-6">
         <div className="grid gap-4">

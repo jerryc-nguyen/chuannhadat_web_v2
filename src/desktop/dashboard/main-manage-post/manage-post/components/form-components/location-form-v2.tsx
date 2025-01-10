@@ -50,12 +50,11 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   }, [fullAddress])
 
   return (
-    <Card className="bg-primary/10">
+    <Card>
       <CardHeader>
         <CardTitle className="text-md flex gap-2">
           <MapPin /> Chọn địa chỉ bất động sản
         </CardTitle>
-        <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
         <LocationsPickerFormV2

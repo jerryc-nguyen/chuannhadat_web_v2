@@ -1,34 +1,48 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Separator } from '@components/ui/separator';
+
 import { BadgeInfo } from 'lucide-react';
 import React from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 import { businessTypeOptions, categoryTypeOptions } from '../../constant';
 import { CommonSelect } from '../CommonSelect';
+import { PriceAutoComplete } from './fields/price-autocomplete';
+import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
+import { Input } from '@components/ui/input';
+import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
 
 interface IProductTypeForm {
   form: UseFormReturn<A>;
 }
 
 const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
+  const price_in_vnd = form.watch('price_in_vnd');
+
+  const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
+    // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
+    const regex = /^(?![.,])\d+([.,]\d{0,})?$/;
+
+    if (regex.test(value) || value === '') {
+      field.onChange(value); // Update the value only if it matches the regex
+    }
+  };
+
   return (
     <Card>
-      <CardHeader className='p-4 md:p-6'>
+      <CardHeader>
         <CardTitle className="text-md flex gap-2">
-          <BadgeInfo /> Loại giao dịch
+          <BadgeInfo /> Thông tin cơ bản
         </CardTitle>
-        <Separator />
       </CardHeader>
-      <CardContent className="grid gap-4 md:gap-6 p-4 md:p-6">
+      <CardContent className="grid gap-6">
         <div className="grid gap-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="business_type"
               render={({ field }) => (
-                <FormItem className="grid gap-2">
+                <FormItem>
                   <FormLabel>
                     <span className="text-red-600">*</span> Nhu cầu của bạn là
                   </FormLabel>
@@ -48,7 +62,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
               control={form.control}
               name="category_type"
               render={({ field }) => (
-                <FormItem className="grid gap-2">
+                <FormItem>
                   <FormLabel>
                     <span className="text-red-600">*</span> Loại bất động sản
                   </FormLabel>
@@ -61,6 +75,110 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="price_in_vnd"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Giá bán/ thuê (VNĐ)
+                  </FormLabel>
+                  <PriceAutoComplete
+                    selectedValue={price_in_vnd}
+                    onSelectedValueChange={(value) => {
+                      const { rawValue } = maskNumber(value);
+                      onChangeFieldNumber(field, rawValue);
+                    }}
+                    items={buildOptionsPrice({
+                      searchText: price_in_vnd,
+                      businessType: form.getValues('business_type'),
+                    })}
+                    emptyMessage="Nhập giá bán"
+                    InputRender={
+                      <Input
+                        {...field}
+                        value={maskNumber(field.value).formattedValue}
+                        placeholder="Nhập giá bán"
+                        onChange={(e) => {
+                          const { rawValue } = maskNumber(e.target.value);
+                          onChangeFieldNumber(field, rawValue);
+                        }}
+                        maxLength={12}
+                        disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
+                      />
+                    }
+                  />
+
+                  <div
+                    className={`flex ${form.formState.errors.price_in_vnd ? 'justify-between' : 'justify-end'}`}
+                  >
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="area"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Diện tích (m²)
+                  </FormLabel>
+                  <Input
+                    {...field}
+                    value={maskNumber(field.value).formattedValue}
+                    onChange={(e) => {
+                      const { rawValue } = maskNumber(e.target.value);
+                      onChangeFieldNumber(field, rawValue);
+                    }}
+                    placeholder="Nhập diện tích (m²)"
+                    maxLength={10}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+
+            <FormField
+              control={form.control}
+              name="bedrooms_count"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Số phòng ngủ</FormLabel>
+                  <RoundedOptionsNumberInput
+                    {...field}
+                    className="relative"
+                    placeholder="Nhập số"
+                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                    maxLength={3}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="bathrooms_count"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Số phòng tắm</FormLabel>
+                  <RoundedOptionsNumberInput
+                    {...field}
+                    className="relative"
+                    placeholder="Nhập số"
+                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                    maxLength={3}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
           </div>
         </div>
       </CardContent>
