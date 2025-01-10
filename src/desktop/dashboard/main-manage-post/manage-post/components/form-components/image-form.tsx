@@ -2,7 +2,6 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@components/ui/separator';
 import { Image } from 'lucide-react';
 import { FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
@@ -19,13 +18,13 @@ type ImageFormProps = {
 export const ImageForm = ({ form }: ImageFormProps) => {
   return (
     <Card>
-      <CardHeader className="p-4 md:p-6">
+      <CardHeader>
         <CardTitle className="text-md flex gap-2">
           <Image /> Hình ảnh, Video
         </CardTitle>
-        <Separator />
+
       </CardHeader>
-      <CardContent className="grid gap-4 p-4 md:gap-6 md:p-6">
+      <CardContent className="grid gap-6">
         <InputYoutube form={form} />
         <UploadImages form={form} />
       </CardContent>

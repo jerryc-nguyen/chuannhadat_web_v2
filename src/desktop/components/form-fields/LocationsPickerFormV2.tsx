@@ -184,12 +184,12 @@ export default function LocationsPickerFormV2({
 
   return (
     <div ref={containerRef}>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         <FormField
           control={form.control}
           name="city_id"
           render={({ field }) => (
-            <FormItem className="grid gap-2">
+            <FormItem>
               <FormLabel>
                 <span className="text-red-600">*</span> Tỉnh/ Thành phố
               </FormLabel>
@@ -213,7 +213,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="district_id"
           render={({ field }) => (
-            <FormItem className="grid gap-2">
+            <FormItem>
               <FormLabel>
                 <span className="text-red-600">*</span> Quận/ Huyện
               </FormLabel>
@@ -236,7 +236,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="ward_id"
           render={({ field }) => (
-            <FormItem className="grid gap-2">
+            <FormItem>
               <FormLabel>Phường/ Xã</FormLabel>
               <DropdownSelectField
                 options={wardOptions}
@@ -256,7 +256,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="street_id"
           render={({ field }) => (
-            <FormItem className="grid gap-2">
+            <FormItem>
               <FormLabel>Đường/ Phố</FormLabel>
               <DropdownSelectField
                 options={[...streetOptions]}

@@ -8,6 +8,7 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
+  CommandShortcut,
 } from '@components/ui/command';
 import { Input } from '@components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
@@ -78,7 +79,8 @@ export function PriceAutoComplete<T extends string>({
                 e.preventDefault();
               }
             }}
-            className="w-[--radix-popover-trigger-width] p-0"
+            className="w-[300px] p-0 right-[-20px]"
+            align="center" side="bottom"
           >
             <CommandList>
               {isLoading && (
@@ -104,6 +106,8 @@ export function PriceAutoComplete<T extends string>({
                         )}
                       />
                       {option.text}
+
+                      <CommandShortcut>{option.description}</CommandShortcut>
                     </CommandItem>
                   ))}
                 </CommandGroup>

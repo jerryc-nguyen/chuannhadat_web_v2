@@ -50,12 +50,11 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   }, [fullAddress])
 
   return (
-    <Card className="bg-primary/10">
+    <Card>
       <CardHeader>
         <CardTitle className="text-md flex gap-2">
-          <MapPin /> Chọn địa chỉ bất động sản
+          <MapPin /> Khu vực bất động sản
         </CardTitle>
-        <Separator />
       </CardHeader>
       <CardContent className="grid gap-6">
         <LocationsPickerFormV2
@@ -72,7 +71,7 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
         />
 
         <div className="grid gap-2">
-          <Label htmlFor="subject">Vị trí trên bản đồ</Label>
+          <Label htmlFor="subject">Khu vực trên bản đồ</Label>
 
           <iframe
             className='w-full min-h-64'
@@ -88,7 +87,7 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
             render={({ field }) => (
               <FormItem className="grid gap-2">
                 <FormLabel>
-                  Địa chỉ cụ thể
+                  Địa chỉ
                 </FormLabel>
                 <Input
                   value={fullAddress}

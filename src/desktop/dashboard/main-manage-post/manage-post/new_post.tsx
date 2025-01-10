@@ -105,11 +105,11 @@ const NewPost: React.FC = () => {
             <FormMobile />
           ) : (
             <div className="grid items-start gap-6 lg:col-span-3">
-              <ImageForm form={form} />
               <ProductTypeForm form={form} />
               <LocationFormV2 form={form} />
               <ProductDescriptionForm form={form} />
               <ProductInfoForm form={form} />
+              <ImageForm form={form} />
             </div>
           )}
           {/* <div className="grid items-start gap-6 lg:col-span-1 top-2 sticky">

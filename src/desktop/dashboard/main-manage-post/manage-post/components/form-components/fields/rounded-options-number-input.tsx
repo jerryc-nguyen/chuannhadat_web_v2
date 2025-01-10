@@ -38,7 +38,7 @@ export const roundedOptionsInputVariants = cva(
 
 export interface RoundedOptionsInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof roundedOptionsInputVariants> {
+  VariantProps<typeof roundedOptionsInputVariants> {
   endAdornment?: React.ReactNode;
   hiddenSelect?: boolean;
 }
@@ -74,7 +74,7 @@ const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOpti
             return (
               <div
                 key={index}
-                className={`cnd-chip flex min-h-9 min-w-9 justify-center ${selected ? 'bg-slate-500 text-gray-100' : ''}`}
+                className={`cnd-chip flex min-h-12 min-w-12 justify-center ${selected ? 'bg-black text-white' : ''}`}
                 onClick={() => {
                   setInputValue('');
                   onChange?.({
