@@ -1,6 +1,5 @@
 'use client';
 import { removeTokenServer } from '@app/action';
-import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import {
   DropdownMenu,
@@ -9,7 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { Skeleton } from '@components/ui/skeleton';
@@ -88,31 +86,25 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
           <DropdownMenuGroup>
             <DropdownMenuItem className="hover:cursor-pointer">
               <Link href={`/profile/${currentUser?.slug}`}>Trang cá nhân</Link>
-              <DropdownMenuShortcut>⇧⌘R</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
               <Link href={isDashboardPage ? '/' : '/dashboard'}>
                 {isDashboardPage ? 'Trang chủ' : 'Trang quản lý'}
               </Link>
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard/manage-post/collection-post">Quản lý tin đăng</Link>
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard/account-settings">Cài đặt tài khoản</Link>
-              <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
               <Link href="/dashboard/top-up">Nạp tiền</Link>
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer" onClick={handleLogOut}>
             Đăng xuất
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
