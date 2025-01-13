@@ -1,12 +1,16 @@
 import background_profile from '@assets/images/background_profile.jpg';
 import Image, { StaticImageData } from 'next/image';
 import default_avatar from '@assets/images/default_avatar.png';
-import React from 'react';
+import useResizeImage from '@hooks/useResizeImage';
+import { useState } from 'react';
 
 export default function ProfileImage({ profileData }: { profileData: A }) {
-  const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
+  const [imgSrc, setImgSrc] = useState<StaticImageData | string>(
     profileData?.avatar_url as string,
   );
+  const THUMB_WIDTH = 150;
+
+  const { buildThumbnailUrl } = useResizeImage();
 
   return (
     <div className="profile-image mb-[75px] -translate-x-5 md:-translate-x-10">
@@ -29,13 +33,13 @@ export default function ProfileImage({ profileData }: { profileData: A }) {
         <Image
           draggable="false"
           alt="avatar-profile"
-          src={imgSrc}
+          src={buildThumbnailUrl({ imageUrl: imgSrc.toString(), width: THUMB_WIDTH, ratio: 1 })}
           onError={() => {
             setImgSrc(default_avatar);
           }}
-          height={150}
+          height={THUMB_WIDTH}
           unoptimized
-          width={150}
+          width={THUMB_WIDTH}
           className="profile-content_avatar rounded-full border-4 border-solid border-slate-200 bg-slate-300"
         />
       </div>
