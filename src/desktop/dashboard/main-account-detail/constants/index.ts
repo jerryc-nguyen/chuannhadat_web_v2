@@ -28,12 +28,12 @@ export const listTabAccountSetting = [
     icon: LuUserCog2,
     tabComponent: PersonalTab,
   },
-  {
-    title: 'Liên kết tài khoản',
-    tabValue: AccountSettingTab.CONNECT_SOCIAL,
-    icon: IoShareSocial,
-    tabComponent: ConnectSocial,
-  },
+  // {
+  //   title: 'Liên kết tài khoản',
+  //   tabValue: AccountSettingTab.CONNECT_SOCIAL,
+  //   icon: IoShareSocial,
+  //   tabComponent: ConnectSocial,
+  // },
   {
     title: 'Thông tin liên hệ',
     tabValue: AccountSettingTab.CONTACT_INFO,

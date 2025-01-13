@@ -12,10 +12,10 @@ type ButtonPhoneProps = {
 
 const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className, isMobile }) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>(
-    phoneNumberProfile.slice(0, -4) + 'xxxx',
+    phoneNumberProfile,
   );
   const [textButtonPhone, setTextButtonPhone] = React.useState<string>(
-    isMobile ? StatusPhoneNumber.copy : StatusPhoneNumber.normal,
+    isMobile ? StatusPhoneNumber.copy : StatusPhoneNumber.copy,
   );
   const handleClickButtonPhone = async () => {
     if (textButtonPhone === StatusPhoneNumber.copy) {
@@ -47,7 +47,7 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
       )}
       variant={'outline'}
     >
-      <span className="flex items-center gap-x-2">
+      <span className="flex items-center gap-x-2 text-xl">
         <FaPhone />
         <span id="phone-number">{isMobile ? textButtonPhone : phoneNumber}</span>
       </span>

@@ -62,25 +62,25 @@ export const listNavDashboard: INavLinkGroup[] = [
         name: 'Mua gói dịch vụ',
         url: '/service-package',
       },
-      {
-        name: 'Dùng mã quà tặng / KM',
-        url: '/code-promotion',
-      },
+      // {
+      //   name: 'Dùng mã quà tặng / KM',
+      //   url: '/code-promotion',
+      // },
     ],
   },
-  {
-    name: 'Quản lý yêu cầu',
-    url: '',
-    icon: LuRepeat,
-    links: [
-      {
-        name: 'Yêu cầu liên hệ lại',
-        url: '/request/call-back',
-      },
-      {
-        name: 'Yêu cầu tư vấn',
-        url: '/request/advise',
-      },
-    ],
-  },
+  // {
+  //   name: 'Quản lý yêu cầu',
+  //   url: '',
+  //   icon: LuRepeat,
+  //   links: [
+  //     {
+  //       name: 'Yêu cầu liên hệ lại',
+  //       url: '/request/call-back',
+  //     },
+  //     {
+  //       name: 'Yêu cầu tư vấn',
+  //       url: '/request/advise',
+  //     },
+  //   ],
+  // },
 ];

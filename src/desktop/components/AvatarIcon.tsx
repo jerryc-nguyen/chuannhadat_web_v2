@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { Skeleton } from '@components/ui/skeleton';
+import useResizeImage from '@hooks/useResizeImage';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
@@ -33,6 +34,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const { openModal, closeModal } = useModals();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const { buildThumbnailUrl } = useResizeImage();
 
   const showModalLoginAndRegister = () => {
     openModal({
@@ -67,7 +69,8 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
               width={40}
               height={40}
               className="rounded-full"
-              src={currentUser.avatar_url}
+              src={buildThumbnailUrl({ imageUrl: currentUser.avatar_url, width: 40, ratio: 1 })}
+              object-fit="cover"
             />
           ) : (
             <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
