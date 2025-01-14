@@ -51,7 +51,7 @@ export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
   const auto_refresh_product = row.original.auto_refresh_product;
 
   return (
-    <div className="container">
+    <div className={`container ${row.original.ads_type}`}>
       {hide_on_frontend_reason ? (
         <div className="mb-4 flex w-full overflow-hidden rounded-lg border border-[#9f3a38] bg-[#fff6f6] p-4 md:rounded-xl lg:flex-row lg:items-center">
           <span className="text-sm text-[#9f3a38]">
@@ -196,7 +196,6 @@ const TitleTriggerOpenProductDetail = ({
   const { openModal } = useModals();
 
   const openModalPostDetail = async () => {
-    console.log('fffffff', product.uid);
     if (isMobile) {
       openModal({
         name: title,
@@ -219,10 +218,10 @@ const TitleTriggerOpenProductDetail = ({
 
   return (
     <span
-      className="mb-3 cursor-pointer text-16 font-semibold hover:text-primary_color"
+      className="mb-3 cursor-pointer text-16 font-semibold hover:underline"
       onClick={openModalPostDetail}
     >
-      {title}
+      <span className='c-ads_color'>{title}</span>
       <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
         <span className="mx-2"> · </span>
         <span className="space-x-1">

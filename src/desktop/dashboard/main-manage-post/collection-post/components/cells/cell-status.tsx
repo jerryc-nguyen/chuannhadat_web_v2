@@ -1,6 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { Product } from '../../data/schemas/product-schema';
+import { ADS_TYPES } from '@common/constants';
 
 export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
   const id = row.original.id;
@@ -33,25 +34,12 @@ export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
         <span className="text-secondary">{formatted_published_at}</span>
       </div>
 
-      <div className="flex flex-col gap-1 text-xs">
+      <div className={`flex flex-col gap-1 text-xs ${ads_type}`}>
         <span className="font-medium">Loại tin:</span>
-        <span
-          className={`${ads_type === 'vip_1'
-              ? 'text-[#dc3545]'
-              : ads_type === 'vip_2'
-                ? 'text-[#fd7e14]'
-                : ads_type === 'vip_3'
-                  ? 'text-[#0052ea]'
-                  : 'text-secondary'
-            }`}
-        >
-          {ads_type === 'vip_1'
-            ? 'TIN VIP 1'
-            : ads_type === 'vip_2'
-              ? 'TIN VIP 2'
-              : ads_type === 'vip_3'
-                ? 'TIN VIP 3'
-                : 'Tin thường'}
+        <span>
+          <span className='c-ads_color font-bold'>
+            {ADS_TYPES[ads_type]}
+          </span>
           {expires_after_days && ads_type !== 'normal' ? (
             <span className="text-secondary">{` (hết hạn sau ${expires_after_days})`}</span>
           ) : (
