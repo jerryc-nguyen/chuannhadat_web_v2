@@ -83,7 +83,16 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
           sideOffset={5}
         >
           {currentUser?.full_name && (
-            <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
+            <>
+              <DropdownMenuLabel>
+                {currentUser?.full_name}
+
+              </DropdownMenuLabel>
+
+              <p className='px-2 text-xs text-secondary'>
+                Mã thành viên: {currentUser?.id}
+              </p>
+            </>
           )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>

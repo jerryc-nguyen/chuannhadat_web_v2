@@ -14,12 +14,16 @@ import Link from 'next/link';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
 import MenubarIcon from './MenubarIcon';
+import useResizeImage from '@hooks/useResizeImage';
 type MainNavRightProps = {
   isLogged: boolean;
 };
+const AVATAR_SIZE = 40;
+
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { currentUser } = useAuth();
   const { openModal, closeModal } = useModals();
+  const { cropSquare } = useResizeImage();
   React.useEffect(() => {
     setFrontendToken(uuidv4());
     return () => {
@@ -42,10 +46,10 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
         <Link href={`/profile/${currentUser?.slug}`}>
           <Image
             alt={currentUser.full_name}
-            width={40}
-            height={40}
+            width={AVATAR_SIZE}
+            height={AVATAR_SIZE}
             className="rounded-full"
-            src={currentUser.avatar_url}
+            src={cropSquare(currentUser.avatar_url, AVATAR_SIZE)}
           />
         </Link>
       ) : (

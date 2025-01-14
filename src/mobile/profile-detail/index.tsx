@@ -23,13 +23,17 @@ import {
 import { listFilterProfileMobile } from '@mobile/filter_bds/constants';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 import { useSyncParamsToState } from '@hooks';
+import useResizeImage from '@hooks/useResizeImage';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
 };
 
+const PROFILE_IMAGE_SIZE = 100;
+
 const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }) => {
   useSyncParamsToState();
+  const { cropSquare } = useResizeImage();
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
@@ -62,12 +66,12 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           <Image
             draggable="false"
             alt="avatar-profile"
-            src={imgSrc}
+            src={cropSquare(imgSrc.toString(), PROFILE_IMAGE_SIZE)}
             onError={() => {
               setImgSrc(default_avatar);
             }}
-            height={100}
-            width={100}
+            height={PROFILE_IMAGE_SIZE}
+            width={PROFILE_IMAGE_SIZE}
             className="rounded-full border-[5px] border-solid border-white bg-slate-300"
           />
           <span className="absolute bottom-1 right-1 block rounded-full border-2 border-white bg-white">

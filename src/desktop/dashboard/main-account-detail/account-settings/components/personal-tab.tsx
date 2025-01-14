@@ -118,12 +118,12 @@ const PersonalTab: React.FC = () => {
       values.customerType === CustomerType.Customer
         ? defaultPayload
         : {
-            ...defaultPayload,
-            exp_years: values.experience ? parseInt(values.experience) : undefined,
-            gender: values.customerGender,
-            address: values.workplace,
-            description: values.aboutMe,
-          };
+          ...defaultPayload,
+          exp_years: values.experience ? parseInt(values.experience) : undefined,
+          gender: values.customerGender,
+          address: values.workplace,
+          description: values.aboutMe,
+        };
     updateMyProfile(formatDataPayload);
   }
   React.useEffect(() => {
@@ -145,7 +145,7 @@ const PersonalTab: React.FC = () => {
     <section>
       <div className="border-b pb-4">
         <h3 className="text-xl font-semibold">Tài khoản của bạn</h3>
-        <p className="text-xs text-slate-400">Thông tin chi tiết về tài khoản</p>
+        <p className="text-xs text-slate-400">Mã thành viên: <b className='text-primary'>{currentUser?.id}</b></p>
       </div>
       <Form {...form}>
         <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
