@@ -40,12 +40,15 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
   const handleUpVip = async (data: UpVipProductInput) => {
     try {
       const res = await ProductApiService.UpVip(data);
-      console.log('handleUpVip success response', res);
-      toast.success('Up VIP thành công.');
-      fetchBalance();
-      closeModal();
-
-      // TODO KHAI NEED HELP: Cập nhật số dư tài khoản real-time
+      if (res.status) {
+        console.log('handleUpVip success response', res);
+        toast.success('Up VIP thành công.');
+        fetchBalance();
+        closeModal();
+      } else {
+        // @ts-ignore: ok
+        toast.success('Đã có lỗi xảy ra: ' + res.message);
+      }
     } catch (err) {
       console.error('handleUpVip error', err);
       toast.error('Có lỗi xảy ra, vui lòng thử lại sau.');
@@ -83,11 +86,9 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
 
     let amountPerDay = 0;
     if (adsType === 'vip_1') {
-      amountPerDay = 20000;
-    } else if (adsType === 'vip_2') {
-      amountPerDay = 10000;
-    } else if (adsType === 'vip_3') {
       amountPerDay = 5000;
+    } else if (adsType === 'vip_3') {
+      amountPerDay = 2500;
     }
 
     let discountPercentage = 0;
@@ -119,13 +120,13 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
       {productActionSettings && productActionSettings.up_vip ? (
         <form onSubmit={form.handleSubmit(handleUpVip)}>
           {productActionSettings.up_vip?.ads_type_options &&
-          productActionSettings.up_vip?.ads_type_options.length > 0 ? (
-            <div className="space-y-4">
+            productActionSettings.up_vip?.ads_type_options.length > 0 ? (
+            <div className="space-y-2">
               <h6 className="text-16 font-semibold">Chọn loại tin đăng</h6>
 
-              <ButtonGroup className="w-full flex-1" orientation="vertical">
+              <ButtonGroup className="w-full flex-1 border rounded-t-lg rounded-b-lg" orientation="vertical">
                 {productActionSettings.up_vip.ads_type_options.map((item, index) => (
-                  <div key={index} className="flex justify-between space-y-2">
+                  <div key={index} className={`flex justify-between px-3 py-1 ${index == 0 ? '' : 'border-t'}`}>
                     <Radio
                       key={item.value}
                       label={item.text}
@@ -144,7 +145,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
                       }
                     />
 
-                    <span className="font-normal text-[#28a745]">
+                    <span className="font-normal text-secondary">
                       {item.formatted_amount || '0%'}
                     </span>
                   </div>
@@ -156,41 +157,47 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
             </div>
           ) : (
             <></>
-          )}
-          {productActionSettings.up_vip?.number_of_day_options &&
-          productActionSettings.up_vip?.number_of_day_options.length > 0 ? (
-            <div className="space-y-4">
-              <h6 className="text-16 font-semibold">Chọn thời gian đăng tin</h6>
+          )
+          }
+          {
+            productActionSettings.up_vip?.number_of_day_options &&
+              productActionSettings.up_vip?.number_of_day_options.length > 0 ? (
+              <div className="space-y-2 mt-4">
+                <h6 className="text-16 font-semibold">Chọn thời gian đăng tin</h6>
 
-              <ButtonGroup className="w-full flex-1" orientation="vertical">
-                {productActionSettings.up_vip.number_of_day_options.map((item, index) => (
-                  <div key={index} className="flex justify-between space-y-2">
-                    <Radio
-                      key={item.value}
-                      label={item.text}
-                      checked={!!(numberOfDay && numberOfDay === item.value.toString())}
-                      onChange={() => {
-                        form.setValue('number_of_day', item.value.toString());
-                      }}
-                    />
+                <ButtonGroup className="w-full flex-1 border rounded-t-lg rounded-b-lg" orientation="vertical">
+                  {productActionSettings.up_vip.number_of_day_options.map((item, index) => (
+                    <div key={index} className={`flex justify-between px-3 py-1 ${index == 0 ? '' : 'border-t'}`}>
+                      <Radio
+                        key={item.value}
+                        label={item.text}
+                        checked={!!(numberOfDay && numberOfDay === item.value.toString())}
+                        onChange={() => {
+                          form.setValue('number_of_day', item.value.toString());
+                        }}
+                      />
 
-                    <span className="font-normal text-[#28a745]">{item.formatted_discount}</span>
-                  </div>
-                ))}
-              </ButtonGroup>
+                      <span className="font-normal text-[#28a745]">{item.formatted_discount}</span>
+                    </div>
+                  ))}
+                </ButtonGroup>
 
-              <span className="text-sm font-normal text-destructive">
-                {form.formState.errors.number_of_day?.message}
-              </span>
-            </div>
-          ) : (
-            <></>
-          )}
+                <span className="text-sm font-normal text-destructive">
+                  {form.formState.errors.number_of_day?.message}
+                </span>
+              </div>
+            ) : (
+              <></>
+            )
+          }
 
-          <span className="flex flex-1 justify-center gap-3 font-medium">
-            Tổng tiền:
-            <p className="text-[#f39c12]">{maskNumber(totalAmount.toString()).formattedValue} Xu</p>
-          </span>
+          <div className="flex flex-1 justify-between gap-3 font-medium mt-4">
+            <b className="text-xl">
+              Tổng tiền:
+            </b>
+
+            <p className="text-xl font-bold">{maskNumber(totalAmount.toString()).formattedValue} Xu</p>
+          </div>
 
           <span className="text-sm font-normal text-destructive">{errorValidate}</span>
 
@@ -198,7 +205,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
             <Button
               type="submit"
               variant="default"
-              size="sm"
+              size="lg"
               className="h-8"
               // disabled={!!(!isLoadingValidate && errorValidate)}
               disabled={
@@ -214,11 +221,11 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
               <span className="text-sm">Áp dụng</span>
             </Button>
           </div>
-        </form>
+        </form >
       ) : (
         <></>
       )}
-    </div>
+    </div >
   );
 };
 

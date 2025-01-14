@@ -10,10 +10,10 @@ import { LoginResponse } from '@mobile/auth/types';
 import { useMutation } from '@tanstack/react-query';
 import { signInWithPopup } from 'firebase/auth';
 import React from 'react';
-import { BsQrCode } from 'react-icons/bs';
+// import { BsQrCode } from 'react-icons/bs';
 import { CgSpinner } from 'react-icons/cg';
 import { FcGoogle } from 'react-icons/fc';
-import { IoLogoFacebook } from 'react-icons/io5';
+// import { IoLogoFacebook } from 'react-icons/io5';
 import { toast } from 'sonner';
 
 type LoginSocialProps = {
@@ -58,7 +58,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className
         referral_code: getCookie(REFERRAL_CODE),
       });
     } catch (error) {
-      toast.error('Đăng nhập google thất bại ' + error);
+      toast.error('Đăng nhập google không thành công' + error);
       setLoadingLoginGoogle(false);
     }
   };
@@ -75,9 +75,9 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className
         ) : (
           <FcGoogle className="text-2xl sm:text-xl" />
         )}
-        <span className="hidden sm:block">Google</span>
+        <span className="hidden sm:block">Đăng nhập bằng Google</span>
       </Button>
-      <div
+      {/* <div
         onClick={() => toast.warning('Chức năng này hiện đang trong quá trình phát triển')}
         className="flex flex-1 cursor-pointer items-center justify-center gap-x-2 rounded-md border border-primary_color/30 py-3 shadow-lg"
       >
@@ -90,7 +90,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className
       >
         <BsQrCode className="h-6 w-6 text-primary_color sm:h-4 sm:w-4" />
         <span className="hidden sm:block"> QR</span>
-      </div>
+      </div> */}
     </section>
   );
 };

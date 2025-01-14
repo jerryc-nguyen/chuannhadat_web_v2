@@ -6,8 +6,7 @@ import { IoImage } from 'react-icons/io5';
 import { LuLoader2 } from 'react-icons/lu';
 import { IProductSummary } from '@desktop/post-detail/type';
 import { AspectRatio } from '@components/ui/AspectRatio';
-import { Button } from '@components/ui/button';
-import { usePathname, useRouter } from 'next/navigation';
+
 import useModalPostDetail from '@desktop/post-detail/hooks/useModalPostDetail';
 
 type RelatedProductCardProps = {

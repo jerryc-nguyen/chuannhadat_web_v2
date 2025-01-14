@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 import { LuPhoneIncoming } from 'react-icons/lu';
 import { AuthorPostProps } from '../type';
-import DialogContactAgain from '@components/dialog-contact-again';
+// import DialogContactAgain from '@components/dialog-contact-again';
 import PostsBySameAuthor from './posts-by-same-author';
 import ButtonPhone from '@components/button-phone';
 import { useRouter } from 'next/navigation';
@@ -48,15 +48,15 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
       </div>
     );
   };
-  const buttonContactAgain = () => (
-    <Button
-      className="flex items-center gap-x-2 hover:bg-blue-500 hover:text-white"
-      variant={'outline'}
-    >
-      <LuPhoneIncoming />
-      Yêu cầu liên hệ lại
-    </Button>
-  );
+  // const buttonContactAgain = () => (
+  //   <Button
+  //     className="flex items-center gap-x-2 hover:bg-blue-500 hover:text-white"
+  //     variant={'outline'}
+  //   >
+  //     <LuPhoneIncoming />
+  //     Yêu cầu liên hệ lại
+  //   </Button>
+  // );
   return (
     <div className={cn('author-post z-3 sticky top-0 h-fit min-w-[350px] flex-1', className)}>
       {isLoading || !data?.author?.slug ? (
@@ -88,12 +88,12 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
 
           <div className="flex flex-col gap-y-2">
             <ButtonPhone phoneNumberProfile={profileData?.phone as string} />
-            <DialogContactAgain
+            {/* <DialogContactAgain
               postUid={data.uid}
               elementTrigger={buttonContactAgain}
               postId={data?.id}
               title={data.title}
-            />
+            /> */}
           </div>
         </div>
       )}

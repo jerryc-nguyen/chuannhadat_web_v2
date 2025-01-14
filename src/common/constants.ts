@@ -65,3 +65,10 @@ export const CND_TEXT_COLORS = {
   Error: "text-rose-700",
   Info: "text-cyan-500"
 }
+
+export const ADS_TYPES: Record<string, A> = {
+  vip_1: 'Siêu VIP',
+  vip_2: 'VIP+',
+  vip_3: 'VIP',
+  normal: 'Tin thường'
+}
