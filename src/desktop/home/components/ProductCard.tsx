@@ -4,22 +4,16 @@ import { isLoadingModal, selectedPostId } from '../../post-detail/states/modalPo
 import { useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
-import { EmblaCarouselType } from 'embla-carousel';
 import styles from '../styles/ProductCard.module.scss';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import Spinner from '@components/ui/spinner';
-import { Carousel, CarouselApi, CarouselContent } from '@components/ui/carousel';
 import { cn } from '@common/utils';
-import React, { useCallback } from 'react';
-import ImageCard from './ImageCard';
-import Fade from 'embla-carousel-fade';
-import ImageSliderAction from './ImageSliderAction';
-import useEmblaCarousel from 'embla-carousel-react';
+import React from 'react';
 
-import ButtonSave from './ButtonSave';
-import useResizeImage from '@hooks/useResizeImage';
 import LoadingProductCard from './LoadingProductCard';
+import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
+import Link from 'next/link';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
@@ -27,10 +21,6 @@ type ProductCardProps = {
 };
 export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
-  const [imageSliderViewPortRef] = useEmblaCarousel();
-  const [imageSliderApi, setImageSliderApi] = React.useState<CarouselApi>();
-  const [slidesInView, setSlidesInView] = React.useState<number[]>([]);
-  const { buildThumbnailUrl } = useResizeImage();
 
   const [postId, setSelectedPostId] = useAtom(selectedPostId);
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
@@ -42,41 +32,6 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
       queryFn: () => services.posts.getDetailPost(postId),
     });
   };
-
-  const updateSlidesInView = React.useCallback((imageSliderApi: EmblaCarouselType) => {
-    setSlidesInView((slidesInView) => {
-      if (slidesInView.length === imageSliderApi.slideNodes().length) {
-        imageSliderApi.off('slidesInView', updateSlidesInView);
-      }
-      const inView = imageSliderApi.slidesInView().filter((index) => !slidesInView.includes(index));
-      return slidesInView.concat(inView);
-    });
-  }, []);
-
-  // https://stackoverflow.com/a/50227675
-  const preloadImages = useCallback(
-    (event: A) => {
-      if (event.scrollProgress() != 0) {
-        return;
-      }
-      product.images.forEach((picture: A, index: number) => {
-        setTimeout(() => {
-          const img = new Image();
-          img.src = buildThumbnailUrl({ imageUrl: picture.url });
-        }, index * 10);
-      });
-    },
-    [buildThumbnailUrl, product?.images],
-  );
-
-  React.useEffect(() => {
-    if (!imageSliderApi) return;
-    updateSlidesInView(imageSliderApi);
-    imageSliderApi.on('slidesInView', updateSlidesInView);
-    imageSliderApi.on('reInit', updateSlidesInView);
-    imageSliderApi.on('select', preloadImages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageSliderApi, updateSlidesInView]);
 
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
   if (!product || product.images.length == 0) {
@@ -96,45 +51,12 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         </CardHeader>
       )}
       <CardContent className="card-content">
-        {product.images_count < 2 ? (
-          <>
-            <ImageCard
-              key={product.images[0].id}
-              countImages={product.images_count}
-              item={product.images[0]}
-              detailPath={product.detail_path || ''}
-              onClick={() => openModalPostDetail(product.uid)}
-            />
-            <ButtonSave postUid={product.uid} />
-          </>
-        ) : (
-          <Carousel
-            opts={{ loop: true }}
-            setApi={setImageSliderApi}
-            plugins={[Fade()]}
-            className="card-content_carousel w-full"
-          >
-            <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
-              {product.images.map((item: A, index: number) => (
-                <ImageCard
-                  key={item.id}
-                  inView={slidesInView.indexOf(index) > -1}
-                  countImages={product.images_count}
-                  item={item}
-                  detailPath={product.detail_path || ''}
-                  index={index}
-                  onClick={() => openModalPostDetail(product.uid)}
-                />
-              ))}
-            </CarouselContent>
-            <ImageSliderAction
-              api={imageSliderApi}
-              countImages={product.images.length}
-              onClick={() => openModalPostDetail(product.uid)}
-            />
-            <ButtonSave postUid={product.uid} />
-          </Carousel>
-        )}
+        <CardImageCarousel
+          handleClickCardImage={() => {
+            openModalPostDetail(product.uid);
+          }}
+          product={product}
+        />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
         {!isShowAuthor && (
@@ -143,13 +65,11 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
           </div>
         )}
 
-        {isShowAuthor && (
-          <div className="text-secondary w-full">{product.bus_cat_type}</div>
-        )}
-
+        {isShowAuthor && <div className="w-full text-secondary">{product.bus_cat_type}</div>}
+        <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="mt-2 w-full line-clamp-2 cursor-pointer text-base font-semibold text-primary"
+          className="mt-2 line-clamp-2 w-full cursor-pointer text-base font-semibold text-primary"
         >
           {product?.title}
         </h3>
