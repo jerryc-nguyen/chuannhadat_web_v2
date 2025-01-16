@@ -10,7 +10,7 @@ export const ButtonUpVip = ({ productId, adsType }: { productId: string; adsType
   const showModalUpVipProduct = () => {
     openModal({
       name: 'ModalUpVipProduct',
-      title: 'Cấu hình tin đăng',
+      title: 'Đăng tin VIP',
       content: <UpVipProductForm productId={productId} closeModal={closeModal} />,
       footer: <></>,
       showAsDialog: true,
