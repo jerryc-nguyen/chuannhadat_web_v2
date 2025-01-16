@@ -29,7 +29,7 @@
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],
       "@components/*": ["src/components/*"],
-      "@views/*": ["src/views/*"]
+      "@views/*": ["src/views/*"],
     },
     "target": "ES2017"
   },
@@ -41,7 +41,7 @@
     "src/**/*.tsx",
     ".next/types/**/*.ts",
     "tailwind.config.js",
-    "src/components/ui/ConfirmEmailModaltsx"
+    "src/components/ui/ConfirmEmailModal.tsx"
   ],
   "exclude": ["node_modules"]
 }

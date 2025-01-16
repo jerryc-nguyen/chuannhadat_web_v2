@@ -14,7 +14,7 @@ export default function useSSRCurrentUser() {
     queryOptions({
       queryKey: ['ssrCurrentUserInfo', authHeaders],
       queryFn: () => {
-        return services.profiles.getMyProfile(authHeaders);
+        return services.profiles.getMyProfile();
       },
       staleTime: 0,
     }),

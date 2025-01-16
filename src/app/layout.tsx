@@ -32,7 +32,6 @@ export const metadata: Metadata = createMetadata({
     url: getServerSideURL(),
   },
   manifest: '/manifest.json',
-  themeColor: '#ffffff',
 
   icons: {
     icon: [
