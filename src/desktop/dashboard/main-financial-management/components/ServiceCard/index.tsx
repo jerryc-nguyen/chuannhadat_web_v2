@@ -6,6 +6,7 @@ import PaymentDialog from '../PaymentDialog';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { useBalanceRequest } from '@api/balance';
 
 interface ServiceCardProps {
   plan: Service;
@@ -14,6 +15,7 @@ interface ServiceCardProps {
 const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { fetchBalance } = useBalanceRequest();
 
   const buyPlanMutation = useMutation({
     mutationFn: async (planId: number) => {
@@ -22,7 +24,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data.message || 'Mua gói thành công!');
-
+        fetchBalance();
         handleCloseDialog();
       } else toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
