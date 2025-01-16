@@ -6,6 +6,8 @@ import registerSchema from './resolver';
 import { Button } from '@components/ui/button';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+
 import {
   Form,
   FormControl,
@@ -22,7 +24,7 @@ import { getCookie, removeCookie } from '@common/cookies';
 import { REFERRAL_CODE } from '@common/auth';
 import { toast } from 'sonner';
 type RegisterFormProps = {
-  onClose: () => void;
+  onClose?: () => void;
 };
 export default function RegisterForm({ onClose }: RegisterFormProps) {
   const { handleSignIn } = useAuth();
@@ -38,7 +40,7 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
         toast.error(response.message ?? 'Lỗi đăng ký');
       }
       removeCookie(REFERRAL_CODE);
-      onClose();
+      onClose && onClose();
     },
     onError: (error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
@@ -147,10 +149,16 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
         <Button
           disabled={isRegister}
           type="submit"
-          className="text-md my-4 w-full rounded-md bg-primary_color/80 px-4 py-2 font-semibold text-white hover:bg-primary_color focus:animate-pulse"
+          className="text-md mt-4 w-full rounded-md bg-primary_color/80 px-4 py-2 font-semibold text-white hover:bg-primary_color focus:animate-pulse"
         >
           {isRegister ? 'Đang xác thực' : 'Đăng ký'}
         </Button>
+        <div className="text-center">
+          <span className="pr-1 text-sm"> Bạn đã có tài khoản?</span>
+          <Link href="/sign-in" className="text-sm font-semibold text-blue-400 hover:underline">
+            Đăng nhập
+          </Link>
+        </div>
       </form>
     </Form>
   );

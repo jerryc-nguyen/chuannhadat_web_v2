@@ -98,13 +98,18 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                               <SidebarMenuSubItem
                                 onClick={() => setOpenMobile(false)}
                                 className={cn(
-                                  'rounded-md border-[1.5px] border-transparent px-4 py-2 text-base transition-all hover:cursor-pointer',
+                                  'rounded-md border-[1.5px] border-transparent text-base transition-all hover:cursor-pointer',
                                   getActiveLink(navLink.url),
                                   getClassActiveHover(),
                                 )}
                                 key={genKey(index)}
                               >
-                                <Link href={`/dashboard/${navLink.url}`}>{navLink.name}</Link>
+                                <Link
+                                  className="block h-full w-full px-4 py-2"
+                                  href={`/dashboard/${navLink.url}`}
+                                >
+                                  {navLink.name}
+                                </Link>
                               </SidebarMenuSubItem>
                             ))}
                           </SidebarMenuSub>
@@ -125,7 +130,10 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                       )}
                       asChild
                     >
-                      <Link href={nav.url as string} className="flex items-center gap-x-2">
+                      <Link
+                        href={nav.url as string}
+                        className="flex h-full w-full items-center gap-x-2"
+                      >
                         <nav.icon className="!h-6 !w-6" />
                         <span className="text-base font-medium">{nav.name}</span>
                       </Link>

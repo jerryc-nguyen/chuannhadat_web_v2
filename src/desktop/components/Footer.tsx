@@ -58,7 +58,7 @@ const listMenuFooter = [
       {
         key: 3,
         value: 'Đăng tin mới',
-        link: '/dang-tin-moi',
+        link: '/dashboard/manage-post/new-post',
       },
     ],
   },
