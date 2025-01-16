@@ -357,7 +357,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
       {addTimeRefresh()}
       {numberRefreshPost()}
       {refreshSettingsTable()}
-      {refeshListPackage()}
+      {/* {refeshListPackage()} */}
       {renderDialogScheduleTime()}
       {renderDialogWarning()}
     </section>

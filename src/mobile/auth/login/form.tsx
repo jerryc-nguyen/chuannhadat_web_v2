@@ -67,6 +67,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
 
   return (
     <Form {...form}>
+      <LoginSocial handleSuccessLogin={onClose} />
+
+      <div className="mt-4 flex w-full items-center justify-between gap-x-2">
+        <span className="block h-[1px] flex-1 bg-slate-300" />
+        <span className="px-2 text-center text-sm text-gray-500">Hoặc</span>
+        <span className="block h-[1px] flex-1 bg-slate-300" />
+      </div>
+
       <form className="mt-4 flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
         <FormField
           name="phone"
@@ -133,19 +141,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
           {isPending ? 'Đang xác thực ...' : 'Đăng nhập'}
         </Button>
 
-        <div className="text-center">
+        {/* <div className="text-center">
           <span className="pr-1 text-sm"> Bạn chưa có tài khoản?</span>
           <Link href="/sign-up" className="text-sm font-semibold text-blue-400 hover:underline">
             Đăng ký
           </Link>
-        </div>
+        </div> */}
 
-        <div className="mt-4 flex w-full items-center justify-between gap-x-2">
-          <span className="block h-[1px] flex-1 bg-slate-300" />
-          <span className="px-2 text-center text-sm text-gray-500">Hoặc </span>
-          <span className="block h-[1px] flex-1 bg-slate-300" />
-        </div>
-        <LoginSocial handleSuccessLogin={onClose} />
       </form>
     </Form>
   );

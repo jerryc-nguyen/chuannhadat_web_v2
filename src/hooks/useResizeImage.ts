@@ -63,6 +63,13 @@ export default function useResizeImage() {
     });
   };
 
+  const cropSquare = (url: string, width: number): string => {
+    return resize({
+      imageUrl: url,
+      sizes: { width: width, height: width },
+    });
+  }
+
   const applyCdnUrlFor = (url: string): string => {
     for (const host in CDN_MAPS) {
       url = url.replace(host, CDN_MAPS[host]) || url;
@@ -88,5 +95,6 @@ export default function useResizeImage() {
     resize,
     thresholdWidth,
     buildThumbnailUrl,
+    cropSquare
   };
 }
