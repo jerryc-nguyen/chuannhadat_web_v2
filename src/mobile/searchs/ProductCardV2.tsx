@@ -13,6 +13,7 @@ import LoadingProductCard from '@desktop/home/components/LoadingProductCard';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
 import CardAuthor from '@desktop/home/components/CardAuthor';
+import CardImageCarousel from '@desktop/home/components/CardImageCarousel/CardImageCarousel';
 
 const styles: A = {
   imagesCountWrapper: {
@@ -88,29 +89,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       <div className="p-4">
         <CardAuthor product={product} isMobile={true} />
       </div>
-
-      <AspectRatio.Root ratio={16 / 9}>
-        <Image
-          src={genImageSrc}
-          alt={product?.title}
-          fill
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mOcWw8AAb8BHjgUU1kAAAAASUVORK5CYII="
-          loading="lazy"
-          placeholder="blur"
-          className="h-full w-full cursor-pointer object-cover"
-        />
-
-        <div style={styles.imagesCountWrapper}>
-          <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
-            <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>
-              <IoImage size={20} style={{ color: '#fff' }} />
-              <span style={{ color: '#fff', marginLeft: 5 }}>{product.images_count}</span>
-            </div>
-          </div>
-        </div>
-        <ButtonSave postUid={product.uid} />
-      </AspectRatio.Root>
-
+      <CardImageCarousel product={product} />
       <div className="p-4">
         <div className="w-full text-secondary">{product.bus_cat_type}</div>
 
@@ -122,7 +101,6 @@ export default function ProductCard({ product }: { product: IProduct }) {
           {product?.title}{' '}
         </Link>
       </div>
-
       <div className="flex w-full justify-between px-4 pb-4">
         <div className="flex flex-col gap-y-1 text-sm">
           <span className="text-base font-bold text-black">{product?.formatted_price}</span>
