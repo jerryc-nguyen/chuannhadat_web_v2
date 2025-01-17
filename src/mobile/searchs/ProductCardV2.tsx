@@ -74,18 +74,8 @@ export default function ProductCard({ product }: { product: IProduct }) {
     });
   };
 
-  const genImageSrc = React.useMemo(() => {
-    return buildThumbnailUrl({
-      imageUrl: product?.featured_image_url,
-    });
-  }, [buildThumbnailUrl, product?.featured_image_url]);
-
-  if (!product) {
-    return <LoadingProductCard />;
-  }
-
   return (
-    <div className="c-productCard overflow-hidden bg-white shadow-lg">
+    <div className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type}`}>
       <div className="p-4">
         <CardAuthor product={product} isMobile={true} />
       </div>
@@ -96,7 +86,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
         <Link
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}
-          className="mb-2 cursor-pointer font-bold text-secondary hover:text-blue-500"
+          className="mb-2 cursor-pointer font-bold text-secondary c-ads_color"
         >
           {product?.title}{' '}
         </Link>

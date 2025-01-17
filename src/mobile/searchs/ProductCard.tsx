@@ -81,7 +81,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
   }
 
   return (
-    <div className="my-4 overflow-hidden bg-white shadow-lg">
+    <div className={`my-4 overflow-hidden bg-white shadow-lg ${product.ads_type}`}>
       <AspectRatio.Root ratio={16 / 9}>
         <Image
           src={genImageSrc}
@@ -107,7 +107,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
         <Link
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}
-          className="mb-2 cursor-pointer font-bold text-secondary hover:text-blue-500"
+          className="mb-2 cursor-pointer font-bold text-secondary hover:underline c-ads_color"
         >
           {product?.title}{' '}
         </Link>
