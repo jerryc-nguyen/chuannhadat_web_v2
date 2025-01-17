@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -18,19 +19,6 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "@*": ["./src/*"],
-      "@app/*": ["src/app/*"],
-      "@styles/*": ["src/styles/*"],
-      "@assets/*": ["src/assets/*"],
-      "@utils/*": ["src/services/*"],
-      "@desktop/*": ["src/desktop/*"],
-      "@mobile/*": ["src/mobile/*"],
-      "@api/*": ["src/api/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@components/*": ["src/components/*"],
-      "@views/*": ["src/views/*"],
-    },
     "target": "ES2017"
   },
   "include": [
