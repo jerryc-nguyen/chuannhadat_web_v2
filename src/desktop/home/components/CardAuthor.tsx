@@ -1,4 +1,3 @@
-import { LuSparkles } from 'react-icons/lu';
 import useCardAuthors from '../hooks/useCardAuthors';
 import HoverCardAuthor from './hover-card-author/HoverCardAuthor';
 import { Skeleton } from '@components/ui/skeleton';
@@ -48,13 +47,13 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
 
   const formattedAds = useMemo((): string | null => {
     if (product.ads_type == 'vip_1') {
-      return 'Tin Siêu VIP'
+      return 'Tin Siêu VIP';
     } else if (product.ads_type == 'vip_3') {
-      return 'Tin VIP'
+      return 'Tin VIP';
     } else {
-      return null
+      return null;
     }
-  }, [product])
+  }, [product]);
 
   const Component = isMobile ? 'div' : HoverCardAuthor;
   const linkTarget = isMobile ? {} : { target: '_blank' };
@@ -70,10 +69,10 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                    imageUrl: imgSrc,
-                    width: 40,
-                    ratio: 1,
-                  })
+                      imageUrl: imgSrc,
+                      width: 40,
+                      ratio: 1,
+                    })
                   : imgSrc
               }
               onError={() => {
@@ -119,12 +118,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
           <span className="overflow-hidden text-ellipsis text-nowrap">
             {shortenLocationName(product?.short_location_name)}
           </span>
-          {formattedAds && (
-            <>
-              ·
-              {formattedAds}
-            </>
-          )}
+          {formattedAds && <>·{formattedAds}</>}
         </p>
       </div>
       {/* <LuMoreHorizontal className="ml-2 h-5 w-5 rounded-full text-secondary hover:bg-blue-50" /> */}
