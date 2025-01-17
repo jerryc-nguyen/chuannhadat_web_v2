@@ -42,6 +42,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
       className={cn(
         styles.card_wrapper,
         'relative h-full overflow-hidden rounded-md p-4',
+        product.ads_type,
         className,
       )}
     >
@@ -69,7 +70,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="mt-2 line-clamp-2 w-full cursor-pointer text-base font-semibold text-primary"
+          className="mt-2 line-clamp-2 w-full cursor-pointer text-base font-semibold text-primary c-ads_color"
         >
           {product?.title}
         </h3>

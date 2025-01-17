@@ -1,9 +1,9 @@
-import { LuMoreHorizontal } from 'react-icons/lu';
+import { LuSparkles } from 'react-icons/lu';
 import useCardAuthors from '../hooks/useCardAuthors';
 import HoverCardAuthor from './hover-card-author/HoverCardAuthor';
 import { Skeleton } from '@components/ui/skeleton';
 import Image, { StaticImageData } from 'next/image';
-import React from 'react';
+import React, { useMemo } from 'react';
 import default_avatar from '@assets/images/default_avatar.png';
 import Link from 'next/link';
 import useResizeImage from '@hooks/useResizeImage';
@@ -12,6 +12,7 @@ import TooltipHost from '@components/tooltip-host';
 import { useTopAuthors } from '../hooks/useTopAuthors';
 import { useAtom } from 'jotai';
 import { filterStateAtom } from '@mobile/filter_bds/states';
+import { shortenLocationName } from '@common/stringHelpers';
 
 export default function CardAuthor({ product, isMobile }: { product: A; isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
@@ -45,6 +46,16 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
     }
   };
 
+  const formattedAds = useMemo((): string | null => {
+    if (product.ads_type == 'vip_1') {
+      return 'Tin Siêu VIP'
+    } else if (product.ads_type == 'vip_3') {
+      return 'Tin VIP'
+    } else {
+      return null
+    }
+  }, [product])
+
   const Component = isMobile ? 'div' : HoverCardAuthor;
   const linkTarget = isMobile ? {} : { target: '_blank' };
 
@@ -59,10 +70,10 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                      imageUrl: imgSrc,
-                      width: 40,
-                      ratio: 1,
-                    })
+                    imageUrl: imgSrc,
+                    width: 40,
+                    ratio: 1,
+                  })
                   : imgSrc
               }
               onError={() => {
@@ -106,11 +117,17 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
           </Link>
           ·
           <span className="overflow-hidden text-ellipsis text-nowrap">
-            {product?.short_location_name}
+            {shortenLocationName(product?.short_location_name)}
           </span>
+          {formattedAds && (
+            <>
+              ·
+              {formattedAds}
+            </>
+          )}
         </p>
       </div>
-      <LuMoreHorizontal className="ml-2 h-5 w-5 rounded-full text-secondary hover:bg-blue-50" />
+      {/* <LuMoreHorizontal className="ml-2 h-5 w-5 rounded-full text-secondary hover:bg-blue-50" /> */}
     </div>
   );
 }
