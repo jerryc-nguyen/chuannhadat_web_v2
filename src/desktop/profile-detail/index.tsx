@@ -28,7 +28,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1
+  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
   const { updateValues } = useMainContentNavigator();
 
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
@@ -60,8 +60,12 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   }
 
   const onFilterChanged = (filterState: Record<string, A>) => {
-    updateValues({ city: filterState.city, district: filterState.district, ward: filterState.ward })
-  }
+    updateValues({
+      city: filterState.city,
+      district: filterState.district,
+      ward: filterState.ward,
+    });
+  };
 
   const EmptyPost = () => {
     return (
@@ -79,7 +83,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   return (
     <>
       {!profileData ? (
-        <NotFound className="h-full" errorCode={404} errorMessage="Not Found Data Of Profile" />
+        <NotFound className="h-full" errorMessage="Not Found Data Of Profile" />
       ) : (
         <section className={styles.profile_detail_wrapper}>
           <ProfileImage profileData={profileData} />
