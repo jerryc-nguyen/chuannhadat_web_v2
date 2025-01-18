@@ -50,6 +50,8 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       return 'Tin Siêu VIP';
     } else if (product.ads_type == 'vip_3') {
       return 'Tin VIP';
+    } else if (product.ads_type == 'vip_2') {
+      return 'Tin VIP+';
     } else {
       return null;
     }
@@ -69,10 +71,10 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                      imageUrl: imgSrc,
-                      width: 40,
-                      ratio: 1,
-                    })
+                    imageUrl: imgSrc,
+                    width: 40,
+                    ratio: 1,
+                  })
                   : imgSrc
               }
               onError={() => {
