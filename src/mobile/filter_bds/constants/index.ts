@@ -316,9 +316,9 @@ export const listFilterProfileMobile: Array<FilterChipOption> = [
 ];
 
 export const listFilterMobile: FilterChipOption[] = [
-  {
-    id: FilterFieldName.FilterOverview,
-    text: 'Bộ Lọc',
-  },
+  // {
+  //   id: FilterFieldName.FilterOverview,
+  //   text: 'Bộ Lọc',
+  // },
   ...listFilterDesktop,
 ];
