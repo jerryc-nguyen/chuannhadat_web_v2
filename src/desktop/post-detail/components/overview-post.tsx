@@ -204,7 +204,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
             Lưu tin
             <ButtonSave
               ref={refButtonSave}
-              className="relative right-0 top-0 border-0 !bg-transparent"
+              className="opacity-1 visible relative right-0 top-0 border-0 !bg-transparent"
               postUid={data?.uid}
             />
           </Button>

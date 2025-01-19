@@ -77,7 +77,7 @@ const ButtonSave = React.forwardRef<ButtonSaveHandle, ButtonSaveProps>(
         disabled={isLoadingSavePost}
         variant="outline"
         className={cn(
-          'opacity-1 absolute right-3 top-3 z-[3] rounded-full transition-all',
+          'opacity-1 invisible absolute right-3 top-3 z-[3] rounded-full opacity-0 transition-all',
           styles['favorite_button'],
           !isLoadingSavePost &&
             isSaved &&
