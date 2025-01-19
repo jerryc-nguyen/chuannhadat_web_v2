@@ -4,9 +4,7 @@ import { FilterFieldName } from '@models';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
-
 import Locations from './bts/Locations';
-
 import useModals from '@mobile/modals/hooks';
 import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
@@ -20,7 +18,6 @@ import useFilterState from './hooks/useFilterState';
 import { cn } from '@common/utils';
 import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
-
 import { Modal } from '@mobile/modals/states/types';
 import Projects from './bts/desktop/Projects';
 import { useAtom } from 'jotai';
@@ -29,6 +26,7 @@ import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
 import ProfileLocationsV2 from '@desktop/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
+
 type FilterChipsProps = {
   chipOptions: FilterChipOption[];
   onFilterChipsChanged?: (filterState: Record<string, A>) => void;

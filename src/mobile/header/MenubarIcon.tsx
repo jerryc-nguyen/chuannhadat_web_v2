@@ -11,7 +11,6 @@ import useAuth from '@mobile/auth/hooks/useAuth';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
 
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { LuMenu, LuUserCircle } from 'react-icons/lu';
@@ -43,11 +42,6 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
       title: 'Cài đặt tài khoản',
     },
     {
-      id: 3,
-      href: '/tao-tin-moi',
-      title: 'Đăng tin',
-    },
-    {
       id: 4,
       href: '/dashboard/top-up',
       title: 'Nạp tiền',
@@ -74,21 +68,37 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
         <div className="flex flex-col p-6">
           <SheetTitle className="font-bold text-primary_color">{currentUser?.full_name}</SheetTitle>
           <SheetDescription className="text-sm text-secondary">
-            ID {currentUser?.id}
+            Mã thành viên: {currentUser?.id}
           </SheetDescription>
         </div>
+
+        <div className="mb-4 px-6">
+          <Button
+            className="flex w-full items-center gap-x-2"
+          >
+            <a href='/dashboard/manage-post/new-post'>Đăng tin</a>
+          </Button>
+
+          <Button
+            className="flex w-full items-center gap-x-2 mt-2"
+          >
+            <a href='/dashboard/top-up'>Nạp tiền</a>
+          </Button>
+        </div>
+
         <ul>
           {listMenubar.map((menu) => (
             <li
               className="border-b px-6 py-2 font-medium hover:bg-slate-100 hover:underline"
               key={menu.id}
             >
-              <Link href={menu.href}>{menu.title}</Link>
+              <a href={menu.href}>{menu.title}</a>
             </li>
           ))}
+
         </ul>
         <div className="my-4 px-6">
-          <Button className="flex w-full items-center gap-x-2" onClick={handleLogout}>
+          <Button className="flex w-full items-center gap-x-2" variant="outline" onClick={handleLogout}>
             Đăng xuất
           </Button>
         </div>
@@ -113,12 +123,6 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
           <SheetTitle className="text-sm">Xin chào, quý khách</SheetTitle>
         </div>
         <div className="my-4 px-6">
-          <Button
-            className="mb-2 flex w-full items-center gap-x-2"
-            onClick={() => router.push('tao-tin-moi')}
-          >
-            Đăng tin
-          </Button>
           <Button className="flex w-full items-center gap-x-2" onClick={showModalLoginAndRegister}>
             Đăng nhập
           </Button>

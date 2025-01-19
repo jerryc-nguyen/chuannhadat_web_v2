@@ -15,6 +15,7 @@ import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin'
 import useModals from '@mobile/modals/hooks';
 import MenubarIcon from './MenubarIcon';
 import useResizeImage from '@hooks/useResizeImage';
+
 type MainNavRightProps = {
   isLogged: boolean;
 };
