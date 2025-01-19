@@ -110,7 +110,7 @@ const ReferFriend: React.FC = () => {
                 width={120}
                 height={120}
                 className="h-[120px] dark:bg-white"
-                src="https://chuannhadat.com/images/referral_1.svg"
+                src="https://admin.chuannhadat.com/images/referral_1.svg"
               />
               <div className="flex flex-col items-center">
                 <span className="text-md font-semibold">Bạn là người giới thiệu</span>
@@ -127,7 +127,7 @@ const ReferFriend: React.FC = () => {
                 width={120}
                 height={120}
                 className="h-[120px] dark:bg-white"
-                src="https://chuannhadat.com/images/referral_2.svg"
+                src="https://admin.chuannhadat.com/images/referral_2.svg"
               />
               <div className="flex flex-col items-center">
                 <span className="text-md font-semibold">Bạn là người được giới thiệu</span>

@@ -10,7 +10,7 @@ const Logo: React.FC<LogoProps> = ({ isAlwaysShow = false, className }) => {
     <a href="/" className={cn('header-logo mr-4 flex items-center space-x-2', className)}>
       <Image
         height={40}
-        src="https://chuannhadat.com/images/logo_mobile@2x.png"
+        src="https://admin.chuannhadat.com/images/logo_mobile@2x.png"
         width={40}
         alt="Logo"
       />
