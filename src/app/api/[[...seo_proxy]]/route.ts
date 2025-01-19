@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request) {
   const url = new URL(req.url).host;
   const path = new URL(req.url).pathname;
-  const siteMapHost = 'https://chuannhadat.com';
+  const siteMapHost = 'https://admin.chuannhadat.com';
   const targetUrl = `${siteMapHost}${path}`;
   const response = await fetch(targetUrl);
 
