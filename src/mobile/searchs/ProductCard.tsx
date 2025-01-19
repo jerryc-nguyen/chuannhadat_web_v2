@@ -92,7 +92,6 @@ export default function ProductCard({ product }: { product: IProduct }) {
           placeholder="blur"
           className="h-full w-full cursor-pointer object-cover"
         />
-
         <div style={styles.imagesCountWrapper}>
           <div style={styles.imagesCount} className="flex items-center justify-between px-2 py-1">
             <div className="flex items-center justify-start" style={{ marginLeft: 5 }}>

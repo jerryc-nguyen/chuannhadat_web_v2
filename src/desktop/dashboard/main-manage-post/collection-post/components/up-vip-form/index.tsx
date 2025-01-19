@@ -14,36 +14,13 @@ import { Button } from '@components/ui/button';
 import { LoadingSpinner } from '@components/icons/loading-spinner';
 import useProductActionSetting from '../../hooks/product-action-setting';
 import { useBalanceRequest } from '@api/balance';
-import { get, pick } from 'lodash-es';
-import { getQueryClient } from '@api/react-query';
+import { get } from 'lodash-es';
+import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 
 interface IUpVipProductFormProps {
   productId: string;
   closeModal: () => void;
 }
-
-const updateQueriesCacheAfterUpVip = (updateRes: A) => {
-  getQueryClient().setQueriesData(
-    {
-      queryKey: ['collection-post'],
-    },
-    (prev: A) => {
-      const recordId = get(updateRes, 'id', '');
-      return {
-        ...prev,
-        data: prev.data.map((record: A) => {
-          if (record.id === recordId) {
-            return {
-              ...record,
-              ...updateRes,
-            };
-          }
-          return record;
-        }),
-      };
-    },
-  );
-};
 
 const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => {
   const { productActionSettings, isLoadingProductActionSetting } = useProductActionSetting();
@@ -61,13 +38,15 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
     reValidateMode: 'onChange',
   });
 
+  const { updateRowData } = useManagePostsCache();
+
   const handleUpVip = async (data: UpVipProductInput) => {
     try {
       const res = await ProductApiService.UpVip(data);
       if (res.status) {
         toast.success('Up VIP thành công.');
         fetchBalance();
-        updateQueriesCacheAfterUpVip(res.data);
+        updateRowData(res.data);
         closeModal();
       } else {
         toast.success('Đã có lỗi xảy ra: ' + get(res, 'message', 'chưa xác định'));
@@ -143,7 +122,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
       {productActionSettings && productActionSettings.up_vip ? (
         <form onSubmit={form.handleSubmit(handleUpVip)}>
           {productActionSettings.up_vip?.ads_type_options &&
-          productActionSettings.up_vip?.ads_type_options.length > 0 ? (
+            productActionSettings.up_vip?.ads_type_options.length > 0 ? (
             <div className="space-y-2">
               <h6 className="text-16 font-semibold">Chọn loại tin đăng</h6>
 
@@ -188,7 +167,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
             <></>
           )}
           {productActionSettings.up_vip?.number_of_day_options &&
-          productActionSettings.up_vip?.number_of_day_options.length > 0 ? (
+            productActionSettings.up_vip?.number_of_day_options.length > 0 ? (
             <div className="mt-4 space-y-2">
               <h6 className="text-16 font-semibold">Chọn thời gian đăng tin</h6>
 

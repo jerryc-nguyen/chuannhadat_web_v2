@@ -1,6 +1,7 @@
 import React, { useImperativeHandle } from 'react';
 import { Button } from '@components/ui/button';
 import { AxiosError } from 'axios';
+import styles from './CardImageCarousel/CardImageCarousel.module.scss';
 import { PiHeart, PiHeartFill } from 'react-icons/pi';
 import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { listPostIdSavedAtom } from '../states';
@@ -76,7 +77,8 @@ const ButtonSave = React.forwardRef<ButtonSaveHandle, ButtonSaveProps>(
         disabled={isLoadingSavePost}
         variant="outline"
         className={cn(
-          'favorite_button opacity-1 absolute right-3 top-3 z-[3] rounded-full transition-all',
+          'opacity-1 absolute right-3 top-3 z-[3] rounded-full transition-all',
+          styles['favorite_button'],
           !isLoadingSavePost &&
             isSaved &&
             '!visible border-none bg-red-100 !opacity-100 hover:bg-red-100',

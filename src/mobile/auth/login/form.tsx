@@ -23,7 +23,7 @@ import React from 'react';
 import LoginSocial from '@components/login-social';
 
 type LoginFormProps = {
-  onClose: () => void;
+  onClose?: () => void;
 };
 const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
   const { handleSignIn } = useAuth();
@@ -34,7 +34,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
       if (response.status) {
         const userData = response.data;
         handleSignIn(userData);
-        onClose();
+        onClose && onClose();
         toast.success(
           `Xin chào, ${userData.full_name || userData.phone} bạn đã đăng nhập thành công!`,
         );
@@ -143,7 +143,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
 
         {/* <div className="text-center">
           <span className="pr-1 text-sm"> Bạn chưa có tài khoản?</span>
-          <Link href="/register" className="text-sm font-semibold text-blue-400 hover:underline">
+          <Link href="/sign-up" className="text-sm font-semibold text-blue-400 hover:underline">
             Đăng ký
           </Link>
         </div> */}

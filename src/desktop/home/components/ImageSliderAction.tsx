@@ -6,7 +6,7 @@ import { EmblaCarouselType } from 'embla-carousel';
 type ImageSliderActionProps = {
   countImages: number;
   api: EmblaCarouselType | undefined;
-  onClick: () => void
+  onClick?: () => void;
 };
 
 const ImageSliderAction: React.FC<ImageSliderActionProps> = ({ countImages, api, onClick }) => {
@@ -14,9 +14,9 @@ const ImageSliderAction: React.FC<ImageSliderActionProps> = ({ countImages, api,
 
   const handleOnClick = (event: A) => {
     if (event.target && event.target.classList.contains('js-sliderControls')) {
-      onClick();
+      onClick && onClick();
     }
-  }
+  };
 
   React.useEffect(() => {
     if (!api) {
@@ -45,7 +45,10 @@ const ImageSliderAction: React.FC<ImageSliderActionProps> = ({ countImages, api,
   }, [api]);
   return (
     <>
-      <div className="js-sliderControls slider_button absolute top-1/2 flex w-full -translate-y-1/2 justify-between px-4 cursor-pointer" onClick={handleOnClick}>
+      <div
+        className="js-sliderControls slider_button absolute top-1/2 flex w-full -translate-y-1/2 cursor-pointer justify-between px-4"
+        onClick={handleOnClick}
+      >
         <CarouselPrevious className="static translate-y-0" />
         <CarouselNext className="static translate-y-0" />
       </div>
