@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ProductApiService from '../../apis/product-api';
 import {
-    SetUpAutoRefreshProductInput
+  SetUpAutoRefreshProductInput
 } from '../../data/schemas';
 
 export const CheckboxAutoRefresh = ({
@@ -34,23 +34,23 @@ export const CheckboxAutoRefresh = ({
     }
   };
 
+  const handleCheckOnLabel = () => {
+    const newCheck = !checked;
+    setChecked(newCheck);
+    handleSetUpAutoRefresh({
+      productId: productId,
+      autoRefresh: newCheck,
+    });
+  }
+
   return (
-    <div className="flex w-max items-center space-x-2 rounded-md border bg-background px-3 text-sm">
+    <div className="flex w-max items-center space-x-2 rounded-md border bg-background px-2 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); handleCheckOnLabel() }}>
       <Checkbox
         checked={checked}
-        onCheckedChange={(checkedState) => {
-          if (typeof checkedState === 'boolean') {
-            setChecked(checkedState);
-            handleSetUpAutoRefresh({
-              productId: productId,
-              autoRefresh: checkedState,
-            });
-          }
-        }}
       />
       <label
         htmlFor="terms"
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        className="text-sm font-medium leading-none peer-disabled:opacity-70 cursor-pointer"
       >
         Làm mới tin tự động
       </label>

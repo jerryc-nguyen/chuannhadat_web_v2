@@ -5,11 +5,11 @@ const VipNewsPage = () => {
   const listVipNews = [
     {
       id: 1,
-      title: 'Tin vip 1',
+      title: 'Tin Siêu VIP',
       desciprtion: (
         <p className="text-sm lg:text-base">
           Là loại tin được đăng tiêu đề bằng chữ{' '}
-          <span className="font-semibold uppercase text-red-500">in hoa màu đỏ</span>, được hưởng
+          <span className="font-semibold uppercase text-red-500">in màu đỏ</span>, được hưởng
           nhiều ưu tiên và hiệu quả giao dịch cao nhất.
         </p>
       ),
@@ -17,11 +17,11 @@ const VipNewsPage = () => {
     },
     {
       id: 2,
-      title: 'Tin vip 2',
+      title: 'Tin VIP+ (đã ngưng cung cấp)',
       desciprtion: (
         <p className="text-sm lg:text-base">
           Là loại tin được đăng tiêu đề bằng chữ{' '}
-          <span className="font-semibold uppercase text-orange-500">in hoa màu cam</span>, được
+          <span className="font-semibold uppercase text-orange-500">in màu cam</span>, được
           hưởng nhiều ưu, nằm dưới tin VIP 1 và trên tất cả các loại tin khác.
         </p>
       ),
@@ -29,11 +29,11 @@ const VipNewsPage = () => {
     },
     {
       id: 3,
-      title: 'Tin vip 3',
+      title: 'Tin VIP',
       desciprtion: (
         <p className="text-sm lg:text-base">
           Là loại tin được đăng tiêu đề bằng chữ{' '}
-          <span className="font-semibold uppercase text-blue-500">in hoa màu Xanh</span>, nằm dưới
+          <span className="font-semibold uppercase text-blue-500">in màu Xanh</span>, nằm dưới
           tin VIP 1, VIP 2 và trên tin thường.
         </p>
       ),

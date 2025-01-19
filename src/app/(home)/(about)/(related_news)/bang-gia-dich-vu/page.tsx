@@ -8,7 +8,23 @@ const ServicePrice: React.FC<ServicePriceProps> = () => {
   return (
     <section className="mx-auto w-full py-10 text-lg md:w-4/5">
       <h1 className="mb-10 text-nowrap text-3xl font-bold lg:text-5xl">Bảng giá dịch vụ</h1>
-      <section className="pb-4">
+
+      <div className="text-secondary">
+        Tin thường: 2K Xu / 1 lần đăng tin - tin được hiển thị mãi mãi
+      </div>
+
+      <div className="text-secondary">
+        VIP: 2.5K Xu  / 1 ngày
+      </div>
+
+
+      <div className="text-secondary">
+        Siêu VIP: 5K Xu  / 1 ngày
+      </div>
+
+      <br>
+      </br>
+      {/* <section className="pb-4">
         <h2 className="mb-2 mt-4 text-xl font-bold lg:text-2xl">Gói combo cho môi giới</h2>
         <p className="text-sm lg:text-base">
           Gói COMBO tiết kiệm chi phí đăng tin VIP cho môi giới.
@@ -74,7 +90,7 @@ const ServicePrice: React.FC<ServicePriceProps> = () => {
             listPreferential={['Số lần làm mới tin: 2000']}
           />
         </section>
-      </section>
+      </section> */}
     </section>
   );
 };
