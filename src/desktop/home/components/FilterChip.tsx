@@ -218,7 +218,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
           sideOffset={5}
           align="center"
           side="bottom"
-          className={cn(`!relative mt-4 ${contentWidth()}`, styles.filter_popover_content)}
+          className={cn(`!relative mt-4 z-20 ${contentWidth()}`, styles.filter_popover_content)}
         >
           <h2 className="text-left text-lg font-semibold">{filterChipItem.text}</h2>
           <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">

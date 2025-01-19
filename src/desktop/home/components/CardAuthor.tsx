@@ -120,7 +120,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
           <span className="overflow-hidden text-ellipsis text-nowrap">
             {shortenLocationName(product?.short_location_name)}
           </span>
-          {formattedAds && <>·{formattedAds}</>}
+          {formattedAds && <> · <b>{formattedAds}</b></>}
         </p>
       </div>
       {/* <LuMoreHorizontal className="ml-2 h-5 w-5 rounded-full text-secondary hover:bg-blue-50" /> */}

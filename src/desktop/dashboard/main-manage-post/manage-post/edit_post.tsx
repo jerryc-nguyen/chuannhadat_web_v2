@@ -71,7 +71,7 @@ const EditPost = ({ params }: { params: A }) => {
       console.log('done');
     }
   };
-  
+
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -81,13 +81,11 @@ const EditPost = ({ params }: { params: A }) => {
               <FormMobile />
             ) : (
               <>
-                <ImageForm form={form} />
-                <ProductDescriptionForm form={form} />
-
                 <ProductTypeForm form={form} />
                 <LocationFormV2 form={form} />
-
+                <ProductDescriptionForm form={form} />
                 <ProductInfoForm form={form} />
+                <ImageForm form={form} />
               </>
             )}
           </div>
