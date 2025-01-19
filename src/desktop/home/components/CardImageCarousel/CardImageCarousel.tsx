@@ -56,7 +56,7 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
   }, [imageSliderApi, updateSlidesInView]);
   return (
     <section className={styles.card_img_carousel}>
-      {product.images_count < 2 ? (
+      {product.images.length > 0 && product.images_count < 2 ? (
         <>
           <ImageCard
             key={product.images[0].id}
