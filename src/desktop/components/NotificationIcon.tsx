@@ -21,9 +21,8 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
 
   const handleRedirect = (notif: A) => {
-    router.push(notif.redirect_url)
+    router.push(notif.redirect_url);
   };
-
   React.useEffect(() => {
     if (notifications.length > 0 && totalUnread === 0) {
       setIsShowBadge(false);
