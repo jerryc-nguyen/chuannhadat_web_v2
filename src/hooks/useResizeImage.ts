@@ -54,7 +54,7 @@ export default function useResizeImage() {
     width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
     const height = Math.ceil(width / curRatio);
-    if (!imageUrl || imageUrl.length == 0) {
+    if (!imageUrl || imageUrl.length == 0 || !isValidUrl(imageUrl)) {
       return '';
     }
 
@@ -98,4 +98,14 @@ export default function useResizeImage() {
     buildThumbnailUrl,
     cropSquare,
   };
+}
+
+function isValidUrl(url: any) {
+  try {
+    new URL(String(url));
+    return true;
+  } catch (err) {
+    throw new Error('Invalid Image URL', url);
+    return false;
+  }
 }
