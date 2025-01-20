@@ -38,7 +38,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
     },
     {
       id: 2,
-      href: '/dashboard/account-setting',
+      href: '/dashboard/account-settings',
       title: 'Cài đặt tài khoản',
     },
     {
@@ -92,11 +92,11 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
               className="border-b px-6 py-2 font-medium hover:bg-slate-100 hover:underline"
               key={menu.id}
             >
-              <a href={menu.href}>{menu.title}</a>
+              <a href={menu.href} className='w-full block'>{menu.title}</a>
             </li>
           ))}
-
         </ul>
+
         <div className="my-4 px-6">
           <Button className="flex w-full items-center gap-x-2" variant="outline" onClick={handleLogout}>
             Đăng xuất
