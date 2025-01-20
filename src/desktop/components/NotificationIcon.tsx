@@ -5,34 +5,31 @@ import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import NotificationsList from '@desktop/notification/NotificationsList';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
-import useAuth from '@mobile/auth/hooks/useAuth';
 import { LucideBell } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 type NotificationIconProps = {
   isLogged: boolean;
 };
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
-  const { totalNotificationlUnread, loadMore } = usePaginatedNotifications();
-  const { currentUser } = useAuth();
+  const { totalUnread, notifications } = usePaginatedNotifications();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
 
   const handleRedirect = () => {
     return;
   };
   React.useEffect(() => {
-    if (currentUser?.id) {
-      loadMore();
+    if (notifications.length > 0 && totalUnread === 0) {
+      setIsShowBadge(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.id]);
-  const showBadge = useMemo(() => {
-    return totalNotificationlUnread !== null && totalNotificationlUnread > 0;
-  }, [totalNotificationlUnread]);
-
+    if (notifications.length > 0 && totalUnread > 0) {
+      setIsShowBadge(true);
+    }
+  }, [notifications, totalUnread]);
   if (!isLogged) return null;
   return (
     <Popover>
@@ -42,17 +39,17 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <LucideBell className="h-5 w-5" />
           </Button>
 
-          {showBadge && (
+          {isShowBadge && (
             <Badge
               className={cn(
-                'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
-                totalNotificationlUnread !== null
+                'absolute -right-2 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-[7px] items-center justify-center rounded-full !text-[10px]',
+                totalUnread !== 0
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',
               )}
             >
-              {totalNotificationlUnread !== null ? (
-                totalNotificationlUnread
+              {totalUnread !== 0 ? (
+                totalUnread
               ) : (
                 <span className="relative flex h-4 w-4 items-center justify-center">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />

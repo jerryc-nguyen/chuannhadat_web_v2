@@ -31,18 +31,27 @@ type PostLoadingType = {
 const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [openSavedPost, setOpenSavePost] = React.useState<boolean>(false);
   const { currentUser } = useAuth();
+  const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
   const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
 
-  const { data: savedSummary } = useQuery({
+  const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
     queryFn: () => services.saves.savedSummary(),
     select: (data) => data.data,
   });
-
+  React.useEffect(() => {
+    if (isSuccess) {
+      if (savedSummary && savedSummary.saved_product_uids.length === 0) {
+        setIsShowBadge(false);
+      } else {
+        setIsShowBadge(true);
+      }
+    }
+  }, [isSuccess, savedSummary]);
   React.useEffect(() => {
     const listPostLoading = savedSummary?.saved_product_uids.map((item) => ({
       id: item,
@@ -159,23 +168,25 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           <Button size={'icon'} variant="outline" className="rounded-full">
             <LucideHeart className="h-5 w-5" />
           </Button>
-          <Badge
-            className={cn(
-              'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white',
-              savedSummary
-                ? 'bg-error_color hover:bg-error_color'
-                : 'bg-transparent hover:bg-transparent',
-            )}
-          >
-            {savedSummary ? (
-              savedSummary.saved_product_uids.length
-            ) : (
-              <span className="relative flex h-4 w-4 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
-                <span className="relative inline-flex h-4 w-4 rounded-full bg-primary_color" />
-              </span>
-            )}
-          </Badge>
+          {isShowBadge && (
+            <Badge
+              className={cn(
+                'absolute -right-2 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-[7px] items-center justify-center rounded-full border border-white text-[10px]',
+                savedSummary
+                  ? 'bg-error_color hover:bg-error_color'
+                  : 'bg-transparent hover:bg-transparent',
+              )}
+            >
+              {savedSummary ? (
+                savedSummary.saved_product_uids.length
+              ) : (
+                <span className="relative flex h-4 w-4 items-center justify-center">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
+                  <span className="relative inline-flex h-4 w-4 rounded-full bg-primary_color" />
+                </span>
+              )}
+            </Badge>
+          )}
         </div>
       </PopoverTrigger>
       <PopoverContent

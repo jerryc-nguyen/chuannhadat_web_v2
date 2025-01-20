@@ -2,10 +2,10 @@ export const DEFAULT_BG_CLASS = 'bg-ios-light-surface dark:bg-ios-dark-surface';
 export const CURRENT_USER_KEY = 'current_user';
 export const SMS_PHONE_NUMBER = '0967.354.632';
 export const SMS_SUPPORT_NUMBER = '0966662192';
-export const BANK_ACCOUNT_NAME = 'NGUYEN VAN LINH'
-export const BANK_ACCOUNT_NUMBER = '519 3839 8888'
-export const BANK_CODE = 'TPBank'
-export const BANK_FULL_NAME = 'Ngân hàng Tiên Phong'
+export const BANK_ACCOUNT_NAME = 'NGUYEN VAN LINH';
+export const BANK_ACCOUNT_NUMBER = '519 3839 8888';
+export const BANK_CODE = 'TPBank';
+export const BANK_FULL_NAME = 'Ngân hàng Tiên Phong';
 
 export const ALL_VALUE = 'all';
 export const ALL_TEXT = 'Tất cả';
@@ -60,15 +60,17 @@ export const QUERY_KEY = {
 export const timeOutDuration = 15 * 3600 * 1000; // 15 days
 
 export const CND_TEXT_COLORS = {
-  Success: "text-green-600",
-  Warning: "text-amber-500",
-  Error: "text-rose-700",
-  Info: "text-cyan-500"
-}
+  Success: 'text-green-600',
+  Warning: 'text-amber-500',
+  Error: 'text-rose-700',
+  Info: 'text-cyan-500',
+};
 
 export const ADS_TYPES: Record<string, A> = {
   vip_1: 'Siêu VIP',
   vip_2: 'VIP+',
   vip_3: 'VIP',
-  normal: 'Tin thường'
-}
+  normal: 'Tin thường',
+};
+export const defaultPageSize = 10;
+export const defaultPageNumber = 1;
