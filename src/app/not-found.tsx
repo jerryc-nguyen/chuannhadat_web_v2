@@ -1,7 +1,7 @@
 'use client';
-import { cn } from '@common/utils';
 import empty_city from '@assets/images/empty-city.png';
-import * as Sentry from '@sentry/nextjs';
+import { logNonCriticalError } from '@common/logs';
+import { cn } from '@common/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
@@ -24,13 +24,7 @@ export default function NotFound(props: NotFoundProps) {
   } = props;
 
   useEffect(() => {
-    Sentry.captureException(new Error('Page not found'), {
-      extra: {
-        pathname,
-        params,
-        errorMessage,
-      },
-    });
+    logNonCriticalError('Page not found', { pathname, params, errorMessage });
   }, [pathname, params]);
 
   return (
