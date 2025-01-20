@@ -68,22 +68,16 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     <>
       <Card className="max-w-sm">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">{plan.plan_name}</CardTitle>
+          <CardTitle className="font-semibold">{plan.plan_name}</CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-2">
-          <img
-            src={plan.image_url}
-            alt={plan.plan_name}
-            className="h-40 w-full rounded object-contain"
-          />
-          <p className="text-sm text-gray-500">GIÁ: {plan.buy_info.formatted_total} / 1 THÁNG</p>
-          <p className="text-sm text-gray-500">
-            BAO GỒM:
+          <p className='font-bold mb-4'>{plan.buy_info.formatted_total} / 1 THÁNG</p>
+          <p>
             <div>
               {plan.contents.map((content, index) => (
-                <p key={index} className="mt-2 text-lg text-[#212529]">
-                  + {content.text}: <strong>{content.value}</strong>
+                <p key={index} className="mt-2 text-lg">
+                  <span className='text-secondary'>{content.text}:</span> <strong>{content.value}</strong>
                 </p>
               ))}
             </div>
