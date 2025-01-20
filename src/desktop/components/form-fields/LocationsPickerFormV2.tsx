@@ -71,19 +71,19 @@ export default function LocationsPickerFormV2({
 
   const districtOptions = useMemo(() => {
     //@ts-ignore: read field of object
-    return citiesDistricts[city.value + '']
+    return citiesDistricts[city.value + ''] || []
   }, [city?.value])
 
   const wardOptions = useMemo(() => {
     return curDistrict?.value
       // @ts-ignore: ok
-      ? districtWards[curDistrict?.value + ''] : []
+      ? districtWards[curDistrict?.value + ''] || [] : []
   }, [curDistrict?.value])
 
   const streetOptions = useMemo(() => {
     return curDistrict?.value
       // @ts-ignore: ok
-      ? districtStreets[curDistrict?.value + ''] : []
+      ? districtStreets[curDistrict?.value + ''] || [] : []
   }, [curDistrict?.value])
 
   const populateCity = () => {

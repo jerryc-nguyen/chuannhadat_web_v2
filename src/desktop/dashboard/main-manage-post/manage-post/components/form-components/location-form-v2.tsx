@@ -3,7 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@components/ui/separator';
 import { MapPin } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
@@ -21,22 +20,18 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   const [fullAddress, setFullAddress] = useState<string>(form.getValues('full_address'));
 
   const onSelectCity = (city?: OptionForSelect) => {
-    console.log('onSelectCity', city)
     setCurCity(city);
   }
 
   const onSelectDistrict = (district?: OptionForSelect) => {
-    console.log('onSelectDistrict', district)
     setCurDistrict(district);
   }
 
   const onSelectWard = (ward?: OptionForSelect) => {
-    console.log('onSelectWard', ward)
     setCurWard(ward);
   }
 
   const onSelectStreet = (street?: OptionForSelect) => {
-    console.log('onSelectStreet', street)
     setCurStreet(street)
   }
 
