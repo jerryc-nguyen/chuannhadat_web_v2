@@ -18,7 +18,7 @@ const listMenubar = [
   },
   {
     id: 2,
-    href: '/dashboard/account-setting',
+    href: '/dashboard/account-settings',
     title: 'Cài đặt tài khoản',
   },
   {
@@ -55,7 +55,7 @@ export default function MainNavSidePanel() {
             className="border-b py-3 font-medium hover:bg-slate-100 hover:underline"
             key={menu.id}
           >
-            <Link href={menu.href}>{menu.title}</Link>
+            <Link className='w-full' href={menu.href}>{menu.title}</Link>
           </li>
         ))}
       </ul>
