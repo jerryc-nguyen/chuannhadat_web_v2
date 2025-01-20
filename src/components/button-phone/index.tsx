@@ -1,8 +1,10 @@
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { StatusPhoneNumber } from '@desktop/post-detail/type';
+import { Copy, CopyCheck } from 'lucide-react';
 import React from 'react';
 import { FaPhone } from 'react-icons/fa6';
+import { toast } from 'sonner';
 
 type ButtonPhoneProps = {
   phoneNumberProfile: string;
@@ -11,9 +13,7 @@ type ButtonPhoneProps = {
 };
 
 const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className, isMobile }) => {
-  const [phoneNumber, setPhoneNumber] = React.useState<string>(
-    phoneNumberProfile,
-  );
+  const [phoneNumber, setPhoneNumber] = React.useState<string>(phoneNumberProfile);
   const [textButtonPhone, setTextButtonPhone] = React.useState<string>(
     isMobile ? StatusPhoneNumber.copy : StatusPhoneNumber.copy,
   );
@@ -22,6 +22,7 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
       try {
         await navigator.clipboard.writeText(phoneNumberProfile);
         setTextButtonPhone(StatusPhoneNumber.copied);
+        toast.success('Đã sao chép số điện thoại');
       } catch (err) {
         console.error('Failed to copy: ', err);
       }
@@ -38,6 +39,7 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
       }, 2000);
     }
   }, [textButtonPhone]);
+
   return (
     <Button
       onClick={handleClickButtonPhone}
@@ -51,7 +53,7 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
         <FaPhone />
         <span id="phone-number">{isMobile ? textButtonPhone : phoneNumber}</span>
       </span>
-      {!isMobile && <span>{textButtonPhone}</span>}
+      {!isMobile && <span>{textButtonPhone === 'Sao chép' ? <Copy /> : <CopyCheck />}</span>}
     </Button>
   );
 };
