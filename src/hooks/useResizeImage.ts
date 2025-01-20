@@ -1,6 +1,7 @@
 import { getViewportSize } from '@hooks/useViewportSize';
 import { isServer } from '@tanstack/react-query';
 import queryString from 'query-string';
+import * as Sentry from '@sentry/nextjs';
 
 const CDN_MAPS: Record<string, A> = {
   'chuannhadat-assets.sgp1.digitaloceanspaces.com': 'images.chuannhadat.com',
@@ -11,6 +12,9 @@ const CDN_MAPS: Record<string, A> = {
 export const MAX_THUMB_WIDTH = 480;
 const DEFAULT_RATIO = 16 / 9;
 
+const DEFAULT_IMG =
+  'https://images.chuannhadat.com/images/avatars/gg_avatar.png?crop=true&height=150&width=150';
+
 export default function useResizeImage() {
   let screenWidth = MAX_THUMB_WIDTH;
 
@@ -19,8 +23,14 @@ export default function useResizeImage() {
   }
 
   const resize = ({ imageUrl, sizes }: { imageUrl: string; sizes: Record<string, A> }): string => {
-    if (imageUrl === '[object Object]')
-      return 'https://images.chuannhadat.com/images/avatars/gg_avatar.png?crop=true&height=150&width=150';
+    try {
+      new URL(String(imageUrl));
+    } catch (error) {
+      Sentry.captureException(error, { extra: { imageUrl } });
+      console.error('Error resize image: ', error);
+      return DEFAULT_IMG;
+    }
+    if (imageUrl === '[object Object]') return DEFAULT_IMG;
     const updatedCdnUrl = applyCdnUrlFor(imageUrl);
     const url = new URL(updatedCdnUrl);
     const newURLStr = updatedCdnUrl.replace(url.search, '');
@@ -54,7 +64,7 @@ export default function useResizeImage() {
     width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
     const height = Math.ceil(width / curRatio);
-    if (!imageUrl || imageUrl.length == 0 || !isValidUrl(imageUrl)) {
+    if (!imageUrl || imageUrl.length == 0) {
       return '';
     }
 
@@ -98,15 +108,4 @@ export default function useResizeImage() {
     buildThumbnailUrl,
     cropSquare,
   };
-}
-
-function isValidUrl(url: any) {
-  try {
-    new URL(String(url));
-    return true;
-  } catch (err) {
-    // throw new Error('Invalid Image URL', url);
-    console.error('Invalid Image URL', url);
-    return false;
-  }
 }
