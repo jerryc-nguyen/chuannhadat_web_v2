@@ -105,7 +105,8 @@ function isValidUrl(url: any) {
     new URL(String(url));
     return true;
   } catch (err) {
-    throw new Error('Invalid Image URL', url);
+    // throw new Error('Invalid Image URL', url);
+    console.error('Invalid Image URL', url);
     return false;
   }
 }
