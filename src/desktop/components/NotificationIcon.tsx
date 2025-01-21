@@ -21,15 +21,13 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
 
   const handleRedirect = (notif: A) => {
-    router.push(notif.redirect_url)
+    router.push(notif.redirect_url);
   };
-
   React.useEffect(() => {
-    if (notifications.length > 0 && totalUnread === 0) {
-      setIsShowBadge(false);
-    }
     if (notifications.length > 0 && totalUnread > 0) {
       setIsShowBadge(true);
+    } else {
+      setIsShowBadge(false);
     }
   }, [notifications, totalUnread]);
   if (!isLogged) return null;
@@ -45,7 +43,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           {isShowBadge && (
             <Badge
               className={cn(
-                'absolute -right-2 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-[7px] items-center justify-center rounded-full !text-[10px]',
+                'absolute -right-2 top-0 ml-auto flex aspect-square h-5 w-5 shrink-0 -translate-y-[7px] items-center justify-center rounded-full p-0 !text-[10px]',
                 totalUnread !== 0
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',

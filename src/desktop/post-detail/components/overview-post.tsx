@@ -24,6 +24,7 @@ import TooltipHost from '@components/tooltip-host';
 import ButtonSave, { type ButtonSaveHandle } from '@desktop/home/components/ButtonSave';
 import { toast } from 'sonner';
 import useAuth from '@mobile/auth/hooks/useAuth';
+import BlurImage from '@components/BlurImage';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -101,8 +102,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               data?.images.length > 3 && index === 2 ? 'bg-overlay' : '',
             )}
           >
-            <Image
-              className="z-0 opacity-100 bg-blend-lighten transition-all"
+            <BlurImage
+              className="z-0 transition-all opacity-100 bg-blend-lighten"
               onClick={() => onClickImage(index)}
               style={{
                 objectFit: 'cover',
@@ -156,7 +157,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         }}
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
-      <h2 className="mb-2 mt-4 line-clamp-2 whitespace-normal text-2xl font-bold">{data?.title}</h2>
+      <h2 className="mt-4 mb-2 text-2xl font-bold whitespace-normal line-clamp-2">{data?.title}</h2>
       <p className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
         <LuMapPin />
         <TooltipHost isOverflow content={data?.full_address}>
@@ -165,18 +166,18 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       </p>
       <div className="flex flex-wrap items-center justify-between gap-y-2">
         <div className="flex gap-x-10">
-          <div className="price flex flex-col text-nowrap">
+          <div className="flex flex-col price text-nowrap">
             <p className="font-medium">Mức giá</p>
             <strong>{data?.formatted_price}</strong>
             <span className="text-xs italic text-secondary">{data?.formatted_price_per_m2}</span>
           </div>
-          <div className="area flex flex-col text-nowrap">
+          <div className="flex flex-col area text-nowrap">
             <p className="font-medium">Diện tích</p>
             <strong>{data?.formatted_area}</strong>
             <span className="text-xs italic text-secondary">{data?.formatted_kt}</span>
           </div>
         </div>
-        <div className="action flex gap-x-4">
+        <div className="flex action gap-x-4">
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -214,7 +215,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
                 router.push(data.detail_path);
                 onCloseModal();
               }}
-              className="border bg-primary_color/80 text-white hover:bg-primary_color"
+              className="text-white border bg-primary_color/80 hover:bg-primary_color"
               variant={'link'}
             >
               Xem chi tiết

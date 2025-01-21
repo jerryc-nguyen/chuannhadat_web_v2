@@ -28,7 +28,6 @@ type NotificationIconProps = {
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const [openModalNotifications, setOpenModalNotifications] = React.useState<boolean>(false);
   const {
-    totalCount,
     isMarkAllRead,
     notifications,
     handleFilter,
@@ -64,11 +63,10 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
     router.push('/dashboard/notifications');
   };
   React.useEffect(() => {
-    if (notifications.length > 0 && totalUnread === 0) {
-      setIsShowBadge(false);
-    }
     if (notifications.length > 0 && totalUnread > 0) {
       setIsShowBadge(true);
+    } else {
+      setIsShowBadge(false);
     }
   }, [notifications, totalUnread]);
   if (!isLogged) return null;
@@ -91,7 +89,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           {isShowBadge && (
             <Badge
               className={cn(
-                'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
+                'absolute -right-1 top-0 ml-auto flex aspect-square h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full !p-0',
                 totalUnread !== 0
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',
@@ -140,7 +138,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                   </div>
                 </section>
               ))}
-              {totalCount && totalCount > notifications.length && notifications.length > 0 ? (
+              {notifications.length < currentTotalCount ? (
                 <Button
                   className="mx-auto my-4 block w-[90%] bg-slate-50 px-5"
                   variant={'outline'}

@@ -167,7 +167,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           {isShowBadge && (
             <Badge
               className={cn(
-                'absolute -right-2 top-0 ml-auto flex h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white',
+                'absolute -right-2 top-0 ml-auto flex aspect-square h-6 w-6 shrink-0 -translate-y-1/2 items-center justify-center rounded-full border border-white p-0',
                 savedSummary
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',

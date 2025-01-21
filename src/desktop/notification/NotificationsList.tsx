@@ -75,7 +75,7 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
               </div>
             </section>
           ))}
-          {totalCount && totalCount > notifications.length && notifications.length > 0 ? (
+          {notifications.length < currentTotalCount ? (
             <Button
               className="flex-center bg-slate-50 font-semibold hover:bg-slate-200"
               variant={'outline'}
