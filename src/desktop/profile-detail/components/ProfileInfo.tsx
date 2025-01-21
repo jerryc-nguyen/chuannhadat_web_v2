@@ -67,14 +67,6 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
           <span className="text-sm text-secondary">{profileData?.formatted_joined_at}</span>
         </span>
       )}
-      {profileData?.gender && (
-        <span className="flex items-center gap-x-1 whitespace-nowrap">
-          <PiGenderIntersexBold className="mr-2 h-5 w-5 text-secondary" />
-          <span className="text-sm text-secondary">
-            Giới tính {profileData?.gender === CustomerGender.Male ? 'nam' : 'nữ'}
-          </span>
-        </span>
-      )}
       {profileData?.posts_count && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <RiArticleLine className="mr-2 h-5 w-5 text-secondary" />

@@ -10,18 +10,23 @@ type ButtonPhoneProps = {
   phoneNumberProfile: string;
   className?: string;
   isMobile?: boolean;
+  isCall?: boolean;
 };
 
-const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className, isMobile }) => {
+const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className, isMobile, isCall }) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string>(phoneNumberProfile);
   const [textButtonPhone, setTextButtonPhone] = React.useState<string>(
     isMobile ? StatusPhoneNumber.copy : StatusPhoneNumber.copy,
   );
-  const handleClickButtonPhone = async () => {
+  const handleClickButtonPhone = () => {
     if (textButtonPhone === StatusPhoneNumber.copy) {
       try {
-        await navigator.clipboard.writeText(phoneNumberProfile);
+        navigator.clipboard.writeText(phoneNumberProfile);
         setTextButtonPhone(StatusPhoneNumber.copied);
+
+        if (isCall) {
+          window.location.href = `tel:${phoneNumber}`;
+        }
         toast.success('Đã sao chép số điện thoại');
       } catch (err) {
         console.error('Failed to copy: ', err);
