@@ -61,3 +61,18 @@ export interface ITopAuthor {
   top_position: number;
 }
 export type TopAuthorsResponse = IResponseData<ITopAuthor[]>;
+interface INotificationData {
+  description: string;
+  formatted_created_at: string;
+  id: number;
+  is_read: boolean;
+  redirect_url: string;
+  title: string;
+}
+export type NotificationsResponse = IResponseData<{
+  page: number;
+  per_page: number;
+  results: INotificationData[];
+  total_count: number;
+  total_pages: number;
+}>;

@@ -29,6 +29,7 @@ import {
   IVerifyPhoneResponse,
   IViewedPostResonpse,
   TopAuthorsResponse,
+  type NotificationsResponse,
 } from '@models/modelResponse';
 import {
   ISavedProductsResponse,
@@ -108,7 +109,7 @@ export const services = {
       page: number;
       per_page: number;
       filter_status: 'read' | 'unread' | null;
-    }): Promise<A> => {
+    }): Promise<NotificationsResponse> => {
       return axiosInstance.get(API_ROUTES.NOTIFICATION.LIST, {
         params,
       });
