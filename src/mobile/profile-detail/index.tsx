@@ -112,6 +112,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
             </DropdownMenu>
           )}
           <ButtonPhone
+            isCall={true}
             className="h-10 w-fit rounded-md px-3"
             phoneNumberProfile={profileData?.phone as string}
           />
