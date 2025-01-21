@@ -4,7 +4,6 @@ import React from 'react';
 import { LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
 import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
 import NextJsImage from './next-image';
-import Image from 'next/image';
 import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
 import { cn } from '@common/utils';
 import styles from '../styles/overvew-post.module.scss';

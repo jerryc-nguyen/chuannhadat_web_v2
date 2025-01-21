@@ -9,7 +9,6 @@ type BlurImageProps = ImageProps & {
 
 const BlurImage: React.FC<BlurImageProps> = (props) => {
   const [isLoading, setLoading] = React.useState(true);
-
   return (
     <Image
       {...props}
