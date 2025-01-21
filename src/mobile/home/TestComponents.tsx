@@ -82,7 +82,7 @@ export default function TestComponents() {
   }
 
   const priceFieldOption = {
-    displayText: readMoney(parseInt(price || '')),
+    displayText: readMoney(price || ''),
     openModal: openModal,
     closeModal: closeModal,
 

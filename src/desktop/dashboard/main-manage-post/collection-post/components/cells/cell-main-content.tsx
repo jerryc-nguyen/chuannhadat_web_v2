@@ -99,7 +99,7 @@ export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
             <span className="text-sm">{short_location_name || '--'}</span>
           </div>
 
-          <div className="flex gap-16">
+          <div className="flex gap-4">
             <ButtonUpVip productId={productId} adsType={adsType} />
 
             <CheckboxAutoRefresh

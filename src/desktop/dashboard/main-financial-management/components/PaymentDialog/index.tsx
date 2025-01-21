@@ -15,27 +15,22 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({ plan, onClose, onBuy, isL
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Thông tin thanh toán</DialogTitle>
+          <DialogTitle className='text-2xl'>Thông tin thanh toán</DialogTitle>
         </DialogHeader>
         {/* Pass plan vào component PaymentCard */}
-        <div className="max-w-lg rounded-lg bg-white p-4 shadow-md">
+        <div className="max-w-lg rounded-lg bg-white">
           {/* Product Info */}
-          <h2 className="text-lg font-semibold">{plan.plan_name}</h2>
+          <b className="text-lg font-semibold">{plan.plan_name}</b>
           <div className="flex items-center justify-between space-x-4">
-            <img
-              src={plan.image_url}
-              alt={plan.plan_name}
-              className="h-16 w-16 rounded-lg object-contain"
-            />
-            <div className="text-gray-500">{plan.contents[0]?.value} Lần</div>
+            <div className="text-gray-500">{plan.contents[0]?.value} lần</div>
             <div className="ml-auto font-semibold text-gray-700">
               {plan.buy_info.formatted_total}
             </div>
           </div>
 
           {/* Payment Info */}
-          <div className="mt-6 border-t pt-4">
-            <h3 className="text-lg font-medium">Thông tin thanh toán</h3>
+          <div className="mt-6 border-t py-4">
+            <h3 className="font-medium">Thông tin thanh toán</h3>
             <div className="mt-2 space-y-1">
               <div className="flex justify-between">
                 <span className="text-gray-600">Giá</span>
@@ -49,7 +44,8 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({ plan, onClose, onBuy, isL
                     : `0 Xu`}
                 </span>
               </div>
-              <div className="flex justify-between border-t pt-2 font-semibold">
+
+              <div className="flex justify-between py-2 font-semibold">
                 <span className="text-gray-900">Tổng cộng</span>
                 <span>{plan.buy_info.formatted_total}</span>
               </div>

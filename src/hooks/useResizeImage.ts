@@ -19,6 +19,8 @@ export default function useResizeImage() {
   }
 
   const resize = ({ imageUrl, sizes }: { imageUrl: string; sizes: Record<string, A> }): string => {
+    if (imageUrl === '[object Object]')
+      return 'https://images.chuannhadat.com/images/avatars/gg_avatar.png?crop=true&height=150&width=150';
     const updatedCdnUrl = applyCdnUrlFor(imageUrl);
     const url = new URL(updatedCdnUrl);
     const newURLStr = updatedCdnUrl.replace(url.search, '');
@@ -51,9 +53,8 @@ export default function useResizeImage() {
     width = width ?? thresholdWidth(screenWidth);
     width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
-
     const height = Math.ceil(width / curRatio);
-    if (!imageUrl || imageUrl.length == 0) {
+    if (!imageUrl || imageUrl.length == 0 || !isValidUrl(imageUrl)) {
       return '';
     }
 
@@ -68,7 +69,7 @@ export default function useResizeImage() {
       imageUrl: url,
       sizes: { width: width, height: width },
     });
-  }
+  };
 
   const applyCdnUrlFor = (url: string): string => {
     for (const host in CDN_MAPS) {
@@ -95,6 +96,16 @@ export default function useResizeImage() {
     resize,
     thresholdWidth,
     buildThumbnailUrl,
-    cropSquare
+    cropSquare,
   };
+}
+
+function isValidUrl(url: any) {
+  try {
+    new URL(String(url));
+    return true;
+  } catch (err) {
+    throw new Error('Invalid Image URL', url);
+    return false;
+  }
 }

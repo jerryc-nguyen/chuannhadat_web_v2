@@ -1,7 +1,17 @@
 import { withSentryConfig } from '@sentry/nextjs';
+import { loadConfig } from 'tsconfig-paths';
+
+const tsconfig = loadConfig();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      ...tsconfig.paths,
+    };
+    return config;
+  },
   output: 'standalone',
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -13,7 +23,7 @@ const nextConfig = {
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
     // !! WARN !!
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   reactStrictMode: true,
   sassOptions: {

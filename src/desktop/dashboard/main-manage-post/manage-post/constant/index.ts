@@ -26,10 +26,10 @@ export const businessTypeOptions = [
 export const categoryTypeOptions = [
   { value: "can_ho_chung_cu", text: "Căn hộ chung cư" },
   { value: "nha_rieng", text: "Nhà riêng" },
-  { value: "biet_thu_lien_ke", text: "Biệt thự liền kề" },
   { value: "nha_mat_pho", text: "Nhà mặt phố" },
-  { value: "dat_nen_du_an", text: "Đất nền dự án" },
   { value: "dat", text: "Đất" },
+  { value: "biet_thu_lien_ke", text: "Biệt thự liền kề" },
+  { value: "dat_nen_du_an", text: "Đất nền dự án" },
   { value: "trang_trai_khu_nghi_duong", text: "Trang trại/ Khu nghỉ dưỡng" },
   { value: "kho_nha_xuong", text: "Kho/ Nhà xưởng" },
   { value: "nha_tro_phong_tro", text: "Nhà trọ/ Phòng trọ" },

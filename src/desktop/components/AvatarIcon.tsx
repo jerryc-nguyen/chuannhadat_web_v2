@@ -97,21 +97,21 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href={`/profile/${currentUser?.slug}`}>Trang cá nhân</Link>
+              <Link href={`/profile/${currentUser?.slug}`} className='w-full'>Trang cá nhân</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href={isDashboardPage ? '/' : '/dashboard'}>
+              <Link href={isDashboardPage ? '/' : '/dashboard'} className='w-full'>
                 {isDashboardPage ? 'Trang chủ' : 'Trang quản lý'}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/manage-post/collection-post">Quản lý tin đăng</Link>
+              <Link href="/dashboard/manage-post/collection-post" className='w-full'>Quản lý tin đăng</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/account-settings">Cài đặt tài khoản</Link>
+              <Link href="/dashboard/account-settings" className='w-full'>Cài đặt tài khoản</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/top-up">Nạp tiền</Link>
+              <Link href="/dashboard/top-up" className='w-full'>Nạp tiền</Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

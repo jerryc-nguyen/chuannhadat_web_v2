@@ -157,7 +157,7 @@ const TopUpView = () => {
 
           <img
             alt="Nguyen Van Linh"
-            src="https://img.vietqr.io/image/TPB-51938398888-compact2.png?addInfo=cnd15991&accountName=NGUYEN%20VAN%20LINH"
+            src={`https://img.vietqr.io/image/TPB-51938398888-compact2.png?addInfo=${bankTransferNote}&accountName=NGUYEN%20VAN%20LINH`}
             width="300"
           />
         </div>

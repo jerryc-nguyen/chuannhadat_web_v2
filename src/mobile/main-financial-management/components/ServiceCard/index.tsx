@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { Service } from '@mobile/main-financial-management/types';
 import useModals from '@mobile/modals/hooks';
 import '@styles/pages/mobile/finacial-management/service-package.scss';
+import { useBalanceRequest } from '@api/balance';
 
 interface ServiceCardProps {
   plan: Service;
@@ -16,6 +17,7 @@ interface ServiceCardProps {
 const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, closeModal } = useModals();
+  const { fetchBalance } = useBalanceRequest();
 
   const buyPlanMutation = useMutation({
     mutationFn: async (planId: number) => {
@@ -24,7 +26,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       if (data.status) {
         toast.success(data.message || 'Mua gói thành công!');
-
+        fetchBalance();
         closeModal();
       } else toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
@@ -43,13 +45,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       data.status
         ? openModal({
-            name: plan.plan_name,
-            title: plan.plan_name,
-            content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-            footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-            maxHeightPercent: 0.8,
-            isHiddenScroll: true,
-          })
+          name: plan.plan_name,
+          title: plan.plan_name,
+          content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+          footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+          maxHeightPercent: 0.5,
+          isHiddenScroll: true,
+        })
         : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
     onError: (error: A) => {
@@ -69,22 +71,16 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     <>
       <Card className="max-w-sm">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">{plan.plan_name}</CardTitle>
+          <CardTitle>{plan.plan_name}</CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-2">
-          <img
-            src={plan.image_url}
-            alt={plan.plan_name}
-            className="h-40 w-full rounded object-contain"
-          />
-          <p className="text-sm text-gray-500">GIÁ: {plan.buy_info.formatted_total} / 1 THÁNG</p>
-          <p className="text-sm text-gray-500">
-            BAO GỒM:
+          <p className='font-bold mb-4'>{plan.buy_info.formatted_total} / 1 THÁNG</p>
+          <p>
             <div>
               {plan.contents.map((content, index) => (
-                <p key={index} className="mt-2 text-lg text-[#212529]">
-                  + {content.text}: <strong>{content.value}</strong>
+                <p key={index} className="mt-2 text-lg">
+                  <span className='text-secondary'>{content.text}:</span> <strong>{content.value}</strong>
                 </p>
               ))}
             </div>
@@ -100,7 +96,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
             Mua ngay
           </Button>
         </CardFooter>
-      </Card>
+      </Card >
     </>
   );
 };

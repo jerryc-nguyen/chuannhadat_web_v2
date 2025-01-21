@@ -20,7 +20,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
   const isLogged = cookies().has(API_TOKEN_SERVER);
   const { isMobile } = useGetUserAgentInfo();
   return (
-    <header className="box-border flex h-[70px] items-center justify-between gap-4 border-b bg-muted/40 px-4 py-2 lg:px-6 sticky top-0 bg-white z-10">
+    <header className="box-border flex h-[70px] items-center justify-between gap-4 border-b bg-muted/40 px-4 py-2 lg:px-6 sticky top-0 bg-white z-20">
       <div className="flex items-center gap-x-4">
         {isMobile && <SidebarTrigger />}
         {!isMobile && <Breadcrumb />}

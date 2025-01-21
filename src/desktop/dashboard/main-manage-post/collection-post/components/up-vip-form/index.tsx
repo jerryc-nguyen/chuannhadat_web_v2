@@ -14,11 +14,12 @@ import { Button } from '@components/ui/button';
 import { LoadingSpinner } from '@components/icons/loading-spinner';
 import useProductActionSetting from '../../hooks/product-action-setting';
 import { useBalanceRequest } from '@api/balance';
+import { get } from 'lodash-es';
+import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 
 interface IUpVipProductFormProps {
   productId: string;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  closeModal: Function;
+  closeModal: () => void;
 }
 
 const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => {
@@ -37,17 +38,18 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
     reValidateMode: 'onChange',
   });
 
+  const { updateRowData } = useManagePostsCache();
+
   const handleUpVip = async (data: UpVipProductInput) => {
     try {
       const res = await ProductApiService.UpVip(data);
       if (res.status) {
-        console.log('handleUpVip success response', res);
         toast.success('Up VIP thành công.');
         fetchBalance();
+        updateRowData(res.data);
         closeModal();
       } else {
-        // @ts-ignore: ok
-        toast.success('Đã có lỗi xảy ra: ' + res.message);
+        toast.success('Đã có lỗi xảy ra: ' + get(res, 'message', 'chưa xác định'));
       }
     } catch (err) {
       console.error('handleUpVip error', err);
@@ -124,9 +126,15 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
             <div className="space-y-2">
               <h6 className="text-16 font-semibold">Chọn loại tin đăng</h6>
 
-              <ButtonGroup className="w-full flex-1 border rounded-t-lg rounded-b-lg" orientation="vertical">
+              <ButtonGroup
+                className="w-full flex-1 rounded-b-lg rounded-t-lg border"
+                orientation="vertical"
+              >
                 {productActionSettings.up_vip.ads_type_options.map((item, index) => (
-                  <div key={index} className={`flex justify-between px-3 py-1 ${index == 0 ? '' : 'border-t'}`}>
+                  <div
+                    key={index}
+                    className={`flex justify-between px-3 py-1 ${index == 0 ? '' : 'border-t'}`}
+                  >
                     <Radio
                       key={item.value}
                       label={item.text}
@@ -157,46 +165,49 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
             </div>
           ) : (
             <></>
-          )
-          }
-          {
-            productActionSettings.up_vip?.number_of_day_options &&
-              productActionSettings.up_vip?.number_of_day_options.length > 0 ? (
-              <div className="space-y-2 mt-4">
-                <h6 className="text-16 font-semibold">Chọn thời gian đăng tin</h6>
+          )}
+          {productActionSettings.up_vip?.number_of_day_options &&
+            productActionSettings.up_vip?.number_of_day_options.length > 0 ? (
+            <div className="mt-4 space-y-2">
+              <h6 className="text-16 font-semibold">Chọn thời gian đăng tin</h6>
 
-                <ButtonGroup className="w-full flex-1 border rounded-t-lg rounded-b-lg" orientation="vertical">
-                  {productActionSettings.up_vip.number_of_day_options.map((item, index) => (
-                    <div key={index} className={`flex justify-between px-3 py-1 ${index == 0 ? '' : 'border-t'}`}>
-                      <Radio
-                        key={item.value}
-                        label={item.text}
-                        checked={!!(numberOfDay && numberOfDay === item.value.toString())}
-                        onChange={() => {
-                          form.setValue('number_of_day', item.value.toString());
-                        }}
-                      />
+              <ButtonGroup
+                className="w-full flex-1 rounded-b-lg rounded-t-lg border"
+                orientation="vertical"
+              >
+                {productActionSettings.up_vip.number_of_day_options.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`flex justify-between px-3 py-1 ${index == 0 ? '' : 'border-t'}`}
+                  >
+                    <Radio
+                      key={item.value}
+                      label={item.text}
+                      checked={!!(numberOfDay && numberOfDay === item.value.toString())}
+                      onChange={() => {
+                        form.setValue('number_of_day', item.value.toString());
+                      }}
+                    />
 
-                      <span className="font-normal text-[#28a745]">{item.formatted_discount}</span>
-                    </div>
-                  ))}
-                </ButtonGroup>
+                    <span className="font-normal text-[#28a745]">{item.formatted_discount}</span>
+                  </div>
+                ))}
+              </ButtonGroup>
 
-                <span className="text-sm font-normal text-destructive">
-                  {form.formState.errors.number_of_day?.message}
-                </span>
-              </div>
-            ) : (
-              <></>
-            )
-          }
+              <span className="text-sm font-normal text-destructive">
+                {form.formState.errors.number_of_day?.message}
+              </span>
+            </div>
+          ) : (
+            <></>
+          )}
 
-          <div className="flex flex-1 justify-between gap-3 font-medium mt-4">
-            <b className="text-xl">
-              Tổng tiền:
-            </b>
+          <div className="mt-4 flex flex-1 justify-between gap-3 font-medium">
+            <b className="text-xl">Tổng tiền:</b>
 
-            <p className="text-xl font-bold">{maskNumber(totalAmount.toString()).formattedValue} Xu</p>
+            <p className="text-xl font-bold">
+              {maskNumber(totalAmount.toString()).formattedValue} Xu
+            </p>
           </div>
 
           <span className="text-sm font-normal text-destructive">{errorValidate}</span>
@@ -221,11 +232,11 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
               <span className="text-sm">Áp dụng</span>
             </Button>
           </div>
-        </form >
+        </form>
       ) : (
         <></>
       )}
-    </div >
+    </div>
   );
 };
 

@@ -7,7 +7,6 @@ export * from './usePaginatedPost';
 export * from './useRefCallback';
 export * from './useResizeImage';
 export * from './useSearchScope';
-export * from './useSSRCurrentUser';
 export * from './useSyncParamsToState';
 export * from './useViewportSize';
 export * from './useResizeImage';

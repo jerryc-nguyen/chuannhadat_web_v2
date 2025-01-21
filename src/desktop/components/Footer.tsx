@@ -120,10 +120,14 @@ const Footer: React.FC<FooterProps> = () => {
               <HiPhone className="text-xl" />
               <span> 0966662192 ( Linh )</span>
             </div>
-            <div className="flex items-center gap-x-2 text-nowrap">
+            <a
+              href="mailto:Chuannhadat@gmail.com"
+              target="_blank"
+              className="flex items-center gap-x-2 text-nowrap"
+            >
               <HiMail className="text-xl" />
               <span>Chuannhadat@gmail.com</span>
-            </div>
+            </a>
           </div>
         </div>
         <div className="relative z-[1] mt-6 flex w-full flex-col justify-between gap-y-6 sm:flex-row md:mt-0 md:w-fit md:gap-x-6 lg:gap-x-10">

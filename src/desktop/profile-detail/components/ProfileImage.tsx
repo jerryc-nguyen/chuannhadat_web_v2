@@ -5,9 +5,7 @@ import useResizeImage from '@hooks/useResizeImage';
 import { useState } from 'react';
 
 export default function ProfileImage({ profileData }: { profileData: A }) {
-  const [imgSrc, setImgSrc] = useState<StaticImageData | string>(
-    profileData?.avatar_url as string,
-  );
+  const [imgSrc, setImgSrc] = useState<StaticImageData | string>(profileData?.avatar_url as string);
   const THUMB_WIDTH = 150;
 
   const { buildThumbnailUrl } = useResizeImage();
