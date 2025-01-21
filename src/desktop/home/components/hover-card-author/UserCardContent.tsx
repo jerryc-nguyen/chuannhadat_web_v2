@@ -85,10 +85,6 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
             <span className="text-sm text-secondary">Số bài đăng</span>
             <b>{authorData?.posts_count}</b>
           </div>
-          <div className="flex items-center gap-x-2">
-            <span className="text-sm text-secondary">Giới tính</span>
-            <b>{authorData?.gender === CustomerGender.Male ? 'Nam' : 'Nữ'}</b>
-          </div>
         </div>
       </div>
       <div className="flex items-center pt-2">

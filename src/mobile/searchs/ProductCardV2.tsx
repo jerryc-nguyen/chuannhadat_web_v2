@@ -64,7 +64,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
       <div className="p-4">
         <CardAuthor product={product} isMobile={true} />
       </div>
-      <CardImageCarousel product={product} />
+      {product.images && product.images.length > 0 && <CardImageCarousel product={product} />}
       <div className="p-4">
         <div className="w-full text-secondary">{product.bus_cat_type}</div>
 

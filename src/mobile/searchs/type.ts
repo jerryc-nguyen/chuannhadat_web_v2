@@ -21,6 +21,7 @@ export interface IProduct {
   name?: string;
   bus_cat_type?: string
   ads_type?: string
+  images: TPhoto[];
 }
 
 export interface Author {

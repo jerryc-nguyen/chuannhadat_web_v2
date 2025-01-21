@@ -112,7 +112,6 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
             </DropdownMenu>
           )}
           <ButtonPhone
-            isMobile
             className="h-10 w-fit rounded-md px-3"
             phoneNumberProfile={profileData?.phone as string}
           />
@@ -146,12 +145,6 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           <div className="flex items-center gap-x-2">
             <span className="text-sm text-secondary">Số bài đăng</span>
             <b>{profileData?.posts_count}</b>
-          </div>
-        )}
-        {profileData?.gender && (
-          <div className="flex items-center gap-x-2">
-            <span className="text-sm text-secondary">Giới tính</span>
-            <b>{profileData?.gender === CustomerGender.Male ? 'Nam' : 'Nữ'}</b>
           </div>
         )}
       </div>
