@@ -13,7 +13,7 @@ import { usePaginatedNotifications } from '@hooks';
 import { useNotificationRequest } from '@api/notification';
 
 interface IProps {
-  onRedirect: (id: number, is_readed: boolean) => void;
+  onRedirect: (notif: A) => void;
 }
 
 const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
@@ -60,7 +60,7 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
             <section
               key={notify.id}
               className="relative cursor-pointer border-b py-2 pl-5 pr-3 transition-all hover:rounded-lg hover:bg-slate-50 hover:shadow-sm"
-              onClick={() => onRedirect(notify.id, notify.is_read)}
+              onClick={() => onRedirect(notify)}
             >
               {!notify.is_read && (
                 <span className="z-2 absolute right-3 top-3 h-2 w-2 rounded-[100%] bg-primary_color" />

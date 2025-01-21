@@ -7,7 +7,7 @@ import NotificationsList from '@desktop/notification/NotificationsList';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import { LucideBell } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 type NotificationIconProps = {
@@ -19,10 +19,12 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const { currentUser } = useAuth();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const router = useRouter();
 
-  const handleRedirect = () => {
-    return;
+  const handleRedirect = (notif: A) => {
+    router.push(notif.redirect_url)
   };
+
   React.useEffect(() => {
     if (currentUser?.id) {
       loadMore();
