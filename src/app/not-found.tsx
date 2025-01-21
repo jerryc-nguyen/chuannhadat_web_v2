@@ -1,8 +1,11 @@
+'use client';
+import empty_city from '@assets/images/empty-city.png';
+import { logNonCriticalError } from '@common/logs';
 import { cn } from '@common/utils';
-// import { HttpStatusCode } from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import empty_city from '@assets/images/empty-city.png';
+import { useParams, usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 type NotFoundProps = {
   // errorCode?: HttpStatusCode;
@@ -11,11 +14,18 @@ type NotFoundProps = {
 };
 
 export default function NotFound(props: NotFoundProps) {
+  const pathname = usePathname();
+  const params = useParams();
+
   const {
     // errorCode = HttpStatusCode.NotFound,
     errorMessage = 'Đã có lỗi xảy ra, vui lòng thử lại sau',
     className,
   } = props;
+
+  useEffect(() => {
+    logNonCriticalError('Page not found', { pathname, params, errorMessage });
+  }, [pathname, params]);
 
   return (
     <section

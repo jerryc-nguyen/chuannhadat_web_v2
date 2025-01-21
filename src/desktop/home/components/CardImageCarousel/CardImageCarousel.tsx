@@ -13,6 +13,7 @@ type CardImageCarouselProps = {
   handleClickCardImage?: () => void;
 };
 
+
 const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
   const { product, handleClickCardImage } = props;
   const [imageSliderViewPortRef] = useEmblaCarousel();
@@ -56,14 +57,17 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
   }, [imageSliderApi, updateSlidesInView]);
   return (
     <section className={styles.card_img_carousel}>
-      {product.images.length > 0 && product.images_count < 2 ? (
+      {product.images_count < 2 ? (
         <>
-          <ImageCard
-            key={product.images[0].id}
-            countImages={product.images_count}
-            item={product.images[0]}
-            onClick={handleClickCardImage}
-          />
+          {
+            product.images[0] && (
+              <ImageCard
+                key={product.images[0].id}
+                countImages={product.images_count}
+                item={product.images[0]}
+                onClick={handleClickCardImage}
+              />)
+          }
           <ButtonSave postUid={product.uid} />
         </>
       ) : (
@@ -74,7 +78,7 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
           className="card-content_carousel w-full"
         >
           <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
-            {product.images.map((item: A, index: number) => (
+            {(product.images || []).map((item: A, index: number) => (
               <ImageCard
                 key={item.id}
                 inView={slidesInView.indexOf(index) > -1}
