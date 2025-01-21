@@ -10,28 +10,29 @@ import { Badge } from '@components/ui/badge';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
 import { usePaginatedNotifications } from '@hooks';
-import { useNotificationRequest } from '@api/notification';
 
 interface IProps {
-  onRedirect: (id: number, is_readed: boolean) => void;
+  onRedirect: (notif: A) => void;
 }
 
 const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
-  const { isMarkAllRead, notifications, total, currentToltal, loadMore, onFilter } =
-    usePaginatedNotifications();
-  const { makeMarkReadAll } = useNotificationRequest();
-  const [isReaded, setReaded] = React.useState<boolean>(false);
+  const {
+    isMarkAllRead,
+    notifications,
+    totalCount,
+    handleLoadNext,
+    handleFilter,
+    typeFilter,
+    makeMarkReadAll,
+    currentTotalCount,
+  } = usePaginatedNotifications();
   const handleChangeStatus = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | EventTarget>,
   ) => {
     event.stopPropagation();
-    setReaded(!isReaded);
-    !isReaded ? onFilter('unread') : onFilter(null);
+    handleFilter();
   };
 
-  const handleMarkReadAll = () => {
-    makeMarkReadAll();
-  };
   const renderNoNotification = () => (
     <section className="mb-5 flex flex-col items-center justify-center p-5">
       <Image className="w-1/2" src={no_notification} alt="no-notification" />
@@ -41,7 +42,7 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
       </p>
     </section>
   );
-  if (total === 0) return renderNoNotification();
+  if (totalCount === 0) return renderNoNotification();
 
   return (
     <>
@@ -49,7 +50,7 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
         <div className="flex items-center gap-x-2">
           <h4 className="py-2 pl-5 text-lg font-semibold">Thông báo</h4>
           <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-secondary hover:bg-slate-100">
-            {currentToltal}
+            {currentTotalCount}
           </Badge>
         </div>
         <Separator />
@@ -60,7 +61,7 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
             <section
               key={notify.id}
               className="relative cursor-pointer border-b py-2 pl-5 pr-3 transition-all hover:rounded-lg hover:bg-slate-50 hover:shadow-sm"
-              onClick={() => onRedirect(notify.id, notify.is_read)}
+              onClick={() => onRedirect(notify)}
             >
               {!notify.is_read && (
                 <span className="z-2 absolute right-3 top-3 h-2 w-2 rounded-[100%] bg-primary_color" />
@@ -74,11 +75,11 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
               </div>
             </section>
           ))}
-          {total && total > notifications.length && notifications.length > 0 ? (
+          {totalCount && totalCount > notifications.length && notifications.length > 0 ? (
             <Button
               className="flex-center bg-slate-50 font-semibold hover:bg-slate-200"
               variant={'outline'}
-              onClick={() => loadMore()}
+              onClick={() => handleLoadNext()}
             >
               Tải thêm
             </Button>
@@ -92,14 +93,14 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
           <div className="flex items-center gap-x-3">
             <Switch
               id="airplane-mode"
-              className={isReaded ? '!bg-success_color' : ''}
-              checked={isReaded}
+              className={typeFilter === 'unread' ? '!bg-success_color' : ''}
+              checked={typeFilter === 'unread'}
               onClick={handleChangeStatus}
             />
             <Label htmlFor="airplane-mode">Chưa đọc</Label>
           </div>
           {!isMarkAllRead ? (
-            <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
+            <div onClick={() => makeMarkReadAll()} className="flex items-center gap-x-2">
               <BsCheck2All className="text-primary_color" />
               <p className="cursor-pointer text-xs font-semibold text-primary_color hover:underline">
                 Đánh dấu đã đọc tất cả
