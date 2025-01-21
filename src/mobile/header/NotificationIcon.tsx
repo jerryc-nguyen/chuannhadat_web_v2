@@ -4,7 +4,7 @@ import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import { LucideBell } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import {
   Sheet,
@@ -15,26 +15,31 @@ import {
   SheetTrigger,
 } from '@components/ui/sheet';
 import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
-import useAuth from '@mobile/auth/hooks/useAuth';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
 import { Switch } from '@components/ui/switch';
 import { Label } from '@components/ui/label';
 import { BsCheck2All } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
-import { useNotificationRequest } from '@api/notification';
 type NotificationIconProps = {
   isLogged: boolean;
 };
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const [openModalNotifications, setOpenModalNotifications] = React.useState<boolean>(false);
-  const { total, isMarkAllRead, notifications, loadMore, onFilter, totalNotificationlUnread } =
-    usePaginatedNotifications();
-  const { makeMarkReadAll } = useNotificationRequest();
-  const { currentUser } = useAuth();
+  const {
+    totalCount,
+    isMarkAllRead,
+    notifications,
+    handleFilter,
+    handleLoadNext,
+    typeFilter,
+    totalUnread,
+    currentTotalCount,
+    makeMarkReadAll,
+  } = usePaginatedNotifications();
   const router = useRouter();
-  const [isReaded, setReaded] = React.useState<boolean>(false);
+  const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
 
   const handleMarkReadAll = () => {
     makeMarkReadAll();
@@ -43,8 +48,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | EventTarget>,
   ) => {
     event.stopPropagation();
-    setReaded(!isReaded);
-    !isReaded ? onFilter('unread') : onFilter(null);
+    handleFilter();
   };
   const renderNoNotification = () => (
     <section className="flex flex-col items-center justify-center">
@@ -59,18 +63,14 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const handleRedirect = () => {
     router.push('/dashboard/notifications');
   };
-
-  const showBadge = useMemo(() => {
-    return totalNotificationlUnread !== null && totalNotificationlUnread > 0;
-  }, [totalNotificationlUnread]);
-
   React.useEffect(() => {
-    if (currentUser?.id) {
-      loadMore();
+    if (notifications.length > 0 && totalUnread === 0) {
+      setIsShowBadge(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser?.id]);
-
+    if (notifications.length > 0 && totalUnread > 0) {
+      setIsShowBadge(true);
+    }
+  }, [notifications, totalUnread]);
   if (!isLogged) return null;
 
   return (
@@ -88,17 +88,17 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <LucideBell className="h-5 w-5" />
           </Button>
 
-          {showBadge && (
+          {isShowBadge && (
             <Badge
               className={cn(
                 'absolute -right-1 top-0 ml-auto flex h-5 w-5 shrink-0 -translate-y-1/2 items-center justify-center rounded-full',
-                totalNotificationlUnread !== null
+                totalUnread !== 0
                   ? 'bg-error_color hover:bg-error_color'
                   : 'bg-transparent hover:bg-transparent',
               )}
             >
-              {totalNotificationlUnread !== null ? (
-                totalNotificationlUnread
+              {totalUnread !== 0 ? (
+                totalUnread
               ) : (
                 <span className="relative flex h-4 w-4 items-center justify-center">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary_color opacity-75" />
@@ -114,7 +114,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
           <SheetTitle className="flex justify-start gap-x-2 p-3">
             Thông báo
             <Badge className="flex aspect-square h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs text-secondary hover:bg-slate-100">
-              {total}
+              {currentTotalCount}
             </Badge>
           </SheetTitle>
           <Separator className="!mt-0" />
@@ -140,11 +140,11 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
                   </div>
                 </section>
               ))}
-              {total && total > notifications.length && notifications.length > 0 ? (
+              {totalCount && totalCount > notifications.length && notifications.length > 0 ? (
                 <Button
                   className="mx-auto my-4 block w-[90%] bg-slate-50 px-5"
                   variant={'outline'}
-                  onClick={() => loadMore()}
+                  onClick={() => handleLoadNext()}
                 >
                   Tải thêm
                 </Button>
@@ -159,8 +159,8 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
             <div className="flex items-center gap-x-3">
               <Switch
                 id="airplane-mode"
-                className={isReaded ? '!bg-success_color' : ''}
-                checked={isReaded}
+                className={typeFilter === 'unread' ? '!bg-success_color' : ''}
+                checked={typeFilter === 'unread'}
                 onClick={handleChangeStatus}
               />
               <Label htmlFor="airplane-mode">Chưa đọc</Label>
