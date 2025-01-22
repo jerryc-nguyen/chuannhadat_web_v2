@@ -5,8 +5,6 @@ import { cn, genKey } from '@common/utils';
 import ButtonPhone from '@components/button-phone';
 import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
 import { CalendarDays } from 'lucide-react';
-import { PiGenderIntersexBold } from 'react-icons/pi';
-import { CustomerGender } from '@common/types';
 import { RiArticleLine } from 'react-icons/ri';
 import React from 'react';
 
