@@ -89,7 +89,7 @@ const NewPost: React.FC = () => {
         // @ts-ignore: ok
         toast.error(res.message || 'Đăng tin không thành công');
       }
-    } catch (error) {
+    } catch (error: A) {
       toast.error(error.message);
       console.log('error', error);
     }
