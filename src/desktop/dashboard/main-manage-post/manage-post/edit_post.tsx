@@ -55,9 +55,7 @@ const EditPost = ({ params }: { params: A }) => {
 
     try {
       const params = form.getValues();
-      console.log('params', params);
       const res = await ProductApiService.Update(product.id, params);
-      console.log('resssssssss', res);
 
       if (res.status) {
         toast.success('Cập nhật tin thành công');
@@ -65,10 +63,9 @@ const EditPost = ({ params }: { params: A }) => {
         // @ts-ignore: ok
         toast.error(res.message || 'Cập nhật tin không thành công');
       }
-    } catch (error) {
+    } catch (error: A) {
+      toast.error(error.message);
       console.log('error', error);
-    } finally {
-      console.log('done');
     }
   };
 

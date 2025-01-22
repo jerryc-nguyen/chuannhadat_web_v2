@@ -10,7 +10,6 @@ import {
   CommandList,
   CommandShortcut,
 } from '@components/ui/command';
-import { Input } from '@components/ui/input';
 import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
 import { Skeleton } from '@components/ui/skeleton';
 import { OptionForSelect } from '@models';
@@ -33,7 +32,6 @@ export function PriceAutoComplete<T extends string>({
   items,
   isLoading,
   emptyMessage = 'No items.',
-  placeholder = 'Search...',
   InputRender,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
@@ -43,11 +41,6 @@ export function PriceAutoComplete<T extends string>({
     setOpen(false);
   };
 
-  const [searchText, setSearchText] = useState<string>('');
-  const onSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-  };
-
   return (
     <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
       <Popover open={open} onOpenChange={setOpen}>
@@ -55,7 +48,6 @@ export function PriceAutoComplete<T extends string>({
           <PopoverAnchor asChild>
             <CommandPrimitive.Input
               asChild
-              value={selectedValue}
               onValueChange={onSelectedValueChange}
               onKeyDown={(e) => {
                 setOpen(e.key !== 'Escape');
@@ -64,11 +56,10 @@ export function PriceAutoComplete<T extends string>({
                 if (selectedValue) setOpen((open) => !!selectedValue || !open);
               }}
             >
-              {InputRender || (
-                <Input value={searchText} placeholder={placeholder} onChange={onSearchTextChange} />
-              )}
+              {InputRender}
             </CommandPrimitive.Input>
           </PopoverAnchor>
+
           {!open && <CommandList aria-hidden="true" className="hidden" />}
           <PopoverContent
             sideOffset={15}
@@ -102,7 +93,7 @@ export function PriceAutoComplete<T extends string>({
                       <Check
                         className={cn(
                           'mr-2 h-4 w-4',
-                          selectedValue === option.value ? 'opacity-100' : 'opacity-0',
+                          selectedValue.toString() === option.value ? 'opacity-100' : 'opacity-0',
                         )}
                       />
                       {option.text}

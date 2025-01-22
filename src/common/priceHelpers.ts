@@ -9,6 +9,10 @@ export function formatPrice(price: string) {
   return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+export const removeTrailingZeros = (input: string) => {
+  return input.replace(/(\.\d*?[1-9])0+$/g, '$1').replace(/\.0+$/, '');
+};
+
 export function readMoney(value: string) {
   let result: number = 0.0;
   const priceUnit = buildPriceUnit(parseFloat(value));
@@ -18,7 +22,9 @@ export function readMoney(value: string) {
   const number = parseFloat(value);
   let roundedLength = 0;
 
-  if (number < MOT_TRIEU) {
+  if (number < 1000) {
+    result = number
+  } else if (number < MOT_TRIEU) {
     result = number / MOT_NGHIN
   } else if (number < MOT_TY) {
     result = number / MOT_TRIEU
@@ -26,9 +32,11 @@ export function readMoney(value: string) {
   } else if (number >= MOT_TY) {
     result = number / MOT_TY
     roundedLength = 2;
+  } else {
+    result = number
   }
 
-  return `${result.toFixed(roundedLength)} ${priceUnit}`.replace('.00', '').replace('.0', '');
+  return `${removeTrailingZeros(result.toFixed(roundedLength))} ${priceUnit}`
 }
 
 function buildPriceUnit(value: number) {

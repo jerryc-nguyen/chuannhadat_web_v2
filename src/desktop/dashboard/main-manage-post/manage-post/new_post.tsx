@@ -79,7 +79,6 @@ const NewPost: React.FC = () => {
       params.create_source = isMobile ? 'mobile_web' : 'desktop';
 
       const res = await ProductApiService.Create(params);
-      console.log('resssssssss', res);
 
       if (res.status) {
         toast.success('Đăng tin thành công');
@@ -91,9 +90,8 @@ const NewPost: React.FC = () => {
         toast.error(res.message || 'Đăng tin không thành công');
       }
     } catch (error) {
+      toast.error(error.message);
       console.log('error', error);
-    } finally {
-      console.log('done');
     }
   };
 

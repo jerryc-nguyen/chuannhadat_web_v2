@@ -8,7 +8,7 @@ import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
 import { businessTypeOptions, categoryTypeOptions } from '../../constant';
 import { CommonSelect } from '../CommonSelect';
 import { PriceAutoComplete } from './fields/price-autocomplete';
-import { buildOptionsPrice, maskNumber } from '@common/priceHelpers';
+import { buildOptionsPrice, maskNumber, readMoney } from '@common/priceHelpers';
 import { Input } from '@components/ui/input';
 import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
 
@@ -87,7 +87,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
               render={({ field }) => (
                 <FormItem className='relative'>
                   <FormLabel>
-                    <span className="text-red-600">*</span> {priceLabel} (VNĐ)
+                    <span className="text-red-600">*</span> {priceLabel} - <span className='text-secondary'>{readMoney(price_in_vnd)} VNĐ</span>
                   </FormLabel>
                   <PriceAutoComplete
                     selectedValue={price_in_vnd}
