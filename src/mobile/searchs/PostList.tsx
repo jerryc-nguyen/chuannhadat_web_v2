@@ -23,6 +23,7 @@ export default function PostList() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
 
   const { openModal3, closeModals } = useModals();
   const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
@@ -32,6 +33,7 @@ export default function PostList() {
     withLocal: false,
   });
   filterParams.with_users = true
+  filterParams.page = currentPage
 
   const { products, data, aggreations } = useQueryPosts(filterParams);
 
