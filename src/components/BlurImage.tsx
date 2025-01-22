@@ -23,7 +23,7 @@ const BlurImage: React.FC<BlurImageProps> = (props) => {
         props.className,
         isLoading ? 'scale-110 blur-xl grayscale' : 'scale-100 blur-0 grayscale-0',
       )}
-      onLoadingComplete={() => setLoading(false)}
+      onLoad={() => setLoading(false)}
     />
   );
 };
