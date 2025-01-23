@@ -3,12 +3,14 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import HeaderMobile from '@mobile/header/HeaderMobile';
 import HeaderDesktop from '@desktop/components/HeaderDeskop';
 import Footer from '@desktop/components/Footer';
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export default function HomeLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   const { isMobile } = useGetUserAgentInfo();
   const mobileClass = isMobile ? '' : 'px-5 md:px-10';
@@ -16,7 +18,10 @@ export default function HomeLayout({
   return (
     <>
       {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
-      <main className={`z-5 relative h-fit ${mobileClass}`}>{children}</main>
+      <main className={`z-5 relative h-fit ${mobileClass}`}>
+        {modal}
+        {children}
+      </main>
       <Footer />
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
     </>

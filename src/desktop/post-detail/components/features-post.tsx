@@ -1,8 +1,10 @@
+import { Skeleton } from '@components/ui/skeleton';
 import { IProductDetail } from '@mobile/searchs/type';
 import React from 'react';
 
 type FeaturesPostProps = {
   data?: IProductDetail;
+  isLoading?: boolean;
 };
 
 export const FeaturesList = ({ data }: FeaturesPostProps) => {
@@ -57,14 +59,45 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
+const renderLoadingFeatures = () => (
+  <div className="flex flex-col gap-y-2">
+    <div className="flex gap-1">
+      <span className="min-w-[8rem] text-sm font-semibold">Địa chỉ</span>
+      <Skeleton className="h-4 w-2/3" />
+    </div>
 
-const FeaturesPost: React.FC<FeaturesPostProps> = ({ data }) => {
+    <div className="flex gap-1">
+      <span className="min-w-[8rem] text-sm font-semibold">Giá / m2</span>
+      <Skeleton className="h-4 w-[80px]" />
+    </div>
+    <div className="flex gap-1">
+      <span className="min-w-[8rem] text-sm font-semibold">Số phòng ngủ</span>
+      <Skeleton className="h-4 w-6" />
+    </div>
+
+    <div className="flex gap-1">
+      <span className="min-w-[8rem] text-sm font-semibold">Số phòng tắm</span>
+      <Skeleton className="h-4 w-6" />
+    </div>
+
+    <div className="flex gap-1">
+      <span className="min-w-[8rem] text-sm font-semibold">Pháp lý</span>
+      <Skeleton className="h-4 w-[120px]" />
+    </div>
+
+    <div className="flex gap-1">
+      <span className="min-w-[8rem] text-sm font-semibold">Ngày đăng</span>
+      <Skeleton className="h-4 w-[150px]" />
+    </div>
+  </div>
+);
+const FeaturesPost: React.FC<FeaturesPostProps> = ({ data, isLoading }) => {
   return (
     <div className="features-estate rounded-lg border bg-white p-6">
       <h3 className="pb-5 text-xl font-semibold">Đặc điểm của bất động sản</h3>
-      <FeaturesList data={data} />
+      {isLoading ? renderLoadingFeatures() : <FeaturesList data={data} />}
     </div>
   );
 };
