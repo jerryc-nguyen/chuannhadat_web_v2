@@ -74,5 +74,3 @@ export const ADS_TYPES: Record<string, A> = {
 };
 export const defaultPageSize = 10;
 export const defaultPageNumber = 1;
-export const DEFAULT_THUMB_IMAGE =
-  'https://images.chuannhadat.com/product-images/23421/B%C3%A1n-Nh%C3%A0-m%E1%BA%B7t-ph%E1%BB%91-%C4%90%C6%B0%E1%BB%9Dng-Th%E1%BA%A1nh-L%E1%BB%99c-41-Qu%E1%BA%ADn-12--Di%E1%BB%87n-t%C3%ADch-396m2_c98722_big.jpg?crop=true&height=270&width=480';
