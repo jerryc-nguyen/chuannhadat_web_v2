@@ -36,7 +36,6 @@ const TooltipHost: React.FC<TooltipHostProps> = ({ children, content, className,
           <TooltipContent
             side="top"
             align="center"
-            asChild
             className={cn(
               isTextOverflow ? 'max-w-[20rem] overflow-hidden text-wrap text-center' : '!hidden',
               className,

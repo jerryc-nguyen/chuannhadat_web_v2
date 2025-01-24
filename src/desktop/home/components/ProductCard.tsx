@@ -14,7 +14,6 @@ import React from 'react';
 import LoadingProductCard from './LoadingProductCard';
 import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
@@ -22,7 +21,7 @@ type ProductCardProps = {
 };
 export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
-  const router = useRouter();
+
   const [postId, setSelectedPostId] = useAtom(selectedPostId);
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
 
@@ -68,17 +67,13 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         )}
 
         {isShowAuthor && <div className="w-full text-secondary">{product.bus_cat_type}</div>}
-        <Link
-          href={product.detail_path}
-          onClick={(e) => {
-            e.preventDefault();
-            openModalPostDetail(product.uid);
-            router.push(product.detail_path);
-          }}
-          className="c-ads_color mt-2 line-clamp-2 w-full cursor-pointer text-base font-semibold text-primary"
+        <Link className="invisible opacity-0" href={product.detail_path} />
+        <h3
+          onClick={() => openModalPostDetail(product.uid)}
+          className="mt-2 line-clamp-2 w-full cursor-pointer text-base font-semibold text-primary c-ads_color"
         >
           {product?.title}
-        </Link>
+        </h3>
         <div className="mt-4 flex w-full justify-between">
           {isShowInfoPrice && (
             <div className="flex flex-col gap-y-1 text-sm">

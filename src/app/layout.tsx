@@ -106,7 +106,7 @@ export const metadata: Metadata = createMetadata({
         sizes: '180x180',
         url: '/apple-icon-180x180.png',
       },
-    ],
+    ]
   },
   other: {
     'msapplication-TileColor': '#ffffff',
@@ -125,7 +125,6 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   const { isMobile } = useGetUserAgentInfo();
 
@@ -151,9 +150,7 @@ export default function RootLayout({
         )}
       >
         <NextTopLoader />
-        <ProviderWrapper>
-          <div>{children}</div>
-        </ProviderWrapper>
+        <ProviderWrapper>{children}</ProviderWrapper>
       </body>
     </html>
   );

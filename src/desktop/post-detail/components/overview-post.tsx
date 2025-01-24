@@ -15,6 +15,7 @@ import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/plugins/counter.css';
 import SubTitleComponent from './subtitle-component';
+import { useRouter } from 'next/navigation';
 import useModalPostDetail from '../hooks/useModalPostDetail';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
@@ -23,23 +24,19 @@ import ButtonSave, { type ButtonSaveHandle } from '@desktop/home/components/Butt
 import { toast } from 'sonner';
 import useAuth from '@mobile/auth/hooks/useAuth';
 import BlurImage from '@components/BlurImage';
-import { DEFAULT_THUMB_IMAGE } from '@common/constants';
-import Image from 'next/image';
-import { Skeleton } from '@components/ui/skeleton';
 
 type OverviewPostProps = {
   data: IProductDetail;
   isInsideModal?: boolean;
-  isLoading?: boolean;
 };
 
-const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false, isLoading }) => {
+const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false }) => {
   const [openSlideImage, setIsOpenSlideImage] = React.useState<boolean>(false);
   const refButtonSave = React.useRef<ButtonSaveHandle>(null);
   const { currentUser } = useAuth();
   const [indexImageActive, setIndexImageActive] = React.useState<number>(0);
+  const router = useRouter();
   const [isCopied, setIsCopied] = React.useState(false);
-  const { onCloseModal } = useModalPostDetail();
 
   const { mutate: addViewPost } = useMutation({
     mutationFn: services.trackings.viewProduct,
@@ -87,65 +84,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       createModule('SubTitle', () => <SubTitleComponent>{data?.title}</SubTitleComponent>),
     );
   };
-  const renderLoadingOverview = () => (
-    <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
-      <div className={cn('list-image overflow-hidden rounded-lg', renderClassImages(3))}>
-        {[1, 2, 3].map((item) => (
-          <div
-            key={item}
-            className={cn(
-              'image-item border-1 relative flex cursor-pointer items-center justify-center overflow-hidden shadow-md',
-            )}
-          >
-            <Image
-              className="z-0 h-full scale-110 opacity-100 bg-blend-lighten blur-xl grayscale transition-all"
-              style={{
-                objectFit: 'cover',
-              }}
-              fill
-              alt={'loading-image'}
-              title={'Loading image'}
-              src={DEFAULT_THUMB_IMAGE}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="mb-2 mt-4">
-        <Skeleton className="h-5" />
-        <Skeleton className="mt-2 h-5" />
-      </div>
-      <Skeleton className="my-3 h-3" />
-      <div className="flex flex-wrap items-center justify-between gap-y-2">
-        <div className="flex gap-x-10">
-          <div className="price flex flex-col gap-y-2 text-nowrap">
-            <p className="font-medium">Mức giá</p>
-            <Skeleton className="h-5 w-[60px]" />
-            <Skeleton className="h-4 w-[50px]" />
-          </div>
-          <div className="area flex flex-col gap-y-2 text-nowrap">
-            <p className="font-medium">Diện tích</p>
-            <Skeleton className="h-5 w-[60px]" />
-            <Skeleton className="h-4 w-[50px]" />
-          </div>
-        </div>
-        <div className="action flex gap-x-4">
-          <Button disabled variant={'outline'}>
-            Chia sẻ
-            <LuShare2 className="ml-2" />
-          </Button>
-          <Button disabled className="relative" variant={'outline'}>
-            Lưu tin
-            <ButtonSave
-              ref={refButtonSave}
-              className="opacity-1 visible relative right-0 top-0 border-0 !bg-transparent"
-              postUid={data?.uid}
-            />
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-  const renderContentOverview = () => (
+  const { onCloseModal } = useModalPostDetail();
+  return (
     <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
       <div
         className={cn(
@@ -162,7 +102,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
             )}
           >
             <BlurImage
-              className="z-0 opacity-100 bg-blend-lighten transition-all"
+              className="z-0 transition-all opacity-100 bg-blend-lighten"
               onClick={() => onClickImage(index)}
               style={{
                 objectFit: 'cover',
@@ -216,27 +156,27 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         }}
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
-      <h2 className="mb-2 mt-4 line-clamp-2 whitespace-normal text-2xl font-bold">{data?.title}</h2>
-      <TooltipHost isOverflow content={data?.full_address}>
-        <p className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
-          <LuMapPin />
+      <h2 className="mt-4 mb-2 text-2xl font-bold whitespace-normal line-clamp-2">{data?.title}</h2>
+      <p className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
+        <LuMapPin />
+        <TooltipHost isOverflow content={data?.full_address}>
           {data?.full_address}
-        </p>
-      </TooltipHost>
+        </TooltipHost>
+      </p>
       <div className="flex flex-wrap items-center justify-between gap-y-2">
         <div className="flex gap-x-10">
-          <div className="price flex flex-col text-nowrap">
+          <div className="flex flex-col price text-nowrap">
             <p className="font-medium">Mức giá</p>
             <strong>{data?.formatted_price}</strong>
             <span className="text-xs italic text-secondary">{data?.formatted_price_per_m2}</span>
           </div>
-          <div className="area flex flex-col text-nowrap">
+          <div className="flex flex-col area text-nowrap">
             <p className="font-medium">Diện tích</p>
             <strong>{data?.formatted_area}</strong>
             <span className="text-xs italic text-secondary">{data?.formatted_kt}</span>
           </div>
         </div>
-        <div className="action flex gap-x-4">
+        <div className="flex action gap-x-4">
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -271,10 +211,10 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           {isInsideModal && (
             <Button
               onClick={() => {
-                window.location.reload();
+                router.push(data.detail_path);
                 onCloseModal();
               }}
-              className="border bg-primary_color/80 text-white hover:bg-primary_color"
+              className="text-white border bg-primary_color/80 hover:bg-primary_color"
               variant={'link'}
             >
               Xem chi tiết
@@ -285,7 +225,6 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       </div>
     </div>
   );
-  return isLoading ? renderLoadingOverview() : renderContentOverview();
 };
 
 export default OverviewPost;
