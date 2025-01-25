@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 type ButtonSaveProps = {
   postUid: string;
   className?: string;
+  disabled?: boolean;
 };
 
 export type ButtonSaveHandle = {
@@ -21,7 +22,7 @@ export type ButtonSaveHandle = {
 };
 
 const ButtonSave = React.forwardRef<ButtonSaveHandle, ButtonSaveProps>(
-  ({ postUid, className }, ref) => {
+  ({ postUid, className, disabled }, ref) => {
     const [isSaved, setIsSaved] = React.useState<boolean>(false);
     useImperativeHandle(ref, () => ({
       onSaved: () => {
@@ -74,7 +75,7 @@ const ButtonSave = React.forwardRef<ButtonSaveHandle, ButtonSaveProps>(
       <Button
         onClick={handleSavePost}
         size={'icon'}
-        disabled={isLoadingSavePost}
+        disabled={isLoadingSavePost || disabled}
         variant="outline"
         className={cn(
           'opacity-1 invisible absolute right-3 top-3 z-[3] rounded-full opacity-0 transition-all',

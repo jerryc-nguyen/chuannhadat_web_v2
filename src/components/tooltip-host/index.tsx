@@ -50,7 +50,7 @@ const TooltipHost: React.FC<TooltipHostProps> = ({ children, content, className,
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
           side="top"
           align="center"
