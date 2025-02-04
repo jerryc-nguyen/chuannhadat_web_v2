@@ -1,9 +1,10 @@
+import { formatRealEstateText } from "@common/stringHelpers";
 import { genKey } from "@common/utils";
 
 const FormatHtml = ({ content }: { content: string }) => {
   return (
     content &&
-    content.split('\r\n').map((line: string, index: number) => {
+    formatRealEstateText(content).split('\n').map((line: string, index: number) => {
       if (line.trim() === '') return null;
       if (!line.startsWith('•')) {
         return <p key={genKey(index)}>{line}</p>;
