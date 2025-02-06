@@ -42,9 +42,11 @@ export const PhoneNumberTab: React.FC = () => {
   });
 
   React.useEffect(() => {
-    updateCurrentUser(profileMe as ILoginResponse);
+    if (profileMe) {
+      updateCurrentUser(profileMe as ILoginResponse);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileMe]);
+  }, [profileMe?.phone]);
   const formSchema = z.object({
     newPhoneNumber: z
       .string()
@@ -155,8 +157,7 @@ export const PhoneNumberTab: React.FC = () => {
         currentUser.phone && (
           <p className="mt-4">
             Số điện thoại hiện tại của bạn là <b>{currentUser?.phone}</b>
-            {' '}
-            {!isConfirmedPhone && (<i>(chưa được xác thực)</i>)}
+            {!isConfirmedPhone && <i>(chưa được xác thực)</i>}
           </p>
         )
       )}

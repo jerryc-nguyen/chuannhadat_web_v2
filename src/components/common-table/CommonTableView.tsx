@@ -37,7 +37,7 @@ const CommonTableView: React.FC<CommonTableViewProps> = (props) => {
   };
   const onRenderTableBody = () => {
     if (isLoading) {
-      return <TableBody>{new Array(4).fill(0).map(() => renderLoadingTable(uuidv4()))}</TableBody>;
+      return <TableBody>{[1, 2, 3, 4].map(() => renderLoadingTable(uuidv4()))}</TableBody>;
     } else if (items.length === 0 || !items) {
       return onRenderEmptyTable();
     } else {
@@ -45,7 +45,7 @@ const CommonTableView: React.FC<CommonTableViewProps> = (props) => {
         <TableBody>
           {items.map((item, index) => {
             return (
-              <TableRow key={item.key}>
+              <TableRow key={uuidv4()}>
                 {columns.map((column) => (
                   <TableCell
                     key={uuidv4()}
@@ -72,7 +72,7 @@ const CommonTableView: React.FC<CommonTableViewProps> = (props) => {
       <TableHeader>
         <TableRow className="whitespace-nowrap font-semibold">
           {columns.map((item) => (
-            <TableHead key={item.key} className={item.className}>
+            <TableHead key={uuidv4()} className={item.className}>
               <TooltipHost isOverflow content={item.name}>
                 {item.name}
               </TooltipHost>

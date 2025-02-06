@@ -12,12 +12,18 @@ import Section from '@mobile/ui/Section';
 import { FeaturesList } from '@desktop/post-detail/components/features-post';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import './PostDetailMobile.scss';
+import NotFound from '@app/not-found';
 
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);
   const setAuthor = useSetAtom(authorAtom);
 
-  const { data: product, isLoading } = useQuery({
+  const {
+    data: product,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useQuery({
     queryKey: ['get-detail-post', productUid],
     queryFn: () => services.posts.getDetailPost(productUid),
     enabled: !!productUid && productUid !== '/', // Ensure query is enabled only if productUid is valid
@@ -53,7 +59,8 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
         <Spinner />
       </div>
     );
-
+  if (isError || (isSuccess && !product))
+    return <NotFound errorMessage="The current path of post detail is incorrect" />;
   return (
     <div className="flex flex-col gap-4 p-0">
       <PhotosCarousel product={product} />
@@ -61,7 +68,7 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
         <FeaturesList data={product} />
       </Section>
       <ProductDescription product={product} />
-      <div className='c-mblAuthorInfo p-4'>
+      <div className="c-mblAuthorInfo p-4">
         <AuthorInfo />
       </div>
     </div>

@@ -26,6 +26,7 @@ import BlurImage from '@components/BlurImage';
 import Image from 'next/image';
 import { Skeleton } from '@components/ui/skeleton';
 import { DEFAULT_THUMB_IMAGE } from '@common/constants';
+import { useRouter } from 'next/navigation';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -39,7 +40,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   const { currentUser } = useAuth();
   const [indexImageActive, setIndexImageActive] = React.useState<number>(0);
   const [isCopied, setIsCopied] = React.useState(false);
-
+  const { onCloseModal } = useModalPostDetail();
+  const router = useRouter();
   const { mutate: addViewPost } = useMutation({
     mutationFn: services.trackings.viewProduct,
   });
@@ -86,7 +88,6 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       createModule('SubTitle', () => <SubTitleComponent>{data?.title}</SubTitleComponent>),
     );
   };
-  const { onCloseModal } = useModalPostDetail();
   const renderLoadingOverview = () => (
     <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
       <div className={cn('list-image overflow-hidden rounded-lg', renderClassImages(3))}>
@@ -158,7 +159,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           <div
             key={item.id}
             className={cn(
-              'image-item border-1 relative flex cursor-pointer items-center justify-center shadow-md',
+              'image-item border-1 relative flex cursor-pointer items-center justify-center overflow-hidden shadow-md',
               data?.images.length > 3 && index === 2 ? 'bg-overlay' : '',
             )}
           >
@@ -218,12 +219,12 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
       <h2 className="mb-2 mt-4 line-clamp-2 whitespace-normal text-2xl font-bold">{data?.title}</h2>
-      <p className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
+      <div className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
         <LuMapPin />
         <TooltipHost isOverflow content={data?.full_address}>
           {data?.full_address}
         </TooltipHost>
-      </p>
+      </div>
       <div className="flex flex-wrap items-center justify-between gap-y-2">
         <div className="flex gap-x-10">
           <div className="price flex flex-col text-nowrap">
@@ -271,8 +272,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           {isInsideModal && (
             <Button
               onClick={() => {
-                window.location.reload();
-                window.scrollTo(0, 0);
+                router.push(data.detail_path);
                 onCloseModal();
               }}
               className="border bg-primary_color/80 text-white hover:bg-primary_color"

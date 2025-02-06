@@ -3,7 +3,7 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import HeaderMobile from '@mobile/header/HeaderMobile';
 import HeaderDesktop from '@desktop/components/HeaderDeskop';
 import Footer from '@desktop/components/Footer';
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export default function HomeLayout({
   children,
