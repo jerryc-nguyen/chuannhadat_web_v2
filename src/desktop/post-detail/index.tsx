@@ -14,6 +14,7 @@ import { useSetAtom } from 'jotai';
 import { postDetailAtom } from './states/postDetailAtoms';
 import ViewedPosts from './components/ViewedPosts';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@desktop/components/breadcrumb';
+import NotFound from '@app/not-found';
 
 type PostDetailDesktopProps = object;
 
@@ -21,7 +22,7 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   const currentPath = usePathname();
   const setPostDetailData = useSetAtom(postDetailAtom);
   const productUid = currentPath.split('-').slice(-1)[0];
-  const { data } = useQuery({
+  const { data, isLoading, isSuccess, isError } = useQuery({
     queryKey: ['get-detail-post', productUid],
     queryFn: () => services.posts.getDetailPost(productUid),
     select: (data) => data.data,
@@ -36,7 +37,8 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   const breadcrumbsData = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
   }, [data?.breadcrumb]);
-
+  if (isError || (isSuccess && !data))
+    return <NotFound errorMessage="The current path of post detail is incorrect" />;
   return (
     <>
       <div className="mx-auto mt-5 flex justify-between gap-x-4">
@@ -44,9 +46,9 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
       </div>
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">
-          <OverviewPost data={data as IProductDetail} />
-          <FeaturesPost data={data as IProductDetail} />
-          <DescriptionPost data={data as IProductDetail} />
+          <OverviewPost isLoading={isLoading} data={data as IProductDetail} />
+          <FeaturesPost isLoading={isLoading} data={data as IProductDetail} />
+          <DescriptionPost isLoading={isLoading} data={data as IProductDetail} />
           <ViewedPosts productUid={data?.uid as string} />
           <NotePost />
         </div>

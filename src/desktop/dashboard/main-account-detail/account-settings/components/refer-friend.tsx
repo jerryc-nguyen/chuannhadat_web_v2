@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import React from 'react';
@@ -9,6 +10,7 @@ import { services } from '@api/services';
 import CommonTableView from '@components/common-table/CommonTableView';
 import { IColumnTable } from '@components/common-table';
 import { IReferralData } from '@models/modelResponse';
+import { Skeleton } from '@components/ui/skeleton';
 
 const ReferFriend: React.FC = () => {
   const [isCopy, setIsCopy] = React.useState(false);
@@ -43,7 +45,7 @@ const ReferFriend: React.FC = () => {
       key: 'order',
       name: 'Số thứ tự',
       onRenderItemColumn: (_item, index) => {
-        return index != undefined ? index + 1 : index
+        return index != undefined ? index + 1 : index;
       },
     },
     {
@@ -83,23 +85,27 @@ const ReferFriend: React.FC = () => {
         </div>
         <div>
           <h4 className="mb-2 text-center text-lg font-semibold">Mã giới thiệu của bạn</h4>
-          <div className="mx-auto flex w-full justify-center overflow-hidden">
-            <span
-              id="url-refer"
-              className="overflow-hidden text-ellipsis whitespace-nowrap rounded-md rounded-r-none bg-slate-200 p-3 px-4 text-sm dark:bg-slate-700 lg:text-base"
-            >
-              {`${process.env.NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN}/gioi-thieu-ban-be/${currentUser?.referral_code}`}
-            </span>
-            <Button
-              onClick={handleCopyUrlRefer}
-              variant="outline"
-              size="icon"
-              className="flex h-12 w-fit gap-x-2 rounded-l-none px-4"
-            >
-              {isCopy ? <LuCheck className="text-blue-500" /> : <LuClipboard />}
-              {isCopy ? 'Copied!' : 'Copy'}
-            </Button>
-          </div>
+          {currentUser ? (
+            <div className="mx-auto flex w-full justify-center overflow-hidden">
+              <span
+                id="url-refer"
+                className="overflow-hidden text-ellipsis whitespace-nowrap rounded-md rounded-r-none bg-slate-200 p-3 px-4 text-sm dark:bg-slate-700 lg:text-base"
+              >
+                {`${process.env.NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN}/gioi-thieu-ban-be/${currentUser?.referral_code}`}
+              </span>
+              <Button
+                onClick={handleCopyUrlRefer}
+                variant="outline"
+                size="icon"
+                className="flex h-12 w-fit gap-x-2 rounded-l-none px-4"
+              >
+                {isCopy ? <LuCheck className="text-blue-500" /> : <LuClipboard />}
+                {isCopy ? 'Copied!' : 'Copy'}
+              </Button>
+            </div>
+          ) : (
+            <Skeleton className="mx-auto h-12 w-[520px]" />
+          )}
         </div>
         <div>
           <h4 className="mb-4 text-center text-lg font-semibold">Ưu đãi khi giới thiệu bạn bè</h4>

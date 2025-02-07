@@ -106,7 +106,7 @@ export const metadata: Metadata = createMetadata({
         sizes: '180x180',
         url: '/apple-icon-180x180.png',
       },
-    ]
+    ],
   },
   other: {
     'msapplication-TileColor': '#ffffff',

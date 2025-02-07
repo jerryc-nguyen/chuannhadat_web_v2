@@ -9,7 +9,7 @@ import {
 } from '@desktop/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { listTabAccountSetting } from '../constants';
 
 const AccountSettingsDesktop: React.FC = () => {
@@ -20,7 +20,6 @@ const AccountSettingsDesktop: React.FC = () => {
   const pathname = usePathname();
   const handleChangeTab = (value: string) => {
     setTabActive(value);
-    router.push(pathname + '?' + createQueryString('tab', value));
   };
   const createQueryString = React.useCallback(
     (name: string, value: string) => {
@@ -30,6 +29,9 @@ const AccountSettingsDesktop: React.FC = () => {
     },
     [searchParams],
   );
+  useEffect(() => {
+    router.push(pathname + '?' + createQueryString('tab', tabActive));
+  }, [tabActive, createQueryString, pathname, router]);
 
   const setBreadCrumb = useSetAtom(breadcrumbAtom);
   React.useEffect(() => {
