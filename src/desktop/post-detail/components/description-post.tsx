@@ -21,7 +21,7 @@ const DescriptionPost: React.FC<DescriptionPostProps> = ({ data, isLoading }) =>
   };
   const renderContentDescription = () =>
     data?.description &&
-    data?.description.split('\r\n').map((line: string, index: number) => {
+    (formatRealEstateText(data?.description).split('\n')).map((line: string, index: number) => {
       if (line.trim() === '') return null;
       if (!line.startsWith('•')) {
         return <p key={genKey(index)}>{line}</p>;
