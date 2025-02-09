@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { AspectRatio } from "@components/ui/AspectRatio";
-import useResizeImage from "@hooks/useResizeImage";
-import { IProductDetail } from "@mobile/searchs/type";
+import { AspectRatio } from '@components/ui/AspectRatio';
+import useResizeImage from '@hooks/useResizeImage';
+import { IProductDetail } from '@mobile/searchs/type';
 import ImageCarousel from '@mobile/ui/ImageCarousel';
 import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
 import Lightbox from 'yet-another-react-lightbox';
@@ -12,7 +12,7 @@ import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import 'yet-another-react-lightbox/plugins/counter.css';
 
-export default function PhotosCarousel({ product }: { product?: IProductDetail }) {
+export default function PhotosCarousel({ product }: { product: IProductDetail }) {
   const { buildThumbnailUrl } = useResizeImage();
 
   const onClickImage = (indexImage: number) => {
@@ -25,22 +25,21 @@ export default function PhotosCarousel({ product }: { product?: IProductDetail }
 
   return (
     <div className="flex flex-col gap-4 bg-white">
-      {product?.images && product?.images.length > 0 ? (
+      {product?.images && product?.images.length > 1 ? (
         <ImageCarousel images={product.images} onClick={onClickImage} />
       ) : (
         <AspectRatio ratio={16 / 9}>
           <img
-            className="Image"
+            className="h-full w-full object-cover"
             src={buildThumbnailUrl({
-              imageUrl:
-                'https://cdn.dribbble.com/userupload/8392915/file/original-497a5e74203f601d33f76872e7ebaaa6.jpg',
+              imageUrl: product.images[0].url,
             })}
-            alt={(product as any)?.name}
+            alt={(product as IProductDetail)?.description}
           />
         </AspectRatio>
       )}
 
-      {openSlideImage && (
+      {openSlideImage && product?.images_count > 1 && (
         <Lightbox
           open={openSlideImage}
           controller={{ closeOnPullDown: true }}
@@ -75,5 +74,5 @@ export default function PhotosCarousel({ product }: { product?: IProductDetail }
         />
       )}
     </div>
-  )
+  );
 }

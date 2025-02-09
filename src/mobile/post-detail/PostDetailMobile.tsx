@@ -13,6 +13,7 @@ import { FeaturesList } from '@desktop/post-detail/components/features-post';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import './PostDetailMobile.scss';
 import NotFound from '@app/not-found';
+import type { IProductDetail } from '@mobile/searchs/type';
 
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);
@@ -63,7 +64,7 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
     return <NotFound errorMessage="The current path of post detail is incorrect" />;
   return (
     <div className="flex flex-col gap-4 p-0">
-      <PhotosCarousel product={product} />
+      <PhotosCarousel product={product as IProductDetail} />
       <Section title={product?.title}>
         <FeaturesList data={product} />
       </Section>

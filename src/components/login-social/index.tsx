@@ -75,7 +75,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className
         ) : (
           <FcGoogle className="text-2xl sm:text-xl" />
         )}
-        <span className="hidden sm:block">Đăng nhập bằng Google</span>
+        <span className="font-semibold">Đăng nhập bằng Google</span>
       </Button>
       {/* <div
         onClick={() => toast.warning('Chức năng này hiện đang trong quá trình phát triển')}

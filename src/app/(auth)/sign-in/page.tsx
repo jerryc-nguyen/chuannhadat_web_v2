@@ -12,7 +12,7 @@ const SignInPage: React.FC<SignInPageProps> = () => {
   const router = useRouter();
   return (
     <section className="flex min-h-[100dvh] items-center justify-center overflow-x-hidden bg-[#fefdf9]">
-      <section className="shadow-dropdown flex h-full w-full flex-col overflow-hidden rounded-xl bg-transparent md:h-fit md:w-4/5 md:flex-row md:bg-white lg:w-2/3">
+      <section className="shadow-dropdown flex h-full w-full flex-col-reverse overflow-hidden bg-transparent md:h-fit md:w-4/5 md:flex-row md:rounded-xl md:bg-white lg:w-2/3">
         <section className="px-5 py-10 md:w-1/2 md:p-10">
           <Logo isAlwaysShow />
           <Link href="/" className="my-4 flex items-center gap-x-2 font-medium hover:underline">
@@ -26,7 +26,7 @@ const SignInPage: React.FC<SignInPageProps> = () => {
             }}
           />
         </section>
-        <div className="relative flex w-full items-center overflow-x-hidden bg-[url(https://cdn.tailkit.com/media/landing/components-hero.png)] bg-cover bg-right-bottom px-6 py-10 dark:bg-center md:w-1/2 md:px-10 lg:p-16">
+        <div className="relative hidden w-full items-center overflow-x-hidden bg-[url(https://cdn.tailkit.com/media/landing/components-hero.png)] bg-cover bg-right-bottom px-6 py-10 sm:flex md:w-1/2 md:px-10 lg:p-16">
           <div className="absolute inset-0 bg-blue-950/85 backdrop-blur-sm dark:bg-gray-800/95"></div>
           <div className="relative text-center md:text-left">
             <p className="mb-2 font-semibold leading-relaxed text-white">
