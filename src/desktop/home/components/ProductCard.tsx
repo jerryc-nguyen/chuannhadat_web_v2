@@ -70,7 +70,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
           onClick={() => openModalPostDetail(product.uid)}
-          className="mt-2 line-clamp-2 w-full cursor-pointer text-base font-semibold text-primary c-ads_color"
+          className="c-ads_color mt-2 line-clamp-2 w-full cursor-pointer font-semibold text-primary"
         >
           {product?.title}
         </h3>
