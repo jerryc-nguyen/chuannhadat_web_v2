@@ -87,14 +87,13 @@ export function usePaginatedNotifications() {
           per_page: 100,
           filter_status: null,
         });
-        if (data) {
+        if (data && data.data) {
           setTotalCount(data.data.total_count);
           const totalUnread = data.data.results.filter((item) => !item.is_read).length;
           setTotalUnread(totalUnread);
         }
       }
     })();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser?.id]);
   React.useEffect(() => {
