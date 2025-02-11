@@ -16,7 +16,6 @@ import ProductInfoForm from './components/form-components/product-info-form';
 import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 import { FormMobile } from './mobile/form-create';
-import React from 'react';
 
 const EditPost = ({ params }: { params: A }) => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
@@ -25,7 +24,7 @@ const EditPost = ({ params }: { params: A }) => {
       link: '/manage-post/new-post',
       title: 'Chỉnh sửa tin bán & cho thuê',
       isActive: true,
-    },
+    }
   ]);
 
   const isMobile = useIsMobile();
@@ -34,24 +33,19 @@ const EditPost = ({ params }: { params: A }) => {
   const { data: product, isSuccess } = useQuery({
     queryKey: ['get-detail-manage-post', productUid],
     queryFn: () => ManageProductApis.getDetail(productUid),
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: true, // Optional: refetch when window is focused
     select: (data) => data.data,
-    staleTime: 0,
-    gcTime: 0,
   });
 
   const formData = isSuccess ? product : {};
+
   const form = useForm({
     // @ts-ignore: ok
     resolver: yupResolver(PostFormSchema),
     defaultValues: formData,
     reValidateMode: 'onChange',
   });
-  React.useEffect(() => {
-    if (isSuccess) {
-      form.reset(product); // Cập nhật dữ liệu mới vào form
-    }
-  }, [isSuccess, product, form]);
+
   const onSubmit = async (data: A) => {
     console.log('onSubmit', data);
     if (!product) {
