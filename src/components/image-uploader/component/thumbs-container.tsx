@@ -25,19 +25,23 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
       return;
     }
 
-    onChange(reorder(images, result.source.index, result.destination.index));
+    onChange(reorder(
+      images,
+      result.source.index,
+      result.destination.index
+    ))
   }
 
   const generateKey = (image: IUploadedImage) => {
-    return image.id + '';
-  };
+    return image.id + "";
+  }
 
   const onRemoveImageClick = (image: IUploadedImage) => {
     if (!confirm('Bạn muốn xoá hình này?')) {
       return;
     }
     onChange(images.filter((img) => img.id != image.id));
-  };
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -50,10 +54,14 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
           >
             {images.map((image, index) => {
               return (
-                <Draggable key={generateKey(image)} draggableId={generateKey(image)} index={index}>
+                <Draggable
+                  key={generateKey(image)}
+                  draggableId={generateKey(image)}
+                  index={index}
+                >
                   {(provided: any, snapshot: any) => (
                     <div
-                      className="relative w-min"
+                      className="w-min relative"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -61,15 +69,8 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
                       elevation={4}
                     >
                       <PreviewThumb image={image} />
-                      <CircleX
-                        onClick={() => onRemoveImageClick(image)}
-                        className="absolute right-1 top-1 z-10 cursor-pointer text-[#596570] transition-opacity duration-300 group-hover:opacity-100"
-                      />
-                      {index == 0 && (
-                        <span className="absolute bottom-4 left-1/2 -translate-x-1/2 transform whitespace-nowrap rounded border px-1 text-white">
-                          Hình đại diện
-                        </span>
-                      )}
+                      <CircleX onClick={() => onRemoveImageClick(image)} className="absolute right-1 top-1 z-10 text-[#596570] transition-opacity duration-300 group-hover:opacity-100 cursor-pointer" />
+                      {index == 0 && (<span className='absolute left-1/2 transform -translate-x-1/2 bottom-4 text-white border px-1 whitespace-nowrap rounded'>Hình đại diện</span>)}
                     </div>
                   )}
                 </Draggable>

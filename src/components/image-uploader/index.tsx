@@ -29,8 +29,8 @@ const rejectStyle: CSSProperties = {
 };
 
 interface IImageUploader {
-  uploadedImages: IUploadedImage[];
-  onUploaded: (images: IUploadedImage[]) => void;
+  uploadedImages: IUploadedImage[],
+  onUploaded: (images: IUploadedImage[]) => void
 }
 
 export const convertToUploadedImages = (images: TPhoto[]): IUploadedImage[] => {
@@ -42,27 +42,20 @@ export const convertToUploadedImages = (images: TPhoto[]): IUploadedImage[] => {
     return {
       ...img,
       process: 100,
-      uploading: false,
-    };
-  });
-};
+      uploading: false
+    }
+  })
+}
 
 const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded }) => {
-  const sumImageId = uploadedImages.reduce((acc, item) => {
-    return acc + parseInt(item.id + '');
-  }, 0);
   const [images, setImages] = useState<IUploadedImage[]>(uploadedImages);
 
-  useEffect(() => {
-    setImages(uploadedImages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sumImageId]);
   const handleOnChange = (newImages: IUploadedImage[]) => {
     const uploadedImgs = newImages.filter((item) => {
-      return parseInt(item.id + '') && parseInt(item.id + '') > 0;
-    });
-    onUploaded(uploadedImgs);
-  };
+      return parseInt(item.id + '') && parseInt(item.id + '') > 0
+    })
+    onUploaded(uploadedImgs)
+  }
 
   const updateUploadProgress = (file: File, progress: number) => {
     setImages((oldImages: IUploadedImage[]) => {
@@ -72,28 +65,28 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
           return {
             ...img,
             uploading: true,
-            progress: progress,
-          };
+            progress: progress
+          }
         } else {
           return img;
         }
       });
     });
-  };
+  }
 
   const handleUploadCompleted = (result: A) => {
     setImages((oldImages: IUploadedImage[]) => {
       const newImages = oldImages.map((img: IUploadedImage) => {
         // @ts-ignore: check new attr
-        const matched = img.uploadedFile && img.uploadedFile.new_id == result.file?.new_id;
+        const matched = img.uploadedFile && img.uploadedFile.new_id == result.file?.new_id
         const uploaded = oldImages.filter((item) => item.id == result.id).length > 0;
         if (matched && !uploaded) {
           return {
             ...img,
             uploading: false,
             progress: 100,
-            id: result.id,
-          };
+            id: result.id
+          }
         } else {
           return img;
         }
@@ -101,7 +94,7 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
       handleOnChange(newImages);
       return newImages;
     });
-  };
+  }
 
   const uploadImagesHandler = (files: File[]) => {
     const uploadPromises = ImageUploadApiService.upload(
@@ -109,20 +102,17 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
       files,
       (file, progress) => {
         // console.log(`Uploading ${file.name}: ${progress}`)
-        updateUploadProgress(file, progress);
-      },
-    );
+        updateUploadProgress(file, progress)
+      });
 
     uploadPromises.forEach((uploading) => {
-      uploading
-        .then((result) => {
-          handleUploadCompleted(result);
-        })
-        .catch((err) => {
-          console.error('Error in one or more uploads:', err);
-        });
-    });
-  };
+      uploading.then((result) => {
+        handleUploadCompleted(result);
+      }).catch((err) => {
+        console.error('Error in one or more uploads:', err);
+      })
+    })
+  }
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
     accept: {
@@ -140,13 +130,14 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
           id: newId,
           url: URL.createObjectURL(file),
           uploadedFile: file,
-          progress: 10,
+          progress: 10
         };
         return img;
-      });
-      setImages((prev) => [...prev, ...(newImages as IUploadedImage[])]);
+      })
+
+      setImages((prev) => [...prev, ...newImages]);
       uploadImagesHandler(files);
-    },
+    }
   });
 
   const style = useMemo(
@@ -160,10 +151,10 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
   );
 
   const onImagesChanged = (images: IUploadedImage[]) => {
-    setImages(images);
-    onUploaded(images);
+    setImages(images)
+    onUploaded(images)
     // debugImagesNth()
-  };
+  }
 
   // const debugImagesNth = () => {
   //   const imageIds = images.map((item) => item.id);
@@ -174,7 +165,7 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
     if (Array.isArray(uploadedImages) && uploadedImages.length > 0) {
       onUploaded(uploadedImages);
     }
-  }, []);
+  }, [])
 
   return (
     <section className="">
