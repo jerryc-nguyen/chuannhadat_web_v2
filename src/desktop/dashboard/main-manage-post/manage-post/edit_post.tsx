@@ -17,6 +17,7 @@ import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 import { FormMobile } from './mobile/form-create';
 import { useManagePostsCache } from '../collection-post/hooks/useManagePostsCache';
+import { getQueryClient } from "@api/react-query";
 
 const EditPost = ({ params }: { params: A }) => {
   const { updateRowData } = useManagePostsCache();
@@ -62,6 +63,7 @@ const EditPost = ({ params }: { params: A }) => {
 
       if (res.status) {
         updateRowData(res.data);
+        getQueryClient().invalidateQueries({ queryKey: ['get-detail-manage-post', productUid] })
         toast.success('Cập nhật tin thành công');
       } else {
         // @ts-ignore: ok
