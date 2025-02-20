@@ -13,7 +13,8 @@ export interface FilterState {
   ward?: OptionForSelect;
   project?: OptionForSelect;
   sort?: OptionForSelect;
-  busCatType?: OptionForSelect
+  busCatType?: OptionForSelect;
+  [key: string]: OptionForSelect | undefined;
 }
 
 export interface FilterFieldOptions {

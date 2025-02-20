@@ -29,8 +29,7 @@ export default function useFilterState() {
   const copyFilterStatesToLocalByFieldId = (fieldNames: Array<FilterFieldName>) => {
     let values: Record<string, A> = {};
     fieldNames?.forEach((fieldName) => {
-      if (fieldName == FilterFieldName.Locations ||
-        fieldName == FilterFieldName.ProfileLocations) {
+      if (fieldName == FilterFieldName.Locations || fieldName == FilterFieldName.ProfileLocations) {
         values = {
           city: filterState.city,
           district: filterState.district,
@@ -42,10 +41,11 @@ export default function useFilterState() {
           bed: filterState.bed,
         };
       } else {
-        values[fieldName] = (filterState as Record<string, A>)[fieldName];
+        values[fieldName] =
+          (filterState as Record<string, A>)[fieldName] || localFilterState[fieldName];
       }
     });
-    setLocalFilterState({ ...values });
+    setLocalFilterState(values);
   };
   const copyFilterStatesToLocal = (fieldIds: Array<FilterFieldName> = []) => {
     if (fieldIds.length > 0) {
@@ -60,19 +60,18 @@ export default function useFilterState() {
   };
 
   const setLocalFieldValue = (fieldId: FilterFieldName, option: OptionForSelect | undefined) => {
-    const finalOption = option?.value != 'all' ? option : undefined;
-
+    // If case that finalOption is undefined, canot set checked value on Checbox with value is 'all'
+    // const finalOption = option?.value != 'all' ? option : undefined;
     setLocalFilterState({
       ...localFilterState,
-      [fieldId]: finalOption,
+      [fieldId]: option,
     });
   };
 
   const removeFilterValue = (fieldId: FilterFieldName) => {
     let newFilteState = {};
 
-    if (fieldId == FilterFieldName.Locations ||
-      fieldId == FilterFieldName.ProfileLocations) {
+    if (fieldId == FilterFieldName.Locations || fieldId == FilterFieldName.ProfileLocations) {
       newFilteState = {
         ...filterState,
         city: undefined,
@@ -89,10 +88,10 @@ export default function useFilterState() {
       newFilteState = {
         ...filterState,
         [fieldId]: undefined,
-      }
+      };
     }
 
-    setFilterState(newFilteState)
+    setFilterState(newFilteState);
     syncSelectedParamsToUrl(newFilteState);
     return newFilteState;
   };
@@ -108,13 +107,17 @@ export default function useFilterState() {
     return allFilterState;
   };
 
-  const buildFilterParams = ({ withLocal = true, overrideStates = {} }: {
-    withLocal?: boolean, overrideStates?: Record<string, A>
+  const buildFilterParams = ({
+    withLocal = true,
+    overrideStates = {},
+  }: {
+    withLocal?: boolean;
+    overrideStates?: Record<string, A>;
   }): Record<string, A> => {
     let results: Record<string, A> = {};
     let allCurrentFilters: Record<string, A> = {
       ...filterState,
-      ...overrideStates
+      ...overrideStates,
     };
     if (withLocal) {
       allCurrentFilters = {
@@ -143,8 +146,10 @@ export default function useFilterState() {
   const applySingleFilter = (filterOption: FilterChipOption): FilterState => {
     let localValue: Record<string, A> = {};
 
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
+    if (
+      filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations
+    ) {
       localValue = {
         city: localFilterState.city,
         district: localFilterState.district,
@@ -160,7 +165,7 @@ export default function useFilterState() {
         busCatType: localFilterState.busCatType,
         city: undefined,
         district: undefined,
-        ward: undefined
+        ward: undefined,
       };
     } else {
       const fieldName = filterOption.id;
@@ -197,19 +202,19 @@ export default function useFilterState() {
       return {
         search_scope: searchScope,
         author_slug: pathname.split('profile/')[1],
-        aggs_for: 'profile'
+        aggs_for: 'profile',
       };
     } else if (searchScope == SearchScopeEnums.ManagePosts) {
       return {
         search_scope: searchScope,
-        author_slug: AuthUtils.getCurrentUser()?.slug
+        author_slug: AuthUtils.getCurrentUser()?.slug,
       };
     } else {
       return {
-        search_scope: searchScope
+        search_scope: searchScope,
       };
     }
-  }, [pathname, searchScope])
+  }, [pathname, searchScope]);
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
@@ -240,6 +245,6 @@ export default function useFilterState() {
     applySortFilter,
     selectedSortText,
     removeFilterValue,
-    extraSearchParams
+    extraSearchParams,
   };
 }

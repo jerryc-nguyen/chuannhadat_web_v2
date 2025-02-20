@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import { FormatDistanceToken, vi } from 'date-fns/locale';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { ONE_BILLION } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -214,3 +215,29 @@ export const objectToQueryString = (
 export const searchParamsToObj = (searchParams: ReadonlyURLSearchParams) => {
   return queryString.parse(searchParams.toString()) as Record<A, A>;
 };
+export const formatPriceFilterChip = (price: number, hasUnit = true) => {
+  const isLowerBillion = price < ONE_BILLION;
+  const formatNumber = (value: number): string => {
+    const isWhole = value % 1 === 0;
+    return isWhole ? value.toString() : value.toFixed(1);
+  };
+  if (isLowerBillion) {
+    const millionValue = price / 1_000_000;
+    return hasUnit ? `${formatNumber(millionValue)} triệu` : formatNumber(millionValue);
+  } else {
+    const billionValue = price / ONE_BILLION;
+    return hasUnit ? `${formatNumber(billionValue)} tỷ` : formatNumber(billionValue);
+  }
+};
+export const formatRangeText = (min: number, max: number) => {
+  const isSameLowerBillion = min < ONE_BILLION && max < ONE_BILLION;
+  const isSameHigherBillion = min >= ONE_BILLION && max >= ONE_BILLION;
+  if (isSameLowerBillion) {
+    return `${formatPriceFilterChip(min, false)}-${formatPriceFilterChip(max, false)} triệu`;
+  } else if (isSameHigherBillion) {
+    return `${formatPriceFilterChip(min, false)}-${formatPriceFilterChip(max, false)} tỷ`;
+  } else {
+    return `${formatPriceFilterChip(min, true)}-${formatPriceFilterChip(max, true)}`;
+  }
+};
+export const formatAreaText = (min?: number, max?: number) => `${min ?? 0}-${max ?? 0} m2`;
