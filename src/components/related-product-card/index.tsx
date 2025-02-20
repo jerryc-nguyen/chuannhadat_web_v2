@@ -4,10 +4,10 @@ import styles from './index.module.scss';
 import { IoImage } from 'react-icons/io5';
 
 import { LuLoader2 } from 'react-icons/lu';
-import { IProductSummary } from '@desktop/post-detail/type';
+import { IProductSummary } from '@views/post-detail/type';
 import { AspectRatio } from '@components/ui/AspectRatio';
 
-import useModalPostDetail from '@desktop/post-detail/hooks/useModalPostDetail';
+import useModalPostDetail from '@views/post-detail/hooks/useModalPostDetail';
 
 type RelatedProductCardProps = {
   product: IProductSummary;

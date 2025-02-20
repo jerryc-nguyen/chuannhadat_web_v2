@@ -1,5 +1,5 @@
 import React from 'react';
-import { HeaderDashboard, SidebarDashboard } from '@desktop/dashboard/layout/components';
+import { HeaderDashboard, SidebarDashboard } from '@views/dashboard/layout/components';
 import './index.scss';
 import { SidebarProvider } from '@components/ui/sidebar';
 import Breadcrumb from '@components/breadcrumb';

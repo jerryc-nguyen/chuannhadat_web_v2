@@ -3,7 +3,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   IBreadcrumbItem,
-} from '@desktop/dashboard/states/breadcrumbAtom';
+} from '@views/dashboard/states/breadcrumbAtom';
 import React from 'react';
 
 export const useBreadcrumb = (breadcrumb: IBreadcrumbItem[]) => {

@@ -13,7 +13,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
-} from '@desktop/dashboard/states/breadcrumbAtom';
+} from '@views/dashboard/states/breadcrumbAtom';
 
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();

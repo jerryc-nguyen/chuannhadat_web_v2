@@ -3,7 +3,7 @@
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 import SidePanel from './SidePanel';
 import useBrowserPopstate from './popstate-handler/hooks';
-import ModalPostDetail from '@desktop/post-detail/components/modal-post-detail';
+import ModalPostDetail from '@views/post-detail/components/modal-post-detail';
 import ConfirmEmailModal from './ui/ConfirmEmailModal';
 import DepositModal from './ui/DepositModal';
 import { Fragment } from 'react';

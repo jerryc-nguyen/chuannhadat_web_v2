@@ -9,7 +9,7 @@ import Spinner from '@components/ui/spinner';
 import PhotosCarousel from '@mobile/post-detail/components/PhotosCarousel';
 import ProductDescription from './components/ProductDescription';
 import Section from '@mobile/ui/Section';
-import { FeaturesList } from '@desktop/post-detail/components/features-post';
+import { FeaturesList } from '@views/post-detail/components/features-post';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import './PostDetailMobile.scss';
 import NotFound from '@app/not-found';

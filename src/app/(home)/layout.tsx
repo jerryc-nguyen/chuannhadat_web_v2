@@ -1,8 +1,8 @@
 import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import HeaderMobile from '@mobile/header/HeaderMobile';
-import HeaderDesktop from '@desktop/components/HeaderDeskop';
-import Footer from '@desktop/components/Footer';
+import HeaderDesktop from '@views/components/HeaderDeskop';
+import Footer from '@views/components/Footer';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 export default function HomeLayout({

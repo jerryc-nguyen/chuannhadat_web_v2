@@ -1,7 +1,7 @@
 // Next Imports
 import type { Metadata } from 'next';
 import HistoryViewMobile from '@mobile/main-financial-management/history';
-import HistoryViewDesktop from '@desktop/dashboard/main-financial-management/history';
+import HistoryViewDesktop from '@views/dashboard/main-financial-management/history';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 export const metadata: Metadata = {

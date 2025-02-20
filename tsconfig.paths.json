@@ -7,7 +7,6 @@
       "@styles/*": ["src/styles/*"],
       "@assets/*": ["src/assets/*"],
       "@utils/*": ["src/services/*"],
-      "@desktop/*": ["src/desktop/*"],
       "@mobile/*": ["src/mobile/*"],
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],

@@ -2,7 +2,7 @@ import axiosInstance from '@api/axiosInstance';
 import { services } from '@api/services';
 import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
-import ProfileDetailDesktop from '@desktop/profile-detail';
+import ProfileDetailDesktop from '@views/profile-detail';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import ProfileDetailMobile from '@mobile/profile-detail';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';

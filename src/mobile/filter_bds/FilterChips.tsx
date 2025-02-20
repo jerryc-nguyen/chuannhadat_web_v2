@@ -24,7 +24,7 @@ import { useAtom } from 'jotai';
 import { filterStateAtom } from './states';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
-import ProfileLocationsV2 from '@desktop/product-filters/ProfileLocationsV2';
+import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
 
 type FilterChipsProps = {

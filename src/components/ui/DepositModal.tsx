@@ -16,7 +16,7 @@ import {
   depositAmountAtom,
   openModalDepositAtom,
   statusTransactionAtom,
-} from '@desktop/dashboard/states/depositAtoms';
+} from '@views/dashboard/states/depositAtoms';
 import { services } from '@api/services';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useAuth from '@mobile/auth/hooks/useAuth';

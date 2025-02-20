@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { Metadata } from 'next';
-import AutoRefreshDesktop from '@desktop/dashboard/main-manage-post/auto-refresh';
+import AutoRefreshDesktop from '@views/dashboard/main-manage-post/auto-refresh';
 import AutoRefreshMobile from '@mobile/main-manage-post/auto-refresh';
 
 export const metadata: Metadata = {

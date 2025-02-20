@@ -6,8 +6,8 @@ import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
-import CardAuthor from '@desktop/home/components/CardAuthor';
-import CardImageCarousel from '@desktop/home/components/CardImageCarousel/CardImageCarousel';
+import CardAuthor from '@views/home/components/CardAuthor';
+import CardImageCarousel from '@views/home/components/CardImageCarousel/CardImageCarousel';
 
 export const ProductDetailTitleBts = ({ product }: { product: A }) => {
   return (

@@ -1,7 +1,7 @@
 import PageContainer from "@components/page-container/page-container";
 import { Metadata } from "next";
-import { IBreadcrumbItem } from "@desktop/dashboard/states/breadcrumbAtom";
-import Breadcrumb from "@desktop/components/breadcrumb";
+import { IBreadcrumbItem } from "@views/dashboard/states/breadcrumbAtom";
+import Breadcrumb from "@views/components/breadcrumb";
 
 type NewPostPageLayoutProps = {
   children: React.ReactNode;

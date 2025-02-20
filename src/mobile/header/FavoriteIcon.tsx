@@ -13,7 +13,7 @@ import React from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
-import { listPostIdSavedAtom } from '@desktop/home/states';
+import { listPostIdSavedAtom } from '@views/home/states';
 import { AxiosError } from 'axios';
 import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';

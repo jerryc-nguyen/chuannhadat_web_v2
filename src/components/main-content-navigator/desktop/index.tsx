@@ -1,6 +1,6 @@
 import { Button } from '@components/ui/button';
 import { DialogFooter } from '@components/ui/dialog';
-import LocationsPicker from '@desktop/components/LocationsPicker';
+import LocationsPicker from '@views/components/LocationsPicker';
 import { OptionForSelect } from '@models';
 import { useState } from 'react';
 import useMainContentNavigator from '../hooks';

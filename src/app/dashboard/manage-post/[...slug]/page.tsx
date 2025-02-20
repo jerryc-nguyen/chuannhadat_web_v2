@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import EditPost from '@desktop/dashboard/main-manage-post/manage-post/edit_post';
-import ManageProductApis from '@desktop/dashboard/main-manage-post/manage-post/apis/product-api';
+import EditPost from '@views/dashboard/main-manage-post/manage-post/edit_post';
+import ManageProductApis from '@views/dashboard/main-manage-post/manage-post/apis/product-api';
 
 export default async function PostDetailPage({ params }: { params: { slug: string } }) {
   const productUid = params.slug

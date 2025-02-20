@@ -4,7 +4,7 @@ import { getCookie } from '@common/cookies';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
 import { IArticleDetail, INews, ResponseNewsByCategory } from '@views/news/types';
-import { IProductSummary } from '@desktop/post-detail/type';
+import { IProductSummary } from '@views/post-detail/type';
 import {
   IFormPropsLogin,
   IFormPropsRegister,

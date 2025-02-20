@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import { Metadata } from 'next';
-import TaskDataTable from '@desktop/dashboard/main-manage-post/collection-post';
+import TaskDataTable from '@views/dashboard/main-manage-post/collection-post';
 
 export const metadata: Metadata = {
   title: 'Danh sách tin',

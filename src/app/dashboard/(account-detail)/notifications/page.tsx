@@ -1,4 +1,4 @@
-import NotificationsDesktop from '@desktop/dashboard/main-account-detail/notifications';
+import NotificationsDesktop from '@views/dashboard/main-account-detail/notifications';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import NotificationsMobile from '@mobile/main-account-detail/notifications';
 import { Metadata } from 'next';

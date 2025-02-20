@@ -1,5 +1,5 @@
 import { getFromStorage, removeFromStorage } from './localstorage';
-import { IBalanceResponse } from '@desktop/dashboard/main-financial-management/types';
+import { IBalanceResponse } from '@views/dashboard/main-financial-management/types';
 
 export const BALANCE_INFO_KEY = 'balance';
 

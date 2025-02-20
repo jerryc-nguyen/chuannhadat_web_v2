@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import PostDetailDesktop from '@desktop/post-detail';
+import PostDetailDesktop from '@views/post-detail';
 import { Metadata } from 'next';
 import PostDetailMobile from '@mobile/post-detail/PostDetailMobile';
 import { API_ROUTES } from '@common/router';

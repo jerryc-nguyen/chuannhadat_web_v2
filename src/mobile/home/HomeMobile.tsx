@@ -8,7 +8,7 @@ import { getQueryClient } from '@api/react-query';
 import '@styles/pages/mobile/home.scss';
 
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-import { ListTopAuthor } from '@desktop/home/components/ListTopAuthor';
+import { ListTopAuthor } from '@views/home/components/ListTopAuthor';
 import { listFilterMobile } from '@mobile/filter_bds/constants';
 
 export default function HomeMobile() {

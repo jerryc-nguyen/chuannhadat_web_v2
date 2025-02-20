@@ -7,13 +7,13 @@ import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
 import { IoChevronDown } from 'react-icons/io5';
 
-import { PostPagination } from '@desktop/home/components/PostPagination';
+import { PostPagination } from '@views/home/components/PostPagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
 import ProductCardV2 from './ProductCardV2';
 import useQueryPosts from '@hooks/useQueryPosts';
-import useLoadMissingAuthors from '@desktop/home/hooks/useLoadMissingAuthors';
+import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
 import useSearchAggs from '@components/search-aggs/hooks';
 
 // TODO: Move to views/home

@@ -8,16 +8,16 @@ import {
   PersonalTab,
   ReferFriend,
   PhoneNumberTab,
-} from '@desktop/dashboard/main-account-detail/account-settings/components';
+} from '@views/dashboard/main-account-detail/account-settings/components';
 import {
   breadcrumbAtom,
   defaultBreadcrumb,
   IBreadcrumbItem,
-} from '@desktop/dashboard/states/breadcrumbAtom';
+} from '@views/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { listTabAccountSetting } from '@desktop/dashboard/main-account-detail/constants';
+import { listTabAccountSetting } from '@views/dashboard/main-account-detail/constants';
 
 const AccountSettingsMobile: React.FC = () => {
   const searchParams = useSearchParams();

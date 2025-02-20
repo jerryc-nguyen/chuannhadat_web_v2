@@ -1,5 +1,5 @@
 // Next Imports
-import ServicePackageViewDesktop from "@desktop/dashboard/main-financial-management/service-package";
+import ServicePackageViewDesktop from "@views/dashboard/main-financial-management/service-package";
 import ServicePackageViewMobile from "@mobile/main-financial-management/service-package";
 import { useGetUserAgentInfo } from "@hooks/useGetUserAgentInfo";
 import type { Metadata } from "next";

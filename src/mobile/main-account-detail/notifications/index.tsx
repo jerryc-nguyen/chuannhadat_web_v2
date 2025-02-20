@@ -3,7 +3,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   IBreadcrumbItem,
-} from '@desktop/dashboard/states/breadcrumbAtom';
+} from '@views/dashboard/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import React from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter hook

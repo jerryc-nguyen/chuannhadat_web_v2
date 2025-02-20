@@ -5,7 +5,7 @@ import { API_ROUTES } from '@common/router';
 import { saveToStorage } from '@common/localstorage';
 import { BALANCE_INFO_KEY } from '@common/balance';
 import { useAtom } from 'jotai';
-import { balanceDataAtom } from '@desktop/dashboard/layout/states';
+import { balanceDataAtom } from '@views/dashboard/layout/states';
 
 export function useBalanceRequest() {
   const [balanceData, setBalanceData] = useAtom(balanceDataAtom);

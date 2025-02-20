@@ -1,7 +1,7 @@
 // Next Imports
 import type { Metadata } from 'next';
 import BalanceViewMobie from '@mobile/main-financial-management/balance';
-import BalanceViewDesktop from '@desktop/dashboard/main-financial-management/balance';
+import BalanceViewDesktop from '@views/dashboard/main-financial-management/balance';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 
 export const metadata: Metadata = {
