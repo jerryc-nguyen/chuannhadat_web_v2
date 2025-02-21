@@ -14,6 +14,8 @@ import { DataTableColumnHeader } from './datagrid/column-header';
 import useSearchAggs from '@components/search-aggs/hooks';
 import { searchApi } from '@api/searchApi';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import { useIsMobile } from '@hooks';
+import { ListPostMobile } from '../mobile/ListPostMobile';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -44,6 +46,8 @@ const columns: ColumnDef<Product>[] = [
 export function DataTable() {
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
   const { buildFilterParams } = useFilterState();
+
+  const isMobile = useIsMobile();
 
   const { watch, setValue } = useFormContext<ProductQuery>();
 
@@ -114,12 +118,15 @@ export function DataTable() {
         onFilterChipsChanged={onFilterChipsChanged}
         onClickSearch={refetch}
       />
-      <div className="rounded-md border">
-        <Table className="bg-white/30">
-          <DataGridHeader table={table} />
-          <DataGridContent table={table} columns={columns} />
-        </Table>
-      </div>
+      {isMobile && <ListPostMobile table={table} contentEmpty="Chưa có bài đăng nào" />}
+      {!isMobile && (
+        <div className="rounded-md border">
+          <Table className="bg-white/30">
+            <DataGridHeader table={table} />
+            <DataGridContent table={table} columns={columns} />
+          </Table>
+        </div>
+      )}
       <DataTablePagination table={table} />
     </div>
   );
