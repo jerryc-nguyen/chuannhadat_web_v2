@@ -17,9 +17,10 @@ import {
 
 interface DataTablePaginationProps<T> {
   table: Table<T>;
+  isMobile?: boolean;
 }
 
-export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
+export function DataTablePagination<T>({ table, isMobile }: DataTablePaginationProps<T>) {
   const listLength = table.getFilteredRowModel().rows.length;
   const meta = {
     ...{ totalRecords: 0, totalPages: 0 },
@@ -28,21 +29,22 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
 
   return (
     <div className="flex items-center justify-between px-2">
-      <div className="flex-1 text-sm text-secondary">
+      <div className="flex-1 text-sm text-secondary whitespace-nowrap">
         {/* {table.getFilteredSelectedRowModel().rows.length} /{" "}
         {table.getFilteredRowModel().rows.length} đã chọn. */}
-        {`Hiển thị ${listLength} / ${meta?.totalRecords ?? 0} bản ghi.`}
+        {!isMobile && `Hiển thị ${listLength} / ${meta?.totalRecords ?? 0} bản ghi.`}
+        {isMobile && `Tổng ${listLength}/${meta?.totalRecords ?? 0}`}
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex items-center space-x-2 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Bản ghi mỗi trang</p>
+          <p className="text-sm font-medium">{!isMobile && "Bản ghi mỗi trang"}</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger className="h-8 md:w-[70px]">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -54,7 +56,7 @@ export function DataTablePagination<T>({ table }: DataTablePaginationProps<T>) {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <div className="flex md:w-[100px] items-center justify-center text-sm font-medium">
           Trang {table.getState().pagination.pageIndex + 1} / {meta?.totalPages}
         </div>
         <div className="flex items-center space-x-2">

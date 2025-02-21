@@ -36,7 +36,7 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   };
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-2 text-sm md:text-base">
       <span>Ẩn tin</span>
       <Switch
         checked={checked}

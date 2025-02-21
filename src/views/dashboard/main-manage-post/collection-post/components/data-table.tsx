@@ -127,7 +127,7 @@ export function DataTable() {
           </Table>
         </div>
       )}
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table} isMobile={isMobile} />
     </div>
   );
 }

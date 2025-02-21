@@ -126,7 +126,7 @@ const TopUpView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div>
+    <div className='mx-4'>
       <BalanceInfo title="Nạp tiền vào tài khoản" />
 
       <div className="c-top-up__content">

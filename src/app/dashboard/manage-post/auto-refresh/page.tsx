@@ -13,7 +13,7 @@ const AutoRefeshPage: React.FC = () => {
   const { isMobile } = useGetUserAgentInfo();
   if (isMobile) {
     return (
-      <div className="c-mobileApp">
+      <div className="c-mobileApp mx-4">
         <AutoRefreshMobile />
       </div>
     );
