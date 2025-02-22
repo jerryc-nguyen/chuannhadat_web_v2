@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 
 export async function GET(req: Request) {
-  const url = new URL(req.url).host;
   const path = new URL(req.url).pathname;
   const siteMapHost = 'https://admin.chuannhadat.com';
-  const targetUrl = `${siteMapHost}${path}`;
+  const targetUrl = `${siteMapHost}${path}?agent=cnd`;
+
   const response = await fetch(targetUrl);
 
   if (!response.ok) {
-    return NextResponse.redirect(new URL('/', url));
+    return NextResponse.redirect(new URL('/'));
   }
 
   const body = await response.body;
