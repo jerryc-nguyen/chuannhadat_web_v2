@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { Button } from '@components/ui/button';
 import { Maximize2, SquarePen } from 'lucide-react';
 import { BlockCheckHiddenReason } from '../components/cells/BlockCheckHiddenReason';
+import { BlockAdsType } from '../components/cells/BlockAdsType';
 
 type Props<T> = {
   table: T extends object ? ReturnType<typeof useReactTable<T>> : never;
@@ -69,23 +70,32 @@ function SinglePost({ key, product }: SinglePostProps) {
   const adsType = product.ads_type;
   const auto_refresh_product = product.auto_refresh_product;
 
+  const expires_after_days = product.expires_after_days;
+
   return (
     <div
       className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type} px-4 pb-4`}
     >
-      <div className="flex w-full justify-end gap-2">
+      <div className="flex w-full items-center justify-end gap-2">
         <BlockWarnHiddenPost visible={visible} isMobile />
         <BlockPostId product={product} />
       </div>
 
       <BlockCheckHiddenReason hide_on_frontend_reason={hide_on_frontend_reason} />
       <div className="grid grid-cols-4">
-        <BlockImageProduct
-          images_count={images_count}
-          imageUrl={imageUrl}
-          title={title}
-          className="h-20 w-full"
-        />
+        <div>
+          <BlockImageProduct
+            images_count={images_count}
+            imageUrl={imageUrl}
+            title={title}
+            className="h-20 w-full"
+          />
+          <BlockAdsType
+            ads_type={adsType}
+            expires_after_days={expires_after_days}
+            className="px-1 pt-2"
+          />
+        </div>
         <div className="col-span-3 flex flex-col gap-1 pl-3">
           <TitleTriggerOpenProductDetail title={title} product={product} className="text-sm" />
           <div className="flex flex-wrap gap-1 text-xs">
