@@ -6,9 +6,11 @@ import { RefreshCw } from 'lucide-react';
 import { toast } from 'react-toastify';
 import ProductApiService from '../../apis/product-api';
 import useProductActionSetting from '../../hooks/product-action-setting';
+import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 
 export const ButtonRefresh = ({ productId }: { productId: string }) => {
   const { productActionSettings, decreaseTotalRefreshsCount } = useProductActionSetting();
+  const { updateFieldDataOnRow } = useManagePostsCache();
 
   const handleRefresh = async () => {
     try {
@@ -20,6 +22,12 @@ export const ButtonRefresh = ({ productId }: { productId: string }) => {
       if (res.status === true && res.message) {
         toast.success(res.message);
         decreaseTotalRefreshsCount();
+        updateFieldDataOnRow(productId, [
+          {
+            setterKey: 'formatted_published_at',
+            newValue: 'Vừa xong',
+          },
+        ]);
       } else {
         toast.error(res.message);
       }

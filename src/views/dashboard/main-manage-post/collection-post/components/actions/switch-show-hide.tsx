@@ -28,7 +28,6 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
         setChecked(!data.showOnFrontEnd);
       }
       // Update cache data
-      console.log({ res, data, productId });
       updateFieldDataOnRow(productId, [
         {
           setterKey: 'visible',

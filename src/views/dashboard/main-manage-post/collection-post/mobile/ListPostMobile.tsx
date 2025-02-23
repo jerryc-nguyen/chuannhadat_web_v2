@@ -72,11 +72,17 @@ function SinglePost({ key, product }: SinglePostProps) {
 
   const expires_after_days = product.expires_after_days;
 
+  const formatted_published_at = product.formatted_published_at;
+
   return (
     <div
       className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type} px-4 pb-4`}
     >
       <div className="flex w-full items-center justify-end gap-2">
+        <div className="flex flex-row gap-1 text-xs">
+          <span className="font-medium">Ngày làm mới:</span>
+          <span className="text-secondary">{formatted_published_at}</span>
+        </div>
         <BlockWarnHiddenPost visible={visible} isMobile />
         <BlockPostId product={product} />
       </div>
