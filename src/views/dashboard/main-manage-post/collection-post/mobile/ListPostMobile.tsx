@@ -96,30 +96,28 @@ function SinglePost({ key, product }: SinglePostProps) {
             title={title}
             className="h-20 w-full"
           />
+        </div>
+        <div className="col-span-3 flex flex-col gap-1 pl-3">
+          <TitleTriggerOpenProductDetail title={title} product={product} className="text-sm mb-0" />
           <BlockAdsType
             ads_type={adsType}
             expires_after_days={expires_after_days}
-            className="px-1 pt-2"
+            className="mb-2 flex-row"
           />
         </div>
-        <div className="col-span-3 flex flex-col gap-1 pl-3">
-          <TitleTriggerOpenProductDetail title={title} product={product} className="text-sm" />
-          <div className="flex flex-wrap gap-1 text-xs">
-            <span className="rounded-sm border p-1 font-medium">{formatted_price || '--'}</span>
-            <span className="rounded-sm border p-1 font-medium">{formatted_area || '--'}</span>
-            <span className="rounded-sm border p-1 font-medium">
-              {formatted_price_per_m2 || '--'}
-            </span>
-            <span className="flex gap-1 rounded-sm border p-1 font-medium">
-              <Maximize2 size={14} strokeWidth={1} />
-              {formatted_kt || '--'}
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-1 text-xs">
-            <span className="rounded-sm border p-1">{formatted_bussiness_category || '--'}</span>
-            <span className="rounded-sm border p-1">{short_location_name || '--'}</span>
-          </div>
-        </div>
+      </div>
+      <div className="flex flex-wrap gap-1 text-xs mt-2">
+        <span className="rounded-sm border p-1 font-medium">{formatted_price || '--'}</span>
+        <span className="rounded-sm border p-1 font-medium">{formatted_area || '--'}</span>
+        <span className="rounded-sm border p-1 font-medium">{formatted_price_per_m2 || '--'}</span>
+        <span className="flex gap-1 rounded-sm border p-1 font-medium">
+          <Maximize2 size={14} strokeWidth={1} />
+          {formatted_kt || '--'}
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-1 text-xs mt-1">
+        <span className="rounded-sm border p-1">{formatted_bussiness_category || '--'}</span>
+        <span className="rounded-sm border p-1">{short_location_name || '--'}</span>
       </div>
       <Separator className="my-4" />
       <div className="flex flex-wrap gap-x-4 gap-y-2">

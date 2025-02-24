@@ -10,8 +10,8 @@ interface BlockAdsTypeProps {
 export function BlockAdsType({ ads_type, expires_after_days, className }: BlockAdsTypeProps) {
   return (
     <div className={cn(`flex flex-col gap-1 text-xs ${ads_type}`, className)}>
-      <span className="hidden font-medium md:block">Loại tin:</span>
-      <span className=''>
+      <span className="font-medium">Loại tin:</span>
+      <span className='flex gap-1'>
         <span className="c-ads_color font-bold">{ADS_TYPES[ads_type]}</span>
         {expires_after_days && ads_type !== 'normal' ? (
           <>
