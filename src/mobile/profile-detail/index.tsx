@@ -142,7 +142,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
       {profileData?.address && <p className="text-muted-foreground">{profileData?.address}</p>}
 
       <div className="mb-2 flex items-center gap-x-4">
-        {profileData?.posts_count && (
+        {(profileData?.posts_count || 0) > 0 && (
           <div className="flex items-center gap-x-2">
             <span className="text-sm text-secondary">Số bài đăng</span>
             <b>{profileData?.posts_count}</b>

@@ -65,7 +65,8 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
           <span className="text-sm text-secondary">{profileData?.formatted_joined_at}</span>
         </span>
       )}
-      {profileData?.posts_count && (
+
+      {parseInt(profileData?.posts_count) > 0 && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
           <RiArticleLine className="mr-2 h-5 w-5 text-secondary" />
           <span className="text-sm text-secondary">Số bài đăng {profileData?.posts_count}</span>
