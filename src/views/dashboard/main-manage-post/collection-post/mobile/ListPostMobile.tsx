@@ -1,6 +1,5 @@
 import { useReactTable } from '@tanstack/react-table';
 import { Product } from '../data/schemas';
-import CardImageCarousel from '@views/home/components/CardImageCarousel';
 import { BlockImageProduct } from '../components/cells/BlockImageProduct';
 import { TitleTriggerOpenProductDetail } from '../components/cells/TitleTriggerOpenProductDetail';
 import { BlockWarnHiddenPost } from '../components/cells/BlockWarnHiddenPost';

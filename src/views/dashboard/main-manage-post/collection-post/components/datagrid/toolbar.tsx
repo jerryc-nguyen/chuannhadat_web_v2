@@ -12,11 +12,9 @@ import { Separator } from '@components/ui/separator';
 import { Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
-import { listChipsQuery } from '../../constant/list_chips_query';
+
 import { ProductQuery } from '../../data/schemas';
 import { DataTableViewOptions } from './view-options';
-
-import FilterChip from '@views/home/components/FilterChip';
 
 import {
   Select,
@@ -31,6 +29,7 @@ import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { createPortal } from 'react-dom';
 import { cn } from '@common/utils';
 import { useIsMobile } from '@hooks';
+import FilterChips from './filter-chips';
 
 const options = [
   {
@@ -112,9 +111,7 @@ export function DataTableToolbar<TData>({
       </div>
 
       <HorizontalScroller className="relative my-2 flex gap-2">
-        {listChipsQuery.map((item) => (
-          <FilterChip filterChipItem={item} key={item.id} onChange={onFilterChipsChanged} />
-        ))}
+        <FilterChips onFilterChipsChanged={onFilterChipsChanged} />
       </HorizontalScroller>
 
       <Separator className="h-[1px]" />
