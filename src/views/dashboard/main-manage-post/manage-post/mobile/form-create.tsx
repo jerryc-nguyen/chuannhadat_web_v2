@@ -24,13 +24,14 @@ import {
 } from '../constant';
 import { IPostForm } from '../../types';
 import { InputYoutube, UploadImages } from '../components/form-components/image-form';
-import {
-  InputDescription,
-  InputTitle,
-} from '../components/form-components/product-description';
+import { InputDescription, InputTitle } from '../components/form-components/product-description';
 
 import { RoundedOptionsNumberInput } from '../components/form-components/fields/rounded-options-number-input';
-import { roomsOptionsForCreate, facadeOptionsForCreate, areaOptionsForCreate } from '@mobile/filter_bds/constants';
+import {
+  roomsOptionsForCreate,
+  facadeOptionsForCreate,
+  areaOptionsForCreate,
+} from '@mobile/filter_bds/constants';
 import { Button } from '@components/ui/button';
 import { OptionForSelect } from '@models';
 import PriceOptions from './PriceOptions';
@@ -86,9 +87,7 @@ export const FormMobile: React.FC = () => {
 
   return (
     <div className="grid items-start gap-0 lg:col-span-3">
-      <CardTitle className="text-md flex gap-2 px-4 pb-2">
-        Thông tin cơ bản
-      </CardTitle>
+      <CardTitle className="text-md flex gap-2 px-4 pb-2">Thông tin cơ bản</CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
         <ListItemBtsPicker {...businessTypeControl} />
         <ListItemBtsPicker {...categoryTypeControl} dividers={true} />
@@ -104,14 +103,16 @@ export const FormMobile: React.FC = () => {
                 openModal({
                   name: `ListItemBtsPicker_price`,
                   title: 'Giá',
-                  content: <PriceOptions
-                    value={form.getValues('price_in_vnd')}
-                    onSelect={(option: OptionForSelect) => {
-                      onChangeFieldNumber(field, option.value + '');
-                      closeModal();
-                    }}
-                    businessType={form.getValues('business_type')}
-                  />
+                  content: (
+                    <PriceOptions
+                      value={form.getValues('price_in_vnd')}
+                      onSelect={(option: OptionForSelect) => {
+                        onChangeFieldNumber(field, option.value + '');
+                        closeModal();
+                      }}
+                      businessType={form.getValues('business_type')}
+                    />
+                  ),
                 });
               }}
               after={readMoney(form.getValues('price_in_vnd'))}
@@ -265,7 +266,6 @@ export const FormMobile: React.FC = () => {
       </List>
       <CardTitle className="text-md flex gap-2 px-4 pb-2">Thông tin chi tiết</CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
-
         <ListItemBtsPicker
           options={phapLyTypeOptions}
           modalOptions={{ title: 'Giấy tờ pháp lý' }}
@@ -273,6 +273,21 @@ export const FormMobile: React.FC = () => {
           onSelect={(option) => {
             if (typeof option.value === 'string') form.setValue('phap_ly', option.value);
           }}
+          footer={
+            <div className="px-4 pt-4">
+              <Button
+                variant="default"
+                className="w-full"
+                onClick={() => {
+                  form.setValue('phap_ly', '');
+                  closeModal();
+                }}
+                disabled={!form.watch('phap_ly')}
+              >
+                Xóa
+              </Button>
+            </div>
+          }
         />
 
         <FormField
@@ -290,20 +305,35 @@ export const FormMobile: React.FC = () => {
                 modalOptions={{ title: 'Mặt tiền', maxHeightPercent: 0.7 }}
                 formattedValue={field.value ? `${field.value} m` : ''}
                 footer={
-                  <div className="flex flex-col gap-4 p-4">
-                    <Label>Số khác:</Label>
-                    <RoundedOptionsNumberInput
-                      {...field}
-                      className="relative"
-                      placeholder="Nhập số"
-                      onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                      maxLength={3}
-                      hiddenSelect
-                    />
-                    <Button variant="default" className="w-full" onClick={closeModal}>
-                      OK
-                    </Button>
-                  </div>
+                  <>
+                    <div className="px-4 pt-4">
+                      <Button
+                        variant="default"
+                        className="w-full"
+                        onClick={() => {
+                          field.onChange('');
+                          closeModal();
+                        }}
+                        disabled={!field.value}
+                      >
+                        Xóa
+                      </Button>
+                    </div>
+                    <div className="flex flex-col gap-4 p-4">
+                      <Label>Số khác:</Label>
+                      <RoundedOptionsNumberInput
+                        {...field}
+                        className="relative"
+                        placeholder="Nhập số"
+                        onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                        maxLength={3}
+                        hiddenSelect
+                      />
+                      <Button variant="default" className="w-full" onClick={closeModal}>
+                        OK
+                      </Button>
+                    </div>
+                  </>
                 }
               />
               <FormMessage />
@@ -318,6 +348,21 @@ export const FormMobile: React.FC = () => {
           onSelect={(option) => {
             if (typeof option.value === 'string') form.setValue('entrance_direction', option.value);
           }}
+          footer={
+            <div className="px-4 pt-4">
+              <Button
+                variant="default"
+                className="w-full"
+                onClick={() => {
+                  form.setValue('entrance_direction', '');
+                  closeModal();
+                }}
+                disabled={!form.watch('entrance_direction')}
+              >
+                Xóa
+              </Button>
+            </div>
+          }
         />
 
         <ListItemBtsPicker
@@ -327,6 +372,21 @@ export const FormMobile: React.FC = () => {
           onSelect={(option) => {
             if (typeof option.value === 'string') form.setValue('view_direction', option.value);
           }}
+          footer={
+            <div className="px-4 pt-4">
+              <Button
+                variant="default"
+                className="w-full"
+                onClick={() => {
+                  form.setValue('view_direction', '');
+                  closeModal();
+                }}
+                disabled={!form.watch('view_direction')}
+              >
+                Xóa
+              </Button>
+            </div>
+          }
         />
 
         <ListItemBtsPicker
@@ -337,6 +397,21 @@ export const FormMobile: React.FC = () => {
             if (typeof option.value === 'string') form.setValue('furniture', option.value);
           }}
           dividers={false}
+          footer={
+            <div className="px-4 pt-4">
+              <Button
+                variant="default"
+                className="w-full"
+                onClick={() => {
+                  form.setValue('furniture', '');
+                  closeModal();
+                }}
+                disabled={!form.watch('furniture')}
+              >
+                Xóa
+              </Button>
+            </div>
+          }
         />
       </List>
 
