@@ -11,7 +11,6 @@ import { directionOptions, furnitureTypeOptions, phapLyTypeOptions } from '../..
 import { CommonSelect } from '../CommonSelect';
 
 const ProductInfoForm: React.FC<A> = ({ form }) => {
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
@@ -28,7 +27,6 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
         <CardTitle className="text-md flex gap-2">
           <BadgeInfo /> Thông tin chi tiết
         </CardTitle>
-
       </CardHeader>
       <CardContent className="grid gap-6">
         <FormField
@@ -38,25 +36,11 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
             <FormItem className="grid gap-2">
               <FormLabel>Giấy tờ pháp lý</FormLabel>
               <CommonSelect
-                placeholder='Giấy tờ pháp lý'
+                placeholder="Chọn giấy tờ pháp lý"
                 onChange={field.onChange}
                 value={field.value}
                 options={[{ text: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
-                actions={
-                  <>
-                    <SelectSeparator />
-                    <Button
-                      className="w-full px-2"
-                      variant="default"
-                      size="sm"
-                      onClick={(e) => {
-                        form.setValue('phap_ly', '');
-                      }}
-                    >
-                      Xóa lựa chọn
-                    </Button>
-                  </>
-                }
+                showClear
               />
               <FormMessage />
             </FormItem>
@@ -65,7 +49,6 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
 
         <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
-
             <FormField
               control={form.control}
               name="facade"
@@ -153,20 +136,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                     onChange={field.onChange}
                     value={field.value}
                     options={[{ text: 'Không xác định', value: '__default' }, ...directionOptions]}
-                    actions={
-                      <>
-                        <SelectSeparator />
-                        <Button
-                          className="w-full px-2"
-                          size="sm"
-                          onClick={(e) => {
-                            form.setValue('entrance_direction', '');
-                          }}
-                        >
-                          Xóa lựa chọn
-                        </Button>
-                      </>
-                    }
+                    showClear
                   />
                   <FormMessage />
                 </FormItem>
@@ -183,21 +153,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                     onChange={field.onChange}
                     value={field.value}
                     options={[{ text: 'Không xác định', value: '__default' }, ...directionOptions]}
-                    actions={
-                      <>
-                        {' '}
-                        <SelectSeparator />
-                        <Button
-                          className="w-full px-2"
-                          size="sm"
-                          onClick={(e) => {
-                            form.setValue('view_direction', '');
-                          }}
-                        >
-                          Xóa lựa chọn
-                        </Button>
-                      </>
-                    }
+                    showClear
                   />
                   <FormMessage />
                 </FormItem>
@@ -217,20 +173,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                       { text: 'Không xác định', value: '__default' },
                       ...furnitureTypeOptions,
                     ]}
-                    actions={
-                      <>
-                        <SelectSeparator />
-                        <Button
-                          className="w-full px-2"
-                          size="sm"
-                          onClick={(e) => {
-                            form.setValue('furniture', '');
-                          }}
-                        >
-                          Xóa lựa chọn
-                        </Button>
-                      </>
-                    }
+                    showClear
                   />
                   <FormMessage />
                 </FormItem>
@@ -239,7 +182,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
           </div>
         </div>
       </CardContent>
-    </Card >
+    </Card>
   );
 };
 
