@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <>
       {isMobile ? (
-        <div className="c-mobileApp">
+        <div className="c-mobileApp mx-4">
           <HistoryViewMobile />
         </div>
       ) : (

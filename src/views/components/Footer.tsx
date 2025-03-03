@@ -116,10 +116,10 @@ const Footer: React.FC<FooterProps> = () => {
             </p>
           </div>
           <div className="flex flex-wrap justify-between gap-y-4 border-t border-[#3E4550] pt-4">
-            <div className="flex items-center gap-x-2 text-nowrap">
+            <a className="flex items-center gap-x-2 text-nowrap" href='tel:+84 966662192'>
               <HiPhone className="text-xl" />
               <span> 0966662192 ( Linh )</span>
-            </div>
+            </a>
             <a
               href="mailto:Chuannhadat@gmail.com"
               target="_blank"

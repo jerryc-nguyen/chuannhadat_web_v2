@@ -12,7 +12,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
   const { currentUser } = useAuth();
 
   return (
-    <section>
+    <section className='mx-4'>
       <h1 className="mb-4 text-lg font-semibold md:text-xl">Xin chào {currentUser?.full_name}</h1>
       {!isLoading && (
         <div className="flex flex-col gap-4">

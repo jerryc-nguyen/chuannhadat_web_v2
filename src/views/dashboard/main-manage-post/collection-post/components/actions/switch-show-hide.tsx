@@ -4,10 +4,8 @@ import { Switch } from '@components/ui/switch';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ProductApiService from '../../apis/product-api';
-import {
-    ShowOnFrontEndProductInput
-} from '../../data/schemas';
-
+import { ShowOnFrontEndProductInput } from '../../data/schemas';
+import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 
 export const SwitchButtonToggleShowOnFrontEnd = ({
   productId,
@@ -17,6 +15,7 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   visible: boolean;
 }) => {
   const [checked, setChecked] = useState<boolean>(visible);
+  const { updateFieldDataOnRow } = useManagePostsCache();
 
   const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
     try {
@@ -28,6 +27,13 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
         toast.error(res.message);
         setChecked(!data.showOnFrontEnd);
       }
+      // Update cache data
+      updateFieldDataOnRow(productId, [
+        {
+          setterKey: 'visible',
+          newValue: data.showOnFrontEnd,
+        },
+      ]);
     } catch (err) {
       setChecked(!data.showOnFrontEnd);
       console.error('handleShowOnFrontend error', err);
@@ -36,7 +42,7 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   };
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-2 text-sm md:text-base">
       <span>Ẩn tin</span>
       <Switch
         checked={checked}

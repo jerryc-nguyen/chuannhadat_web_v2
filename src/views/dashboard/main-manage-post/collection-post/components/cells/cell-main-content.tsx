@@ -1,15 +1,12 @@
 'use client';
 
-import { services } from '@api/services';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import Spinner from '@components/ui/spinner';
-import { isLoadingModal, selectedPostId } from '@views/post-detail/states/modalPostDetailAtoms';
-import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef } from '@tanstack/react-table';
-import { useAtom, useAtomValue } from 'jotai';
-import { ImageIcon, Maximize2, SquarePen, TriangleAlert } from 'lucide-react';
-import Image from 'next/image';
+import { isLoadingModal, selectedPostId } from '@views/post-detail/states/modalPostDetailAtoms';
+import { useAtomValue } from 'jotai';
+import { Maximize2, SquarePen } from 'lucide-react';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import hideOnFrontendReasonConstant from '../../constant/hide_on_frontend_reason';
@@ -21,11 +18,10 @@ import {
   CheckboxAutoRefresh,
   SwitchButtonToggleShowOnFrontEnd,
 } from '../actions';
-import { useIsMobile } from '@hooks';
-import useModals from '@mobile/modals/hooks';
-import PostDetailMobile from '@mobile/post-detail/PostDetailMobile';
-import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
-import { ProductDetailTitleBts } from '@mobile/searchs/ProductCardV2';
+import { BlockImageProduct } from './BlockImageProduct';
+import { TitleTriggerOpenProductDetail } from './TitleTriggerOpenProductDetail';
+import { BlockWarnHiddenPost } from './BlockWarnHiddenPost';
+import { BlockCheckHiddenReason } from './BlockCheckHiddenReason';
 
 export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
   const hide_on_frontend_reason = row.original.hide_on_frontend_reason;
@@ -52,22 +48,7 @@ export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
 
   return (
     <div className={`container ${row.original.ads_type}`}>
-      {hide_on_frontend_reason ? (
-        <div className="mb-4 flex w-full overflow-hidden rounded-lg border border-[#9f3a38] bg-[#fff6f6] p-4 md:rounded-xl lg:flex-row lg:items-center">
-          <span className="text-sm text-[#9f3a38]">
-            {hideOnFrontendReasonConstant
-              .find((item) => item.value === hide_on_frontend_reason)
-              ?.content.map((line, index) => (
-                <Fragment key={index}>
-                  {line.trim()}
-                  <br />
-                </Fragment>
-              ))}
-          </span>
-        </div>
-      ) : (
-        <></>
-      )}
+      <BlockCheckHiddenReason hide_on_frontend_reason={hide_on_frontend_reason} />
       <div className="flex min-h-[180px] w-full gap-8 overflow-hidden rounded-lg md:rounded-xl lg:flex-row lg:items-center">
         <ImageProduct
           title={title}
@@ -79,7 +60,8 @@ export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
         />
         <div className="flex h-full flex-1 flex-col">
           <div className="mb-2">
-            <TitleTriggerOpenProductDetail title={title} visible={visible} product={row.original} />
+            <TitleTriggerOpenProductDetail title={title} product={row.original} />
+            <BlockWarnHiddenPost visible={visible} />
           </div>
           <div className="mb-2 flex flex-wrap gap-5">
             <span className="text-sm font-medium">{formatted_price || '--'}</span>
@@ -148,24 +130,7 @@ const ImageProduct = ({
 
   return (
     <div className="group inline-flex h-full flex-col gap-3 rounded-lg">
-      <div className="relative h-36 w-48">
-        <Image
-          alt={title}
-          src={imageUrl}
-          className="rounded-lg border-2 object-cover"
-          onError={(e) => {
-            e.currentTarget.src = '/default-image.jpg'; // Set default image path
-            e.currentTarget.onerror = null; // Prevents infinite loop in case the fallback image also fails
-          }}
-          fill
-        />
-
-        <div className="absolute left-[50%] top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 transform items-center gap-1 rounded-full bg-black/60 px-2.5 py-0.5 text-xs font-semibold text-white">
-          <ImageIcon size={16} />
-          <span>{images_count}</span>
-          <span>hình</span>
-        </div>
-      </div>
+      <BlockImageProduct images_count={images_count} imageUrl={imageUrl} title={title} />
       <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible} />
 
       {isLoadingCardProduct && postId === productUid && (
@@ -177,59 +142,5 @@ const ImageProduct = ({
         </div>
       )}
     </div>
-  );
-};
-
-const TitleTriggerOpenProductDetail = ({
-  title,
-  visible,
-  product,
-}: {
-  title: string;
-  visible: boolean;
-  product: Product;
-}) => {
-  const queryClient = useQueryClient();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_postId, setSelectedPostId] = useAtom(selectedPostId);
-  const isMobile = useIsMobile();
-  const { openModal } = useModals();
-
-  const openModalPostDetail = async () => {
-    if (isMobile) {
-      openModal({
-        name: title,
-        title: <ProductDetailTitleBts product={product} />,
-        content: <PostDetailMobile productUid={product.uid} />,
-        maxHeightPercent: 0.95,
-        footer: <AuthorInfo />,
-        headerHeight: 74.59,
-        footerHeight: 74.59,
-        // pushToPath: product.detail_path,
-      });
-    } else {
-      setSelectedPostId(product.uid);
-      await queryClient.prefetchQuery({
-        queryKey: ['get-detail-post', product.uid],
-        queryFn: () => services.posts.getDetailPost(product.uid),
-      });
-    }
-  };
-
-  return (
-    <span
-      className="mb-3 cursor-pointer text-16 font-semibold hover:underline"
-      onClick={openModalPostDetail}
-    >
-      <span className='c-ads_color'>{title}</span>
-      <span className={`text-sm font-semibold text-[#dc3545] ${visible ? 'hidden' : ''}`}>
-        <span className="mx-2"> · </span>
-        <span className="space-x-1">
-          <TriangleAlert className="inline-block" color="#dc3545" size={16} />
-          <span> Tin đang bị ẩn! </span>
-          <TriangleAlert className="inline-block" color="#dc3545" size={16} />
-        </span>
-      </span>
-    </span>
   );
 };

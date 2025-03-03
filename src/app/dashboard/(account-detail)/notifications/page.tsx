@@ -13,7 +13,7 @@ const NotificationsPage: React.FC = () => {
 
   if (isMobile) {
     return (
-      <div className="c-mobileApp">
+      <div className="c-mobileApp mx-4">
         <NotificationsMobile />
       </div>
     );

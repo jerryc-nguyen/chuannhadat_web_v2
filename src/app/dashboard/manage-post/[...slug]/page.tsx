@@ -20,7 +20,7 @@ export default async function PostDetailPage({ params }: { params: { slug: strin
   return (
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
-        <div className="c-mobileApp">
+        <div className="c-mobileApp mx-4">
           <EditPost params={params} />
         </div>
       ) : (
