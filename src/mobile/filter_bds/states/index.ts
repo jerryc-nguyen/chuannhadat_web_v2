@@ -10,19 +10,25 @@ export const defaultFilterStateAtom = {
   categoryType: undefined,
   bed: undefined,
   bath: undefined,
-  price: undefined,
-  area: undefined,
+  price: {
+    text: 'Tất cả',
+    value: 'all',
+  },
+  area: {
+    text: 'Tất cả',
+    value: 'all',
+  },
   direction: undefined,
   city: undefined,
   district: undefined,
   ward: undefined,
   project: undefined,
   sort: undefined,
-  busCatType: undefined
+  busCatType: undefined,
 };
 export const filterStateAtom = atom<FilterState>(defaultFilterStateAtom);
 
-export const localFilterStateAtom = atom<FilterState>({});
+export const localFilterStateAtom = atom<FilterState>(defaultFilterStateAtom);
 
 export const filterFieldOptionsAtom = atom<FilterFieldOptions>(
   defaultListFilterOptions as FilterFieldOptions,

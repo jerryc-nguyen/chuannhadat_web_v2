@@ -1,6 +1,6 @@
 import { Checkbox, List, ListItem } from '@components/konsta';
 
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import { OptionForSelect } from '@models';
 import * as React from 'react';
 
@@ -15,8 +15,6 @@ const ListCheckOptions = ({
   onSelect?: (arg: A) => void;
   footer?: React.ReactNode;
 }): ReactElement => {
-  const [curOption, setCurOption] = useState(selectedOption);
-
   return (
     <>
       <List strongIos outlineIos margin="my-0">
@@ -31,14 +29,13 @@ const ListCheckOptions = ({
               media={
                 <Checkbox
                   component="div"
-                  checked={curOption?.text == item.text}
+                  checked={selectedOption?.text == item.text}
                   onChange={() => null}
                 />
               }
               onClick={() => {
                 if (onSelect) {
                   onSelect(item);
-                  setCurOption(item);
                 }
               }}
             ></ListItem>

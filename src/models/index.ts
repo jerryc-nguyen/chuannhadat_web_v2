@@ -10,13 +10,13 @@ export type Range = {
 };
 
 export type OptionForSelect = {
-  value: number | string | undefined;
-  text: string;
+  value?: number | string | undefined;
+  text?: string;
   range?: Range;
   params?: Record<string, A>;
   count?: number;
   long_text?: string;
-  description?: string
+  description?: string;
 };
 
 export const PARAM_BUSINESS_TYPE = 'business_type';
