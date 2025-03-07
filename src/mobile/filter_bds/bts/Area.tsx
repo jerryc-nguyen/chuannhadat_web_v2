@@ -4,6 +4,11 @@ import useFilterState from '../hooks/useFilterState';
 import useSearchAggs from '@components/search-aggs/hooks';
 import DualRangeSlider from '@components/dual-range-slider';
 import { formatAreaText } from '@common/utils';
+import { debounce } from "lodash-es";
+import { useCallback, useState } from 'react';
+
+const MIN_AREA = 0;
+const MAX_AREA = 150;
 
 export default function Area({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
@@ -13,26 +18,38 @@ export default function Area({ onSelect }: { onSelect?: (option: OptionForSelect
 
   const isSliderDisabled = value?.text !== formatAreaText(value?.range?.min, value?.range?.max);
   const areaSliderRange = isSliderDisabled
-    ? [0, 150]
+    ? [MIN_AREA, MAX_AREA]
     : [value?.range?.min as number, value?.range?.max as number];
-  const handleChangeAreaSlider = (values: number[]) => {
-    setLocalFieldValue(FilterFieldName.Area, {
-      range: { min: values[0], max: values[1] },
-      text: formatAreaText(values[0], values[1]),
-    });
-  };
+
+  const [sliderValues, setSliderValues] = useState(areaSliderRange);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceChangeAreaValues = useCallback(
+    debounce((values: A) => {
+      setLocalFieldValue(FilterFieldName.Area, {
+        range: { min: values[0], max: values[1] },
+        text: formatAreaText(values[0], values[1]),
+      });
+    }, 300),
+    []
+  );
+
+  const handleChangeAreaSlider = useCallback((values: A) => {
+    setSliderValues(values);
+    debounceChangeAreaValues(values);
+  }, [debounceChangeAreaValues])
 
   return (
     <section className="w-[400px]">
-      <div className="pb-2 pr-2">
+      <div className="pt-4 pb-6 pr-2">
         <DualRangeSlider
           disabled={isSliderDisabled}
-          value={areaSliderRange}
+          value={sliderValues}
           showLabel
           labelPosition="top"
           onValueChange={handleChangeAreaSlider}
-          max={150}
-          min={0}
+          max={MAX_AREA}
+          min={MIN_AREA}
           step={10}
           formatLabel={(area: number) => `${area} m²`}
         />

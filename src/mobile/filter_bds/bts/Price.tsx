@@ -5,6 +5,8 @@ import useSearchAggs from '@components/search-aggs/hooks';
 import DualRangeSilder from '@components/dual-range-slider';
 import React from 'react';
 import { formatPriceFilterChip, formatRangeText } from '@common/utils';
+import { debounce } from "lodash-es";
+import { useCallback, useState } from 'react';
 
 export default function Price({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();
@@ -18,18 +20,29 @@ export default function Price({ onSelect }: { onSelect?: (option: OptionForSelec
     ? [100_000_000, 20_000_000_000]
     : [value?.range?.min as number, value?.range?.max as number];
 
+  const [sliderValues, setSliderValues] = useState(valueSliderRange);
+
+  const debounceChangePriceValues = useCallback(
+    debounce((values: A) => {
+      setLocalFieldValue(FilterFieldName.Price, {
+        range: { min: values[0], max: values[1] },
+        text: formatRangeText(values[0], values[1]),
+      });
+    }, 300),
+    []
+  );
+
   const handleChangePriceSlider = (values: number[]) => {
-    setLocalFieldValue(FilterFieldName.Price, {
-      range: { min: values[0], max: values[1] },
-      text: formatRangeText(values[0], values[1]),
-    });
+    setSliderValues(values);
+    debounceChangePriceValues(values);
   };
+
   return (
     <section className="w-[400px]">
-      <div className="pb-2 pr-2">
+      <div className="pt-4 pb-6 pr-2 mx-4">
         <DualRangeSilder
           disabled={isSliderDisabled}
-          value={valueSliderRange}
+          value={sliderValues}
           showLabel
           labelPosition="top"
           onValueChange={handleChangePriceSlider}

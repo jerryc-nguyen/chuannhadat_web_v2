@@ -31,15 +31,14 @@ const DualRangeSlider = React.forwardRef<
   return (
     <section className={cn('dual_range_slider', disabled && 'opacity-50')}>
       {heading && (
-        <p className={cn('font-semibold', labelPosition === 'top' ? 'mb-8' : '')}>{heading}</p>
+        <p className={cn('font-semibold', labelPosition === 'top' ? 'mb-10' : '')}>{heading}</p>
       )}
       <div
         className={cn(
           'flex items-center justify-center gap-x-3',
-          showLabel && !heading ? (labelPosition === 'top' ? 'mt-8' : 'mb-8') : '',
+          showLabel && !heading ? (labelPosition === 'top' ? 'mt-10' : 'mb-10') : '',
         )}
       >
-        <span className="whitespace-nowrap">{formatLabelText(rest.min as number)}</span>
         <SliderPrimitive.Root
           ref={ref}
           className={cn('relative flex w-full touch-none select-none items-center', className)}
@@ -72,7 +71,6 @@ const DualRangeSlider = React.forwardRef<
             </React.Fragment>
           ))}
         </SliderPrimitive.Root>
-        <span className="whitespace-nowrap">{formatLabelText(rest.max as number)}</span>
       </div>
     </section>
   );
