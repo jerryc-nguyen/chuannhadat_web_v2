@@ -49,6 +49,9 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const handleLogOut = () => {
     removeTokenServer();
     router.refresh();
+    setTimeout(() => {
+      router.push('/');
+    }, 500);
   };
   React.useEffect(() => {
     if (!isLogged) {
@@ -84,34 +87,37 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
         >
           {currentUser?.full_name && (
             <>
-              <DropdownMenuLabel>
-                {currentUser?.full_name}
+              <DropdownMenuLabel>{currentUser?.full_name}</DropdownMenuLabel>
 
-              </DropdownMenuLabel>
-
-              <p className='px-2 text-xs text-secondary'>
-                Mã thành viên: {currentUser?.id}
-              </p>
+              <p className="px-2 text-xs text-secondary">Mã thành viên: {currentUser?.id}</p>
             </>
           )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href={`/profile/${currentUser?.slug}`} className='w-full'>Trang cá nhân</Link>
+              <Link href={`/profile/${currentUser?.slug}`} className="w-full">
+                Trang cá nhân
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href={isDashboardPage ? '/' : '/dashboard'} className='w-full'>
+              <Link href={isDashboardPage ? '/' : '/dashboard'} className="w-full">
                 {isDashboardPage ? 'Trang chủ' : 'Trang quản lý'}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/manage-post/collection-post" className='w-full'>Quản lý tin đăng</Link>
+              <Link href="/dashboard/manage-post/collection-post" className="w-full">
+                Quản lý tin đăng
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/account-settings" className='w-full'>Cài đặt tài khoản</Link>
+              <Link href="/dashboard/account-settings" className="w-full">
+                Cài đặt tài khoản
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/top-up" className='w-full'>Nạp tiền</Link>
+              <Link href="/dashboard/top-up" className="w-full">
+                Nạp tiền
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

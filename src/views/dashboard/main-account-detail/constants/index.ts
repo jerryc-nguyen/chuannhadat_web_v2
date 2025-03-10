@@ -2,7 +2,6 @@ import { LuContact, LuLock, LuMail, LuPhone, LuUserCog2, LuUserPlus2 } from 'rea
 import broker from '@assets/images/broker.png';
 import personal from '@assets/images/personal.png';
 import { CustomerGender, CustomerType } from '@common/types';
-import { IoShareSocial } from 'react-icons/io5';
 import {
   ContactInfor,
   EmailTab,
@@ -11,7 +10,6 @@ import {
   PhoneNumberTab,
   ReferFriend,
 } from '../account-settings/components';
-import ConnectSocial from '../account-settings/components/connect-social';
 export enum AccountSettingTab {
   PERSONAL_WALL = 'personal-wall',
   CONNECT_SOCIAL = 'connect-social',

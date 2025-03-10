@@ -14,7 +14,16 @@ export async function middleware(req: NextRequest) {
   // Get token from cookie for check authenticated
   const token = cookies().get(API_TOKEN_SERVER)?.value;
 
+  if (
+    pathname.endsWith('.json') ||
+    pathname.endsWith('.ico') ||
+    pathname.endsWith('.png') ||
+    pathname.endsWith('.svg')
+  ) {
+    return;
+  }
   // Redirect to home page if the user is not authenticated
+
   if (isProtectedRoute && !token) {
     return NextResponse.redirect(new URL('/', req.nextUrl));
   }
