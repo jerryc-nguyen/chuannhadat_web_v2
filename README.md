@@ -1,6 +1,6 @@
 ### Troubleshooting
 
-- To view logs run `docker compose logs --tail=100 -f`
+- To view logs run `docker compose logs --tail=100 -f`
 - To view the generated Nginx configuration run:
   - docker exeac -ti nginx cat /etc/nginx/conf.d/default.conf
 
@@ -61,3 +61,67 @@ component examples from this repo: https://github.com/HashenUdara/shadcn-ui-exam
 https://next-shadcn-dashboard-starter.vercel.app/dashboard/employee/new
 
 OK
+
+### Preventing Application Crashes
+
+The application has been optimized to prevent crashes that previously required redeployment:
+
+#### Docker Configuration
+- Memory limits have been set to 4GB in both build and runtime environments
+- Resource limits have been added to docker-compose.yml to prevent container resource starvation
+- A health check endpoint was added at `/api/health` to monitor application status and auto-restart if needed
+
+#### Memory Leak Prevention
+The primary cause of crashes was likely memory leaks from improperly cleaned up event listeners, timers, or intervals.
+
+To prevent these issues:
+1. Use the `useCleanupEffect` hook from `src/hooks/useCleanupEffect.ts` instead of regular `useEffect` when:
+   - Setting timers with setTimeout or setInterval
+   - Adding event listeners
+   - Managing subscriptions
+   - Handling async operations that update state
+
+Example usage:
+```tsx
+import useCleanupEffect from '@hooks/useCleanupEffect';
+
+function MyComponent() {
+  useCleanupEffect((helpers) => {
+    // Safe timeout that won't cause memory leaks
+    helpers.setTimeout(() => {
+      console.log('This is safe');
+    }, 5000);
+    
+    // Safe event listener that's automatically removed
+    helpers.addEventListener(window, 'resize', handleResize);
+    
+    // Check if component is still mounted in async functions
+    async function fetchData() {
+      const result = await api.getData();
+      if (helpers.isMounted()) {
+        setData(result); // Safe to update state
+      }
+    }
+    
+    fetchData();
+  }, []);
+  
+  return <div>My Component</div>;
+}
+```
+
+#### Error Handling
+- Enhanced error boundaries to provide better diagnostics
+- Added detailed error logging to Sentry for monitoring
+- Improved error recovery mechanism with reset functionality
+
+#### Deployment
+When deploying, make sure:
+1. The Docker environment has at least 4GB of available memory
+2. Health checks are properly configured
+3. Environment variables are correctly set
+
+For further troubleshooting, see the logs via:
+```bash
+docker compose logs --tail=100 -f
+```

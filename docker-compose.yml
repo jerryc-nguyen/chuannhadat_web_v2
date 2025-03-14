@@ -46,6 +46,14 @@ services:
     container_name: chuannhadat_next
     ports:
       - '4500:4500'
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2'
+        reservations:
+          memory: 2G
+          cpus: '1'
     environment:
       - VIRTUAL_HOST=nextjs.chuannhadat.com
       - VIRTUAL_NETWORK=nginx-proxy
@@ -53,6 +61,12 @@ services:
       - LETSENCRYPT_HOST=nextjs.chuannhadat.com
       - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
     command: 'node server.js'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4500/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 volumes:
   vhost:

@@ -5,7 +5,7 @@ FROM node:20-alpine AS base
 FROM base AS builder
 WORKDIR /app
 
-ENV NODE_OPTIONS=--max-old-space-size=8192
+ENV NODE_OPTIONS=--max-old-space-size=4096
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
@@ -27,7 +27,7 @@ WORKDIR /app
 
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_ENV production
-ENV NODE_OPTIONS=--max-old-space-size=8192
+ENV NODE_OPTIONS=--max-old-space-size=4096
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
