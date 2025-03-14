@@ -131,3 +131,115 @@ For further troubleshooting, see the logs via:
 ```bash
 docker compose logs --tail=100 -f
 ```
+
+### Additional Stability Improvements
+
+To further improve application stability:
+
+1. **API Error Handling**: An enhanced axios instance has been implemented with:
+   - Automatic retry for failed network requests and certain error responses (408, 429, 500, 502, 503, 504)
+   - Progressive retry delay (increases with each retry attempt)
+   - Detailed error logging with request duration metrics
+   - Consistent error format for easier debugging
+   - Request cancellation support
+
+   ```typescript
+   // You can cancel requests to prevent race conditions
+   import { cancelTokenSource } from '@api/axiosInstance';
+   
+   const source = cancelTokenSource();
+   
+   // Make a cancellable request
+   axiosInstance.get('/some-endpoint', { 
+     cancelToken: source.token 
+   });
+   
+   // Cancel the request if needed
+   source.cancel('Operation cancelled by the user');
+   ```
+
+2. **React Query Configuration**: Add retry logic and error handling
+   ```typescript
+   // Example configuration
+   const queryClient = new QueryClient({
+     defaultOptions: {
+       queries: {
+         retry: 3,
+         staleTime: 5 * 60 * 1000, // 5 minutes
+         onError: (error) => console.error('Query error:', error),
+       },
+     },
+   });
+   ```
+
+3. **Error Boundaries**: Wrap key sections of your application with error boundaries
+   ```tsx
+   <ErrorBoundary fallback={<p>Something went wrong</p>}>
+     <ComponentThatMightError />
+   </ErrorBoundary>
+   ```
+
+4. **Memory Monitoring**: Monitor client-side memory usage to detect issues early
+   ```typescript
+   // Check browser memory usage periodically
+   useCleanupEffect((helpers) => {
+     const checkMemory = () => {
+       if ('performance' in window && 'memory' in performance) {
+         const memory = performance.memory;
+         if (memory.usedJSHeapSize > 100 * 1024 * 1024) { // 100MB
+           console.warn('High memory usage detected');
+         }
+       }
+     };
+     
+     helpers.setInterval(checkMemory, 30000); // Every 30 seconds
+   }, []);
+   ```
+
+### Using PM2 for Automatic Restarts
+
+The application now uses PM2 to automatically restart when it crashes. PM2 is a process manager for Node.js applications that provides:
+
+- Automatic restarts when the application crashes
+- Clustering for load balancing across multiple CPU cores
+- Process monitoring and logging
+- Memory/CPU usage monitoring
+
+#### PM2 Commands
+
+These commands are available in package.json scripts:
+
+```bash
+# Start the application with PM2 in production
+npm run start:pm2
+
+# Start PM2 in development
+npm run pm2:start
+
+# Stop PM2 processes
+npm run pm2:stop
+
+# Restart PM2 processes
+npm run pm2:restart
+
+# View process status
+npm run pm2:status
+
+# View logs
+npm run pm2:logs
+
+# Monitor processes in real-time
+npm run pm2:monitor
+```
+
+#### PM2 Configuration
+
+PM2 is configured in `ecosystem.config.js` with the following features:
+
+- **Clustering**: Utilizes all available CPU cores
+- **Auto-restart**: Automatically restarts the application if it crashes
+- **Memory limit**: Restarts if memory usage exceeds 4GB
+- **Graceful shutdown**: Properly handles shutdown signals
+- **Log management**: Stores logs in the `logs` directory
+
+For more details on PM2, see [PM2 Documentation](https://pm2.keymetrics.io/docs/usage/quick-start/).
