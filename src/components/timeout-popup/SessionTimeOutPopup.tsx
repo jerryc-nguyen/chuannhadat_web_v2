@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 import { timeOutDuration } from '@common/constants';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
-import { removeTokenServer } from '@app/action';
+import { checkIsLoggedInServer } from '@app/action';
 
 type SessionTimeOutPopupProps = {
   isLogged: boolean;
@@ -33,7 +33,8 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
 
   const handleCloseTimoutPopup = () => {
     setShowSessionTimeout(false);
-    removeTokenServer();
+    // Remove server-side token call - we're using client-side only
+    // removeTokenServer();
     router.refresh();
     broadCastMessage();
     openModal({

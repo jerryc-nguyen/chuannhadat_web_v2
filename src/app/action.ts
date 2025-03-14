@@ -1,9 +1,13 @@
 'use server';
 
 import { API_TOKEN_SERVER } from '@common/auth';
-import { timeOutDuration } from '@common/constants';
 import { cookies } from 'next/headers';
 
+// NOTE: These server-side cookie functions are no longer used.
+// We've switched to client-side cookies only for authentication.
+// Keeping them commented for reference in case we need them in the future.
+
+/*
 // 30 days in seconds (30 * 24 * 60 * 60)
 const THIRTY_DAYS_IN_SECONDS = 2592000;
 
@@ -23,4 +27,14 @@ export const setTokenServer = (token: string) => {
     secure: true,
     sameSite: 'lax',
   });
+};
+*/
+
+// Instead, provide a way to check if the user is logged in on the server side
+// by looking at the client cookie that will be sent with the request
+export const checkIsLoggedInServer = () => {
+  'use server';
+  // This will return undefined if the cookie doesn't exist
+  // Note that client-side cookie is automatically sent to the server with requests
+  return !!cookies().get(API_TOKEN_SERVER);
 };

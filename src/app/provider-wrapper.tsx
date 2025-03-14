@@ -9,6 +9,7 @@ import { QueryProvider } from '@components/providers';
 import SessionTimeOutPopup from '@components/timeout-popup/SessionTimeOutPopup';
 import ListModal from '@components/ListModal';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { AuthProvider } from '@common/auth/AuthContext';
 
 type ProviderWrapperProps = {
   children: React.ReactNode;
@@ -20,7 +21,9 @@ const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
   return (
     <QueryProvider>
       <JotaiProvider>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <ListModal />
         <SessionTimeOutPopup isLogged={isLogged} />
       </JotaiProvider>
