@@ -1,7 +1,10 @@
 import cookies from 'js-cookie';
 import { API_TOKEN_CIENT, FRONTEND_TOKEN } from './auth';
 import { timeOutDuration } from './constants';
-const expiredTime = new Date(new Date().getTime() + timeOutDuration);
+
+// Define 30 days expiration for consistency with server-side cookies
+const THIRTY_DAYS_IN_MS = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+const expiredTime = new Date(new Date().getTime() + THIRTY_DAYS_IN_MS);
 
 export const defaultConfigToken: Cookies.CookieAttributes = {
   secure: true,

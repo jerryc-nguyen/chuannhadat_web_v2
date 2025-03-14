@@ -57,7 +57,7 @@ export const QUERY_KEY = {
   BALANCE: ['balance'],
 };
 
-export const timeOutDuration = 15 * 3600 * 1000; // 15 days
+export const timeOutDuration = 15 * 3600 * 1000; // 15 hours (15 * 60 * 60 * 1000)
 
 export const CND_TEXT_COLORS = {
   Success: 'text-green-600',

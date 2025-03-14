@@ -71,11 +71,14 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
       });
     }
   };
+  // 30 days in milliseconds
+  const THIRTY_DAYS_IN_MS = 30 * 24 * 60 * 60 * 1000;
+
   useIdleTimer({
     onIdle,
     onActive,
     onMessage,
-    timeout: timeOutDuration,
+    timeout: THIRTY_DAYS_IN_MS,
     crossTab: true,
     throttle: 500,
   });
