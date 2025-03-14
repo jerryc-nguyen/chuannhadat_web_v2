@@ -27,6 +27,7 @@ import Image from 'next/image';
 import { Skeleton } from '@components/ui/skeleton';
 import { DEFAULT_THUMB_IMAGE } from '@common/constants';
 import { useRouter } from 'next/navigation';
+import useCleanupEffect from '@hooks/useCleanupEffect';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -45,6 +46,13 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   const { mutate: addViewPost } = useMutation({
     mutationFn: services.trackings.viewProduct,
   });
+  useCleanupEffect((helpers) => {
+    if (isCopied) {
+      helpers.setTimeout(() => {
+        setIsCopied(false);
+      }, 4000);
+    }
+  }, [isCopied]);
   React.useEffect(() => {
     if (data?.uid) {
       addViewPost({
@@ -70,9 +78,6 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       try {
         await navigator.clipboard.writeText(window.location.href || '');
         setIsCopied(true);
-        setTimeout(() => {
-          setIsCopied(false);
-        }, 4000);
       } catch (err) {
         console.error('Failed to copy: ', err);
       }

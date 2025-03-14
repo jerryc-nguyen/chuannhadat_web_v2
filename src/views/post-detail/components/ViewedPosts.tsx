@@ -8,6 +8,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import useCleanupEffect from '@hooks/useCleanupEffect';
 
 type ViewedPostsProps = {
   productUid: string;
@@ -38,14 +39,14 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     placeholderData: keepPreviousData,
   });
 
-  React.useEffect(() => {
+  useCleanupEffect((helpers) => {
     if (listProduct && isScrollNext.current) {
-      setTimeout(() => {
+      helpers.setTimeout(() => {
         api?.scrollNext();
         isScrollNext.current = false;
       }, 0.2);
     }
-  }, [listProduct.length]);
+  }, [listProduct.length, api]);
 
   React.useEffect(() => {
     if (viewedPosts?.data) {
@@ -75,11 +76,16 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     setPrevBtnEnabled(api.canScrollPrev());
   }, [api, setSelectedIndex]);
 
-  React.useEffect(() => {
+  useCleanupEffect((helpers) => {
     if (!api) return;
     onSelect();
     api.on('select', onSelect);
+
+    helpers.addCleanup(() => {
+      api.off('select', onSelect);
+    });
   }, [api, onSelect]);
+
   if (viewedPosts?.pagination.total_count === 0) return null;
   return (
     <section className={cn('flex w-full flex-col gap-1 rounded-xl border bg-white p-6')}>

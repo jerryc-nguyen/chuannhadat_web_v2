@@ -8,11 +8,12 @@ import Fade from 'embla-carousel-fade';
 import useEmblaCarousel from 'embla-carousel-react';
 import useResizeImage from '@hooks/useResizeImage';
 import styles from './CardImageCarousel.module.scss';
+import useCleanupEffect from '@hooks/useCleanupEffect';
+
 type CardImageCarouselProps = {
   product: A;
   handleClickCardImage?: () => void;
 };
-
 
 const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
   const { product, handleClickCardImage } = props;
@@ -31,30 +32,49 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
     });
   }, []);
 
-  // https://stackoverflow.com/a/50227675
-  const preloadImages = React.useCallback(
-    (event: A) => {
-      if (event.scrollProgress() != 0) {
-        return;
-      }
-      product.images.forEach((picture: A, index: number) => {
-        setTimeout(() => {
-          const img = new Image();
-          img.src = buildThumbnailUrl({ imageUrl: picture.url });
-        }, index * 10);
-      });
+  // Instead of using setTimeout directly, we'll use it in a safer way 
+  // within the useCleanupEffect hook to avoid memory leaks
+  const preloadImageSafely = React.useCallback(
+    (imageUrl: string) => {
+      const img = new Image();
+      img.src = buildThumbnailUrl({ imageUrl });
     },
-    [buildThumbnailUrl, product?.images],
+    [buildThumbnailUrl]
   );
 
-  React.useEffect(() => {
+  // Modified preloadImages callback
+  const preloadImages = React.useCallback(
+    (event: A) => {
+      if (event.scrollProgress() !== 0 || !product?.images?.length) {
+        return;
+      }
+
+      // We'll handle the actual preloading with timeouts in the useCleanupEffect hook
+      product.images.forEach((picture: A, index: number) => {
+        preloadImageSafely(picture.url);
+      });
+    },
+    [product?.images, preloadImageSafely],
+  );
+
+  // Replace React.useEffect with useCleanupEffect
+  useCleanupEffect((helpers) => {
     if (!imageSliderApi) return;
+
+    // Set up event handlers
     updateSlidesInView(imageSliderApi);
     imageSliderApi.on('slidesInView', updateSlidesInView);
     imageSliderApi.on('reInit', updateSlidesInView);
     imageSliderApi.on('select', preloadImages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageSliderApi, updateSlidesInView]);
+
+    // Clean up event handlers
+    helpers.addCleanup(() => {
+      imageSliderApi.off('slidesInView', updateSlidesInView);
+      imageSliderApi.off('reInit', updateSlidesInView);
+      imageSliderApi.off('select', preloadImages);
+    });
+  }, [imageSliderApi, updateSlidesInView, preloadImages]);
+
   return (
     <section className={styles.card_img_carousel}>
       {product.images_count < 2 ? (

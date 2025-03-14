@@ -4,6 +4,12 @@
 - To view the generated Nginx configuration run:
   - docker exeac -ti nginx cat /etc/nginx/conf.d/default.conf
 
+
+### Find memory leak components:
+```
+chmod +x scripts/find-memory-leaks.sh
+```
+
 ### Build web docker production
 
 ```

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@common/utils';
+import useCleanupEffect from '@hooks/useCleanupEffect';
+
 type TooltipHostProps = {
   children: React.ReactNode;
   content: string | JSX.Element;
@@ -18,7 +20,7 @@ const TooltipHost: React.FC<TooltipHostProps> = ({
   const textRef = React.useRef<HTMLButtonElement>(null);
   const [isTextOverflow, setIsTextOverflow] = React.useState(false);
 
-  React.useEffect(() => {
+  useCleanupEffect((helpers) => {
     const checkOverflow = () => {
       if (textRef.current) {
         const hasOverflow = textRef.current.scrollWidth > textRef.current.clientWidth;
@@ -27,10 +29,9 @@ const TooltipHost: React.FC<TooltipHostProps> = ({
     };
 
     checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-
-    return () => window.removeEventListener('resize', checkOverflow);
+    helpers.addEventListener(window, 'resize', checkOverflow);
   }, []);
+
   if (isOverflow) {
     return (
       <TooltipProvider delayDuration={0}>

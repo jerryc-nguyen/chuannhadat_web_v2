@@ -1,9 +1,9 @@
 import {
   useCallback,
-  useEffect,
-  useState,
   useLayoutEffect,
+  useState,
 } from 'react';
+import useCleanupEffect from './useCleanupEffect';
 
 const useBrowserLayoutEffect =
   typeof window !== 'undefined'
@@ -47,6 +47,7 @@ const useViewportSize = () => {
   const [viewportSize, setViewportSize] = useState<
     Size | undefined
   >();
+
   const updateViewportSize = useCallback(() => {
     const viewportSize = getViewportSize();
 
@@ -63,44 +64,33 @@ const useViewportSize = () => {
       return viewportSize;
     });
   }, []);
+
   useBrowserLayoutEffect(updateViewportSize, [
     updateViewportSize,
   ]);
 
-  useEffect(() => {
+  // Replace useEffect with useCleanupEffect for safer event handling
+  useCleanupEffect((helpers) => {
     const effectTwice = () => {
       updateViewportSize();
       // Closing the OSK in iOS does not immediately update the visual viewport
       // size :<
-      setTimeout(updateViewportSize, 1000);
+      helpers.setTimeout(updateViewportSize, 1000);
     };
 
-    window.addEventListener('resize', effectTwice);
+    // Add all event listeners with automatic cleanup
+    helpers.addEventListener(window, 'resize', effectTwice);
+
     // From the top of my head this used to be required for older browsers since
     // this didn't trigger a resize event. Keeping it in to be safe.
-    window.addEventListener(
-      'orientationchange',
-      effectTwice,
-    );
+    helpers.addEventListener(window, 'orientationchange', effectTwice);
+
     // This is needed on iOS to resize the viewport when the Virtual/OnScreen
     // Keyboard opens. This does not trigger A other event, or the standard
     // resize event.
-    window.visualViewport?.addEventListener(
-      'resize',
-      effectTwice,
-    );
-
-    return () => {
-      window.removeEventListener('resize', effectTwice);
-      window.removeEventListener(
-        'orientationchange',
-        effectTwice,
-      );
-      window.visualViewport?.removeEventListener(
-        'resize',
-        effectTwice,
-      );
-    };
+    if (window.visualViewport) {
+      helpers.addEventListener(window.visualViewport, 'resize', effectTwice);
+    }
   }, [updateViewportSize]);
 
   return viewportSize;

@@ -29,6 +29,7 @@ import {
   BANK_FULL_NAME,
   SMS_SUPPORT_NUMBER,
 } from '@common/constants';
+import useCleanupEffect from '@hooks/useCleanupEffect';
 
 type DepositModalProps = object;
 const DepositModal: React.FC<DepositModalProps> = () => {
@@ -43,30 +44,30 @@ const DepositModal: React.FC<DepositModalProps> = () => {
   const { currentUser, bankTransferNote } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
 
+  useCleanupEffect((helpers) => {
+    if (isCopied) {
+      helpers.setTimeout(() => {
+        setIsCopied(false);
+      }, 4000);
+    }
+  }, [isCopied]);
+
   const handleCopy = () => {
     navigator.clipboard.writeText(BANK_ACCOUNT_NUMBER);
     setIsCopied(true);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, 4000);
   };
 
-  React.useEffect(() => {
-    let timmerId: NodeJS.Timeout;
-    // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is true
+  useCleanupEffect((helpers) => {
     if (!statusTransaction && isOpenDepositModal) {
-      timmerId = setInterval(() => {
+      helpers.setInterval(() => {
         checkDepositMutate(currentUser?.last_credit_id as number);
       }, 3000);
     }
+
     if (!isOpenDepositModal) {
       setStatusTransaction(false);
     }
-    return () => {
-      clearInterval(timmerId);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusTransaction, isOpenDepositModal]);
+  }, [statusTransaction, isOpenDepositModal, currentUser?.last_credit_id, checkDepositMutate, setStatusTransaction]);
 
   const guideDeposit = () => (
     <>
