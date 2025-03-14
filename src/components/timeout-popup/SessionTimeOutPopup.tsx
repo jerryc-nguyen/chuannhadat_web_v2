@@ -12,29 +12,22 @@ import { useAtom } from 'jotai';
 import React from 'react';
 import { isShowSessionTimout } from './session-timeout-atoms';
 import { Separator } from '@components/ui/separator';
-import useAuth from '@mobile/auth/hooks/useAuth';
-import { getTokenClient } from '@common/cookies';
+import { useAuth } from '@common/auth/AuthContext';
 import { useIdleTimer } from 'react-idle-timer';
 import { useRouter } from 'next/navigation';
-import { timeOutDuration } from '@common/constants';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
-import { checkIsLoggedInServer } from '@app/action';
 
-type SessionTimeOutPopupProps = {
-  isLogged: boolean;
-};
-const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) => {
+const SessionTimeOutPopup = () => {
   const [showSessionTimeout, setShowSessionTimeout] = useAtom(isShowSessionTimout);
   const { openModal, closeModal } = useModals();
   const router = useRouter();
-  const tokenCookie = getTokenClient();
-  const { handleSignOut, currentUser } = useAuth();
+  const { isAuthenticated, logout, checkAuthStatus } = useAuth();
 
   const handleCloseTimoutPopup = () => {
     setShowSessionTimeout(false);
-    // Remove server-side token call - we're using client-side only
-    // removeTokenServer();
+    // Call logout from AuthContext instead of manual token removal
+    logout();
     router.refresh();
     broadCastMessage();
     openModal({
@@ -48,7 +41,9 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
   };
 
   const onIdle = () => {
-    if (currentUser && !tokenCookie) {
+    // Check auth status using the context instead of direct cookie checks
+    const isStillLoggedIn = checkAuthStatus();
+    if (!isStillLoggedIn && isAuthenticated) {
       setShowSessionTimeout(true);
     }
   };
@@ -83,12 +78,7 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
     crossTab: true,
     throttle: 500,
   });
-  React.useEffect(() => {
-    if (!isLogged) {
-      handleSignOut();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged]);
+
   return (
     <AlertDialog open={showSessionTimeout}>
       <AlertDialogContent>

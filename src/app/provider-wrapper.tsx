@@ -1,8 +1,6 @@
 'use server';
 import React from 'react';
 import { Provider as JotaiProvider } from 'jotai';
-import { cookies } from 'next/headers';
-import { API_TOKEN_SERVER } from '@common/auth';
 import { Toaster } from '@components/ui/sonner';
 import { ToastContainer } from 'react-toastify';
 import { QueryProvider } from '@components/providers';
@@ -16,16 +14,15 @@ type ProviderWrapperProps = {
 };
 
 const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children }) => {
-  const isLogged = cookies().has(API_TOKEN_SERVER);
   const { isMobile } = useGetUserAgentInfo();
   return (
     <QueryProvider>
       <JotaiProvider>
         <AuthProvider>
           {children}
+          <ListModal />
+          <SessionTimeOutPopup />
         </AuthProvider>
-        <ListModal />
-        <SessionTimeOutPopup isLogged={isLogged} />
       </JotaiProvider>
       <Toaster position={isMobile ? 'top-center' : 'bottom-right'} theme="light" richColors />
       <ToastContainer

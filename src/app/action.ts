@@ -1,6 +1,6 @@
 'use server';
 
-import { API_TOKEN_SERVER } from '@common/auth';
+import { API_TOKEN_CIENT } from '@common/auth';
 import { cookies } from 'next/headers';
 
 // NOTE: These server-side cookie functions are no longer used.
@@ -34,7 +34,6 @@ export const setTokenServer = (token: string) => {
 // by looking at the client cookie that will be sent with the request
 export const checkIsLoggedInServer = () => {
   'use server';
-  // This will return undefined if the cookie doesn't exist
-  // Note that client-side cookie is automatically sent to the server with requests
-  return !!cookies().get(API_TOKEN_SERVER);
+  // This will check for the client cookie that gets sent to the server with requests
+  return !!cookies().get(API_TOKEN_CIENT);
 };
