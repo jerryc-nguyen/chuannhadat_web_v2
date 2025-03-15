@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import Link from 'next/link';
 import { Button } from '@components/ui/button';
-import { removeTokenServer } from '@app/action';
 import { useRouter } from 'next/navigation';
 const listMenubar = [
   {
@@ -33,15 +32,15 @@ const listMenubar = [
   },
 ];
 export default function MainNavSidePanel() {
-  const { currentUser, handleSignOut } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   const router = useRouter();
 
   const handleLogout = () => {
-    handleSignOut();
-    removeTokenServer();
+    logout();
     router.refresh();
   };
+
   return (
     <>
       <div className="flex flex-col">

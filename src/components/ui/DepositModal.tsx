@@ -19,7 +19,7 @@ import {
 } from '@views/dashboard/states/depositAtoms';
 import { services } from '@api/services';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { PiSealCheckFill } from 'react-icons/pi';
 import { useBalanceRequest } from '@api/balance';
 import Confetti from 'react-confetti';

@@ -1,5 +1,5 @@
 'use client';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -18,7 +18,7 @@ type MainNavRightProps = {
 };
 
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
-  const { handleSignOut, currentUser } = useAuth();
+  const { currentUser } = useAuth();
 
   React.useEffect(() => {
     setFrontendToken(uuidv4());
@@ -26,12 +26,6 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
       removeCookie(FRONTEND_TOKEN);
     };
   }, [currentUser?.api_token]);
-  React.useEffect(() => {
-    if (!isLogged) {
-      handleSignOut();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged]);
 
   const { openModal, closeModal } = useModals();
   const showModalLoginAndRegister = () => {

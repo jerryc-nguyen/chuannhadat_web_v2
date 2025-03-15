@@ -10,7 +10,7 @@ import {
 import { Input } from '@components/ui/input';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { Button } from '@components/ui/button';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';

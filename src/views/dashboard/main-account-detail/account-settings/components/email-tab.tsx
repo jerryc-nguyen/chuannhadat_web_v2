@@ -4,7 +4,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@components/u
 import { Input } from '@components/ui/input';
 import { Skeleton } from '@components/ui/skeleton';
 import { yupResolver } from '@hookform/resolvers/yup';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';

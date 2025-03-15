@@ -24,7 +24,7 @@ import { services } from '@api/services';
 import { IRegisterResponse } from '@mobile/auth/types';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { removeCookie, setCookie } from '@common/cookies';
 import { REFERRAL_CODE } from '@common/auth';
 

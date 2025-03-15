@@ -21,7 +21,7 @@ import { services } from '@api/services';
 import TooltipHost from '@components/tooltip-host';
 import ButtonSave, { type ButtonSaveHandle } from '@views/home/components/ButtonSave';
 import { toast } from 'sonner';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import BlurImage from '@components/BlurImage';
 import Image from 'next/image';
 import { Skeleton } from '@components/ui/skeleton';

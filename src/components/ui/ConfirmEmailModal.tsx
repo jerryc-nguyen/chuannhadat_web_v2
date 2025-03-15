@@ -14,7 +14,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { LuLoader2 } from 'react-icons/lu';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 
 const ConfirmEmailModal: React.FC = () => {
   const { updateCurrentUser } = useAuth();

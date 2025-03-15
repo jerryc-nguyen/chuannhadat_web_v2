@@ -1,4 +1,4 @@
-import { getTokenClient, getFrontendTokenClient } from '@common/cookies';
+import { getTokenClient, getFrontendTokenClient, removeTokenClient } from '@common/cookies';
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { set, get } from 'lodash-es';
 
@@ -9,6 +9,9 @@ const RETRY_DELAY = 1000; // 1 second
 const RETRY_STATUS_CODES = [408, 429, 500, 502, 503, 504]; // Status codes that should trigger a retry
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+// Flag to prevent multiple auth error handlers from triggering at once
+let isHandlingAuthError = false;
 
 // Create a custom axios instance
 const axiosInstance = axios.create({
@@ -68,6 +71,40 @@ axiosInstance.interceptors.request.use(
 interface RetryConfig extends InternalAxiosRequestConfig {
   _retryCount?: number;
 }
+
+// Handle authentication errors by logging out the user
+const handleAuthError = () => {
+  // Prevent multiple handlers from triggering at once
+  if (isHandlingAuthError) return;
+
+  try {
+    isHandlingAuthError = true;
+
+    // Remove authentication tokens
+    removeTokenClient();
+
+    // Store the current path for redirect after login
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
+      } catch (e) {
+        console.error('Failed to store redirect path:', e);
+      }
+
+      // Redirect to home page after a short delay
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 500);
+    }
+  } catch (e) {
+    console.error('Error handling auth error:', e);
+  } finally {
+    // Reset flag after a delay to prevent further errors during redirect
+    setTimeout(() => {
+      isHandlingAuthError = false;
+    }, 1000);
+  }
+};
 
 // Response interceptor for handling responses and errors
 axiosInstance.interceptors.response.use(
@@ -132,8 +169,17 @@ axiosInstance.interceptors.response.use(
       // Network error (no response from server)
       errorResponse.message = 'Network error: Unable to connect to server';
     } else if (error.response.status === 401) {
-      // Unauthorized - could handle token refresh or logout here
-      console.warn('Authentication error: User may need to re-authenticate');
+      // Unauthorized - handle token expiration with logout
+      console.warn('Authentication error: Token expired or invalid');
+
+      // Don't handle auth errors for login/register endpoints
+      const isAuthEndpoint =
+        config?.url?.includes('/auth/login') ||
+        config?.url?.includes('/auth/register');
+
+      if (!isAuthEndpoint) {
+        handleAuthError();
+      }
     } else if (error.response.status === 403) {
       // Forbidden - user doesn't have permission
       console.warn('Permission error: User lacks required permission');
