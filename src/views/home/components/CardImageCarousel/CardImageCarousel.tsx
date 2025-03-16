@@ -23,12 +23,27 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
   const { buildThumbnailUrl } = useResizeImage();
 
   const updateSlidesInView = React.useCallback((imageSliderApi: EmblaCarouselType) => {
-    setSlidesInView((slidesInView) => {
-      if (slidesInView.length === imageSliderApi.slideNodes().length) {
-        imageSliderApi.off('slidesInView', updateSlidesInView);
+    // Get slides that are currently in view but not in our state yet
+    const currentSlidesInView = imageSliderApi.slidesInView();
+
+    setSlidesInView((prevSlidesInView) => {
+      // If we've already processed all slides, don't update state again
+      if (prevSlidesInView.length === imageSliderApi.slideNodes().length) {
+        return prevSlidesInView; // Return the same state to prevent re-render
       }
-      const inView = imageSliderApi.slidesInView().filter((index) => !slidesInView.includes(index));
-      return slidesInView.concat(inView);
+
+      // Only add slides that aren't already in our state
+      const newInView = currentSlidesInView.filter(
+        (index) => !prevSlidesInView.includes(index)
+      );
+
+      // If no new slides to add, return same state reference to prevent re-render
+      if (newInView.length === 0) {
+        return prevSlidesInView;
+      }
+
+      // Add new slides to the state
+      return [...prevSlidesInView, ...newInView];
     });
   }, []);
 

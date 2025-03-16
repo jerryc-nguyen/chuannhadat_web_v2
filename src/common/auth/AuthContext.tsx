@@ -71,13 +71,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.log("👤 User restored from localStorage");
           } else {
             console.warn("⚠️ Found user data but no valid token - may need to login again");
+            // Clean up localStorage if token is invalid to prevent confusion
+            localStorage.removeItem('user_data');
           }
         }
       } catch (error) {
         console.error('Error loading user data:', error);
       }
     }
-  }, [setCurrentUser, currentUser]);
+    // Important: Do NOT include currentUser in the dependency array
+    // as it would cause infinite re-renders
+  }, [setCurrentUser]);
 
   // Helper function to ensure we have a valid ILoginResponse
   const ensureValidUserData = (data: Partial<ILoginResponse>): ILoginResponse => {

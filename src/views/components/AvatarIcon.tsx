@@ -46,6 +46,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
     });
   };
   const handleLogOut = () => {
+    logout();
     router.refresh();
   };
 
