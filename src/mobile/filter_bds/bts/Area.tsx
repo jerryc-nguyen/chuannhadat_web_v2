@@ -4,7 +4,7 @@ import useFilterState from '../hooks/useFilterState';
 import useSearchAggs from '@components/search-aggs/hooks';
 import DualRangeSlider from '@components/dual-range-slider';
 import { formatAreaText } from '@common/utils';
-import { debounce } from "lodash-es";
+import { debounce } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
 const MIN_AREA = 0;
@@ -30,18 +30,21 @@ export default function Area({ onSelect }: { onSelect?: (option: OptionForSelect
         range: { min: values[0], max: values[1] },
         text: formatAreaText(values[0], values[1]),
       });
-    }, 300),
-    []
+    }, 500),
+    [],
   );
 
-  const handleChangeAreaSlider = useCallback((values: A) => {
-    setSliderValues(values);
-    debounceChangeAreaValues(values);
-  }, [debounceChangeAreaValues])
+  const handleChangeAreaSlider = useCallback(
+    (values: A) => {
+      setSliderValues(values);
+      debounceChangeAreaValues(values);
+    },
+    [debounceChangeAreaValues],
+  );
 
   return (
     <section className="w-[400px]">
-      <div className="pt-4 pb-6 pr-2">
+      <div className="mx-4 pb-6 pr-2 pt-4">
         <DualRangeSlider
           disabled={isSliderDisabled}
           value={sliderValues}

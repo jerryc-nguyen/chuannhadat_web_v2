@@ -5,7 +5,7 @@ import useSearchAggs from '@components/search-aggs/hooks';
 import DualRangeSilder from '@components/dual-range-slider';
 import React from 'react';
 import { formatPriceFilterChip, formatRangeText } from '@common/utils';
-import { debounce } from "lodash-es";
+import { debounce } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
 export default function Price({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
@@ -22,14 +22,15 @@ export default function Price({ onSelect }: { onSelect?: (option: OptionForSelec
 
   const [sliderValues, setSliderValues] = useState(valueSliderRange);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceChangePriceValues = useCallback(
-    debounce((values: A) => {
+    debounce((values: number[]) => {
       setLocalFieldValue(FilterFieldName.Price, {
         range: { min: values[0], max: values[1] },
         text: formatRangeText(values[0], values[1]),
       });
-    }, 300),
-    []
+    }, 500),
+    [setLocalFieldValue],
   );
 
   const handleChangePriceSlider = (values: number[]) => {
@@ -39,7 +40,7 @@ export default function Price({ onSelect }: { onSelect?: (option: OptionForSelec
 
   return (
     <section className="w-[400px]">
-      <div className="pt-4 pb-6 pr-2 mx-4">
+      <div className="mx-6 px-2 pb-6 pt-4">
         <DualRangeSilder
           disabled={isSliderDisabled}
           value={sliderValues}
