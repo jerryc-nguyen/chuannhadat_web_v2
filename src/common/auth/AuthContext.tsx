@@ -8,6 +8,7 @@ import { ILoginResponse } from '@mobile/auth/types';
 import { CustomerGender } from '@common/types';
 import { useAtom } from 'jotai';
 import { currentUserAtom } from '@mobile/auth/states';
+import { v4 as uuidv4 } from 'uuid';
 
 interface AuthContextType {
   // Core authentication state
@@ -51,6 +52,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
   const router = useRouter();
 
+  // Initialize frontend token if it doesn't exist
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const existingToken = getFrontendTokenClient();
+      if (!existingToken) {
+        console.log("🔑 Initializing frontend token");
+        setFrontendToken(uuidv4());
+      }
+    }
+  }, []); // Empty dependency array means this runs once on mount
+
   useEffect(() => {
     // Check auth status on mount and set state
     const hasValidToken = checkAuthStatus();
@@ -79,8 +91,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Error loading user data:', error);
       }
     }
-    // Important: Do NOT include currentUser in the dependency array
-    // as it would cause infinite re-renders
   }, [setCurrentUser]);
 
   // Helper function to ensure we have a valid ILoginResponse
@@ -120,11 +130,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (token: string, userData: ILoginResponse) => {
     // Set token in client cookie (secure storage)
     setTokenClient(token);
-
-    // Extract and set frontend token if available in userData
-    if (userData.post_token) {
-      setFrontendToken(userData.post_token);
-    }
 
     setIsAuthenticated(true);
 

@@ -1,11 +1,8 @@
 'use client';
 import React from 'react';
 import { useAuth } from '@common/auth/AuthContext';
-import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@components/ui/button';
 import { LuUserCircle } from 'react-icons/lu';
-import { removeCookie, setFrontendToken } from '@common/cookies';
-import { FRONTEND_TOKEN } from '@common/auth';
 import FavoriteIcon from './FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
 import { Skeleton } from '@components/ui/skeleton';
