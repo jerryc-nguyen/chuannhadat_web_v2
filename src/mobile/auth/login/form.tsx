@@ -38,12 +38,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
         // The API uses api_token as the auth token
         login(
           userData.api_token,
-          userData.post_token, // Using post_token as frontend token
-          {
-            id: userData.id.toString(),
-            name: userData.full_name || '',
-            email: userData.email || ''
-          }
+          userData
         );
 
         onClose && onClose();

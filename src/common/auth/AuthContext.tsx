@@ -91,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Error loading user data:', error);
       }
     }
-  }, [setCurrentUser]);
+  }, [currentUser, setCurrentUser]);
 
   // Helper function to ensure we have a valid ILoginResponse
   const ensureValidUserData = (data: Partial<ILoginResponse>): ILoginResponse => {
