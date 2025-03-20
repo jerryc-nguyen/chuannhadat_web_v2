@@ -2,7 +2,7 @@
 import { get } from 'lodash-es';
 import { useAccountSummary } from './hooks/useAccountSummary';
 import FigureCard, { CardIcons } from '../components/FigureCard';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { CND_TEXT_COLORS } from '@common/constants';
 
 type SummaryDashboardProps = object;

@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '@components/ui/form';
 import { Button } from '@components/ui/button';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { toast } from 'sonner';
@@ -26,18 +26,44 @@ type LoginFormProps = {
   onClose?: () => void;
 };
 const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
-  const { handleSignIn } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
   const { mutate: signInMutate, isPending } = useMutation({
     mutationFn: services.auth.signIn,
     onSuccess: (response: LoginResponse) => {
       if (response.status) {
         const userData = response.data;
-        handleSignIn(userData);
+
+        // Use the new AuthContext login method with the correct token field
+        // The API uses api_token as the auth token
+        login(
+          userData.api_token,
+          userData.post_token, // Using post_token as frontend token
+          {
+            id: userData.id.toString(),
+            name: userData.full_name || '',
+            email: userData.email || ''
+          }
+        );
+
         onClose && onClose();
         toast.success(
           `Xin chào, ${userData.full_name || userData.phone} bạn đã đăng nhập thành công!`,
         );
+
+        // Check if we need to redirect after login
+        try {
+          const redirectPath = sessionStorage.getItem('redirectAfterLogin');
+          if (redirectPath) {
+            sessionStorage.removeItem('redirectAfterLogin');
+            router.push(redirectPath);
+          } else {
+            // Default redirect after login (e.g., dashboard)
+            router.push('/dashboard');
+          }
+        } catch (e) {
+          console.error('Error handling redirect:', e);
+        }
       } else {
         toast.error('Tài khoản hoặc mật khẩu không chính xác');
       }

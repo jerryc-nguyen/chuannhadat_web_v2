@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Input } from '@components/ui/input';
 import Image from 'next/image';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { LuLoader2, LuUpload } from 'react-icons/lu';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

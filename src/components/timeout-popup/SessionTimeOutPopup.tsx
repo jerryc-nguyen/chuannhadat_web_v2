@@ -9,31 +9,30 @@ import {
   AlertDialogTitle,
 } from '@components/ui/alert-dialog';
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { isShowSessionTimout } from './session-timeout-atoms';
 import { Separator } from '@components/ui/separator';
-import useAuth from '@mobile/auth/hooks/useAuth';
-import { getTokenClient } from '@common/cookies';
+import { useAuth } from '@common/auth/AuthContext';
 import { useIdleTimer } from 'react-idle-timer';
 import { useRouter } from 'next/navigation';
-import { timeOutDuration } from '@common/constants';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
-import { removeTokenServer } from '@app/action';
 
-type SessionTimeOutPopupProps = {
-  isLogged: boolean;
-};
-const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) => {
+const SessionTimeOutPopup = () => {
   const [showSessionTimeout, setShowSessionTimeout] = useAtom(isShowSessionTimout);
   const { openModal, closeModal } = useModals();
   const router = useRouter();
-  const tokenCookie = getTokenClient();
-  const { handleSignOut, currentUser } = useAuth();
+
+  // Safely access the auth context
+  const auth = useAuth();
+  const isAuthenticated = auth?.isAuthenticated || false;
+  const logout = auth?.logout || (() => console.warn('Logout function not available'));
+  const checkAuthStatus = auth?.checkAuthStatus || (() => false);
 
   const handleCloseTimoutPopup = () => {
     setShowSessionTimeout(false);
-    removeTokenServer();
+    // Call logout from AuthContext
+    logout();
     router.refresh();
     broadCastMessage();
     openModal({
@@ -46,19 +45,38 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
     });
   };
 
+  // Use this function to check authentication status safely
+  const checkAuth = () => {
+    try {
+      return checkAuthStatus();
+    } catch (error) {
+      console.error('Error checking auth status:', error);
+      return false;
+    }
+  };
+
   const onIdle = () => {
-    if (currentUser && !tokenCookie) {
+    // Only trigger timeout if the user was previously authenticated but token is gone
+    const isStillLoggedIn = checkAuth();
+    if (!isStillLoggedIn && isAuthenticated) {
       setShowSessionTimeout(true);
     }
   };
+
   const onActive = () => {
     console.log('Client come back');
   };
+
   const broadCastMessage = () => {
-    const broadCastChannel = new BroadcastChannel('reloadChannel');
-    broadCastChannel.postMessage({ type: 'loginAgain', value: true });
+    try {
+      const broadCastChannel = new BroadcastChannel('reloadChannel');
+      broadCastChannel.postMessage({ type: 'loginAgain', value: true });
+    } catch (error) {
+      console.error('Error broadcasting message:', error);
+    }
   };
-  const onMessage = (event: A) => {
+
+  const onMessage = (event: any) => {
     if (event.data && event.data.type === 'loginAgain' && event.data.value) {
       setShowSessionTimeout(false);
       openModal({
@@ -71,20 +89,20 @@ const SessionTimeOutPopup: React.FC<SessionTimeOutPopupProps> = ({ isLogged }) =
       });
     }
   };
+
+  // Maximum timeout value allowed (approximately 24.8 days)
+  // Using 24 days to be safe (24 * 24 * 60 * 60 * 1000)
+  const MAX_TIMEOUT_MS = 10 * 24 * 60 * 60 * 1000; // Maximum 32-bit integer value
+
   useIdleTimer({
     onIdle,
     onActive,
     onMessage,
-    timeout: timeOutDuration,
+    timeout: MAX_TIMEOUT_MS, // Using maximum safe value
     crossTab: true,
     throttle: 500,
   });
-  React.useEffect(() => {
-    if (!isLogged) {
-      handleSignOut();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged]);
+
   return (
     <AlertDialog open={showSessionTimeout}>
       <AlertDialogContent>

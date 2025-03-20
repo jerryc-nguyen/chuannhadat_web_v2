@@ -1,13 +1,16 @@
 import cookies from 'js-cookie';
 import { API_TOKEN_CIENT, FRONTEND_TOKEN } from './auth';
-import { timeOutDuration } from './constants';
-const expiredTime = new Date(new Date().getTime() + timeOutDuration);
+
+// Use days for js-cookie (it's more natural for this library)
+// https://github.com/js-cookie/js-cookie#expires
+const THIRTY_DAYS = 30; // js-cookie uses days for expiration
 
 export const defaultConfigToken: Cookies.CookieAttributes = {
   secure: true,
-  expires: expiredTime,
+  expires: THIRTY_DAYS, // js-cookie uses days, not milliseconds or seconds
   sameSite: 'lax',
-  httpOnly: false,
+  // HTTP-only can only be set by the server, not by client JavaScript
+  // We're not using HTTP-only since we need JavaScript access
 };
 
 export const getCookie = (name: A) => cookies.get(name);

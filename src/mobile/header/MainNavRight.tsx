@@ -1,11 +1,8 @@
 'use client';
 import React from 'react';
-import useAuth from '@mobile/auth/hooks/useAuth';
-import { v4 as uuidv4 } from 'uuid';
+import { useAuth } from '@common/auth/AuthContext';
 import { Button } from '@components/ui/button';
 import { LuUserCircle } from 'react-icons/lu';
-import { removeCookie, setFrontendToken } from '@common/cookies';
-import { FRONTEND_TOKEN } from '@common/auth';
 import FavoriteIcon from './FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
 import { Skeleton } from '@components/ui/skeleton';
@@ -25,12 +22,6 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { currentUser } = useAuth();
   const { openModal, closeModal } = useModals();
   const { cropSquare } = useResizeImage();
-  React.useEffect(() => {
-    setFrontendToken(uuidv4());
-    return () => {
-      removeCookie(FRONTEND_TOKEN);
-    };
-  }, [currentUser?.api_token]);
 
   const showModalLoginAndRegister = () => {
     openModal({

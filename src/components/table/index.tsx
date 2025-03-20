@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import useCleanupEffect from '@hooks/useCleanupEffect';
 
 interface DataType {
   [key: string]: any; // Changed to `any` for simplicity
@@ -23,13 +24,16 @@ interface TableComponentProps {
 const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, footer }) => {
   const [isWideScreen, setIsWideScreen] = useState(false);
 
-  useEffect(() => {
+  useCleanupEffect((helpers) => {
     const handleResize = () => {
       setIsWideScreen(window.innerWidth > 450);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Call handleResize immediately to set initial state
+    handleResize();
+
+    // Add event listener safely with automatic cleanup
+    helpers.addEventListener(window, 'resize', handleResize);
   }, []);
 
   const containerStyle: React.CSSProperties = {

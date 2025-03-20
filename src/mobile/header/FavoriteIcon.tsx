@@ -19,7 +19,7 @@ import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet';
 import { toast } from 'sonner';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {

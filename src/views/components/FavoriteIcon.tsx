@@ -20,7 +20,7 @@ import { AxiosError } from 'axios';
 import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'sonner';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { useSearchParams } from 'next/navigation';
 
 type FavoriteIconProps = object;

@@ -5,7 +5,7 @@ import { getCookie, removeCookie } from '@common/cookies';
 import { auth, googleProvider } from '@common/firebase';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { LoginResponse } from '@mobile/auth/types';
 import { useMutation } from '@tanstack/react-query';
 import { signInWithPopup } from 'firebase/auth';
@@ -23,13 +23,20 @@ type LoginSocialProps = {
 
 const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className }) => {
   const [loadingLoginGoogle, setLoadingLoginGoogle] = React.useState(false);
-  const { handleSignIn } = useAuth();
+  const { login } = useAuth();
   const { mutate: loginGoogle } = useMutation({
     mutationFn: services.auth.loginGoogle,
     onSuccess: (response: LoginResponse) => {
       if (response.status) {
         const userData = response.data;
-        handleSignIn(userData);
+
+        // Use the new AuthContext login method
+        console.log("🔐 Login successful via Google, setting tokens...");
+        login(
+          userData.api_token,
+          userData
+        );
+
         toast.success(
           `Xin chào, ${userData.full_name || userData.phone} bạn đã đăng nhập thành công!`,
         );

@@ -1,5 +1,4 @@
 'use client';
-import { removeTokenServer } from '@app/action';
 import { Button } from '@components/ui/button';
 import {
   DropdownMenu,
@@ -12,7 +11,7 @@ import {
 } from '@components/ui/dropdown-menu';
 import { Skeleton } from '@components/ui/skeleton';
 import useResizeImage from '@hooks/useResizeImage';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
 import Image from 'next/image';
@@ -30,7 +29,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const pathName = usePathname();
   const [openDropdownMenu, setOpenDropdownMenu] = React.useState(false);
   const isDashboardPage = pathName.includes('dashboard');
-  const { currentUser, handleSignOut } = useAuth();
+  const { currentUser, logout } = useAuth();
   const { openModal, closeModal } = useModals();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
@@ -47,18 +46,14 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
     });
   };
   const handleLogOut = () => {
-    removeTokenServer();
+    logout();
     router.refresh();
     setTimeout(() => {
       router.push('/');
     }, 500);
   };
-  React.useEffect(() => {
-    if (!isLogged) {
-      handleSignOut();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged]);
+
+
   React.useEffect(() => {
     setOpenDropdownMenu(false);
   }, [pathName]);

@@ -9,7 +9,7 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { toast } from 'sonner';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React from 'react';

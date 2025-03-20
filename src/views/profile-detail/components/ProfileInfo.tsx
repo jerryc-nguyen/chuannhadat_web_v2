@@ -7,6 +7,7 @@ import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
 import { CalendarDays } from 'lucide-react';
 import { RiArticleLine } from 'react-icons/ri';
 import React from 'react';
+import useCleanupEffect from '@hooks/useCleanupEffect';
 
 export default function ProfileInfo({ profileData }: { profileData: A }) {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -19,16 +20,10 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
     }
   };
 
-  React.useEffect(() => {
+  useCleanupEffect((helpers) => {
     const handleScroll = throttle(toggleVisibility, 200);
 
-    // Lắng nghe sự kiện scroll với hàm đã được throttle
-    window.addEventListener('scroll', handleScroll);
-
-    // Gỡ bỏ sự kiện khi component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    helpers.addEventListener(window, 'scroll', handleScroll);
   }, []);
 
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(

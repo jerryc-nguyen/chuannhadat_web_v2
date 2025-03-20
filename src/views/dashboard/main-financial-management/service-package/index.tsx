@@ -3,7 +3,7 @@ import React from 'react';
 import '@styles/pages/desktop/finacial-management/service-package.scss';
 import { ServicePackageInfo } from '../types';
 import { useQuery } from '@tanstack/react-query';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { services } from '@api/services';
 import ServiceCard from '../components/ServiceCard';
 import { Button } from '@components/ui/button';

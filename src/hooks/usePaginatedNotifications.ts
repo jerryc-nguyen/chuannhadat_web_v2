@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useAtom } from 'jotai';
 import React from 'react';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { notificationsDataAtom, totalAtom, totalUnreadAtom } from '@mobile/notification/states';
 import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';

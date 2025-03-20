@@ -1,4 +1,3 @@
-import { removeTokenServer } from '@app/action';
 import { Button } from '@components/ui/button';
 import {
   Sheet,
@@ -7,7 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@components/ui/sheet';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
 
@@ -22,7 +21,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
   const [openMenuBar, setOpenMenuBar] = React.useState<boolean>(false);
   const pathName = usePathname();
   const isDashboardPage = pathName.includes('dashboard');
-  const { currentUser, handleSignOut } = useAuth();
+  const { currentUser } = useAuth();
   const router = useRouter();
   const { openModal, closeModal } = useModals();
   const listMenubar = [
@@ -53,18 +52,12 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
     }
   }, [currentUser, isLogged]);
   const handleLogout = () => {
-    removeTokenServer();
     router.refresh();
     setTimeout(() => {
       router.push('/');
     }, 500);
   };
-  React.useEffect(() => {
-    if (!isLogged) {
-      handleSignOut();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogged]);
+
   const onRenderMenuWhenLogged = () => {
     return (
       <section>

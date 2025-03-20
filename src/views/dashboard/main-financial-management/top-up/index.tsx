@@ -4,7 +4,7 @@ import '@styles/pages/desktop/finacial-management/top-up.scss';
 import TableComponent from '@components/table';
 import BalanceInfo from '../components/BalanceInfo';
 import { useDepositModal } from '@components/ui/DepositModal';
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import {
   BANK_ACCOUNT_NAME,
   BANK_ACCOUNT_NUMBER,

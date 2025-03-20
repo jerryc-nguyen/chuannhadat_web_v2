@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { LuCheck, LuClipboard } from 'react-icons/lu';
 
-import useAuth from '@mobile/auth/hooks/useAuth';
+import { useAuth } from '@common/auth/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
 import CommonTableView from '@components/common-table/CommonTableView';
