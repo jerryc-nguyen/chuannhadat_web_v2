@@ -6,7 +6,6 @@ import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';
 import Locations from './bts/Locations';
 import useModals from '@mobile/modals/hooks';
-import { useFilterLocations } from '@mobile/locations/hooks';
 import FilterModal from './FilterModal';
 import FooterOverviewBtsButton from './FooterOverviewBtsButton';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
@@ -20,8 +19,6 @@ import { FilterChipOption } from './types';
 import { Button } from '@components/ui/button';
 import { Modal } from '@mobile/modals/states/types';
 import Projects from './bts/desktop/Projects';
-import { useAtom } from 'jotai';
-import { filterStateAtom } from './states';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
@@ -33,39 +30,13 @@ type FilterChipsProps = {
 }
 
 export default function FilterChips({ chipOptions, onFilterChipsChanged }: FilterChipsProps) {
-  const [filterState] = useAtom(filterStateAtom);
-
-  const { copyFilterStatesToLocal, removeFilterValue } = useFilterState();
+  const {
+    copyFilterStatesToLocal,
+    removeFilterValue,
+    selectedFilterText,
+    isActiveChip
+  } = useFilterState();
   const { openModal } = useModals();
-  const { selectedLocationText, isSelectedLocation } = useFilterLocations();
-
-  const selectedRoomText = (): string => {
-    const results = [];
-    if (filterState.bed) {
-      results.push(`${filterState.bed.text} PN`);
-    }
-    if (filterState.bath) {
-      results.push(`${filterState.bath.text} WC`);
-    }
-
-    return results.join(' / ');
-  };
-
-  const selectedFilterText = (filterOption: FilterChipOption) => {
-    const fieldName = filterOption.id;
-
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
-      return selectedLocationText ?? 'Khu vực';
-    } else if (filterOption.id == FilterFieldName.Rooms) {
-      return selectedRoomText() || 'Số phòng';
-    } else {
-      return (
-        //@ts-ignore: read value
-        filterState[fieldName]?.text ?? filterOption.text
-      );
-    }
-  };
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
@@ -104,7 +75,6 @@ export default function FilterChips({ chipOptions, onFilterChipsChanged }: Filte
     switch (filterOption.id) {
       case FilterFieldName.FilterOverview:
         return 1;
-
       default:
         return undefined;
     }
@@ -145,25 +115,12 @@ export default function FilterChips({ chipOptions, onFilterChipsChanged }: Filte
     openModal(modalOptions);
   };
 
-  const isActiveChip = (filterOption: FilterChipOption): boolean => {
-    const fieldName = filterOption.id;
-
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
-      return isSelectedLocation;
-    } else if (filterOption.id == FilterFieldName.Rooms) {
-      return !!(filterState.bed || filterState.bath);
-    } else {
-      return (
-        //@ts-ignore: read value
-        !!filterState[fieldName]?.text
-      );
-    }
-  };
-
   const handleRemoveFilter = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
-    removeFilterValue(fieldName);
+    const filterState = removeFilterValue(fieldName);
+    if (onFilterChipsChanged) {
+      onFilterChipsChanged(filterState);
+    }
   };
 
   return (
@@ -186,7 +143,10 @@ export default function FilterChips({ chipOptions, onFilterChipsChanged }: Filte
 
           {isActiveChip(item) && (
             <LuX
-              onClick={(e) => { e.stopPropagation(); handleRemoveFilter(item) }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemoveFilter(item);
+              }}
               className="cursor-pointer text-xl"
             />
           )}

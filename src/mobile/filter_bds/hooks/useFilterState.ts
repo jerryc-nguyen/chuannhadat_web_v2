@@ -91,7 +91,13 @@ export default function useFilterState() {
         (newFilterState as any)[fieldId] = undefined;
     }
 
+    // Update both states
     setFilterState(newFilterState);
+    setLocalFilterState(newFilterState);
+
+    // Sync URL params
+    syncSelectedParamsToUrl(newFilterState);
+
     return newFilterState;
   };
 
@@ -228,6 +234,49 @@ export default function useFilterState() {
     return filterState.sort?.text as string | undefined;
   }, [filterState.sort?.text]);
 
+  const selectedFilterText = (filterOption: FilterChipOption): string => {
+    const fieldName = filterOption.id;
+
+    if (filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations) {
+      return 'Khu vực';
+    } else if (filterOption.id == FilterFieldName.Rooms) {
+      return selectedRoomText() || 'Số phòng';
+    } else {
+      return (
+        //@ts-ignore: read value
+        filterState[fieldName]?.text ?? filterOption.text
+      );
+    }
+  };
+
+  const selectedRoomText = (): string => {
+    const results = [];
+    if (filterState.bed) {
+      results.push(`${filterState.bed.text} PN`);
+    }
+    if (filterState.bath) {
+      results.push(`${filterState.bath.text} WC`);
+    }
+    return results.join(' / ');
+  };
+
+  const isActiveChip = (filterOption: FilterChipOption): boolean => {
+    const fieldName = filterOption.id;
+
+    if (filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations) {
+      return !!(filterState.city || filterState.district || filterState.ward);
+    } else if (filterOption.id == FilterFieldName.Rooms) {
+      return !!(filterState.bed || filterState.bath);
+    } else {
+      return (
+        //@ts-ignore: read value
+        !!filterState[fieldName]?.text
+      );
+    }
+  };
+
   return {
     filterState,
     setFilterState,
@@ -245,5 +294,8 @@ export default function useFilterState() {
     selectedSortText,
     removeFilterValue,
     extraSearchParams,
+    selectedFilterText,
+    selectedRoomText,
+    isActiveChip
   };
 }
