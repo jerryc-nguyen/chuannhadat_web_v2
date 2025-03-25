@@ -69,31 +69,30 @@ export default function useFilterState() {
   };
 
   const removeFilterValue = (fieldId: FilterFieldName) => {
-    let newFilteState = {};
+    // Create a new state object starting with current state
+    const newFilterState: FilterState = { ...filterState };
 
-    if (fieldId == FilterFieldName.Locations || fieldId == FilterFieldName.ProfileLocations) {
-      newFilteState = {
-        ...filterState,
-        city: undefined,
-        district: undefined,
-        ward: undefined,
-      };
-    } else if (fieldId == FilterFieldName.Rooms) {
-      newFilteState = {
-        ...filterState,
-        bath: undefined,
-        bed: undefined,
-      };
-    } else {
-      newFilteState = {
-        ...filterState,
-        [fieldId]: undefined,
-      };
+    // Handle special cases for composite filters
+    switch (fieldId) {
+      case FilterFieldName.Locations:
+      case FilterFieldName.ProfileLocations:
+        newFilterState.city = undefined;
+        newFilterState.district = undefined;
+        newFilterState.ward = undefined;
+        break;
+
+      case FilterFieldName.Rooms:
+        newFilterState.bath = undefined;
+        newFilterState.bed = undefined;
+        break;
+
+      default:
+        // For simple filters, just set the field to undefined
+        (newFilterState as any)[fieldId] = undefined;
     }
 
-    setFilterState(newFilteState);
-    syncSelectedParamsToUrl(newFilteState);
-    return newFilteState;
+    setFilterState(newFilterState);
+    return newFilterState;
   };
 
   const applyAllFilters = (filters?: A) => {
