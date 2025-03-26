@@ -23,6 +23,7 @@ import HorizontalScroller from '@mobile/ui/HorizontalScroller';
 import { LuX } from 'react-icons/lu';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
+import SortOptions from './bts/SortOptions';
 
 type FilterChipsProps = {
   chipOptions: FilterChipOption[];
@@ -66,6 +67,8 @@ export default function FilterChips({ chipOptions, onFilterChipsChanged }: Filte
         return <Rooms />;
       case FilterFieldName.Direction:
         return <Direction />;
+      case FilterFieldName.Sort:
+        return <SortOptions />;
       default:
         return undefined;
     }

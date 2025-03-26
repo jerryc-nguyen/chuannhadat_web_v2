@@ -10,10 +10,9 @@ interface TFilterChipsProps {
 
 export default function PostsFilterChips({ onFilterChipsChanged }: TFilterChipsProps) {
   const isMobile = useIsMobile();
-  console.log('isMobile', isMobile);
   return (
     <>
-      {isMobile && <FilterChips chipOptions={listChipsQuery} onFilterChipsChanged={onFilterChipsChanged} />}
+      {isMobile && <div style={{ marginLeft: '-1em', color: 'red' }}><FilterChips chipOptions={listChipsQuery} onFilterChipsChanged={onFilterChipsChanged} /></div>}
       {!isMobile && listChipsQuery.map((item) => (
         <FilterChip filterChipItem={item} key={item.id} onChange={onFilterChipsChanged} />
       ))}
