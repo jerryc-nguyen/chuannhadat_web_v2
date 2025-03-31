@@ -83,7 +83,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   return (
     <>
       {!profileData ? (
-        <NotFound className="h-full" errorMessage="Not Found Data Of Profile" />
+        <NotFound className="h-full" errorMessage="Nội dung không tồn tại hoặc đã bị xóa" />
       ) : (
         <section className={styles.profile_detail_wrapper}>
           <ProfileImage profileData={profileData} />

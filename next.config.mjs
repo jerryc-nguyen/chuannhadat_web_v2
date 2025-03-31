@@ -26,6 +26,7 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   reactStrictMode: true,
+  assetPrefix: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_ASSET_PREFIX : '',
   sassOptions: {
     additionalData: `@import "src/styles/variables/_variables.scss"; @import "src/styles/variables/_mixin.scss"; `,
   },
@@ -35,6 +36,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: '**.chuannhadat.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.chuannhadat.com',
       },
       {
         protocol: 'https',
