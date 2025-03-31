@@ -7,6 +7,16 @@ import { shouldRedirect } from '@components/redirect-urls';
 const protectedRoutes = ['/dashboard'];
 
 export async function middleware(req: NextRequest) {
+  // Extract client IP address
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  const realIp = req.headers.get('x-real-ip');
+  const clientIp = forwardedFor
+    ? forwardedFor.split(',')[0].trim()
+    : (realIp || req.ip || 'unknown');
+
+  // Log the client IP for debugging
+  console.log('Client IP:', clientIp);
+
   // Check if the current route is protected or public
   const pathname = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.some((prefix) => pathname.startsWith(prefix));
@@ -31,7 +41,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  return NextResponse.next();
+  // Add the real IP to the request headers for downstream use
+  const response = NextResponse.next();
+  response.headers.set('x-client-real-ip', clientIp);
+
+  return response;
 }
 
 // Routes Middleware should not run on
