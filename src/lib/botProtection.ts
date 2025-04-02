@@ -1,4 +1,6 @@
 import { NextRequest } from 'next/server';
+import dns from 'dns';
+import util from 'util';
 
 // Check if bot protection is enabled from environment variable
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
@@ -6,11 +8,11 @@ const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 // Enable debug mode for local development
 const DEBUG = process.env.NODE_ENV === 'development' ? true : false;
 
-// Edge compatible in-memory rate limiter storage (for development/testing only)
-// In production, use a durable edge-compatible solution like Vercel KV or upstash
-const rateLimitMap = new Map<string, { count: number, reset: number }>();
+// Simple in-memory rate limiter for middleware
+// This avoids Redis dependencies in the middleware context
+const ipRequestCounts = new Map<string, { count: number, timestamp: number }>();
 
-// Redis rate limiter (Edge compatible version)
+// Redis will only be used in the API routes, not middleware
 export const rateLimit = async (
   ip: string,
   maxRequests: number = 60,
@@ -28,47 +30,50 @@ export const rateLimit = async (
 
   const now = Math.floor(Date.now() / 1000);
   const windowStart = now - (now % windowSizeInSeconds);
-  const windowExpire = windowStart + windowSizeInSeconds;
-  const key = `ratelimit:${ip}:${windowStart}`;
+  const reset = windowStart + windowSizeInSeconds;
 
-  try {
-    // Clean up expired entries
-    for (const [storedKey, data] of rateLimitMap.entries()) {
-      if (data.reset < now) {
-        rateLimitMap.delete(storedKey);
-      }
-    }
+  // Check if we have a record for this IP in the current window
+  const record = ipRequestCounts.get(ip);
 
-    // Get or create rate limit data
-    let rateData = rateLimitMap.get(key);
-    if (!rateData) {
-      rateData = { count: 0, reset: windowExpire };
-    }
-
-    // Increment counter
-    rateData.count++;
-    rateLimitMap.set(key, rateData);
-
-    if (DEBUG) {
-      console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${rateData.count}/${maxRequests}`);
-    }
-
-    return {
-      success: rateData.count <= maxRequests,
-      limit: maxRequests,
-      remaining: Math.max(0, maxRequests - rateData.count),
-      reset: windowExpire
-    };
-  } catch (error) {
-    console.error('Rate limiting error:', error);
-    // In case of error, allow the request
+  // If no record exists or it's from a previous window, create a new one
+  if (!record || record.timestamp < windowStart) {
+    ipRequestCounts.set(ip, { count: 1, timestamp: now });
     return {
       success: true,
       limit: maxRequests,
       remaining: maxRequests - 1,
-      reset: windowStart + windowSizeInSeconds
+      reset
     };
   }
+
+  // Increment the counter
+  record.count += 1;
+
+  // Check if the request is allowed
+  const isAllowed = record.count <= maxRequests;
+  const remaining = Math.max(0, maxRequests - record.count);
+
+  if (DEBUG) {
+    console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${record.count}/${maxRequests}`);
+  }
+
+  // Periodically clean up old records (do this async to not block)
+  if (now % 10 === 0) { // Clean every ~10 seconds
+    setTimeout(() => {
+      for (const [ipKey, data] of ipRequestCounts.entries()) {
+        if (data.timestamp < windowStart) {
+          ipRequestCounts.delete(ipKey);
+        }
+      }
+    }, 0);
+  }
+
+  return {
+    success: isAllowed,
+    limit: maxRequests,
+    remaining,
+    reset
+  };
 };
 
 // List of allowed bot user agents
@@ -112,14 +117,14 @@ export const isKnownBot = (userAgent: string | null): boolean => {
   return false;
 };
 
-// Advanced bot verification via DNS lookup - Edge compatible version
+// Advanced bot verification via DNS lookup
 export const verifySearchEngineBot = async (ip: string, userAgent: string | null): Promise<boolean> => {
   if (!userAgent) return false;
 
   userAgent = userAgent.toLowerCase();
 
   try {
-    // Only verify common search engine bots
+    // Only verify Google and Bing bots
     const isGoogle = userAgent.includes('google');
     const isBing = userAgent.includes('bing') || userAgent.includes('msn');
     const isYandex = userAgent.includes('yandex');
@@ -127,24 +132,43 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
 
     if (!isGoogle && !isBing && !isYandex && !isBaidu) return false;
 
-    // In Edge runtime, we can't do DNS lookups
-    // For development/testing, we'll just assume the bot is legitimate
-    // In production, this should be replaced with a proper verification service
-    if (DEBUG) {
-      console.log(`[BOT-VERIFY] Skipping DNS verification in Edge runtime for: ${userAgent}`);
+    // Perform DNS lookup
+    const reverseLookup = util.promisify(dns.reverse);
+
+    try {
+      const addresses = await reverseLookup(ip);
+      if (addresses.length === 0) return false;
+
+      const hostname = addresses[0].toLowerCase();
+
+      // Verify the hostname belongs to the correct domain
+      if (isGoogle && (hostname.includes('googlebot.com') || hostname.includes('google.com'))) {
+        return true;
+      }
+
+      if (isBing && (hostname.includes('search.msn.com') || hostname.includes('bing.com'))) {
+        return true;
+      }
+
+      if (isYandex && hostname.includes('yandex.ru')) {
+        return true;
+      }
+
+      if (isBaidu && hostname.includes('baidu.com')) {
+        return true;
+      }
+    } catch (err) {
+      console.log(`DNS lookup error for ${ip}: ${err}`);
+      // In development, allow bots even if DNS lookup fails
+      if (process.env.NODE_ENV === 'development') {
+        return true;
+      }
     }
 
-    // As a simple heuristic, check if IP is in common ranges
-    // This isn't reliable but better than nothing in Edge
-    // Google's crawlers often come from 66.249.xx.xx
-    if (isGoogle && ip.startsWith('66.249.')) {
-      return true;
-    }
-
-    // For development, return true to simulate successful verification
-    return process.env.NODE_ENV === 'development';
+    return false;
   } catch (error) {
     console.error('Bot verification error:', error);
+    // If verification fails, assume it's not a legitimate bot
     return false;
   }
 };

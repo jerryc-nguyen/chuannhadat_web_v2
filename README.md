@@ -216,3 +216,47 @@ PM2 is configured in `ecosystem.config.js` with the following features:
 - **Log management**: Stores logs in the `logs` directory
 
 For more details on PM2, see [PM2 Documentation](https://pm2.keymetrics.io/docs/usage/quick-start/).
+
+### Bot Protection System
+
+The application includes a bot protection system that identifies and filters suspicious bot traffic using the following methods:
+
+1. **Bot Detection**: Analyzes user agents, IP addresses, and request patterns to identify bots
+2. **Search Engine Verification**: Verifies legitimate search engine bots through DNS lookups
+3. **Request Monitoring**: Logs all requests for analysis in the dashboard
+
+#### Edge/Node.js Runtime Compatibility
+
+The bot protection system is designed to work safely in both Node.js and Edge runtimes:
+
+- **Middleware (Node.js runtime)**: Uses pure JavaScript implementation without Redis dependencies
+- **API Routes (Node.js runtime)**: Uses ioredis for persistent log storage
+- **Log Synchronization**: Middleware logs are stored in memory and asynchronously sent to the API routes for Redis storage
+
+#### Redis Integration for Bot Protection
+
+Bot protection logs are stored in Redis for improved persistence and scalability:
+
+- **Installation**: Redis is required for production use of the bot protection system
+- **Configuration**: Set the `REDIS_URL` environment variable (defaults to `redis://localhost:6379/1`)
+- **Fallback**: In-memory storage is used as a fallback if Redis is unavailable
+- **Dashboard**: The bot protection dashboard at `/bot-protection-dashboard` shows real-time metrics
+
+#### Environment Variables
+
+Configure bot protection with these environment variables:
+
+```
+# Enable/disable bot protection
+ENABLE_BOT_PROTECTION=true
+
+# Redis connection string for bot logs storage
+REDIS_URL=redis://redis:6379/1
+
+# Optional API key for dashboard access (if not set, only allowed in dev)
+BOT_PROTECTION_DASHBOARD_KEY=your-secure-key-here
+```
+
+#### Middleware Configuration
+
+The bot protection system is implemented as middleware in `src/middleware/bot-protection.ts` and is triggered based on the configuration in `src/middleware/index.ts`. It can be customized to protect specific routes or exclude others as needed.

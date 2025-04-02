@@ -34,58 +34,91 @@ interface BotDetectionResult {
   };
 }
 
-// Store recent bot detection logs in memory (for dev/testing)
-// In production you would use a proper logging service
+// Store recent bot detection logs in memory
+// This is used by both middleware and API routes
 const recentBotLogs: BotDetectionResult[] = [];
-const MAX_LOGS = 1000; // Keep only the most recent logs
+const MAX_LOGS = 1000;
 
-// Make logs available globally to share between Edge and Node environments
-// This is a workaround for development environments
-if (typeof globalThis !== 'undefined') {
-  (globalThis as any).__BOT_PROTECTION_LOGS = (globalThis as any).__BOT_PROTECTION_LOGS || [];
+// Export the interface for use in API routes
+export type { BotDetectionResult };
+
+// Function to send logs to the API for Redis storage
+// This is called after in-memory storage and avoids direct Redis dependency in middleware
+async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
+
+  try {
+    // Construct absolute URL based on request origin or environment
+    const baseUrl = typeof window !== 'undefined'
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN || 'http://localhost:3000';
+
+    // Use native fetch to send log to API endpoint
+    console.log(`[BOT-MONITOR] Sending log to API at ${baseUrl}/api/bot-protection/logs`);
+    const response = await fetch(`${baseUrl}/api/bot-protection/logs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add an API key if configured
+        ...(process.env.BOT_PROTECTION_DASHBOARD_KEY && {
+          'x-api-key': process.env.BOT_PROTECTION_DASHBOARD_KEY
+        })
+      },
+      body: JSON.stringify(log)
+    });
+
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`);
+    }
+
+    if (DEBUG) {
+      console.log(`[BOT-MONITOR] Log sent to API for Redis storage successfully`);
+    }
+  } catch (error) {
+    // Don't let errors in API storage affect the middleware
+    console.error('Error sending log to API:', error);
+  }
 }
 
+// Store bot detection log for dashboard/monitoring
+// This is a simplified version that only uses memory storage
+// Redis functionality will be added only in the API routes
+function storeDetectionLog(detectionResult: BotDetectionResult) {
+  if (DEBUG || FORCE_LOG_VISIBILITY) {
+    console.log(`[BOT-MONITOR] 📝 Storing detection log for ${detectionResult.url}`);
+  }
+
+  // Store the log in memory (for all environments)
+  recentBotLogs.unshift(detectionResult);
+
+  // Trim the in-memory logs to prevent memory growth
+  if (recentBotLogs.length > MAX_LOGS) {
+    recentBotLogs.length = MAX_LOGS;
+  }
+
+  // Also send the log to the API for Redis storage
+  // This is done asynchronously and won't block middleware
+  try {
+    // We use setTimeout to make this truly non-blocking
+    setTimeout(() => {
+      sendLogToAPI(detectionResult).catch(err => {
+        console.error('Failed to send log to API:', err);
+      });
+    }, 0);
+  } catch (err) {
+    console.error('Error scheduling log API call:', err);
+  }
+}
+
+// Get logs (simplified version for middleware)
+// The full Redis implementation is in the API route
 export function getBotLogs(): BotDetectionResult[] {
-  console.log(`📋📋📋 [BOT-MONITOR] Retrieving ${recentBotLogs.length} logs`);
-
-  try {
-    // Try to get global logs if available
-    const globalLogs = (globalThis as any).__BOT_PROTECTION_LOGS || [];
-    console.log(`Global logs count: ${globalLogs.length}`);
-
-    // Combine local and global logs
-    const allLogs = [...recentBotLogs, ...globalLogs];
-
-    // Log the first few logs to help with debugging
-    if (allLogs.length > 0) {
-      console.log(`📋 First log: ${JSON.stringify({
-        url: allLogs[0].url,
-        timestamp: allLogs[0].timestamp,
-        isBot: allLogs[0].isBot
-      })}`);
-    } else {
-      console.log(`📋 WARNING: No logs found in recentBotLogs array or global scope!`);
-    }
-
-    return allLogs;
-  } catch (e) {
-    console.error('Error accessing global logs:', e);
-    return [...recentBotLogs]; // Fallback to local logs
-  }
+  return [...recentBotLogs];
 }
 
+// Clear logs (simplified version for middleware)
+// The full Redis implementation is in the API route
 export function clearBotLogs(): void {
-  console.log('[BOT-MONITOR] Clearing all logs');
   recentBotLogs.length = 0;
-
-  try {
-    // Also clear global logs
-    if (typeof globalThis !== 'undefined') {
-      (globalThis as any).__BOT_PROTECTION_LOGS = [];
-    }
-  } catch (e) {
-    console.error('Error clearing global logs:', e);
-  }
 }
 
 // Extract patterns that matched in the user agent
@@ -204,38 +237,13 @@ export async function monitorBotProtection(
   result.requestDenied = result.rateLimited ||
     (result.isSuspicious && !(isSearchEngineBot && isVerifiedBot));
 
-  // Store the log (for monitoring purposes)
-  recentBotLogs.unshift(result);
-  if (recentBotLogs.length > MAX_LOGS) {
-    recentBotLogs.length = MAX_LOGS; // Trim the log array
-  }
-
-  // Also add to global scope for sharing between Edge and Node environments
-  try {
-    if (typeof globalThis !== 'undefined') {
-      const globalLogs = (globalThis as any).__BOT_PROTECTION_LOGS || [];
-      globalLogs.unshift(result);
-      if (globalLogs.length > MAX_LOGS) {
-        globalLogs.length = MAX_LOGS;
-      }
-      (globalThis as any).__BOT_PROTECTION_LOGS = globalLogs;
-    }
-  } catch (e) {
-    console.error('Error adding to global logs:', e);
-  }
+  // Store the log using our storage function
+  storeDetectionLog(result);
 
   // Always show log storage regardless of DEBUG setting
   const homepageFlag = result.url.match(/\/(home|index)?(\?|$)/) ? ' 🏠 HOME PAGE' : '';
   console.log(`💾💾💾 BOT LOG STORED for${homepageFlag}: ${result.url}`);
   console.log(`💾💾💾 Current log count: ${recentBotLogs.length}`);
-
-  // Show global log count if available
-  try {
-    const globalLogs = (globalThis as any).__BOT_PROTECTION_LOGS || [];
-    console.log(`💾💾💾 Global log count: ${globalLogs.length}`);
-  } catch (e) {
-    // Skip if not available
-  }
 
   // Log to console
   const executionTime = Date.now() - start;

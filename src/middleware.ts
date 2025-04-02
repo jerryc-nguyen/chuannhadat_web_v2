@@ -7,13 +7,14 @@ import { handleUrlRedirects } from './middleware/url-redirects';
 // Enable debug mode for local development
 const DEBUG = process.env.NODE_ENV === 'development' ? true : false;
 
-// This is the ONLY middleware Next.js will recognize
+// This runs in Node.js runtime (not Edge)
 export const config = {
   matcher: [
     '/', // Explicitly match the home route
     '/bot-protection-dashboard', // Dashboard route
     '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
   ],
+  runtime: 'nodejs',
 };
 
 /**
