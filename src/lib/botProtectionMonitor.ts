@@ -39,14 +39,53 @@ interface BotDetectionResult {
 const recentBotLogs: BotDetectionResult[] = [];
 const MAX_LOGS = 1000; // Keep only the most recent logs
 
+// Make logs available globally to share between Edge and Node environments
+// This is a workaround for development environments
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any).__BOT_PROTECTION_LOGS = (globalThis as any).__BOT_PROTECTION_LOGS || [];
+}
+
 export function getBotLogs(): BotDetectionResult[] {
-  if (DEBUG) console.log(`[BOT-MONITOR] Retrieving ${recentBotLogs.length} logs`);
-  return [...recentBotLogs];
+  console.log(`📋📋📋 [BOT-MONITOR] Retrieving ${recentBotLogs.length} logs`);
+
+  try {
+    // Try to get global logs if available
+    const globalLogs = (globalThis as any).__BOT_PROTECTION_LOGS || [];
+    console.log(`Global logs count: ${globalLogs.length}`);
+
+    // Combine local and global logs
+    const allLogs = [...recentBotLogs, ...globalLogs];
+
+    // Log the first few logs to help with debugging
+    if (allLogs.length > 0) {
+      console.log(`📋 First log: ${JSON.stringify({
+        url: allLogs[0].url,
+        timestamp: allLogs[0].timestamp,
+        isBot: allLogs[0].isBot
+      })}`);
+    } else {
+      console.log(`📋 WARNING: No logs found in recentBotLogs array or global scope!`);
+    }
+
+    return allLogs;
+  } catch (e) {
+    console.error('Error accessing global logs:', e);
+    return [...recentBotLogs]; // Fallback to local logs
+  }
 }
 
 export function clearBotLogs(): void {
-  if (DEBUG) console.log('[BOT-MONITOR] Clearing all logs');
+  console.log('[BOT-MONITOR] Clearing all logs');
   recentBotLogs.length = 0;
+
+  try {
+    // Also clear global logs
+    if (typeof globalThis !== 'undefined') {
+      (globalThis as any).__BOT_PROTECTION_LOGS = [];
+    }
+  } catch (e) {
+    console.error('Error clearing global logs:', e);
+  }
 }
 
 // Extract patterns that matched in the user agent
@@ -171,10 +210,32 @@ export async function monitorBotProtection(
     recentBotLogs.length = MAX_LOGS; // Trim the log array
   }
 
+  // Also add to global scope for sharing between Edge and Node environments
+  try {
+    if (typeof globalThis !== 'undefined') {
+      const globalLogs = (globalThis as any).__BOT_PROTECTION_LOGS || [];
+      globalLogs.unshift(result);
+      if (globalLogs.length > MAX_LOGS) {
+        globalLogs.length = MAX_LOGS;
+      }
+      (globalThis as any).__BOT_PROTECTION_LOGS = globalLogs;
+    }
+  } catch (e) {
+    console.error('Error adding to global logs:', e);
+  }
+
   // Always show log storage regardless of DEBUG setting
   const homepageFlag = result.url.match(/\/(home|index)?(\?|$)/) ? ' 🏠 HOME PAGE' : '';
   console.log(`💾💾💾 BOT LOG STORED for${homepageFlag}: ${result.url}`);
   console.log(`💾💾💾 Current log count: ${recentBotLogs.length}`);
+
+  // Show global log count if available
+  try {
+    const globalLogs = (globalThis as any).__BOT_PROTECTION_LOGS || [];
+    console.log(`💾💾💾 Global log count: ${globalLogs.length}`);
+  } catch (e) {
+    // Skip if not available
+  }
 
   // Log to console
   const executionTime = Date.now() - start;

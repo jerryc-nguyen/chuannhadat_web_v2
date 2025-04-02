@@ -149,10 +149,21 @@ export default function BotProtectionDashboard() {
     try {
       const response = await fetch('/api/bot-protection/logs');
       const data = await response.json();
-      setLogs(data.logs || []);
-      const statsData = calculateStats(data.logs || []);
+
+      // Deduplicate logs by URL and timestamp to avoid counting the same request multiple times
+      const uniqueLogMap = new Map();
+      (data.logs || []).forEach((log: BotDetectionResult) => {
+        const key = `${log.url}-${log.timestamp}`;
+        uniqueLogMap.set(key, log);
+      });
+
+      const uniqueLogs = Array.from(uniqueLogMap.values());
+      addDebugMessage(`Received ${data.logs.length} logs, deduplicated to ${uniqueLogs.length}`);
+
+      setLogs(uniqueLogs);
+      const statsData = calculateStats(uniqueLogs);
       setStats(statsData);
-      addDebugMessage(`Logs retrieved: ${data.logs.length} entries`);
+      addDebugMessage(`Logs retrieved: ${uniqueLogs.length} entries`);
     } catch (error) {
       console.error('Failed to fetch bot logs:', error);
       addDebugMessage(`Error fetching logs: ${error instanceof Error ? error.message : String(error)}`);
@@ -271,7 +282,7 @@ export default function BotProtectionDashboard() {
       <div className="mb-8 border border-amber-200 bg-amber-50 p-4 rounded-lg">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-semibold">Debugging Panel</h3>
-          <span className="text-sm text-gray-500">Total Records: {logs.length}</span>
+          <span className="text-sm text-gray-500">Total Records: {logs.length} | Stats Total: {stats?.totalRequests || 0}</span>
         </div>
         <div className="max-h-32 overflow-y-auto text-xs font-mono bg-black text-green-400 p-2 rounded">
           {debugInfo.map((msg, i) => (
