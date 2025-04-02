@@ -1,80 +1,23 @@
-import Redis from 'ioredis';
 import { NextRequest } from 'next/server';
 
 // Check if bot protection is enabled from environment variable
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
-// Configure Redis client (use environment variables in production)
-let redis: Redis | null = null;
-let redisConnectionError = false;
+// Enable debug mode for local development
+const DEBUG = process.env.NODE_ENV === 'development' ? true : false;
 
-// Initialize Redis connection
-const getRedisClient = (): Redis | null => {
-  // Skip Redis if bot protection is disabled
-  if (!isBotProtectionEnabled) {
-    return null;
-  }
+// Edge compatible in-memory rate limiter storage (for development/testing only)
+// In production, use a durable edge-compatible solution like Vercel KV or upstash
+const rateLimitMap = new Map<string, { count: number, reset: number }>();
 
-  // Don't retry connection if we already had an error
-  if (redisConnectionError) {
-    return null;
-  }
-
-  if (!redis) {
-    try {
-      redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-        connectTimeout: 5000, // 5 seconds
-        maxRetriesPerRequest: 3,
-        retryStrategy(times) {
-          if (times > 3) {
-            // After 3 retries, mark as error and stop trying
-            redisConnectionError = true;
-            console.error('Redis connection failed after multiple retries, disabling rate limiting');
-            return null;
-          }
-          return Math.min(times * 50, 1000); // Exponential backoff up to 1s
-        },
-      });
-
-      // Reset error flag if connection is successful
-      redis.on('connect', () => {
-        redisConnectionError = false;
-        console.log('Connected to Redis successfully');
-      });
-
-      // Log errors but don't crash the application
-      redis.on('error', (err) => {
-        console.error('Redis connection error:', err);
-        redisConnectionError = true;
-      });
-    } catch (error) {
-      console.error('Failed to initialize Redis client:', error);
-      redisConnectionError = true;
-      return null;
-    }
-  }
-  return redis;
-};
-
-// Redis rate limiter
+// Redis rate limiter (Edge compatible version)
 export const rateLimit = async (
   ip: string,
   maxRequests: number = 60,
   windowSizeInSeconds: number = 60
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> => {
-  // If protection is disabled or Redis is not available, always allow
-  if (!isBotProtectionEnabled || redisConnectionError) {
-    return {
-      success: true,
-      limit: maxRequests,
-      remaining: maxRequests - 1,
-      reset: Math.floor(Date.now() / 1000) + windowSizeInSeconds
-    };
-  }
-
-  const client = getRedisClient();
-  if (!client) {
-    // Redis client not available, default to allowing the request
+  // If protection is disabled, always allow
+  if (!isBotProtectionEnabled) {
     return {
       success: true,
       limit: maxRequests,
@@ -85,33 +28,36 @@ export const rateLimit = async (
 
   const now = Math.floor(Date.now() / 1000);
   const windowStart = now - (now % windowSizeInSeconds);
-  const windowExpire = windowStart + windowSizeInSeconds * 2; // Keep for current and next window
+  const windowExpire = windowStart + windowSizeInSeconds;
   const key = `ratelimit:${ip}:${windowStart}`;
 
   try {
-    // Use Redis transaction to ensure atomicity
-    const multi = client.multi();
-    multi.incr(key);
-    multi.expireat(key, windowExpire);
-
-    const results = await multi.exec();
-    if (!results) {
-      // Redis transaction failed, default to allowing the request
-      return {
-        success: true,
-        limit: maxRequests,
-        remaining: maxRequests - 1,
-        reset: windowStart + windowSizeInSeconds
-      };
+    // Clean up expired entries
+    for (const [storedKey, data] of rateLimitMap.entries()) {
+      if (data.reset < now) {
+        rateLimitMap.delete(storedKey);
+      }
     }
 
-    const currentRequests = (results[0][1] as number) || 1;
+    // Get or create rate limit data
+    let rateData = rateLimitMap.get(key);
+    if (!rateData) {
+      rateData = { count: 0, reset: windowExpire };
+    }
+
+    // Increment counter
+    rateData.count++;
+    rateLimitMap.set(key, rateData);
+
+    if (DEBUG) {
+      console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${rateData.count}/${maxRequests}`);
+    }
 
     return {
-      success: currentRequests <= maxRequests,
+      success: rateData.count <= maxRequests,
       limit: maxRequests,
-      remaining: Math.max(0, maxRequests - currentRequests),
-      reset: windowStart + windowSizeInSeconds
+      remaining: Math.max(0, maxRequests - rateData.count),
+      reset: windowExpire
     };
   } catch (error) {
     console.error('Rate limiting error:', error);
@@ -166,14 +112,14 @@ export const isKnownBot = (userAgent: string | null): boolean => {
   return false;
 };
 
-// Advanced bot verification via DNS lookup
+// Advanced bot verification via DNS lookup - Edge compatible version
 export const verifySearchEngineBot = async (ip: string, userAgent: string | null): Promise<boolean> => {
   if (!userAgent) return false;
 
   userAgent = userAgent.toLowerCase();
 
   try {
-    // Only verify Google and Bing bots
+    // Only verify common search engine bots
     const isGoogle = userAgent.includes('google');
     const isBing = userAgent.includes('bing') || userAgent.includes('msn');
     const isYandex = userAgent.includes('yandex');
@@ -181,37 +127,24 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
 
     if (!isGoogle && !isBing && !isYandex && !isBaidu) return false;
 
-    // Perform DNS lookup
-    const dns = await import('dns');
-    const util = await import('util');
-    const reverseLookup = util.promisify(dns.reverse);
+    // In Edge runtime, we can't do DNS lookups
+    // For development/testing, we'll just assume the bot is legitimate
+    // In production, this should be replaced with a proper verification service
+    if (DEBUG) {
+      console.log(`[BOT-VERIFY] Skipping DNS verification in Edge runtime for: ${userAgent}`);
+    }
 
-    const addresses = await reverseLookup(ip);
-    if (addresses.length === 0) return false;
-
-    const hostname = addresses[0].toLowerCase();
-
-    // Verify the hostname belongs to the correct domain
-    if (isGoogle && (hostname.includes('googlebot.com') || hostname.includes('google.com'))) {
+    // As a simple heuristic, check if IP is in common ranges
+    // This isn't reliable but better than nothing in Edge
+    // Google's crawlers often come from 66.249.xx.xx
+    if (isGoogle && ip.startsWith('66.249.')) {
       return true;
     }
 
-    if (isBing && (hostname.includes('search.msn.com') || hostname.includes('bing.com'))) {
-      return true;
-    }
-
-    if (isYandex && hostname.includes('yandex.ru')) {
-      return true;
-    }
-
-    if (isBaidu && hostname.includes('baidu.com')) {
-      return true;
-    }
-
-    return false;
+    // For development, return true to simulate successful verification
+    return process.env.NODE_ENV === 'development';
   } catch (error) {
     console.error('Bot verification error:', error);
-    // If verification fails, assume it's not a legitimate bot
     return false;
   }
 };

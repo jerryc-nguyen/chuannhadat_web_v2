@@ -13,7 +13,7 @@ chmod +x scripts/find-memory-leaks.sh
 ### Build web docker production
 
 ```
-docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next
+docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2 -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2
 ```
 
 ### IMAGES CND NOTES

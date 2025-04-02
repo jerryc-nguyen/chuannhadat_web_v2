@@ -75,9 +75,9 @@ services:
       - VIRTUAL_PORT=4500
       - LETSENCRYPT_HOST=nextjs.chuannhadat.com
       - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
-      - REDIS_URL=redis://redis:6379
       - NODE_ENV=production
       - ENABLE_BOT_PROTECTION=true
+      - REDIS_URL=redis://redis:6379
     command: 'node server.js'
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4500/api/health"]

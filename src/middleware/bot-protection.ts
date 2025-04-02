@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { monitorBotProtection } from '@/lib/botProtectionMonitor';
 import {
   isKnownBot,
   isSuspiciousBot,
@@ -10,6 +11,9 @@ import {
 
 // Check if bot protection is enabled
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
+
+// Enable debug mode for local development
+const DEBUG = process.env.NODE_ENV === 'development';
 
 /**
  * Get the real client IP address
@@ -40,82 +44,110 @@ export function getClientIp(req: NextRequest): string {
  * @returns NextResponse if request should be blocked/limited, or null if allowed
  */
 export async function applyBotProtection(req: NextRequest): Promise<NextResponse | null> {
+  // Immediate log at the very start 
+  console.log(`⚠️⚠️⚠️ BOT PROTECTION STARTED: ${req.nextUrl.pathname}`);
+
+  const startTime = Date.now();
+  const pathname = req.nextUrl.pathname;
+  const userAgent = req.headers.get('user-agent');
+  const ip = getClientIp(req);
+
+  // Always log every request that reaches the middleware
+  console.log(`[BOT-PROTECTION] Request: ${req.method} ${pathname} from ${ip}`);
+
+  if (DEBUG) {
+    console.log(`[BOT-PROTECTION] Middleware request: ${pathname}`);
+    console.log(`[BOT-PROTECTION] IP: ${ip}, User-Agent: ${userAgent?.substring(0, 50)}...`);
+    console.log(`[BOT-PROTECTION] Enabled: ${isBotProtectionEnabled}`);
+  }
+
   // Skip bot protection if disabled in environment
   if (!isBotProtectionEnabled) {
+    if (DEBUG) console.log('[BOT-PROTECTION] Protection disabled, skipping');
     return null;
+  }
+
+  // Handle special routes separately to ensure they get monitored
+
+  // Handle the dashboard route
+  if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?')) {
+    console.log('!!!!! DASHBOARD ACCESS DETECTED !!!!!');
+    console.log(`Dashboard URL: ${req.nextUrl.toString()}`);
+    console.log(`User-Agent: ${userAgent}`);
+
+    // Always monitor the dashboard page
+    const monitorResult = await monitorBotProtection(req);
+    console.log('Dashboard monitoring result:', {
+      timestamp: monitorResult.result.timestamp,
+      url: monitorResult.result.url,
+      logCount: monitorBotProtection.toString().includes('recentBotLogs.unshift') ? 'Logs should be added' : 'No log adding code found'
+    });
+
+    return null;
+  }
+
+  // Always monitor the home page
+  if (pathname === '/' || pathname === '/index' || pathname === '/home') {
+    console.log('!!!!! HOME PAGE ACCESS DETECTED !!!!!');
+    console.log(`Home URL: ${req.nextUrl.toString()}`);
+    console.log(`User-Agent: ${userAgent}`);
+
+    // Always monitor the home page
+    const monitorResult = await monitorBotProtection(req);
+    console.log('Home page monitoring result:', {
+      timestamp: monitorResult.result.timestamp,
+      url: monitorResult.result.url
+    });
+
+    // Continue normal middleware processing - don't return early
+  }
+
+  // Skip bot protection for API routes and static assets
+  const isApiRoute = pathname.startsWith('/api/');
+  const isStaticAsset =
+    pathname.startsWith('/_next/') ||
+    pathname.includes('.') || // Files with extensions
+    pathname === '/favicon.ico';
+
+  if (DEBUG) {
+    console.log(`[BOT-PROTECTION] Route type: ${isApiRoute ? 'API' : isStaticAsset ? 'Static' : 'Page'}`);
+  }
+
+  // Only apply bot protection to actual page routes (not API or static)
+  if (!isApiRoute && !isStaticAsset) {
+    if (DEBUG) console.log('[BOT-PROTECTION] Running protection on page route');
+
+    // Run enhanced bot protection middleware with monitoring
+    const { response: botResponse, result: botResult } = await monitorBotProtection(req);
+
+    // If bot protection blocked the request, return the response
+    if (botResponse) {
+      if (DEBUG) console.log('[BOT-PROTECTION] Request blocked');
+      return botResponse;
+    }
+
+    // Add the bot analysis to request headers for potential use by the application
+    const nextReq = req.clone();
+    (nextReq as any).botResult = botResult;
+  } else if (DEBUG) {
+    console.log('[BOT-PROTECTION] Skipping protection for API/static asset');
   }
 
   // Get the client IP using our enhanced function
-  const ip = getClientIp(req);
-  const userAgent = req.headers.get('user-agent');
-
-  // Log headers during development to debug IP resolution
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Headers:', Object.fromEntries(req.headers.entries()));
-    console.log('Resolved client IP:', ip);
+  const ip2 = getClientIp(req);
+  if (DEBUG && ip !== ip2) {
+    console.log(`[BOT-PROTECTION] IP mismatch: ${ip} vs ${ip2}`);
   }
 
-  // Allow known search engine bots to bypass protection
-  if (isKnownBot(userAgent)) {
-    // For enhanced security, you can enable DNS verification:
-    // const isVerifiedBot = await verifySearchEngineBot(ip, userAgent);
-    // if (!isVerifiedBot) {
-    //   console.warn(`Blocked fake search engine bot: IP ${ip}, UA: ${userAgent}`);
-    //   return new NextResponse('Forbidden - Bot Verification Failed', { status: 403 });
-    // }
+  // Add the real IP to the request headers for downstream use
+  const response = NextResponse.next();
+  response.headers.set('x-client-real-ip', ip);
 
-    // No additional protection needed for legitimate bots
-    return null;
+  const endTime = Date.now();
+  if (DEBUG) {
+    console.log(`[BOT-PROTECTION] Processing time: ${endTime - startTime}ms`);
+    console.log('[BOT-PROTECTION] Middleware complete');
   }
 
-  // For regular visitors and potential bad bots, check suspicious patterns
-  const isSuspicious = isSuspiciousBot(userAgent) ||
-    hasSuspiciousHeaders(req) ||
-    hasUnusualRequestPattern(req);
-
-  // Apply rate limiting based on suspiciousness
-  const rateLimit_MaxRequests = isSuspicious ? 20 : 60; // Lower limit for suspicious clients
-
-  try {
-    const rateLimitResult = await rateLimit(ip, rateLimit_MaxRequests);
-
-    if (!rateLimitResult.success) {
-      // Log rate limit events for monitoring
-      console.warn(`Rate limited IP: ${ip}, UA: ${userAgent}`);
-
-      return new NextResponse('Too Many Requests', {
-        status: 429,
-        headers: {
-          'Retry-After': String(Math.ceil((rateLimitResult.reset - Date.now()) / 1000)),
-          'X-RateLimit-Limit': String(rateLimitResult.limit),
-          'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-          'X-RateLimit-Reset': String(rateLimitResult.reset),
-          'Content-Type': 'text/plain',
-        },
-      });
-    }
-
-    // Add rate limit headers to the response for monitoring
-    const response = NextResponse.next();
-    response.headers.set('X-RateLimit-Limit', String(rateLimitResult.limit));
-    response.headers.set('X-RateLimit-Remaining', String(rateLimitResult.remaining));
-    response.headers.set('X-RateLimit-Reset', String(rateLimitResult.reset));
-
-    // Block extremely suspicious behavior
-    if (isSuspicious && rateLimitResult.remaining < 5) {
-      console.warn(`Blocked suspicious bot: IP ${ip}, UA: ${userAgent}`);
-      return new NextResponse('Forbidden', { status: 403 });
-    }
-
-    // If rate limiting succeeded but response headers were set,
-    // return the response with the headers
-    if (response.headers.has('X-RateLimit-Limit')) {
-      return response;
-    }
-  } catch (error) {
-    console.error('Rate limiting error:', error);
-  }
-
-  // Allow request to proceed
-  return null;
+  return response;
 } 
