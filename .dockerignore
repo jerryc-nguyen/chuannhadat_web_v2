@@ -1,14 +1,50 @@
-
-.dockerignore
-
-# Not needed as we are bundling the whole app
+# Exclude node dependencies
 node_modules
-# Log files
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Exclude Next.js build output
 .next
+out
+
+# Exclude version control
 .git
+.gitignore
+.github
+
+# Exclude development/debug files
+**/.DS_Store
+*.pem
+*.log
+.vscode
+.idea
+*.tsbuildinfo
+*.sw*
+
+# Exclude test files
+/coverage
+/test
+**/__tests__
+**/*.test.*
+**/*.spec.*
+
+# Exclude documentation
+/docs
+README.md
+*.md
+
+# Exclude certificates and other sensitive data
+certificates
+backup
+backup.tsx
+test.css
+
+# Exclude Docker and deployment files (not needed in build)
+Dockerfile
+docker-compose.yml
+.dockerignore
+grafana
+nginx
+prometheus
+scripts

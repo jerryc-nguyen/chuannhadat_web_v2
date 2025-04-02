@@ -2,8 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'chuannhadat-web',
-      script: './node_modules/.bin/next',
-      args: 'start',
+      script: 'server.js',
       instances: 'max', // Use max to leverage all available CPUs
       exec_mode: 'cluster', // Use cluster mode for load balancing across instances
       autorestart: true, // Auto restart if app crashes
