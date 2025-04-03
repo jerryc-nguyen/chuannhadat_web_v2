@@ -56,7 +56,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = ({
   });
   const createQueryString = React.useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() ?? '');
       params.set(name, value);
 
       return params.toString();
@@ -77,7 +77,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = ({
         const userData = response.data;
         handleSignIn(userData);
         toast.success('Đăng ký tài khoản thàng công');
-        const redirectUrl = searchParams.get('redirectUrl');
+        const redirectUrl = searchParams?.get('redirectUrl');
         router.push(redirectUrl as string);
         reset();
       } else {
@@ -215,7 +215,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = ({
             <LoginSocial
               className="mb-0"
               handleSuccessLogin={() => {
-                const redirectUrl = searchParams.get('redirectUrl');
+                const redirectUrl = searchParams?.get('redirectUrl');
                 router.push(redirectUrl as string);
               }}
             />

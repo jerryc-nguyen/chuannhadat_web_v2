@@ -4,10 +4,7 @@ import { API_TOKEN_CIENT } from '@common/auth';
 
 // List of paths that require authentication
 export const PROTECTED_PATHS = [
-  '/dashboard',
-  '/profile',
-  '/settings',
-  // Add other protected paths
+  '/dashboard'
 ];
 
 // List of paths that should be accessible only to non-authenticated users

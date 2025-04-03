@@ -20,7 +20,7 @@ import useSearchAggs from '@components/search-aggs/hooks';
 
 export default function PostList() {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const searchParams = useSearchParams();
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;

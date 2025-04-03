@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 
 export const useSyncQueryToUrl = (object: Record<string, A>) => {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const searchParams = useSearchParams();
   const prevRoute = useRef('');
 
