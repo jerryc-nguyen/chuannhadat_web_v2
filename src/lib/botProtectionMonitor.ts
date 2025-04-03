@@ -9,7 +9,7 @@ import {
 } from './botProtection';
 
 // Enable debug mode for local development
-const DEBUG = false
+const DEBUG = true;
 
 // Force log storing to be visible even without DEBUG
 const FORCE_LOG_VISIBILITY = process.env.BOT_PROTECTION_FORCE_LOGS === 'true';
@@ -187,11 +187,19 @@ function getMatchedPatterns(userAgent: string | null): string[] {
 export function isRateLimitExcluded(pathname: string, url?: string): boolean {
   // Exclude specific paths
   if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
+    log.storage(`Excluded path: ${pathname}`);
     return true;
   }
 
   // Exclude Next.js AJAX requests (used for client navigation)
   if (url && url.includes('_rsc=')) {
+    log.storage(`Excluded AJAX request with _rsc param: ${url}`);
+
+    // Print the URL for debugging
+    if (LOG_LEVEL >= 3 || FORCE_LOG_VISIBILITY) {
+      console.log(`⚠️⚠️⚠️ EXCLUDING RSC REQUEST: ${url}`);
+    }
+
     return true;
   }
 
@@ -205,11 +213,20 @@ export async function monitorBotProtection(
   const start = Date.now();
   const url = req.nextUrl.toString();
   const pathname = req.nextUrl.pathname;
+  const searchParams = req.nextUrl.searchParams.toString();
   const userAgent = req.headers.get('user-agent');
   const ip = req.ip || '0.0.0.0';
 
   log.verbose(`Processing request: ${url}`);
+  log.verbose(`URL searchParams: ${searchParams}`);
   log.verbose(`IP: ${ip}, UA: ${userAgent?.substring(0, 30)}...`);
+
+  // Additional debug for RSC detection
+  if (searchParams.includes('_rsc')) {
+    if (LOG_LEVEL >= 2 || FORCE_LOG_VISIBILITY) {
+      console.log(`🔴🔴🔴 RSC PARAM DETECTED in: ${url}`);
+    }
+  }
 
   // Create the detection result object
   const result: BotDetectionResult = {
@@ -233,7 +250,7 @@ export async function monitorBotProtection(
 
   // Check if path should be excluded from rate limiting
   if (isRateLimitExcluded(pathname, url)) {
-    log.verbose(`Path excluded from rate limiting: ${pathname}`);
+    log.storage(`Path excluded from rate limiting: ${pathname}`);
     // Still record the request but don't apply rate limiting
     storeDetectionLog(result);
     return { response: null, result };

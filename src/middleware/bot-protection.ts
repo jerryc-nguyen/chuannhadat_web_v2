@@ -5,7 +5,10 @@ import { monitorBotProtection } from '@/lib/botProtectionMonitor';
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = false;
+const DEBUG = true;
+
+// Force log visibility regardless of DEBUG flag
+const FORCE_LOG_VISIBILITY = process.env.BOT_PROTECTION_FORCE_LOGS === 'true';
 
 // Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
 const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
@@ -14,25 +17,25 @@ const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
 const log = {
   error: (message: string, ...args: any[]) => {
     // Always log errors (level >= 1)
-    if (DEBUG && LOG_LEVEL >= 1) {
+    if ((DEBUG || FORCE_LOG_VISIBILITY) && LOG_LEVEL >= 1) {
       console.error(`[BOT-PROTECTION] ❌ ${message}`, ...args);
     }
   },
   info: (message: string, ...args: any[]) => {
     // Only log important info (level >= 2)
-    if (DEBUG && LOG_LEVEL >= 2) {
+    if ((DEBUG || FORCE_LOG_VISIBILITY) && LOG_LEVEL >= 2) {
       console.log(`[BOT-PROTECTION] ${message}`, ...args);
     }
   },
   verbose: (message: string, ...args: any[]) => {
     // Only log verbose details (level >= 3)
-    if (DEBUG && LOG_LEVEL >= 3) {
+    if ((DEBUG || FORCE_LOG_VISIBILITY) && LOG_LEVEL >= 3) {
       console.log(`[BOT-PROTECTION] 🔍 ${message}`, ...args);
     }
   },
   warning: (message: string, ...args: any[]) => {
     // Only log important warnings (level >= 2)
-    if (DEBUG && LOG_LEVEL >= 2) {
+    if ((DEBUG || FORCE_LOG_VISIBILITY) && LOG_LEVEL >= 2) {
       console.log(`⚠️⚠️⚠️ ${message}`, ...args);
     }
   }
@@ -87,11 +90,13 @@ function isProtectedRoute(pathname: string): boolean {
 function isRateLimitExcluded(pathname: string, url: URL): boolean {
   // Exclude specific paths
   if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
+    log.info(`Excluded path: ${pathname}`);
     return true;
   }
 
   // Exclude Next.js AJAX requests (used for client navigation)
   if (url.searchParams.has('_rsc')) {
+    log.info(`Excluded AJAX request with _rsc param: ${url.toString()}`);
     return true;
   }
 
@@ -142,8 +147,8 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     // Check if path should be excluded from rate limiting
     const url = new URL(req.nextUrl.toString());
     if (isRateLimitExcluded(pathname, url)) {
-      log.verbose(`Skipping rate limit counting for excluded path: ${pathname}`);
-      // Allow the request but skip monitoring/counting
+      log.info(`Skipping rate limit counting for excluded path: ${pathname}`);
+      // Allow the request but skip monitoring/counting entirely
       return NextResponse.next();
     }
 

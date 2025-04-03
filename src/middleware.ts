@@ -73,6 +73,12 @@ export async function middleware(req: NextRequest) {
     log.verbose(`Processing: ${pathname}`);
     log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
 
+    // Enhanced debugging for RSC requests
+    const hasRscParam = req.nextUrl.searchParams.has('_rsc');
+    if (hasRscParam) {
+      log.highlight(`[RSC] Client navigation detected: ${req.nextUrl.toString()}`);
+    }
+
     // Skip middleware for static files
     if (
       pathname.startsWith('/_next/') ||
@@ -82,9 +88,9 @@ export async function middleware(req: NextRequest) {
       pathname.endsWith('.svg') ||
       pathname === '/robots.txt' ||
       pathname === '/sitemap.xml' ||
-      req.nextUrl.searchParams.has('_rsc') // Skip AJAX requests for client-side transitions
+      hasRscParam // Skip AJAX requests for client-side transitions
     ) {
-      log.verbose('Skipping static file or AJAX request');
+      log.verbose(`Skipping middleware for: ${hasRscParam ? 'RSC request' : 'static file'}`);
       return NextResponse.next();
     }
 
