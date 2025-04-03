@@ -18,7 +18,7 @@ export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const [localFilterState, setLocalFilterState] = useAtom(localFilterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const { searchScope } = useSearchScope();
 
   const resetDataFilter = () => {

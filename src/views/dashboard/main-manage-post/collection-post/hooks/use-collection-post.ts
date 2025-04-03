@@ -12,7 +12,7 @@ export const useAdminCollectionPost = () => {
   const searchParams = useSearchParams();
   const { setFilterState } = useFilterState();
   const reqParams = {
-    path: searchParams.get('filter_chips') || '--',
+    path: searchParams?.get('filter_chips') || '--',
     scope: SearchScopeEnums.ManagePosts
   }
 

@@ -40,6 +40,21 @@ services:
       - acme:/etc/acme.sh
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   chuannhadat_next:
     restart: always
     image: registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next
@@ -60,6 +75,9 @@ services:
       - VIRTUAL_PORT=4500
       - LETSENCRYPT_HOST=nextjs.chuannhadat.com
       - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
+      - NODE_ENV=production
+      - ENABLE_BOT_PROTECTION=true
+      - REDIS_URL=redis://redis:6379
     command: 'node server.js'
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4500/api/health"]
@@ -67,6 +85,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+    depends_on:
+      - redis
 
 volumes:
   vhost:
@@ -74,3 +94,4 @@ volumes:
   html:
   acme:
   certs:
+  redis_data:

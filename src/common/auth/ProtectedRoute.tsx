@@ -13,7 +13,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, checkAuthStatus } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || '/';
   const { openModal, closeModal } = useModals();
 
   useEffect(() => {

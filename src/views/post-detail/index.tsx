@@ -19,7 +19,7 @@ import NotFound from '@app/not-found';
 type PostDetailDesktopProps = object;
 
 const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
-  const currentPath = usePathname();
+  const currentPath = usePathname() || '';
   const setPostDetailData = useSetAtom(postDetailAtom);
   const productUid = currentPath.split('-').slice(-1)[0];
   const { data, isLoading, isSuccess, isError } = useQuery({

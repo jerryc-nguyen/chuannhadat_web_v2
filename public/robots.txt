@@ -1,0 +1,45 @@
+# Allow Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Allow Google AdsBot
+User-agent: AdsBot-Google
+Allow: /
+
+# Allow Google Mobile
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Allow Google Image
+User-agent: Googlebot-Image
+Allow: /
+
+# Allow Bingbot
+User-agent: Bingbot
+Allow: /
+
+# Allow MSNBot
+User-agent: MSNBot
+Allow: /
+
+# Allow Yandex
+User-agent: Yandexbot
+Allow: /
+
+# Allow Baidu
+User-agent: Baiduspider
+Allow: /
+
+# Block all other bots
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /backend/
+Disallow: /*?*
+
+# Crawl-delay for other bots
+Crawl-delay: 10
+
+# Sitemap
+Sitemap: https://nextjs.chuannhadat.com/sitemap.xml 

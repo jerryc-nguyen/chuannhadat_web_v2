@@ -13,7 +13,7 @@ chmod +x scripts/find-memory-leaks.sh
 ### Build web docker production
 
 ```
-docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next
+docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2 -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2
 ```
 
 ### IMAGES CND NOTES
@@ -216,3 +216,76 @@ PM2 is configured in `ecosystem.config.js` with the following features:
 - **Log management**: Stores logs in the `logs` directory
 
 For more details on PM2, see [PM2 Documentation](https://pm2.keymetrics.io/docs/usage/quick-start/).
+
+### Bot Protection System
+
+The application includes a bot protection system that identifies and filters suspicious bot traffic using the following methods:
+
+1. **Bot Detection**: Analyzes user agents, IP addresses, and request patterns to identify bots
+2. **Search Engine Verification**: Verifies legitimate search engine bots through DNS lookups
+3. **Request Monitoring**: Logs all requests for analysis in the dashboard
+
+#### Edge/Node.js Runtime Compatibility
+
+The bot protection system is designed to work safely in both Node.js and Edge runtimes:
+
+- **Middleware (Node.js runtime)**: Uses pure JavaScript implementation without Redis dependencies
+- **API Routes (Node.js runtime)**: Uses ioredis for persistent log storage
+- **Log Synchronization**: Middleware logs are stored in memory and asynchronously sent to the API routes for Redis storage
+
+#### Redis Integration for Bot Protection
+
+Bot protection logs are stored in Redis for improved persistence and scalability:
+
+- **Installation**: Redis is required for production use of the bot protection system
+- **Configuration**: Set the `REDIS_URL` environment variable (defaults to `redis://localhost:6379/1`)
+- **Fallback**: In-memory storage is used as a fallback if Redis is unavailable
+- **Dashboard**: The bot protection dashboard at `/bot-protection-dashboard` shows real-time metrics
+
+#### Environment Variables
+
+Configure bot protection with these environment variables:
+
+```
+# Enable/disable bot protection
+ENABLE_BOT_PROTECTION=true
+
+# Redis connection string for bot logs storage
+REDIS_URL=redis://redis:6379/1
+
+# Optional API key for dashboard access (if not set, only allowed in dev)
+BOT_PROTECTION_DASHBOARD_KEY=your-secure-key-here
+```
+
+#### Middleware Configuration
+
+The bot protection system is implemented as middleware in `src/middleware/bot-protection.ts` and is triggered based on the configuration in `src/middleware/index.ts`. It can be customized to protect specific routes or exclude others as needed.
+
+## Environment Variables
+
+### Essential Environment Variables
+
+- `NEXT_PUBLIC_API_BASE_URL`: Base URL for the API
+- `NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN`: Base domain for the application
+- `NEXT_PUBLIC_CAPCHA_SITE_KEY`: Site key for the CAPTCHA service
+- `NEXT_PUBLIC_ASSET_PREFIX`: Asset prefix for the application
+
+### Bot Protection Configuration
+
+- `ENABLE_BOT_PROTECTION`: Enable or disable bot protection (true/false)
+- `BOT_PROTECTION_LOG_LEVEL`: Control verbosity of bot protection logs (0=silent, 1=errors only, 2=important, 3=verbose)
+- `BOT_PROTECTION_FORCE_LOGS`: Force visibility of logs regardless of environment (true/false)
+
+### Firebase Configuration
+
+- `NEXT_PUBLIC_FIREBASE_APP_ID`: Firebase App ID
+- `NEXT_PUBLIC_AUTH_DOMAIN`: Firebase Auth Domain
+- `NEXT_PUBLIC_FIREBASE_API_KEY`: Firebase API Key
+- `NEXT_PUBLIC_PROJECT_ID`: Firebase Project ID
+- `NEXT_PUBLIC_FIREBASE_MESSAGE_ID`: Firebase Message ID
+- `NEXT_PUBLIC_STORAGE_BUCKET`: Firebase Storage Bucket
+
+### Other
+
+- `NEXT_PUBLIC_GA_ID`: Google Analytics ID
+- `SENTRY_AUTH_TOKEN`: Sentry Authentication Token

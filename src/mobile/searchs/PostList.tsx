@@ -20,10 +20,10 @@ import useSearchAggs from '@components/search-aggs/hooks';
 
 export default function PostList() {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const searchParams = useSearchParams();
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
-  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
+  const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
 
   const { openModal3, closeModals } = useModals();
   const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
@@ -93,8 +93,8 @@ export default function PostList() {
       })}
 
       <PostPagination
-        total_pages={data.pagination.total_pages}
-        currentPage={searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1}
+        total_pages={data?.pagination?.total_pages}
+        currentPage={currentPage}
         onPageChange={(page) => {
           const selected = page.selected + 1;
           router.push(pathname + '?page=' + selected);

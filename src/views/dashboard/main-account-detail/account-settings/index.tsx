@@ -14,7 +14,7 @@ import { listTabAccountSetting } from '../constants';
 
 const AccountSettingsDesktop: React.FC = () => {
   const searchParams = useSearchParams();
-  const currentTab = searchParams.get('tab');
+  const currentTab = searchParams?.get('tab');
   const [tabActive, setTabActive] = React.useState(currentTab || 'personal-wall');
   const router = useRouter();
   const pathname = usePathname();
@@ -23,7 +23,7 @@ const AccountSettingsDesktop: React.FC = () => {
   };
   const createQueryString = React.useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString() ?? '');
       params.set(name, value);
       return params.toString();
     },

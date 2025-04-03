@@ -21,17 +21,17 @@ import { listTabAccountSetting } from '@views/dashboard/main-account-detail/cons
 
 const AccountSettingsMobile: React.FC = () => {
   const searchParams = useSearchParams();
-  const currentTab = searchParams.get('tab');
+  const currentTab = searchParams?.get('tab');
   const [tabActive, setTabActive] = React.useState(currentTab || 'personal-wall');
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const handleChangeTab = (value: string) => {
     setTabActive(value);
     router.push(pathname + '?' + createQueryString('tab', value));
   };
   const createQueryString = React.useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams?.toString());
       params.set(name, value);
       return params.toString();
     },

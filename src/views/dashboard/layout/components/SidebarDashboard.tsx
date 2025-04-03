@@ -34,7 +34,7 @@ type SidebarDashboardProps = object;
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const { onOpenModalDeposit } = useDepositModal();
   const { balanceData, fetchBalance } = useBalanceRequest();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const { setOpenMobile } = useSidebar();
   const getActiveLink = (url: string) => {
     if (url === '/dashboard')

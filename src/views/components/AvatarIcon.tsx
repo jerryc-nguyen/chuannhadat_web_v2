@@ -26,13 +26,13 @@ type AvatarIconProps = {
 
 const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const router = useRouter();
-  const pathName = usePathname();
+  const pathName = usePathname() || '';
   const [openDropdownMenu, setOpenDropdownMenu] = React.useState(false);
   const isDashboardPage = pathName.includes('dashboard');
   const { currentUser, logout } = useAuth();
   const { openModal, closeModal } = useModals();
   const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
   const { buildThumbnailUrl } = useResizeImage();
 
   const showModalLoginAndRegister = () => {

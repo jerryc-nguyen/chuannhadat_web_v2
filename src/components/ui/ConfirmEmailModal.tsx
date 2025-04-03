@@ -21,7 +21,7 @@ const ConfirmEmailModal: React.FC = () => {
   const params = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const emailToken = params.get('confirm_email_token');
+  const emailToken = params?.get('confirm_email_token');
   const [showConfirmEmail, setShowConfirmEmail] = React.useState(false);
   const [isConfirmSuccess, setIsConfirmSuccess] = React.useState(false);
   const { data: profileMe } = useQuery({

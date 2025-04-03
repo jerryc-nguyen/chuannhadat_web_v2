@@ -11,7 +11,7 @@ export const enum SearchScopeEnums {
 }
 
 export default function useSearchScope() {
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
 
   const searchScope = useMemo(() => {
     if (pathname.indexOf('profile/') != -1) {

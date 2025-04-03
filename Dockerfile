@@ -5,21 +5,21 @@ FROM node:20-alpine AS base
 FROM base AS builder
 WORKDIR /app
 
-ENV NODE_OPTIONS=--max-old-space-size=8192
+# Set memory limit for Node.js during build
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Copy package.json and package-lock.json before other files
 COPY package.json package-lock.json ./
 RUN npm install
+
+# Copy all files
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-# RUN yarn build
-
-# If using npm comment out above and use below instead
+# Remove local environment variables
 RUN rm -rf .env.local
-RUN npm run build
+
+# Add custom build command to optimize memory usage
+RUN NODE_ENV=production npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -27,9 +27,7 @@ WORKDIR /app
 
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_ENV production
-ENV NODE_OPTIONS=--max-old-space-size=8192
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Install PM2 globally
 RUN npm install -g pm2

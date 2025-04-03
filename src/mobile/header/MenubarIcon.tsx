@@ -19,7 +19,7 @@ type MenubarIconProps = {
 };
 const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
   const [openMenuBar, setOpenMenuBar] = React.useState<boolean>(false);
-  const pathName = usePathname();
+  const pathName = usePathname() || '';
   const isDashboardPage = pathName.includes('dashboard');
   const { currentUser } = useAuth();
   const router = useRouter();
