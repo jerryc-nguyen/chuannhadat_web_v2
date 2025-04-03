@@ -75,6 +75,7 @@ export async function middleware(req: NextRequest) {
 
     // Skip middleware for static files
     if (
+      pathname.startsWith('/_next/') ||
       pathname.endsWith('.json') ||
       pathname.endsWith('.ico') ||
       pathname.endsWith('.png') ||

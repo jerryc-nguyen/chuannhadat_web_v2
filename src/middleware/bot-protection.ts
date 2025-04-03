@@ -5,10 +5,10 @@ import { monitorBotProtection } from '@/lib/botProtectionMonitor';
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = true;
+const DEBUG = false;
 
 // Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
-const LOG_LEVEL = DEBUG ? 3 : 0;
+const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
 
 // Helper functions for controlled logging
 const log = {
@@ -80,6 +80,15 @@ function isProtectedRoute(pathname: string): boolean {
 }
 
 /**
+ * Check if a path should be excluded from rate limiting
+ * @param pathname URL pathname to check
+ * @returns true if the pathname should be excluded from rate limiting
+ */
+function isRateLimitExcluded(pathname: string): boolean {
+  return pathname.startsWith('/_next/') || pathname.startsWith('/monitoring');
+}
+
+/**
  * Get a friendly route name for logging purposes
  */
 function getRouteName(pathname: string): string {
@@ -118,6 +127,13 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     if (!isBotProtectionEnabled) {
       log.verbose('Protection disabled, skipping');
       return null;
+    }
+
+    // Check if path should be excluded from rate limiting
+    if (isRateLimitExcluded(pathname)) {
+      log.verbose(`Skipping rate limit counting for excluded path: ${pathname}`);
+      // Allow the request but skip monitoring/counting
+      return NextResponse.next();
     }
 
     // Handle special routes separately to ensure they get monitored

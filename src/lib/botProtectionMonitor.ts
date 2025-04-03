@@ -183,12 +183,18 @@ function getMatchedPatterns(userAgent: string | null): string[] {
   return matches;
 }
 
+// Function to check if a path should be excluded from rate limiting
+export function isRateLimitExcluded(pathname: string): boolean {
+  return pathname.startsWith('/_next/') || pathname.startsWith('/monitoring');
+}
+
 // Bot protection middleware with enhanced monitoring
 export async function monitorBotProtection(
   req: NextRequest
 ): Promise<{ response: NextResponse | null; result: BotDetectionResult }> {
   const start = Date.now();
   const url = req.nextUrl.toString();
+  const pathname = req.nextUrl.pathname;
   const userAgent = req.headers.get('user-agent');
   const ip = req.ip || '0.0.0.0';
 
@@ -214,6 +220,14 @@ export async function monitorBotProtection(
       matchedPatterns: getMatchedPatterns(userAgent),
     }
   };
+
+  // Check if path should be excluded from rate limiting
+  if (isRateLimitExcluded(pathname)) {
+    log.verbose(`Path excluded from rate limiting: ${pathname}`);
+    // Still record the request but don't apply rate limiting
+    storeDetectionLog(result);
+    return { response: null, result };
+  }
 
   // 1. Check for rate limiting
   log.verbose(`Checking rate limit for IP: ${ip}`);
