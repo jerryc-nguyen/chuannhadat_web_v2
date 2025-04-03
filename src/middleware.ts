@@ -41,6 +41,9 @@ const log = {
 export const config = {
   matcher: [
     '/', // Explicitly match the home route
+    '/post/:path*', // Post detail pages
+    '/profile/:path*', // Profile detail pages 
+    '/category/:path*', // Category pages
     '/bot-protection-dashboard', // Dashboard route
     '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
   ],

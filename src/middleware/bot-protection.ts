@@ -5,10 +5,10 @@ import { monitorBotProtection } from '@/lib/botProtectionMonitor';
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = false;
+const DEBUG = true;
 
 // Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
-const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
+const LOG_LEVEL = DEBUG ? 3 : 0;
 
 // Helper functions for controlled logging
 const log = {
@@ -63,6 +63,35 @@ export function getClientIp(req: NextRequest): string {
 }
 
 /**
+ * Check if a pathname matches one of the protected routes
+ * @param pathname URL pathname to check
+ * @returns true if the pathname matches a protected route pattern
+ */
+function isProtectedRoute(pathname: string): boolean {
+  // Match common dynamic route patterns
+  const patterns = [
+    /^\/$/, // Home route "/"
+    /^\/post\/[^/]+$/, // Post detail "/post/:slug"
+    /^\/profile\/[^/]+$/, // Profile detail "/profile/:slug" 
+    /^\/category\/[^/]+$/, // Category "/category/:slug"
+  ];
+
+  return patterns.some(pattern => pattern.test(pathname));
+}
+
+/**
+ * Get a friendly route name for logging purposes
+ */
+function getRouteName(pathname: string): string {
+  if (pathname === '/') return 'HOME';
+  if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?')) return 'DASHBOARD';
+  if (pathname.startsWith('/post/')) return 'POST DETAIL';
+  if (pathname.startsWith('/profile/')) return 'PROFILE DETAIL';
+  if (pathname.startsWith('/category/')) return 'CATEGORY';
+  return 'OTHER';
+}
+
+/**
  * Apply bot protection rules
  * @returns NextResponse if request should be blocked/limited, or null if allowed
  */
@@ -76,6 +105,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     const pathname = req.nextUrl.pathname;
     const userAgent = req.headers.get('user-agent');
     const ip = getClientIp(req);
+    const routeName = getRouteName(pathname);
 
     // Always log every request that reaches the middleware
     log.info(`Request: ${req.method} ${pathname} from ${ip}`);
@@ -109,20 +139,27 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
       return null;
     }
 
-    // Always monitor the home page
-    if (pathname === '/' || pathname === '/index' || pathname === '/home') {
-      if (LOG_LEVEL >= 2) console.log('!!!!! HOME PAGE ACCESS DETECTED !!!!!');
-      log.info(`Home URL: ${req.nextUrl.toString()}`);
+    // Handle protected routes (home, post detail, profile detail, category)
+    if (isProtectedRoute(pathname)) {
+      if (LOG_LEVEL >= 2) console.log(`!!!!! ${routeName} PAGE ACCESS DETECTED !!!!!`);
+      log.info(`${routeName} URL: ${req.nextUrl.toString()}`);
       log.info(`User-Agent: ${userAgent}`);
 
-      // Always monitor the home page
+      // Always monitor these important pages
       const monitorResult = await monitorBotProtection(req);
-      log.verbose('Home page monitoring result:', {
+      log.verbose(`${routeName} page monitoring result:`, {
         timestamp: monitorResult.result.timestamp,
         url: monitorResult.result.url
       });
 
-      // Continue normal middleware processing - don't return early
+      // If bot protection blocks the request, return response
+      if (monitorResult.response) {
+        log.info(`Blocking access to ${routeName} page: ${pathname}`);
+        return monitorResult.response;
+      }
+
+      // For these routes, we want to continue processing after monitoring
+      // but we've already applied the bot protection
     }
 
     // Skip bot protection for API routes and static assets
@@ -134,9 +171,9 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
 
     log.verbose(`Route type: ${isApiRoute ? 'API' : isStaticAsset ? 'Static' : 'Page'}`);
 
-    // Only apply bot protection to actual page routes (not API or static)
-    if (!isApiRoute && !isStaticAsset) {
-      log.verbose('Running protection on page route');
+    // Only apply bot protection to actual page routes that weren't handled above
+    if (!isApiRoute && !isStaticAsset && !isProtectedRoute(pathname)) {
+      log.verbose('Running protection on other page route');
 
       // Run enhanced bot protection middleware with monitoring
       const { response: botResponse, result: botResult } = await monitorBotProtection(req);
@@ -150,7 +187,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
       // Add the bot analysis to request headers for potential use by the application
       const nextReq = req.clone();
       (nextReq as any).botResult = botResult;
-    } else {
+    } else if (isApiRoute || isStaticAsset) {
       log.verbose('Skipping protection for API/static asset');
     }
 
