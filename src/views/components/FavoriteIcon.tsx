@@ -36,7 +36,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
 
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],

@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 
 const ButtonCreatePost = () => {
   const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
 
   return (
     <Link

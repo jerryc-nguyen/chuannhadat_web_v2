@@ -48,7 +48,7 @@ const RelatedNewsLayout: React.FC<RelatedNewsLayoutProps> = ({ children }) => {
             <DropdownMenuItem
               className={cn(
                 'cursor-pointer text-nowrap rounded-md px-3 py-1 font-medium transition-all hover:bg-primary_color/10 hover:text-primary_color/80',
-                pathname.includes(menu.link) ? 'bg-primary_color/10 text-primary_color/80' : '',
+                pathname?.includes(menu.link) ? 'bg-primary_color/10 text-primary_color/80' : '',
               )}
               key={menu.id}
             >
@@ -69,7 +69,7 @@ const RelatedNewsLayout: React.FC<RelatedNewsLayoutProps> = ({ children }) => {
               key={menu.id}
               className={cn(
                 'cursor-pointer text-nowrap rounded-md px-3 py-1 font-medium transition-all hover:bg-primary_color/10 hover:text-primary_color/80',
-                pathname.includes(menu.link) ? 'bg-primary_color/10 text-primary_color/80' : '',
+                pathname?.includes(menu.link) ? 'bg-primary_color/10 text-primary_color/80' : '',
               )}
             >
               <Link href={menu.link}>{menu.title}</Link>

@@ -28,7 +28,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = searchParams.get('page') ? parseInt(searchParams.get('page') as string) : 1;
+  const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
   const { updateValues } = useMainContentNavigator();
 
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();

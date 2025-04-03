@@ -206,14 +206,14 @@ export const timeAgo = (date: string) => {
 
 export const objectToQueryString = (
   obj: Record<string, A>,
-  currentSearch: ReadonlyURLSearchParams,
+  currentSearch?: ReadonlyURLSearchParams | null,
 ) => {
-  const prev = queryString.parse(currentSearch.toString());
+  const prev = queryString.parse(currentSearch?.toString() ?? '');
   return queryString.stringify(removeEmpty(merge(prev, obj)));
 };
 
-export const searchParamsToObj = (searchParams: ReadonlyURLSearchParams) => {
-  return queryString.parse(searchParams.toString()) as Record<A, A>;
+export const searchParamsToObj = (searchParams?: ReadonlyURLSearchParams | null) => {
+  return queryString.parse(searchParams?.toString() ?? '') as Record<A, A>;
 };
 export const formatPriceFilterChip = (price: number, hasUnit = true) => {
   const isLowerBillion = price < ONE_BILLION;

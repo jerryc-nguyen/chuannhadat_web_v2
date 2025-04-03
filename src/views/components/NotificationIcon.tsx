@@ -16,7 +16,7 @@ type NotificationIconProps = {
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const { totalUnread, notifications } = usePaginatedNotifications();
   const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams.get('hide_create_post') == 'true';
+  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
   const router = useRouter();
   const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
 

@@ -9,7 +9,7 @@ import { NewDetailArticle } from './NewDetailArticle';
 
 export const NewsDetail = ({ slug }: { slug: string }) => {
   const searchParams = useSearchParams();
-  const ref = searchParams.get('ref');
+  const ref = searchParams?.get('ref');
 
   const { data: newsByCategory } = useSuspenseQuery({
     queryKey: ['get-news-by-category', slug],
