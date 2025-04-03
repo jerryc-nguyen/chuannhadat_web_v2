@@ -184,8 +184,18 @@ function getMatchedPatterns(userAgent: string | null): string[] {
 }
 
 // Function to check if a path should be excluded from rate limiting
-export function isRateLimitExcluded(pathname: string): boolean {
-  return pathname.startsWith('/_next/') || pathname.startsWith('/monitoring');
+export function isRateLimitExcluded(pathname: string, url?: string): boolean {
+  // Exclude specific paths
+  if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
+    return true;
+  }
+
+  // Exclude Next.js AJAX requests (used for client navigation)
+  if (url && url.includes('_rsc=')) {
+    return true;
+  }
+
+  return false;
 }
 
 // Bot protection middleware with enhanced monitoring
@@ -222,7 +232,7 @@ export async function monitorBotProtection(
   };
 
   // Check if path should be excluded from rate limiting
-  if (isRateLimitExcluded(pathname)) {
+  if (isRateLimitExcluded(pathname, url)) {
     log.verbose(`Path excluded from rate limiting: ${pathname}`);
     // Still record the request but don't apply rate limiting
     storeDetectionLog(result);

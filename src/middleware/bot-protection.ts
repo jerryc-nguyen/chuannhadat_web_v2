@@ -84,8 +84,18 @@ function isProtectedRoute(pathname: string): boolean {
  * @param pathname URL pathname to check
  * @returns true if the pathname should be excluded from rate limiting
  */
-function isRateLimitExcluded(pathname: string): boolean {
-  return pathname.startsWith('/_next/') || pathname.startsWith('/monitoring');
+function isRateLimitExcluded(pathname: string, url: URL): boolean {
+  // Exclude specific paths
+  if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
+    return true;
+  }
+
+  // Exclude Next.js AJAX requests (used for client navigation)
+  if (url.searchParams.has('_rsc')) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -130,7 +140,8 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     }
 
     // Check if path should be excluded from rate limiting
-    if (isRateLimitExcluded(pathname)) {
+    const url = new URL(req.nextUrl.toString());
+    if (isRateLimitExcluded(pathname, url)) {
       log.verbose(`Skipping rate limit counting for excluded path: ${pathname}`);
       // Allow the request but skip monitoring/counting
       return NextResponse.next();

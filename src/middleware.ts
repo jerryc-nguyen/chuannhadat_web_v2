@@ -81,9 +81,10 @@ export async function middleware(req: NextRequest) {
       pathname.endsWith('.png') ||
       pathname.endsWith('.svg') ||
       pathname === '/robots.txt' ||
-      pathname === '/sitemap.xml'
+      pathname === '/sitemap.xml' ||
+      req.nextUrl.searchParams.has('_rsc') // Skip AJAX requests for client-side transitions
     ) {
-      log.verbose('Skipping static file');
+      log.verbose('Skipping static file or AJAX request');
       return NextResponse.next();
     }
 
