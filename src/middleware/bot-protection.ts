@@ -1,19 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { monitorBotProtection } from '@/lib/botProtectionMonitor';
-import {
-  isKnownBot,
-  isSuspiciousBot,
-  hasSuspiciousHeaders,
-  hasUnusualRequestPattern,
-  rateLimit,
-  verifySearchEngineBot
-} from '../lib/botProtection';
 
 // Check if bot protection is enabled
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = process.env.NODE_ENV === 'development';
+const DEBUG = false;
+
+// Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
+const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
+
+// Helper functions for controlled logging
+const log = {
+  error: (message: string, ...args: any[]) => {
+    // Always log errors (level >= 1)
+    if (DEBUG && LOG_LEVEL >= 1) {
+      console.error(`[BOT-PROTECTION] ❌ ${message}`, ...args);
+    }
+  },
+  info: (message: string, ...args: any[]) => {
+    // Only log important info (level >= 2)
+    if (DEBUG && LOG_LEVEL >= 2) {
+      console.log(`[BOT-PROTECTION] ${message}`, ...args);
+    }
+  },
+  verbose: (message: string, ...args: any[]) => {
+    // Only log verbose details (level >= 3)
+    if (DEBUG && LOG_LEVEL >= 3) {
+      console.log(`[BOT-PROTECTION] 🔍 ${message}`, ...args);
+    }
+  },
+  warning: (message: string, ...args: any[]) => {
+    // Only log important warnings (level >= 2)
+    if (DEBUG && LOG_LEVEL >= 2) {
+      console.log(`⚠️⚠️⚠️ ${message}`, ...args);
+    }
+  }
+};
 
 /**
  * Get the real client IP address
@@ -47,7 +70,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
   // Wrap the entire middleware in a try-catch to prevent crashes in production
   try {
     // Immediate log at the very start 
-    console.log(`⚠️⚠️⚠️ BOT PROTECTION STARTED: ${req.nextUrl.pathname}`);
+    log.warning(`BOT PROTECTION STARTED: ${req.nextUrl.pathname}`);
 
     const startTime = Date.now();
     const pathname = req.nextUrl.pathname;
@@ -55,17 +78,15 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     const ip = getClientIp(req);
 
     // Always log every request that reaches the middleware
-    console.log(`[BOT-PROTECTION] Request: ${req.method} ${pathname} from ${ip}`);
+    log.info(`Request: ${req.method} ${pathname} from ${ip}`);
 
-    if (DEBUG) {
-      console.log(`[BOT-PROTECTION] Middleware request: ${pathname}`);
-      console.log(`[BOT-PROTECTION] IP: ${ip}, User-Agent: ${userAgent?.substring(0, 50)}...`);
-      console.log(`[BOT-PROTECTION] Enabled: ${isBotProtectionEnabled}`);
-    }
+    log.verbose(`Middleware request: ${pathname}`);
+    log.verbose(`IP: ${ip}, User-Agent: ${userAgent?.substring(0, 50)}...`);
+    log.verbose(`Enabled: ${isBotProtectionEnabled}`);
 
     // Skip bot protection if disabled in environment
     if (!isBotProtectionEnabled) {
-      if (DEBUG) console.log('[BOT-PROTECTION] Protection disabled, skipping');
+      log.verbose('Protection disabled, skipping');
       return null;
     }
 
@@ -73,13 +94,13 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
 
     // Handle the dashboard route
     if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?')) {
-      console.log('!!!!! DASHBOARD ACCESS DETECTED !!!!!');
-      console.log(`Dashboard URL: ${req.nextUrl.toString()}`);
-      console.log(`User-Agent: ${userAgent}`);
+      if (LOG_LEVEL >= 2) console.log('!!!!! DASHBOARD ACCESS DETECTED !!!!!');
+      log.info(`Dashboard URL: ${req.nextUrl.toString()}`);
+      log.info(`User-Agent: ${userAgent}`);
 
       // Always monitor the dashboard page
       const monitorResult = await monitorBotProtection(req);
-      console.log('Dashboard monitoring result:', {
+      log.info('Dashboard monitoring result:', {
         timestamp: monitorResult.result.timestamp,
         url: monitorResult.result.url,
         logCount: monitorBotProtection.toString().includes('recentBotLogs.unshift') ? 'Logs should be added' : 'No log adding code found'
@@ -90,13 +111,13 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
 
     // Always monitor the home page
     if (pathname === '/' || pathname === '/index' || pathname === '/home') {
-      console.log('!!!!! HOME PAGE ACCESS DETECTED !!!!!');
-      console.log(`Home URL: ${req.nextUrl.toString()}`);
-      console.log(`User-Agent: ${userAgent}`);
+      if (LOG_LEVEL >= 2) console.log('!!!!! HOME PAGE ACCESS DETECTED !!!!!');
+      log.info(`Home URL: ${req.nextUrl.toString()}`);
+      log.info(`User-Agent: ${userAgent}`);
 
       // Always monitor the home page
       const monitorResult = await monitorBotProtection(req);
-      console.log('Home page monitoring result:', {
+      log.verbose('Home page monitoring result:', {
         timestamp: monitorResult.result.timestamp,
         url: monitorResult.result.url
       });
@@ -111,34 +132,32 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
       pathname.includes('.') || // Files with extensions
       pathname === '/favicon.ico';
 
-    if (DEBUG) {
-      console.log(`[BOT-PROTECTION] Route type: ${isApiRoute ? 'API' : isStaticAsset ? 'Static' : 'Page'}`);
-    }
+    log.verbose(`Route type: ${isApiRoute ? 'API' : isStaticAsset ? 'Static' : 'Page'}`);
 
     // Only apply bot protection to actual page routes (not API or static)
     if (!isApiRoute && !isStaticAsset) {
-      if (DEBUG) console.log('[BOT-PROTECTION] Running protection on page route');
+      log.verbose('Running protection on page route');
 
       // Run enhanced bot protection middleware with monitoring
       const { response: botResponse, result: botResult } = await monitorBotProtection(req);
 
       // If bot protection blocked the request, return the response
       if (botResponse) {
-        if (DEBUG) console.log('[BOT-PROTECTION] Request blocked');
+        log.info('Request blocked');
         return botResponse;
       }
 
       // Add the bot analysis to request headers for potential use by the application
       const nextReq = req.clone();
       (nextReq as any).botResult = botResult;
-    } else if (DEBUG) {
-      console.log('[BOT-PROTECTION] Skipping protection for API/static asset');
+    } else {
+      log.verbose('Skipping protection for API/static asset');
     }
 
     // Get the client IP using our enhanced function
     const ip2 = getClientIp(req);
-    if (DEBUG && ip !== ip2) {
-      console.log(`[BOT-PROTECTION] IP mismatch: ${ip} vs ${ip2}`);
+    if (ip !== ip2) {
+      log.verbose(`IP mismatch: ${ip} vs ${ip2}`);
     }
 
     // Add the real IP to the request headers for downstream use
@@ -146,15 +165,13 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     response.headers.set('x-client-real-ip', ip);
 
     const endTime = Date.now();
-    if (DEBUG) {
-      console.log(`[BOT-PROTECTION] Processing time: ${endTime - startTime}ms`);
-      console.log('[BOT-PROTECTION] Middleware complete');
-    }
+    log.verbose(`Processing time: ${endTime - startTime}ms`);
+    log.verbose('Middleware complete');
 
     return response;
   } catch (error) {
     // Log the error but allow the request to continue
-    console.error('[BOT-PROTECTION] Middleware error:', error);
+    log.error('Middleware error:', error);
 
     // Return a pass-through response to avoid breaking the application
     return NextResponse.next();

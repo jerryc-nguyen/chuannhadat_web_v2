@@ -260,3 +260,32 @@ BOT_PROTECTION_DASHBOARD_KEY=your-secure-key-here
 #### Middleware Configuration
 
 The bot protection system is implemented as middleware in `src/middleware/bot-protection.ts` and is triggered based on the configuration in `src/middleware/index.ts`. It can be customized to protect specific routes or exclude others as needed.
+
+## Environment Variables
+
+### Essential Environment Variables
+
+- `NEXT_PUBLIC_API_BASE_URL`: Base URL for the API
+- `NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN`: Base domain for the application
+- `NEXT_PUBLIC_CAPCHA_SITE_KEY`: Site key for the CAPTCHA service
+- `NEXT_PUBLIC_ASSET_PREFIX`: Asset prefix for the application
+
+### Bot Protection Configuration
+
+- `ENABLE_BOT_PROTECTION`: Enable or disable bot protection (true/false)
+- `BOT_PROTECTION_LOG_LEVEL`: Control verbosity of bot protection logs (0=silent, 1=errors only, 2=important, 3=verbose)
+- `BOT_PROTECTION_FORCE_LOGS`: Force visibility of logs regardless of environment (true/false)
+
+### Firebase Configuration
+
+- `NEXT_PUBLIC_FIREBASE_APP_ID`: Firebase App ID
+- `NEXT_PUBLIC_AUTH_DOMAIN`: Firebase Auth Domain
+- `NEXT_PUBLIC_FIREBASE_API_KEY`: Firebase API Key
+- `NEXT_PUBLIC_PROJECT_ID`: Firebase Project ID
+- `NEXT_PUBLIC_FIREBASE_MESSAGE_ID`: Firebase Message ID
+- `NEXT_PUBLIC_STORAGE_BUCKET`: Firebase Storage Bucket
+
+### Other
+
+- `NEXT_PUBLIC_GA_ID`: Google Analytics ID
+- `SENTRY_AUTH_TOKEN`: Sentry Authentication Token

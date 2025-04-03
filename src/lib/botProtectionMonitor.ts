@@ -9,10 +9,47 @@ import {
 } from './botProtection';
 
 // Enable debug mode for local development
-const DEBUG = process.env.NODE_ENV === 'development' ? true : false;
+const DEBUG = false
 
 // Force log storing to be visible even without DEBUG
-const FORCE_LOG_VISIBILITY = true;
+const FORCE_LOG_VISIBILITY = process.env.BOT_PROTECTION_FORCE_LOGS === 'true';
+
+// Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
+const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
+
+// Helper functions for controlled logging
+const log = {
+  error: (message: string, ...args: any[]) => {
+    // Always log errors (level >= 1)
+    if (DEBUG && LOG_LEVEL >= 1) {
+      console.error(`[BOT-MONITOR] ❌ ${message}`, ...args);
+    }
+  },
+  info: (message: string, ...args: any[]) => {
+    // Only log important info (level >= 2)
+    if (DEBUG && LOG_LEVEL >= 2) {
+      console.log(`[BOT-MONITOR] ${message}`, ...args);
+    }
+  },
+  verbose: (message: string, ...args: any[]) => {
+    // Only log verbose details (level >= 3)
+    if (DEBUG && LOG_LEVEL >= 3) {
+      console.log(`[BOT-MONITOR] 🔍 ${message}`, ...args);
+    }
+  },
+  storage: (message: string, ...args: any[]) => {
+    // Only log storage actions if forced or debug (level >= 2)
+    if (DEBUG && LOG_LEVEL >= 2 || FORCE_LOG_VISIBILITY) {
+      console.log(`[BOT-MONITOR] 📝 ${message}`, ...args);
+    }
+  },
+  result: (message: string, ...args: any[]) => {
+    // Only log important results (level >= 2)
+    if (DEBUG && LOG_LEVEL >= 2) {
+      console.log(`[BOT-MONITOR] ${message}`, ...args);
+    }
+  }
+};
 
 // Interface for bot detection results
 interface BotDetectionResult {
@@ -44,7 +81,7 @@ export type { BotDetectionResult };
 
 // Function to send logs to the API for Redis storage
 // This is called after in-memory storage and avoids direct Redis dependency in middleware
-async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
+async function sendLogToAPI(botLog: BotDetectionResult): Promise<void> {
   // Skip in production builds
   if (process.env.NODE_ENV === 'production') {
     // In production, we'll use a separate process or worker to handle logs
@@ -67,18 +104,16 @@ async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
           'x-api-key': process.env.BOT_PROTECTION_DASHBOARD_KEY
         })
       },
-      body: JSON.stringify(log)
+      body: JSON.stringify(botLog)
     }).catch(err => {
       // Silently catch errors to avoid breaking the middleware
-      console.error('Error sending log to API:', err);
+      log.error('Error sending log to API:', err);
     });
 
-    if (DEBUG) {
-      console.log(`[BOT-MONITOR] Log sent to API for processing`);
-    }
+    log.verbose('Log sent to API for processing');
   } catch (error) {
     // Don't let errors in API storage affect the middleware
-    console.error('Error initializing log API call:', error);
+    log.error('Error initializing log API call:', error);
   }
 }
 
@@ -86,9 +121,7 @@ async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
 // This is a simplified version that only uses memory storage
 // Redis functionality will be added only in the API routes
 function storeDetectionLog(detectionResult: BotDetectionResult) {
-  if (DEBUG || FORCE_LOG_VISIBILITY) {
-    console.log(`[BOT-MONITOR] 📝 Storing detection log for ${detectionResult.url}`);
-  }
+  log.storage(`Storing detection log for ${detectionResult.url}`);
 
   // Store the log in memory (for all environments)
   recentBotLogs.unshift(detectionResult);
@@ -159,10 +192,8 @@ export async function monitorBotProtection(
   const userAgent = req.headers.get('user-agent');
   const ip = req.ip || '0.0.0.0';
 
-  if (DEBUG) {
-    console.log(`[BOT-MONITOR] Processing request: ${url}`);
-    console.log(`[BOT-MONITOR] IP: ${ip}, UA: ${userAgent?.substring(0, 30)}...`);
-  }
+  log.verbose(`Processing request: ${url}`);
+  log.verbose(`IP: ${ip}, UA: ${userAgent?.substring(0, 30)}...`);
 
   // Create the detection result object
   const result: BotDetectionResult = {
@@ -185,23 +216,23 @@ export async function monitorBotProtection(
   };
 
   // 1. Check for rate limiting
-  if (DEBUG) console.log(`[BOT-MONITOR] Checking rate limit for IP: ${ip}`);
+  log.verbose(`Checking rate limit for IP: ${ip}`);
   const rateLimitResult = await rateLimit(ip);
   result.rateLimited = !rateLimitResult.success;
   result.rateLimitRemaining = rateLimitResult.remaining;
-  if (DEBUG) console.log(`[BOT-MONITOR] Rate limit result: ${JSON.stringify(rateLimitResult)}`);
+  log.verbose(`Rate limit result: ${JSON.stringify(rateLimitResult)}`);
 
   // 2. Check if it's a known search engine bot
   const isSearchEngineBot = isKnownBot(userAgent);
   result.suspiciousDetails.isKnownSearchEngine = isSearchEngineBot;
-  if (DEBUG && isSearchEngineBot) console.log(`[BOT-MONITOR] Known search engine detected`);
+  if (isSearchEngineBot) log.verbose(`Known search engine detected`);
 
   // 3. If it claims to be a search engine, verify it
   let isVerifiedBot = false;
   if (isSearchEngineBot) {
-    if (DEBUG) console.log(`[BOT-MONITOR] Verifying search engine bot claim`);
+    log.verbose(`Verifying search engine bot claim`);
     isVerifiedBot = await verifySearchEngineBot(ip, userAgent);
-    if (DEBUG) console.log(`[BOT-MONITOR] Verification result: ${isVerifiedBot ? 'Legitimate' : 'Spoofed'}`);
+    log.verbose(`Verification result: ${isVerifiedBot ? 'Legitimate' : 'Spoofed'}`);
   }
 
   // 4. Check for suspicious characteristics
@@ -213,11 +244,9 @@ export async function monitorBotProtection(
   result.suspiciousDetails.hasSuspiciousHeaders = suspiciousHeaders;
   result.suspiciousDetails.hasUnusualPattern = unusualPattern;
 
-  if (DEBUG) {
-    console.log(`[BOT-MONITOR] Suspicious UA: ${suspiciousUA}`);
-    console.log(`[BOT-MONITOR] Suspicious headers: ${suspiciousHeaders}`);
-    console.log(`[BOT-MONITOR] Unusual request pattern: ${unusualPattern}`);
-  }
+  log.verbose(`Suspicious UA: ${suspiciousUA}`);
+  log.verbose(`Suspicious headers: ${suspiciousHeaders}`);
+  log.verbose(`Unusual request pattern: ${unusualPattern}`);
 
   // Determine if this is a bot and if it's suspicious
   result.isBot = isSearchEngineBot || suspiciousUA;
@@ -236,23 +265,27 @@ export async function monitorBotProtection(
 
   // Always show log storage regardless of DEBUG setting
   const homepageFlag = result.url.match(/\/(home|index)?(\?|$)/) ? ' 🏠 HOME PAGE' : '';
-  console.log(`💾💾💾 BOT LOG STORED for${homepageFlag}: ${result.url}`);
-  console.log(`💾💾💾 Current log count: ${recentBotLogs.length}`);
+
+  // Control storage logs with environment variable
+  if (LOG_LEVEL >= 2) {
+    console.log(`💾💾💾 BOT LOG STORED for${homepageFlag}: ${result.url}`);
+    console.log(`💾💾💾 Current log count: ${recentBotLogs.length}`);
+  }
 
   // Log to console
   const executionTime = Date.now() - start;
-  console.log(`[BotProtection] ${result.requestDenied ? '🚫 BLOCKED' : '✅ ALLOWED'} ${url} (${executionTime}ms)`);
+  log.info(`${result.requestDenied ? '🚫 BLOCKED' : '✅ ALLOWED'} ${url} (${executionTime}ms)`);
 
-  if (result.isBot || result.isSuspicious) {
-    console.log(JSON.stringify({
+  if ((result.isBot || result.isSuspicious) && LOG_LEVEL >= 3) {
+    log.verbose(`Bot details: ${JSON.stringify({
       type: 'bot_detection',
       ...result
-    }, null, 2));
+    }, null, 2)}`);
   }
 
   // If the request should be denied, return 403 response
   if (result.requestDenied) {
-    if (DEBUG) console.log(`[BOT-MONITOR] Denying request with 403`);
+    log.verbose(`Denying request with 403`);
     const response = NextResponse.json(
       { error: 'Access Denied', code: 'BOT_PROTECTION' },
       { status: 403 }
@@ -260,7 +293,7 @@ export async function monitorBotProtection(
     return { response, result };
   }
 
-  if (DEBUG) console.log(`[BOT-MONITOR] Request processing complete in ${executionTime}ms`);
+  log.verbose(`Request processing complete in ${executionTime}ms`);
   // Otherwise continue with the request
   return { response: null, result };
 } 

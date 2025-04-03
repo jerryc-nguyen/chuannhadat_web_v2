@@ -6,7 +6,7 @@ import util from 'util';
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = process.env.NODE_ENV === 'development' ? true : false;
+const DEBUG = isBotProtectionEnabled;
 
 // Simple in-memory rate limiter for middleware
 // This avoids Redis dependencies in the middleware context

@@ -4,7 +4,38 @@ import { handleAuthRedirects } from './middleware/auth';
 import { handleUrlRedirects } from './middleware/url-redirects';
 
 // Enable debug mode for local development
-const DEBUG = process.env.NODE_ENV === 'development' ? true : false;
+const DEBUG = false;
+
+// Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
+const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
+
+// Helper functions for controlled logging
+const log = {
+  error: (message: string, ...args: any[]) => {
+    // Always log errors (level >= 1)
+    if (LOG_LEVEL >= 1) {
+      console.error(`[MIDDLEWARE] ❌ ${message}`, ...args);
+    }
+  },
+  info: (message: string, ...args: any[]) => {
+    // Only log important info (level >= 2)
+    if (LOG_LEVEL >= 2) {
+      console.log(`[MIDDLEWARE] ${message}`, ...args);
+    }
+  },
+  verbose: (message: string, ...args: any[]) => {
+    // Only log verbose details (level >= 3)
+    if (LOG_LEVEL >= 3 || DEBUG) {
+      console.log(`[MIDDLEWARE] 🔍 ${message}`, ...args);
+    }
+  },
+  highlight: (message: string, ...args: any[]) => {
+    // Only log highlighted messages (level >= 2)
+    if (LOG_LEVEL >= 2) {
+      console.log(`🔵🔵🔵 ${message}`, ...args);
+    }
+  }
+};
 
 // This runs in Node.js runtime (not Edge)
 export const config = {
@@ -25,30 +56,19 @@ const isBuildTime = process.env.NODE_ENV === 'production' && process.env.NEXT_PH
 export async function middleware(req: NextRequest) {
   // Skip all middleware during builds to avoid memory issues
   if (isBuildTime) {
-    console.log('[MIDDLEWARE] Skipping during build phase');
+    log.info('Skipping during build phase');
     return NextResponse.next();
   }
 
   try {
-    console.log('🔵🔵🔵 MAIN MIDDLEWARE EXECUTED for:', req.nextUrl.pathname);
+    log.highlight(`MAIN MIDDLEWARE EXECUTED for: ${req.nextUrl.pathname}`);
 
     const pathname = req.nextUrl.pathname;
 
     // Log all requests to help with debugging
-    console.log(`[MIDDLEWARE] Request path: ${pathname}`);
-
-    // Only show special markers for home page
-    if (pathname === '/' || pathname === '/home' || pathname === '/index') {
-      console.log('★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★');
-      console.log(`✅ HOME PAGE REQUEST DETECTED IN MIDDLEWARE: ${req.method} ${req.nextUrl.toString()}`);
-      console.log(`✅ IP: ${req.ip || 'unknown'}, User-Agent: ${req.headers.get('user-agent')?.substring(0, 50)}...`);
-      console.log('★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★');
-    }
-
-    if (DEBUG) {
-      console.log(`[MIDDLEWARE] Processing: ${pathname}`);
-      console.log(`[MIDDLEWARE] Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
-    }
+    log.info(`Request path: ${pathname}`);
+    log.verbose(`Processing: ${pathname}`);
+    log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
 
     // Skip middleware for static files
     if (
@@ -59,43 +79,43 @@ export async function middleware(req: NextRequest) {
       pathname === '/robots.txt' ||
       pathname === '/sitemap.xml'
     ) {
-      if (DEBUG) console.log('[MIDDLEWARE] Skipping static file');
+      log.verbose('Skipping static file');
       return NextResponse.next();
     }
 
     // Apply bot protection first - if it returns a response, use it
-    if (DEBUG) console.log('[MIDDLEWARE] Applying bot protection');
+    log.verbose('Applying bot protection');
     const startTime = Date.now();
     const botProtectionResponse = await applyBotProtection(req);
-    if (DEBUG) console.log(`[MIDDLEWARE] Bot protection applied in ${Date.now() - startTime}ms`);
+    log.verbose(`Bot protection applied in ${Date.now() - startTime}ms`);
 
     if (botProtectionResponse) {
-      if (DEBUG) console.log('[MIDDLEWARE] Bot protection returned a response, using it');
+      log.verbose('Bot protection returned a response, using it');
       return botProtectionResponse;
     }
 
     // Apply authentication checks next - if it returns a response, use it
-    if (DEBUG) console.log('[MIDDLEWARE] Checking authentication');
+    log.verbose('Checking authentication');
     const authResponse = handleAuthRedirects(req);
     if (authResponse) {
-      if (DEBUG) console.log('[MIDDLEWARE] Auth check returned a response, using it');
+      log.verbose('Auth check returned a response, using it');
       return authResponse;
     }
 
     // Finally check for URL redirects
-    if (DEBUG) console.log('[MIDDLEWARE] Checking URL redirects');
+    log.verbose('Checking URL redirects');
     const redirectResponse = await handleUrlRedirects(req);
     if (redirectResponse) {
-      if (DEBUG) console.log('[MIDDLEWARE] URL redirect found, redirecting');
+      log.verbose('URL redirect found, redirecting');
       return redirectResponse;
     }
 
     // If no middleware provided a response, proceed with the request
-    if (DEBUG) console.log('[MIDDLEWARE] No middleware actions, proceeding with request');
+    log.verbose('No middleware actions, proceeding with request');
     return NextResponse.next();
   } catch (error) {
     // Log any errors but never crash the application
-    console.error('[MIDDLEWARE] Global middleware error:', error);
+    log.error('Global middleware error:', error);
 
     // Always continue with the request if middleware fails
     return NextResponse.next();
