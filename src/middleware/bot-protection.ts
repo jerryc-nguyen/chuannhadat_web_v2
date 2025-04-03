@@ -5,7 +5,7 @@ import { monitorBotProtection } from '@/lib/botProtectionMonitor';
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = true;
+const DEBUG = false;
 
 // Force log visibility regardless of DEBUG flag
 const FORCE_LOG_VISIBILITY = process.env.BOT_PROTECTION_FORCE_LOGS === 'true';
@@ -87,16 +87,50 @@ function isProtectedRoute(pathname: string): boolean {
  * @param pathname URL pathname to check
  * @returns true if the pathname should be excluded from rate limiting
  */
-function isRateLimitExcluded(pathname: string, url: URL): boolean {
+function isRateLimitExcluded(pathname: string, url: URL, req: NextRequest): boolean {
+  // Convert to string for more flexible checking
+  const urlString = url.toString();
+  const searchParamsString = url.searchParams.toString();
+  const rawUrl = req.url || '';
+  const referer = req.headers.get('referer') || '';
+
+  // Debug the full URL information
+  if (LOG_LEVEL >= 3 || FORCE_LOG_VISIBILITY) {
+    console.log(`🔎 URL CHECK:
+    - pathname: ${pathname}
+    - urlString: ${urlString}
+    - searchParams: ${searchParamsString}
+    - referer: ${referer}
+    - raw URL: ${rawUrl}
+    - x-nextjs-data: ${req.headers.has('x-nextjs-data')}
+    - next-router-state-tree: ${req.headers.has('next-router-state-tree')}
+    `);
+  }
+
   // Exclude specific paths
   if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
     log.info(`Excluded path: ${pathname}`);
     return true;
   }
 
-  // Exclude Next.js AJAX requests (used for client navigation)
-  if (url.searchParams.has('_rsc')) {
-    log.info(`Excluded AJAX request with _rsc param: ${url.toString()}`);
+  // Exclude Next.js AJAX requests by checking for multiple indicators
+  const isNextJsAjax = (
+    // Check URL parameters
+    url.searchParams.has('_rsc') ||
+    urlString.includes('_rsc=') ||
+    searchParamsString.includes('_rsc') ||
+    referer.includes('_rsc') ||
+    rawUrl.includes('_rsc') ||
+
+    // Check special Next.js headers
+    req.headers.has('x-nextjs-data') ||
+    req.headers.has('next-router-state-tree') ||
+    req.headers.has('next-url')
+  );
+
+  if (isNextJsAjax) {
+    log.info(`Excluded Next.js AJAX request: ${urlString}`);
+    console.log(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${urlString}`);
     return true;
   }
 
@@ -146,7 +180,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
 
     // Check if path should be excluded from rate limiting
     const url = new URL(req.nextUrl.toString());
-    if (isRateLimitExcluded(pathname, url)) {
+    if (isRateLimitExcluded(pathname, url, req)) {
       log.info(`Skipping rate limit counting for excluded path: ${pathname}`);
       // Allow the request but skip monitoring/counting entirely
       return NextResponse.next();

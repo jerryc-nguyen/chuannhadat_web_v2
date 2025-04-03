@@ -9,43 +9,37 @@ import {
 } from './botProtection';
 
 // Enable debug mode for local development
-const DEBUG = true;
-
-// Force log storing to be visible even without DEBUG
-const FORCE_LOG_VISIBILITY = process.env.BOT_PROTECTION_FORCE_LOGS === 'true';
-
-// Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
-const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
+const DEBUG = false;
 
 // Helper functions for controlled logging
 const log = {
   error: (message: string, ...args: any[]) => {
     // Always log errors (level >= 1)
-    if (DEBUG && LOG_LEVEL >= 1) {
+    if (DEBUG) {
       console.error(`[BOT-MONITOR] ❌ ${message}`, ...args);
     }
   },
   info: (message: string, ...args: any[]) => {
     // Only log important info (level >= 2)
-    if (DEBUG && LOG_LEVEL >= 2) {
+    if (DEBUG) {
       console.log(`[BOT-MONITOR] ${message}`, ...args);
     }
   },
   verbose: (message: string, ...args: any[]) => {
     // Only log verbose details (level >= 3)
-    if (DEBUG && LOG_LEVEL >= 3) {
+    if (DEBUG) {
       console.log(`[BOT-MONITOR] 🔍 ${message}`, ...args);
     }
   },
   storage: (message: string, ...args: any[]) => {
     // Only log storage actions if forced or debug (level >= 2)
-    if (DEBUG && LOG_LEVEL >= 2 || FORCE_LOG_VISIBILITY) {
+    if (DEBUG) {
       console.log(`[BOT-MONITOR] 📝 ${message}`, ...args);
     }
   },
   result: (message: string, ...args: any[]) => {
     // Only log important results (level >= 2)
-    if (DEBUG && LOG_LEVEL >= 2) {
+    if (DEBUG) {
       console.log(`[BOT-MONITOR] ${message}`, ...args);
     }
   }
@@ -74,7 +68,7 @@ interface BotDetectionResult {
 // Store recent bot detection logs in memory
 // This is used by both middleware and API routes
 const recentBotLogs: BotDetectionResult[] = [];
-const MAX_LOGS = 1000;
+const MAX_LOGS = 50000;
 
 // Export the interface for use in API routes
 export type { BotDetectionResult };
@@ -184,7 +178,7 @@ function getMatchedPatterns(userAgent: string | null): string[] {
 }
 
 // Function to check if a path should be excluded from rate limiting
-export function isRateLimitExcluded(pathname: string, url?: string): boolean {
+export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRequest): boolean {
   // Exclude specific paths
   if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
     log.storage(`Excluded path: ${pathname}`);
@@ -192,14 +186,44 @@ export function isRateLimitExcluded(pathname: string, url?: string): boolean {
   }
 
   // Exclude Next.js AJAX requests (used for client navigation)
-  if (url && url.includes('_rsc=')) {
-    log.storage(`Excluded AJAX request with _rsc param: ${url}`);
+  let isNextJsAjax = false;
 
+  // Check URL for _rsc parameter variants
+  if (url) {
+    isNextJsAjax = isNextJsAjax ||
+      url.includes('_rsc=') ||
+      url.includes('?_rsc') ||
+      url.includes('&_rsc');
+  }
+
+  // Check for Next.js-specific headers if request object available
+  if (req) {
+    const referer = req.headers.get('referer') || '';
+    isNextJsAjax = isNextJsAjax ||
+      referer.includes('_rsc') ||
+      req.headers.has('x-nextjs-data') ||
+      req.headers.has('next-router-state-tree') ||
+      req.headers.has('next-url');
+
+    // Enhanced logging of the detection method
+    if (DEBUG) {
+      console.log(`🔎 AJAX CHECK:
+      - URL _rsc check: ${url?.includes('_rsc')}
+      - referer _rsc: ${referer.includes('_rsc')}
+      - x-nextjs-data: ${req.headers.has('x-nextjs-data')}
+      - next-router-state-tree: ${req.headers.has('next-router-state-tree')}
+      - next-url: ${req.headers.has('next-url')}
+      `);
+    }
+  }
+
+  if (isNextJsAjax) {
     // Print the URL for debugging
-    if (LOG_LEVEL >= 3 || FORCE_LOG_VISIBILITY) {
-      console.log(`⚠️⚠️⚠️ EXCLUDING RSC REQUEST: ${url}`);
+    if (DEBUG) {
+      console.log(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${url || pathname}`);
     }
 
+    log.storage(`Excluded AJAX request: ${url || pathname}`);
     return true;
   }
 
@@ -222,9 +246,14 @@ export async function monitorBotProtection(
   log.verbose(`IP: ${ip}, UA: ${userAgent?.substring(0, 30)}...`);
 
   // Additional debug for RSC detection
-  if (searchParams.includes('_rsc')) {
-    if (LOG_LEVEL >= 2 || FORCE_LOG_VISIBILITY) {
-      console.log(`🔴🔴🔴 RSC PARAM DETECTED in: ${url}`);
+  if (searchParams.includes('_rsc') || req.headers.has('x-nextjs-data')) {
+    if (DEBUG) {
+      console.log(`🔴🔴🔴 NEXT.JS AJAX DETECTED:
+      - URL: ${url}
+      - Has x-nextjs-data: ${req.headers.has('x-nextjs-data')}
+      - Has next-router-state-tree: ${req.headers.has('next-router-state-tree')}
+      - searchParams: ${searchParams}
+      `);
     }
   }
 
@@ -249,7 +278,7 @@ export async function monitorBotProtection(
   };
 
   // Check if path should be excluded from rate limiting
-  if (isRateLimitExcluded(pathname, url)) {
+  if (isRateLimitExcluded(pathname, url, req)) {
     log.storage(`Path excluded from rate limiting: ${pathname}`);
     // Still record the request but don't apply rate limiting
     storeDetectionLog(result);
@@ -308,7 +337,7 @@ export async function monitorBotProtection(
   const homepageFlag = result.url.match(/\/(home|index)?(\?|$)/) ? ' 🏠 HOME PAGE' : '';
 
   // Control storage logs with environment variable
-  if (LOG_LEVEL >= 2) {
+  if (DEBUG) {
     console.log(`💾💾💾 BOT LOG STORED for${homepageFlag}: ${result.url}`);
     console.log(`💾💾💾 Current log count: ${recentBotLogs.length}`);
   }
@@ -317,7 +346,7 @@ export async function monitorBotProtection(
   const executionTime = Date.now() - start;
   log.info(`${result.requestDenied ? '🚫 BLOCKED' : '✅ ALLOWED'} ${url} (${executionTime}ms)`);
 
-  if ((result.isBot || result.isSuspicious) && LOG_LEVEL >= 3) {
+  if ((result.isBot || result.isSuspicious) && DEBUG) {
     log.verbose(`Bot details: ${JSON.stringify({
       type: 'bot_detection',
       ...result

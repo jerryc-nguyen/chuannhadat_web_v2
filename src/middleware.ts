@@ -6,32 +6,29 @@ import { handleUrlRedirects } from './middleware/url-redirects';
 // Enable debug mode for local development
 const DEBUG = false;
 
-// Log verbosity level (0=silent, 1=errors only, 2=important, 3=verbose)
-const LOG_LEVEL = parseInt(process.env.BOT_PROTECTION_LOG_LEVEL || '2', 10);
-
 // Helper functions for controlled logging
 const log = {
   error: (message: string, ...args: any[]) => {
     // Always log errors (level >= 1)
-    if (LOG_LEVEL >= 1) {
+    if (DEBUG) {
       console.error(`[MIDDLEWARE] ❌ ${message}`, ...args);
     }
   },
   info: (message: string, ...args: any[]) => {
     // Only log important info (level >= 2)
-    if (LOG_LEVEL >= 2) {
+    if (DEBUG) {
       console.log(`[MIDDLEWARE] ${message}`, ...args);
     }
   },
   verbose: (message: string, ...args: any[]) => {
     // Only log verbose details (level >= 3)
-    if (LOG_LEVEL >= 3 || DEBUG) {
+    if (DEBUG) {
       console.log(`[MIDDLEWARE] 🔍 ${message}`, ...args);
     }
   },
   highlight: (message: string, ...args: any[]) => {
     // Only log highlighted messages (level >= 2)
-    if (LOG_LEVEL >= 2) {
+    if (DEBUG) {
       console.log(`🔵🔵🔵 ${message}`, ...args);
     }
   }
@@ -74,9 +71,36 @@ export async function middleware(req: NextRequest) {
     log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
 
     // Enhanced debugging for RSC requests
-    const hasRscParam = req.nextUrl.searchParams.has('_rsc');
+    const urlString = req.nextUrl.toString();
+    const fullRequestUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}${req.nextUrl.pathname}${req.nextUrl.search}`;
+    const searchParamsString = req.nextUrl.searchParams.toString();
+    const rawHeadersUrl = req.headers.get('referer') || '';
+    const rawUrl = req.url || '';
+
+    // Debug full request URL information
+    if (DEBUG) {
+      console.log(`🔍🔍🔍 URL INSPECTION:
+      - pathname: ${pathname}
+      - urlString: ${urlString}
+      - fullRequestUrl: ${fullRequestUrl}
+      - searchParams: ${searchParamsString}
+      - rawUrl: ${rawUrl}
+      - referer: ${rawHeadersUrl}
+      - headers: ${JSON.stringify(Object.fromEntries([...req.headers.entries()].filter(([k]) => k.includes('rsc') || k === 'x-nextjs-data')), null, 2)}
+      `);
+    }
+
+    // Check for _rsc in multiple possible locations
+    const hasRscParam = req.nextUrl.searchParams.has('_rsc') ||
+      urlString.includes('_rsc=') ||
+      searchParamsString.includes('_rsc') ||
+      rawUrl.includes('_rsc') ||
+      rawHeadersUrl.includes('_rsc') ||
+      req.headers.has('x-nextjs-data');
+
     if (hasRscParam) {
-      log.highlight(`[RSC] Client navigation detected: ${req.nextUrl.toString()}`);
+      log.highlight(`[RSC] Client navigation detected: ${urlString}`);
+      log.info(`RSC detection: searchParams=${req.nextUrl.searchParams.has('_rsc')}, nextUrlString=${urlString.includes('_rsc=')}, searchParamsString=${searchParamsString.includes('_rsc')}, rawUrl=${rawUrl.includes('_rsc')}, referer=${rawHeadersUrl.includes('_rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}`);
     }
 
     // Skip middleware for static files
