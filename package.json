@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev2": "next dev --experimental-https",
-    "build": "next build",
+    "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" next build",
     "start": "next start",
     "start:pm2": "pm2-runtime start ecosystem.config.js",
     "pm2:start": "pm2 start ecosystem.config.js",
@@ -122,6 +122,7 @@
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "^14.2.6",
     "eslint-config-prettier": "^9.1.0",

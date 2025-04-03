@@ -45,6 +45,11 @@ export type { BotDetectionResult };
 // Function to send logs to the API for Redis storage
 // This is called after in-memory storage and avoids direct Redis dependency in middleware
 async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
+  // Skip in production builds
+  if (process.env.NODE_ENV === 'production') {
+    // In production, we'll use a separate process or worker to handle logs
+    return;
+  }
 
   try {
     // Construct absolute URL based on request origin or environment
@@ -52,9 +57,8 @@ async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
       ? window.location.origin
       : process.env.NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN || 'http://localhost:3000';
 
-    // Use native fetch to send log to API endpoint
-    console.log(`[BOT-MONITOR] Sending log to API at ${baseUrl}/api/bot-protection/logs`);
-    const response = await fetch(`${baseUrl}/api/bot-protection/logs`, {
+    // Use fetch with no-wait to avoid blocking
+    fetch(`${baseUrl}/api/bot-protection/logs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,18 +68,17 @@ async function sendLogToAPI(log: BotDetectionResult): Promise<void> {
         })
       },
       body: JSON.stringify(log)
+    }).catch(err => {
+      // Silently catch errors to avoid breaking the middleware
+      console.error('Error sending log to API:', err);
     });
 
-    if (!response.ok) {
-      throw new Error(`API responded with status: ${response.status}`);
-    }
-
     if (DEBUG) {
-      console.log(`[BOT-MONITOR] Log sent to API for Redis storage successfully`);
+      console.log(`[BOT-MONITOR] Log sent to API for processing`);
     }
   } catch (error) {
     // Don't let errors in API storage affect the middleware
-    console.error('Error sending log to API:', error);
+    console.error('Error initializing log API call:', error);
   }
 }
 
@@ -96,17 +99,8 @@ function storeDetectionLog(detectionResult: BotDetectionResult) {
   }
 
   // Also send the log to the API for Redis storage
-  // This is done asynchronously and won't block middleware
-  try {
-    // We use setTimeout to make this truly non-blocking
-    setTimeout(() => {
-      sendLogToAPI(detectionResult).catch(err => {
-        console.error('Failed to send log to API:', err);
-      });
-    }, 0);
-  } catch (err) {
-    console.error('Error scheduling log API call:', err);
-  }
+  // This is done non-blocking and won't affect middleware performance
+  sendLogToAPI(detectionResult);
 }
 
 // Get logs (simplified version for middleware)

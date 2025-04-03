@@ -44,24 +44,36 @@ function ensureLogsExist(logs: BotDetectionResult[]) {
 let logsRedis: Redis | null = null;
 let redisConnectionError = false;
 
+// Skip Redis in build time to save memory
+const isBuildTime = process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
+
 const getLogsRedis = (): Redis | null => {
+  // Skip Redis during build time
+  if (isBuildTime) {
+    console.log('[BOT-API] Skipping Redis initialization during build');
+    return null;
+  }
+
   if (redisConnectionError) {
     return null;
   }
 
   if (!logsRedis) {
     try {
+      // Lower memory connection options for Redis
       logsRedis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379/1', {
         connectTimeout: 5000, // 5 seconds
-        maxRetriesPerRequest: 3,
+        maxRetriesPerRequest: 2,
+        enableOfflineQueue: false, // Don't queue commands when disconnected
+        lazyConnect: true, // Only connect when needed
         retryStrategy(times) {
-          if (times > 3) {
-            // After 3 retries, mark as error and stop trying
+          if (times > 2) {
+            // After 2 retries, mark as error and stop trying
             redisConnectionError = true;
             console.error('Redis connection failed after multiple retries, using in-memory logs');
             return null;
           }
-          return Math.min(times * 50, 1000); // Exponential backoff up to 1s
+          return Math.min(times * 50, 500); // Shorter backoff up to 500ms
         },
       });
 
@@ -87,6 +99,12 @@ const getLogsRedis = (): Redis | null => {
 
 // Get logs from Redis
 async function getRedisLogs(): Promise<BotDetectionResult[]> {
+  // Skip Redis during build time
+  if (isBuildTime) {
+    console.log('[BOT-API] Skipping Redis logs retrieval during build');
+    return [];
+  }
+
   try {
     const redis = getLogsRedis();
     if (!redis) {
@@ -116,6 +134,12 @@ async function getRedisLogs(): Promise<BotDetectionResult[]> {
 
 // Clear logs from Redis
 async function clearRedisLogs(): Promise<void> {
+  // Skip Redis during build time
+  if (isBuildTime) {
+    console.log('[BOT-API] Skipping Redis logs clearing during build');
+    return;
+  }
+
   try {
     const redis = getLogsRedis();
     if (redis) {
