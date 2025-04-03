@@ -68,7 +68,7 @@ interface BotDetectionResult {
 // Store recent bot detection logs in memory
 // This is used by both middleware and API routes
 const recentBotLogs: BotDetectionResult[] = [];
-const MAX_LOGS = 50000;
+const MAX_LOGS = 20000;
 
 // Export the interface for use in API routes
 export type { BotDetectionResult };
