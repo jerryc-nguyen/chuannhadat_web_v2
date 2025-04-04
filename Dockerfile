@@ -8,17 +8,35 @@ WORKDIR /app
 # Set memory limit for Node.js during build
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
+# Disable Next.js telemetry during build
+ENV NEXT_TELEMETRY_DISABLED=1
+# Disable source maps to speed up the build
+ENV GENERATE_SOURCEMAP=false
+
 # Copy package.json and package-lock.json before other files
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy all files
+# Copy app configuration files first to leverage caching
+COPY next.config.mjs tsconfig.json tsconfig.paths.json postcss.config.mjs tailwind.config.ts next-env.d.ts next-global.d.ts components.json .eslintrc.json .prettierrc* ./
+COPY public ./public
+
+# Copy sentry configuration if needed
+COPY sentry*.config.ts ./
+
+# Copy source code
+COPY src ./src
+
+# Copy ecosystem config
+COPY ecosystem.config.js ./
+
+# Copy remaining files (if any)
 COPY . .
 
 # Remove local environment variables
 RUN rm -rf .env.local
 
-# Add custom build command to optimize memory usage
+# Use production mode for the build - simple and effective
 RUN NODE_ENV=production npm run build
 
 # Production image, copy all the files and run next
@@ -26,8 +44,9 @@ FROM base AS runner
 WORKDIR /app
 
 ENV GENERATE_SOURCEMAP=false
-ENV NODE_ENV production
+ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install PM2 globally
 RUN npm install -g pm2
