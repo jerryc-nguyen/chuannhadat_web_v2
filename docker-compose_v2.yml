@@ -40,6 +40,19 @@ services:
       - acme:/etc/acme.sh
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   chuannhadat_next:
     restart: always
     image: registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2
@@ -50,10 +63,27 @@ services:
       - .env.production
     environment:
       - NEXT_PUBLIC_API_BASE_URL=https://api-production.chuannhadat.com
-      - VIRTUAL_HOST=beta.chuannhadat.com
+      - VIRTUAL_HOST=chuannhadat.com
       - VIRTUAL_NETWORK=nginx-proxy
       - VIRTUAL_PORT=4500
-      - LETSENCRYPT_HOST=beta.chuannhadat.com
+      - LETSENCRYPT_HOST=chuannhadat.com
+      - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
+      - NODE_ENV=production
+      - ENABLE_BOT_PROTECTION=true
+      - REDIS_URL=redis://redis:6379
+    command: 'node server.js'
+
+  cnd_503:
+    restart: always
+    image: registry.gitlab.com/mkt-devops/web-deployments:cnd_503
+    container_name: cnd_503
+    ports:
+      - '4000:4000'
+    environment:
+      - VIRTUAL_HOST=chuannhadat.com
+      - VIRTUAL_NETWORK=nginx-proxy
+      - VIRTUAL_PORT=4000
+      - LETSENCRYPT_HOST=chuannhadat.com
       - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
     command: 'node server.js'
 
@@ -63,3 +93,4 @@ volumes:
   html:
   acme:
   certs:
+  redis_data:

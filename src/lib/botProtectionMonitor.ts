@@ -5,11 +5,12 @@ import {
   verifySearchEngineBot,
   isSuspiciousBot,
   hasSuspiciousHeaders,
-  hasUnusualRequestPattern
+  hasUnusualRequestPattern,
 } from './botProtection';
+import { getClientIp } from '../middleware/bot-protection';
 
 // Enable debug mode for local development
-const DEBUG = false;
+const DEBUG = true;
 
 // Helper functions for controlled logging
 const log = {
@@ -239,7 +240,7 @@ export async function monitorBotProtection(
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
   const userAgent = req.headers.get('user-agent');
-  const ip = req.ip || '0.0.0.0';
+  const ip = getClientIp(req) || '0.0.0.0';
 
   log.verbose(`Processing request: ${url}`);
   log.verbose(`URL searchParams: ${searchParams}`);
