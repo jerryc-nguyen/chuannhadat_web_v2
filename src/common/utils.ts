@@ -101,7 +101,7 @@ export const generateRandomString = (length: number) => {
   return result;
 };
 export const getInitialsName = (fullName: string) => {
-  const words = fullName.trim().split(' ');
+  const words = (fullName || '').trim().split(' ');
   if (words.length === 1) {
     return words[0].substring(0, 2).toUpperCase();
   }
