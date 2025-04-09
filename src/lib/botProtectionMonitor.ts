@@ -10,7 +10,7 @@ import {
 import { getClientIp } from '../middleware/bot-protection';
 
 // Enable debug mode for local development
-const DEBUG = true;
+const DEBUG = process.env.DEBUG_BOT_PROTECTION === 'true';
 
 // Helper functions for controlled logging
 const log = {
@@ -258,6 +258,45 @@ export async function monitorBotProtection(
     }
   }
 
+  // Add special case for PageSpeed Insights
+  if (userAgent && (
+    userAgent.toLowerCase().includes('lighthouse') ||
+    userAgent.toLowerCase().includes('pagespeed') ||
+    userAgent.toLowerCase().includes('chrome-lighthouse') ||
+    userAgent.toLowerCase().includes('googleother')
+  )) {
+    console.log('PageSpeed Insights detected:', {
+      userAgent,
+      ip,
+      path: pathname,
+      headers: Object.fromEntries([...req.headers.entries()]),
+    });
+
+    // Create a minimal "allowed" result
+    const result: BotDetectionResult = {
+      timestamp: new Date().toISOString(),
+      url,
+      ip,
+      userAgent,
+      isBot: true,
+      isSuspicious: false,
+      requestDenied: false,
+      rateLimited: false,
+      rateLimitRemaining: 999,
+      suspiciousDetails: {
+        isKnownSearchEngine: true,
+        hasSuspiciousUserAgent: false,
+        hasSuspiciousHeaders: false,
+        hasUnusualPattern: false,
+        matchedPatterns: [],
+      }
+    };
+
+    // Log but don't deny access
+    storeDetectionLog(result);
+    return { response: null, result };
+  }
+
   // Create the detection result object
   const result: BotDetectionResult = {
     timestamp: new Date().toISOString(),
@@ -356,7 +395,7 @@ export async function monitorBotProtection(
 
   // If the request should be denied, return 403 response
   if (result.requestDenied) {
-    log.verbose(`Denying request with 403`);
+    console.log(`🚫 BLOCKED ${url}: ${userAgent}`);
     const response = NextResponse.json(
       { error: 'Access Denied', code: 'BOT_PROTECTION' },
       { status: 403 }

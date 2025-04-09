@@ -5,7 +5,7 @@ import { monitorBotProtection } from '@/lib/botProtectionMonitor';
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
 
 // Enable debug mode for local development
-const DEBUG = false;
+const DEBUG = process.env.DEBUG_BOT_PROTECTION === 'true';
 
 // Force log visibility regardless of DEBUG flag
 const FORCE_LOG_VISIBILITY = process.env.BOT_PROTECTION_FORCE_LOGS === 'true';
@@ -95,8 +95,8 @@ function isRateLimitExcluded(pathname: string, url: URL, req: NextRequest): bool
   const referer = req.headers.get('referer') || '';
 
   // Debug the full URL information
-  if (LOG_LEVEL >= 3 || FORCE_LOG_VISIBILITY) {
-    console.log(`🔎 URL CHECK:
+  if (DEBUG) {
+    log.info(`🔎 URL CHECK:
     - pathname: ${pathname}
     - urlString: ${urlString}
     - searchParams: ${searchParamsString}
@@ -190,7 +190,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
 
     // Handle the dashboard route
     if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?')) {
-      if (LOG_LEVEL >= 2) console.log('!!!!! DASHBOARD ACCESS DETECTED !!!!!');
+      if (DEBUG) log.info('!!!!! DASHBOARD ACCESS DETECTED !!!!!');
       log.info(`Dashboard URL: ${req.nextUrl.toString()}`);
       log.info(`User-Agent: ${userAgent}`);
 
@@ -207,7 +207,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
 
     // Handle protected routes (home, post detail, profile detail, category)
     if (isProtectedRoute(pathname)) {
-      if (LOG_LEVEL >= 2) console.log(`!!!!! ${routeName} PAGE ACCESS DETECTED !!!!!`);
+      if (DEBUG) log.info(`!!!!! ${routeName} PAGE ACCESS DETECTED !!!!!`);
       log.info(`${routeName} URL: ${req.nextUrl.toString()}`);
       log.info(`User-Agent: ${userAgent}`);
 

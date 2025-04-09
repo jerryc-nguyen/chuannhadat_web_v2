@@ -4,7 +4,7 @@ import { handleAuthRedirects } from './middleware/auth';
 import { handleUrlRedirects } from './middleware/url-redirects';
 
 // Enable debug mode for local development
-const DEBUG = false;
+const DEBUG = process.env.DEBUG_MIDDLEWARE === 'true';
 
 // Helper functions for controlled logging
 const log = {
