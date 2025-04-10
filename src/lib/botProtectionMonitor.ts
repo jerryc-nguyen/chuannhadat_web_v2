@@ -399,8 +399,9 @@ function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: 
       '52.146.', '104.40.', '104.42.', '104.44.', '104.45.'
     ]);
 
-    // Allow any ChatGPT user agent (lenient mode)
-    return { name: 'ChatGPT', rateLimit: 60 };
+    if (isChatGptIP) {
+      return { name: 'ChatGPT', rateLimit: 60 };
+    }
   }
 
   // Check for Google
