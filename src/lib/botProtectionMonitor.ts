@@ -265,7 +265,7 @@ export async function monitorBotProtection(
     userAgent.toLowerCase().includes('chrome-lighthouse') ||
     userAgent.toLowerCase().includes('googleother')
   )) {
-    console.log('PageSpeed Insights detected:', {
+    log.info('PageSpeed Insights detected:', {
       userAgent,
       ip,
       path: pathname,
@@ -299,7 +299,7 @@ export async function monitorBotProtection(
 
   // Add special case for Googlebot
   if (userAgent && userAgent.toLowerCase().includes('googlebot')) {
-    console.log('Googlebot detected:', {
+    log.info('Googlebot detected:', {
       userAgent,
       ip,
       path: pathname
@@ -333,6 +333,74 @@ export async function monitorBotProtection(
 
       // Log but don't deny access
       storeDetectionLog(result);
+      return { response: null, result };
+    }
+  }
+
+  // Add SemRush to your special cases handling
+  if (userAgent && (
+    userAgent.toLowerCase().includes('googlebot') ||
+    userAgent.toLowerCase().includes('bingbot') ||
+    userAgent.toLowerCase().includes('msnbot') ||
+    userAgent.toLowerCase().includes('semrush')
+  )) {
+    log.info('Bot detected:', {
+      userAgent,
+      ip,
+      path: pathname
+    });
+
+    // Verify if IP is from Google's or Bing's IP range
+    const isGoogleIP = ip.startsWith('66.249.') ||
+      ip.startsWith('64.233.') ||
+      ip.startsWith('216.239.') ||
+      ip.startsWith('172.217.') ||
+      ip.startsWith('34.') ||
+      ip.startsWith('35.') ||
+      ip.startsWith('209.85.');
+
+    const isBingIP = ip.startsWith('157.55.') ||
+      ip.startsWith('207.46.') ||
+      ip.startsWith('40.77.') ||
+      ip.startsWith('13.66.') ||
+      ip.startsWith('131.253.') ||
+      ip.startsWith('199.30.') ||
+      ip.startsWith('157.56.');
+
+    // SemRush IPs (Note: these may change, you should verify current ranges)
+    const isSemrushIP = ip.startsWith('185.191.') ||
+      ip.startsWith('203.131.') ||
+      ip.startsWith('45.82.');
+
+    // For SemRush, you might want to apply a different rate limit
+    const isSemrush = userAgent.toLowerCase().includes('semrush');
+
+    // Allow both Google, Bing bots and SemRush
+    if (isGoogleIP || isBingIP || (isSemrush && isSemrushIP)) {
+      // For SemRush bots, you might want to apply a lower rate limit threshold
+      // This example allows SemRush but with stricter monitoring
+      const result: BotDetectionResult = {
+        timestamp: new Date().toISOString(),
+        url,
+        ip,
+        userAgent,
+        isBot: true,
+        isSuspicious: false,
+        requestDenied: false,
+        rateLimited: false,
+        rateLimitRemaining: isSemrush ? 30 : 999, // Lower remaining requests for SemRush
+        suspiciousDetails: {
+          isKnownSearchEngine: true,
+          hasSuspiciousUserAgent: false,
+          hasSuspiciousHeaders: false,
+          hasUnusualPattern: false,
+          matchedPatterns: [],
+        }
+      };
+
+      // Log but don't deny access
+      storeDetectionLog(result);
+      console.log(`✅ ALLOWED ${isSemrush ? 'SemRush' : 'search engine'} bot: ${userAgent.substring(0, 50)}...`);
       return { response: null, result };
     }
   }
