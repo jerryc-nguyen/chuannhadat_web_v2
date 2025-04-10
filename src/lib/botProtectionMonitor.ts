@@ -297,6 +297,46 @@ export async function monitorBotProtection(
     return { response: null, result };
   }
 
+  // Add special case for Googlebot
+  if (userAgent && userAgent.toLowerCase().includes('googlebot')) {
+    console.log('Googlebot detected:', {
+      userAgent,
+      ip,
+      path: pathname
+    });
+
+    // Verify if IP is from Google's IP range (this is a simplified check)
+    const isGoogleIP = ip.startsWith('66.249.') ||
+      ip.startsWith('64.233.') ||
+      ip.startsWith('216.239.') ||
+      ip.startsWith('172.217.');
+
+    if (isGoogleIP) {
+      const result: BotDetectionResult = {
+        timestamp: new Date().toISOString(),
+        url,
+        ip,
+        userAgent,
+        isBot: true,
+        isSuspicious: false,
+        requestDenied: false,
+        rateLimited: false,
+        rateLimitRemaining: 999,
+        suspiciousDetails: {
+          isKnownSearchEngine: true,
+          hasSuspiciousUserAgent: false,
+          hasSuspiciousHeaders: false,
+          hasUnusualPattern: false,
+          matchedPatterns: [],
+        }
+      };
+
+      // Log but don't deny access
+      storeDetectionLog(result);
+      return { response: null, result };
+    }
+  }
+
   // Create the detection result object
   const result: BotDetectionResult = {
     timestamp: new Date().toISOString(),
@@ -384,7 +424,7 @@ export async function monitorBotProtection(
 
   // Log to console
   const executionTime = Date.now() - start;
-  log.info(`${result.requestDenied ? '🚫 BLOCKED' : '✅ ALLOWED'} ${url} (${executionTime}ms)`);
+  log.info(`${result.requestDenied ? '🚫 BLOCKED' : '✅ ALLOWED'} ${url}: ${userAgent} (${executionTime}ms)`);
 
   if ((result.isBot || result.isSuspicious) && DEBUG) {
     log.verbose(`Bot details: ${JSON.stringify({

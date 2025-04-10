@@ -123,54 +123,32 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
 
   userAgent = userAgent.toLowerCase();
 
-  try {
-    // Only verify Google and Bing bots
-    const isGoogle = userAgent.includes('google');
-    const isBing = userAgent.includes('bing') || userAgent.includes('msn');
-    const isYandex = userAgent.includes('yandex');
-    const isBaidu = userAgent.includes('baidu');
-
-    if (!isGoogle && !isBing && !isYandex && !isBaidu) return false;
-
-    // Perform DNS lookup
-    const reverseLookup = util.promisify(dns.reverse);
-
-    try {
-      const addresses = await reverseLookup(ip);
-      if (addresses.length === 0) return false;
-
-      const hostname = addresses[0].toLowerCase();
-
-      // Verify the hostname belongs to the correct domain
-      if (isGoogle && (hostname.includes('googlebot.com') || hostname.includes('google.com'))) {
-        return true;
-      }
-
-      if (isBing && (hostname.includes('search.msn.com') || hostname.includes('bing.com'))) {
-        return true;
-      }
-
-      if (isYandex && hostname.includes('yandex.ru')) {
-        return true;
-      }
-
-      if (isBaidu && hostname.includes('baidu.com')) {
-        return true;
-      }
-    } catch (err) {
-      console.log(`DNS lookup error for ${ip}: ${err}`);
-      // In development, allow bots even if DNS lookup fails
-      if (process.env.NODE_ENV === 'development') {
-        return true;
-      }
-    }
-
-    return false;
-  } catch (error) {
-    console.error('Bot verification error:', error);
-    // If verification fails, assume it's not a legitimate bot
-    return false;
+  // IP-based verification 
+  // Google IPs
+  if (userAgent.includes('google') && (
+    ip.startsWith('66.249.') || // Core Googlebot range
+    ip.startsWith('64.233.') ||
+    ip.startsWith('216.239.') ||
+    ip.startsWith('172.217.') ||
+    ip.startsWith('34.') ||
+    ip.startsWith('35.') ||
+    ip.startsWith('209.85.')
+  )) {
+    return true;
   }
+
+  // Bing IPs
+  if ((userAgent.includes('bing') || userAgent.includes('msn')) && (
+    ip.startsWith('157.55.') ||
+    ip.startsWith('207.46.') ||
+    ip.startsWith('40.77.') ||
+    ip.startsWith('13.66.')
+  )) {
+    return true;
+  }
+
+  // For other user agents, fall back to a lenient approach
+  return isKnownBot(userAgent);
 };
 
 // Bot detection patterns

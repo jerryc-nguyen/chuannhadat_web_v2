@@ -13,6 +13,12 @@ const nextConfig = {
     return config;
   },
   output: 'standalone',
+  experimental: {
+    // This is crucial for Node.js runtime in middleware
+    middleware: {
+      runtime: 'nodejs',
+    },
+  },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
