@@ -344,7 +344,7 @@ export async function monitorBotProtection(
     userAgent.toLowerCase().includes('msnbot') ||
     userAgent.toLowerCase().includes('semrush')
   )) {
-    log.info('Bot detected:', {
+    log.info('Search engine bot detected:', {
       userAgent,
       ip,
       path: pathname
@@ -359,13 +359,17 @@ export async function monitorBotProtection(
       ip.startsWith('35.') ||
       ip.startsWith('209.85.');
 
+    // Update with broader Bing IP ranges to include 40.77.167.78
     const isBingIP = ip.startsWith('157.55.') ||
       ip.startsWith('207.46.') ||
-      ip.startsWith('40.77.') ||
+      ip.startsWith('40.77.') ||   // This should catch 40.77.167.78
       ip.startsWith('13.66.') ||
       ip.startsWith('131.253.') ||
       ip.startsWith('199.30.') ||
-      ip.startsWith('157.56.');
+      ip.startsWith('157.56.') ||
+      ip.startsWith('20.31.') ||   // Additional Bing IPs
+      ip.startsWith('20.175.') ||  // Additional Bing IPs
+      ip.startsWith('20.186.');
 
     // SemRush IPs (Note: these may change, you should verify current ranges)
     const isSemrushIP = ip.startsWith('185.191.') ||

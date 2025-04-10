@@ -1,6 +1,4 @@
 import { NextRequest } from 'next/server';
-import dns from 'dns';
-import util from 'util';
 
 // Check if bot protection is enabled from environment variable
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
@@ -142,7 +140,13 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
     ip.startsWith('157.55.') ||
     ip.startsWith('207.46.') ||
     ip.startsWith('40.77.') ||
-    ip.startsWith('13.66.')
+    ip.startsWith('13.66.') ||
+    ip.startsWith('131.253.') ||
+    ip.startsWith('199.30.') ||
+    ip.startsWith('157.56.') ||
+    ip.startsWith('20.31.') ||
+    ip.startsWith('20.175.') ||
+    ip.startsWith('20.186.')
   )) {
     return true;
   }
