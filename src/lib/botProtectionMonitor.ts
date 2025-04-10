@@ -143,6 +143,12 @@ export function clearBotLogs(): void {
   recentBotLogs.length = 0;
 }
 
+// First, add a proper type for botType at the top of the file
+interface BotTypeInfo {
+  name: string;
+  rateLimit: number;
+}
+
 // Extract patterns that matched in the user agent
 function getMatchedPatterns(userAgent: string | null): string[] {
   if (!userAgent) return [];
@@ -260,13 +266,9 @@ export async function monitorBotProtection(
   // Fast bot detection - check once and store result
   const botType = detectBotType(lowerUA, ip);
 
-  // If it's a known bot type, fast-track the response
-  if (botType) {
-    const result = createAllowedBotResult(url, ip, userAgent, botType);
-    log.info(`${botType.name} detected: ${ip}, UA: ${lowerUA.substring(0, 30)}...`);
-    storeDetectionLog(result);
-    console.log(`✅ ALLOWED ${botType.name} bot: ${userAgent?.substring(0, 50) || 'unknown'}...`);
-    return { response: null, result };
+  // Add better debugging
+  if (botType && DEBUG) {
+    console.log(`[BOT-RATE] Detected bot: ${botType.name} with rate limit ${botType.rateLimit}`);
   }
 
   // Create the detection result object for normal processing
@@ -291,7 +293,17 @@ export async function monitorBotProtection(
 
   // 1. Check for rate limiting
   log.verbose(`Checking rate limit for IP: ${ip}`);
-  const rateLimitResult = await rateLimit(ip);
+  let effectiveRateLimit = 60; // Default rate limit
+  if (botType) {
+    effectiveRateLimit = botType.rateLimit;
+  }
+
+  // Pass all parameters explicitly to avoid confusion
+  const rateLimitResult = await rateLimit(
+    ip,                // First parameter: IP address
+    userAgent,         // Second parameter: User agent (string)
+    effectiveRateLimit // Third parameter: Max requests
+  );
   result.rateLimited = !rateLimitResult.success;
   result.rateLimitRemaining = rateLimitResult.remaining;
   log.verbose(`Rate limit result: ${JSON.stringify(rateLimitResult)}`);
@@ -330,9 +342,24 @@ export async function monitorBotProtection(
     unusualPattern;
 
   // Decide whether to block the request
-  // Block if rate limited or is a suspicious bot (but not verified search engine)
-  result.requestDenied = result.rateLimited ||
-    (result.isSuspicious && !(isSearchEngineBot && isVerifiedBot));
+  // Only block rate-limited requests, handle suspicious bots via rate limiting
+  result.requestDenied = result.rateLimited;
+
+  // If it's a suspicious bot but not verified, apply stricter rate limiting
+  if (result.isSuspicious && !(isSearchEngineBot && isVerifiedBot)) {
+    // Check if the bot exceeds our special lower rate limit
+    const stricterRateLimitResult = await rateLimit(ip, userAgent, 5); // 5 req/min for suspicious bots
+
+    if (!stricterRateLimitResult.success) {
+      result.rateLimited = true;
+      result.requestDenied = true;
+    }
+
+    result.rateLimitRemaining = stricterRateLimitResult.remaining;
+
+    log.verbose(`Applied stricter rate limit to suspicious bot: ${userAgent?.substring(0, 50)}`);
+    log.verbose(`Stricter rate limit result: ${JSON.stringify(stricterRateLimitResult)}`);
+  }
 
   // Store the log using our storage function
   storeDetectionLog(result);
@@ -357,13 +384,33 @@ export async function monitorBotProtection(
     }, null, 2)}`);
   }
 
-  // If the request should be denied, return 403 response
+  // If the request should be denied, return 429 response
   if (result.requestDenied) {
-    console.log(`🚫 BLOCKED ${url}: ${userAgent}`);
+    console.log(`🚫 RATE LIMITED ${url}: ${userAgent}`);
+
+    // Use 429 status code with appropriate headers
     const response = NextResponse.json(
-      { error: 'Access Denied', code: 'BOT_PROTECTION' },
-      { status: 403 }
+      {
+        error: 'Too Many Requests',
+        code: 'RATE_LIMIT',
+        message: 'Please reduce request rate'
+      },
+      {
+        status: 429,
+        headers: {
+          // Add Retry-After header (in seconds)
+          // This helps bots know when to retry
+          'Retry-After': '60',
+
+          // Additional helpful headers
+          'X-RateLimit-Limit': result.rateLimitRemaining ?
+            (result.rateLimitRemaining + 1).toString() : '5',
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': (Math.floor(Date.now() / 1000) + 60).toString()
+        }
+      }
     );
+
     return { response, result };
   }
 
@@ -374,10 +421,17 @@ export async function monitorBotProtection(
 
 // Helper functions to optimize performance
 
-// Unified bot detection function - returns bot type or null
-function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: number } | null {
+// Update the detectBotType function declaration
+function detectBotType(lowerUA: string, ip: string): BotTypeInfo | null {
+  // Same implementation, but with more debugging for Facebook
+
   // Early return if no user agent
   if (!lowerUA) return null;
+
+  // Debug all user agents to see what's happening
+  if (DEBUG) {
+    console.log(`[BOT-DETECT] Checking UA: ${lowerUA.substring(0, 50)}`);
+  }
 
   // Check for PageSpeed/Lighthouse
   if (lowerUA.includes('lighthouse') ||
@@ -385,6 +439,18 @@ function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: 
     lowerUA.includes('chrome-lighthouse') ||
     lowerUA.includes('googleother')) {
     return { name: 'PageSpeed', rateLimit: 999 };
+  }
+
+  // Facebook detection needs to be more specific
+  // Facebook bots have specific user agents we should check for
+  if (lowerUA.includes('facebook') || (lowerUA.includes('instagram') && lowerUA.includes('bot'))) {
+
+    if (DEBUG) {
+      console.log(`[FACEBOOK-BOT] Detected Facebook/Instagram bot: ${lowerUA}`);
+    }
+
+    // Always return true for testing, can add IP check later
+    return { name: 'Facebook', rateLimit: 10 };
   }
 
   // Check for ChatGPT
@@ -400,7 +466,7 @@ function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: 
     ]);
 
     if (isChatGptIP) {
-      return { name: 'ChatGPT', rateLimit: 60 };
+      return { name: 'ChatGPT', rateLimit: 10 };
     }
   }
 
@@ -412,7 +478,7 @@ function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: 
     ]);
 
     if (isGoogleIP) {
-      return { name: 'Google', rateLimit: 999 };
+      return { name: 'Google', rateLimit: 60 };
     }
   }
 
@@ -424,7 +490,7 @@ function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: 
     ]);
 
     if (isBingIP) {
-      return { name: 'Bing', rateLimit: 999 };
+      return { name: 'Bing', rateLimit: 60 };
     }
   }
 
@@ -433,8 +499,19 @@ function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: 
     const isSemrushIP = checkIPRange(ip, ['185.191.', '203.131.', '45.82.']);
 
     if (isSemrushIP) {
-      return { name: 'SemRush', rateLimit: 30 };
+      return { name: 'SemRush', rateLimit: 10 };
     }
+  }
+
+  // Check for other bots - allow but with very strict rate limit
+  // This is a catch-all for any bot-like behavior
+  if (lowerUA.includes('bot') ||
+    lowerUA.includes('crawler') ||
+    lowerUA.includes('spider') ||
+    lowerUA.includes('scraper')) {
+
+    // Don't validate IP for unknown bots, just identify them
+    return { name: 'OtherBot', rateLimit: 5 };
   }
 
   return null;
@@ -489,4 +566,4 @@ function createAllowedBotResult(url: string, ip: string, userAgent: string | nul
       matchedPatterns: [],
     }
   };
-} 
+}

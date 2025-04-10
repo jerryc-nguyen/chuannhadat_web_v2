@@ -13,9 +13,19 @@ const ipRequestCounts = new Map<string, { count: number, timestamp: number }>();
 // Redis will only be used in the API routes, not middleware
 export const rateLimit = async (
   ip: string,
-  maxRequests: number = 60,
+  userAgent?: string | null,
+  maxRequests: number = 60, // Default value if not provided
   windowSizeInSeconds: number = 60
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> => {
+  // Log all parameters for debugging
+  if (DEBUG) {
+    console.log(`[RATE-LIMIT-DEBUG] Parameters:
+      - IP: ${ip}
+      - userAgent: ${userAgent ? userAgent.substring(0, 30) + '...' : 'null'}
+      - maxRequests: ${maxRequests}
+    `);
+  }
+
   // If protection is disabled, always allow
   if (!isBotProtectionEnabled) {
     return {
@@ -51,8 +61,9 @@ export const rateLimit = async (
   const isAllowed = record.count <= maxRequests;
   const remaining = Math.max(0, maxRequests - record.count);
 
+  // Log the decision
   if (DEBUG) {
-    console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${record.count}/${maxRequests}`);
+    console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${record.count}/${maxRequests}, Allowed: ${isAllowed}`);
   }
 
   // Periodically clean up old records (do this async to not block)
@@ -93,16 +104,12 @@ export const allowedBots: Record<string, boolean> = {
   'adidxbot': true,
   'bingpreview': true,
 
-  // Add ChatGPT bot
-  'chatgpt': true,
-  'gptbot': true,
-  'openai': true,
-
-  // Add other legitimate search engines
-  'yandexbot': true,
-  'duckduckbot': true,
-  'baiduspider': true,
-  'applebot': true
+  // Facebook bots
+  'facebookexternalhit': true,
+  'facebookcatalog': true,
+  'facebookbot': true,
+  'facebook-api': true,
+  'instagram': true,
 };
 
 // Check if a user agent belongs to a known bot
@@ -156,23 +163,18 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
     return true;
   }
 
-  // ChatGPT/OpenAI IPs
-  if ((userAgent.includes('chatgpt') || userAgent.includes('gptbot') || userAgent.includes('openai')) && (
-    ip.startsWith('23.98.') ||     // OpenAI Azure IPs
-    ip.startsWith('52.152.') ||    // OpenAI Azure IPs
-    ip.startsWith('20.15.') ||     // OpenAI Azure IPs
-    ip.startsWith('13.107.') ||    // OpenAI Azure IPs
-    ip.startsWith('20.37.') ||     // OpenAI Azure IPs
-    ip.startsWith('20.40.') ||     // OpenAI Azure IPs
-    ip.startsWith('20.43.') ||     // OpenAI Azure IPs
-    ip.startsWith('20.193.') ||    // OpenAI Azure IPs
-    ip.startsWith('20.195.') ||    // OpenAI Azure IPs
-    ip.startsWith('20.82.') ||     // OpenAI Azure IPs
-    ip.startsWith('52.146.') ||    // OpenAI Azure IPs
-    ip.startsWith('104.40.') ||    // OpenAI Azure IPs
-    ip.startsWith('104.42.') ||    // OpenAI Azure IPs
-    ip.startsWith('104.44.') ||    // OpenAI Azure IPs
-    ip.startsWith('104.45.')       // OpenAI Azure IPs
+  // Facebook IPs
+  if ((userAgent.includes('facebook') || userAgent.includes('instagram')) && (
+    ip.startsWith('31.13.') ||    // Facebook main range
+    ip.startsWith('66.220.') ||   // Facebook range
+    ip.startsWith('69.63.') ||    // Facebook range
+    ip.startsWith('69.171.') ||   // Facebook range
+    ip.startsWith('74.119.') ||   // Facebook range
+    ip.startsWith('103.4.') ||    // Facebook Asia Pacific
+    ip.startsWith('173.252.') ||  // Facebook range
+    ip.startsWith('179.60.') ||   // Facebook range
+    ip.startsWith('185.89.') ||   // Facebook Europe
+    ip.startsWith('157.240.')     // Facebook range
   )) {
     return true;
   }
@@ -184,7 +186,7 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
 // Bot detection patterns
 export const botPatterns = [
   /crawl/i,
-  /bot/i,
+  /bot(?!chovy|tle)/i,  // 'bot' but not in 'botchovy' or 'bottle'
   /spider/i,
   /scraper/i,
   /curl/i,
@@ -193,28 +195,45 @@ export const botPatterns = [
   /headless/i,
   /archiver/i,
   /slurp/i,
-  /facebook/i,
   /chrome-lighthouse/i,
   /dataminr/i,
-  /semrush/i,
   /python-requests/i,
   /python-urllib/i,
   /ahrefs/i,
   /screaming frog/i,
 ];
 
-// Detect suspicious bots
+
+// Modify the isSuspiciousBot function to exclude Facebook bots
 export const isSuspiciousBot = (userAgent: string | null): boolean => {
   if (!userAgent) return true;
 
+  // Check if it's a Facebook bot first
+  if (isFacebookBot(userAgent)) return false;
+
+  // Check for known search engines
+  if (isKnownBot(userAgent)) return false;
+
+  // Check for patterns
   for (const pattern of botPatterns) {
-    if (pattern.test(userAgent) && !isKnownBot(userAgent)) {
+    if (pattern.test(userAgent)) {
       return true;
     }
   }
 
   return false;
 };
+
+// Add a specific Facebook check function
+export const isFacebookBot = (userAgent: string | null): boolean => {
+  if (!userAgent) return false;
+
+  const lowerUA = userAgent.toLowerCase();
+  return lowerUA.includes('facebookexternalhit') ||
+    lowerUA.includes('facebookcatalog') ||
+    lowerUA.includes('facebookbot');
+};
+
 
 // Check for suspicious headers
 export const hasSuspiciousHeaders = (req: NextRequest): boolean => {
@@ -244,4 +263,48 @@ export const hasUnusualRequestPattern = (req: NextRequest): boolean => {
   }
 
   return false;
-}; 
+};
+
+// Update the getMatchedPatterns function to handle Facebook correctly
+function getMatchedPatterns(userAgent: string | null): string[] {
+  if (!userAgent) return [];
+
+  const lowerUA = userAgent.toLowerCase();
+
+  // Special case for Facebook - avoid flagging it as suspicious
+  if (lowerUA.includes('facebookexternalhit') ||
+    lowerUA.includes('facebookcatalog') ||
+    lowerUA.includes('facebookbot')) {
+    return ['facebook-legitimate'];
+  }
+
+  const patterns = [
+    { name: 'crawl', regex: /crawl/i },
+    { name: 'bot', regex: /bot(?!chovy|tle)/i }, // Exclude "botchovy", "bottle", etc.
+    { name: 'spider', regex: /spider/i },
+    { name: 'scraper', regex: /scraper/i },
+    { name: 'curl', regex: /curl/i },
+    { name: 'wget', regex: /wget/i },
+    { name: 'phantom', regex: /phantom/i },
+    { name: 'headless', regex: /headless/i },
+    { name: 'archiver', regex: /archiver/i },
+    { name: 'slurp', regex: /slurp/i },
+    // Removed facebook from suspicious patterns
+    { name: 'chrome-lighthouse', regex: /chrome-lighthouse/i },
+    { name: 'dataminr', regex: /dataminr/i },
+    { name: 'semrush', regex: /semrush/i },
+    { name: 'python', regex: /python/i },
+    { name: 'ahrefs', regex: /ahrefs/i },
+    { name: 'screaming frog', regex: /screaming frog/i },
+  ];
+
+  const matches = patterns
+    .filter(pattern => pattern.regex.test(userAgent))
+    .map(pattern => pattern.name);
+
+  if (DEBUG && matches.length > 0) {
+    console.log(`[BOT-MONITOR] Pattern matches for UA: ${matches.join(', ')}`);
+  }
+
+  return matches;
+}
