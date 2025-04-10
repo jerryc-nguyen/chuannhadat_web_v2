@@ -93,6 +93,11 @@ export const allowedBots: Record<string, boolean> = {
   'adidxbot': true,
   'bingpreview': true,
 
+  // Add ChatGPT bot
+  'chatgpt': true,
+  'gptbot': true,
+  'openai': true,
+
   // Add other legitimate search engines
   'yandexbot': true,
   'duckduckbot': true,
@@ -147,6 +152,27 @@ export const verifySearchEngineBot = async (ip: string, userAgent: string | null
     ip.startsWith('20.31.') ||
     ip.startsWith('20.175.') ||
     ip.startsWith('20.186.')
+  )) {
+    return true;
+  }
+
+  // ChatGPT/OpenAI IPs
+  if ((userAgent.includes('chatgpt') || userAgent.includes('gptbot') || userAgent.includes('openai')) && (
+    ip.startsWith('23.98.') ||     // OpenAI Azure IPs
+    ip.startsWith('52.152.') ||    // OpenAI Azure IPs
+    ip.startsWith('20.15.') ||     // OpenAI Azure IPs
+    ip.startsWith('13.107.') ||    // OpenAI Azure IPs
+    ip.startsWith('20.37.') ||     // OpenAI Azure IPs
+    ip.startsWith('20.40.') ||     // OpenAI Azure IPs
+    ip.startsWith('20.43.') ||     // OpenAI Azure IPs
+    ip.startsWith('20.193.') ||    // OpenAI Azure IPs
+    ip.startsWith('20.195.') ||    // OpenAI Azure IPs
+    ip.startsWith('20.82.') ||     // OpenAI Azure IPs
+    ip.startsWith('52.146.') ||    // OpenAI Azure IPs
+    ip.startsWith('104.40.') ||    // OpenAI Azure IPs
+    ip.startsWith('104.42.') ||    // OpenAI Azure IPs
+    ip.startsWith('104.44.') ||    // OpenAI Azure IPs
+    ip.startsWith('104.45.')       // OpenAI Azure IPs
   )) {
     return true;
   }

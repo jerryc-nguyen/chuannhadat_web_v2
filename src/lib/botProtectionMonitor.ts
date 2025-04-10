@@ -242,174 +242,34 @@ export async function monitorBotProtection(
   const userAgent = req.headers.get('user-agent');
   const ip = getClientIp(req) || '0.0.0.0';
 
+  // Preprocessing - Do this once instead of repeatedly
+  const lowerUA = userAgent?.toLowerCase() || '';
+
   log.verbose(`Processing request: ${url}`);
   log.verbose(`URL searchParams: ${searchParams}`);
-  log.verbose(`IP: ${ip}, UA: ${userAgent?.substring(0, 30)}...`);
+  log.verbose(`IP: ${ip}, UA: ${lowerUA.substring(0, 30)}...`);
 
-  // Additional debug for RSC detection
-  if (searchParams.includes('_rsc') || req.headers.has('x-nextjs-data')) {
-    if (DEBUG) {
-      console.log(`🔴🔴🔴 NEXT.JS AJAX DETECTED:
-      - URL: ${url}
-      - Has x-nextjs-data: ${req.headers.has('x-nextjs-data')}
-      - Has next-router-state-tree: ${req.headers.has('next-router-state-tree')}
-      - searchParams: ${searchParams}
-      `);
-    }
-  }
-
-  // Add special case for PageSpeed Insights
-  if (userAgent && (
-    userAgent.toLowerCase().includes('lighthouse') ||
-    userAgent.toLowerCase().includes('pagespeed') ||
-    userAgent.toLowerCase().includes('chrome-lighthouse') ||
-    userAgent.toLowerCase().includes('googleother')
-  )) {
-    log.info('PageSpeed Insights detected:', {
-      userAgent,
-      ip,
-      path: pathname,
-      headers: Object.fromEntries([...req.headers.entries()]),
-    });
-
-    // Create a minimal "allowed" result
-    const result: BotDetectionResult = {
-      timestamp: new Date().toISOString(),
-      url,
-      ip,
-      userAgent,
-      isBot: true,
-      isSuspicious: false,
-      requestDenied: false,
-      rateLimited: false,
-      rateLimitRemaining: 999,
-      suspiciousDetails: {
-        isKnownSearchEngine: true,
-        hasSuspiciousUserAgent: false,
-        hasSuspiciousHeaders: false,
-        hasUnusualPattern: false,
-        matchedPatterns: [],
-      }
-    };
-
-    // Log but don't deny access
+  // Fast path - check for common exclusions first
+  if (isRateLimitExcluded(pathname, url, req)) {
+    const result = createBasicResult(url, ip, userAgent, false);
+    log.storage(`Path excluded from rate limiting: ${pathname}`);
     storeDetectionLog(result);
     return { response: null, result };
   }
 
-  // Add special case for Googlebot
-  if (userAgent && userAgent.toLowerCase().includes('googlebot')) {
-    log.info('Googlebot detected:', {
-      userAgent,
-      ip,
-      path: pathname
-    });
+  // Fast bot detection - check once and store result
+  const botType = detectBotType(lowerUA, ip);
 
-    // Verify if IP is from Google's IP range (this is a simplified check)
-    const isGoogleIP = ip.startsWith('66.249.') ||
-      ip.startsWith('64.233.') ||
-      ip.startsWith('216.239.') ||
-      ip.startsWith('172.217.');
-
-    if (isGoogleIP) {
-      const result: BotDetectionResult = {
-        timestamp: new Date().toISOString(),
-        url,
-        ip,
-        userAgent,
-        isBot: true,
-        isSuspicious: false,
-        requestDenied: false,
-        rateLimited: false,
-        rateLimitRemaining: 999,
-        suspiciousDetails: {
-          isKnownSearchEngine: true,
-          hasSuspiciousUserAgent: false,
-          hasSuspiciousHeaders: false,
-          hasUnusualPattern: false,
-          matchedPatterns: [],
-        }
-      };
-
-      // Log but don't deny access
-      storeDetectionLog(result);
-      return { response: null, result };
-    }
+  // If it's a known bot type, fast-track the response
+  if (botType) {
+    const result = createAllowedBotResult(url, ip, userAgent, botType);
+    log.info(`${botType.name} detected: ${ip}, UA: ${lowerUA.substring(0, 30)}...`);
+    storeDetectionLog(result);
+    console.log(`✅ ALLOWED ${botType.name} bot: ${userAgent?.substring(0, 50) || 'unknown'}...`);
+    return { response: null, result };
   }
 
-  // Add SemRush to your special cases handling
-  if (userAgent && (
-    userAgent.toLowerCase().includes('googlebot') ||
-    userAgent.toLowerCase().includes('bingbot') ||
-    userAgent.toLowerCase().includes('msnbot') ||
-    userAgent.toLowerCase().includes('semrush')
-  )) {
-    log.info('Search engine bot detected:', {
-      userAgent,
-      ip,
-      path: pathname
-    });
-
-    // Verify if IP is from Google's or Bing's IP range
-    const isGoogleIP = ip.startsWith('66.249.') ||
-      ip.startsWith('64.233.') ||
-      ip.startsWith('216.239.') ||
-      ip.startsWith('172.217.') ||
-      ip.startsWith('34.') ||
-      ip.startsWith('35.') ||
-      ip.startsWith('209.85.');
-
-    // Update with broader Bing IP ranges to include 40.77.167.78
-    const isBingIP = ip.startsWith('157.55.') ||
-      ip.startsWith('207.46.') ||
-      ip.startsWith('40.77.') ||   // This should catch 40.77.167.78
-      ip.startsWith('13.66.') ||
-      ip.startsWith('131.253.') ||
-      ip.startsWith('199.30.') ||
-      ip.startsWith('157.56.') ||
-      ip.startsWith('20.31.') ||   // Additional Bing IPs
-      ip.startsWith('20.175.') ||  // Additional Bing IPs
-      ip.startsWith('20.186.');
-
-    // SemRush IPs (Note: these may change, you should verify current ranges)
-    const isSemrushIP = ip.startsWith('185.191.') ||
-      ip.startsWith('203.131.') ||
-      ip.startsWith('45.82.');
-
-    // For SemRush, you might want to apply a different rate limit
-    const isSemrush = userAgent.toLowerCase().includes('semrush');
-
-    // Allow both Google, Bing bots and SemRush
-    if (isGoogleIP || isBingIP || (isSemrush && isSemrushIP)) {
-      // For SemRush bots, you might want to apply a lower rate limit threshold
-      // This example allows SemRush but with stricter monitoring
-      const result: BotDetectionResult = {
-        timestamp: new Date().toISOString(),
-        url,
-        ip,
-        userAgent,
-        isBot: true,
-        isSuspicious: false,
-        requestDenied: false,
-        rateLimited: false,
-        rateLimitRemaining: isSemrush ? 30 : 999, // Lower remaining requests for SemRush
-        suspiciousDetails: {
-          isKnownSearchEngine: true,
-          hasSuspiciousUserAgent: false,
-          hasSuspiciousHeaders: false,
-          hasUnusualPattern: false,
-          matchedPatterns: [],
-        }
-      };
-
-      // Log but don't deny access
-      storeDetectionLog(result);
-      console.log(`✅ ALLOWED ${isSemrush ? 'SemRush' : 'search engine'} bot: ${userAgent.substring(0, 50)}...`);
-      return { response: null, result };
-    }
-  }
-
-  // Create the detection result object
+  // Create the detection result object for normal processing
   const result: BotDetectionResult = {
     timestamp: new Date().toISOString(),
     url,
@@ -428,14 +288,6 @@ export async function monitorBotProtection(
       matchedPatterns: getMatchedPatterns(userAgent),
     }
   };
-
-  // Check if path should be excluded from rate limiting
-  if (isRateLimitExcluded(pathname, url, req)) {
-    log.storage(`Path excluded from rate limiting: ${pathname}`);
-    // Still record the request but don't apply rate limiting
-    storeDetectionLog(result);
-    return { response: null, result };
-  }
 
   // 1. Check for rate limiting
   log.verbose(`Checking rate limit for IP: ${ip}`);
@@ -518,4 +370,122 @@ export async function monitorBotProtection(
   log.verbose(`Request processing complete in ${executionTime}ms`);
   // Otherwise continue with the request
   return { response: null, result };
+}
+
+// Helper functions to optimize performance
+
+// Unified bot detection function - returns bot type or null
+function detectBotType(lowerUA: string, ip: string): { name: string, rateLimit: number } | null {
+  // Early return if no user agent
+  if (!lowerUA) return null;
+
+  // Check for PageSpeed/Lighthouse
+  if (lowerUA.includes('lighthouse') ||
+    lowerUA.includes('pagespeed') ||
+    lowerUA.includes('chrome-lighthouse') ||
+    lowerUA.includes('googleother')) {
+    return { name: 'PageSpeed', rateLimit: 999 };
+  }
+
+  // Check for ChatGPT
+  const isChatGpt = lowerUA.includes('chatgpt') ||
+    lowerUA.includes('gptbot') ||
+    lowerUA.includes('openai');
+
+  if (isChatGpt) {
+    const isChatGptIP = checkIPRange(ip, [
+      '23.98.', '52.152.', '20.15.', '13.107.', '20.37.',
+      '20.40.', '20.43.', '20.193.', '20.195.', '20.82.',
+      '52.146.', '104.40.', '104.42.', '104.44.', '104.45.'
+    ]);
+
+    // Allow any ChatGPT user agent (lenient mode)
+    return { name: 'ChatGPT', rateLimit: 60 };
+  }
+
+  // Check for Google
+  if (lowerUA.includes('google')) {
+    const isGoogleIP = checkIPRange(ip, [
+      '66.249.', '64.233.', '216.239.', '172.217.',
+      '34.', '35.', '209.85.'
+    ]);
+
+    if (isGoogleIP) {
+      return { name: 'Google', rateLimit: 999 };
+    }
+  }
+
+  // Check for Bing
+  if (lowerUA.includes('bing') || lowerUA.includes('msn')) {
+    const isBingIP = checkIPRange(ip, [
+      '157.55.', '207.46.', '40.77.', '13.66.', '131.253.',
+      '199.30.', '157.56.', '20.31.', '20.175.', '20.186.'
+    ]);
+
+    if (isBingIP) {
+      return { name: 'Bing', rateLimit: 999 };
+    }
+  }
+
+  // Check for SemRush
+  if (lowerUA.includes('semrush')) {
+    const isSemrushIP = checkIPRange(ip, ['185.191.', '203.131.', '45.82.']);
+
+    if (isSemrushIP) {
+      return { name: 'SemRush', rateLimit: 30 };
+    }
+  }
+
+  return null;
+}
+
+// Helper to check IP range once
+function checkIPRange(ip: string, prefixes: string[]): boolean {
+  for (const prefix of prefixes) {
+    if (ip.startsWith(prefix)) return true;
+  }
+  return false;
+}
+
+// Create standardized result objects
+function createBasicResult(url: string, ip: string, userAgent: string | null, isBot: boolean): BotDetectionResult {
+  return {
+    timestamp: new Date().toISOString(),
+    url,
+    ip,
+    userAgent,
+    isBot,
+    isSuspicious: false,
+    requestDenied: false,
+    rateLimited: false,
+    rateLimitRemaining: 0,
+    suspiciousDetails: {
+      isKnownSearchEngine: isBot,
+      hasSuspiciousUserAgent: false,
+      hasSuspiciousHeaders: false,
+      hasUnusualPattern: false,
+      matchedPatterns: isBot ? [] : getMatchedPatterns(userAgent),
+    }
+  };
+}
+
+function createAllowedBotResult(url: string, ip: string, userAgent: string | null, botType: { name: string, rateLimit: number }): BotDetectionResult {
+  return {
+    timestamp: new Date().toISOString(),
+    url,
+    ip,
+    userAgent,
+    isBot: true,
+    isSuspicious: false,
+    requestDenied: false,
+    rateLimited: false,
+    rateLimitRemaining: botType.rateLimit,
+    suspiciousDetails: {
+      isKnownSearchEngine: true,
+      hasSuspiciousUserAgent: false,
+      hasSuspiciousHeaders: false,
+      hasUnusualPattern: false,
+      matchedPatterns: [],
+    }
+  };
 } 

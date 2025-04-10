@@ -15,9 +15,6 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     // This is crucial for Node.js runtime in middleware
-    middleware: {
-      runtime: 'nodejs',
-    },
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -85,6 +82,7 @@ const nextConfig = {
       },
     ];
   },
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'node.js'],
 };
 
 export default withSentryConfig(
