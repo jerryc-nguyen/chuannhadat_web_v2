@@ -129,8 +129,7 @@ function isRateLimitExcluded(pathname: string, url: URL, req: NextRequest): bool
   );
 
   if (isNextJsAjax) {
-    log.info(`Excluded Next.js AJAX request: ${urlString}`);
-    console.log(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${urlString}`);
+    log.info(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${urlString}`);
     return true;
   }
 
