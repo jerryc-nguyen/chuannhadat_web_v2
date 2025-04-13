@@ -124,18 +124,20 @@ export async function middleware(req: NextRequest) {
     const botProtectionResponse = await applyBotProtection(req);
     log.verbose(`Bot protection applied in ${Date.now() - startTime}ms`);
 
-    if (botProtectionResponse) {
-      log.verbose('Bot protection returned a response, using it');
+    // If the bot protection returns a 429, return it immediately
+    if (botProtectionResponse && botProtectionResponse.status === 429) {
+      log.verbose('Rate limit exceeded, returning 429');
       return botProtectionResponse;
     }
 
     // Apply authentication checks next - if it returns a response, use it
-    log.verbose('Checking authentication');
-    const authResponse = handleAuthRedirects(req);
-    if (authResponse) {
-      log.verbose('Auth check returned a response, using it');
-      return authResponse;
-    }
+    // log.verbose('Checking authentication');
+    // const authResponse = handleAuthRedirects(req);
+    // if (authResponse) {
+    //   log.verbose('Auth check returned a response, using it');
+    //   return authResponse;
+    // }
+
 
     // Finally check for URL redirects
     log.verbose('Checking URL redirects');
