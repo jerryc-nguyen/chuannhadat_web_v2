@@ -17,10 +17,9 @@ type NotFoundProps = {
 export default function NotFound(props: NotFoundProps) {
   const pathname = usePathname();
   const params = useParams();
-
   const {
     // errorCode = HttpStatusCode.NotFound,
-    errorMessage = 'Đã có lỗi xảy ra, vui lòng thử lại sau',
+    errorMessage = 'Nội dung không tồn tại hoặc đã bị xóa (404)',
     className,
     isCritical = false,
   } = props;
@@ -29,7 +28,7 @@ export default function NotFound(props: NotFoundProps) {
     if (isCritical) {
       logNonCriticalError('Page not found', { pathname, params, errorMessage });
     }
-  }, [pathname, params]);
+  }, [pathname, params, isCritical, errorMessage]);
 
   return (
     <section
