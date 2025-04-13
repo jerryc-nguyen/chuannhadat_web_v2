@@ -66,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Check auth status on mount and set state
     const hasValidToken = checkAuthStatus();
-    console.log("🔍 AuthContext init - Token exists:", hasValidToken);
+    // console.log("🔍 AuthContext init - Token exists:", hasValidToken);
 
     // Only run localStorage operations in the browser
     if (typeof window !== 'undefined') {
@@ -74,15 +74,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const savedUserData = localStorage.getItem('user_data');
         if (savedUserData && !currentUser) {
-          console.log("📋 Loading user data from localStorage");
+          // console.log("📋 Loading user data from localStorage");
           const userData = JSON.parse(savedUserData);
 
           // If we have a token but no current user, restore the user from localStorage
           if (hasValidToken) {
             setCurrentUser(userData);
-            console.log("👤 User restored from localStorage");
+            // console.log("👤 User restored from localStorage");
           } else {
-            console.warn("⚠️ Found user data but no valid token - may need to login again");
+            // console.warn("⚠️ Found user data but no valid token - may need to login again");
             // Clean up localStorage if token is invalid to prevent confusion
             localStorage.removeItem('user_data');
           }

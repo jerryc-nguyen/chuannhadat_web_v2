@@ -61,7 +61,7 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
       </div>
     );
   if (isError || (isSuccess && !product))
-    return <NotFound errorMessage="The current path of post detail is incorrect" />;
+    return <NotFound errorMessage="Bài viết không tồn tại hoặc đã bị xoá" isCritical={false} />;
   return (
     <div className="flex flex-col gap-4 p-0">
       <PhotosCarousel product={product as IProductDetail} />

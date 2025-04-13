@@ -11,6 +11,7 @@ type NotFoundProps = {
   // errorCode?: HttpStatusCode;
   errorMessage?: string;
   className?: string;
+  isCritical?: boolean;
 };
 
 export default function NotFound(props: NotFoundProps) {
@@ -21,10 +22,13 @@ export default function NotFound(props: NotFoundProps) {
     // errorCode = HttpStatusCode.NotFound,
     errorMessage = 'Đã có lỗi xảy ra, vui lòng thử lại sau',
     className,
+    isCritical = false,
   } = props;
 
   useEffect(() => {
-    logNonCriticalError('Page not found', { pathname, params, errorMessage });
+    if (isCritical) {
+      logNonCriticalError('Page not found', { pathname, params, errorMessage });
+    }
   }, [pathname, params]);
 
   return (

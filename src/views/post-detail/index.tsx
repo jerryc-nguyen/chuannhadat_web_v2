@@ -37,8 +37,10 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   const breadcrumbsData = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
   }, [data?.breadcrumb]);
+
   if (isError || (isSuccess && !data))
-    return <NotFound errorMessage="The current path of post detail is incorrect" />;
+    return <NotFound errorMessage="Bài viết không tồn tại hoặc đã bị xoá" isCritical={false} />;
+
   return (
     <>
       <div className="mx-auto mt-5 flex justify-between gap-x-4">
