@@ -152,6 +152,7 @@ export default function RootLayout({
       >
         <NextTopLoader />
         <ProviderWrapper>{children}</ProviderWrapper>
+        {/* Hotjar script */}
         <Script id="hotjar" strategy="afterInteractive">
           {`
             (function(h,o,t,j,a,r){
