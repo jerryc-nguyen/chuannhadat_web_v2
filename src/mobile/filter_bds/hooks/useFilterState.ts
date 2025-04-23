@@ -13,6 +13,7 @@ import { FilterChipOption, FilterState } from '../types';
 import { usePathname } from 'next/navigation';
 import { AuthUtils } from '@common/auth';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import { SORT_CHIP_OPTION } from '../constants';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -223,11 +224,7 @@ export default function useFilterState() {
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
-    const newFilterState = {
-      ...filterState,
-      sort: localFilterState.sort,
-    };
-    syncSelectedParamsToUrl(newFilterState);
+    applySingleFilter(SORT_CHIP_OPTION)
   };
 
   const selectedSortText = useMemo((): string | undefined => {

@@ -231,6 +231,12 @@ export const defaultListFilterOptions = {
   directionOptions: [ALL_OPTION, ...directionsOptions],
   roomOptions: [ALL_OPTION, ...roomsOptions],
 };
+
+export const SORT_CHIP_OPTION = {
+  id: FilterFieldName.Sort,
+  text: 'Sắp xếp',
+}
+
 export const listFilterDesktop: Array<FilterChipOption> = [
   {
     id: FilterFieldName.BusinessType,
@@ -257,10 +263,7 @@ export const listFilterDesktop: Array<FilterChipOption> = [
     id: FilterFieldName.Direction,
     text: 'Hướng',
   },
-  {
-    id: FilterFieldName.Sort,
-    text: 'Sắp xếp',
-  },
+  SORT_CHIP_OPTION
 ];
 
 export const listFilterProfileDesktop: Array<FilterChipOption> = [
@@ -285,10 +288,7 @@ export const listFilterProfileDesktop: Array<FilterChipOption> = [
     id: FilterFieldName.Direction,
     text: 'Hướng',
   },
-  {
-    id: FilterFieldName.Sort,
-    text: 'Sắp xếp',
-  },
+  SORT_CHIP_OPTION
 ];
 
 export const listFilterProfileMobile: Array<FilterChipOption> = [
@@ -320,5 +320,29 @@ export const listFilterMobile: FilterChipOption[] = [
   //   id: FilterFieldName.FilterOverview,
   //   text: 'Bộ Lọc',
   // },
-  ...listFilterDesktop,
+  {
+    id: FilterFieldName.BusinessType,
+    text: 'Loại tin',
+  },
+  {
+    id: FilterFieldName.CategoryType,
+    text: 'Loại nhà đất',
+  },
+  { id: FilterFieldName.Project, text: 'Dự án' },
+  {
+    id: FilterFieldName.Price,
+    text: 'Mức giá',
+  },
+  {
+    id: FilterFieldName.Area,
+    text: 'Diện tích',
+  },
+  {
+    id: FilterFieldName.Rooms,
+    text: 'Số Phòng',
+  },
+  {
+    id: FilterFieldName.Direction,
+    text: 'Hướng',
+  },
 ];
