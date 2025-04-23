@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
 import PostDetailMobile from '../post-detail/PostDetailMobile';
@@ -8,6 +8,7 @@ import BedRoomIcon from '@assets/icons/badroom-icon';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
 import CardAuthor from '@views/home/components/CardAuthor';
 import CardImageCarousel from '@views/home/components/CardImageCarousel/CardImageCarousel';
+import { useIsInVerticalCenterZone } from '@hooks/useIsInVerticalCenterZone';
 
 export const ProductDetailTitleBts = ({ product }: { product: A }) => {
   return (
@@ -38,6 +39,8 @@ export const ProductDetailTitleBts = ({ product }: { product: A }) => {
 };
 export default function ProductCard({ product }: { product: IProduct }) {
   const { openModal } = useModals();
+  const divRef = useRef<HTMLDivElement | null>(null);
+  const isInCenter = useIsInVerticalCenterZone(divRef);
 
   const showDetailPostModal = (e: A) => {
 
@@ -60,7 +63,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
   };
 
   return (
-    <div className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type}`}>
+    <div className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type} ${isInCenter ? "card-in-view-center" : ""}`} ref={divRef}>
       <div className="p-4">
         <CardAuthor product={product} isMobile={true} />
       </div>

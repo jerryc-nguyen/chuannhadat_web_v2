@@ -194,3 +194,18 @@ input[type='number'] {
     color: #0052ea;
   }
 }
+
+// 
+.card-in-view-center {
+  .slider_button {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .card-image {
+    @apply scale-125;
+  }
+  button:has(>.favorite-icon) {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
