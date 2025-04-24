@@ -256,7 +256,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Calculate bankTransferNote 
-  const bankTransferNote = currentUser?.id?.toString() || '';
+  const bankTransferNote = "cnd" + currentUser?.id?.toString() || '';
 
   const value = {
     isAuthenticated,
