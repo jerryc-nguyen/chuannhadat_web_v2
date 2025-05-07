@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LucideHeart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
@@ -20,6 +20,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet';
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
+import { useViewedPosts } from '@hooks/useViewedPosts';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
@@ -34,6 +35,8 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
+  const [viewSaved, setViewSaved] = useState(true);
+
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
     queryFn: () => services.saves.savedSummary(),
@@ -187,12 +190,42 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
       </SheetTrigger>
       <SheetContent className="w-[90vw] p-0">
         <SheetHeader className="p-3">
-          <SheetTitle>Tin đăng đã lưu</SheetTitle>
+          <SheetTitle>
+            <div className="flex justify-around border-b">
+              <button
+                className={cn(
+                  'flex-1 py-2 text-center',
+                  viewSaved ? 'border-b-2 border-primary_color font-semibold' : 'text-secondary',
+                )}
+                onClick={() => setViewSaved(true)}
+              >
+                Tin đã lưu
+              </button>
+              <button
+                className={cn(
+                  'flex-1 py-2 text-center',
+                  !viewSaved ? 'border-b-2 border-primary_color font-semibold' : 'text-secondary',
+                )}
+                onClick={() => setViewSaved(false)}
+              >
+                Tin vừa xem
+              </button>
+            </div>
+          </SheetTitle>
         </SheetHeader>
         <section>
-          <Separator />
           <section className="max-h-[90vh] overflow-y-auto">
-            {isFetching ? onRenderLoadingListPost() : onRenderListPost()}
+            {viewSaved ? (
+              isFetching ? (
+                onRenderLoadingListPost()
+              ) : (
+                onRenderListPost()
+              )
+            ) : (
+              <div className="px-4 text-center text-secondary">
+                <ListViewedPosts />
+              </div>
+            )}
           </section>
         </section>
       </SheetContent>
@@ -201,3 +234,39 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
 };
 
 export default FavoriteIcon;
+
+const ListViewedPosts = () => {
+  const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
+    productUid: '',
+    defaultPageSize: 20,
+  });
+  if (!listProduct || listProduct.length === 0) return null;
+
+  return (
+    <>
+      {listProduct.map((post) => {
+        if (!post) return null;
+        return (
+          <section key={post.id} className="flex items-center gap-x-1 pb-3 hover:bg-slate-100">
+            <Link href={post?.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
+              <Image
+                width={80}
+                height={70}
+                className="h-[70px] overflow-hidden rounded-sm border bg-slate-200 object-cover shadow-md"
+                alt={post.title}
+                src={post.images[0].url}
+                unoptimized
+              />
+
+              <div className="flex flex-1 flex-col justify-between">
+                <p className="line-clamp-3 text-left text-xs font-semibold hover:text-primary_color">
+                  {post.title}
+                </p>
+              </div>
+            </Link>
+          </section>
+        );
+      })}
+    </>
+  );
+};

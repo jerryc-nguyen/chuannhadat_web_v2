@@ -11,7 +11,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LucideHeart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiMiniXMark } from 'react-icons/hi2';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
@@ -22,6 +22,7 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSearchParams } from 'next/navigation';
+import { useViewedPosts } from '@hooks/useViewedPosts';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
@@ -37,6 +38,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
+  const [viewSaved, setViewSaved] = useState(true);
 
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
@@ -196,10 +198,41 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
         side="bottom"
         align="center"
       >
-        <h4 className="py-2 text-center text-lg font-semibold">Tin đăng đã lưu</h4>
+        <div className="py-2 text-center text-lg font-semibold">
+          <div className="flex justify-center gap-4">
+            <button
+              className={cn(
+                'px-4 py-2',
+                viewSaved ? 'border-b-2 border-primary_color font-bold' : 'text-secondary',
+              )}
+              onClick={() => setViewSaved(true)}
+            >
+              Tin đã lưu
+            </button>
+            <button
+              className={cn(
+                'px-4 py-2',
+                !viewSaved ? 'border-b-2 border-primary_color font-bold' : 'text-secondary',
+              )}
+              onClick={() => setViewSaved(false)}
+            >
+              Tin vừa xem
+            </button>
+          </div>
+        </div>
         <Separator />
         <section className="max-h-[50vh] overflow-y-auto">
-          {isFetching ? onRenderLoadingListPost() : onRenderListPost()}
+          {viewSaved ? (
+            isFetching ? (
+              onRenderLoadingListPost()
+            ) : (
+              onRenderListPost()
+            )
+          ) : (
+            <div className="py-4 text-center text-sm text-secondary">
+              <ListViewedPosts />
+            </div>
+          )}
         </section>
       </PopoverContent>
     </Popover>
@@ -207,3 +240,39 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
 };
 
 export default FavoriteIcon;
+
+const ListViewedPosts = () => {
+  const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
+    productUid: '',
+    defaultPageSize: 20,
+  });
+  if (!listProduct || listProduct.length === 0) return null;
+
+  return (
+    <>
+      {listProduct.map((post) => {
+        if (!post) return null;
+        return (
+          <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">
+            <Link href={post?.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
+              <Image
+                width={80}
+                height={70}
+                className="h-[70px] overflow-hidden rounded-sm border bg-slate-200 object-cover shadow-md"
+                alt={post.title}
+                src={post.images[0].url}
+                unoptimized
+              />
+
+              <div className="flex flex-1 flex-col justify-between">
+                <p className="line-clamp-3 text-left text-xs font-semibold hover:text-primary_color">
+                  {post.title}
+                </p>
+              </div>
+            </Link>
+          </section>
+        );
+      })}
+    </>
+  );
+};

@@ -1,10 +1,9 @@
-import { services } from '@api/services';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
+import { useViewedPosts } from '@hooks/useViewedPosts';
 import ProductCard from '@mobile/searchs/ProductCard';
-import { IProduct, IProductDetail } from '@mobile/searchs/type';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { IProduct } from '@mobile/searchs/type';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
@@ -13,24 +12,17 @@ type ViewedPostsMobileProps = {
   productUid: string;
 };
 
-const defaultpageSize = 1;
+const defaultPageSize = 1;
 const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [prevBtnEnabled, setPrevBtnEnabled] = React.useState(false);
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [listProduct, setListProduct] = React.useState<(IProductDetail | undefined)[]>([undefined]);
   const isScrollNext = React.useRef<boolean>(false);
-  const [pageNumber, setPageNumber] = React.useState(1);
 
-  const { data: viewedPosts, isFetching } = useQuery({
-    queryKey: ['get-viewed-post', productUid, pageNumber, defaultpageSize],
-    queryFn: () =>
-      services.posts.getViewedPosts({
-        page: pageNumber,
-        per_page: defaultpageSize,
-      }),
-    placeholderData: keepPreviousData,
+  const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
+    productUid,
+    defaultPageSize,
   });
 
   React.useEffect(() => {
@@ -41,15 +33,6 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
       }, 0.2);
     }
   }, [listProduct.length]);
-
-  React.useEffect(() => {
-    if (viewedPosts?.data) {
-      setListProduct((data) => {
-        const activeData = data.filter((item) => item !== undefined);
-        return [...activeData, ...viewedPosts.data];
-      });
-    }
-  }, [viewedPosts?.data]);
 
   const handleScrollNext = () => {
     if (viewedPosts && pageNumber < viewedPosts?.pagination.total_pages) {
@@ -81,7 +64,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
       <div
         className={cn(
           'flex items-center justify-between',
-          viewedPosts?.pagination.total_count === defaultpageSize ? 'hidden' : 'flex',
+          viewedPosts?.pagination.total_count === defaultPageSize ? 'hidden' : 'flex',
         )}
       >
         <h3 className="text-2xl font-semibold">Tin vừa xem</h3>
@@ -100,7 +83,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
             size="icon"
             className="flex items-center justify-center gap-x-2 rounded-full"
             disabled={
-              isFetching || selectedIndex + defaultpageSize === viewedPosts?.pagination.total_count
+              isFetching || selectedIndex + defaultPageSize === viewedPosts?.pagination.total_count
             }
             onClick={handleScrollNext}
           >
