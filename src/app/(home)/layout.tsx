@@ -1,4 +1,3 @@
-import 'react-toastify/dist/ReactToastify.css';
 import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import HeaderMobile from '@mobile/header/HeaderMobile';
 import HeaderDesktop from '@views/components/HeaderDeskop';
