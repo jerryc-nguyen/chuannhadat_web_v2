@@ -23,12 +23,21 @@ import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSearchParams } from 'next/navigation';
 import { useViewedPosts } from '@hooks/useViewedPosts';
+import OptionsTabList from '@mobile/ui/OptionsTabList';
+import { OptionForSelect } from '@models';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
   id: string;
   status: boolean;
 };
+
+// TODO: move to constants
+export const viewOptions = [
+  { text: 'Tin đã lưu', value: 'saved' },
+  { text: 'Tin đã xem', value: 'viewed' },
+];
+
 const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [openSavedPost, setOpenSavePost] = React.useState<boolean>(false);
   const { currentUser } = useAuth();
@@ -38,7 +47,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
-  const [viewSaved, setViewSaved] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<OptionForSelect | undefined>(viewOptions[0]);
 
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
@@ -198,38 +207,23 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
         side="bottom"
         align="center"
       >
-        <div className="py-2 text-center text-lg font-semibold">
-          <div className="flex justify-center gap-4">
-            <button
-              className={cn(
-                'px-4 py-2',
-                viewSaved ? 'border-b-2 border-primary_color font-bold' : 'text-secondary',
-              )}
-              onClick={() => setViewSaved(true)}
-            >
-              Tin đã lưu
-            </button>
-            <button
-              className={cn(
-                'px-4 py-2',
-                !viewSaved ? 'border-b-2 border-primary_color font-bold' : 'text-secondary',
-              )}
-              onClick={() => setViewSaved(false)}
-            >
-              Tin vừa xem
-            </button>
-          </div>
+        <div className="py-2 text-center text-lg font-semibold px-5">
+          <OptionsTabList
+            options={viewOptions}
+            value={selectedTab}
+            onChange={(selected) => setSelectedTab(selected)}
+          />
         </div>
         <Separator />
         <section className="max-h-[50vh] overflow-y-auto">
-          {viewSaved ? (
+          {selectedTab?.value === 'saved' ? (
             isFetching ? (
               onRenderLoadingListPost()
             ) : (
               onRenderListPost()
             )
           ) : (
-            <div className="py-4 text-center text-sm text-secondary">
+            <div className="pb-4 text-center text-sm text-secondary">
               <ListViewedPosts />
             </div>
           )}
@@ -242,10 +236,26 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
 export default FavoriteIcon;
 
 const ListViewedPosts = () => {
+  // TODO: implement pagination
   const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
     productUid: '',
     defaultPageSize: 20,
   });
+  if (isFetching) {
+    return new Array(10).fill(0).map((_, index) => (
+      <section className="flex gap-x-2 px-5 py-3" key={index}>
+        <Skeleton className="h-[70px] w-[80px]" />
+        <div className="flex flex-1 flex-col justify-between">
+          <div className="flex h-8 flex-col gap-y-1">
+            <Skeleton className="h-3 flex-1" />
+            <Skeleton className="h-3 flex-1" />
+          </div>
+          <Skeleton className="mb-1 h-4 w-12" />
+        </div>
+      </section>
+    ));
+  }
+
   if (!listProduct || listProduct.length === 0) return null;
 
   return (

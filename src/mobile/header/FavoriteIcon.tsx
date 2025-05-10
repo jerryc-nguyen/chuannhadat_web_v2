@@ -21,6 +21,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@com
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
 import { useViewedPosts } from '@hooks/useViewedPosts';
+import OptionsTabList from '@mobile/ui/OptionsTabList';
+import { viewOptions } from '@views/components/FavoriteIcon';
+import { OptionForSelect } from '@models';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
@@ -35,7 +38,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
-  const [viewSaved, setViewSaved] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<OptionForSelect | undefined>(viewOptions[0]);
 
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
@@ -190,32 +193,17 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
       </SheetTrigger>
       <SheetContent className="w-[90vw] p-0">
         <SheetHeader className="p-3">
-          <SheetTitle>
-            <div className="flex justify-around border-b">
-              <button
-                className={cn(
-                  'flex-1 py-2 text-center',
-                  viewSaved ? 'border-b-2 border-primary_color font-semibold' : 'text-secondary',
-                )}
-                onClick={() => setViewSaved(true)}
-              >
-                Tin đã lưu
-              </button>
-              <button
-                className={cn(
-                  'flex-1 py-2 text-center',
-                  !viewSaved ? 'border-b-2 border-primary_color font-semibold' : 'text-secondary',
-                )}
-                onClick={() => setViewSaved(false)}
-              >
-                Tin vừa xem
-              </button>
-            </div>
+          <SheetTitle className='pt-6'>
+            <OptionsTabList
+              options={viewOptions}
+              value={selectedTab}
+              onChange={(selected) => setSelectedTab(selected)}
+            />
           </SheetTitle>
         </SheetHeader>
         <section>
           <section className="max-h-[90vh] overflow-y-auto">
-            {viewSaved ? (
+            {selectedTab?.value === 'saved' ? (
               isFetching ? (
                 onRenderLoadingListPost()
               ) : (
@@ -235,6 +223,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
 
 export default FavoriteIcon;
 
+// TODO: refactor gom thành component
 const ListViewedPosts = () => {
   const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
     productUid: '',
