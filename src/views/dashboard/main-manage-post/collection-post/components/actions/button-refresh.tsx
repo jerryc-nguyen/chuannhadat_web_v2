@@ -3,10 +3,10 @@
 import { Button } from '@components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
 import { RefreshCw } from 'lucide-react';
-import { toast } from 'react-toastify';
 import ProductApiService from '../../apis/product-api';
 import useProductActionSetting from '../../hooks/product-action-setting';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
+import { toast } from 'sonner';
 
 export const ButtonRefresh = ({ productId }: { productId: string }) => {
   const { productActionSettings, decreaseTotalRefreshsCount } = useProductActionSetting();

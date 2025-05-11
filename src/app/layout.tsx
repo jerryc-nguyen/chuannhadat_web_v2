@@ -5,7 +5,6 @@ import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import type { Metadata, Viewport } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import Head from 'next/head';
-import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
 import NextTopLoader from 'nextjs-toploader';
