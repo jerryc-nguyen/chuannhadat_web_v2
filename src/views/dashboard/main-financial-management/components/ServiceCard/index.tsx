@@ -5,8 +5,8 @@ import { Service } from '../../types';
 import PaymentDialog from '../PaymentDialog';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
 import { useBalanceRequest } from '@api/balance';
+import { toast } from 'sonner';
 
 interface ServiceCardProps {
   plan: Service;

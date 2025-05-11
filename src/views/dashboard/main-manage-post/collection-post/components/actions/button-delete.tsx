@@ -3,8 +3,8 @@ import { Button } from '@components/ui/button';
 import useModals from '@mobile/modals/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
-import { toast } from 'react-toastify';
 import ProductApiService from '../../apis/product-api';
+import { toast } from 'sonner';
 
 export const ButtonDelete = ({ productId }: { productId: string }) => {
   const { openModal, closeModal } = useModals();

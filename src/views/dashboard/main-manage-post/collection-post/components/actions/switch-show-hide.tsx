@@ -2,10 +2,10 @@
 
 import { Switch } from '@components/ui/switch';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import ProductApiService from '../../apis/product-api';
 import { ShowOnFrontEndProductInput } from '../../data/schemas';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
+import { toast } from 'sonner';
 
 export const SwitchButtonToggleShowOnFrontEnd = ({
   productId,

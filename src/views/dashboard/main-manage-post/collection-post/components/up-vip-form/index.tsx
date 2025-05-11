@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import ProductApiService from '../../apis/product-api';
-import { toast } from 'react-toastify';
 import { ButtonGroup } from '@components/ui/button-group';
 import { Radio } from '@components/ui/Radio';
 import { maskNumber } from '@common/priceHelpers';
@@ -16,6 +15,7 @@ import useProductActionSetting from '../../hooks/product-action-setting';
 import { useBalanceRequest } from '@api/balance';
 import { get } from 'lodash-es';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
+import { toast } from 'sonner';
 
 interface IUpVipProductFormProps {
   productId: string;
