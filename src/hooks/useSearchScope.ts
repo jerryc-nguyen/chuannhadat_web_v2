@@ -6,7 +6,7 @@ import { useMemo } from "react";
 export const enum SearchScopeEnums {
   Profile = 'profile',
   ManagePosts = 'manage_posts',
-  Search = 'search',
+  Category = 'category',
   News = 'news'
 }
 
@@ -22,7 +22,7 @@ export default function useSearchScope() {
     } else if (pathname.indexOf('/dashboard/') != -1 && AuthUtils.getCurrentUser()) {
       return SearchScopeEnums.ManagePosts
     } else {
-      return SearchScopeEnums.Search
+      return SearchScopeEnums.Category
     }
   }, [pathname])
 
