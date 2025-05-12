@@ -10,7 +10,9 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug;
-  const path = `/category/${slug}`;
+  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
+  const path = `/category/${slugStr}`;
+
   const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS, { params: { path } }))
     .data as Metadata;
   return createMetadata(rawMetadata);
