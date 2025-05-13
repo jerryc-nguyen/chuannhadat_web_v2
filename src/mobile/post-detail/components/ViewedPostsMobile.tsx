@@ -20,7 +20,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const isScrollNext = React.useRef<boolean>(false);
 
-  const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
+  const { listProduct, isFetching, pageNumber, setPageNumber, pagination } = useViewedPosts({
     productUid,
     defaultPageSize,
   });
@@ -35,7 +35,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
   }, [listProduct.length]);
 
   const handleScrollNext = () => {
-    if (viewedPosts && pageNumber < viewedPosts?.pagination.total_pages) {
+    if (pagination && pageNumber < pagination?.total_pages) {
       setPageNumber((pageNumber) => pageNumber + 1);
       isScrollNext.current = true;
     } else {
@@ -58,13 +58,13 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
     onSelect();
     api.on('select', onSelect);
   }, [api, onSelect]);
-  if (viewedPosts?.pagination.total_count === 0) return null;
+  if (pagination?.total_count === 0) return null;
   return (
     <section className={cn('flex w-full flex-col gap-1 overflow-hidden border bg-white p-4')}>
       <div
         className={cn(
           'flex items-center justify-between',
-          viewedPosts?.pagination.total_count === defaultPageSize ? 'hidden' : 'flex',
+          pagination?.total_count === defaultPageSize ? 'hidden' : 'flex',
         )}
       >
         <h3 className="text-2xl font-semibold">Tin vừa xem</h3>
@@ -83,7 +83,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
             size="icon"
             className="flex items-center justify-center gap-x-2 rounded-full"
             disabled={
-              isFetching || selectedIndex + defaultPageSize === viewedPosts?.pagination.total_count
+              isFetching || selectedIndex + defaultPageSize === pagination?.total_count
             }
             onClick={handleScrollNext}
           >

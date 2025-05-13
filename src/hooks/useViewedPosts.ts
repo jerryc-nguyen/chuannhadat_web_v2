@@ -1,5 +1,6 @@
 import { services } from '@api/services';
-import { IProductDetail } from '@mobile/searchs/type';
+import { IViewedProductDetail } from '@mobile/searchs/type';
+import { Pagination } from '@models/savesPostModel';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -9,19 +10,19 @@ type UseViewedPostsProps = {
 };
 
 type UseViewedPostsReturn = {
-  listProduct: (IProductDetail | undefined)[];
+  listProduct: IViewedProductDetail[];
   isFetching: boolean;
   pageNumber: number;
   setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-  viewedPosts: any;
+  pagination: Pagination | undefined
 };
 
-export const useViewedPosts = ({ productUid, defaultPageSize = 3 }: UseViewedPostsProps): UseViewedPostsReturn => {
-  const [listProduct, setListProduct] = useState<(IProductDetail | undefined)[]>([
-    undefined,
-    undefined,
-    undefined,
-  ]);
+// TODO: check if listProduct & viewedPosts is duplicate
+export const useViewedPosts = ({
+  productUid,
+  defaultPageSize = 3,
+}: UseViewedPostsProps): UseViewedPostsReturn => {
+  const [listProduct, setListProduct] = useState<IViewedProductDetail[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
 
   const { data: viewedPosts, isFetching } = useQuery({
@@ -48,6 +49,6 @@ export const useViewedPosts = ({ productUid, defaultPageSize = 3 }: UseViewedPos
     isFetching,
     pageNumber,
     setPageNumber,
-    viewedPosts,
+    pagination: viewedPosts?.pagination,
   };
 };

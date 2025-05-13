@@ -237,7 +237,7 @@ export default FavoriteIcon;
 
 const ListViewedPosts = () => {
   // TODO: implement pagination
-  const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } = useViewedPosts({
+  const { listProduct, isFetching, pageNumber, setPageNumber } = useViewedPosts({
     productUid: '',
     defaultPageSize: 20,
   });
@@ -260,7 +260,8 @@ const ListViewedPosts = () => {
 
   return (
     <>
-      {listProduct.map((post) => {
+      {listProduct.map((postInfo) => {
+        const post = postInfo.product;
         if (!post) return null;
         return (
           <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">

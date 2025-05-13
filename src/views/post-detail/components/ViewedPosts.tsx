@@ -21,7 +21,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const isScrollNext = useRef<boolean>(false);
 
-  const { listProduct, isFetching, pageNumber, setPageNumber, viewedPosts } =
+  const { listProduct, isFetching, pageNumber, setPageNumber, pagination } =
     useViewedPosts({ productUid, defaultPageSize });
 
   useCleanupEffect(
@@ -37,7 +37,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
   );
 
   const handleScrollNext = () => {
-    if (viewedPosts && pageNumber < viewedPosts?.pagination.total_pages) {
+    if (pagination && pageNumber < pagination?.total_pages) {
       setPageNumber((pageNumber) => pageNumber + 1);
       isScrollNext.current = true;
     } else {
@@ -68,13 +68,13 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     [api, onSelect],
   );
 
-  if (viewedPosts?.pagination.total_count === 0) return null;
+  if (pagination?.total_count === 0) return null;
   return (
     <section className={cn('flex w-full flex-col gap-1 rounded-xl border bg-white p-6')}>
       <div
         className={cn(
           'flex justify-between',
-          viewedPosts?.pagination.total_count === defaultPageSize ? 'hidden' : 'flex',
+          pagination?.total_count === defaultPageSize ? 'hidden' : 'flex',
         )}
       >
         <h3 className="pb-5 text-xl font-semibold">Tin vừa xem</h3>
@@ -92,7 +92,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
             size="icon"
             className="flex items-center justify-center gap-x-2"
             disabled={
-              isFetching || selectedIndex + defaultPageSize === viewedPosts?.pagination.total_count
+              isFetching || selectedIndex + defaultPageSize === pagination?.total_count
             }
             onClick={handleScrollNext}
           >

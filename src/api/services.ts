@@ -151,13 +151,20 @@ export const services = {
       );
     },
     getViewedPosts: async (payload: IViewedPostsPayload): Promise<IViewedPostResonpse> => {
-      return axiosInstance.get(API_ROUTES.POSTS.VIEWD_PRODUCTS, {
+      return axiosInstance.get(API_ROUTES.POSTS.VIEWED_PRODUCTS_V2, {
         params: payload,
         headers: {
           'Frontend-Token': getCookie(FRONTEND_TOKEN),
         },
       });
     },
+    deleteViewedPosts: async (product_uid: string): Promise<IViewedPostResonpse> => {
+      return axiosInstance.delete(`${API_ROUTES.POSTS.VIEWD_PRODUCTS}/${product_uid}`, {
+        headers: {
+          'Frontend-Token': getCookie(FRONTEND_TOKEN),
+        },
+      });
+    }
   },
   auth: {
     signIn: async (data: IFormPropsLogin): Promise<LoginResponse> => {
