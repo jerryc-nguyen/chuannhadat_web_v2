@@ -1,33 +1,34 @@
-import { Button } from '@components/ui/button';
-import { IProductDetail } from '@mobile/searchs/type';
-import React from 'react';
-import { LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
-import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
-import NextJsImage from './next-image';
-import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
+import { services } from '@api/services';
+import { useAuth } from '@common/auth/AuthContext';
+import { DEFAULT_THUMB_IMAGE } from '@common/constants';
 import { cn } from '@common/utils';
-import styles from '../styles/overvew-post.module.scss';
+import BlurImage from '@components/BlurImage';
+import TooltipHost from '@components/tooltip-host';
+import { Button } from '@components/ui/button';
+import { Skeleton } from '@components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
+import { YoutubePlayerAction } from '@components/youtube-player-modal';
+import useCleanupEffect from '@hooks/useCleanupEffect';
+import { IProductDetail } from '@mobile/searchs/type';
+import { useMutation } from '@tanstack/react-query';
+import ButtonSave, { type ButtonSaveHandle } from '@views/home/components/ButtonSave';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
+import { LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
+import { toast } from 'sonner';
+import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
+import 'yet-another-react-lightbox/plugins/counter.css';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import 'yet-another-react-lightbox/plugins/counter.css';
-import SubTitleComponent from './subtitle-component';
 import useModalPostDetail from '../hooks/useModalPostDetail';
-import { useMutation } from '@tanstack/react-query';
-import { services } from '@api/services';
-import TooltipHost from '@components/tooltip-host';
-import ButtonSave, { type ButtonSaveHandle } from '@views/home/components/ButtonSave';
-import { toast } from 'sonner';
-import { useAuth } from '@common/auth/AuthContext';
-import BlurImage from '@components/BlurImage';
-import Image from 'next/image';
-import { Skeleton } from '@components/ui/skeleton';
-import { DEFAULT_THUMB_IMAGE } from '@common/constants';
-import { useRouter } from 'next/navigation';
-import useCleanupEffect from '@hooks/useCleanupEffect';
+import styles from '../styles/overvew-post.module.scss';
+import NextJsImage from './next-image';
+import SubTitleComponent from './subtitle-component';
 
 type OverviewPostProps = {
   data: IProductDetail;
@@ -43,16 +44,27 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   const [isCopied, setIsCopied] = React.useState(false);
   const { onCloseModal } = useModalPostDetail();
   const router = useRouter();
+
+  const actionLightBox = {
+    slide: NextJsImage,
+    iconPrev: () => <GoArrowLeft className="text-3xl opacity-50 hover:opacity-100" />,
+    iconNext: () => <GoArrowRight className="text-3xl opacity-50 hover:opacity-100" />,
+    buttonPrev: data?.images.length <= 1 ? () => null : undefined,
+    buttonNext: data?.images.length <= 1 ? () => null : undefined,
+  };
   const { mutate: addViewPost } = useMutation({
     mutationFn: services.trackings.viewProduct,
   });
-  useCleanupEffect((helpers) => {
-    if (isCopied) {
-      helpers.setTimeout(() => {
-        setIsCopied(false);
-      }, 4000);
-    }
-  }, [isCopied]);
+  useCleanupEffect(
+    (helpers) => {
+      if (isCopied) {
+        helpers.setTimeout(() => {
+          setIsCopied(false);
+        }, 4000);
+      }
+    },
+    [isCopied],
+  );
   React.useEffect(() => {
     if (data?.uid) {
       addViewPost({
@@ -79,7 +91,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         await navigator.clipboard.writeText(window.location.href || '');
         setIsCopied(true);
       } catch (err) {
-        console.error('Failed to copy: ', err);
+        throw new Error('Không thể copy nội dung');
       }
     }
   };
@@ -180,6 +192,10 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               title={data?.title}
               src={item.url}
             />
+            <YoutubePlayerAction
+              isDisplay={index === 0}
+              youtube_url={data?.youtube_url as string}
+            />
             {data?.images.length > 3 && index === 2 && (
               <Button
                 onClick={() => setIsOpenSlideImage(true)}
@@ -192,6 +208,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           </div>
         ))}
       </div>
+
       <Lightbox
         className={styles.lightbox_images}
         open={openSlideImage}
@@ -214,13 +231,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
           hidden: data?.images.length <= 1,
         }}
         counter={{ container: { style: { top: '0' } } }}
-        render={{
-          slide: NextJsImage,
-          iconPrev: () => <GoArrowLeft className="text-3xl opacity-50 hover:opacity-100" />,
-          iconNext: () => <GoArrowRight className="text-3xl opacity-50 hover:opacity-100" />,
-          buttonPrev: data?.images.length <= 1 ? () => null : undefined,
-          buttonNext: data?.images.length <= 1 ? () => null : undefined,
-        }}
+        render={actionLightBox}
         plugins={[Thumbnails, SubTitleLightBox, Zoom, Counter]}
       />
       <h2 className="mb-2 mt-4 line-clamp-2 whitespace-normal text-2xl font-bold">{data?.title}</h2>

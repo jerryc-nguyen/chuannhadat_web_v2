@@ -19,9 +19,10 @@ export interface IProduct {
   title: string;
   uid: string;
   name?: string;
-  bus_cat_type?: string
-  ads_type?: string
+  bus_cat_type?: string;
+  ads_type?: string;
   images: TPhoto[];
+  youtube_url?: string;
 }
 
 export interface Author {
@@ -72,5 +73,6 @@ export interface IProductDetail {
   price_per_m2: number;
   formatted_kt: string;
   author: Author;
-  breadcrumb: A
+  breadcrumb: A;
+  youtube_url?: string;
 }

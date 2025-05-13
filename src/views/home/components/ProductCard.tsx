@@ -1,25 +1,30 @@
-import CardAuthor from './CardAuthor';
-import { useAtom, useAtomValue } from 'jotai';
-import { isLoadingModal, selectedPostId } from '../../post-detail/states/modalPostDetailAtoms';
-import { useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
-import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
-import styles from '../styles/ProductCard.module.scss';
-import BadRoomIcon from '@assets/icons/bedroom-icon';
 import BedRoomIcon from '@assets/icons/badroom-icon';
-import Spinner from '@components/ui/spinner';
+import BadRoomIcon from '@assets/icons/bedroom-icon';
 import { cn } from '@common/utils';
-import React from 'react';
-
-import LoadingProductCard from './LoadingProductCard';
-import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
+import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
+import Spinner from '@components/ui/spinner';
+import { YoutubePlayerAction } from '@components/youtube-player-modal';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAtom, useAtomValue } from 'jotai';
 import Link from 'next/link';
+import { isLoadingModal, selectedPostId } from '../../post-detail/states/modalPostDetailAtoms';
+import styles from '../styles/ProductCard.module.scss';
+import CardAuthor from './CardAuthor';
+import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
+import LoadingProductCard from './LoadingProductCard';
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
   className?: string;
+  isShowVideoYoutube?: boolean;
 };
-export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  isShowAuthor = true,
+  className,
+  isShowVideoYoutube = true,
+}: ProductCardProps) {
   const queryClient = useQueryClient();
 
   const [postId, setSelectedPostId] = useAtom(selectedPostId);
@@ -37,6 +42,7 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
   if (!product || product.images.length == 0) {
     return <LoadingProductCard />;
   }
+
   return (
     <Card
       className={cn(
@@ -51,7 +57,11 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
           <CardAuthor product={product} />
         </CardHeader>
       )}
-      <CardContent className="card-content">
+      <CardContent className="card-content flex-center relative">
+        <YoutubePlayerAction
+          youtube_url={product.youtube_url}
+          isDisplay={Boolean(product.youtube_url && isShowVideoYoutube)}
+        />
         <CardImageCarousel
           handleClickCardImage={() => {
             openModalPostDetail(product.uid);
@@ -60,13 +70,8 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
-        {!isShowAuthor && (
-          <div className="w-full text-secondary">
-            {product.bus_cat_type} · {product?.formatted_publish_at}
-          </div>
-        )}
-
         {isShowAuthor && <div className="w-full text-secondary">{product.bus_cat_type}</div>}
+
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
           onClick={() => openModalPostDetail(product.uid)}
@@ -100,7 +105,6 @@ export default function ProductCard({ product, isShowAuthor = true, className }:
             </div>
           </div>
         </div>
-
         {!isShowAuthor && (
           <div className="w-full text-secondary">{product?.short_location_name}</div>
         )}

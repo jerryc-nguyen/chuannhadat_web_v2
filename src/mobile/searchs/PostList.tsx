@@ -7,14 +7,14 @@ import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
 import { IoChevronDown } from 'react-icons/io5';
 
-import { PostPagination } from '@views/home/components/PostPagination';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
-import ProductCardV2 from './ProductCardV2';
-import useQueryPosts from '@hooks/useQueryPosts';
-import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
 import useSearchAggs from '@components/search-aggs/hooks';
+import useQueryPosts from '@hooks/useQueryPosts';
+import { PostPagination } from '@views/home/components/PostPagination';
+import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
+import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import ProductCardV2 from './ProductCardV2';
 
 // TODO: Move to views/home
 
@@ -32,12 +32,12 @@ export default function PostList() {
   const filterParams = buildFilterParams({
     withLocal: false,
   });
-  filterParams.with_users = true
-  filterParams.page = currentPage
+  filterParams.with_users = true;
+  filterParams.page = currentPage;
 
   const { products, data, aggreations } = useQueryPosts(filterParams);
 
-  useLoadMissingAuthors(data)
+  useLoadMissingAuthors(data);
 
   if (aggreations) {
     updateSearchAggs(aggreations);
@@ -78,7 +78,7 @@ export default function PostList() {
   };
   return (
     <div className="c-verticalPostList relative mx-auto w-full">
-      <div className="flex items-center justify-between px-4 pt-0 pb-4">
+      <div className="flex items-center justify-between px-4 pb-4 pt-0">
         <div className="text-secondary">Có {data?.pagination?.total_count} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">

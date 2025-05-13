@@ -2,13 +2,13 @@ import { services } from '@api/services';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
-import ProductCard from '@views/home/components/ProductCard';
+import useCleanupEffect from '@hooks/useCleanupEffect';
 import { IProductDetail } from '@mobile/searchs/type';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import ProductCard from '@views/home/components/ProductCard';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
-import useCleanupEffect from '@hooks/useCleanupEffect';
 
 type ViewedPostsProps = {
   productUid: string;
@@ -39,14 +39,17 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     placeholderData: keepPreviousData,
   });
 
-  useCleanupEffect((helpers) => {
-    if (listProduct && isScrollNext.current) {
-      helpers.setTimeout(() => {
-        api?.scrollNext();
-        isScrollNext.current = false;
-      }, 0.2);
-    }
-  }, [listProduct.length, api]);
+  useCleanupEffect(
+    (helpers) => {
+      if (listProduct && isScrollNext.current) {
+        helpers.setTimeout(() => {
+          api?.scrollNext();
+          isScrollNext.current = false;
+        }, 0.2);
+      }
+    },
+    [listProduct.length, api],
+  );
 
   React.useEffect(() => {
     if (viewedPosts?.data) {
@@ -76,15 +79,18 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     setPrevBtnEnabled(api.canScrollPrev());
   }, [api, setSelectedIndex]);
 
-  useCleanupEffect((helpers) => {
-    if (!api) return;
-    onSelect();
-    api.on('select', onSelect);
+  useCleanupEffect(
+    (helpers) => {
+      if (!api) return;
+      onSelect();
+      api.on('select', onSelect);
 
-    helpers.addCleanup(() => {
-      api.off('select', onSelect);
-    });
-  }, [api, onSelect]);
+      helpers.addCleanup(() => {
+        api.off('select', onSelect);
+      });
+    },
+    [api, onSelect],
+  );
 
   if (viewedPosts?.pagination.total_count === 0) return null;
   return (
@@ -136,7 +142,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
               className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
               key={product?.id || index}
             >
-              <ProductCard isShowAuthor={false} product={product} />
+              <ProductCard isShowVideoYoutube={false} isShowAuthor={false} product={product} />
             </CarouselItem>
           ))}
         </CarouselContent>

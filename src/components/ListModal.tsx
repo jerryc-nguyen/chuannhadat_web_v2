@@ -1,12 +1,13 @@
 'use client';
 
 import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
+import ModalPostDetail from '@views/post-detail/components/modal-post-detail';
+import { Fragment } from 'react';
 import SidePanel from './SidePanel';
 import useBrowserPopstate from './popstate-handler/hooks';
-import ModalPostDetail from '@views/post-detail/components/modal-post-detail';
 import ConfirmEmailModal from './ui/ConfirmEmailModal';
 import DepositModal from './ui/DepositModal';
-import { Fragment } from 'react';
+import { YoutubePlayerModal } from './youtube-player-modal';
 
 export default function ListModal() {
   useBrowserPopstate();
@@ -19,6 +20,7 @@ export default function ListModal() {
       <ModalPostDetail />
       <ConfirmEmailModal />
       <DepositModal />
+      <YoutubePlayerModal />
     </Fragment>
   );
 }
