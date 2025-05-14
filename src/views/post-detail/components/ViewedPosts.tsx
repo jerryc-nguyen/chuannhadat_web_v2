@@ -1,9 +1,10 @@
+"use client";
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
 import ProductCard from '@views/home/components/ProductCard';
 import { Loader2 } from 'lucide-react';
-import React, { useRef } from 'react';
+import React, { memo, useRef } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 import useCleanupEffect from '@hooks/useCleanupEffect';
 import { useViewedPosts } from '@hooks/useViewedPosts';
@@ -116,9 +117,9 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
           {listProduct.map((product, index) => (
             <CarouselItem
               className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
-              key={product?.id || index}
+              key={product?.product?.id || index}
             >
-              <ProductCard isShowAuthor={false} product={product} />
+              <ProductCard isShowAuthor={false} product={product.product} />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -127,4 +128,4 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
   );
 };
 
-export default ViewedPosts;
+export default memo(ViewedPosts)

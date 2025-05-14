@@ -1,19 +1,20 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { authorAtom, postDetailAtom } from '@mobile/post-detail/states';
-import { useSetAtom } from 'jotai';
-import { useQuery, isServer, useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
-import Spinner from '@components/ui/spinner';
-import PhotosCarousel from '@mobile/post-detail/components/PhotosCarousel';
-import ProductDescription from './components/ProductDescription';
-import Section from '@mobile/ui/Section';
-import { FeaturesList } from '@views/post-detail/components/features-post';
-import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
-import './PostDetailMobile.scss';
 import NotFound from '@app/not-found';
+import Spinner from '@components/ui/spinner';
+import { usePostDetail } from '@hooks/usePostDetail';
+import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
+import PhotosCarousel from '@mobile/post-detail/components/PhotosCarousel';
+import { authorAtom, postDetailAtom } from '@mobile/post-detail/states';
 import type { IProductDetail } from '@mobile/searchs/type';
+import Section from '@mobile/ui/Section';
+import { isServer, useMutation } from '@tanstack/react-query';
+import { FeaturesList } from '@views/post-detail/components/features-post';
+import { useSetAtom } from 'jotai';
+import React, { useEffect } from 'react';
+import ProductDescription from './components/ProductDescription';
+import './PostDetailMobile.scss';
 
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);
@@ -24,12 +25,10 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
     isLoading,
     isSuccess,
     isError,
-  } = useQuery({
-    queryKey: ['get-detail-post', productUid],
-    queryFn: () => services.posts.getDetailPost(productUid),
+  } = usePostDetail({
+    postId: productUid,
     enabled: !!productUid && productUid !== '/', // Ensure query is enabled only if productUid is valid
     refetchOnWindowFocus: true, // Optional: refetch when window is focused
-    select: (data) => data.data,
   });
 
   const { mutate: addViewPost } = useMutation({

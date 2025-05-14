@@ -14,11 +14,13 @@ import React from 'react';
 import LoadingProductCard from './LoadingProductCard';
 import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
 import Link from 'next/link';
+
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
   className?: string;
 };
+
 export default function ProductCard({ product, isShowAuthor = true, className }: ProductCardProps) {
   const queryClient = useQueryClient();
 
