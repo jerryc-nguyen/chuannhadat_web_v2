@@ -3,6 +3,7 @@ import { IViewedProductDetail } from '@mobile/searchs/type';
 import { Pagination } from '@models/savesPostModel';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type UseViewedPostsProps = {
   productUid: string;
@@ -44,6 +45,7 @@ export const useViewedPosts = ({
   const { mutateAsync, isPending: isDeleting } = useMutation({
     mutationFn: (postUid: string) => services.posts.deleteViewedPosts(postUid),
     onSuccess: (_, deletedProductUid) => {
+      toast.success('Xóa bài viết đã xem thành công');
       // Update the local list by removing the deleted post
       setListProduct((currentList) =>
         currentList.filter((item) => item.product.uid !== deletedProductUid),

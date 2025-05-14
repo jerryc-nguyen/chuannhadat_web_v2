@@ -250,7 +250,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     </Badge>
   );
 
-  const renderContent = () => (
+  const RenderContent = () => (
     <>
       <div className="px-0 py-2 text-center text-lg font-semibold lg:px-5">
         <OptionsTabList
@@ -307,7 +307,9 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
         </SheetTrigger>
         <SheetContent className="w-[90vw] p-0">
           <SheetHeader className="p-3">
-            <SheetTitle className="pt-6">{renderContent()}</SheetTitle>
+            <SheetTitle className="pt-6">
+              <RenderContent />
+            </SheetTitle>
           </SheetHeader>
         </SheetContent>
       </Sheet>
@@ -331,7 +333,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
         side="bottom"
         align="center"
       >
-        {renderContent()}
+        <RenderContent />
       </PopoverContent>
     </Popover>
   );
