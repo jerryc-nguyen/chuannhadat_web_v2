@@ -68,13 +68,13 @@ const LoadingListPost = ({ length = 5 }: { length?: number }) => {
 type ActivityPostsListProps = {
   data: ISavedProductsResponse['data'] | IViewedProductDetail[];
   pagination?: ISavedProductsResponse['pagination'];
-  loadingRemovePost: PostLoadingType[];
-  handleRemovePost: (uid: string) => void;
+  loadingRemovePostId: string;
+  handleRemovePost: (uid: string) => Promise<void>;
 };
 
 const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
   data,
-  loadingRemovePost,
+  loadingRemovePostId,
   handleRemovePost,
   pagination,
 }) => {
@@ -89,6 +89,8 @@ const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
     const formatted_price = post?.product?.formatted_price;
     const formatted_area = post?.product?.formatted_area;
     const formatted_kt = post?.product?.formatted_kt;
+
+    const isLoadingDelete = loadingRemovePostId === post?.product?.uid;
 
     return (
       <section
@@ -119,7 +121,7 @@ const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
             </span>
           </div>
         </Link>
-        {loadingRemovePost?.find((item) => item.id === post?.product?.uid)?.status ? (
+        {isLoadingDelete ? (
           <AiOutlineLoading3Quarters className="animate-spin text-xl duration-500" />
         ) : (
           <HiMiniXMark
@@ -136,13 +138,13 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [openSavedPost, setOpenSavePost] = React.useState<boolean>(false);
   const { currentUser } = useAuth();
   const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
-  const [loadingRemovePost, setLoadingRemovePost] = React.useState<PostLoadingType[]>([]);
   const setListPostIdSaved = useSetAtom(listPostIdSavedAtom);
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
   const [selectedTab, setSelectedTab] = useState<OptionForSelect | undefined>(viewOptions[0]);
   const isMobile = useIsMobile();
+  const [loadingDeleteUid, setLoadingDeleteUid] = useState('');
 
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
@@ -179,14 +181,6 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   }, [isSuccess, savedSummary]);
 
   React.useEffect(() => {
-    const listPostLoading = savedSummary?.saved_product_uids.map((item) => ({
-      id: item,
-      status: false,
-    }));
-    setLoadingRemovePost(listPostLoading as PostLoadingType[]);
-  }, [savedSummary?.saved_product_uids]);
-
-  React.useEffect(() => {
     if (savedSummary) {
       setListPostIdSaved(savedSummary.saved_product_uids);
     }
@@ -202,31 +196,30 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
       if (data.status) {
         queryClient.invalidateQueries({ queryKey: ['save_summary'] });
         queryClient.invalidateQueries({ queryKey: ['list_saves_post'] }).then(() => {
-          setLoadingRemovePost((post) => post.filter((item) => !item.status));
           toast.success('Xóa tin lưu thành công');
         });
       } else {
         toast.error('Xóa tin lưu không thành công');
       }
     },
+    onSettled: () => {
+      setLoadingDeleteUid('');
+    },
   });
 
-  const handleRemovePost = (uid: string) => {
-    setLoadingRemovePost((post) =>
-      post.map((item) => {
-        if (item.id === uid)
-          return {
-            id: uid,
-            status: true,
-          };
-        return item;
-      }),
-    );
+  const handleRemovePost = async (uid: string) => {
+    setLoadingDeleteUid(uid);
     const payload: ISaveProductPayload = {
       product_uid: uid,
       action: ActionSaveProduct.Unlike,
     };
     savePostMutate(payload);
+  };
+
+  const handleRemoveViewedPost = async (uid: string) => {
+    setLoadingDeleteUid(uid);
+    await deleteViewedPost(uid);
+    setLoadingDeleteUid('');
   };
 
   const renderBadge = () => (
@@ -271,7 +264,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
             <ActivityPostsList
               data={listSavedPost?.data ?? []}
               pagination={listSavedPost?.pagination}
-              loadingRemovePost={loadingRemovePost}
+              loadingRemovePostId={loadingDeleteUid}
               handleRemovePost={handleRemovePost}
             />
           )
@@ -283,8 +276,8 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
               <ActivityPostsList
                 data={listViewed}
                 pagination={paginationViewed}
-                loadingRemovePost={loadingRemovePost}
-                handleRemovePost={deleteViewedPost}
+                loadingRemovePostId={loadingDeleteUid}
+                handleRemovePost={handleRemoveViewedPost}
               />
             )}
           </>
