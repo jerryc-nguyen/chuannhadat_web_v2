@@ -15,7 +15,6 @@ import AuthorPost from './author-post';
 import ViewedPosts from './ViewedPosts';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import NotFound from '@app/not-found';
-import { useRouter } from 'next/navigation';
 import { usePostDetail } from '@hooks/usePostDetail';
 
 type ModalPostDetailProps = object;
@@ -35,14 +34,6 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   //   window.history.pushState({}, '', product.detail_path);
   //   trackPushPath(product.detail_path);
   // };
-
-  console.log('postId', {
-    postId,
-    data,
-    isLoading,
-    isSuccess,
-    isError,
-  });
 
   React.useEffect(() => {
     if (data) {

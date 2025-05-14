@@ -15,7 +15,11 @@ import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
 import { listPostIdSavedAtom } from '@views/home/states';
 import { AxiosError } from 'axios';
-import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
+import {
+  ActionSaveProduct,
+  ISavedProductsResponse,
+  ISaveProductPayload,
+} from '@models/savesPostModel';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet';
 import { toast } from 'sonner';
@@ -24,12 +28,85 @@ import { useViewedPosts } from '@hooks/useViewedPosts';
 import OptionsTabList from '@mobile/ui/OptionsTabList';
 import { viewOptions } from '@views/components/FavoriteIcon';
 import { OptionForSelect } from '@models';
+import { IViewedProductDetail } from '../searchs/type';
 
 type FavoriteIconProps = object;
 type PostLoadingType = {
   id: string;
   status: boolean;
 };
+
+const LoadingListPost = ({ length = 5 }: { length?: number }) => {
+  return (
+    <>
+      {new Array(length).fill(0).map((_, index) => (
+        <section className="flex gap-x-2 px-5 py-3" key={uuidv4() + index}>
+          <Skeleton className="h-[70px] w-[80px]" />
+          <div className="flex flex-1 flex-col justify-between">
+            <div className="flex h-8 flex-col gap-y-1">
+              <Skeleton className="h-3 flex-1" />
+              <Skeleton className="h-3 flex-1" />
+            </div>
+            <Skeleton className="mb-1 h-4 w-12" />
+          </div>
+        </section>
+      ))}
+    </>
+  );
+};
+
+// Saved Posts List component
+type SavedPostsListProps = {
+  data: ISavedProductsResponse['data'] | IViewedProductDetail[];
+  pagination?: ISavedProductsResponse['pagination'];
+  loadingRemovePost: PostLoadingType[];
+  handleRemovePost: (uid: string) => void;
+};
+
+const SavedPostsList: React.FC<SavedPostsListProps> = ({
+  data,
+  loadingRemovePost,
+  handleRemovePost,
+  pagination,
+}) => {
+  if (pagination?.total_count === 0)
+    return (
+      <div className="mb-4 flex items-center justify-center pb-4 pt-2">
+        <Image alt="empty-save-post" src={EmptyPost} />
+      </div>
+    );
+
+  return data.map((post) => (
+    <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">
+      <Link href={post.product.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
+        <Image
+          width={80}
+          height={70}
+          className="h-[70px] overflow-hidden rounded-sm border bg-slate-200 object-cover shadow-md"
+          alt={post.product.title}
+          src={post.product.images[0].url}
+          unoptimized
+        />
+
+        <div className="flex flex-1 flex-col justify-between">
+          <p className="line-clamp-2 text-xs font-semibold hover:text-primary_color">
+            {post.product.title}
+          </p>
+          <span className="mb-1 text-xs text-secondary">{timeAgo(post.created_at)}</span>
+        </div>
+      </Link>
+      {loadingRemovePost.find((item) => item.id === post.product.uid)?.status ? (
+        <AiOutlineLoading3Quarters className="animate-spin text-xl duration-500" />
+      ) : (
+        <HiMiniXMark
+          onClick={() => handleRemovePost(post.product.uid)}
+          className="cursor-pointer text-xl hover:text-error_color"
+        />
+      )}
+    </section>
+  ));
+};
+
 const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   const [openSavedPost, setOpenSavePost] = React.useState<boolean>(false);
   const { currentUser } = useAuth();
@@ -76,6 +153,12 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     staleTime: 0,
   });
 
+  const { listProduct: listViewed, pagination: paginationViewed, deleteViewedPost } = useViewedPosts({
+    productUid: '',
+    defaultPageSize: 20,
+    enabled: selectedTab?.value === 'viewed',
+  });
+
   const { mutate: savePostMutate } = useMutation({
     mutationFn: services.saves.savePost,
     onError: (err: AxiosError<A>) => {
@@ -112,57 +195,6 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     savePostMutate(payload);
   };
 
-  const onRenderLoadingListPost = () =>
-    new Array(savedSummary?.saved_product_uids.length).fill(0).map((item) => (
-      <section className="flex gap-x-2 px-5 py-3" key={uuidv4() + item}>
-        <Skeleton className="h-[70px] w-[80px]" />
-        <div className="flex flex-1 flex-col justify-between">
-          <div className="flex h-8 flex-col gap-y-1">
-            <Skeleton className="h-3 flex-1" />
-            <Skeleton className="h-3 flex-1" />
-          </div>
-          <Skeleton className="mb-1 h-4 w-12" />
-        </div>
-      </section>
-    ));
-  const onRenderListPost = () => {
-    if (listSavedPost?.pagination?.total_count === 0)
-      return (
-        <div className="mb-4 flex items-center justify-center pb-4 pt-2">
-          <Image alt="empty-save-post" src={EmptyPost} />
-        </div>
-      );
-    return listSavedPost?.data.map((post) => (
-      <section key={post.id} className="flex items-center gap-x-1 px-5 py-3 hover:bg-slate-100">
-        <Link href={post.product.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
-          <Image
-            width={80}
-            height={70}
-            className="h-[70px] overflow-hidden rounded-sm border bg-slate-200 object-cover shadow-md"
-            alt={post.product.title}
-            src={post.product.images[0].url}
-            unoptimized
-          />
-
-          <div className="flex flex-1 flex-col justify-between">
-            <p className="line-clamp-2 text-xs font-semibold hover:text-primary_color">
-              {post.product.title}
-            </p>
-            <span className="mb-1 text-xs text-secondary">{timeAgo(post.created_at)}</span>
-          </div>
-        </Link>
-        {loadingRemovePost.find((item) => item.id === post.product.uid)?.status ? (
-          <AiOutlineLoading3Quarters className="animate-spin text-xl duration-500" />
-        ) : (
-          <HiMiniXMark
-            onClick={() => handleRemovePost(post.product.uid)}
-            className="cursor-pointer text-xl hover:text-error_color"
-          />
-        )}
-      </section>
-    ));
-  };
-
   return (
     <Sheet onOpenChange={setOpenSavePost} open={openSavedPost}>
       <SheetTrigger asChild>
@@ -193,7 +225,7 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
       </SheetTrigger>
       <SheetContent className="w-[90vw] p-0">
         <SheetHeader className="p-3">
-          <SheetTitle className='pt-6'>
+          <SheetTitle className="pt-6">
             <OptionsTabList
               options={viewOptions}
               value={selectedTab}
@@ -205,13 +237,23 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
           <section className="max-h-[90vh] overflow-y-auto">
             {selectedTab?.value === 'saved' ? (
               isFetching ? (
-                onRenderLoadingListPost()
+                <LoadingListPost length={savedSummary?.saved_product_uids.length} />
               ) : (
-                onRenderListPost()
+                <SavedPostsList
+                  data={listSavedPost?.data ?? []}
+                  pagination={listSavedPost?.pagination}
+                  loadingRemovePost={loadingRemovePost}
+                  handleRemovePost={handleRemovePost}
+                />
               )
             ) : (
               <div className="px-4 text-center text-secondary">
-                <ListViewedPosts />
+                <SavedPostsList
+                  data={listViewed}
+                  pagination={paginationViewed}
+                  loadingRemovePost={loadingRemovePost}
+                  handleRemovePost={deleteViewedPost}
+                />
               </div>
             )}
           </section>
@@ -222,41 +264,3 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
 };
 
 export default FavoriteIcon;
-
-// TODO: refactor gom thành component
-const ListViewedPosts = () => {
-  const { listProduct, isFetching, pageNumber, setPageNumber } = useViewedPosts({
-    productUid: '',
-    defaultPageSize: 20,
-  });
-  if (!listProduct || listProduct.length === 0) return null;
-
-  return (
-    <>
-      {listProduct.map((postInfo) => {
-        const post = postInfo.product;
-        if (!post) return null;
-        return (
-          <section key={post.id} className="flex items-center gap-x-1 pb-3 hover:bg-slate-100">
-            <Link href={post?.detail_path} className="flex flex-1 cursor-pointer gap-x-2">
-              <Image
-                width={80}
-                height={70}
-                className="h-[70px] overflow-hidden rounded-sm border bg-slate-200 object-cover shadow-md"
-                alt={post.title}
-                src={post.images[0].url}
-                unoptimized
-              />
-
-              <div className="flex flex-1 flex-col justify-between">
-                <p className="line-clamp-3 text-left text-xs font-semibold hover:text-primary_color">
-                  {post.title}
-                </p>
-              </div>
-            </Link>
-          </section>
-        );
-      })}
-    </>
-  );
-};
