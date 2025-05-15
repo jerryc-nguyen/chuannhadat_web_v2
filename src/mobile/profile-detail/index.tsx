@@ -1,18 +1,9 @@
 'use client';
-import React from 'react';
-import styles from './index.module.scss';
-import background_profile from '@assets/images/background_profile.jpg';
-import Image, { StaticImageData } from 'next/image';
-import { useQuery } from '@tanstack/react-query';
 import { services } from '@api/services';
-import ButtonPhone from '@components/button-phone';
-import default_avatar from '@assets/images/default_avatar.png';
 import NotFound from '@app/not-found';
-import PostList from '@mobile/searchs/PostList';
-import Link from 'next/link';
-import { CustomerGender } from '@common/types';
-import { FaCircleCheck } from 'react-icons/fa6';
-import { BsThreeDots } from 'react-icons/bs';
+import background_profile from '@assets/images/background_profile.jpg';
+import default_avatar from '@assets/images/default_avatar.png';
+import ButtonPhone from '@components/button-phone';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,10 +11,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { listFilterProfileMobile } from '@mobile/filter_bds/constants';
-import FilterChips from '@mobile/filter_bds/FilterChips';
 import { useSyncParamsToState } from '@hooks';
 import useResizeImage from '@hooks/useResizeImage';
+import { listFilterProfileMobile } from '@mobile/filter_bds/constants';
+import FilterChips from '@mobile/filter_bds/FilterChips';
+import PostList from '@mobile/searchs/PostList';
+import { useQuery } from '@tanstack/react-query';
+import Image, { StaticImageData } from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { BsThreeDots } from 'react-icons/bs';
+import { FaCircleCheck } from 'react-icons/fa6';
+import styles from './index.module.scss';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
@@ -154,11 +153,10 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
 
   const profileListPost = () => (
     <>
-      <h2 className="mb-2 mt-4 text-xl font-semibold text-primary_color ml-4">Tin đã đăng</h2>
-      <div className='my-4'>
+      <h2 className="mb-2 ml-4 mt-4 text-xl font-semibold text-primary_color">Tin đã đăng</h2>
+      <div className="my-4">
         <FilterChips chipOptions={listFilterProfileMobile} />
       </div>
-
       <PostList />
     </>
   );

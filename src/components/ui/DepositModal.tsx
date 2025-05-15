@@ -1,4 +1,25 @@
+import { useBalanceRequest } from '@api/balance';
+import { services } from '@api/services';
+import { useAuth } from '@common/auth/AuthContext';
+import {
+  BANK_ACCOUNT_NAME,
+  BANK_ACCOUNT_NUMBER,
+  BANK_FULL_NAME,
+  SMS_SUPPORT_NUMBER,
+} from '@common/constants';
+import useCleanupEffect from '@hooks/useCleanupEffect';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  depositAmountAtom,
+  openModalDepositAtom,
+  statusTransactionAtom,
+} from '@views/dashboard/states/depositAtoms';
+import { useAtom } from 'jotai';
 import React from 'react';
+import Confetti from 'react-confetti';
+import { BsCopy } from 'react-icons/bs';
+import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2';
+import { PiSealCheckFill } from 'react-icons/pi';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,28 +29,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from './alert-dialog';
-import Image from 'next/image';
-import { BsCopy } from 'react-icons/bs';
-import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2';
-import { useAtom } from 'jotai';
-import {
-  depositAmountAtom,
-  openModalDepositAtom,
-  statusTransactionAtom,
-} from '@views/dashboard/states/depositAtoms';
-import { services } from '@api/services';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '@common/auth/AuthContext';
-import { PiSealCheckFill } from 'react-icons/pi';
-import { useBalanceRequest } from '@api/balance';
-import Confetti from 'react-confetti';
-import {
-  BANK_ACCOUNT_NAME,
-  BANK_ACCOUNT_NUMBER,
-  BANK_FULL_NAME,
-  SMS_SUPPORT_NUMBER,
-} from '@common/constants';
-import useCleanupEffect from '@hooks/useCleanupEffect';
 
 type DepositModalProps = object;
 const DepositModal: React.FC<DepositModalProps> = () => {
@@ -44,30 +43,42 @@ const DepositModal: React.FC<DepositModalProps> = () => {
   const { currentUser, bankTransferNote } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
 
-  useCleanupEffect((helpers) => {
-    if (isCopied) {
-      helpers.setTimeout(() => {
-        setIsCopied(false);
-      }, 4000);
-    }
-  }, [isCopied]);
+  useCleanupEffect(
+    (helpers) => {
+      if (isCopied) {
+        helpers.setTimeout(() => {
+          setIsCopied(false);
+        }, 4000);
+      }
+    },
+    [isCopied],
+  );
 
   const handleCopy = () => {
     navigator.clipboard.writeText(BANK_ACCOUNT_NUMBER);
     setIsCopied(true);
   };
 
-  useCleanupEffect((helpers) => {
-    if (!statusTransaction && isOpenDepositModal) {
-      helpers.setInterval(() => {
-        checkDepositMutate(currentUser?.last_credit_id as number);
-      }, 3000);
-    }
+  useCleanupEffect(
+    (helpers) => {
+      if (!statusTransaction && isOpenDepositModal) {
+        helpers.setInterval(() => {
+          checkDepositMutate(currentUser?.last_credit_id as number);
+        }, 3000);
+      }
 
-    if (!isOpenDepositModal) {
-      setStatusTransaction(false);
-    }
-  }, [statusTransaction, isOpenDepositModal, currentUser?.last_credit_id, checkDepositMutate, setStatusTransaction]);
+      if (!isOpenDepositModal) {
+        setStatusTransaction(false);
+      }
+    },
+    [
+      statusTransaction,
+      isOpenDepositModal,
+      currentUser?.last_credit_id,
+      checkDepositMutate,
+      setStatusTransaction,
+    ],
+  );
 
   const guideDeposit = () => (
     <>

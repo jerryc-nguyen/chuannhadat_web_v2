@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
-import { IProduct } from './type';
-import useModals from '@mobile/modals/hooks';
-import PostDetailMobile from '../post-detail/PostDetailMobile';
-import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
-import Link from 'next/link';
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
+import { YoutubePlayerAction } from '@components/youtube-player-modal';
+import { useIsInVerticalCenterZone } from '@hooks/useIsInVerticalCenterZone';
+import useModals from '@mobile/modals/hooks';
+import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import CardAuthor from '@views/home/components/CardAuthor';
 import CardImageCarousel from '@views/home/components/CardImageCarousel/CardImageCarousel';
-import { useIsInVerticalCenterZone } from '@hooks/useIsInVerticalCenterZone';
+import { useRef } from 'react';
+import PostDetailMobile from '../post-detail/PostDetailMobile';
+import { IProduct } from './type';
 
 export const ProductDetailTitleBts = ({ product }: { product: A }) => {
   return (
@@ -42,8 +42,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const isInCenter = useIsInVerticalCenterZone(divRef);
 
-  const showDetailPostModal = (e: A) => {
-
+  const showDetailPostModal = (e?: A) => {
     openModal({
       name: product.title,
       title: <ProductDetailTitleBts product={product} />,
@@ -52,29 +51,36 @@ export default function ProductCard({ product }: { product: IProduct }) {
       footer: <AuthorInfo />,
       headerHeight: 74.59,
       footerHeight: 74.59,
-      supportPushState: false
+      supportPushState: false,
     });
 
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
+    e?.preventDefault();
+    e?.stopPropagation();
+    e?.nativeEvent.stopImmediatePropagation();
 
-    return false
+    return false;
   };
 
   return (
-    <div className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type} ${isInCenter ? "card-in-view-center" : ""}`} ref={divRef}>
+    <div
+      className={`c-productCard overflow-hidden bg-white shadow-lg ${product.ads_type} ${isInCenter ? 'card-in-view-center' : ''}`}
+      ref={divRef}
+    >
       <div className="p-4">
         <CardAuthor product={product} isMobile={true} />
       </div>
-      {product.images && product.images.length > 0 && <CardImageCarousel product={product} />}
+      <div className="flex-center relative">
+        <YoutubePlayerAction youtube_url={product.youtube_url} />
+        {product.images && product.images.length > 0 && (
+          <CardImageCarousel handleClickCardImage={showDetailPostModal} product={product} />
+        )}
+      </div>
       <div className="p-4">
         <div className="w-full text-secondary">{product.bus_cat_type}</div>
-
         <a
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}
-          className="mb-2 cursor-pointer font-bold text-secondary c-ads_color"
+          className="c-ads_color mb-2 cursor-pointer font-bold text-secondary"
         >
           {product?.title}{' '}
         </a>

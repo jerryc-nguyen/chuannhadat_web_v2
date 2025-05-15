@@ -3,23 +3,23 @@
 import React from 'react';
 import styles from './styles/profile-detail.module.scss';
 
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { services } from '@api/services';
-import PostList from '@views/home/components/PostList';
-import PostControls from '@views/home/components/PostControls';
 import { searchApi } from '@api/searchApi';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
+import { services } from '@api/services';
 import NotFound from '@app/not-found';
+import empty_city from '@assets/images/empty-city.png';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
+import useSearchAggs from '@components/search-aggs/hooks';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import PostControls from '@views/home/components/PostControls';
+import PostList from '@views/home/components/PostList';
+import { PostPagination } from '@views/home/components/PostPagination';
+import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-import useSearchAggs from '@components/search-aggs/hooks';
-import { PostPagination } from '@views/home/components/PostPagination';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import useMainContentNavigator from '@components/main-content-navigator/hooks';
-import Image from 'next/image';
-import empty_city from '@assets/images/empty-city.png';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
@@ -101,7 +101,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
                 dataPostList={products}
-                isShowAuthor={false}
+                isShowAuthor={true}
               />
 
               <PostPagination
