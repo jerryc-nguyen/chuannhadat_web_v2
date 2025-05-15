@@ -27,7 +27,6 @@ export default function useResizeImage() {
       new URL(String(imageUrl));
     } catch (error) {
       Sentry.captureException(error, { extra: { imageUrl } });
-      console.error('Error resize image: ', error);
       return DEFAULT_IMG;
     }
     if (imageUrl === '[object Object]') return DEFAULT_IMG;
@@ -60,12 +59,21 @@ export default function useResizeImage() {
     width?: number;
     ratio?: number;
   }): string => {
+
+    if (!imageUrl || imageUrl.length == 0) {
+      return '';
+    }
+
     width = width ?? thresholdWidth(screenWidth);
     width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
-    const height = Math.ceil(width / curRatio);
-    if (!imageUrl || imageUrl.length == 0) {
-      return '';
+    let height = Math.ceil(width / curRatio);
+
+    // Check for retina/high DPI display
+    const isRetina = !isServer && window.devicePixelRatio >= 2;
+    if (isRetina) {
+      width = width * 2;
+      height = height * 2;
     }
 
     return resize({

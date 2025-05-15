@@ -74,7 +74,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
                 href={`/profile/${data.author.slug}`}
                 className="cursor-pointer font-bold hover:underline"
               >
-                {profileData?.full_name}
+                {profileData?.full_name || profileData?.phone}
               </a>
               <p className="text-sm text-secondary">Đã đăng {profileData?.posts_count} tin</p>
             </div>

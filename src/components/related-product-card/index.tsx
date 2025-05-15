@@ -6,6 +6,7 @@ import React from 'react';
 import { IoImage } from 'react-icons/io5';
 import { LuLoader2 } from 'react-icons/lu';
 import styles from './index.module.scss';
+import { featureProductImage } from '@common/productHelpers';
 
 type RelatedProductCardProps = {
   product: IProductSummary;
@@ -35,7 +36,8 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
             <img
               className="h-full object-cover transition-all hover:scale-125"
               src={buildThumbnailUrl({
-                imageUrl: product?.featured_image_url || DEFAULT_THUMB_IMAGE,
+                imageUrl: featureProductImage(product) || DEFAULT_THUMB_IMAGE,
+                width: 140,
               })}
               alt={product?.title}
             />
@@ -53,12 +55,21 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
           <span className="text-xs font-bold [grid-area:price]">{product?.formatted_area}</span>
           <span className="text-secondary [grid-area:price]">{product?.formatted_kt}</span>
         </div>
-        {product?.bedrooms_count && (
-          <span className="font-bold [grid-area:bedroom]">{product?.bedrooms_count} pn</span>
-        )}
-        {product?.bathrooms_count && (
-          <span className="font-bold [grid-area:wc]">{product?.bathrooms_count} pt</span>
-        )}
+
+        {/* Bedroom area */}
+        {product?.bedrooms_count && product.bedrooms_count > 0 ? (
+          <div className="[grid-area:bedroom]">
+            <span className="font-bold">{product.bedrooms_count} pn</span>
+          </div>
+        ) : <div className="[grid-area:bedroom]"></div>}
+
+        {/* Bathroom area */}
+        {product?.bathrooms_count && product.bathrooms_count > 0 ? (
+          <div className="[grid-area:wc]">
+            <span className="font-bold">{product.bathrooms_count} pt</span>
+          </div>
+        ) : <div className="[grid-area:wc]"></div>}
+
         <p className="text-sm text-secondary [grid-area:address]">{product?.short_location_name}</p>
       </div>
       {isLoadingDataModal && postIdModal === product.uid && (
