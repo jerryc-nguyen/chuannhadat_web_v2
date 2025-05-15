@@ -62,7 +62,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
 
   return (
     <div className="flex items-center justify-between gap-x-2">
-      <Component authorslug={author?.slug as string}>
+      <Component authorSlug={author?.slug as string}>
         {imgSrc ? (
           <Link {...linkTarget} href={`/profile/${author?.slug}`}>
             <Image
@@ -71,10 +71,10 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               src={
                 typeof imgSrc === 'string'
                   ? buildThumbnailUrl({
-                      imageUrl: imgSrc,
-                      width: 40,
-                      ratio: 1,
-                    })
+                    imageUrl: imgSrc,
+                    width: 40,
+                    ratio: 1,
+                  })
                   : imgSrc
               }
               onError={() => {
@@ -91,7 +91,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       </Component>
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-x-1">
-          <Component authorslug={author?.slug as string}>
+          <Component authorSlug={author?.slug as string}>
             <Link
               {...linkTarget}
               href={`/profile/${author?.slug}`}

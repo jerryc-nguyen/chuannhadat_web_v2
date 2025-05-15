@@ -3,10 +3,10 @@ import React from 'react';
 import UserCardContent from './UserCardContent';
 
 type HoverCardAuthorProps = {
-  authorslug: string;
+  authorSlug: string;
   children: React.ReactNode;
 };
-const HoverCardAuthor: React.FC<HoverCardAuthorProps> = ({ authorslug, children }) => {
+const HoverCardAuthor: React.FC<HoverCardAuthorProps> = ({ authorSlug, children }) => {
   const containerRef = React.useRef(null);
   return (
     <HoverCard openDelay={200} closeDelay={100} defaultOpen={false}>
@@ -15,12 +15,12 @@ const HoverCardAuthor: React.FC<HoverCardAuthorProps> = ({ authorslug, children 
           {children}
         </div>
       </HoverCardTrigger>
-      {authorslug && (
+      {authorSlug && (
         <HoverCardContent
           onClick={(e) => e.stopPropagation()}
           className="z-[11] min-w-[22rem] hover:cursor-default"
         >
-          <UserCardContent authorSlug={authorslug} />
+          <UserCardContent authorSlug={authorSlug} />
         </HoverCardContent>
       )}
     </HoverCard>
