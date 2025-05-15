@@ -19,12 +19,16 @@ type PostsBySameAuthorProps = {
   productId: string;
   authorSlug: string | undefined;
   fullNameAuthor: string | undefined;
+  totalCount?: number;
 };
+
+const MAX_POSTS = 8;
 
 const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
   productId,
   authorSlug,
   fullNameAuthor,
+  totalCount
 }) => {
   const {
     data: relatedPosts,
@@ -81,7 +85,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
 
       <Carousel className="w-full mt-4">
         <CarouselContent>
-          {relatedPosts?.slice(0, 2)?.map((post, index) => (
+          {relatedPosts?.map((post, index) => (
             <CarouselItem key={index}>
               <Card>
                 <CardContent className="group p-4">
@@ -91,18 +95,19 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
             </CarouselItem>
           ))}
 
-          {relatedPosts && relatedPosts?.length > 1 && (
+          {relatedPosts && relatedPosts?.length >= MAX_POSTS && (
             <CarouselItem>
               <Card>
-                <CardContent className="relative overflow-hidden p-4">
-                  <RelatedCard product={relatedPosts[2]} />
-                  <Link
-                    href={`/profile/${authorSlug}`}
-                    onClick={onCloseModal}
-                    className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/60 text-xl font-medium text-white hover:underline"
-                  >
-                    Xem thêm
-                  </Link>
+                <CardContent className="flex p-0 h-full">
+                  <div className="relative w-full h-full min-h-[228px]">
+                    <Link
+                      href={`/profile/${authorSlug}`}
+                      onClick={onCloseModal}
+                      className="absolute inset-0 flex items-center justify-center w-full h-full rounded-lg bg-black/60 text-xl font-medium text-white hover:underline"
+                    >
+                      {(totalCount && totalCount > MAX_POSTS) ? `Xem thêm ${totalCount - relatedPosts?.length}+ tin` : 'Xem thêm'}
+                    </Link>
+                  </div>
                 </CardContent>
               </Card>
             </CarouselItem>
