@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { applyBotProtection } from './middleware/bot-protection';
-import { handleAuthRedirects } from './middleware/auth';
 import { handleUrlRedirects } from './middleware/url-redirects';
 
 // Enable debug mode for local development
@@ -129,15 +128,6 @@ export async function middleware(req: NextRequest) {
       log.verbose('Rate limit exceeded, returning 429');
       return botProtectionResponse;
     }
-
-    // Apply authentication checks next - if it returns a response, use it
-    // log.verbose('Checking authentication');
-    // const authResponse = handleAuthRedirects(req);
-    // if (authResponse) {
-    //   log.verbose('Auth check returned a response, using it');
-    //   return authResponse;
-    // }
-
 
     // Finally check for URL redirects
     log.verbose('Checking URL redirects');

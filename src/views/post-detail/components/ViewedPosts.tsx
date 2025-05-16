@@ -2,12 +2,12 @@
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
+import useCleanupEffect from '@hooks/useCleanupEffect';
+import { useViewedPosts } from '@hooks/useViewedPosts';
 import ProductCard from '@views/home/components/ProductCard';
 import { Loader2 } from 'lucide-react';
 import React, { memo, useRef } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
-import useCleanupEffect from '@hooks/useCleanupEffect';
-import { useViewedPosts } from '@hooks/useViewedPosts';
 
 type ViewedPostsProps = {
   productUid: string;
@@ -114,17 +114,17 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
         setApi={setApi}
       >
         <CarouselContent>
-          {listProduct.map((product, index) => (
+          {listProduct.map((item: A, index: number) => (
             <CarouselItem
               className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
-              key={product?.product?.id || index}
+              key={item?.product?.id || index}
             >
-              <ProductCard isShowAuthor={false} product={product.product} />
-            </CarouselItem>
+              <ProductCard isShowVideoYoutube={false} isShowAuthor={false} product={item?.product} />
+            </CarouselItem >
           ))}
-        </CarouselContent>
-      </Carousel>
-    </section>
+        </CarouselContent >
+      </Carousel >
+    </section >
   );
 };
 

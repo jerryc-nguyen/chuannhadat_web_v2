@@ -1,30 +1,29 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles/profile-detail.module.scss';
 
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { services } from '@api/services';
-import PostList from '@views/home/components/PostList';
-import PostControls from '@views/home/components/PostControls';
 import { searchApi } from '@api/searchApi';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
+import { services } from '@api/services';
 import NotFound from '@app/not-found';
+import empty_city from '@assets/images/empty-city.png';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
+import useSearchAggs from '@components/search-aggs/hooks';
+import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import PostControls from '@views/home/components/PostControls';
+import PostList from '@views/home/components/PostList';
+import { PostPagination } from '@views/home/components/PostPagination';
+import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
-import useSearchAggs from '@components/search-aggs/hooks';
-import { PostPagination } from '@views/home/components/PostPagination';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import useMainContentNavigator from '@components/main-content-navigator/hooks';
-import Image from 'next/image';
-import empty_city from '@assets/images/empty-city.png';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
   useSyncParamsToState();
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -54,11 +53,12 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       }),
   });
 
-  if (aggreations) {
-    updateSearchAggs(aggreations);
-    setIsUseAggOptions(true);
-  }
-
+  useEffect(() => {
+    if (aggreations) {
+      updateSearchAggs(aggreations);
+      setIsUseAggOptions(true);
+    }
+  }, [aggreations]);
   const onFilterChanged = (filterState: Record<string, A>) => {
     updateValues({
       city: filterState.city,
@@ -89,7 +89,6 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
           <ProfileImage profileData={profileData} />
           <div className="flex flex-col gap-x-10 gap-y-10 sm:flex-row">
             <ProfileInfo profileData={profileData} />
-
             <div className="relative flex-1">
               <h2 className="text-2xl font-bold">Tin đã đăng</h2>
               <PostControls
@@ -103,7 +102,6 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
                 dataPostList={products}
                 isShowAuthor={false}
               />
-
               <PostPagination
                 total_pages={pagination.total_pages}
                 currentPage={currentPage}

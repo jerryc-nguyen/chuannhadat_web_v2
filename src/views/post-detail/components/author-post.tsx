@@ -1,13 +1,10 @@
 import { services } from '@api/services';
 import { cn, genKey, getInitialsName } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
-import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
-import { LuPhoneIncoming } from 'react-icons/lu';
 import { AuthorPostProps } from '../type';
-// import DialogContactAgain from '@components/dialog-contact-again';
 import PostsBySameAuthor from './posts-by-same-author';
 import ButtonPhone from '@components/button-phone';
 import { useRouter } from 'next/navigation';
@@ -77,7 +74,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
                 href={`/profile/${data.author.slug}`}
                 className="cursor-pointer font-bold hover:underline"
               >
-                {profileData?.full_name}
+                {profileData?.full_name || profileData?.phone}
               </a>
               <p className="text-sm text-secondary">Đã đăng {profileData?.posts_count} tin</p>
             </div>
@@ -101,6 +98,7 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
         fullNameAuthor={profileData?.full_name}
         authorSlug={profileData?.slug}
         productId={data?.uid}
+        totalCount={profileData?.posts_count}
       />
     </div>
   );

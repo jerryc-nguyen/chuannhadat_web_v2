@@ -1,6 +1,5 @@
 import { cn } from '@common/utils';
 import { Card } from '@components/ui/card';
-import { Skeleton } from '@components/ui/skeleton';
 import { useTopAuthors } from '@views/home/hooks/useTopAuthors';
 import { filterStateAtom } from '@mobile/filter_bds/states';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
@@ -10,14 +9,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import default_avatar from '@assets/images/default_avatar.png';
 import useResizeImage from '@hooks/useResizeImage';
-import { Button } from '@components/ui/button';
-import { BookUser } from 'lucide-react';
-import TooltipHost from '@components/tooltip-host';
 
 export const ListTopAuthor = () => {
   const [filterState] = useAtom(filterStateAtom);
 
-  const { isFetching, topAuthors } = useTopAuthors(filterState);
+  const { topAuthors } = useTopAuthors(filterState);
   const { buildThumbnailUrl } = useResizeImage();
 
   if (!topAuthors.length) {
@@ -28,7 +24,7 @@ export const ListTopAuthor = () => {
     <div className="flex flex-col gap-4 pb-8">
       <h3 className="text-lg font-semibold text-secondary">Môi giới nổi bật</h3>
       <HorizontalScroller className="flex gap-4">
-        {topAuthors.map((author, index) => {
+        {topAuthors.map((author: A, index) => {
           const imgSrc = author.avatar_url || default_avatar;
           return (
             <Card

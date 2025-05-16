@@ -1,16 +1,17 @@
-import { useState } from 'react';
 import { AspectRatio } from '@components/ui/AspectRatio';
+import { YoutubePlayerAction } from '@components/youtube-player-modal';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProductDetail } from '@mobile/searchs/type';
 import ImageCarousel from '@mobile/ui/ImageCarousel';
+import { useState } from 'react';
 import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
 import Lightbox from 'yet-another-react-lightbox';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
+import 'yet-another-react-lightbox/plugins/counter.css';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import 'yet-another-react-lightbox/plugins/counter.css';
 
 export default function PhotosCarousel({ product }: { product: IProductDetail }) {
   const { buildThumbnailUrl } = useResizeImage();
@@ -24,7 +25,11 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
   const [indexImageActive, setIndexImageActive] = useState<number>(0);
 
   return (
-    <div className="flex flex-col gap-4 bg-white">
+    <div className="flex-center relative flex-col gap-4 bg-white">
+      <YoutubePlayerAction
+        isDisplay={Boolean(product?.youtube_url)}
+        youtube_url={product?.youtube_url as string}
+      />
       {product?.images && product?.images.length > 1 ? (
         <ImageCarousel images={product.images} onClick={onClickImage} />
       ) : (
@@ -38,7 +43,6 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
           />
         </AspectRatio>
       )}
-
       {openSlideImage && product?.images_count > 1 && (
         <Lightbox
           open={openSlideImage}

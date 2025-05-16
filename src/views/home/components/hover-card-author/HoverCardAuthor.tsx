@@ -1,6 +1,6 @@
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card';
 import React from 'react';
 import UserCardContent from './UserCardContent';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@components/ui/hover-card';
 
 type HoverCardAuthorProps = {
   authorSlug: string;

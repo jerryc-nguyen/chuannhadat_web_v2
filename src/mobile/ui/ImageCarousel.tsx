@@ -1,11 +1,22 @@
 'use client';
-import React from 'react';
-import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import * as AspectRatio from '@radix-ui/react-aspect-ratio';
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import useResizeImage from '@hooks/useResizeImage';
 import { TPhoto } from '@models';
+import * as AspectRatio from '@radix-ui/react-aspect-ratio';
+import React from 'react';
+type ImageCarouselProps = {
+  images: TPhoto[];
+  onClick: (id: number) => void;
+};
 
-const ImageCarousel: React.FC<{ images: TPhoto[]; onClick: (id: number) => void }> = ({ images, onClick }) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, onClick }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const { buildThumbnailUrl } = useResizeImage();
   const [current, setCurrent] = React.useState(0);
@@ -32,7 +43,7 @@ const ImageCarousel: React.FC<{ images: TPhoto[]; onClick: (id: number) => void 
   };
 
   return (
-    <div className="relative w-full max-w-lg mx-auto">
+    <div className="relative mx-auto w-full max-w-lg">
       <Carousel setApi={setApi} className="w-full" loop={true}>
         <CarouselContent>
           {images.map((image: TPhoto, index: number) => (
@@ -43,7 +54,7 @@ const ImageCarousel: React.FC<{ images: TPhoto[]; onClick: (id: number) => void 
             >
               <AspectRatio.Root ratio={16 / 9}>
                 <img
-                  className="object-cover w-full h-full"
+                  className="h-full w-full object-cover"
                   src={buildThumbnailUrl({
                     imageUrl: image.url,
                   })}
@@ -56,14 +67,14 @@ const ImageCarousel: React.FC<{ images: TPhoto[]; onClick: (id: number) => void 
 
         <CarouselPrevious
           onClick={handlePrevSlide}
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md cursor-pointer"
+          className="absolute left-4 top-1/2 -translate-y-1/2 transform cursor-pointer rounded-full bg-white p-2 shadow-md"
         />
         <CarouselNext
           onClick={handleNextSlide}
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md cursor-pointer"
+          className="absolute right-4 top-1/2 -translate-y-1/2 transform cursor-pointer rounded-full bg-white p-2 shadow-md"
         />
 
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-1 rounded-full shadow-md">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded-full bg-white px-4 py-1 shadow-md">
           {current + 1} / {images.length}
         </div>
       </Carousel>

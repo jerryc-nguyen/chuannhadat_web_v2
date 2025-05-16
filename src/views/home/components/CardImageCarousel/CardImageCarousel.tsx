@@ -1,14 +1,14 @@
-import React from 'react';
-import ImageCard from '../ImageCard';
-import ButtonSave from '../ButtonSave';
 import { Carousel, CarouselContent, type CarouselApi } from '@components/ui/carousel';
-import ImageSliderAction from '../ImageSliderAction';
+import useCleanupEffect from '@hooks/useCleanupEffect';
+import useResizeImage from '@hooks/useResizeImage';
 import { EmblaCarouselType } from 'embla-carousel';
 import Fade from 'embla-carousel-fade';
 import useEmblaCarousel from 'embla-carousel-react';
-import useResizeImage from '@hooks/useResizeImage';
+import React from 'react';
+import ButtonSave from '../ButtonSave';
+import ImageCard from '../ImageCard';
+import ImageSliderAction from '../ImageSliderAction';
 import styles from './CardImageCarousel.module.scss';
-import useCleanupEffect from '@hooks/useCleanupEffect';
 
 type CardImageCarouselProps = {
   product: A;
@@ -33,9 +33,7 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
       }
 
       // Only add slides that aren't already in our state
-      const newInView = currentSlidesInView.filter(
-        (index) => !prevSlidesInView.includes(index)
-      );
+      const newInView = currentSlidesInView.filter((index) => !prevSlidesInView.includes(index));
 
       // If no new slides to add, return same state reference to prevent re-render
       if (newInView.length === 0) {
@@ -47,14 +45,14 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
     });
   }, []);
 
-  // Instead of using setTimeout directly, we'll use it in a safer way 
+  // Instead of using setTimeout directly, we'll use it in a safer way
   // within the useCleanupEffect hook to avoid memory leaks
   const preloadImageSafely = React.useCallback(
     (imageUrl: string) => {
       const img = new Image();
       img.src = buildThumbnailUrl({ imageUrl });
     },
-    [buildThumbnailUrl]
+    [buildThumbnailUrl],
   );
 
   // Modified preloadImages callback
@@ -65,7 +63,7 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
       }
 
       // We'll handle the actual preloading with timeouts in the useCleanupEffect hook
-      product.images.forEach((picture: A, index: number) => {
+      product.images.forEach((picture: A) => {
         preloadImageSafely(picture.url);
       });
     },
@@ -73,36 +71,38 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
   );
 
   // Replace React.useEffect with useCleanupEffect
-  useCleanupEffect((helpers) => {
-    if (!imageSliderApi) return;
+  useCleanupEffect(
+    (helpers) => {
+      if (!imageSliderApi) return;
 
-    // Set up event handlers
-    updateSlidesInView(imageSliderApi);
-    imageSliderApi.on('slidesInView', updateSlidesInView);
-    imageSliderApi.on('reInit', updateSlidesInView);
-    imageSliderApi.on('select', preloadImages);
+      // Set up event handlers
+      updateSlidesInView(imageSliderApi);
+      imageSliderApi.on('slidesInView', updateSlidesInView);
+      imageSliderApi.on('reInit', updateSlidesInView);
+      imageSliderApi.on('select', preloadImages);
 
-    // Clean up event handlers
-    helpers.addCleanup(() => {
-      imageSliderApi.off('slidesInView', updateSlidesInView);
-      imageSliderApi.off('reInit', updateSlidesInView);
-      imageSliderApi.off('select', preloadImages);
-    });
-  }, [imageSliderApi, updateSlidesInView, preloadImages]);
+      // Clean up event handlers
+      helpers.addCleanup(() => {
+        imageSliderApi.off('slidesInView', updateSlidesInView);
+        imageSliderApi.off('reInit', updateSlidesInView);
+        imageSliderApi.off('select', preloadImages);
+      });
+    },
+    [imageSliderApi, updateSlidesInView, preloadImages],
+  );
 
   return (
     <section className={styles.card_img_carousel}>
       {product.images_count < 2 ? (
         <>
-          {
-            product.images[0] && (
-              <ImageCard
-                key={product.images[0].id}
-                countImages={product.images_count}
-                item={product.images[0]}
-                onClick={handleClickCardImage}
-              />)
-          }
+          {product.images[0] && (
+            <ImageCard
+              key={product.images[0].id}
+              countImages={product.images_count}
+              item={product.images[0]}
+              onClick={handleClickCardImage}
+            />
+          )}
           <ButtonSave postUid={product.uid} />
         </>
       ) : (
@@ -124,6 +124,7 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
               />
             ))}
           </CarouselContent>
+
           <ImageSliderAction
             api={imageSliderApi}
             countImages={product.images.length}

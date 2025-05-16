@@ -3,6 +3,7 @@
 # Deployment automation script for Docker to VPS
 # Usage: ./deploy.sh [tag]
 #        ./deploy.sh --restart (to restart services only without rebuilding/pushing)
+#        ./deploy.sh --use-current-login [tag] (to use current Docker login instead of deploy token)
 
 # Load configuration from .env file if it exists
 if [ -f .env.deploy ]; then
@@ -26,23 +27,47 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Check if restart-only mode is requested
+# Parse command-line options
+RESTART_ONLY=false
+USE_CURRENT_LOGIN=false
+TAG=$DEFAULT_TAG
+
 if [ "$1" == "--restart" ]; then
   RESTART_ONLY=true
   echo -e "${YELLOW}Restart-only mode activated. Skipping build and push.${NC}"
-  TAG=$DEFAULT_TAG
+  # If there's a second argument, it's the tag
+  if [ -n "$2" ]; then
+    TAG=$2
+  fi
+elif [ "$1" == "--use-current-login" ]; then
+  USE_CURRENT_LOGIN=true
+  echo -e "${YELLOW}Using current Docker login instead of deploy token.${NC}"
+  # If there's a second argument, it's the tag
+  if [ -n "$2" ]; then
+    TAG=$2
+  fi
 else
-  RESTART_ONLY=false
-  # Get tag from argument or use default
-  TAG=${1:-$DEFAULT_TAG}
+  # If the first argument exists and doesn't start with --, it's the tag
+  if [ -n "$1" ] && [[ "$1" != --* ]]; then
+    TAG=$1
+  fi
 fi
 
 IMAGE_NAME="$REGISTRY:$TAG"
 
-# Log in to GitLab registry using deploy token
+# Handle Docker login
 if [ "$RESTART_ONLY" = false ]; then
-  echo -e "${YELLOW}Logging in to GitLab registry...${NC}"
-  echo "$DEPLOY_TOKEN" | docker login $REGISTRY -u $DEPLOY_TOKEN_USERNAME --password-stdin || { echo "Docker login failed"; exit 1; }
+  if [ "$USE_CURRENT_LOGIN" = false ]; then
+    echo -e "${YELLOW}Logging in to GitLab registry with deploy token...${NC}"
+    echo "$DEPLOY_TOKEN" | docker login $REGISTRY -u $DEPLOY_TOKEN_USERNAME --password-stdin || { echo "Docker login failed"; exit 1; }
+  else
+    echo -e "${YELLOW}Using existing Docker login credentials...${NC}"
+    # Check if already logged in
+    if ! docker info > /dev/null 2>&1; then
+      echo "Error: Not logged in to Docker. Please log in first with 'docker login $REGISTRY'"
+      exit 1
+    fi
+  fi
 
   echo -e "${YELLOW}Starting deployment process for $IMAGE_NAME${NC}"
 
@@ -64,8 +89,12 @@ ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
   
   # Log in to GitLab registry on VPS if needed
   if [ "$RESTART_ONLY" = false ]; then
-    echo "Logging in to GitLab registry on VPS..."
-    echo "$DEPLOY_TOKEN" | docker login $REGISTRY -u $DEPLOY_TOKEN_USERNAME --password-stdin
+    if [ "$USE_CURRENT_LOGIN" = false ]; then
+      echo "Logging in to GitLab registry on VPS with deploy token..."
+      echo "$DEPLOY_TOKEN" | docker login $REGISTRY -u $DEPLOY_TOKEN_USERNAME --password-stdin
+    else
+      echo "Using existing Docker login on VPS. Ensure you're already logged in on the VPS."
+    fi
     
     echo "Pulling latest image..."
     docker pull $IMAGE_NAME
@@ -95,7 +124,7 @@ echo -e "${YELLOW}Current running containers on VPS:${NC}"
 ssh $VPS_USER@$VPS_IP "docker ps"
 
 # Log out of Docker registry
-if [ "$RESTART_ONLY" = false ]; then
+if [ "$RESTART_ONLY" = false ] && [ "$USE_CURRENT_LOGIN" = false ]; then
   echo -e "${YELLOW}Logging out of GitLab registry...${NC}"
   docker logout $REGISTRY
 fi
