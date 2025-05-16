@@ -3,7 +3,6 @@ import React from 'react';
 import { useAuth } from '@common/auth/AuthContext';
 import { Button } from '@components/ui/button';
 import { LuUserCircle } from 'react-icons/lu';
-import FavoriteIcon from './FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
 import { Skeleton } from '@components/ui/skeleton';
 import Image from 'next/image';
@@ -12,6 +11,7 @@ import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin'
 import useModals from '@mobile/modals/hooks';
 import MenubarIcon from './MenubarIcon';
 import useResizeImage from '@hooks/useResizeImage';
+import FavoriteIcon from '@views/components/FavoriteIcon';
 
 type MainNavRightProps = {
   isLogged: boolean;

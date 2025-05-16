@@ -1,6 +1,4 @@
 'use client';
-import { services } from '@api/services';
-import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 
@@ -15,6 +13,7 @@ import { postDetailAtom } from './states/postDetailAtoms';
 import ViewedPosts from './components/ViewedPosts';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import NotFound from '@app/not-found';
+import { usePostDetail } from '@hooks/usePostDetail';
 
 type PostDetailDesktopProps = object;
 
@@ -22,10 +21,9 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   const currentPath = usePathname() || '';
   const setPostDetailData = useSetAtom(postDetailAtom);
   const productUid = currentPath.split('-').slice(-1)[0];
-  const { data, isLoading, isSuccess, isError } = useQuery({
-    queryKey: ['get-detail-post', productUid],
-    queryFn: () => services.posts.getDetailPost(productUid),
-    select: (data) => data.data,
+  const { data, isLoading, isSuccess, isError } = usePostDetail({
+    postId: productUid,
+    enabled: !!productUid,
   });
 
   React.useEffect(() => {

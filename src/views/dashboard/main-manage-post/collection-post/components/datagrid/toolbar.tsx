@@ -77,7 +77,7 @@ export function DataTableToolbar<TData>({
   const selectSearchTarget = form.watch('search_by');
 
   return (
-    <div className="flex flex-col space-y-3 px-4">
+    <div className="flex flex-col space-y-3 px-4 lg:px-0">
       <div className="grid space-x-2 md:grid-cols-2">
         <div className="flex items-center space-x-2">
           <ButtonGroup className="flex-1">

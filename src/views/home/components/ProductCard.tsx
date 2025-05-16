@@ -39,7 +39,7 @@ export default function ProductCard({
   };
 
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
-  if (!product || product.images.length == 0) {
+  if (!product || product?.images?.length == 0) {
     return <LoadingProductCard />;
   }
 

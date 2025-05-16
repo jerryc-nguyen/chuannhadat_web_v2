@@ -1,13 +1,12 @@
-import { services } from '@api/services';
+"use client";
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
 import useCleanupEffect from '@hooks/useCleanupEffect';
-import { IProductDetail } from '@mobile/searchs/type';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useViewedPosts } from '@hooks/useViewedPosts';
 import ProductCard from '@views/home/components/ProductCard';
 import { Loader2 } from 'lucide-react';
-import React from 'react';
+import React, { memo, useRef } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 type ViewedPostsProps = {
@@ -15,29 +14,16 @@ type ViewedPostsProps = {
   isInsideModal?: boolean;
 };
 
-const defaultpageSize = 3;
+const defaultPageSize = 3;
 const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = false }) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [prevBtnEnabled, setPrevBtnEnabled] = React.useState(false);
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [listProduct, setListProduct] = React.useState<(IProductDetail | undefined)[]>([
-    undefined,
-    undefined,
-    undefined,
-  ]);
-  const isScrollNext = React.useRef<boolean>(false);
-  const [pageNumber, setPageNumber] = React.useState(1);
+  const isScrollNext = useRef<boolean>(false);
 
-  const { data: viewedPosts, isFetching } = useQuery({
-    queryKey: ['get-viewed-post', productUid, pageNumber, defaultpageSize],
-    queryFn: () =>
-      services.posts.getViewedPosts({
-        page: pageNumber,
-        per_page: defaultpageSize,
-      }),
-    placeholderData: keepPreviousData,
-  });
+  const { listProduct, isFetching, pageNumber, setPageNumber, pagination } =
+    useViewedPosts({ productUid, defaultPageSize });
 
   useCleanupEffect(
     (helpers) => {
@@ -51,17 +37,8 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     [listProduct.length, api],
   );
 
-  React.useEffect(() => {
-    if (viewedPosts?.data) {
-      setListProduct((data) => {
-        const activeData = data.filter((item) => item !== undefined);
-        return [...activeData, ...viewedPosts.data];
-      });
-    }
-  }, [viewedPosts?.data]);
-
   const handleScrollNext = () => {
-    if (viewedPosts && pageNumber < viewedPosts?.pagination.total_pages) {
+    if (pagination && pageNumber < pagination?.total_pages) {
       setPageNumber((pageNumber) => pageNumber + 1);
       isScrollNext.current = true;
     } else {
@@ -92,13 +69,13 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
     [api, onSelect],
   );
 
-  if (viewedPosts?.pagination.total_count === 0) return null;
+  if (pagination?.total_count === 0) return null;
   return (
     <section className={cn('flex w-full flex-col gap-1 rounded-xl border bg-white p-6')}>
       <div
         className={cn(
           'flex justify-between',
-          viewedPosts?.pagination.total_count === defaultpageSize ? 'hidden' : 'flex',
+          pagination?.total_count === defaultPageSize ? 'hidden' : 'flex',
         )}
       >
         <h3 className="pb-5 text-xl font-semibold">Tin vừa xem</h3>
@@ -116,7 +93,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
             size="icon"
             className="flex items-center justify-center gap-x-2"
             disabled={
-              isFetching || selectedIndex + defaultpageSize === viewedPosts?.pagination.total_count
+              isFetching || selectedIndex + defaultPageSize === pagination?.total_count
             }
             onClick={handleScrollNext}
           >
@@ -137,18 +114,18 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
         setApi={setApi}
       >
         <CarouselContent>
-          {listProduct.map((product, index) => (
+          {listProduct.map((item: A, index: number) => (
             <CarouselItem
               className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
-              key={product?.id || index}
+              key={item?.product?.id || index}
             >
-              <ProductCard isShowVideoYoutube={false} isShowAuthor={false} product={product} />
-            </CarouselItem>
+              <ProductCard isShowVideoYoutube={false} isShowAuthor={false} product={item?.product} />
+            </CarouselItem >
           ))}
-        </CarouselContent>
-      </Carousel>
-    </section>
+        </CarouselContent >
+      </Carousel >
+    </section >
   );
 };
 
-export default ViewedPosts;
+export default memo(ViewedPosts)

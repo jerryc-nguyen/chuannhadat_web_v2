@@ -76,3 +76,36 @@ export interface IProductDetail {
   breadcrumb: A;
   youtube_url?: string;
 }
+
+export interface IViewedProductDetail {
+  id: number;
+  product: ProductViewed;
+  created_at: string;
+}
+
+// TODO: check if duplicate with IProductDetail
+interface ProductViewed {
+  id: number;
+  uid: string;
+  title: string;
+  slug: string;
+  detail_path: string;
+  featured_image_url: null;
+  ads_type: string;
+  images: TPhoto[];
+  short_location_name: string;
+  formatted_price: string;
+  formatted_area: string;
+  formatted_price_per_m2: string;
+  formatted_floors: string;
+  formatted_direction: string;
+  formatted_publish_at: string;
+  formatted_facade_with_label: string;
+  bus_cat_type: string;
+  formatted_kt: null;
+  bedrooms_count: number;
+  bathrooms_count: number;
+  images_count: number;
+  user_id: number;
+  youtube_url: string;
+}

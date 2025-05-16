@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/sheet';
 import { useAtom, useSetAtom } from 'jotai';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
-import { services } from '@api/services';
 import { IProductDetail } from '@mobile/searchs/type';
 import styles from '../styles/modal-post-detail.module.scss';
 import { cn } from '@common/utils';
@@ -13,26 +12,22 @@ import DescriptionPost from './description-post';
 import NotePost from './note-post';
 import AuthorPost from './author-post';
 // import { useBrowserPushState } from '@components/popstate-handler/hooks';
-import { useQuery } from '@tanstack/react-query';
 import ViewedPosts from './ViewedPosts';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import NotFound from '@app/not-found';
-import { useRouter } from 'next/navigation';
+import { usePostDetail } from '@hooks/usePostDetail';
 
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   // const { trackPushPath, historyBack } = useBrowserPushState();
   const [isOpenModal, setIsOpenModal] = useAtom(openModalDetail);
-  const router = useRouter();
   const setIsLoadingModal = useSetAtom(isLoadingModal);
   const [postId, setPostId] = useAtom(selectedPostId);
   const postContentRef = React.useRef<HTMLElement>(null);
-  const { data, isLoading, isSuccess, isError } = useQuery({
-    queryKey: ['get-detail-post', postId],
-    queryFn: () => services.posts.getDetailPost(postId),
+  const { data, isLoading, isSuccess, isError } = usePostDetail({
+    postId,
     enabled: !!postId,
-    select: (data) => data.data,
   });
 
   // const updateBrowserPath = (product: IProductDetail) => {
