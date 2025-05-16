@@ -59,7 +59,6 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
 
   const Component = isMobile ? 'div' : HoverCardAuthor;
   const linkTarget = isMobile ? {} : { target: '_blank' };
-
   return (
     <div className="flex items-center justify-between gap-x-2">
       <Component authorSlug={author?.slug as string}>

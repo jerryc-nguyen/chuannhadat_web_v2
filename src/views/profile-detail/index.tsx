@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles/profile-detail.module.scss';
 
 import { searchApi } from '@api/searchApi';
@@ -24,7 +24,6 @@ import ProfileInfo from './components/ProfileInfo';
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
   useSyncParamsToState();
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -54,11 +53,12 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       }),
   });
 
-  if (aggreations) {
-    updateSearchAggs(aggreations);
-    setIsUseAggOptions(true);
-  }
-
+  useEffect(() => {
+    if (aggreations) {
+      updateSearchAggs(aggreations);
+      setIsUseAggOptions(true);
+    }
+  }, [aggreations]);
   const onFilterChanged = (filterState: Record<string, A>) => {
     updateValues({
       city: filterState.city,
@@ -89,7 +89,6 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
           <ProfileImage profileData={profileData} />
           <div className="flex flex-col gap-x-10 gap-y-10 sm:flex-row">
             <ProfileInfo profileData={profileData} />
-
             <div className="relative flex-1">
               <h2 className="text-2xl font-bold">Tin đã đăng</h2>
               <PostControls
@@ -101,9 +100,8 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
                 dataPostList={products}
-                isShowAuthor={true}
+                isShowAuthor={false}
               />
-
               <PostPagination
                 total_pages={pagination.total_pages}
                 currentPage={currentPage}
