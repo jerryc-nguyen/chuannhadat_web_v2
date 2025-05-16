@@ -70,7 +70,7 @@ export default function ProductCard({
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
-        {isShowAuthor && <div className="w-full text-secondary">{product.bus_cat_type}</div>}
+        <div className="w-full text-secondary">{product.bus_cat_type}</div>
 
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
