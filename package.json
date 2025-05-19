@@ -14,7 +14,8 @@
     "pm2:status": "pm2 status",
     "pm2:logs": "pm2 logs",
     "pm2:monitor": "pm2 monit",
-    "lint": "next lint"
+    "lint": "next lint",
+    "create:feature": "node scripts/create-feature.js"
   },
   "engines": {
     "npm": ">=10.0.0",

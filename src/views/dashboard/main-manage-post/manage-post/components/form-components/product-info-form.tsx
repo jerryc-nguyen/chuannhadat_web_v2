@@ -1,9 +1,7 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { SelectSeparator } from '@/components/ui/select';
 import { BadgeInfo } from 'lucide-react';
 import React from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
@@ -20,6 +18,22 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
       field.onChange(value); // Update the value only if it matches the regex
     }
   };
+
+  // Get selected property type
+  const categoryType = form.watch('category_type');
+
+  // Check if it's land or land project
+  const isLand = categoryType === 'dat' || categoryType === 'dat_nen_du_an';
+
+  // Check if it's a house
+  const isHouse = categoryType === 'nha_rieng' ||
+    categoryType === 'nha_mat_pho' ||
+    categoryType === 'biet_thu_lien_ke' ||
+    categoryType == 'nha_tro_phong_tro' ||
+    categoryType == 'van_phong' || categoryType == 'cua_hang_kiot'
+
+  // Check if it's an apartment
+  const isApartment = categoryType === 'can_ho_chung_cu';
 
   return (
     <Card>
@@ -49,89 +63,96 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
 
         <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="facade"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Mặt tiền</FormLabel>
-                  <Input
-                    {...field}
-                    value={field.value}
-                    onChange={(e) => {
-                      onChangeFieldNumber(field, e.target.value);
-                    }}
-                    placeholder="Nhập số"
-                    endAdornment={
-                      <span>
-                        <b>m</b>
-                      </span>
-                    }
-                    maxLength={8}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Mặt tiền - Hide for apartment */}
+            {!isApartment && (
+              <FormField
+                control={form.control}
+                name="facade"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>{isHouse ? 'Mặt tiền rộng (m)' : 'Chiều ngang đất rộng (m)'}</FormLabel>
+                    <Input
+                      {...field}
+                      value={field.value}
+                      onChange={(e) => {
+                        onChangeFieldNumber(field, e.target.value);
+                      }}
+                      placeholder="Nhập số"
+                      endAdornment={
+                        <span>
+                          <b>m</b>
+                        </span>
+                      }
+                      maxLength={8}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
-            <FormField
-              control={form.control}
-              name="entrance"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Đường rộng</FormLabel>
-                  <Input
-                    {...field}
-                    value={field.value}
-                    onChange={(e) => {
-                      onChangeFieldNumber(field, e.target.value);
-                    }}
-                    placeholder="Nhập số"
-                    endAdornment={
-                      <span>
-                        <b>m</b>
-                      </span>
-                    }
-                    maxLength={8}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Đường rộng - Hide for apartment */}
+            {!isApartment && (
+              <FormField
+                control={form.control}
+                name="entrance"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Đường rộng</FormLabel>
+                    <Input
+                      {...field}
+                      value={field.value}
+                      onChange={(e) => {
+                        onChangeFieldNumber(field, e.target.value);
+                      }}
+                      placeholder="Nhập số"
+                      endAdornment={
+                        <span>
+                          <b>m</b>
+                        </span>
+                      }
+                      maxLength={8}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
-            <FormField
-              control={form.control}
-              name="floors_count"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Số tầng</FormLabel>
-
-                  <Input
-                    {...field}
-                    value={field.value}
-                    onChange={(e) => {
-                      onChangeFieldNumber(field, e.target.value);
-                    }}
-                    placeholder="Nhập số"
-                    endAdornment={
-                      <span>
-                        <b>tầng</b>
-                      </span>
-                    }
-                    maxLength={8}
-                  />
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Số tầng / Vị trí tầng - Hide for land */}
+            {!isLand && (
+              <FormField
+                control={form.control}
+                name="floors_count"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>{isApartment ? 'Vị trí tầng' : 'Số tầng'}</FormLabel>
+                    <Input
+                      {...field}
+                      value={field.value}
+                      onChange={(e) => {
+                        onChangeFieldNumber(field, e.target.value);
+                      }}
+                      placeholder="Nhập số"
+                      endAdornment={
+                        <span>
+                          <b>tầng</b>
+                        </span>
+                      }
+                      maxLength={8}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={form.control}
               name="entrance_direction"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
-                  <FormLabel>Hướng nhà/ đất</FormLabel>
+                  <FormLabel>{isApartment ? 'Hướng ban công' : 'Hướng nhà/ đất'}</FormLabel>
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
@@ -143,42 +164,27 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="view_direction"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Hướng ban công</FormLabel>
-                  <CommonSelect
-                    onChange={field.onChange}
-                    value={field.value}
-                    options={[{ text: 'Không xác định', value: '__default' }, ...directionOptions]}
-                    showClear
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="furniture"
-              render={({ field }) => (
-                <FormItem className="grid gap-2">
-                  <FormLabel>Nội thất</FormLabel>
-                  <CommonSelect
-                    onChange={field.onChange}
-                    value={field.value}
-                    options={[
-                      { text: 'Không xác định', value: '__default' },
-                      ...furnitureTypeOptions,
-                    ]}
-                    showClear
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {(isHouse || isApartment) && (
+              <FormField
+                control={form.control}
+                name="furniture"
+                render={({ field }) => (
+                  <FormItem className="grid gap-2">
+                    <FormLabel>Nội thất</FormLabel>
+                    <CommonSelect
+                      onChange={field.onChange}
+                      value={field.value}
+                      options={[
+                        { text: 'Không xác định', value: '__default' },
+                        ...furnitureTypeOptions,
+                      ]}
+                      showClear
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
         </div>
       </CardContent>
