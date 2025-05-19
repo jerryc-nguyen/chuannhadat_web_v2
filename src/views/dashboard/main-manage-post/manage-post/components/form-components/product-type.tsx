@@ -19,6 +19,10 @@ interface IProductTypeForm {
 const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
   const price_in_vnd = form.watch('price_in_vnd');
   const businessType = form.watch('business_type');
+  const categoryType = form.watch('category_type');
+
+  // Check if it's land or land project
+  const isLand = categoryType === 'dat' || categoryType === 'dat_nen_du_an';
 
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning
@@ -157,42 +161,47 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
               )}
             />
 
+            {/* Only show bedroom fields if not land */}
+            {!isLand && (
+              <FormField
+                control={form.control}
+                name="bedrooms_count"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Số phòng ngủ</FormLabel>
+                    <RoundedOptionsNumberInput
+                      {...field}
+                      className="relative"
+                      placeholder="Nhập số khác"
+                      onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                      maxLength={3}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
-            <FormField
-              control={form.control}
-              name="bedrooms_count"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Số phòng ngủ</FormLabel>
-                  <RoundedOptionsNumberInput
-                    {...field}
-                    className="relative"
-                    placeholder="Nhập số khác"
-                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                    maxLength={3}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="bathrooms_count"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Số phòng tắm</FormLabel>
-                  <RoundedOptionsNumberInput
-                    {...field}
-                    className="relative"
-                    placeholder="Nhập số khác"
-                    onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                    maxLength={3}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Only show bathroom fields if not land */}
+            {!isLand && (
+              <FormField
+                control={form.control}
+                name="bathrooms_count"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Số phòng tắm</FormLabel>
+                    <RoundedOptionsNumberInput
+                      {...field}
+                      className="relative"
+                      placeholder="Nhập số khác"
+                      onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                      maxLength={3}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
           </div>
         </div>
