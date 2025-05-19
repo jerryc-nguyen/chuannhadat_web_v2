@@ -76,7 +76,6 @@ export const FormMobile: React.FC = () => {
 
   const categoryTypeControl = {
     onSelect: (option: A) => {
-      console.log('onSelect', option);
       form.setValue('category_type', option.value);
     },
     options: categoryTypeOptions,
@@ -85,7 +84,6 @@ export const FormMobile: React.FC = () => {
   };
 
   const onChangedFullAddress = (newAddress: string) => {
-    console.log('newAddress', newAddress);
     form.setValue('full_address', newAddress);
   };
 
@@ -143,7 +141,6 @@ export const FormMobile: React.FC = () => {
             <FormItem>
               <ListItemBtsPicker
                 onSelect={(option: A) => {
-                  console.log('onSelect area', option);
                   field.onChange(option.value);
                 }}
                 options={areaOptionsForCreate}
@@ -372,7 +369,7 @@ export const FormMobile: React.FC = () => {
             modalOptions={{ title: isApartment ? 'Vị trí tầng' : 'Số tầng' }}
             value={form.watch('floors_count')}
             onSelect={(option) => {
-              if (typeof option.value === 'string') form.setValue('floors_count', option.value);
+              form.setValue('floors_count', option.value?.toString() ?? '');
             }}
             formattedValue={form.watch('floors_count') ? `${form.watch('floors_count')} tầng` : ''}
             footer={
@@ -432,33 +429,6 @@ export const FormMobile: React.FC = () => {
             </div>
           }
         />
-
-        {/* Hướng ban công - Hide for land and house */}
-        {!isLand && !isHouse && (
-          <ListItemBtsPicker
-            options={directionOptions}
-            modalOptions={{ title: 'Hướng ban công' }}
-            value={form.watch('view_direction')}
-            onSelect={(option) => {
-              if (typeof option.value === 'string') form.setValue('view_direction', option.value);
-            }}
-            footer={
-              <div className="px-4 pt-4">
-                <Button
-                  variant="default"
-                  className="w-full"
-                  onClick={() => {
-                    form.setValue('view_direction', '');
-                    closeModal();
-                  }}
-                  disabled={!form.watch('view_direction')}
-                >
-                  Xóa
-                </Button>
-              </div>
-            }
-          />
-        )}
 
         {/* Nội thất - Show for house or apartment */}
         {(isHouse || isApartment) && (
