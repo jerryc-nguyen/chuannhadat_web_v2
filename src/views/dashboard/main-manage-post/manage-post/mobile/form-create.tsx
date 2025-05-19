@@ -48,6 +48,22 @@ export const FormMobile: React.FC = () => {
   const form = useFormContext<IPostForm>();
 
   const business_type = form.watch('business_type');
+  const category_type = form.watch('category_type');
+
+  // Check if it's land or land project
+  const isLand = category_type === 'dat' || category_type === 'dat_nen_du_an';
+
+  // Check if it's a house
+  const isHouse = category_type === 'nha_rieng' ||
+    category_type === 'nha_mat_pho' ||
+    category_type === 'biet_thu_lien_ke' ||
+    category_type === 'nha_tro_phong_tro' ||
+    category_type === 'van_phong' ||
+    category_type === 'cua_hang_kiot';
+
+  // Check if it's an apartment
+  const isApartment = category_type === 'can_ho_chung_cu';
+
   const businessTypeControl = {
     onSelect: (option: A) => {
       console.log('onSelect', option);
@@ -58,7 +74,6 @@ export const FormMobile: React.FC = () => {
     value: business_type,
   };
 
-  const category_type = form.watch('category_type');
   const categoryTypeControl = {
     onSelect: (option: A) => {
       console.log('onSelect', option);
@@ -157,77 +172,83 @@ export const FormMobile: React.FC = () => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="bedrooms_count"
-          render={({ field }) => (
-            <FormItem>
-              <ListItemBtsPicker
-                onSelect={(option: A) => {
-                  console.log('onSelect bedrooms_count', option);
-                  field.onChange(option.value);
-                }}
-                options={roomsOptionsForCreate}
-                value={field.value}
-                modalOptions={{ title: 'Phòng ngủ', maxHeightPercent: 0.7 }}
-                formattedValue={field.value ? `${field.value} PN` : ''}
-                footer={
-                  <div className="flex flex-col gap-4 p-4">
-                    <Label>Số khác:</Label>
-                    <RoundedOptionsNumberInput
-                      {...field}
-                      className="relative"
-                      placeholder="Nhập số"
-                      onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                      maxLength={3}
-                      hiddenSelect
-                    />
-                    <Button variant="default" className="w-full" onClick={closeModal}>
-                      OK
-                    </Button>
-                  </div>
-                }
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Only show bedroom fields if not land */}
+        {!isLand && (
+          <FormField
+            control={form.control}
+            name="bedrooms_count"
+            render={({ field }) => (
+              <FormItem>
+                <ListItemBtsPicker
+                  onSelect={(option: A) => {
+                    console.log('onSelect bedrooms_count', option);
+                    field.onChange(option.value);
+                  }}
+                  options={roomsOptionsForCreate}
+                  value={field.value}
+                  modalOptions={{ title: 'Phòng ngủ', maxHeightPercent: 0.7 }}
+                  formattedValue={field.value ? `${field.value} PN` : ''}
+                  footer={
+                    <div className="flex flex-col gap-4 p-4">
+                      <Label>Số khác:</Label>
+                      <RoundedOptionsNumberInput
+                        {...field}
+                        className="relative"
+                        placeholder="Nhập số"
+                        onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                        maxLength={3}
+                        hiddenSelect
+                      />
+                      <Button variant="default" className="w-full" onClick={closeModal}>
+                        OK
+                      </Button>
+                    </div>
+                  }
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
-        <FormField
-          control={form.control}
-          name="bathrooms_count"
-          render={({ field }) => (
-            <FormItem>
-              <ListItemBtsPicker
-                onSelect={(option: A) => {
-                  console.log('onSelect bathrooms_count', option);
-                  field.onChange(option.value);
-                }}
-                options={roomsOptionsForCreate}
-                value={field.value}
-                modalOptions={{ title: 'Phòng tắm', maxHeightPercent: 0.7 }}
-                formattedValue={field.value ? `${field.value} WC` : ''}
-                footer={
-                  <div className="flex flex-col gap-4 p-4">
-                    <Label>Số khác:</Label>
-                    <RoundedOptionsNumberInput
-                      {...field}
-                      className="relative"
-                      placeholder="Nhập số"
-                      onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                      maxLength={3}
-                      hiddenSelect
-                    />
-                    <Button variant="default" className="w-full" onClick={closeModal}>
-                      OK
-                    </Button>
-                  </div>
-                }
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Only show bathroom fields if not land */}
+        {!isLand && (
+          <FormField
+            control={form.control}
+            name="bathrooms_count"
+            render={({ field }) => (
+              <FormItem>
+                <ListItemBtsPicker
+                  onSelect={(option: A) => {
+                    console.log('onSelect bathrooms_count', option);
+                    field.onChange(option.value);
+                  }}
+                  options={roomsOptionsForCreate}
+                  value={field.value}
+                  modalOptions={{ title: 'Phòng tắm', maxHeightPercent: 0.7 }}
+                  formattedValue={field.value ? `${field.value} WC` : ''}
+                  footer={
+                    <div className="flex flex-col gap-4 p-4">
+                      <Label>Số khác:</Label>
+                      <RoundedOptionsNumberInput
+                        {...field}
+                        className="relative"
+                        placeholder="Nhập số"
+                        onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                        maxLength={3}
+                        hiddenSelect
+                      />
+                      <Button variant="default" className="w-full" onClick={closeModal}>
+                        OK
+                      </Button>
+                    </div>
+                  }
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
       </List>
 
       <CardTitle className="text-md flex gap-2 px-4 pb-2">Địa chỉ</CardTitle>
@@ -290,60 +311,107 @@ export const FormMobile: React.FC = () => {
           }
         />
 
-        <FormField
-          control={form.control}
-          name="facade"
-          render={({ field }) => (
-            <FormItem>
-              <ListItemBtsPicker
-                onSelect={(option: A) => {
-                  console.log('onSelect facade', option);
-                  field.onChange(option.value);
-                }}
-                options={facadeOptionsForCreate}
-                value={field.value}
-                modalOptions={{ title: 'Mặt tiền', maxHeightPercent: 0.7 }}
-                formattedValue={field.value ? `${field.value} m` : ''}
-                footer={
-                  <>
-                    <div className="px-4 pt-4">
-                      <Button
-                        variant="default"
-                        className="w-full"
-                        onClick={() => {
-                          field.onChange('');
-                          closeModal();
-                        }}
-                        disabled={!field.value}
-                      >
-                        Xóa
-                      </Button>
-                    </div>
-                    <div className="flex flex-col gap-4 p-4">
-                      <Label>Số khác:</Label>
-                      <RoundedOptionsNumberInput
-                        {...field}
-                        className="relative"
-                        placeholder="Nhập số"
-                        onChange={(e) => onChangeFieldNumber(field, e.target.value)}
-                        maxLength={3}
-                        hiddenSelect
-                      />
-                      <Button variant="default" className="w-full" onClick={closeModal}>
-                        OK
-                      </Button>
-                    </div>
-                  </>
-                }
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Mặt tiền - Hide for apartment */}
+        {!isApartment && (
+          <FormField
+            control={form.control}
+            name="facade"
+            render={({ field }) => (
+              <FormItem>
+                <ListItemBtsPicker
+                  onSelect={(option: A) => {
+                    console.log('onSelect facade', option);
+                    field.onChange(option.value);
+                  }}
+                  options={facadeOptionsForCreate}
+                  value={field.value}
+                  modalOptions={{ title: isHouse ? 'Mặt tiền rộng (m)' : 'Chiều ngang đất rộng (m)', maxHeightPercent: 0.7 }}
+                  formattedValue={field.value ? `${field.value} m` : ''}
+                  footer={
+                    <>
+                      <div className="px-4 pt-4">
+                        <Button
+                          variant="default"
+                          className="w-full"
+                          onClick={() => {
+                            field.onChange('');
+                            closeModal();
+                          }}
+                          disabled={!field.value}
+                        >
+                          Xóa
+                        </Button>
+                      </div>
+                      <div className="flex flex-col gap-4 p-4">
+                        <Label>Số khác:</Label>
+                        <RoundedOptionsNumberInput
+                          {...field}
+                          className="relative"
+                          placeholder="Nhập số"
+                          onChange={(e) => onChangeFieldNumber(field, e.target.value)}
+                          maxLength={3}
+                          hiddenSelect
+                        />
+                        <Button variant="default" className="w-full" onClick={closeModal}>
+                          OK
+                        </Button>
+                      </div>
+                    </>
+                  }
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        {/* Số tầng / Vị trí tầng - Hide for land */}
+        {!isLand && (
+          <ListItemBtsPicker
+            options={roomsOptionsForCreate}
+            modalOptions={{ title: isApartment ? 'Vị trí tầng' : 'Số tầng' }}
+            value={form.watch('floors_count')}
+            onSelect={(option) => {
+              if (typeof option.value === 'string') form.setValue('floors_count', option.value);
+            }}
+            formattedValue={form.watch('floors_count') ? `${form.watch('floors_count')} tầng` : ''}
+            footer={
+              <>
+                <div className="px-4 pt-4">
+                  <Button
+                    variant="default"
+                    className="w-full"
+                    onClick={() => {
+                      form.setValue('floors_count', '');
+                      closeModal();
+                    }}
+                    disabled={!form.watch('floors_count')}
+                  >
+                    Xóa
+                  </Button>
+                </div>
+                <div className="flex flex-col gap-4 p-4">
+                  <Label>Số khác:</Label>
+                  <RoundedOptionsNumberInput
+                    value={form.watch('floors_count')}
+                    className="relative"
+                    placeholder="Nhập số"
+                    onChange={(e) => form.setValue('floors_count', e.target.value)}
+                    maxLength={3}
+                    hiddenSelect
+                  />
+                  <Button variant="default" className="w-full" onClick={closeModal}>
+                    OK
+                  </Button>
+                </div>
+              </>
+            }
+          />
+        )}
 
         <ListItemBtsPicker
           options={directionOptions}
-          modalOptions={{ title: 'Hướng nhà/ đất' }}
+          modalOptions={{ title: isApartment ? 'Hướng ban công' : 'Hướng nhà/ đất' }}
           value={form.watch('entrance_direction')}
           onSelect={(option) => {
             if (typeof option.value === 'string') form.setValue('entrance_direction', option.value);
@@ -365,54 +433,60 @@ export const FormMobile: React.FC = () => {
           }
         />
 
-        <ListItemBtsPicker
-          options={directionOptions}
-          modalOptions={{ title: 'Hướng ban công' }}
-          value={form.watch('view_direction')}
-          onSelect={(option) => {
-            if (typeof option.value === 'string') form.setValue('view_direction', option.value);
-          }}
-          footer={
-            <div className="px-4 pt-4">
-              <Button
-                variant="default"
-                className="w-full"
-                onClick={() => {
-                  form.setValue('view_direction', '');
-                  closeModal();
-                }}
-                disabled={!form.watch('view_direction')}
-              >
-                Xóa
-              </Button>
-            </div>
-          }
-        />
+        {/* Hướng ban công - Hide for land and house */}
+        {!isLand && !isHouse && (
+          <ListItemBtsPicker
+            options={directionOptions}
+            modalOptions={{ title: 'Hướng ban công' }}
+            value={form.watch('view_direction')}
+            onSelect={(option) => {
+              if (typeof option.value === 'string') form.setValue('view_direction', option.value);
+            }}
+            footer={
+              <div className="px-4 pt-4">
+                <Button
+                  variant="default"
+                  className="w-full"
+                  onClick={() => {
+                    form.setValue('view_direction', '');
+                    closeModal();
+                  }}
+                  disabled={!form.watch('view_direction')}
+                >
+                  Xóa
+                </Button>
+              </div>
+            }
+          />
+        )}
 
-        <ListItemBtsPicker
-          options={furnitureTypeOptions}
-          modalOptions={{ title: 'Nội thất' }}
-          value={form.watch('furniture')}
-          onSelect={(option) => {
-            if (typeof option.value === 'string') form.setValue('furniture', option.value);
-          }}
-          dividers={false}
-          footer={
-            <div className="px-4 pt-4">
-              <Button
-                variant="default"
-                className="w-full"
-                onClick={() => {
-                  form.setValue('furniture', '');
-                  closeModal();
-                }}
-                disabled={!form.watch('furniture')}
-              >
-                Xóa
-              </Button>
-            </div>
-          }
-        />
+        {/* Nội thất - Show for house or apartment */}
+        {(isHouse || isApartment) && (
+          <ListItemBtsPicker
+            options={furnitureTypeOptions}
+            modalOptions={{ title: 'Nội thất' }}
+            value={form.watch('furniture')}
+            onSelect={(option) => {
+              if (typeof option.value === 'string') form.setValue('furniture', option.value);
+            }}
+            dividers={false}
+            footer={
+              <div className="px-4 pt-4">
+                <Button
+                  variant="default"
+                  className="w-full"
+                  onClick={() => {
+                    form.setValue('furniture', '');
+                    closeModal();
+                  }}
+                  disabled={!form.watch('furniture')}
+                >
+                  Xóa
+                </Button>
+              </div>
+            }
+          />
+        )}
       </List>
 
       <CardTitle className="text-md flex gap-2 px-4 pb-2">Hình ảnh, Video</CardTitle>
