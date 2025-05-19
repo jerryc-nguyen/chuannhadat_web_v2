@@ -72,6 +72,39 @@ This will generate a new feature directory with all the required folders and fil
 4. **Reusable Elements**:
    - If a component, hook, or utility within a feature becomes useful in multiple features, consider moving it to the appropriate shared directory
 
+## UI Development with AI Assistance
+
+When implementing UI components, leverage Claude's capabilities as a Senior Frontend UI Engineer:
+
+1. **Before Implementing UI Components**:
+
+   - Ask Claude for UI implementation guidance using the prompt: "@page.tsx please help me as senior UI engineer: [your question]"
+   - Provide detailed requirements and challenges you're facing
+
+2. **What Claude Can Help With**:
+
+   - Component architecture and best practices
+   - Responsive design patterns
+   - Accessibility improvements (WCAG compliance)
+   - Performance optimizations
+   - CSS/styling solutions
+   - Form validation and user input handling
+   - State management strategies
+   - Animation and transition effects
+
+3. **UI Implementation Principles**:
+
+   - Always build responsive UI that works across all device sizes
+   - Ensure components are accessible (semantic HTML, ARIA attributes)
+   - Maintain consistent styling with existing components
+   - Optimize for performance (minimize re-renders, lazy loading)
+   - Design for reusability when appropriate
+
+4. **Examples of Good UI Assistance Requests**:
+   - "Please help me as senior UI engineer: How should I implement a responsive layout for this dashboard?"
+   - "Please help me as senior UI engineer: What's the best way to implement form validation for this data?"
+   - "Please help me as senior UI engineer: How can I optimize this component's performance?"
+
 ## Benefits
 
 - **Improved Developer Experience**: Easier to navigate, understand, and work with the codebase

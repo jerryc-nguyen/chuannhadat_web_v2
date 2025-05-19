@@ -10,7 +10,7 @@
   "explorer.fileNesting.expand": false,
   "workbench.editor.wrapTabs": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  
+
   // Feature-Driven Development folder structure recommendations
   "workspace.recommended.structure": {
     "src/views": "Main features directory",
@@ -27,7 +27,7 @@
     "src/components": "Shared components across features",
     "src/apis": "Shared API functions across features"
   },
-  
+
   // File templates for new features
   "files.newFeature.templates": {
     "index.ts": "export * from './components';\nexport * from './hooks';\nexport * from './types';\n",
@@ -38,7 +38,7 @@
     "apis/index.ts": "// Export feature-specific API functions\n",
     "query/index.ts": "// Export feature-specific React Query implementations\n"
   },
-  
+
   // File associations
   "files.associations": {
     "*/views/*/apis/*.ts": "typescript",
@@ -48,8 +48,21 @@
     "*/views/*/constants/*.ts": "typescript",
     "*/views/*/query/*.ts": "typescript"
   },
-  
+
+  // UI Development Guidelines
+  "ui.development.guidelines": {
+    "assistantRole": "Senior Frontend UI Engineer",
+    "beforeUiImplementation": "Consult Claude as a Senior Frontend UI Engineer for optimized solutions",
+    "uiComponentGoals": [
+      "Responsiveness across all device sizes",
+      "Accessibility compliance (WCAG 2.1)",
+      "Consistent styling with existing components",
+      "Performance optimization",
+      "Reusability"
+    ]
+  },
+
   // Snippet prefixes for quick feature development
   "editor.snippetSuggestions": "top",
   "editor.suggest.showSnippets": true
-} 
+}
