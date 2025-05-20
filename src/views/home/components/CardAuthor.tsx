@@ -24,7 +24,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
     author?.avatar_url || default_avatar,
   );
-  const fullName = author?.full_name ? author.full_name : 'Loading';
+  const fullName = author?.full_name ? author.full_name : (author.phone ?? 'Loading');
   const topAuthor = topAuthors.find((author) => author.id === product.user_id);
   const renderIconTopAuthor = (position: number) => {
     switch (position) {
