@@ -100,7 +100,7 @@ export const PhoneNumberTab: React.FC = () => {
       <CommonAlertDialog
         isOpen={openPopupVerifyPhone}
         handleOpenChange={setOpenPopupVerifyPhone}
-        title={isConfirmedPhone ? 'Xác thực thành công' : 'Xác thực số điện thoại'}
+        title={isConfirmedPhone ? 'Xác thực thành công' : 'Xác thực số điện thoại: ' + currentUser?.phone}
         description={
           isConfirmedPhone ? (
             <div className="flex flex-col items-center justify-center gap-y-3">
@@ -114,7 +114,7 @@ export const PhoneNumberTab: React.FC = () => {
             <div className="flex flex-col items-center justify-center gap-y-3">
               <AiFillMessage className="text-5xl text-muted-foreground" />
               <div>
-                Để xác thực thay đổi số điện thoại. Vui lòng soạn tin nhắn với cú pháp sau :{' '}
+                Để xác thực thay đổi số điện thoại. Vui lòng dùng số <b className="text-primary_color/80">{currentUser?.phone}</b> soạn tin nhắn với cú pháp sau :{' '}
                 <b className="text-primary_color/80">xt</b> gửi đến{' '}
                 <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
                   <b onClick={() => handleCopy(SMS_PHONE_NUMBER)} className="text-primary_color/80">
@@ -137,7 +137,7 @@ export const PhoneNumberTab: React.FC = () => {
       <div className="border-b pb-4">
         <h3 className="text-xl font-semibold">Thay đổi số điện thoại</h3>
       </div>
-      {!isConfirmedPhone && (
+      {currentUser?.phone && !isConfirmedPhone && (
         <div className="mt-4 rounded-md border bg-primary_color/10 p-6">
           <p>
             Số điện thoại của bạn chưa được xác thực, vui lòng xác thực để sử dụng đầy đủ các tính
@@ -162,7 +162,7 @@ export const PhoneNumberTab: React.FC = () => {
         )
       )}
       <Form {...form}>
-        <form className="mt-2 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
           <FormField
             control={control}
             name="newPhoneNumber"
