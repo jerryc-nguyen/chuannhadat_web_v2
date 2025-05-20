@@ -23,20 +23,25 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
           <span className="text-sm text-secondary">{data?.formatted_price_per_m2}</span>
         </div>
       )}
-      {data?.bedrooms_count && (
+
+      {/* Only show bedrooms if value is greater than 0 */}
+      {parseInt(data?.bedrooms_count + '') > 0 && (
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold">Số phòng ngủ</span>
-          <span className="text-md text-secondary">{data?.bedrooms_count ?? 1}</span>
+          <span className="text-md text-secondary">{data?.bedrooms_count}</span>
         </div>
       )}
 
-      {data?.bathrooms_count && (
+      {/* Only show bathrooms if value is greater than 0 */}
+      {parseInt(data?.bathrooms_count + '') > 0 && (
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold">Số phòng tắm</span>
           <span className="text-md text-secondary">{data?.bathrooms_count}</span>
         </div>
       )}
-      {data?.floors_count && (
+
+      {/* Only show floors if value is greater than 0 */}
+      {data?.floors_count && Number(data.floors_count) > 0 && (
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold">Số tầng</span>
           <span className="text-md text-secondary">{data?.floors_count}</span>
