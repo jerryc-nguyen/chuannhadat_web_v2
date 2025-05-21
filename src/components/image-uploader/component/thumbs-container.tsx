@@ -43,6 +43,10 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
     onChange(images.filter((img) => img.id != image.id));
   }
 
+  // Filter out images that have hasError set to true
+  // @ts-ignore: uploadedFile is not defined in the IUploadedImage interface
+  const filteredImages = images.filter(image => image.uploadedFile?.hasError !== true);
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable" direction="horizontal" type="group">
@@ -52,7 +56,7 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
             ref={provided.innerRef}
             className="flex w-full flex-wrap justify-start gap-5 pt-4"
           >
-            {images.map((image, index) => {
+            {filteredImages.map((image, index) => {
               return (
                 <Draggable
                   key={generateKey(image)}

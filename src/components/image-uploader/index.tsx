@@ -101,7 +101,6 @@ const ImageUploader: React.FC<IImageUploader> = ({ uploadedImages, onUploaded })
       UploadFolders.PRODUCT_IMAGES,
       files,
       (file, progress) => {
-        // console.log(`Uploading ${file.name}: ${progress}`)
         updateUploadProgress(file, progress)
       });
 

@@ -5,6 +5,7 @@ import { API_ROUTES } from '@common/router';
 
 import { AxiosProgressEvent, AxiosRequestConfig } from 'axios';
 import { IImageSignS3_Request, IImageSignS3_Response, ITrackUploadedUrl_Request, ITrackUploadedUrl_Response } from './types';
+import { toast } from 'sonner';
 
 const GetSignedUploadUrl = async (data: IImageSignS3_Request): Promise<IImageSignS3_Response> => {
   return await axiosInstance.post(API_ROUTES.IMAGE_UPLOAD.SIGN_S3, data);
@@ -42,7 +43,11 @@ const ImageUploadApiService = {
         });
 
         if (!signedUrlResponse?.signed_url) {
-          throw new Error('Đã có lỗi xảy ra (code 1)');
+          // @ts-ignore: file.hasError is not defined in the File interface
+          file.hasError = true;
+
+          toast.error(signedUrlResponse.message || 'Đã có lỗi xảy ra (code 1)');
+          throw new Error(signedUrlResponse.message || 'Đã có lỗi xảy ra (code 1)');
         }
 
         const options = {
@@ -60,7 +65,6 @@ const ImageUploadApiService = {
           file,
           options,
         );
-        console.log('uploadImageS3Response', uploadImageS3Response);
 
         if (uploadImageS3Response.status === 200 || uploadImageS3Response) {
           const trackUploadedUrlResponse: ITrackUploadedUrl_Response = await TrackUploadedUrl({

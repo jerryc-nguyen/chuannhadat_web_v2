@@ -19,6 +19,7 @@ export interface IImageSignS3_Response {
   s3_key: string;
   s3_url: string;
   signed_url: string;
+  message: string;
 }
 
 export interface ITrackUploadedUrl_Request {
