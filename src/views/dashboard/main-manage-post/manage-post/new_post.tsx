@@ -19,7 +19,7 @@ import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 
 import { useBreadcrumb } from '@hooks/useBreadcrumb';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormMobile } from './mobile/form-create';
 import { useAuth } from '@common/auth/AuthContext';
 import useModals from '@mobile/modals/hooks';
@@ -57,7 +57,7 @@ const defaultValues: IPostForm = {
 
 const NewPost: React.FC = () => {
   const { currentUser } = useAuth();
-  const userCheckedRef = useRef(false);
+  const alertShownRef = useRef(false);
 
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
   useBreadcrumb([
@@ -100,15 +100,19 @@ const NewPost: React.FC = () => {
     }
   };
 
-  // Check user info directly in component body, not in an effect
-  if (currentUser && (!currentUser.full_name || !currentUser.phone) && !userCheckedRef.current) {
-    userCheckedRef.current = true;
-    // Use setTimeout to avoid immediate redirect during render
-    setTimeout(() => {
+  const requireUpdateUserInfo = () => {
+    if (currentUser && (!currentUser.full_name || !currentUser.phone) && !alertShownRef.current) {
+      alertShownRef.current = true;
       alert('Bạn phải cập nhật Tên và SĐT liên lạc trước khi đăng tin');
       window.location.href = '/dashboard/account-settings';
-    }, 0);
+    }
   }
+
+  useEffect(() => {
+    if (currentUser) {
+      requireUpdateUserInfo();
+    }
+  }, [currentUser]);
 
   return (
     <Form {...form}>
