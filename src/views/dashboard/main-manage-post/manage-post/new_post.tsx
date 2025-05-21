@@ -19,8 +19,10 @@ import ProductTypeForm from './components/form-components/product-type';
 import { PostFormSchema } from './form-schemas';
 
 import { useBreadcrumb } from '@hooks/useBreadcrumb';
-import React from 'react';
+import React, { useRef } from 'react';
 import { FormMobile } from './mobile/form-create';
+import { useAuth } from '@common/auth/AuthContext';
+import useModals from '@mobile/modals/hooks';
 
 /**
  * TODO: Split file to smaller components
@@ -54,6 +56,9 @@ const defaultValues: IPostForm = {
 } as const;
 
 const NewPost: React.FC = () => {
+  const { currentUser } = useAuth();
+  const userCheckedRef = useRef(false);
+
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
   useBreadcrumb([
     {
@@ -94,6 +99,16 @@ const NewPost: React.FC = () => {
       console.log('error', error);
     }
   };
+
+  // Check user info directly in component body, not in an effect
+  if (currentUser && (!currentUser.full_name || !currentUser.phone) && !userCheckedRef.current) {
+    userCheckedRef.current = true;
+    // Use setTimeout to avoid immediate redirect during render
+    setTimeout(() => {
+      alert('Bạn phải cập nhật Tên và SĐT liên lạc trước khi đăng tin');
+      window.location.href = '/dashboard/account-settings';
+    }, 0);
+  }
 
   return (
     <Form {...form}>
