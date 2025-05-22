@@ -5,7 +5,6 @@ import { IUploadedImage } from '../types';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { useEffect, useRef } from 'react';
-import { useAuth } from '@common/auth/AuthContext';
 import { useDepositModal } from '@components/ui/DepositModal';
 import { useBalanceRequest } from '@api/balance';
 
