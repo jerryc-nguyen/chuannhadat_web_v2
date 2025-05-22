@@ -17,6 +17,7 @@ const BalanceInfo: FC = () => {
     tk_chinh: '0 Xu',
     tk_km: '0 Xu',
     total: '0 Xu',
+    total_amount: 0
   });
 
   useEffect(() => {
