@@ -4,6 +4,9 @@ import { CircleX } from 'lucide-react';
 import { IUploadedImage } from '../types';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { useEffect, useRef } from 'react';
+import { useDepositModal } from '@components/ui/DepositModal';
+import { useBalanceRequest } from '@api/balance';
 
 interface IThumbDragAndDropZone {
   images: IUploadedImage[];
@@ -11,6 +14,10 @@ interface IThumbDragAndDropZone {
 }
 
 const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChange }) => {
+  const { setOpenDepositModal } = useDepositModal();
+  const { balanceData } = useBalanceRequest();
+  const depositModalShownRef = useRef(false);
+
   const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -46,6 +53,18 @@ const ThumbDragAndDropZone: React.FC<IThumbDragAndDropZone> = ({ images, onChang
   // Filter out images that have hasError set to true
   // @ts-ignore: uploadedFile is not defined in the IUploadedImage interface
   const filteredImages = images.filter(image => image.uploadedFile?.hasError !== true);
+
+  // Filter out images that have hasError set to true
+  // @ts-ignore: uploadedFile is not defined in the IUploadedImage interface
+  const errorImages = images.filter(image => image.uploadedFile?.hasError === true);
+
+  // Open deposit modal when there are error images
+  useEffect(() => {
+    if (errorImages.length > 0 && balanceData?.total_amount < 2000 && !depositModalShownRef.current) {
+      setOpenDepositModal(true);
+      depositModalShownRef.current = true;
+    }
+  }, [errorImages.length, setOpenDepositModal, balanceData?.total_amount]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

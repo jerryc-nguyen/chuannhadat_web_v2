@@ -9,6 +9,7 @@ export interface IBalanceResponse {
   tk_chinh: string;
   tk_km: string;
   total: string;
+  total_amount: number;
 }
 
 export interface ITransactionResponse {
