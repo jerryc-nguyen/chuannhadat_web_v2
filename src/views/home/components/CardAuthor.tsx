@@ -5,6 +5,7 @@ import TooltipHost from '@components/tooltip-host';
 import { Skeleton } from '@components/ui/skeleton';
 import useResizeImage from '@hooks/useResizeImage';
 import { filterStateAtom } from '@mobile/filter_bds/states';
+import { HoverCardAuthorMobile } from '@views/home/components/hover-card-author/HoverCardAuthorMobile';
 import { useAtom } from 'jotai';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
@@ -57,8 +58,19 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
     }
   }, [product]);
 
-  const Component = isMobile ? 'div' : HoverCardAuthor;
+  const Component = isMobile ? HoverCardAuthorMobile : HoverCardAuthor;
   const linkTarget = isMobile ? {} : { target: '_blank' };
+  React.useEffect(() => {
+    if (typeof imgSrc === 'string') {
+      setImgSrc(
+        buildThumbnailUrl({
+          imageUrl: imgSrc,
+          width: 40,
+          ratio: 1,
+        }),
+      );
+    }
+  }, [imgSrc]);
   return (
     <div className="flex items-center justify-between gap-x-2">
       <Component authorSlug={author?.slug as string}>
@@ -67,20 +79,13 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
             <Image
               width={40}
               height={40}
-              src={
-                typeof imgSrc === 'string'
-                  ? buildThumbnailUrl({
-                    imageUrl: imgSrc,
-                    width: 40,
-                    ratio: 1,
-                  })
-                  : imgSrc
-              }
+              src={imgSrc}
               onError={() => {
                 setImgSrc(default_avatar);
               }}
               className="aspect-square rounded-full"
               unoptimized
+              suppressHydrationWarning
               alt="avatar_author"
             />
           </Link>

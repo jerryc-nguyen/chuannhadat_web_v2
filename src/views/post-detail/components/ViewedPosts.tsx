@@ -8,6 +8,7 @@ import ProductCard from '@views/home/components/ProductCard';
 import { Loader2 } from 'lucide-react';
 import React, { memo, useRef } from 'react';
 import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import { v4 as uuidv4 } from 'uuid';
 
 type ViewedPostsProps = {
   productUid: string;
@@ -117,7 +118,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
           {listProduct.map((item: A, index: number) => (
             <CarouselItem
               className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
-              key={item?.product?.id || index}
+              key={uuidv4()}
             >
               <ProductCard
                 isShowVideoYoutube={false}

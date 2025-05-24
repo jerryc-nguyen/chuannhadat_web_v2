@@ -73,16 +73,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
 
         <CardContent className="space-y-2">
           <p className="mb-4 font-bold">{plan.buy_info.formatted_total} / 1 THÁNG</p>
-          <p>
-            <div>
-              {plan.contents.map((content, index) => (
-                <p key={index} className="mt-2 text-lg">
-                  <span className="text-secondary">{content.text}:</span>{' '}
-                  <strong>{content.value}</strong>
-                </p>
-              ))}
-            </div>
-          </p>
+          <div>
+            {plan.contents.map((content, index) => (
+              <p key={index} className="mt-2 text-lg">
+                <span className="text-secondary">{content.text}:</span>{' '}
+                <strong>{content.value}</strong>
+              </p>
+            ))}
+          </div>
         </CardContent>
 
         <CardFooter>

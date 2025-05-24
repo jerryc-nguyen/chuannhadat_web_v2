@@ -35,9 +35,11 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
     mutationFn: services.trackings.viewProduct,
   });
 
-  if (product) {
-    setAuthor(product.author);
-  }
+  useEffect(() => {
+    if (product) {
+      setAuthor(product.author);
+    }
+  }, [product]);
 
   React.useEffect(() => {
     if (productUid) {

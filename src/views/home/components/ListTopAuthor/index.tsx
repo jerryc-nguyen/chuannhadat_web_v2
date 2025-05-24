@@ -46,9 +46,6 @@ export const ListTopAuthor = () => {
                         })
                       : imgSrc
                   }
-                  onError={() => {
-                    //   setImgSrc(default_avatar);
-                  }}
                   className="aspect-square rounded-full"
                   unoptimized
                   alt="avatar_author"

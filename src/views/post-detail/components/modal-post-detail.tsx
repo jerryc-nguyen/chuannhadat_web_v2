@@ -1,7 +1,10 @@
 'use client';
+import NotFound from '@app/not-found';
 import { cn } from '@common/utils';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/sheet';
+import { usePostDetail } from '@hooks/usePostDetail';
 import { IProductDetail } from '@mobile/searchs/type';
+import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import { useAtom, useSetAtom } from 'jotai';
 import React, { useMemo } from 'react';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
@@ -11,16 +14,11 @@ import DescriptionPost from './description-post';
 import FeaturesPost from './features-post';
 import NotePost from './note-post';
 import OverviewPost from './overview-post';
-// import { useBrowserPushState } from '@components/popstate-handler/hooks';
-import NotFound from '@app/not-found';
-import { usePostDetail } from '@hooks/usePostDetail';
-import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import ViewedPosts from './ViewedPosts';
 
 type ModalPostDetailProps = object;
 
 const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
-  // const { trackPushPath, historyBack } = useBrowserPushState();
   const [isOpenModal, setIsOpenModal] = useAtom(openModalDetail);
   const setIsLoadingModal = useSetAtom(isLoadingModal);
   const [postId, setPostId] = useAtom(selectedPostId);

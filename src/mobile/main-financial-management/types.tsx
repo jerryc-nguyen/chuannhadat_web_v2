@@ -44,5 +44,5 @@ export interface ServicePackageInfo {
   sub_title: string;
   title: string;
   plans: Service[];
-  type: string
+  type: string;
 }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { applyBotProtection } from './middleware/bot-protection';
 import { handleUrlRedirects } from './middleware/url-redirects';
 
@@ -7,25 +7,25 @@ const DEBUG = process.env.DEBUG_MIDDLEWARE === 'true';
 
 // Helper functions for controlled logging
 const log = {
-  error: (message: string, ...args: any[]) => {
+  error: (message: string, ...args: A[]) => {
     // Always log errors (level >= 1)
     if (DEBUG) {
       console.error(`[MIDDLEWARE] ❌ ${message}`, ...args);
     }
   },
-  info: (message: string, ...args: any[]) => {
+  info: (message: string, ...args: A[]) => {
     // Only log important info (level >= 2)
     if (DEBUG) {
       console.log(`[MIDDLEWARE] ${message}`, ...args);
     }
   },
-  verbose: (message: string, ...args: any[]) => {
+  verbose: (message: string, ...args: A[]) => {
     // Only log verbose details (level >= 3)
     if (DEBUG) {
       console.log(`[MIDDLEWARE] 🔍 ${message}`, ...args);
     }
   },
-  highlight: (message: string, ...args: any[]) => {
+  highlight: (message: string, ...args: A[]) => {
     // Only log highlighted messages (level >= 2)
     if (DEBUG) {
       console.log(`🔵🔵🔵 ${message}`, ...args);
@@ -43,7 +43,6 @@ export const config = {
     '/bot-protection-dashboard', // Dashboard route
     '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
   ],
-  runtime: 'nodejs',
 };
 
 // Special variable specifically to disable during build
