@@ -1,14 +1,7 @@
 'use client';
 import { cn, genKey } from '@common/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
-import {
-  ContactInfor,
-  EmailTab,
-  PasswordTab,
-  PersonalTab,
-  ReferFriend,
-  PhoneNumberTab,
-} from '@views/dashboard/main-account-detail/account-settings/components';
+import { listTabAccountSetting } from '@views/dashboard/main-account-detail/constants';
 import {
   breadcrumbAtom,
   defaultBreadcrumb,
@@ -17,7 +10,6 @@ import {
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { listTabAccountSetting } from '@views/dashboard/main-account-detail/constants';
 
 const AccountSettingsMobile: React.FC = () => {
   const searchParams = useSearchParams();
@@ -79,24 +71,11 @@ const AccountSettingsMobile: React.FC = () => {
           ))}
         </TabsList>
         <div className="flex max-w-screen-lg flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
-          <TabsContent value="personal-wall">
-            <PersonalTab />
-          </TabsContent>
-          <TabsContent value="contact-infor">
-            <ContactInfor />
-          </TabsContent>
-          <TabsContent className="relative flex-1" value="email">
-            <EmailTab />
-          </TabsContent>
-          <TabsContent className="relative flex-1" value="phone-number">
-            <PhoneNumberTab />
-          </TabsContent>
-          <TabsContent value="password">
-            <PasswordTab />
-          </TabsContent>
-          <TabsContent value="refer-friend">
-            <ReferFriend />
-          </TabsContent>
+          {listTabAccountSetting.map((tab) => (
+            <TabsContent key={tab.title} className="p-4" value={tab.tabValue}>
+              <tab.tabComponent />
+            </TabsContent>
+          ))}
         </div>
       </Tabs>
     </section>

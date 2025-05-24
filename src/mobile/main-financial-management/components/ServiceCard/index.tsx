@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BuyButton, PaymentDialog } from '../PaymentDialog';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useBalanceRequest } from '@api/balance';
 import { services } from '@api/services';
-import { useMutation } from '@tanstack/react-query';
 import { Service } from '@mobile/main-financial-management/types';
 import useModals from '@mobile/modals/hooks';
 import '@styles/pages/mobile/finacial-management/service-package.scss';
-import { useBalanceRequest } from '@api/balance';
+import { useMutation } from '@tanstack/react-query';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
+import { BuyButton, PaymentDialog } from '../PaymentDialog';
 
 interface ServiceCardProps {
   plan: Service;
@@ -45,13 +45,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       data.status
         ? openModal({
-          name: plan.plan_name,
-          title: plan.plan_name,
-          content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-          footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-          maxHeightPercent: 0.5,
-          isHiddenScroll: true,
-        })
+            name: plan.plan_name,
+            title: plan.plan_name,
+            content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+            footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+            maxHeightPercent: 0.5,
+            isHiddenScroll: true,
+          })
         : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
     onError: (error: A) => {
@@ -75,12 +75,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
         </CardHeader>
 
         <CardContent className="space-y-2">
-          <p className='font-bold mb-4'>{plan.buy_info.formatted_total} / 1 THÁNG</p>
+          <p className="mb-4 font-bold">{plan.buy_info.formatted_total} / 1 THÁNG</p>
           <p>
             <div>
               {plan.contents.map((content, index) => (
                 <p key={index} className="mt-2 text-lg">
-                  <span className='text-secondary'>{content.text}:</span> <strong>{content.value}</strong>
+                  <span className="text-secondary">{content.text}:</span>{' '}
+                  <strong>{content.value}</strong>
                 </p>
               ))}
             </div>
@@ -96,7 +97,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
             Mua ngay
           </Button>
         </CardFooter>
-      </Card >
+      </Card>
     </>
   );
 };

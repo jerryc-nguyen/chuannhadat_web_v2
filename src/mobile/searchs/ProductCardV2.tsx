@@ -40,7 +40,7 @@ export const ProductDetailTitleBts = ({ product }: { product: A }) => {
 export default function ProductCard({ product }: { product: IProduct }) {
   const { openModal } = useModals();
   const divRef = useRef<HTMLDivElement | null>(null);
-  const isInCenter = useIsInVerticalCenterZone(divRef);
+  const isInCenter = useIsInVerticalCenterZone(divRef as React.RefObject<HTMLElement>);
 
   const showDetailPostModal = (e?: A) => {
     openModal({

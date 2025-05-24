@@ -1,7 +1,5 @@
 .modal_content_post {
-  :global {
-    .post-content {
-      overflow-y: auto;
-    }
+  .post_content {
+    overflow-y: auto;
   }
 }

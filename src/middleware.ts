@@ -30,7 +30,7 @@ const log = {
     if (DEBUG) {
       console.log(`🔵🔵🔵 ${message}`, ...args);
     }
-  }
+  },
 };
 
 // This runs in Node.js runtime (not Edge)
@@ -38,7 +38,7 @@ export const config = {
   matcher: [
     '/', // Explicitly match the home route
     '/post/:path*', // Post detail pages
-    '/profile/:path*', // Profile detail pages 
+    '/profile/:path*', // Profile detail pages
     '/category/:path*', // Category pages
     '/bot-protection-dashboard', // Dashboard route
     '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
@@ -47,7 +47,8 @@ export const config = {
 };
 
 // Special variable specifically to disable during build
-const isBuildTime = process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
+const isBuildTime =
+  process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
 
 /**
  * Main middleware function that orchestrates all middleware modules
@@ -90,7 +91,8 @@ export async function middleware(req: NextRequest) {
     }
 
     // Check for _rsc in multiple possible locations
-    const hasRscParam = req.nextUrl.searchParams.has('_rsc') ||
+    const hasRscParam =
+      req.nextUrl.searchParams.has('_rsc') ||
       urlString.includes('_rsc=') ||
       searchParamsString.includes('_rsc') ||
       rawUrl.includes('_rsc') ||
@@ -99,7 +101,9 @@ export async function middleware(req: NextRequest) {
 
     if (hasRscParam) {
       log.highlight(`[RSC] Client navigation detected: ${urlString}`);
-      log.info(`RSC detection: searchParams=${req.nextUrl.searchParams.has('_rsc')}, nextUrlString=${urlString.includes('_rsc=')}, searchParamsString=${searchParamsString.includes('_rsc')}, rawUrl=${rawUrl.includes('_rsc')}, referer=${rawHeadersUrl.includes('_rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}`);
+      log.info(
+        `RSC detection: searchParams=${req.nextUrl.searchParams.has('_rsc')}, nextUrlString=${urlString.includes('_rsc=')}, searchParamsString=${searchParamsString.includes('_rsc')}, rawUrl=${rawUrl.includes('_rsc')}, referer=${rawHeadersUrl.includes('_rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}`,
+      );
     }
 
     // Skip middleware for static files
@@ -147,4 +151,4 @@ export async function middleware(req: NextRequest) {
     // Always continue with the request if middleware fails
     return NextResponse.next();
   }
-} 
+}

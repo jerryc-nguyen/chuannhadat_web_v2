@@ -1,21 +1,21 @@
 'use client';
-import React, { useMemo } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/sheet';
-import { useAtom, useSetAtom } from 'jotai';
-import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
-import { IProductDetail } from '@mobile/searchs/type';
-import styles from '../styles/modal-post-detail.module.scss';
 import { cn } from '@common/utils';
-import OverviewPost from './overview-post';
-import FeaturesPost from './features-post';
-import DescriptionPost from './description-post';
-import NotePost from './note-post';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/sheet';
+import { IProductDetail } from '@mobile/searchs/type';
+import { useAtom, useSetAtom } from 'jotai';
+import React, { useMemo } from 'react';
+import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
+import styles from '../styles/modal-post-detail.module.scss';
 import AuthorPost from './author-post';
+import DescriptionPost from './description-post';
+import FeaturesPost from './features-post';
+import NotePost from './note-post';
+import OverviewPost from './overview-post';
 // import { useBrowserPushState } from '@components/popstate-handler/hooks';
-import ViewedPosts from './ViewedPosts';
-import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import NotFound from '@app/not-found';
 import { usePostDetail } from '@hooks/usePostDetail';
+import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
+import ViewedPosts from './ViewedPosts';
 
 type ModalPostDetailProps = object;
 

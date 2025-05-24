@@ -1,15 +1,15 @@
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
+import AccountSettingsMobile from '@mobile/main-account-detail/account-settings';
+import AccountSettingsDesktop from '@views/dashboard/main-account-detail/account-settings';
 import { Metadata } from 'next';
 import React from 'react';
-import AccountSettingsDesktop from '@views/dashboard/main-account-detail/account-settings';
-import AccountSettingsMobile from '@mobile/main-account-detail/account-settings';
 
 export const metadata: Metadata = {
   title: 'Tài khoản',
   description: 'Cài đặt thông tin tài khoản',
 };
-const AccountSettingsPage: React.FC = () => {
-  const { isMobile } = useGetUserAgentInfo();
+const AccountSettingsPage: React.FC = async () => {
+  const { isMobile } = await getUserAgentInfo();
 
   if (isMobile) {
     return (

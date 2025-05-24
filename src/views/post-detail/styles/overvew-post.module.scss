@@ -1,35 +1,14 @@
 [role='dialog'] .overview_post {
-  :global {
-    .list-image {
-      aspect-ratio: 4/2 !important;
-    }
+  .list_image {
+    aspect-ratio: 4/2 !important;
   }
 }
 
 .overview_post {
-  :global {
-    .list-image {
-      aspect-ratio: 5/2;
-      gap: 5px;
-    }
-    .grid-item {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-    .grid-two-items {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
-    }
-    .grid-multiple-items {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      grid-template-rows: 1fr 1fr;
-      & > div:first-child {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-      }
-    }
+  .list_image {
+    aspect-ratio: 5/2;
+    gap: 5px;
+
     .bg-overlay {
       &::before {
         content: '';
@@ -43,25 +22,48 @@
       }
     }
   }
-}
-.lightbox_images {
-  :global {
-    .yarl__thumbnails_container {
-      background-color: rgb(45, 45, 45);
-      .yarl__thumbnails_thumbnail {
-        border: 2px solid white !important;
-        &:hover {
-          border: 2px solid yellow !important;
-        }
-        img {
-          width: 90px;
-          height: 60px;
-          overflow: hidden;
-        }
-      }
-      .yarl__thumbnails_thumbnail_active {
-        border: 2px solid yellow !important;
-      }
+
+  .grid-item {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .grid-two-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .grid-multiple-items {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 1fr 1fr;
+
+    &>div:first-child {
+      grid-column: 1;
+      grid-row: 1 / span 2;
     }
+  }
+}
+
+.lightbox_images:global(.yarl__thumbnails_container) {
+  background-color: rgb(45, 45, 45);
+
+  .yarl__thumbnails_thumbnail {
+    border: 2px solid white !important;
+
+    &:hover {
+      border: 2px solid yellow !important;
+    }
+
+    img {
+      width: 90px;
+      height: 60px;
+      overflow: hidden;
+    }
+  }
+
+  .yarl__thumbnails_thumbnail_active {
+    border: 2px solid yellow !important;
   }
 }

@@ -1,7 +1,7 @@
-import { LuContact, LuLock, LuMail, LuPhone, LuUserCog2, LuUserPlus2 } from 'react-icons/lu';
 import broker from '@assets/images/broker.png';
 import personal from '@assets/images/personal.png';
 import { CustomerGender, CustomerType } from '@common/types';
+import { LuContact, LuLock, LuMail, LuPhone, LuUserCog2, LuUserPlus2 } from 'react-icons/lu';
 import {
   ContactInfor,
   EmailTab,

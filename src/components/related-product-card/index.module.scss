@@ -1,35 +1,37 @@
 .related_product_card {
-  :global {
-    .card-content {
-      display: grid;
-      gap: 0 10px;
-      grid-template-columns: 2fr 1fr 5px 1fr;
-      grid-template-rows: repeat(3, 1fr);
-      grid-template-areas:
-        'image price . square'
-        'image bedroom . wc'
-        'image address address address';
-      &_image > div {
-        height: 100%;
-      }
+  .card_content {
+    display: grid;
+    gap: 0 10px;
+    grid-template-columns: 2fr 1fr 5px 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+      'image price . square'
+      'image bedroom . wc'
+      'image address address address';
+
+    &_image>div {
+      height: 100%;
+    }
+
+    span {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .card-content_thumb {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      height: fit-content;
+      display: flex;
+      gap: 0 4px;
+      align-items: center;
+
       span {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 13px;
-        width: 100%;
-        overflow: hidden;
-      }
-      .card-content_thumb {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        height: fit-content;
-        display: flex;
-        gap: 0 4px;
-        align-items: center;
-        span {
-          width: fit-content;
-        }
+        width: fit-content;
       }
     }
   }

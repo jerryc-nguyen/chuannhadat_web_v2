@@ -1,6 +1,5 @@
 'use client';
 import { useAuth } from '@common/auth/AuthContext';
-import React from 'react';
 
 import { Button } from '@components/ui/button';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
@@ -16,7 +15,6 @@ type MainNavRightProps = {
 
 export default function MainNavRight({ isLogged }: MainNavRightProps) {
   const { currentUser } = useAuth();
-
   const { openModal, closeModal } = useModals();
   const showModalLoginAndRegister = () => {
     openModal({

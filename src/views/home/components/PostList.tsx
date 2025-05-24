@@ -13,7 +13,7 @@ export default function PostList({ isShowAuthor = true, dataPostList, className 
   return (
     <>
       <div className={styles.post_list_wrapper}>
-        <div className={cn('post_list', className)}>
+        <div className={cn(styles.post_list, className)}>
           {dataPostList.map((product) => {
             return <ProductCard isShowAuthor={isShowAuthor} product={product} key={product?.id} />;
           })}

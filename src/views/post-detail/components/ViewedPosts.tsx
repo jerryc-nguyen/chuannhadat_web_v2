@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
@@ -22,8 +22,10 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const isScrollNext = useRef<boolean>(false);
 
-  const { listProduct, isFetching, pageNumber, setPageNumber, pagination } =
-    useViewedPosts({ productUid, defaultPageSize });
+  const { listProduct, isFetching, pageNumber, setPageNumber, pagination } = useViewedPosts({
+    productUid,
+    defaultPageSize,
+  });
 
   useCleanupEffect(
     (helpers) => {
@@ -92,9 +94,7 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
             variant="outline"
             size="icon"
             className="flex items-center justify-center gap-x-2"
-            disabled={
-              isFetching || selectedIndex + defaultPageSize === pagination?.total_count
-            }
+            disabled={isFetching || selectedIndex + defaultPageSize === pagination?.total_count}
             onClick={handleScrollNext}
           >
             {isFetching && pageNumber !== 1 ? (
@@ -119,13 +119,17 @@ const ViewedPosts: React.FC<ViewedPostsProps> = ({ productUid, isInsideModal = f
               className={cn('', isInsideModal ? 'lg:basis-1/2' : 'md:basis-1/2 lg:basis-1/3')}
               key={item?.product?.id || index}
             >
-              <ProductCard isShowVideoYoutube={false} isShowAuthor={false} product={item?.product} />
-            </CarouselItem >
+              <ProductCard
+                isShowVideoYoutube={false}
+                isShowAuthor={false}
+                product={item?.product}
+              />
+            </CarouselItem>
           ))}
-        </CarouselContent >
-      </Carousel >
-    </section >
+        </CarouselContent>
+      </Carousel>
+    </section>
   );
 };
 
-export default memo(ViewedPosts)
+export default memo(ViewedPosts);

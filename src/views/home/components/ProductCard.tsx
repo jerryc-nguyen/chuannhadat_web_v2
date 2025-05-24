@@ -57,7 +57,7 @@ export default function ProductCard({
           <CardAuthor product={product} />
         </CardHeader>
       )}
-      <CardContent className="card-content flex-center relative">
+      <CardContent className={cn(styles.card_content, 'flex-center relative')}>
         <YoutubePlayerAction
           youtube_url={product.youtube_url}
           isDisplay={Boolean(product.youtube_url && isShowVideoYoutube)}

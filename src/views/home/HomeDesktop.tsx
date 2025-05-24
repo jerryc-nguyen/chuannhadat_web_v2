@@ -1,16 +1,16 @@
 'use client';
-import PostControls from '@views/home/components/PostControls';
-import PostList from '@views/home/components/PostList';
+import empty_city from '@assets/images/empty-city.png';
+import useQueryPosts from '@hooks/useQueryPosts';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { listFilterDesktop } from '@mobile/filter_bds/constants';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import PostControls from '@views/home/components/PostControls';
+import PostList from '@views/home/components/PostList';
+import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { PostPagination } from './components/PostPagination';
-import useQueryPosts from '@hooks/useQueryPosts';
 import { ListTopAuthor } from './components/ListTopAuthor';
-import empty_city from '@assets/images/empty-city.png';
-import Image from 'next/image';
+import { PostPagination } from './components/PostPagination';
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 
 const HomeDesktop: React.FC = () => {
@@ -19,11 +19,11 @@ const HomeDesktop: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
+  const currentPage = searchParams?.get( 'page' ) ? parseInt( searchParams.get( 'page' ) as string ) : 1;
 
   const { buildFilterParams } = useFilterState();
 
-  let filterParams = buildFilterParams({ withLocal: false });
+  let filterParams = buildFilterParams( { withLocal: false } );
 
   filterParams = {
     ...filterParams,
@@ -32,8 +32,8 @@ const HomeDesktop: React.FC = () => {
     page: currentPage,
   };
 
-  const { products, data } = useQueryPosts(filterParams);
-  useLoadMissingAuthors(data);
+  const { products, data } = useQueryPosts( filterParams );
+  useLoadMissingAuthors( data );
 
   const EmptyPost = () => {
     return (
@@ -64,10 +64,10 @@ const HomeDesktop: React.FC = () => {
       <PostPagination
         total_pages={data.pagination.total_pages}
         currentPage={currentPage}
-        onPageChange={(page) => {
+        onPageChange={( page ) => {
           const selected = page.selected + 1;
           // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
-          router.push(pathname + '?page=' + selected);
+          router.push( pathname + '?page=' + selected );
         }}
         emptyComponent={EmptyPost}
       />

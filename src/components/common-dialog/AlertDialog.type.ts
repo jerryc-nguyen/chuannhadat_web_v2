@@ -4,7 +4,7 @@ export interface ICommonAlertDialogProps {
   isOpen: boolean;
   handleOpenChange: (open: boolean) => void;
   alertTrigger?: () => React.ReactNode;
-  title: string | JSX.Element;
+  title: string | React.ReactElement;
   description: string | React.ReactNode;
   onRenderFooter?: React.ReactNode;
   handleCancel?: () => void;

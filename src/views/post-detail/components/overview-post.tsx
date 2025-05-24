@@ -76,11 +76,11 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   const renderClassImages = (length: number) => {
     switch (length) {
       case 1:
-        return 'grid-item';
+        return styles['grid-item'];
       case 2:
-        return 'grid-two-items';
+        return styles['grid-two-items'];
       default:
-        return 'grid-multiple-items';
+        return styles['grid-multiple-items'];
     }
   };
   const handleSharePost = async () => {
@@ -107,7 +107,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   };
   const renderLoadingOverview = () => (
     <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
-      <div className={cn('list-image overflow-hidden rounded-lg', renderClassImages(3))}>
+      <div className={cn(styles.list_image, 'overflow-hidden rounded-lg', renderClassImages(3))}>
         {[1, 2, 3].map((item) => (
           <div
             key={item}
@@ -168,7 +168,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
     <div className={cn(styles.overview_post, 'relative rounded-lg border bg-white p-6')}>
       <div
         className={cn(
-          'list-image overflow-hidden rounded-lg',
+          styles.list_image,
+          'overflow-hidden rounded-lg',
           renderClassImages(data?.images.length),
         )}
       >
@@ -177,7 +178,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
             key={item.id}
             className={cn(
               'image-item border-1 relative flex cursor-pointer items-center justify-center overflow-hidden shadow-md',
-              data?.images.length > 3 && index === 2 ? 'bg-overlay' : '',
+              data?.images.length > 3 && index === 2 ? styles['bg-overlay'] : '',
             )}
           >
             <BlurImage

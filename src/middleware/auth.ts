@@ -1,11 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { getCookieServer } from '@app/action';
 import { API_TOKEN_CIENT } from '@common/auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 // List of paths that require authentication
-export const PROTECTED_PATHS = [
-  '/dashboard'
-];
+export const PROTECTED_PATHS = ['/dashboard'];
 
 // List of paths that should be accessible only to non-authenticated users
 export const PUBLIC_ONLY_PATHS = [
@@ -26,7 +24,7 @@ export function handleAuthRedirects(req: NextRequest): NextResponse | null {
   const isPublicOnlyRoute = PUBLIC_ONLY_PATHS.some((prefix) => pathname.startsWith(prefix));
 
   // Get token from cookie for check authenticated
-  const token = cookies().get(API_TOKEN_CIENT)?.value;
+  const token = getCookieServer(API_TOKEN_CIENT);
   const isAuthenticated = !!token;
 
   // Handle authentication redirects
@@ -44,4 +42,4 @@ export function handleAuthRedirects(req: NextRequest): NextResponse | null {
 
   // No redirect needed
   return null;
-} 
+}

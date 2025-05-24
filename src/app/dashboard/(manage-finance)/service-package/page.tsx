@@ -1,28 +1,28 @@
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
+import ServicePackageViewMobile from '@mobile/main-financial-management/service-package';
 // Next Imports
-import ServicePackageViewDesktop from "@views/dashboard/main-financial-management/service-package";
-import ServicePackageViewMobile from "@mobile/main-financial-management/service-package";
-import { useGetUserAgentInfo } from "@hooks/useGetUserAgentInfo";
-import type { Metadata } from "next";
+import ServicePackageViewDesktop from '@views/dashboard/main-financial-management/service-package';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: "Mua gói dịch vụ",
-    description: "Chuẩn Nhà Đất"
-}
+  title: 'Mua gói dịch vụ',
+  description: 'Chuẩn Nhà Đất',
+};
 
-const Page = () => {
-    const { isMobile } = useGetUserAgentInfo();
-  
-    return (
-      <>
-        {isMobile ? (
-          <div className="c-mobileApp mx-4">
-            <ServicePackageViewMobile />
-          </div>
-        ) : (
-          <ServicePackageViewDesktop />
-        )}
-      </>
-    );
-  };
+const Page = async () => {
+  const { isMobile } = await getUserAgentInfo();
 
-export default Page
+  return (
+    <>
+      {isMobile ? (
+        <div className="c-mobileApp mx-4">
+          <ServicePackageViewMobile />
+        </div>
+      ) : (
+        <ServicePackageViewDesktop />
+      )}
+    </>
+  );
+};
+
+export default Page;

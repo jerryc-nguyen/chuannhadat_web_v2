@@ -2,6 +2,7 @@ export type TPhoto = {
   id: number;
   url: string;
 };
+export type Params = Promise<{ slug: string[] }>;
 
 /* eslint-disable no-unused-vars */
 export type Range = {
