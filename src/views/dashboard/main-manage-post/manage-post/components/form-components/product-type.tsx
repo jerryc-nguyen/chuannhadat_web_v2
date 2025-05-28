@@ -60,6 +60,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                     onChange={field.onChange}
                     options={businessTypeOptions}
                     value={field.value}
+                    showClear={true}
                   />
 
                   <FormMessage />
@@ -79,6 +80,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                     onChange={field.onChange}
                     options={categoryTypeOptions}
                     value={field.value}
+                    showClear={true}
                   />
                   <FormMessage />
                 </FormItem>

@@ -5,8 +5,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CircleX } from 'lucide-react';
-import { MouseEventHandler } from 'react';
+import { X } from 'lucide-react';
+import { MouseEvent } from 'react';
+import { cn } from '@common/utils';
+import { Button } from '@components/ui/button';
 
 interface CommonSelectProps {
   options: { text: string; value: string }[];
@@ -17,19 +19,33 @@ interface CommonSelectProps {
 }
 
 export function CommonSelect({ options, onChange, value, placeholder, showClear }: CommonSelectProps) {
-  const onClickClear: MouseEventHandler<SVGSVGElement> = (e) => {
+  const onClickClear = (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     onChange('');
   };
 
+  const selectedOption = options.find(option => option.value === value);
+
   return (
     <Select onValueChange={onChange} value={value} defaultValue={value}>
-      <div className="flex items-center">
-        <SelectTrigger className="flex-1">
-          <SelectValue defaultValue={value} placeholder={placeholder} />
+      <div className="relative">
+        <SelectTrigger className="w-full">
+          <span className={cn("truncate", !value && "text-muted-foreground")}>
+            {selectedOption?.text || placeholder || 'Vui lòng chọn'}
+          </span>
         </SelectTrigger>
-        {!!value && showClear && <CircleX onClick={onClickClear} className='mx-4 cursor-pointer' />}
+        {!!value && showClear && (
+          <Button
+            variant="outline"
+            onClick={onClickClear}
+            className="h-6 w-6 p-0 rounded-full border border-muted hover:border-red-500 hover:bg-red-50 transition-colors absolute right-8 top-1/2 -translate-y-1/2"
+            type="button"
+          >
+            <X className="h-4 w-4 text-muted-foreground hover:text-red-500" />
+            <span className="sr-only">Clear</span>
+          </Button>
+        )}
       </div>
       <SelectContent>
         {options.map((item, index) => (
