@@ -30,7 +30,6 @@ const DropdownSelectField = ({
   return (
     <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
       <PopoverTrigger asChild>
-
         <Button
           variant="outline"
           role="combobox"
