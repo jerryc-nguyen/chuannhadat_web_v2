@@ -15,6 +15,7 @@ export type OptionForSelect = {
   text?: string;
   range?: Range;
   params?: Record<string, A>;
+  data?: Record<string, A>;
   count?: number;
   long_text?: string;
   description?: string;

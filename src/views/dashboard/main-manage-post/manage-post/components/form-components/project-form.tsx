@@ -29,9 +29,16 @@ const ProjectForm: React.FC<any> = ({ form }) => {
             render={({ field }) => {
               const selectedOption = form.watch('project') as OptionForSelect | undefined;
 
-              const handleSelect = (option: OptionForSelect) => {
+              const handleSelect = async (option: OptionForSelect) => {
+                console.log('option', option);
+                // Set project values
                 form.setValue('project_id', option.value);
                 form.setValue('project', option);
+                form.setValue('city_id', option.data?.city_id || undefined);
+                form.setValue('district_id', option.data?.district_id || undefined);
+                form.setValue('ward_id', option.data?.ward_id || undefined);
+                form.setValue('street_id', option.data?.street_id || undefined);
+                form.setValue('full_address', option.data?.address);
                 setOpenDropdown(false);
               };
 
