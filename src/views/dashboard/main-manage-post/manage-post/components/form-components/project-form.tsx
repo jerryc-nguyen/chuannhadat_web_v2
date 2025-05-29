@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, ChevronsUpDown } from 'lucide-react';
+import { Building, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { OptionForSelect } from '@models';
 import { FormField, FormItem } from '@components/ui/form';
@@ -14,15 +14,16 @@ import { cn } from '@common/utils';
 
 const ProjectForm: React.FC<any> = ({ form }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const project = form.watch('project');
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-md flex gap-2">
-          <MapPin /> Dự án
+          <Building /> Dự án
         </CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-6">
+      <CardContent className="grid gap-2">
         <div style={{ width: '300px' }}>
           <FormField
             control={form.control}
@@ -31,8 +32,6 @@ const ProjectForm: React.FC<any> = ({ form }) => {
               const selectedOption = form.watch('project') as OptionForSelect | undefined;
 
               const handleSelect = async (option: OptionForSelect) => {
-                console.log('option', option);
-                // Set project values
                 form.setValue('project_id', option.value);
                 form.setValue('project', option);
                 form.setValue('city_id', option.data?.city_id || undefined);
@@ -59,7 +58,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                         className="w-full justify-between pr-2"
                       >
                         <span className={cn("truncate", !selectedOption && "text-muted-foreground")}>
-                          {selectedOption?.text || 'Tìm dự án'}
+                          {selectedOption?.text || 'Tìm nhanh dự án'}
                         </span>
                         <div className="flex items-center gap-1">
                           {selectedOption && (
@@ -86,6 +85,10 @@ const ProjectForm: React.FC<any> = ({ form }) => {
             }}
           />
         </div>
+
+        {project && (<div>
+          Địa chỉ: <span className="font-bold">{project.data?.address || 'Chưa cập nhật'}</span>
+        </div>)}
       </CardContent>
     </Card>
   );

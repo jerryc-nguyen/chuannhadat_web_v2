@@ -4,7 +4,7 @@ import OptionPicker from "@mobile/ui/OptionPicker";
 import { OptionForSelect } from "@models";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { LuChevronsUpDown } from "react-icons/lu";
-import { X } from "lucide-react";
+import { ClearButton } from "@components/ui/clear-button";
 import { cn } from "@common/utils";
 
 export interface TDropdownSelectFieldProps {
@@ -52,15 +52,7 @@ const DropdownSelectField = ({
           </span>
           <div className="flex items-center gap-1">
             {selectedOption?.value && showClear && (
-              <Button
-                variant="outline"
-                onClick={clearSelection}
-                className="h-6 w-6 p-0 rounded-full border border-muted hover:border-red-500 hover:bg-red-50 transition-colors"
-                type="button"
-              >
-                <X className="h-4 w-4 text-muted-foreground hover:text-red-500" />
-                <span className="sr-only">Clear</span>
-              </Button>
+              <ClearButton onClick={clearSelection} />
             )}
             {!selectedOption?.value && <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
           </div>
