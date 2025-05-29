@@ -9,6 +9,7 @@ import { Label } from '@components/ui/label';
 import { OptionForSelect } from '@models';
 import { IPostForm } from '../../../types';
 import { readMoney } from '@common/priceHelpers';
+import { isLandProperty } from '@common/productHelpers';
 import { RoundedOptionsNumberInput } from '../../components/form-components/fields/rounded-options-number-input';
 import PriceOptions from '../PriceOptions';
 import {
@@ -34,11 +35,8 @@ export default function BasicInfoFields({
   const business_type = form.watch('business_type');
   const category_type = form.watch('category_type');
 
-  // Check if it's land or land project
-  const isLand = category_type === 'dat' || category_type === 'dat_nen_du_an';
-
-  // Check if it's an apartment
-  const isApartment = category_type === 'can_ho_chung_cu';
+  // Check if it's land or land project using the helper function
+  const isLand = isLandProperty(category_type);
 
   const businessTypeControl = {
     onSelect: (option: OptionForSelect) => {

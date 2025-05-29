@@ -7,6 +7,7 @@ import React from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 import { directionOptions, furnitureTypeOptions, phapLyTypeOptions } from '../../constant';
 import { CommonSelect } from '../CommonSelect';
+import { isLandProperty, isHouseProperty, isApartmentProperty } from '@common/productHelpers';
 
 const ProductInfoForm: React.FC<A> = ({ form }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,18 +23,10 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
   // Get selected property type
   const categoryType = form.watch('category_type');
 
-  // Check if it's land or land project
-  const isLand = categoryType === 'dat' || categoryType === 'dat_nen_du_an';
-
-  // Check if it's a house
-  const isHouse = categoryType === 'nha_rieng' ||
-    categoryType === 'nha_mat_pho' ||
-    categoryType === 'biet_thu_lien_ke' ||
-    categoryType == 'nha_tro_phong_tro' ||
-    categoryType == 'van_phong' || categoryType == 'cua_hang_kiot'
-
-  // Check if it's an apartment
-  const isApartment = categoryType === 'can_ho_chung_cu';
+  // Check property types using helper functions
+  const isLand = isLandProperty(categoryType);
+  const isHouse = isHouseProperty(categoryType);
+  const isApartment = isApartmentProperty(categoryType);
 
   return (
     <Card>

@@ -9,6 +9,7 @@ import { businessTypeOptions, categoryTypeOptions } from '../../constant';
 import { CommonSelect } from '../CommonSelect';
 import { PriceAutoComplete } from './fields/price-autocomplete';
 import { buildOptionsPrice, maskNumber, readMoney } from '@common/priceHelpers';
+import { isLandProperty } from '@common/productHelpers';
 import { Input } from '@components/ui/input';
 import { RoundedOptionsNumberInput } from './fields/rounded-options-number-input';
 
@@ -21,8 +22,8 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
   const businessType = form.watch('business_type');
   const categoryType = form.watch('category_type');
 
-  // Check if it's land or land project
-  const isLand = categoryType === 'dat' || categoryType === 'dat_nen_du_an';
+  // Check if it's land or land project using the helper function
+  const isLand = isLandProperty(categoryType);
 
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // Regular expression to allow only numbers, with one optional comma or period, not at the beginning

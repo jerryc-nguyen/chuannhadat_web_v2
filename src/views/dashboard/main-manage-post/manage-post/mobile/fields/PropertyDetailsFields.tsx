@@ -7,6 +7,7 @@ import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
 import { OptionForSelect } from '@models';
 import { IPostForm } from '../../../types';
+import { isLandProperty, isHouseProperty, isApartmentProperty } from '@common/productHelpers';
 import { RoundedOptionsNumberInput } from '../../components/form-components/fields/rounded-options-number-input';
 import {
   roomsOptionsForCreate,
@@ -31,19 +32,10 @@ export default function PropertyDetailsFields({
 }: PropertyDetailsFieldsProps) {
   const category_type = form.watch('category_type');
 
-  // Check if it's land or land project
-  const isLand = category_type === 'dat' || category_type === 'dat_nen_du_an';
-
-  // Check if it's a house
-  const isHouse = category_type === 'nha_rieng' ||
-    category_type === 'nha_mat_pho' ||
-    category_type === 'biet_thu_lien_ke' ||
-    category_type === 'nha_tro_phong_tro' ||
-    category_type === 'van_phong' ||
-    category_type === 'cua_hang_kiot';
-
-  // Check if it's an apartment
-  const isApartment = category_type === 'can_ho_chung_cu';
+  // Use helper functions for property type checking
+  const isLand = isLandProperty(category_type);
+  const isHouse = isHouseProperty(category_type);
+  const isApartment = isApartmentProperty(category_type);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
