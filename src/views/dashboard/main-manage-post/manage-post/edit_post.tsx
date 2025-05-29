@@ -51,7 +51,6 @@ const EditPost = ({ productUid }: { productUid: string }) => {
   });
 
   const onSubmit = async (data: A) => {
-    console.log('onSubmit', data);
     if (!product) {
       toast.error('Tin đăng đã bị xoá');
       return;

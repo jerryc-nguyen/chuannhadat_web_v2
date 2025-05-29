@@ -30,28 +30,24 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   // Update component state when form values change
   useEffect(() => {
     if (watchedCity) {
-      console.log('City changed in form:', watchedCity);
       setCurCity({ value: watchedCity, text: '' });
     }
   }, [watchedCity]);
 
   useEffect(() => {
     if (watchedDistrict) {
-      console.log('District changed in form:', watchedDistrict);
       setCurDistrict({ value: watchedDistrict, text: '' });
     }
   }, [watchedDistrict]);
 
   useEffect(() => {
     if (watchedWard) {
-      console.log('Ward changed in form:', watchedWard);
       setCurWard({ value: watchedWard, text: '' });
     }
   }, [watchedWard]);
 
   useEffect(() => {
     if (watchedStreet) {
-      console.log('Street changed in form:', watchedStreet);
       setCurStreet({ value: watchedStreet, text: '' });
     }
   }, [watchedStreet]);

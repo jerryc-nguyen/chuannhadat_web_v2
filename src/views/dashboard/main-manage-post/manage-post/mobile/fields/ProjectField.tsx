@@ -76,7 +76,7 @@ export default function ProjectField({
 
   return (
     <>
-      <CardTitle className="text-md flex gap-2 px-4 pb-2">Địa chỉ</CardTitle>
+      <CardTitle className="text-md flex gap-2 px-4 pb-2">Dự án</CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
         <ListItem
           link
