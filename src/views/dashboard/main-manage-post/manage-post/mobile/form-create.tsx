@@ -48,9 +48,7 @@ export const FormMobile: React.FC = () => {
   const { openModal, closeModal } = useModals();
 
   const form = useFormContext<IPostForm>();
-  const [curProject, setCurProject] = useState<OptionForSelect | undefined>(
-    form.watch('project_id') ? { value: form.watch('project_id'), text: "" } : undefined
-  );
+  const [curProject, setCurProject] = useState<OptionForSelect | undefined>(form.watch('project'));
 
   // Track location state
   const [cityOption, setCityOption] = useState<OptionForSelect | undefined>();
