@@ -53,7 +53,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                 placeholder="Chọn giấy tờ pháp lý"
                 onChange={field.onChange}
                 value={field.value}
-                options={[{ text: 'Không xác định', value: '__default' }, ...phapLyTypeOptions]}
+                options={phapLyTypeOptions}
                 showClear
               />
               <FormMessage />
@@ -156,7 +156,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                   <CommonSelect
                     onChange={field.onChange}
                     value={field.value}
-                    options={[{ text: 'Không xác định', value: '__default' }, ...directionOptions]}
+                    options={directionOptions}
                     showClear
                   />
                   <FormMessage />
@@ -174,10 +174,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
                     <CommonSelect
                       onChange={field.onChange}
                       value={field.value}
-                      options={[
-                        { text: 'Không xác định', value: '__default' },
-                        ...furnitureTypeOptions,
-                      ]}
+                      options={furnitureTypeOptions}
                       showClear
                     />
                     <FormMessage />
