@@ -13,7 +13,7 @@ import { FormItem, FormMessage } from '@/components/ui/form';
 import { readMoney } from '@common/priceHelpers';
 import { Label } from '@components/ui/label';
 import LocationsPicker from '@mobile/ui/LocationsPicker';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   businessTypeOptions,
@@ -37,6 +37,7 @@ import { OptionForSelect } from '@models';
 import PriceOptions from './PriceOptions';
 import ListItem from '@components/konsta/ListItem';
 import { ChevronRightIcon } from 'lucide-react';
+import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 
 /**
  * TODO: Split file to smaller components
@@ -47,9 +48,49 @@ export const FormMobile: React.FC = () => {
   const { openModal, closeModal } = useModals();
 
   const form = useFormContext<IPostForm>();
+  const [curProject, setCurProject] = useState<OptionForSelect | undefined>(
+    form.watch('project_id') ? { value: form.watch('project_id'), text: "" } : undefined
+  );
+
+  // Track location state
+  const [cityOption, setCityOption] = useState<OptionForSelect | undefined>();
+  const [districtOption, setDistrictOption] = useState<OptionForSelect | undefined>();
+  const [wardOption, setWardOption] = useState<OptionForSelect | undefined>();
+  const [streetOption, setStreetOption] = useState<OptionForSelect | undefined>();
+
+  // Create a key for LocationsPicker to force rebuild
+  const [locationPickerKey, setLocationPickerKey] = useState(0);
 
   const business_type = form.watch('business_type');
   const category_type = form.watch('category_type');
+
+  // Watch for changes in location IDs
+  const city_id = form.watch('city_id');
+  const district_id = form.watch('district_id');
+  const ward_id = form.watch('ward_id');
+  const street_id = form.watch('street_id');
+
+  // Update locationPickerKey when any location ID changes
+  useEffect(() => {
+    setLocationPickerKey(prev => prev + 1);
+
+    // Reset the options when IDs change to ensure proper display
+    if (city_id && !cityOption?.value) {
+      setCityOption({ value: city_id, text: '' });
+    }
+
+    if (district_id && !districtOption?.value) {
+      setDistrictOption({ value: district_id, text: '' });
+    }
+
+    if (ward_id && !wardOption?.value) {
+      setWardOption({ value: ward_id, text: '' });
+    }
+
+    if (street_id && !streetOption?.value) {
+      setStreetOption({ value: street_id, text: '' });
+    }
+  }, [city_id, district_id, ward_id, street_id]);
 
   // Check if it's land or land project
   const isLand = category_type === 'dat' || category_type === 'dat_nen_du_an';
@@ -88,15 +129,89 @@ export const FormMobile: React.FC = () => {
     form.setValue('full_address', newAddress);
   };
 
-  const city_id = form.watch('city_id');
-  const district_id = form.watch('district_id');
-  const ward_id = form.watch('ward_id');
-  const street_id = form.watch('street_id');
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeFieldNumber = (field: ControllerRenderProps<any>, value: string) => {
     // console.log('field', field, value);
     field.onChange(value); // Update the value only if it matches the regex
+  };
+
+  const handleSelectProject = (option: OptionForSelect) => {
+    closeModal();
+    setCurProject(option);
+    // Set project values in form
+    if (option.value !== undefined) {
+      form.setValue('project_id', option.value);
+    }
+    // Set additional data if available
+    if (option.data) {
+      // Update form values
+      form.setValue('city_id', option.data?.city_id || '');
+      form.setValue('district_id', option.data?.district_id || '');
+      form.setValue('ward_id', option.data?.ward_id || '');
+      form.setValue('street_id', option.data?.street_id || '');
+      form.setValue('full_address', option.data?.address || '');
+
+      // Update location options for display
+      if (option.data?.city_id) {
+        setCityOption({ value: option.data.city_id, text: option.data.city_name || '' });
+      }
+
+      if (option.data?.district_id) {
+        setDistrictOption({ value: option.data.district_id, text: option.data.district_name || '' });
+      }
+
+      if (option.data?.ward_id) {
+        setWardOption({ value: option.data.ward_id, text: option.data.ward_name || '' });
+      }
+
+      if (option.data?.street_id) {
+        setStreetOption({ value: option.data.street_id, text: option.data.street_name || '' });
+      }
+    }
+  };
+
+  const handleClearProject = () => {
+    setCurProject(undefined);
+    form.setValue('project_id', '');
+  };
+
+  const handleChangeCity = (city: OptionForSelect | undefined) => {
+    setCityOption(city);
+    form.setValue('city_id', city?.value || '');
+    // Clear dependent fields
+    setDistrictOption(undefined);
+    setWardOption(undefined);
+    setStreetOption(undefined);
+    form.setValue('district_id', '');
+    form.setValue('ward_id', '');
+    form.setValue('street_id', '');
+    closeModal();
+  };
+
+  const handleChangeDistrict = (district: OptionForSelect | undefined) => {
+    setDistrictOption(district);
+    form.setValue('district_id', district?.value || '');
+    // Clear dependent fields
+    setWardOption(undefined);
+    setStreetOption(undefined);
+    form.setValue('ward_id', '');
+    form.setValue('street_id', '');
+    closeModal();
+  };
+
+  const handleChangeWard = (ward: OptionForSelect | undefined) => {
+    setWardOption(ward);
+    form.setValue('ward_id', ward?.value || '');
+    // Clear dependent fields
+    setStreetOption(undefined);
+    form.setValue('street_id', '');
+    closeModal();
+  };
+
+  const handleChangeStreet = (street: OptionForSelect | undefined) => {
+    setStreetOption(street);
+    form.setValue('street_id', street?.value || '');
+    closeModal();
   };
 
   return (
@@ -255,28 +370,41 @@ export const FormMobile: React.FC = () => {
 
       <CardTitle className="text-md flex gap-2 px-4 pb-2">Địa chỉ</CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
+        <ListItem
+          link
+          title="Dự án"
+          after={curProject?.text}
+          value={curProject?.value}
+          onClear={handleClearProject}
+          onClick={() => {
+            openModal({
+              name: 'project',
+              title: 'Dự án',
+              content: (
+                <ProjectPicker
+                  value={curProject}
+                  onSelect={handleSelectProject}
+                  extraParams={{ scope: 'dashboard' }}
+                />
+              ),
+              maxHeightPercent: 0.6,
+            });
+          }}
+        />
+      </List>
+      <CardTitle className="text-md flex gap-2 px-4 pb-2">Địa chỉ</CardTitle>
+      <List strongIos outlineIos className="mt-0 rounded-lg">
         <LocationsPicker
+          key={locationPickerKey}
           openModal={openModal}
-          city={{ text: '', value: city_id }}
-          district={{ text: '', value: district_id }}
-          ward={{ text: '', value: ward_id }}
-          street={{ text: '', value: street_id }}
-          onChangeCity={(city) => {
-            form.setValue('city_id', city?.value);
-            closeModal();
-          }}
-          onChangeDistrict={(district) => {
-            form.setValue('district_id', district?.value);
-            closeModal();
-          }}
-          onChangeWard={(ward) => {
-            form.setValue('ward_id', ward?.value);
-            closeModal();
-          }}
-          onChangeStreet={(street) => {
-            form.setValue('street_id', street?.value);
-            closeModal();
-          }}
+          city={cityOption}
+          district={districtOption}
+          ward={wardOption}
+          street={streetOption}
+          onChangeCity={handleChangeCity}
+          onChangeDistrict={handleChangeDistrict}
+          onChangeWard={handleChangeWard}
+          onChangeStreet={handleChangeStreet}
           withStreet={true}
           onChangedFullAddress={onChangedFullAddress}
         />

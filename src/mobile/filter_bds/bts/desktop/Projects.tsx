@@ -6,7 +6,7 @@ import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 export default function Projects() {
   const { getLocalFieldValue, setLocalFieldValue } = useFilterState();
   const value = getLocalFieldValue(FilterFieldName.Project);
-  const { autocompleteProjectParams } = useMainContentNavigator();
+  const { extraParams } = useMainContentNavigator();
 
   const onSelect = (option: OptionForSelect) => {
     setLocalFieldValue(FilterFieldName.Project, option);
@@ -16,7 +16,7 @@ export default function Projects() {
     <ProjectPicker
       value={value}
       onSelect={onSelect}
-      autocompleteProjectParams={autocompleteProjectParams}
+      extraParams={extraParams}
     />
   );
 }
