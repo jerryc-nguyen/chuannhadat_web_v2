@@ -1,14 +1,14 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, X } from 'lucide-react';
+import { MapPin, X, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { OptionForSelect } from '@models';
 import { FormField, FormItem } from '@components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { Button } from '@components/ui/button';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
-import { LuChevronsUpDown } from 'react-icons/lu';
+
 import { cn } from '@common/utils';
 
 const ProjectForm: React.FC<any> = ({ form }) => {
@@ -73,7 +73,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                               <span className="sr-only">Clear</span>
                             </Button>
                           )}
-                          <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+                          {!selectedOption && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
                         </div>
                       </Button>
                     </PopoverTrigger>

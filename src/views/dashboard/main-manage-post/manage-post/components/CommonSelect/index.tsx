@@ -16,9 +16,17 @@ interface CommonSelectProps {
   value: string;
   placeholder?: string;
   showClear?: boolean;
+  showIconWhenSelected?: boolean;
 }
 
-export function CommonSelect({ options, onChange, value, placeholder, showClear }: CommonSelectProps) {
+export function CommonSelect({
+  options,
+  onChange,
+  value,
+  placeholder,
+  showClear,
+  showIconWhenSelected = false
+}: CommonSelectProps) {
   const onClickClear = (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -26,11 +34,13 @@ export function CommonSelect({ options, onChange, value, placeholder, showClear 
   };
 
   const selectedOption = options.find(option => option.value === value);
+  // Show icon when no value is selected or showIconWhenSelected is true
+  const showIcon = !value || showIconWhenSelected;
 
   return (
     <Select onValueChange={onChange} value={value} defaultValue={value}>
       <div className="relative">
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" showIcon={showIcon}>
           <span className={cn("truncate", !value && "text-muted-foreground")}>
             {selectedOption?.text || placeholder || 'Vui lòng chọn'}
           </span>
@@ -39,7 +49,7 @@ export function CommonSelect({ options, onChange, value, placeholder, showClear 
           <Button
             variant="outline"
             onClick={onClickClear}
-            className="h-6 w-6 p-0 rounded-full border border-muted hover:border-red-500 hover:bg-red-50 transition-colors absolute right-8 top-1/2 -translate-y-1/2"
+            className="h-6 w-6 p-0 rounded-full border border-muted hover:border-red-500 hover:bg-red-50 transition-colors absolute right-3 top-1/2 -translate-y-1/2"
             type="button"
           >
             <X className="h-4 w-4 text-muted-foreground hover:text-red-500" />

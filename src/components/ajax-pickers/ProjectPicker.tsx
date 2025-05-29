@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { OptionForSelect } from '@models';
 import { services } from '@api/services';
 import CmdkOptionPicker from '@mobile/ui/CmdkOptionPicker';
-import { defaultProjects } from '@mobile/filter_bds/constants';
 
 interface ProjectPickerProps {
   value?: OptionForSelect;
@@ -39,7 +38,7 @@ export default function ProjectPicker({
     <CmdkOptionPicker
       searchable={true}
       value={value}
-      options={response?.data?.length > 0 ? response?.data : defaultProjects}
+      options={response?.data}
       onSelect={onSelect}
       emptyMessage={emptyMessage}
       searchPlaceHolder={'Tìm dự án'}
