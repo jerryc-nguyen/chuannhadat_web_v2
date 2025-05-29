@@ -1,4 +1,4 @@
-import { TPhoto } from '@models';
+import { OptionForSelect, TPhoto } from '@models';
 
 export interface IPayloadCreateSchedule {
   hour: string;
@@ -34,6 +34,7 @@ export interface IPostForm {
   youtube_url?: string;
   user_agent?: string;
   create_source?: string;
+  project?: OptionForSelect;
 }
 
 export interface IManageProductDetail {

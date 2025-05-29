@@ -4,45 +4,99 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MapPin } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { OptionForSelect } from '@models';
 import LocationsPickerFormV2 from '@views/components/form-fields/LocationsPickerFormV2';
 import { FormField, FormItem, FormLabel } from '@components/ui/form';
+import { useWatch } from 'react-hook-form';
 
 const LocationFormV2: React.FC<A> = ({ form }) => {
+  // Initialize state from form values 
   const { city_id, district_id, ward_id, street_id } = form.getValues();
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>({ value: city_id, text: '' });
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>({ value: district_id, text: '' });
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>({ value: ward_id, text: '' });
   const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>({ value: street_id, text: '' });
-
   const [fullAddress, setFullAddress] = useState<string>(form.getValues('full_address'));
+
+  // Watch form values using react-hook-form's useWatch
+  const watchedCity = useWatch({ control: form.control, name: 'city_id' });
+  const watchedDistrict = useWatch({ control: form.control, name: 'district_id' });
+  const watchedWard = useWatch({ control: form.control, name: 'ward_id' });
+  const watchedStreet = useWatch({ control: form.control, name: 'street_id' });
+  const watchedFullAddress = useWatch({ control: form.control, name: 'full_address' });
+
+  // Update component state when form values change
+  useEffect(() => {
+    if (watchedCity) {
+      setCurCity({ value: watchedCity, text: '' });
+    }
+  }, [watchedCity]);
+
+  useEffect(() => {
+    if (watchedDistrict) {
+      setCurDistrict({ value: watchedDistrict, text: '' });
+    }
+  }, [watchedDistrict]);
+
+  useEffect(() => {
+    if (watchedWard) {
+      setCurWard({ value: watchedWard, text: '' });
+    }
+  }, [watchedWard]);
+
+  useEffect(() => {
+    if (watchedStreet) {
+      setCurStreet({ value: watchedStreet, text: '' });
+    }
+  }, [watchedStreet]);
+
+  useEffect(() => {
+    if (watchedFullAddress && watchedFullAddress !== fullAddress) {
+      setFullAddress(watchedFullAddress);
+    }
+  }, [watchedFullAddress]);
 
   const onSelectCity = (city?: OptionForSelect) => {
     setCurCity(city);
+    // Update form values
+    form.setValue('city_id', city?.value);
+    form.setValue('city', city);
   }
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     setCurDistrict(district);
+    // Update form values
+    form.setValue('district_id', district?.value);
+    form.setValue('district', district);
   }
 
   const onSelectWard = (ward?: OptionForSelect) => {
     setCurWard(ward);
+    // Update form values
+    form.setValue('ward_id', ward?.value);
+    form.setValue('ward', ward);
   }
 
   const onSelectStreet = (street?: OptionForSelect) => {
-    setCurStreet(street)
+    setCurStreet(street);
+    // Update form values
+    form.setValue('street_id', street?.value);
+    form.setValue('street', street);
   }
 
   const onChangedFullAddress = (address: string) => {
-    setFullAddress(address)
-    form.setValue('full_address', address)
+    setFullAddress(address);
+    form.setValue('full_address', address);
   }
 
   const mapSrc = useMemo(() => {
     return `https://maps.google.com/maps?&q=${fullAddress}&output=embed`
   }, [fullAddress])
+
+  // Force component to rerender when props change
+  const key = `${curCity?.value || ''}-${curDistrict?.value || ''}-${curWard?.value || ''}-${curStreet?.value || ''}`;
 
   return (
     <Card>
@@ -53,6 +107,7 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
       </CardHeader>
       <CardContent className="grid gap-6">
         <LocationsPickerFormV2
+          key={key}
           form={form}
           city={curCity}
           district={curDistrict}
@@ -96,11 +151,9 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
               </FormItem>
             )}
           />
-
         </div>
-
       </CardContent>
-    </Card >
+    </Card>
   );
 };
 

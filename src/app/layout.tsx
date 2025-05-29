@@ -148,6 +148,7 @@ export default async function RootLayout({
           'bg-white',
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}
+        cz-shortcut-listen="true"
       >
         <NextTopLoader />
         <ProviderWrapper>{children}</ProviderWrapper>

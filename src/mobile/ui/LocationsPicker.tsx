@@ -187,6 +187,10 @@ export default function LocationsPicker({
           link
           title="Thành Phố"
           after={curCity?.text}
+          value={curCity?.value}
+          onClear={() => {
+            onSelectCity({ value: '', text: '' })
+          }}
           onClick={() => {
             openModal({
               name: 'city',
@@ -210,6 +214,10 @@ export default function LocationsPicker({
           link
           title="Quận / Huyện"
           after={curDistrict?.text}
+          value={curDistrict?.value}
+          onClear={() => {
+            onSelectDistrict({ value: '', text: '' })
+          }}
           onClick={() => {
             openModal({
               name: 'district',
@@ -233,6 +241,10 @@ export default function LocationsPicker({
         <ListItem
           link
           title="Phường / Xã"
+          value={curWard?.value}
+          onClear={() => {
+            onSelectWard({ value: '', text: '' })
+          }}
           after={curWard?.text}
           onClick={() => {
             openModal({
@@ -258,6 +270,10 @@ export default function LocationsPicker({
           <ListItem
             link
             title="Đường/ Phố"
+            value={curStreet?.value}
+            onClear={() => {
+              onSelectStreet({ value: '', text: '' })
+            }}
             after={curStreet?.text}
             onClick={() => {
               openModal({

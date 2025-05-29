@@ -1,6 +1,7 @@
-import { LuSearch, LuXCircle } from 'react-icons/lu';
+import { Search } from 'lucide-react';
 import { Input } from './ui/input';
 import { useState } from 'react';
+import { ClearButton } from './ui/clear-button';
 
 export type TSearchBoxProps = {
   placeholder?: string;
@@ -30,13 +31,16 @@ export default function SearchBox(props: TSearchBoxProps) {
 
   return (
     <div className="relative mt-2" onClick={props.onClick}>
-      <LuSearch className="absolute left-3 top-2.5 h-4 w-4 text-secondary" />
+      <Search className="absolute left-3 top-3 h-4 w-4 text-secondary" />
 
       {curValue.length > 0 && (
-        <LuXCircle
-          className="absolute right-3 top-2.5 h-4 w-4 cursor-pointer text-secondary"
-          onClick={onClear}
-        />
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 mr-2">
+          <ClearButton
+            onClick={onClear}
+            className="h-5 w-5"
+            iconClassName="h-4 w-4"
+          />
+        </div>
       )}
       <Input
         value={curValue.toString()}

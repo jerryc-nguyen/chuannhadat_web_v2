@@ -34,6 +34,10 @@ export default function ListItemBtsPicker({ onSelect, value, options, closeAfter
     <ListItem
       link
       title={modalOptions?.title}
+      value={value}
+      onClear={() => {
+        onSelect?.({ value: '', text: '' })
+      }}
       onClick={() => {
         openModal({
           name: `ListItemBtsPicker_${modalOptions?.title}`,

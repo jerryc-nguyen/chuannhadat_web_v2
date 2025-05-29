@@ -14,12 +14,14 @@ import LocationFormV2 from './components/form-components/location-form-v2';
 import ProductDescriptionForm from './components/form-components/product-description';
 import ProductInfoForm from './components/form-components/product-info-form';
 import ProductTypeForm from './components/form-components/product-type';
+import ProjectForm from './components/form-components/project-form';
+
 import { PostFormSchema } from './form-schemas';
 import { FormMobile } from './mobile/form-create';
 import { useManagePostsCache } from '../collection-post/hooks/useManagePostsCache';
 import { getQueryClient } from "@api/react-query";
 
-const EditPost = ({ params }: { params: A }) => {
+const EditPost = ({ productUid }: { productUid: string }) => {
   const { updateRowData } = useManagePostsCache();
 
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
@@ -32,8 +34,6 @@ const EditPost = ({ params }: { params: A }) => {
   ]);
 
   const isMobile = useIsMobile();
-  const productUid = params.slug;
-
   const { data: product, isSuccess } = useQuery({
     queryKey: ['get-detail-manage-post', productUid],
     queryFn: () => ManageProductApis.getDetail(productUid),
@@ -51,7 +51,6 @@ const EditPost = ({ params }: { params: A }) => {
   });
 
   const onSubmit = async (data: A) => {
-    console.log('onSubmit', data);
     if (!product) {
       toast.error('Tin đăng đã bị xoá');
       return;
@@ -85,6 +84,7 @@ const EditPost = ({ params }: { params: A }) => {
             ) : (
               <>
                 <ProductTypeForm form={form} />
+                <ProjectForm form={form} />
                 <LocationFormV2 form={form} />
                 <ProductDescriptionForm form={form} />
                 <ProductInfoForm form={form} />

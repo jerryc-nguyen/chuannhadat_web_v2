@@ -6,6 +6,7 @@ import EditPost from '@views/dashboard/main-manage-post/manage-post/edit_post';
 
 export default async function PostDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
+
   const productUid = slug[0];
 
   const queryClient = new QueryClient();
@@ -22,11 +23,11 @@ export default async function PostDetailPage({ params }: { params: Params }) {
   return (
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
-        <div className="c-mobileApp mx-4">
-          <EditPost params={params} />
+        <div className="c-mobileApp">
+          <EditPost productUid={productUid} />
         </div>
       ) : (
-        <EditPost params={params} />
+        <EditPost productUid={productUid} />
       )}
     </HydrationBoundary>
   );
