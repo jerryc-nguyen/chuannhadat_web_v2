@@ -23,7 +23,7 @@ export default async function PostDetailPage({ params }: { params: Params }) {
   return (
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
-        <div className="c-mobileApp mx-4">
+        <div className="c-mobileApp">
           <EditPost productUid={productUid} />
         </div>
       ) : (
