@@ -36,6 +36,7 @@ import { Button } from '@components/ui/button';
 import { OptionForSelect } from '@models';
 import PriceOptions from './PriceOptions';
 import ListItem from '@components/konsta/ListItem';
+import { ChevronRightIcon } from 'lucide-react';
 
 /**
  * TODO: Split file to smaller components
@@ -112,6 +113,10 @@ export const FormMobile: React.FC = () => {
             <ListItem
               link
               title={'Giá'}
+              value={field.value}
+              onClear={() => {
+                field.onChange('');
+              }}
               onClick={() => {
                 openModal({
                   name: `ListItemBtsPicker_price`,

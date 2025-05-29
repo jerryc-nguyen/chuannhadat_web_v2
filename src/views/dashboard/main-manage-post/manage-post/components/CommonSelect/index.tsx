@@ -5,10 +5,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { X } from 'lucide-react';
 import { MouseEvent } from 'react';
 import { cn } from '@common/utils';
-import { Button } from '@components/ui/button';
+import { ClearButton } from '@components/ui/clear-button';
 
 interface CommonSelectProps {
   options: { text: string; value: string }[];
@@ -28,8 +27,6 @@ export function CommonSelect({
   showIconWhenSelected = false
 }: CommonSelectProps) {
   const onClickClear = (e: MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
     onChange('');
   };
 
@@ -46,15 +43,9 @@ export function CommonSelect({
           </span>
         </SelectTrigger>
         {!!value && showClear && (
-          <Button
-            variant="outline"
-            onClick={onClickClear}
-            className="h-6 w-6 p-0 rounded-full border border-muted hover:border-red-500 hover:bg-red-50 transition-colors absolute right-3 top-1/2 -translate-y-1/2"
-            type="button"
-          >
-            <X className="h-4 w-4 text-muted-foreground hover:text-red-500" />
-            <span className="sr-only">Clear</span>
-          </Button>
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            <ClearButton onClick={onClickClear} />
+          </div>
         )}
       </div>
       <SelectContent>

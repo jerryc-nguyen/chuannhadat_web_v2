@@ -1,13 +1,14 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, X, ChevronsUpDown } from 'lucide-react';
+import { MapPin, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { OptionForSelect } from '@models';
 import { FormField, FormItem } from '@components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { Button } from '@components/ui/button';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
+import { ClearButton } from '@components/ui/clear-button';
 
 import { cn } from '@common/utils';
 
@@ -43,7 +44,6 @@ const ProjectForm: React.FC<any> = ({ form }) => {
               };
 
               const clearSelection = (e: React.MouseEvent) => {
-                e.stopPropagation();
                 form.setValue('project_id', undefined);
                 form.setValue('project', undefined);
               };
@@ -63,15 +63,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                         </span>
                         <div className="flex items-center gap-1">
                           {selectedOption && (
-                            <Button
-                              variant="outline"
-                              onClick={clearSelection}
-                              className="h-6 w-6 p-0 rounded-full border border-muted hover:border-red-500 hover:bg-red-50 transition-colors"
-                              type="button"
-                            >
-                              <X className="h-4 w-4 text-muted-foreground hover:text-red-500" />
-                              <span className="sr-only">Clear</span>
-                            </Button>
+                            <ClearButton onClick={clearSelection} />
                           )}
                           {!selectedOption && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
                         </div>
