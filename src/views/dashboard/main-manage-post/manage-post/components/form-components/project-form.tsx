@@ -85,7 +85,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                       <ProjectPicker
                         value={selectedOption}
                         onSelect={handleSelect}
-                        autocompleteProjectParams={{}}
+                        autocompleteProjectParams={{ scope: 'dashboard' }}
                       />
                     </PopoverContent>
                   </Popover>
