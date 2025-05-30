@@ -86,9 +86,42 @@ const ProjectForm: React.FC<any> = ({ form }) => {
           />
         </div>
 
-        {project && (<div>
+        {project && project.data?.child_projects && project.data.child_projects.length > 0 && (
+          <div className="mt-2">
+            <b>Dự án con:</b>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {project.data.child_projects.map((childProject: any) => {
+                const isSelected = form.watch('child_project_id') === childProject.id;
+                return (
+                  <Button
+                    key={childProject.id}
+                    variant={isSelected ? "default" : "outline"}
+                    className={`text-xs rounded-full ${isSelected ? 'bg-primary text-primary-foreground' : ''}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      if (isSelected) {
+                        // Deselect if already selected
+                        form.setValue('child_project_id', undefined);
+                      } else {
+                        // Select this child project
+                        form.setValue('child_project_id', childProject.id);
+                      }
+                    }}
+                  >
+                    {childProject.name}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {project && (<div className="mt-2">
           Địa chỉ: <span className="font-bold">{project.data?.address || 'Chưa cập nhật'}</span>
         </div>)}
+
       </CardContent>
     </Card>
   );
