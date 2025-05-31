@@ -32,8 +32,17 @@ const ProjectForm: React.FC<any> = ({ form }) => {
               const selectedOption = form.watch('project') as OptionForSelect | undefined;
 
               const handleSelect = async (option: OptionForSelect) => {
-                form.setValue('project_id', option.value);
-                form.setValue('project', option);
+                if (option.data?.is_child) {
+                  const parentProject = option.data?.parent
+                  form.setValue('child_project_id', option.value);
+                  form.setValue('project_id', parentProject.value);
+                  form.setValue('project', parentProject);
+                } else {
+                  form.setValue('project_id', option.value);
+                  form.setValue('project', option);
+                  form.setValue('child_project_id', undefined);
+                }
+
                 form.setValue('city_id', option.data?.city_id || undefined);
                 form.setValue('district_id', option.data?.district_id || undefined);
                 form.setValue('ward_id', option.data?.ward_id || undefined);
