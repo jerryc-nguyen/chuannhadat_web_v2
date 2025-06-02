@@ -58,7 +58,7 @@ export default function ProjectPicker({
     <CmdkOptionPicker
       searchable={true}
       value={value}
-      options={response?.data}
+      options={response?.data || []}
       onSelect={onSelect}
       emptyMessage={emptyMessage}
       searchPlaceHolder={'Tìm dự án'}
