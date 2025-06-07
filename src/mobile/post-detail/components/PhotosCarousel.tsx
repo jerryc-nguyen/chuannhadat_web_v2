@@ -13,21 +13,21 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 
-export default function PhotosCarousel({ product }: { product: IProductDetail }) {
+export default function PhotosCarousel ( { product }: { product: IProductDetail } ) {
   const { buildThumbnailUrl } = useResizeImage();
 
-  const onClickImage = (indexImage: number) => {
-    setIndexImageActive(indexImage);
-    setIsOpenSlideImage(true);
+  const onClickImage = ( indexImage: number ) => {
+    setIndexImageActive( indexImage );
+    setIsOpenSlideImage( true );
   };
 
-  const [openSlideImage, setIsOpenSlideImage] = useState<boolean>(false);
-  const [indexImageActive, setIndexImageActive] = useState<number>(0);
+  const [openSlideImage, setIsOpenSlideImage] = useState<boolean>( false );
+  const [indexImageActive, setIndexImageActive] = useState<number>( 0 );
 
   return (
     <div className="flex-center relative flex-col gap-4 bg-white">
       <YoutubePlayerAction
-        isDisplay={Boolean(product?.youtube_url)}
+        isDisplay={Boolean( product?.youtube_url )}
         youtube_url={product?.youtube_url as string}
       />
       {product?.images && product?.images.length > 1 ? (
@@ -36,10 +36,11 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
         <AspectRatio ratio={16 / 9}>
           <img
             className="h-full w-full object-cover"
-            src={buildThumbnailUrl({
+            src={buildThumbnailUrl( {
               imageUrl: product.images[0].url,
-            })}
-            alt={(product as IProductDetail)?.description}
+            } )}
+            suppressHydrationWarning
+            alt={( product as IProductDetail )?.description}
           />
         </AspectRatio>
       )}
@@ -48,7 +49,7 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
           open={openSlideImage}
           controller={{ closeOnPullDown: true }}
           index={indexImageActive}
-          close={() => setIsOpenSlideImage(false)}
+          close={() => setIsOpenSlideImage( false )}
           styles={{
             root: { pointerEvents: 'auto' },
             slide: {
@@ -57,9 +58,9 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
               overflow: 'hidden',
             },
           }}
-          slides={product?.images.map((item) => ({
+          slides={product?.images.map( ( item ) => ( {
             src: item.url,
-          }))}
+          } ) )}
           thumbnails={{
             vignette: false,
             padding: 0,

@@ -19,24 +19,24 @@ type PostDetailDesktopProps = object;
 
 const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   const currentPath = usePathname() || '';
-  const setPostDetailData = useSetAtom(postDetailAtom);
-  const productUid = currentPath.split('-').slice(-1)[0];
-  const { data, isLoading, isSuccess, isError } = usePostDetail({
+  const setPostDetailData = useSetAtom( postDetailAtom );
+  const productUid = currentPath.split( '-' ).slice( -1 )[0];
+  const { data, isLoading, isSuccess, isError } = usePostDetail( {
     postId: productUid,
     enabled: !!productUid,
-  });
+  } );
 
-  React.useEffect(() => {
-    if (data) {
-      setPostDetailData(data);
+  React.useEffect( () => {
+    if ( data ) {
+      setPostDetailData( data );
     }
-  }, [data, setPostDetailData]);
+  }, [data, setPostDetailData] );
 
-  const breadcrumbsData = useMemo(() => {
-    return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
-  }, [data?.breadcrumb]);
+  const breadcrumbsData = useMemo( () => {
+    return ConvertFromBreadcrumbListJSONLd( data?.breadcrumb );
+  }, [data?.breadcrumb] );
 
-  if (isError || (isSuccess && !data))
+  if ( isError || ( isSuccess && !data ) )
     return <NotFound errorMessage="Bài viết không tồn tại hoặc đã bị xoá" isCritical={false} />;
 
   return (
