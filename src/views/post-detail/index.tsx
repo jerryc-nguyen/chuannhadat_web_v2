@@ -19,30 +19,30 @@ type PostDetailDesktopProps = object;
 
 const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   const currentPath = usePathname() || '';
-  const setPostDetailData = useSetAtom( postDetailAtom );
-  const productUid = currentPath.split( '-' ).slice( -1 )[0];
-  const { data, isLoading, isSuccess, isError } = usePostDetail( {
+  const setPostDetailData = useSetAtom(postDetailAtom);
+  const productUid = currentPath.split('-').slice(-1)[0];
+  const { data, isLoading, isSuccess, isError } = usePostDetail({
     postId: productUid,
     enabled: !!productUid,
-  } );
+  });
 
-  React.useEffect( () => {
-    if ( data ) {
-      setPostDetailData( data );
+  React.useEffect(() => {
+    if (data) {
+      setPostDetailData(data);
     }
-  }, [data, setPostDetailData] );
+  }, [data, setPostDetailData]);
 
-  const breadcrumbsData = useMemo( () => {
-    return ConvertFromBreadcrumbListJSONLd( data?.breadcrumb );
-  }, [data?.breadcrumb] );
+  const breadcrumbsData = useMemo(() => {
+    return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
+  }, [data?.breadcrumb]);
 
-  if ( isError || ( isSuccess && !data ) )
+  if (isError || (isSuccess && !data))
     return <NotFound errorMessage="Bài viết không tồn tại hoặc đã bị xoá" isCritical={false} />;
 
   return (
     <>
       <div className="mx-auto mt-5 flex justify-between gap-x-4">
-        <Breadcrumb breadcrumbs={breadcrumbsData} />
+        <Breadcrumb breadcrumbs={breadcrumbsData} isLastLink={true} />
       </div>
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">
