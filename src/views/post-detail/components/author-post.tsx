@@ -1,25 +1,18 @@
-import { services } from '@api/services';
 import { cn, genKey, getInitialsName } from '@common/utils';
+import ButtonPhone from '@components/button-phone';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Skeleton } from '@components/ui/skeleton';
-import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
 import { AuthorPostProps } from '../type';
 import PostsBySameAuthor from './posts-by-same-author';
-import ButtonPhone from '@components/button-phone';
-import { useRouter } from 'next/navigation';
 
-const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
-  const { data: profileData, isLoading } = useQuery({
-    queryKey: ['get-profile', data?.author?.slug],
-    queryFn: () => services.profiles.getProfileSlug(data?.author?.slug),
-    enabled: !!data?.author?.slug,
-    select: (data) => data.data,
-  });
-
-  const badgesCount = useMemo(() => {
-    return (profileData?.formatted_badges || []).length;
-  }, []);
+const AuthorPost: React.FC<AuthorPostProps> = ( { data, className } ) => {
+  const dataAuthor = data?.author
+  const badgesCount = useMemo( () => {
+    return ( dataAuthor?.formatted_badges || [] ).length;
+  }, [] );
 
   const router = useRouter();
   const loadingAuthor = () => {
@@ -34,9 +27,9 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
           </div>
         </div>
         <div className="my-8 flex flex-col gap-y-2">
-          {new Array(4).fill(0).map((_item, index) => (
-            <Skeleton key={genKey(index)} className="h-5 w-full" />
-          ))}
+          {new Array( 4 ).fill( 0 ).map( ( _item, index ) => (
+            <Skeleton key={genKey( index )} className="h-5 w-full" />
+          ) )}
         </div>
         <div className="flex flex-col gap-y-2">
           <Skeleton className="h-[36px] w-full" />
@@ -45,38 +38,29 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
       </div>
     );
   };
-  // const buttonContactAgain = () => (
-  //   <Button
-  //     className="flex items-center gap-x-2 hover:bg-blue-500 hover:text-white"
-  //     variant={'outline'}
-  //   >
-  //     <LuPhoneIncoming />
-  //     Yêu cầu liên hệ lại
-  //   </Button>
-  // );
   return (
-    <div className={cn('author-post z-3 sticky top-0 h-fit min-w-[350px] flex-1', className)}>
-      {isLoading || !data?.author?.slug ? (
+    <div className={cn( 'author-post z-3 sticky top-0 h-fit min-w-[350px] flex-1', className )}>
+      {!dataAuthor ? (
         loadingAuthor()
       ) : (
         <div className="rounded-lg border bg-white p-4">
           <h3 className="text-lg font-semibold">Liên hệ:</h3>
           <div className="my-4 flex items-center gap-x-3">
             <Avatar
-              onClick={() => router.push(`/profile/${data.author.slug}`)}
+              onClick={() => router.push( `/profile/${data.author.slug}` )}
               className="h-[50px] w-[50px] cursor-pointer"
             >
-              <AvatarImage src={profileData?.avatar_url} />
-              <AvatarFallback>{getInitialsName(profileData?.full_name as string)}</AvatarFallback>
+              <AvatarImage src={dataAuthor?.avatar_url} />
+              <AvatarFallback>{getInitialsName( dataAuthor?.full_name as string )}</AvatarFallback>
             </Avatar>
             <div>
-              <a
-                href={`/profile/${data.author.slug}`}
+              <Link
+                href={`/profile/${dataAuthor.slug}`}
                 className="cursor-pointer font-bold hover:underline"
               >
-                {profileData?.full_name || profileData?.phone}
-              </a>
-              <p className="text-sm text-secondary">Đã đăng {profileData?.posts_count} tin</p>
+                {dataAuthor?.full_name || dataAuthor?.phone}
+              </Link>
+              <p className="text-sm text-secondary">Đã đăng {dataAuthor?.posts_count} tin</p>
             </div>
           </div>
           {badgesCount > 0 && (
@@ -84,21 +68,16 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
           )}
 
           <div className="flex flex-col gap-y-2">
-            <ButtonPhone phoneNumberProfile={profileData?.phone as string} />
-            {/* <DialogContactAgain
-              postUid={data.uid}
-              elementTrigger={buttonContactAgain}
-              postId={data?.id}
-              title={data.title}
-            /> */}
+            <ButtonPhone phoneNumberProfile={dataAuthor?.phone as string} />
+
           </div>
         </div>
       )}
       <PostsBySameAuthor
-        fullNameAuthor={profileData?.full_name}
-        authorSlug={profileData?.slug}
+        fullNameAuthor={dataAuthor?.full_name}
+        authorSlug={dataAuthor?.slug}
         productId={data?.uid}
-        totalCount={profileData?.posts_count}
+        totalCount={dataAuthor?.posts_count}
       />
     </div>
   );

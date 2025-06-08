@@ -20,11 +20,8 @@ const HomeDesktop: React.FC = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get( 'page' ) ? parseInt( searchParams.get( 'page' ) as string ) : 1;
-
   const { buildFilterParams } = useFilterState();
-
   let filterParams = buildFilterParams( { withLocal: false } );
-
   filterParams = {
     ...filterParams,
     with_title: true,

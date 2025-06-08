@@ -16,52 +16,52 @@ import React, { useEffect } from 'react';
 import ProductDescription from './components/ProductDescription';
 import './PostDetailMobile.scss';
 
-export default function PostDetailMobile({ productUid }: { productUid: string }) {
-  const setPostDetail = useSetAtom(postDetailAtom);
-  const setAuthor = useSetAtom(authorAtom);
+export default function PostDetailMobile ( { productUid }: { productUid: string } ) {
+  const setPostDetail = useSetAtom( postDetailAtom );
+  const setAuthor = useSetAtom( authorAtom );
 
   const {
     data: product,
     isLoading,
     isSuccess,
     isError,
-  } = usePostDetail({
+  } = usePostDetail( {
     postId: productUid,
     enabled: !!productUid && productUid !== '/', // Ensure query is enabled only if productUid is valid
     refetchOnWindowFocus: true, // Optional: refetch when window is focused
-  });
+  } );
 
-  const { mutate: addViewPost } = useMutation({
+  const { mutate: addViewPost } = useMutation( {
     mutationFn: services.trackings.viewProduct,
-  });
+  } );
 
-  useEffect(() => {
-    if (product) {
-      setAuthor(product.author);
+  useEffect( () => {
+    if ( product ) {
+      setAuthor( product.author );
     }
-  }, [product]);
+  }, [product] );
 
-  React.useEffect(() => {
-    if (productUid) {
-      addViewPost({
+  React.useEffect( () => {
+    if ( productUid ) {
+      addViewPost( {
         product_uid: productUid,
-      });
+      } );
     }
-  }, [productUid]);
+  }, [productUid] );
 
-  useEffect(() => {
-    if (product) {
-      setPostDetail(product);
+  useEffect( () => {
+    if ( product ) {
+      setPostDetail( product );
     }
-  }, [product, setPostDetail]);
+  }, [product, setPostDetail] );
 
-  if (!isServer && isLoading)
+  if ( !isServer && isLoading )
     return (
       <div className="m-auto flex h-full items-center justify-center">
         <Spinner />
       </div>
     );
-  if (isError || (isSuccess && !product))
+  if ( isError || ( isSuccess && !product ) )
     return <NotFound errorMessage="Bài viết không tồn tại hoặc đã bị xoá" isCritical={false} />;
   return (
     <div className="flex flex-col gap-4 p-0">

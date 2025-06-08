@@ -1,30 +1,29 @@
+import { searchApi } from '@api/searchApi';
 import { cn } from '@common/utils';
+import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import React from 'react';
-import styles from '../styles/FilterChip.module.scss';
-import { FilterFieldName } from '@models';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import Area from '@mobile/filter_bds/bts/Area';
+import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 import BusinessTypeButtons from '@mobile/filter_bds/bts/BusinessTypeButtons';
 import CategoryType from '@mobile/filter_bds/bts/CategoryType';
-import Price from '@mobile/filter_bds/bts/Price';
-import Area from '@mobile/filter_bds/bts/Area';
-import FilterModal from '@mobile/filter_bds/FilterModal';
-import Rooms from '@mobile/filter_bds/bts/Rooms';
+import Projects from '@mobile/filter_bds/bts/desktop/Projects';
 import Direction from '@mobile/filter_bds/bts/Direction';
+import Price from '@mobile/filter_bds/bts/Price';
+import Rooms from '@mobile/filter_bds/bts/Rooms';
+import SortOptions from '@mobile/filter_bds/bts/SortOptions';
+import FilterModal from '@mobile/filter_bds/FilterModal';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { FilterChipOption } from '@mobile/filter_bds/types';
-import { Button } from '@components/ui/button';
-import { LuLoader2 } from 'react-icons/lu';
+import { FilterFieldName } from '@models';
 import { useQuery } from '@tanstack/react-query';
-import { searchApi } from '@api/searchApi';
-import SortOptions from '@mobile/filter_bds/bts/SortOptions';
-import { LuX, LuBuilding } from 'react-icons/lu';
-import { BiArea } from 'react-icons/bi';
-import { PiCurrencyCircleDollar } from 'react-icons/pi';
-import { BsSortUp } from 'react-icons/bs';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
-import BusCatType from '@mobile/filter_bds/bts/BusCatType';
-import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import Projects from '@mobile/filter_bds/bts/desktop/Projects';
+import React from 'react';
+import { BiArea } from 'react-icons/bi';
+import { BsSortUp } from 'react-icons/bs';
+import { LuBuilding, LuLoader2, LuX } from 'react-icons/lu';
+import { PiCurrencyCircleDollar } from 'react-icons/pi';
+import styles from '../styles/FilterChip.module.scss';
 import AggProjects from '@mobile/filter_bds/bts/AggProjects';
 
 type FilterChipProps = {
@@ -33,9 +32,6 @@ type FilterChipProps = {
 };
 
 const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => {
-  //State !
-  const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
-  const containerChipsRef = React.useRef(null);
 
   const {
     copyFilterStatesToLocal,
@@ -47,6 +43,8 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   } = useFilterState();
 
   const filterParams = buildFilterParams({ withLocal: true });
+  const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
+  const containerChipsRef = React.useRef(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],
@@ -61,7 +59,6 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
       onChange(newFilterState);
     }
   };
-
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
@@ -105,7 +102,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   const handleRemoveFilter = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
     const newFilterState = removeFilterValue(fieldName);
-    console.log('newFilterState', newFilterState);
+
     if (typeof onChange === 'function') {
       onChange(newFilterState);
     }

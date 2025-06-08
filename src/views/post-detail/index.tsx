@@ -42,7 +42,7 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   return (
     <>
       <div className="mx-auto mt-5 flex justify-between gap-x-4">
-        <Breadcrumb breadcrumbs={breadcrumbsData} />
+        <Breadcrumb breadcrumbs={breadcrumbsData} isLastLink={true} />
       </div>
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">
