@@ -1,5 +1,11 @@
 import { TPhoto } from '@models';
 
+export interface IProject {
+  url: string;
+  long_name: string;
+  name: string;
+}
+
 export interface IProduct {
   bathrooms_count: number | null;
   bedrooms_count: number;
@@ -23,6 +29,7 @@ export interface IProduct {
   ads_type?: string;
   images: TPhoto[];
   youtube_url?: string;
+  project?: IProject;
 }
 
 export interface Author {

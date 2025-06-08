@@ -13,12 +13,15 @@ import styles from '../styles/ProductCard.module.scss';
 import CardAuthor from './CardAuthor';
 import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
 import LoadingProductCard from './LoadingProductCard';
+import BusCatType from './product-card/BusCatType';
+
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
   className?: string;
   isShowVideoYoutube?: boolean;
 };
+
 export default function ProductCard({
   product,
   isShowAuthor = true,
@@ -70,17 +73,7 @@ export default function ProductCard({
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
-        <div className="w-full text-secondary">
-          {product.bus_cat_type.replace('căn hộ chung cư', 'căn hộ')}
-          {!!product.project && (
-            <>
-              <span> · </span>
-              <a href={product.project.url} className="hover:underline">
-                <b>{product.project.name}</b>
-              </a>
-            </>
-          )}
-        </div>
+        <BusCatType busCatType={product.bus_cat_type} project={product.project} />
 
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
