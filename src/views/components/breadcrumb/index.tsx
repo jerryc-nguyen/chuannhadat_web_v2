@@ -11,8 +11,10 @@ import {
 
 import { genKey } from '@common/utils';
 import { IBreadcrumbItem } from '@views/dashboard/states/breadcrumbAtom';
+
 type BreadcrumbProps = {
   breadcrumbs: IBreadcrumbItem[];
+  isLastLink?: boolean;
 };
 
 export const ConvertFromBreadcrumbListJSONLd = (breadcrumb: A) => {
@@ -24,13 +26,15 @@ export const ConvertFromBreadcrumbListJSONLd = (breadcrumb: A) => {
   })
 }
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs, isLastLink = false }) => {
 
   return (
     <BreadcrumbWrap>
       <BreadcrumbList>
         {breadcrumbs.map((item, index) => {
-          if (index !== breadcrumbs.length - 1) {
+          const showAll = isLastLink && index <= breadcrumbs.length - 1;
+
+          if (showAll || index < breadcrumbs.length - 1) {
             return (
               <React.Fragment key={genKey(index)}>
                 <BreadcrumbItem>
@@ -42,7 +46,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ breadcrumbs }) => {
                     </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
+                {index !== breadcrumbs.length - 1 && (
+                  <BreadcrumbSeparator />
+                )}
               </React.Fragment>
             );
           } else {

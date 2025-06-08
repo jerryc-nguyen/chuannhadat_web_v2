@@ -1,19 +1,23 @@
+import { searchApi } from '@api/searchApi';
+import { AuthUtils } from '@common/auth';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import {
+  FILTER_FIELDS_PARAMS_MAP,
+  FILTER_FIELDS_TO_PARAMS,
+  FilterFieldName,
+  OptionForSelect,
+} from '@models';
 import { useAtom, useAtomValue } from 'jotai';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+import { SORT_CHIP_OPTION } from '../constants';
 import {
   defaultFilterStateAtom,
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
 } from '../states';
-import { OptionForSelect } from '@models';
-import { FilterFieldName, FILTER_FIELDS_TO_PARAMS, FILTER_FIELDS_PARAMS_MAP } from '@models';
-import { searchApi } from '@api/searchApi';
-import { useMemo } from 'react';
 import { FilterChipOption, FilterState } from '../types';
-import { usePathname } from 'next/navigation';
-import { AuthUtils } from '@common/auth';
-import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import { SORT_CHIP_OPTION } from '../constants';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -224,7 +228,7 @@ export default function useFilterState() {
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
-    applySingleFilter(SORT_CHIP_OPTION)
+    applySingleFilter(SORT_CHIP_OPTION);
   };
 
   const selectedSortText = useMemo((): string | undefined => {
@@ -234,8 +238,10 @@ export default function useFilterState() {
   const selectedFilterText = (filterOption: FilterChipOption): string => {
     const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
+    if (
+      filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations
+    ) {
       return 'Khu vực';
     } else if (filterOption.id == FilterFieldName.Rooms) {
       return selectedRoomText() || 'Số phòng';
@@ -261,8 +267,10 @@ export default function useFilterState() {
   const isActiveChip = (filterOption: FilterChipOption): boolean => {
     const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
+    if (
+      filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations
+    ) {
       return !!(filterState.city || filterState.district || filterState.ward);
     } else if (filterOption.id == FilterFieldName.Rooms) {
       return !!(filterState.bed || filterState.bath);
@@ -293,6 +301,6 @@ export default function useFilterState() {
     extraSearchParams,
     selectedFilterText,
     selectedRoomText,
-    isActiveChip
+    isActiveChip,
   };
 }
