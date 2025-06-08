@@ -32,8 +32,17 @@ const ProjectForm: React.FC<any> = ({ form }) => {
               const selectedOption = form.watch('project') as OptionForSelect | undefined;
 
               const handleSelect = async (option: OptionForSelect) => {
-                form.setValue('project_id', option.value);
-                form.setValue('project', option);
+                if (option.data?.is_child) {
+                  const parentProject = option.data?.parent
+                  form.setValue('child_project_id', option.value);
+                  form.setValue('project_id', parentProject.value);
+                  form.setValue('project', parentProject);
+                } else {
+                  form.setValue('project_id', option.value);
+                  form.setValue('project', option);
+                  form.setValue('child_project_id', undefined);
+                }
+
                 form.setValue('city_id', option.data?.city_id || undefined);
                 form.setValue('district_id', option.data?.district_id || undefined);
                 form.setValue('ward_id', option.data?.ward_id || undefined);
@@ -86,9 +95,42 @@ const ProjectForm: React.FC<any> = ({ form }) => {
           />
         </div>
 
-        {project && (<div>
+        {project && project.data?.child_projects && project.data.child_projects.length > 0 && (
+          <div className="mt-2">
+            <b>Dự án con:</b>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {project.data.child_projects.map((childProject: any) => {
+                const isSelected = form.watch('child_project_id') === childProject.id;
+                return (
+                  <Button
+                    key={childProject.id}
+                    variant={isSelected ? "default" : "outline"}
+                    className={`text-xs rounded-full ${isSelected ? 'bg-primary text-primary-foreground' : ''}`}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      if (isSelected) {
+                        // Deselect if already selected
+                        form.setValue('child_project_id', undefined);
+                      } else {
+                        // Select this child project
+                        form.setValue('child_project_id', childProject.id);
+                      }
+                    }}
+                  >
+                    {childProject.name}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {project && (<div className="mt-2">
           Địa chỉ: <span className="font-bold">{project.data?.address || 'Chưa cập nhật'}</span>
         </div>)}
+
       </CardContent>
     </Card>
   );

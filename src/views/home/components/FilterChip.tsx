@@ -14,100 +14,54 @@ import Rooms from '@mobile/filter_bds/bts/Rooms';
 import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import FilterModal from '@mobile/filter_bds/FilterModal';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { filterStateAtom } from '@mobile/filter_bds/states';
-import { FilterChipOption, FilterState } from '@mobile/filter_bds/types';
-import { useFilterLocations } from '@mobile/locations/hooks';
+import { FilterChipOption } from '@mobile/filter_bds/types';
 import { FilterFieldName } from '@models';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
-import { useAtom } from 'jotai';
 import React from 'react';
 import { BiArea } from 'react-icons/bi';
 import { BsSortUp } from 'react-icons/bs';
 import { LuBuilding, LuLoader2, LuX } from 'react-icons/lu';
 import { PiCurrencyCircleDollar } from 'react-icons/pi';
 import styles from '../styles/FilterChip.module.scss';
+import AggProjects from '@mobile/filter_bds/bts/AggProjects';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
-  onChange?: ( filterState: Record<string, A> ) => void;
+  onChange?: (filterState: Record<string, A>) => void;
 };
 
-const FilterChip: React.FC<FilterChipProps> = ( { filterChipItem, onChange } ) => {
-  //State !
-  const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>( false );
-  const containerChipsRef = React.useRef( null );
-  const [filterState] = useAtom( filterStateAtom );
+const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => {
 
-  const { copyFilterStatesToLocal } = useFilterState();
-  const { selectedLocationText } = useFilterLocations();
-  const { applySingleFilter, buildFilterParams, removeFilterValue } = useFilterState();
-  const filterParams = buildFilterParams( { withLocal: true } );
+  const {
+    copyFilterStatesToLocal,
+    applySingleFilter,
+    buildFilterParams,
+    removeFilterValue,
+    isActiveChip,
+    selectedFilterText,
+  } = useFilterState();
 
-  const { data, isLoading } = useQuery( {
+  const filterParams = buildFilterParams({ withLocal: true });
+  const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
+  const containerChipsRef = React.useRef(null);
+
+  const { data, isLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],
-    queryFn: () => searchApi( filterParams ),
-  } );
+    queryFn: () => searchApi(filterParams),
+  });
   const { searchScope } = useSearchScope();
 
   const onApplyFilter = () => {
-    setIsOpenPopover( false );
-    const newFilterState = applySingleFilter( filterChipItem );
-    if ( typeof onChange === 'function' ) {
-      onChange( newFilterState );
+    setIsOpenPopover(false);
+    const newFilterState = applySingleFilter(filterChipItem);
+    if (typeof onChange === 'function') {
+      onChange(newFilterState);
     }
   };
 
-  const selectedRoomText = (): string => {
-    const results = [];
-    if ( filterState.bed ) {
-      results.push( `${filterState.bed.text} PN` );
-    }
-    if ( filterState.bath ) {
-      results.push( `${filterState.bath.text} WC` );
-    }
-
-    return results.join( ' / ' );
-  };
-
-  const selectedFilterText = ( filterOption: FilterChipOption ) => {
-    const fieldName = filterOption.id;
-    if (
-      filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations
-    ) {
-      return selectedLocationText ?? 'Khu vực';
-    } else if ( filterOption.id == FilterFieldName.Rooms ) {
-      return selectedRoomText() || 'Số phòng';
-    } else {
-      return (
-        //@ts-ignore: read value
-        filterState[fieldName]?.text ?? filterOption.text
-      );
-    }
-  };
-  const isActiveChip = ( filterOption: FilterChipOption ) => {
-    let isActive = false;
-    const fieldName = filterOption.id;
-    switch ( fieldName ) {
-      case FilterFieldName.Locations:
-        if ( selectedLocationText ) isActive = true;
-        break;
-      case FilterFieldName.ProfileLocations:
-        if ( selectedLocationText ) isActive = true;
-        break;
-      case FilterFieldName.Rooms:
-        if ( selectedRoomText() ) isActive = true;
-        break;
-      default:
-        if ( filterState[fieldName as keyof FilterState]?.text ) isActive = true;
-        break;
-    }
-    return isActive;
-  };
-
-  const buildContent = ( filterOption: FilterChipOption ) => {
-    switch ( filterOption.id ) {
+  const buildContent = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
       case FilterFieldName.ProfileLocations:
         return <ProfileLocationsV2 />;
       case FilterFieldName.BusinessType:
@@ -130,30 +84,32 @@ const FilterChip: React.FC<FilterChipProps> = ( { filterChipItem, onChange } ) =
         return <Direction />;
       case FilterFieldName.Sort:
         return <SortOptions />;
+      case FilterFieldName.AggProjects:
+        return <AggProjects />;
       default:
         return undefined;
     }
   };
 
-  const showFilterPopover = ( filterOption: FilterChipOption ) => {
-    if ( filterOption.id == FilterFieldName.FilterOverview ) {
+  const showFilterPopover = (filterOption: FilterChipOption) => {
+    if (filterOption.id == FilterFieldName.FilterOverview) {
       copyFilterStatesToLocal();
     } else {
-      copyFilterStatesToLocal( [filterOption.id as FilterFieldName] );
+      copyFilterStatesToLocal([filterOption.id as FilterFieldName]);
     }
   };
 
-  const handleRemoveFilter = ( filterOption: FilterChipOption ) => {
+  const handleRemoveFilter = (filterOption: FilterChipOption) => {
     const fieldName = filterOption.id;
-    const newFilterState = removeFilterValue( fieldName );
-    console.log( 'newFilterState', newFilterState );
-    if ( typeof onChange === 'function' ) {
-      onChange( newFilterState );
+    const newFilterState = removeFilterValue(fieldName);
+
+    if (typeof onChange === 'function') {
+      onChange(newFilterState);
     }
   };
 
-  const onRenderIconChip = ( filterOption: FilterChipOption ) => {
-    switch ( filterOption.id ) {
+  const onRenderIconChip = (filterOption: FilterChipOption) => {
+    switch (filterOption.id) {
       case FilterFieldName.Project:
         return <LuBuilding className="text-xl" />;
       case FilterFieldName.Price:
@@ -168,7 +124,7 @@ const FilterChip: React.FC<FilterChipProps> = ( { filterChipItem, onChange } ) =
   };
 
   const contentWidth = () => {
-    switch ( filterChipItem.id ) {
+    switch (filterChipItem.id) {
       case FilterFieldName.Locations:
         return 'w-[350px] c-locationPC';
       case FilterFieldName.ProfileLocations:
@@ -186,7 +142,7 @@ const FilterChip: React.FC<FilterChipProps> = ( { filterChipItem, onChange } ) =
         <Button
           className={cn(
             'w-fit cursor-default gap-x-4 rounded-full border px-4 font-semibold transition-all',
-            isActiveChip( filterChipItem )
+            isActiveChip(filterChipItem)
               ? 'bg-black text-white hover:bg-black'
               : 'bg-white text-black hover:bg-slate-50',
           )}
@@ -194,21 +150,21 @@ const FilterChip: React.FC<FilterChipProps> = ( { filterChipItem, onChange } ) =
           <PopoverTrigger asChild>
             <div
               onClick={() => {
-                showFilterPopover( filterChipItem );
-                setIsOpenPopover( true );
+                showFilterPopover(filterChipItem);
+                setIsOpenPopover(true);
               }}
               className={cn(
                 'flex cursor-pointer items-center gap-x-1',
-                isActiveChip( filterChipItem ) ? '' : 'text-secondary hover:text-black',
+                isActiveChip(filterChipItem) ? '' : 'text-secondary hover:text-black',
               )}
             >
-              {onRenderIconChip( filterChipItem )}
-              {selectedFilterText( filterChipItem )}
+              {onRenderIconChip(filterChipItem)}
+              {selectedFilterText(filterChipItem)}
             </div>
           </PopoverTrigger>
-          {isActiveChip( filterChipItem ) && (
+          {isActiveChip(filterChipItem) && (
             <LuX
-              onClick={() => handleRemoveFilter( filterChipItem )}
+              onClick={() => handleRemoveFilter(filterChipItem)}
               className="cursor-pointer text-xl"
             />
           )}
@@ -219,11 +175,11 @@ const FilterChip: React.FC<FilterChipProps> = ( { filterChipItem, onChange } ) =
           sideOffset={5}
           align="center"
           side="bottom"
-          className={cn( `!relative z-20 mt-4 ${contentWidth()}`, styles.filter_popover_content )}
+          className={cn(`!relative z-20 mt-4 ${contentWidth()}`, styles.filter_popover_content)}
         >
           <h2 className="text-left text-lg font-semibold">{filterChipItem.text}</h2>
           <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
-            {buildContent( filterChipItem )}
+            {buildContent(filterChipItem)}
           </section>
           {searchScope != SearchScopeEnums.ManagePosts && (
             <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>

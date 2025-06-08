@@ -1,7 +1,7 @@
 'use client';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,22 +59,37 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const form = useFormContext<ProductQuery>();
   const selectedOption = form.watch('visibility');
+  const [searchInputValue, setSearchInputValue] = useState(form.getValues('search_value') || '');
+
+  // Set default search_by to 'title' if not set
+  React.useEffect(() => {
+    const currentSearchBy = form.getValues('search_by');
+    if (!currentSearchBy) {
+      form.setValue('search_by', 'title');
+    }
+  }, [form]);
 
   const resetFilter = React.useCallback(() => {
     form.setValue('search_value', '');
+    setSearchInputValue('');
     form.setValue('visibility', '');
-  }, []);
+    form.setValue('search_by', 'title');
+  }, [form]);
 
   const showClearFilter = (['search_value', 'visibility'] as const).some(
     (key) => !!form.getValues(key),
   );
 
   const onSearchTargetChange = (value: string) => {
-    console.log('onSearchTargetChange', value);
     form.setValue('search_by', value as A);
   };
 
   const selectSearchTarget = form.watch('search_by');
+
+  const handleSearch = () => {
+    form.setValue('search_value', searchInputValue);
+    onClickSearch();
+  };
 
   return (
     <div className="flex flex-col space-y-3 px-4 lg:px-0">
@@ -87,10 +102,17 @@ export function DataTableToolbar<TData>({
             />
             <Input
               placeholder="Tìm theo mã tin, tiêu đề hoặc ghi chú..."
-              {...form.register('search_value')}
+              value={searchInputValue}
+              onChange={(e) => setSearchInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSearch();
+                }
+              }}
               className="w-full"
             />
-            <Button variant="default" onClick={onClickSearch}>
+            <Button variant="default" onClick={handleSearch}>
               <Search size={16} />
             </Button>
           </ButtonGroup>
@@ -163,14 +185,13 @@ export function SelectSearchTarget({
   return (
     <Select onValueChange={onChange} value={selectSearchTarget}>
       <SelectTrigger className="w-[130px] rounded-r-none border-r-0 pl-2 pr-0 text-sm md:w-[160px] md:pl-3 md:text-base">
-        <SelectValue placeholder="Tất cả" />
+        <SelectValue placeholder="Tiêu đề" />
       </SelectTrigger>
       <SelectContent className="text-sm md:text-base">
         <SelectGroup>
           <SelectLabel>Tìm kiếm theo</SelectLabel>
-          <SelectItem value="all">Tất cả</SelectItem>
-          <SelectItem value="code">Mã tin</SelectItem>
           <SelectItem value="title">Tiêu đề</SelectItem>
+          <SelectItem value="code">Mã tin</SelectItem>
           <SelectItem value="note">Ghi chú</SelectItem>
         </SelectGroup>
       </SelectContent>

@@ -272,6 +272,7 @@ export const listFilterProfileDesktop: Array<FilterChipOption> = [
     text: 'Phân loại',
   },
   { id: FilterFieldName.ProfileLocations, text: 'Khu vực' },
+  { id: FilterFieldName.AggProjects, text: 'Dự án' },
   {
     id: FilterFieldName.Price,
     text: 'Mức giá',
@@ -297,6 +298,7 @@ export const listFilterProfileMobile: Array<FilterChipOption> = [
     text: 'Phân loại',
   },
   { id: FilterFieldName.ProfileLocations, text: 'Khu vực' },
+  { id: FilterFieldName.AggProjects, text: 'Dự án' },
   {
     id: FilterFieldName.Price,
     text: 'Mức giá',

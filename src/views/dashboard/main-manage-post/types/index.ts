@@ -21,6 +21,7 @@ export interface IPostForm {
   ward_id?: number | string;
   street_id?: number | string;
   project_id: number | string;
+  child_project_id?: number | string;
   full_address?: string;
   bedrooms_count?: string;
   bathrooms_count?: string;

@@ -20,6 +20,7 @@ export const PostFormSchema = yup.object().shape({
   district_id: yup.string().required("Đây là trường bắt buộc."),
   ward_id: yup.string().nullable(),
   street_id: yup.string().nullable(),
+  child_project_id: yup.string().nullable(),
   project_id: yup.string().nullable(),
   full_address: yup.string().nullable(),
   bedrooms_count: yup.string().nullable(),

@@ -12,6 +12,12 @@ import { FormField, FormItem, FormLabel } from '@components/ui/form';
 import { useWatch } from 'react-hook-form';
 
 const LocationFormV2: React.FC<A> = ({ form }) => {
+  // Check if we should show the location form
+  const project = useWatch({ control: form.control, name: 'project' });
+  const watchedFullAddress = useWatch({ control: form.control, name: 'full_address' });
+  const shouldHideLocation = project && watchedFullAddress;
+
+
   // Initialize state from form values 
   const { city_id, district_id, ward_id, street_id } = form.getValues();
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>({ value: city_id, text: '' });
@@ -25,7 +31,6 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   const watchedDistrict = useWatch({ control: form.control, name: 'district_id' });
   const watchedWard = useWatch({ control: form.control, name: 'ward_id' });
   const watchedStreet = useWatch({ control: form.control, name: 'street_id' });
-  const watchedFullAddress = useWatch({ control: form.control, name: 'full_address' });
 
   // Update component state when form values change
   useEffect(() => {
@@ -105,23 +110,28 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
           <MapPin /> Khu vực bất động sản
         </CardTitle>
       </CardHeader>
+
       <CardContent className="grid gap-6">
-        <LocationsPickerFormV2
-          key={key}
-          form={form}
-          city={curCity}
-          district={curDistrict}
-          ward={curWard}
-          street={curStreet}
-          onChangeCity={onSelectCity}
-          onChangeDistrict={onSelectDistrict}
-          onChangeWard={onSelectWard}
-          onChangeStreet={onSelectStreet}
-          onChangedFullAddress={onChangedFullAddress}
-        />
+        {!shouldHideLocation && (
+          <LocationsPickerFormV2
+            key={key}
+            form={form}
+            city={curCity}
+            district={curDistrict}
+            ward={curWard}
+            street={curStreet}
+            onChangeCity={onSelectCity}
+            onChangeDistrict={onSelectDistrict}
+            onChangeWard={onSelectWard}
+            onChangeStreet={onSelectStreet}
+            onChangedFullAddress={onChangedFullAddress}
+          />
+        )}
 
         <div className="grid gap-2">
-          <Label htmlFor="subject">Khu vực trên bản đồ</Label>
+          {!shouldHideLocation &&
+            <Label htmlFor="subject">Khu vực trên bản đồ</Label>
+          }
 
           <iframe
             className='w-full min-h-64'
@@ -140,6 +150,7 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
                   Địa chỉ
                 </FormLabel>
                 <Input
+                  readOnly={shouldHideLocation}
                   value={fullAddress}
                   onChange={(e) => {
                     field.onChange(e.target.value)

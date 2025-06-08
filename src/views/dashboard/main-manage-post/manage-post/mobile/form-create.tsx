@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import useModals from '@mobile/modals/hooks';
 import { useState } from 'react';
 import { OptionForSelect } from '@models';
@@ -20,6 +20,11 @@ import MediaFields from './fields/MediaFields';
 export const FormMobile: React.FC = () => {
   const { openModal, closeModal } = useModals();
   const form = useFormContext<IPostForm>();
+
+  // Watch for project and full_address values to conditionally show location field
+  const project = useWatch({ control: form.control, name: 'project' });
+  const fullAddress = useWatch({ control: form.control, name: 'full_address' });
+  const shouldShowLocationField = !project || !fullAddress;
 
   // Location state management
   const [cityOption, setCityOption] = useState<OptionForSelect | undefined>();
@@ -70,17 +75,19 @@ export const FormMobile: React.FC = () => {
         updateLocationOptions={updateLocationOptions}
       />
 
-      {/* Location selection */}
-      <LocationField
-        form={form}
-        openModal={openModal}
-        closeModal={closeModal}
-        cityOption={cityOption}
-        districtOption={districtOption}
-        wardOption={wardOption}
-        streetOption={streetOption}
-        onLocationChange={handleLocationChange}
-      />
+      {/* Location selection - only show if project or full_address is missing */}
+      {shouldShowLocationField && (
+        <LocationField
+          form={form}
+          openModal={openModal}
+          closeModal={closeModal}
+          cityOption={cityOption}
+          districtOption={districtOption}
+          wardOption={wardOption}
+          streetOption={streetOption}
+          onLocationChange={handleLocationChange}
+        />
+      )}
 
       {/* Property description */}
       <DescriptionFields form={form} />
