@@ -53,6 +53,7 @@ export const enum FilterFieldName {
   Project = 'project',
   Sort = 'sort',
   BusCatType = 'busCatType',
+  AggProjects = 'aggProjects',
 }
 
 export const FILTER_FIELDS_TO_PARAMS = [

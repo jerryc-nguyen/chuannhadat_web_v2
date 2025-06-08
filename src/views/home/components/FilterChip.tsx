@@ -11,8 +11,7 @@ import FilterModal from '@mobile/filter_bds/FilterModal';
 import Rooms from '@mobile/filter_bds/bts/Rooms';
 import Direction from '@mobile/filter_bds/bts/Direction';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useFilterLocations } from '@mobile/locations/hooks';
-import { FilterChipOption, FilterState } from '@mobile/filter_bds/types';
+import { FilterChipOption } from '@mobile/filter_bds/types';
 import { Button } from '@components/ui/button';
 import { LuLoader2 } from 'react-icons/lu';
 import { useQuery } from '@tanstack/react-query';
@@ -26,8 +25,7 @@ import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import BusCatType from '@mobile/filter_bds/bts/BusCatType';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
 import Projects from '@mobile/filter_bds/bts/desktop/Projects';
-import { useAtom } from 'jotai';
-import { filterStateAtom } from '@mobile/filter_bds/states';
+import AggProjects from '@mobile/filter_bds/bts/AggProjects';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -38,11 +36,16 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   //State !
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const containerChipsRef = React.useRef(null);
-  const [filterState] = useAtom(filterStateAtom);
 
-  const { copyFilterStatesToLocal } = useFilterState();
-  const { selectedLocationText } = useFilterLocations();
-  const { applySingleFilter, buildFilterParams, removeFilterValue } = useFilterState();
+  const {
+    copyFilterStatesToLocal,
+    applySingleFilter,
+    buildFilterParams,
+    removeFilterValue,
+    isActiveChip,
+    selectedFilterText,
+  } = useFilterState();
+
   const filterParams = buildFilterParams({ withLocal: true });
 
   const { data, isLoading } = useQuery({
@@ -59,53 +62,6 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
     }
   };
 
-  const selectedRoomText = (): string => {
-    const results = [];
-    if (filterState.bed) {
-      results.push(`${filterState.bed.text} PN`);
-    }
-    if (filterState.bath) {
-      results.push(`${filterState.bath.text} WC`);
-    }
-
-    return results.join(' / ');
-  };
-
-  const selectedFilterText = (filterOption: FilterChipOption) => {
-    const fieldName = filterOption.id;
-    if (
-      filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations
-    ) {
-      return selectedLocationText ?? 'Khu vực';
-    } else if (filterOption.id == FilterFieldName.Rooms) {
-      return selectedRoomText() || 'Số phòng';
-    } else {
-      return (
-        //@ts-ignore: read value
-        filterState[fieldName]?.text ?? filterOption.text
-      );
-    }
-  };
-  const isActiveChip = (filterOption: FilterChipOption) => {
-    let isActive = false;
-    const fieldName = filterOption.id;
-    switch (fieldName) {
-      case FilterFieldName.Locations:
-        if (selectedLocationText) isActive = true;
-        break;
-      case FilterFieldName.ProfileLocations:
-        if (selectedLocationText) isActive = true;
-        break;
-      case FilterFieldName.Rooms:
-        if (selectedRoomText()) isActive = true;
-        break;
-      default:
-        if (filterState[fieldName as keyof FilterState]?.text) isActive = true;
-        break;
-    }
-    return isActive;
-  };
 
   const buildContent = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
@@ -131,6 +87,8 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
         return <Direction />;
       case FilterFieldName.Sort:
         return <SortOptions />;
+      case FilterFieldName.AggProjects:
+        return <AggProjects />;
       default:
         return undefined;
     }
