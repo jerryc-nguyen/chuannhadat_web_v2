@@ -1,3 +1,4 @@
+import { cn } from '@common/utils';
 import { Carousel, CarouselContent, type CarouselApi } from '@components/ui/carousel';
 import useCleanupEffect from '@hooks/useCleanupEffect';
 import useResizeImage from '@hooks/useResizeImage';
@@ -110,7 +111,7 @@ const CardImageCarousel: React.FC<CardImageCarouselProps> = (props) => {
           opts={{ loop: true }}
           setApi={setImageSliderApi}
           plugins={[Fade()]}
-          className="card-content_carousel w-full"
+          className={cn(styles['card-content_carousel'], 'w-full')}
         >
           <CarouselContent ref={imageSliderViewPortRef} className="ml-0">
             {(product.images || []).map((item: A, index: number) => (

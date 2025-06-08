@@ -1,22 +1,22 @@
 'use client';
 
 import { Table } from '@/components/ui/table';
+import { searchApi } from '@api/searchApi';
 import { DataGridContent, DataGridHeader, DataTablePagination } from '@components/data-grid';
+import useSearchAggs from '@components/search-aggs/hooks';
+import { useIsMobile } from '@hooks';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { DataTableToolbar } from './datagrid/toolbar';
 import { ProductQuery } from '../data/schemas';
 import { Product } from '../data/schemas/product-schema';
 import { useAdminCollectionPost } from '../hooks/use-collection-post';
+import { ListPostMobile } from '../mobile/ListPostMobile';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
 import { DataTableColumnHeader } from './datagrid/column-header';
-import useSearchAggs from '@components/search-aggs/hooks';
-import { searchApi } from '@api/searchApi';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { useIsMobile } from '@hooks';
-import { ListPostMobile } from '../mobile/ListPostMobile';
-
+import { DataTableToolbar } from './datagrid/toolbar';
 const columns: ColumnDef<Product>[] = [
   {
     id: 'select',
@@ -58,11 +58,12 @@ export function DataTable() {
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
   const totalRecords: number = cachedData?.pagination?.total_count ?? 0;
   const totalPages: number = cachedData?.pagination?.total_pages ?? 0;
-
-  if (cachedData?.aggs) {
-    updateSearchAggs(cachedData.aggs);
-    setIsUseAggOptions(true);
-  }
+  useEffect(() => {
+    if (cachedData?.aggs) {
+      updateSearchAggs(cachedData.aggs);
+      setIsUseAggOptions(true);
+    }
+  }, [cachedData?.aggs]);
 
   const [rowSelection, setRowSelection] = React.useState({});
 
@@ -112,7 +113,6 @@ export function DataTable() {
 
   return (
     <div className="space-y-4">
-      {/* ... */}
       <DataTableToolbar
         table={table}
         onFilterChipsChanged={onFilterChipsChanged}

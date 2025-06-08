@@ -35,6 +35,12 @@ export default function useSearchAggs() {
     })
   }, [searchAggs])
 
+  const projectsOptions = useMemo(() => {
+    return (searchAggs.projects || []).map((option: A) => {
+      return option;
+    })
+  }, [searchAggs])
+
   const locationAgg = (agg: Record<string, A>) => {
     const city_counts: Record<string, A> = {};
     const district_counts: Record<string, A> = {};
@@ -104,6 +110,7 @@ export default function useSearchAggs() {
     priceOptions,
     areasOptions,
     directionsOptions,
+    projectsOptions,
     isUseAggOptions,
     setIsUseAggOptions,
     locationsList

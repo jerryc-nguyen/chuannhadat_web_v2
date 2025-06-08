@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { monitorBotProtection } from '@/lib/botProtectionMonitor';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Check if bot protection is enabled
 const isBotProtectionEnabled = process.env.ENABLE_BOT_PROTECTION === 'true';
@@ -38,7 +38,7 @@ const log = {
     if ((DEBUG || FORCE_LOG_VISIBILITY) && LOG_LEVEL >= 2) {
       console.log(`⚠️⚠️⚠️ ${message}`, ...args);
     }
-  }
+  },
 };
 
 /**
@@ -62,7 +62,7 @@ export function getClientIp(req: NextRequest): string {
   }
 
   // Fall back to request IP from Next.js (usually the proxy's IP in Docker setups)
-  return req.ip || '0.0.0.0';
+  return req.url || '0.0.0.0';
 }
 
 /**
@@ -75,11 +75,11 @@ function isProtectedRoute(pathname: string): boolean {
   const patterns = [
     /^\/$/, // Home route "/"
     /^\/post\/[^/]+$/, // Post detail "/post/:slug"
-    /^\/profile\/[^/]+$/, // Profile detail "/profile/:slug" 
+    /^\/profile\/[^/]+$/, // Profile detail "/profile/:slug"
     /^\/category\/[^/]+$/, // Category "/category/:slug"
   ];
 
-  return patterns.some(pattern => pattern.test(pathname));
+  return patterns.some((pattern) => pattern.test(pathname));
 }
 
 /**
@@ -114,19 +114,17 @@ function isRateLimitExcluded(pathname: string, url: URL, req: NextRequest): bool
   }
 
   // Exclude Next.js AJAX requests by checking for multiple indicators
-  const isNextJsAjax = (
+  const isNextJsAjax =
     // Check URL parameters
     url.searchParams.has('_rsc') ||
     urlString.includes('_rsc=') ||
     searchParamsString.includes('_rsc') ||
     referer.includes('_rsc') ||
     rawUrl.includes('_rsc') ||
-
     // Check special Next.js headers
     req.headers.has('x-nextjs-data') ||
     req.headers.has('next-router-state-tree') ||
-    req.headers.has('next-url')
-  );
+    req.headers.has('next-url');
 
   if (isNextJsAjax) {
     log.info(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${urlString}`);
@@ -141,7 +139,8 @@ function isRateLimitExcluded(pathname: string, url: URL, req: NextRequest): bool
  */
 function getRouteName(pathname: string): string {
   if (pathname === '/') return 'HOME';
-  if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?')) return 'DASHBOARD';
+  if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?'))
+    return 'DASHBOARD';
   if (pathname.startsWith('/post/')) return 'POST DETAIL';
   if (pathname.startsWith('/profile/')) return 'PROFILE DETAIL';
   if (pathname.startsWith('/category/')) return 'CATEGORY';
@@ -155,7 +154,7 @@ function getRouteName(pathname: string): string {
 export async function applyBotProtection(req: NextRequest): Promise<NextResponse | null> {
   // Wrap the entire middleware in a try-catch to prevent crashes in production
   try {
-    // Immediate log at the very start 
+    // Immediate log at the very start
     log.warning(`BOT PROTECTION STARTED: ${req.nextUrl.pathname}`);
 
     const startTime = Date.now();
@@ -188,7 +187,10 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     // Handle special routes separately to ensure they get monitored
 
     // Handle the dashboard route
-    if (pathname === '/bot-protection-dashboard' || pathname.startsWith('/bot-protection-dashboard?')) {
+    if (
+      pathname === '/bot-protection-dashboard' ||
+      pathname.startsWith('/bot-protection-dashboard?')
+    ) {
       if (DEBUG) log.info('!!!!! DASHBOARD ACCESS DETECTED !!!!!');
       log.info(`Dashboard URL: ${req.nextUrl.toString()}`);
       log.info(`User-Agent: ${userAgent}`);
@@ -198,7 +200,9 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
       log.info('Dashboard monitoring result:', {
         timestamp: monitorResult.result.timestamp,
         url: monitorResult.result.url,
-        logCount: monitorBotProtection.toString().includes('recentBotLogs.unshift') ? 'Logs should be added' : 'No log adding code found'
+        logCount: monitorBotProtection.toString().includes('recentBotLogs.unshift')
+          ? 'Logs should be added'
+          : 'No log adding code found',
       });
 
       return null;
@@ -214,7 +218,7 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
       const monitorResult = await monitorBotProtection(req);
       log.verbose(`${routeName} page monitoring result:`, {
         timestamp: monitorResult.result.timestamp,
-        url: monitorResult.result.url
+        url: monitorResult.result.url,
       });
 
       // If bot protection blocks the request, return response
@@ -278,4 +282,4 @@ export async function applyBotProtection(req: NextRequest): Promise<NextResponse
     // Return a pass-through response to avoid breaking the application
     return NextResponse.next();
   }
-} 
+}

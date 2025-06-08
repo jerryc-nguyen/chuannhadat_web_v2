@@ -1,10 +1,8 @@
 .card_wrapper {
-  :global {
-    .card-content {
-      overflow: hidden;
-      padding: 0;
-      border-radius: $s8;
-      position: relative;
-    }
+  .card_content {
+    overflow: hidden;
+    padding: 0;
+    border-radius: $s8;
+    position: relative;
   }
 }

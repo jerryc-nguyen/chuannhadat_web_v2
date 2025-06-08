@@ -1,13 +1,19 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { setTokenClient, getTokenClient, removeTokenClient, getFrontendTokenClient, setFrontendToken } from '@common/cookies';
-import { useRouter } from 'next/navigation';
 import { AuthUtils } from '@common/auth';
-import { ILoginResponse } from '@mobile/auth/types';
+import {
+  getFrontendTokenClient,
+  getTokenClient,
+  removeTokenClient,
+  setFrontendToken,
+  setTokenClient,
+} from '@common/cookies';
 import { CustomerGender } from '@common/types';
-import { useAtom } from 'jotai';
 import { currentUserAtom } from '@mobile/auth/states';
+import { ILoginResponse } from '@mobile/auth/types';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 interface AuthContextType {
@@ -57,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (typeof window !== 'undefined') {
       const existingToken = getFrontendTokenClient();
       if (!existingToken) {
-        console.log("🔑 Initializing frontend token");
+        console.log('🔑 Initializing frontend token');
         setFrontendToken(uuidv4());
       }
     }
@@ -66,8 +72,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Check auth status on mount and set state
     const hasValidToken = checkAuthStatus();
-    // console.log("🔍 AuthContext init - Token exists:", hasValidToken);
-
     // Only run localStorage operations in the browser
     if (typeof window !== 'undefined') {
       // Try to load user data from localStorage if available
@@ -97,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const ensureValidUserData = (data: Partial<ILoginResponse>): ILoginResponse => {
     // Create a basic structure that satisfies ILoginResponse
     const baseUser: ILoginResponse = {
-      id: typeof data.id === 'string' ? parseInt(data.id, 10) : (data.id || 0),
+      id: typeof data.id === 'string' ? parseInt(data.id, 10) : data.id || 0,
       full_name: data.full_name || '',
       api_token: data.api_token || '',
       post_token: data.post_token || '',
@@ -114,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       slug: data.slug || '',
       address: data.address || '',
       // Copy any other properties from the original object
-      ...data
+      ...data,
     };
 
     // Handle name field if present in the input data
@@ -255,8 +259,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     updateUserInfo(userData);
   };
 
-  // Calculate bankTransferNote 
-  const bankTransferNote = "cnd" + currentUser?.id?.toString() || '';
+  // Calculate bankTransferNote
+  const bankTransferNote = 'cnd' + currentUser?.id?.toString() || '';
 
   const value = {
     isAuthenticated,

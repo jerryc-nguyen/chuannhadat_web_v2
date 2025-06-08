@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from 'react';
 import useBalance from '@mobile/main-financial-management/hooks';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
+import { FC, useEffect, useState } from 'react';
 
-import { MdOutlineDiscount } from 'react-icons/md';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { IoWalletOutline } from 'react-icons/io5';
 import { LuInfo } from 'react-icons/lu';
+import { MdOutlineDiscount } from 'react-icons/md';
 
 import { Card, CardContent } from '@components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
@@ -17,7 +17,7 @@ const BalanceInfo: FC = () => {
     tk_chinh: '0 Xu',
     tk_km: '0 Xu',
     total: '0 Xu',
-    total_amount: 0
+    total_amount: 0,
   });
 
   useEffect(() => {

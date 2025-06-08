@@ -1,19 +1,25 @@
+import { searchApi } from '@api/searchApi';
+import { AuthUtils } from '@common/auth';
+import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import {
+  FILTER_FIELDS_PARAMS_MAP,
+  FILTER_FIELDS_TO_PARAMS,
+  FilterFieldName,
+  OptionForSelect,
+} from '@models';
 import { useAtom, useAtomValue } from 'jotai';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+import { SORT_CHIP_OPTION } from '../constants';
 import {
   defaultFilterStateAtom,
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
 } from '../states';
-import { OptionForSelect } from '@models';
-import { FilterFieldName, FILTER_FIELDS_TO_PARAMS, FILTER_FIELDS_PARAMS_MAP } from '@models';
-import { searchApi } from '@api/searchApi';
-import { useMemo } from 'react';
 import { FilterChipOption, FilterState } from '../types';
-import { usePathname } from 'next/navigation';
-import { AuthUtils } from '@common/auth';
-import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import { SORT_CHIP_OPTION } from '../constants';
+
+import { useFilterLocations } from '@mobile/locations/hooks';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -21,6 +27,7 @@ export default function useFilterState() {
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
   const pathname = usePathname() || '';
   const { searchScope } = useSearchScope();
+  const { selectedLocationText } = useFilterLocations();
 
   const resetDataFilter = () => {
     setFilterState(defaultFilterStateAtom);
@@ -85,6 +92,13 @@ export default function useFilterState() {
       case FilterFieldName.Rooms:
         newFilterState.bath = undefined;
         newFilterState.bed = undefined;
+        break;
+      case FilterFieldName.AggProjects:
+        newFilterState.aggProjects = undefined;
+        newFilterState.project = undefined;
+        newFilterState.city = undefined;
+        newFilterState.district = undefined;
+        newFilterState.ward = undefined;
         break;
 
       default:
@@ -173,6 +187,14 @@ export default function useFilterState() {
         district: undefined,
         ward: undefined,
       };
+    } else if (filterOption.id == FilterFieldName.AggProjects) {
+      localValue = {
+        aggProjects: localFilterState.aggProjects,
+        project: localFilterState.aggProjects,
+        city: undefined,
+        district: undefined,
+        ward: undefined,
+      };
     } else {
       const fieldName = filterOption.id;
 
@@ -224,7 +246,7 @@ export default function useFilterState() {
 
   // handle apply filter by sort in mobile
   const applySortFilter = () => {
-    applySingleFilter(SORT_CHIP_OPTION)
+    applySingleFilter(SORT_CHIP_OPTION);
   };
 
   const selectedSortText = useMemo((): string | undefined => {
@@ -236,9 +258,12 @@ export default function useFilterState() {
 
     if (filterOption.id == FilterFieldName.Locations ||
       filterOption.id == FilterFieldName.ProfileLocations) {
-      return 'Khu vực';
+      return selectedLocationText ?? 'Khu vực';
+    } else if (filterOption.id == FilterFieldName.AggProjects || filterOption.id == FilterFieldName.Project) {
+      return filterState.project?.text ?? 'Dự án';
     } else if (filterOption.id == FilterFieldName.Rooms) {
-      return selectedRoomText() || 'Số phòng';
+      const roomText = selectedRoomText();
+      return roomText || 'Số phòng';
     } else {
       return (
         //@ts-ignore: read value
@@ -261,11 +286,15 @@ export default function useFilterState() {
   const isActiveChip = (filterOption: FilterChipOption): boolean => {
     const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
+    if (
+      filterOption.id == FilterFieldName.Locations ||
+      filterOption.id == FilterFieldName.ProfileLocations
+    ) {
       return !!(filterState.city || filterState.district || filterState.ward);
     } else if (filterOption.id == FilterFieldName.Rooms) {
       return !!(filterState.bed || filterState.bath);
+    } else if (filterOption.id == FilterFieldName.AggProjects) {
+      return !!(filterState.aggProjects || filterState.project);
     } else {
       return (
         //@ts-ignore: read value
@@ -293,6 +322,6 @@ export default function useFilterState() {
     extraSearchParams,
     selectedFilterText,
     selectedRoomText,
-    isActiveChip
+    isActiveChip,
   };
 }

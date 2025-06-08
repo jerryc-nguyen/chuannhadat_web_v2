@@ -1,9 +1,4 @@
 'use client';
-import React from 'react';
-import '@styles/pages/desktop/finacial-management/top-up.scss';
-import TableComponent from '@components/table';
-import BalanceInfo from '../components/BalanceInfo';
-import { useDepositModal } from '@components/ui/DepositModal';
 import { useAuth } from '@common/auth/AuthContext';
 import {
   BANK_ACCOUNT_NAME,
@@ -12,12 +7,17 @@ import {
   BANK_FULL_NAME,
   SMS_SUPPORT_NUMBER,
 } from '@common/constants';
-import { useSetAtom } from 'jotai';
+import TableComponent from '@components/table';
+import { useDepositModal } from '@components/ui/DepositModal';
+import '@styles/pages/desktop/finacial-management/top-up.scss';
 import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
 } from '@views/dashboard/states/breadcrumbAtom';
+import { useSetAtom } from 'jotai';
+import React from 'react';
+import BalanceInfo from '../components/BalanceInfo';
 
 const TopUpView = () => {
   const { currentUser, bankTransferNote } = useAuth();
@@ -126,9 +126,8 @@ const TopUpView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className='mx-4'>
+    <div className="mx-4">
       <BalanceInfo title="Nạp tiền vào tài khoản" />
-
       <div className="c-top-up__content">
         <h3 className="my-4 mt-8 text-xl font-bold">Nạp tiền bằng QR - Chuyển khoản ngân hàng</h3>
         <div className="note-transfer-bank">
@@ -136,8 +135,11 @@ const TopUpView = () => {
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             <li style={{ margin: '8px 0' }}>
               {' '}
-              Ghi đúng nội dung chuyển khoản: {' '}
+              Nội dung chuyển khoản:{' '}
               <strong style={{ color: 'red' }}>{bankTransferNote}</strong>
+            </li>
+            <li>
+              Vui lòng ghi đúng nội dung chuyển khoản để hệ thống tự động cập nhật số dư
             </li>
             <li style={{ margin: '8px 0' }}>
               <p className="my-2">

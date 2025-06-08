@@ -6,6 +6,7 @@ import useModals from '@mobile/modals/hooks';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import CardAuthor from '@views/home/components/CardAuthor';
 import CardImageCarousel from '@views/home/components/CardImageCarousel/CardImageCarousel';
+import BusCatType from '@views/home/components/product-card/BusCatType';
 import { useRef } from 'react';
 import PostDetailMobile from '../post-detail/PostDetailMobile';
 import { IProduct } from './type';
@@ -40,7 +41,7 @@ export const ProductDetailTitleBts = ({ product }: { product: A }) => {
 export default function ProductCard({ product }: { product: IProduct }) {
   const { openModal } = useModals();
   const divRef = useRef<HTMLDivElement | null>(null);
-  const isInCenter = useIsInVerticalCenterZone(divRef);
+  const isInCenter = useIsInVerticalCenterZone(divRef as React.RefObject<HTMLElement>);
 
   const showDetailPostModal = (e?: A) => {
     openModal({
@@ -76,7 +77,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
         )}
       </div>
       <div className="p-4">
-        <div className="w-full text-secondary">{product.bus_cat_type}</div>
+        {product.bus_cat_type && <BusCatType busCatType={product.bus_cat_type} project={product.project} />}
         <a
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}

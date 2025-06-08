@@ -16,13 +16,14 @@ import ImageForm from './components/form-components/image-form';
 import LocationFormV2 from './components/form-components/location-form-v2';
 import ProductDescriptionForm from './components/form-components/product-description';
 import ProductTypeForm from './components/form-components/product-type';
+import ProjectForm from './components/form-components/project-form';
+
 import { PostFormSchema } from './form-schemas';
 
 import { useBreadcrumb } from '@hooks/useBreadcrumb';
 import React, { useEffect, useRef } from 'react';
 import { FormMobile } from './mobile/form-create';
 import { useAuth } from '@common/auth/AuthContext';
-import useModals from '@mobile/modals/hooks';
 
 /**
  * TODO: Split file to smaller components
@@ -123,6 +124,7 @@ const NewPost: React.FC = () => {
           ) : (
             <div className="grid items-start gap-6 lg:col-span-3">
               <ProductTypeForm form={form} />
+              <ProjectForm form={form} />
               <LocationFormV2 form={form} />
               <ProductDescriptionForm form={form} />
               <ProductInfoForm form={form} />

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import useCleanupEffect from '@hooks/useCleanupEffect';
+import React, { useState } from 'react';
 
 interface DataType {
   [key: string]: any; // Changed to `any` for simplicity
@@ -90,7 +90,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data, title, f
               </tr>
             ) : (
               data.map((row, rowIndex) => (
-                <tr key={row.key}>
+                <tr key={row.account_number || row.id}>
                   {columns.map((col) => (
                     <td
                       key={col.key}

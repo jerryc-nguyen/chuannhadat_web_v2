@@ -1,3 +1,4 @@
+import { cn } from '@common/utils';
 import { AspectRatio } from '@components/ui/AspectRatio';
 import useResizeImage from '@hooks/useResizeImage';
 import useModalPostDetail from '@views/post-detail/hooks/useModalPostDetail';
@@ -30,7 +31,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
       >
         {product?.title}
       </h3>
-      <div className="card-content">
+      <div className={styles.card_content}>
         <div className="card-content_image relative cursor-pointer [grid-area:image]">
           <AspectRatio className="h-full overflow-hidden rounded-md">
             <img
@@ -42,7 +43,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
               alt={product?.title}
             />
           </AspectRatio>
-          <div className="card-content_thumb rounded-full bg-black/50 px-2">
+          <div className={cn(styles['card-content_thumb'], 'rounded-full bg-black/50 px-2')}>
             <IoImage size={15} className="text-md text-white" />
             <span className="text-lg text-white">{product?.images_count}</span>
           </div>

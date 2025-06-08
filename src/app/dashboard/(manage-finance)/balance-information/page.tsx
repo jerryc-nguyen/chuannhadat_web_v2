@@ -1,16 +1,16 @@
-// Next Imports
-import type { Metadata } from 'next';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import BalanceViewMobie from '@mobile/main-financial-management/balance';
 import BalanceViewDesktop from '@views/dashboard/main-financial-management/balance';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+// Next Imports
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Thông tin số dư',
   description: 'Chuẩn Nhà Đất',
 };
 
-const Page = () => {
-  const { isMobile } = useGetUserAgentInfo();
+const Page = async () => {
+  const { isMobile } = await getUserAgentInfo();
 
   return (
     <>

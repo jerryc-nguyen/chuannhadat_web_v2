@@ -1,11 +1,11 @@
-import React from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@common/utils';
 import useCleanupEffect from '@hooks/useCleanupEffect';
+import React from 'react';
 
 type TooltipHostProps = {
   children: React.ReactNode;
-  content: string | JSX.Element;
+  content: string | React.ReactElement;
   className?: string;
   /** Specifies to show tooltip only when text is overflowed  */
   isOverflow?: boolean;

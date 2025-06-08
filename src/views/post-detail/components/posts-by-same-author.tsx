@@ -24,23 +24,22 @@ type PostsBySameAuthorProps = {
 
 const MAX_POSTS = 8;
 
-const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
-  productId,
-  authorSlug,
-  fullNameAuthor,
-  totalCount
-}) => {
+const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ( props ) => {
+  const { productId,
+    authorSlug,
+    fullNameAuthor,
+    totalCount } = props
   const {
     data: relatedPosts,
     isLoading,
     isSuccess,
     status,
-  } = useQuery({
+  } = useQuery( {
     queryKey: ['get-posts-same-author', productId],
-    queryFn: () => services.posts.getPostsSameAuthor(productId),
+    queryFn: () => services.posts.getPostsSameAuthor( productId ),
     enabled: !!productId,
-    select: (data) => data.data,
-  });
+    select: ( data ) => data.data,
+  } );
 
   const { onCloseModal } = useModalPostDetail();
 
@@ -72,8 +71,8 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
     </div>
   );
 
-  if ((isSuccess && relatedPosts.length === 0) || status === 'error') return null;
-  if (isLoading || !productId) return loadingRelatedCard();
+  if ( ( isSuccess && relatedPosts.length === 0 ) || status === 'error' ) return null;
+  if ( isLoading || !productId ) return loadingRelatedCard();
   return (
     <>
       <h3 className="mt-6 cursor-pointer text-lg font-bold">
@@ -85,7 +84,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
 
       <Carousel className="w-full mt-4">
         <CarouselContent>
-          {relatedPosts?.map((post, index) => (
+          {relatedPosts?.map( ( post, index ) => (
             <CarouselItem key={index}>
               <Card>
                 <CardContent className="group p-4">
@@ -93,7 +92,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
                 </CardContent>
               </Card>
             </CarouselItem>
-          ))}
+          ) )}
 
           {relatedPosts && relatedPosts?.length >= MAX_POSTS && (
             <CarouselItem>
@@ -105,7 +104,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = ({
                       onClick={onCloseModal}
                       className="absolute inset-0 flex items-center justify-center w-full h-full rounded-lg bg-black/60 text-xl font-medium text-white hover:underline"
                     >
-                      {(totalCount && totalCount > MAX_POSTS) ? `Xem thêm ${totalCount - relatedPosts?.length}+ tin` : 'Xem thêm'}
+                      {( totalCount && totalCount > MAX_POSTS ) ? `Xem thêm ${totalCount - relatedPosts?.length}+ tin` : 'Xem thêm'}
                     </Link>
                   </div>
                 </CardContent>

@@ -9,14 +9,14 @@ type PostListProps = {
   dataPostList: IPostProductCard[];
   className?: string;
 };
-export default function PostList({ isShowAuthor = true, dataPostList, className }: PostListProps) {
+export default function PostList ( { isShowAuthor = true, dataPostList, className }: PostListProps ) {
   return (
     <>
       <div className={styles.post_list_wrapper}>
-        <div className={cn('post_list', className)}>
-          {dataPostList.map((product) => {
+        <div className={cn( styles.post_list, className )}>
+          {dataPostList?.map( ( product ) => {
             return <ProductCard isShowAuthor={isShowAuthor} product={product} key={product?.id} />;
-          })}
+          } )}
         </div>
       </div>
     </>

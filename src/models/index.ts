@@ -2,6 +2,7 @@ export type TPhoto = {
   id: number;
   url: string;
 };
+export type Params = Promise<{ slug: string[] }>;
 
 /* eslint-disable no-unused-vars */
 export type Range = {
@@ -14,6 +15,7 @@ export type OptionForSelect = {
   text?: string;
   range?: Range;
   params?: Record<string, A>;
+  data?: Record<string, A>;
   count?: number;
   long_text?: string;
   description?: string;
@@ -51,6 +53,7 @@ export const enum FilterFieldName {
   Project = 'project',
   Sort = 'sort',
   BusCatType = 'busCatType',
+  AggProjects = 'aggProjects',
 }
 
 export const FILTER_FIELDS_TO_PARAMS = [

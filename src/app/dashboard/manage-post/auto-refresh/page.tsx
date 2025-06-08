@@ -1,16 +1,16 @@
-import React from 'react';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import { Metadata } from 'next';
-import AutoRefreshDesktop from '@views/dashboard/main-manage-post/auto-refresh';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import AutoRefreshMobile from '@mobile/main-manage-post/auto-refresh';
+import AutoRefreshDesktop from '@views/dashboard/main-manage-post/auto-refresh';
+import { Metadata } from 'next';
+import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Cập nhật tin tức',
   description: 'Quản lý cập nhật tin tức',
 };
 
-const AutoRefeshPage: React.FC = () => {
-  const { isMobile } = useGetUserAgentInfo();
+const AutoRefeshPage: React.FC = async () => {
+  const { isMobile } = await getUserAgentInfo();
   if (isMobile) {
     return (
       <div className="c-mobileApp mx-4">

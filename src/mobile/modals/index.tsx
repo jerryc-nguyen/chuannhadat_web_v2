@@ -1,11 +1,4 @@
-import { useAtom } from 'jotai';
-import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
-import './style.scss';
-import { Drawer } from 'vaul';
-import { IoCloseOutline } from 'react-icons/io5';
-import { Modal } from './states/types';
-import { getViewportSize } from '@hooks/useViewportSize';
-import { useEffect, useMemo, useState } from 'react';
+import { useBrowserPushState } from '@components/popstate-handler/hooks';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog';
-import { useBrowserPushState } from '@components/popstate-handler/hooks';
+import { getViewportSize } from '@hooks/useViewportSize';
+import { useAtom } from 'jotai';
+import { useEffect, useMemo, useState } from 'react';
+import { IoCloseOutline } from 'react-icons/io5';
+import { Drawer } from 'vaul';
+import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
+import { Modal } from './states/types';
+import './style.scss';
 
 export const HEADER_HEIGHT = 58.59;
 export const FOOTER_HEIGHT = 54.59;
@@ -79,10 +79,6 @@ export function BtsModals1() {
     }
   };
 
-  const isStringTitle = useMemo(() => {
-    return typeof modal?.title === 'string';
-  }, [modal]);
-
   const headerClass = useMemo(() => {
     return buildHeaderClass(modal);
   }, [modal]);
@@ -102,10 +98,7 @@ export function BtsModals1() {
           <Drawer.Overlay className="c-bts__overlay1 fixed inset-0 bg-black/40" />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
-              {isStringTitle && (
-                <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
-              )}
-              {!isStringTitle && <div className="w-full">{modal?.title}</div>}
+              <Drawer.Title className="c-bts__title w-full">{modal?.title}</Drawer.Title>
               <button onClick={onClose} className="c-bts__close">
                 <IoCloseOutline size={30} />
               </button>
@@ -188,7 +181,12 @@ export function BtsModals2() {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (
-      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose} repositionInputs={false}>
+      <Drawer.Root
+        open={modal != undefined}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+        repositionInputs={false}
+      >
         <Drawer.Portal>
           <Drawer.Overlay className={`c-bts__overlay2 fixed inset-0 bg-black/40`} />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">
@@ -243,7 +241,12 @@ export function BtsModals3() {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
     return (
-      <Drawer.Root open={modal != undefined} onOpenChange={onOpenChange} onClose={onClose} repositionInputs={false}>
+      <Drawer.Root
+        open={modal != undefined}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+        repositionInputs={false}
+      >
         <Drawer.Portal>
           <Drawer.Overlay className={`c-bts__overlay3 fixed inset-0 bg-black/40`} />
           <Drawer.Content className="fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[10px]">

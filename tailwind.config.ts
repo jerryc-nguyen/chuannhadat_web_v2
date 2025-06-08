@@ -158,7 +158,7 @@ const config = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    plugin(function ({ addVariant }) {
+    plugin(({ addVariant }) => {
       addVariant('disabled-within', '&:has(input:is(:disabled), button:is(:disabled))');
     }),
     require('tailwind-scrollbar-hide'),

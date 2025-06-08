@@ -1,16 +1,16 @@
-import React from 'react';
-import { HeaderDashboard, SidebarDashboard } from '@views/dashboard/layout/components';
-import './index.scss';
-import { SidebarProvider } from '@components/ui/sidebar';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import Breadcrumb from '@components/breadcrumb';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { SidebarProvider } from '@components/ui/sidebar';
+import { HeaderDashboard, SidebarDashboard } from '@views/dashboard/layout/components';
+import React from 'react';
+import './index.scss';
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const { isMobile } = useGetUserAgentInfo();
+const DashboardLayout: React.FC<DashboardLayoutProps> = async ({ children }) => {
+  const { isMobile } = await getUserAgentInfo();
   return (
     <SidebarProvider>
       <SidebarDashboard />

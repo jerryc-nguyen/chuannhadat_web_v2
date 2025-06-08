@@ -203,6 +203,7 @@ export default function LocationsPickerFormV2({
                 updateFieldValue={field.onChange}
                 containerRef={containerRef}
                 onSelect={onSelectCity}
+                showClear={true}
               />
               <FormMessage />
             </FormItem>
@@ -226,6 +227,7 @@ export default function LocationsPickerFormV2({
                 updateFieldValue={field.onChange}
                 containerRef={containerRef}
                 onSelect={onSelectDistrict}
+                showClear={true}
               />
               <FormMessage />
             </FormItem>
@@ -247,6 +249,7 @@ export default function LocationsPickerFormV2({
                 updateFieldValue={field.onChange}
                 containerRef={containerRef}
                 onSelect={onSelectWard}
+                showClear={true}
               />
             </FormItem>
           )}
@@ -267,6 +270,7 @@ export default function LocationsPickerFormV2({
                 updateFieldValue={field.onChange}
                 containerRef={containerRef}
                 onSelect={onSelectStreet}
+                showClear={true}
               />
             </FormItem>
           )}

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { applyBotProtection } from './middleware/bot-protection';
 import { handleUrlRedirects } from './middleware/url-redirects';
 
@@ -7,30 +7,30 @@ const DEBUG = process.env.DEBUG_MIDDLEWARE === 'true';
 
 // Helper functions for controlled logging
 const log = {
-  error: (message: string, ...args: any[]) => {
+  error: (message: string, ...args: A[]) => {
     // Always log errors (level >= 1)
     if (DEBUG) {
       console.error(`[MIDDLEWARE] ❌ ${message}`, ...args);
     }
   },
-  info: (message: string, ...args: any[]) => {
+  info: (message: string, ...args: A[]) => {
     // Only log important info (level >= 2)
     if (DEBUG) {
       console.log(`[MIDDLEWARE] ${message}`, ...args);
     }
   },
-  verbose: (message: string, ...args: any[]) => {
+  verbose: (message: string, ...args: A[]) => {
     // Only log verbose details (level >= 3)
     if (DEBUG) {
       console.log(`[MIDDLEWARE] 🔍 ${message}`, ...args);
     }
   },
-  highlight: (message: string, ...args: any[]) => {
+  highlight: (message: string, ...args: A[]) => {
     // Only log highlighted messages (level >= 2)
     if (DEBUG) {
       console.log(`🔵🔵🔵 ${message}`, ...args);
     }
-  }
+  },
 };
 
 // This runs in Node.js runtime (not Edge)
@@ -38,16 +38,16 @@ export const config = {
   matcher: [
     '/', // Explicitly match the home route
     '/post/:path*', // Post detail pages
-    '/profile/:path*', // Profile detail pages 
+    '/profile/:path*', // Profile detail pages
     '/category/:path*', // Category pages
     '/bot-protection-dashboard', // Dashboard route
     '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
   ],
-  runtime: 'nodejs',
 };
 
 // Special variable specifically to disable during build
-const isBuildTime = process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
+const isBuildTime =
+  process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
 
 /**
  * Main middleware function that orchestrates all middleware modules
@@ -90,7 +90,8 @@ export async function middleware(req: NextRequest) {
     }
 
     // Check for _rsc in multiple possible locations
-    const hasRscParam = req.nextUrl.searchParams.has('_rsc') ||
+    const hasRscParam =
+      req.nextUrl.searchParams.has('_rsc') ||
       urlString.includes('_rsc=') ||
       searchParamsString.includes('_rsc') ||
       rawUrl.includes('_rsc') ||
@@ -99,7 +100,9 @@ export async function middleware(req: NextRequest) {
 
     if (hasRscParam) {
       log.highlight(`[RSC] Client navigation detected: ${urlString}`);
-      log.info(`RSC detection: searchParams=${req.nextUrl.searchParams.has('_rsc')}, nextUrlString=${urlString.includes('_rsc=')}, searchParamsString=${searchParamsString.includes('_rsc')}, rawUrl=${rawUrl.includes('_rsc')}, referer=${rawHeadersUrl.includes('_rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}`);
+      log.info(
+        `RSC detection: searchParams=${req.nextUrl.searchParams.has('_rsc')}, nextUrlString=${urlString.includes('_rsc=')}, searchParamsString=${searchParamsString.includes('_rsc')}, rawUrl=${rawUrl.includes('_rsc')}, referer=${rawHeadersUrl.includes('_rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}`,
+      );
     }
 
     // Skip middleware for static files
@@ -147,4 +150,4 @@ export async function middleware(req: NextRequest) {
     // Always continue with the request if middleware fails
     return NextResponse.next();
   }
-} 
+}

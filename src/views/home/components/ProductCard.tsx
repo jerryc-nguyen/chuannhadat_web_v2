@@ -13,12 +13,15 @@ import styles from '../styles/ProductCard.module.scss';
 import CardAuthor from './CardAuthor';
 import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
 import LoadingProductCard from './LoadingProductCard';
+import BusCatType from './product-card/BusCatType';
+
 type ProductCardProps = {
   product: A;
   isShowAuthor?: boolean;
   className?: string;
   isShowVideoYoutube?: boolean;
 };
+
 export default function ProductCard({
   product,
   isShowAuthor = true,
@@ -57,7 +60,7 @@ export default function ProductCard({
           <CardAuthor product={product} />
         </CardHeader>
       )}
-      <CardContent className="card-content flex-center relative">
+      <CardContent className={cn(styles.card_content, 'flex-center relative')}>
         <YoutubePlayerAction
           youtube_url={product.youtube_url}
           isDisplay={Boolean(product.youtube_url && isShowVideoYoutube)}
@@ -70,7 +73,7 @@ export default function ProductCard({
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
-        <div className="w-full text-secondary">{product.bus_cat_type}</div>
+        <BusCatType busCatType={product.bus_cat_type} project={product.project} />
 
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
@@ -110,14 +113,16 @@ export default function ProductCard({
         )}
       </CardFooter>
 
-      {isLoadingCardProduct && postId === product.uid && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
-          <div role="status">
-            <Spinner />
+      {
+        isLoadingCardProduct && postId === product.uid && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
+            <div role="status">
+              <Spinner />
+            </div>
+            <span className="font-medium">Đang tải...</span>
           </div>
-          <span className="font-medium">Đang tải...</span>
-        </div>
-      )}
-    </Card>
+        )
+      }
+    </Card >
   );
 }

@@ -1,14 +1,14 @@
 import { getServerSideURL } from '@common/getURL';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import { createMetadata, defaultJsonLd } from '@common/seo';
 import { cn } from '@common/utils';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import type { Metadata, Viewport } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import Head from 'next/head';
+import Script from 'next/script';
+import NextTopLoader from 'nextjs-toploader';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
-import NextTopLoader from 'nextjs-toploader';
-import Script from 'next/script';
 
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
@@ -121,12 +121,12 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isMobile } = useGetUserAgentInfo();
+  const { isMobile } = await getUserAgentInfo();
 
   return (
     <html lang="vi-VN" suppressHydrationWarning={true}>
@@ -148,6 +148,7 @@ export default function RootLayout({
           'bg-white',
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}
+        cz-shortcut-listen="true"
       >
         <NextTopLoader />
         <ProviderWrapper>{children}</ProviderWrapper>

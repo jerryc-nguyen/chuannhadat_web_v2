@@ -1,9 +1,3 @@
-.sidebarWrapper {
-  :global {
-    [data-state$='open'] {
-      .icon-arrow {
-        rotate: 90deg;
-      }
-    }
-  }
+.sidebarWrapper:global([data-state$='open'] .icon-arrow) {
+  rotate: 90deg;
 }

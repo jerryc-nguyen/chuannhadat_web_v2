@@ -13,49 +13,10 @@
     "@typescript-eslint/ban-ts-comment": ["error", { "ts-ignore": "allow-with-description" }],
     "no-empty-interface": 0,
     "@next/next/no-img-element": 0,
-    "@typescript-eslint/no-unused-vars": "error",
-    "no-console": "error",
-
-    // Feature-Driven Development structure rules
-    "import/no-restricted-paths": [
+    "@typescript-eslint/no-unused-vars": [
       "error",
-      {
-        "zones": [
-          // Feature should not import from other features
-          {
-            "target": "src/views/*/!(common)/**/*",
-            "from": "src/views/!(common)/**/*",
-            "message": "Features should not import directly from other features. Use shared modules instead."
-          },
-          // Feature-specific components should be in the feature's components folder
-          {
-            "target": "src/views/*",
-            "from": "src/views/*/components/**/*",
-            "allowSameFolder": true,
-            "message": "Feature components should be imported from within the feature's components folder"
-          }
-        ]
-      }
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
     ],
-    // Enforce proper naming for features (kebab-case)
-    "import/no-internal-modules": [
-      "error",
-      {
-        "allow": [
-          "src/views/**/index",
-          "src/views/**/components/**",
-          "src/views/**/hooks/**",
-          "src/views/**/types/**",
-          "src/views/**/constants/**",
-          "src/views/**/states/**",
-          "src/views/**/apis/**",
-          "src/views/**/query/**",
-          "src/common/**",
-          "src/hooks/**",
-          "src/components/**",
-          "src/apis/**"
-        ]
-      }
-    ]
+    "no-console": "error"
   }
 }

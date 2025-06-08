@@ -1,8 +1,8 @@
+import { CND_TEXT_COLORS } from '@common/constants';
 import useBalance from '@mobile/main-financial-management/hooks';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
-import { FC, useEffect, useState } from 'react';
-import { CND_TEXT_COLORS } from '@common/constants';
 import FigureCard, { CardIcons } from '@views/dashboard/components/FigureCard';
+import { FC, useEffect, useState } from 'react';
 
 const BalanceInfo: FC<{ title: string }> = ({ title }) => {
   const { balanceInfo } = useBalance();
@@ -11,7 +11,7 @@ const BalanceInfo: FC<{ title: string }> = ({ title }) => {
     tk_chinh: '0 Xu',
     tk_km: '0 Xu',
     total: '0 Xu',
-    total_amount: 0
+    total_amount: 0,
   });
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import { type ClassValue, clsx } from 'clsx';
+import { formatDistanceToNowStrict } from 'date-fns';
+import { FormatDistanceToken, vi } from 'date-fns/locale';
 import { merge } from 'lodash-es';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import queryString from 'query-string';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
-import { FormatDistanceToken, vi } from 'date-fns/locale';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { ONE_BILLION } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
@@ -24,7 +24,7 @@ const customViLocale = {
       halfAMinute: 'Vừa xong',
       lessThanXMinutes: 'Vừa xong',
       xMinutes: `${count} phút trước`,
-      aboutXHours: `1 giờ trước`,
+      aboutXHours: '1 giờ trước',
       xHours: `${count} giờ trước`,
       xDays: `${count} ngày trước`,
       aboutXWeeks: `${count} tuần trước`,
@@ -57,8 +57,8 @@ export const formatRelativeTime = (date: Date | string) => {
 export function stringToSlug(str?: string) {
   str = str ?? '';
 
-  const from = 'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ',
-    to = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy';
+  const from = 'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ';
+  const to = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy';
   for (let i = 0, l = from.length; i < l; i++) {
     str = str.replace(RegExp(from[i], 'gi'), to[i]);
   }
@@ -111,7 +111,7 @@ export const getInitialsName = (fullName: string) => {
 };
 export const truncateText = (text: string, maxLength = 100) => {
   if (text?.length > maxLength) {
-    return text?.substring(0, maxLength) + ' .....';
+    return `${text?.substring(0, maxLength)} .....`;
   }
   return text;
 };
@@ -130,14 +130,15 @@ export const objectToQueryParams = (obj: Record<string, A>, parentKey = ''): str
               : `${encodeURIComponent(fullKey)}[${index}]=${encodeURIComponent(item)}`,
           )
           .join('&');
-      } else if (typeof value === 'object' && value !== null && 'value' in value) {
+      }
+      if (typeof value === 'object' && value !== null && 'value' in value) {
         // Special handling for objects with a "value" field
         return `${encodeURIComponent(key)}=${encodeURIComponent(value.value)}`;
-      } else if (typeof value === 'object' && value !== null) {
-        return objectToQueryParams(value, fullKey);
-      } else {
-        return `${encodeURIComponent(fullKey)}=${encodeURIComponent(value)}`;
       }
+      if (typeof value === 'object' && value !== null) {
+        return objectToQueryParams(value, fullKey);
+      }
+      return `${encodeURIComponent(fullKey)}=${encodeURIComponent(value)}`;
     })
     .join('&');
 
@@ -163,7 +164,7 @@ export const queryParamsToObject = (query: string): Record<string, A> => {
         if (index === keys.length - 1) {
           acc[currKey] = value;
         } else {
-          acc[currKey] = acc[currKey] || (isNaN(Number(keys[index + 1])) ? {} : []);
+          acc[currKey] = acc[currKey] || (Number.isNaN(Number(keys[index + 1])) ? {} : []);
         }
         return acc[currKey];
       }, result);
@@ -224,20 +225,19 @@ export const formatPriceFilterChip = (price: number, hasUnit = true) => {
   if (isLowerBillion) {
     const millionValue = price / 1_000_000;
     return hasUnit ? `${formatNumber(millionValue)} triệu` : formatNumber(millionValue);
-  } else {
-    const billionValue = price / ONE_BILLION;
-    return hasUnit ? `${formatNumber(billionValue)} tỷ` : formatNumber(billionValue);
   }
+  const billionValue = price / ONE_BILLION;
+  return hasUnit ? `${formatNumber(billionValue)} tỷ` : formatNumber(billionValue);
 };
 export const formatRangeText = (min: number, max: number) => {
   const isSameLowerBillion = min < ONE_BILLION && max < ONE_BILLION;
   const isSameHigherBillion = min >= ONE_BILLION && max >= ONE_BILLION;
   if (isSameLowerBillion) {
     return `${formatPriceFilterChip(min, false)}-${formatPriceFilterChip(max, false)} triệu`;
-  } else if (isSameHigherBillion) {
-    return `${formatPriceFilterChip(min, false)}-${formatPriceFilterChip(max, false)} tỷ`;
-  } else {
-    return `${formatPriceFilterChip(min, true)}-${formatPriceFilterChip(max, true)}`;
   }
+  if (isSameHigherBillion) {
+    return `${formatPriceFilterChip(min, false)}-${formatPriceFilterChip(max, false)} tỷ`;
+  }
+  return `${formatPriceFilterChip(min, true)}-${formatPriceFilterChip(max, true)}`;
 };
 export const formatAreaText = (min?: number, max?: number) => `${min ?? 0}-${max ?? 0} m2`;

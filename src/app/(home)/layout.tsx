@@ -1,15 +1,15 @@
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import HeaderMobile from '@mobile/header/HeaderMobile';
-import HeaderDesktop from '@views/components/HeaderDeskop';
-import Footer from '@views/components/Footer';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import Footer from '@views/components/Footer';
+import HeaderDesktop from '@views/components/HeaderDeskop';
 
-export default function HomeLayout({
+export default async function HomeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isMobile } = useGetUserAgentInfo();
+  const { isMobile } = await getUserAgentInfo();
   const mobileClass = isMobile ? '' : 'px-5 md:px-10';
 
   return (

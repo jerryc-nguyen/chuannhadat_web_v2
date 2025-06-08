@@ -106,6 +106,13 @@ export const maskNumber = (value: string) => {
   // Remove non-numeric characters and store the raw value
   const rawValue = value.replace(/\D/g, '');
 
+  if (rawValue === '') {
+    return {
+      rawValue: '',
+      formattedValue: '',
+    };
+  }
+
   // Format the value for display
   const formattedValue = new Intl.NumberFormat('vi-VN', {
     minimumFractionDigits: 0,

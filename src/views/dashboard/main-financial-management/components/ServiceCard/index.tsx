@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Service } from '../../types';
-import PaymentDialog from '../PaymentDialog';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useBalanceRequest } from '@api/balance';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
-import { useBalanceRequest } from '@api/balance';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
+import { Service } from '../../types';
+import PaymentDialog from '../PaymentDialog';
 
 interface ServiceCardProps {
   plan: Service;
@@ -72,16 +72,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
         </CardHeader>
 
         <CardContent className="space-y-2">
-          <p className='font-bold mb-4'>{plan.buy_info.formatted_total} / 1 THÁNG</p>
-          <p>
-            <div>
-              {plan.contents.map((content, index) => (
-                <p key={index} className="mt-2 text-lg">
-                  <span className='text-secondary'>{content.text}:</span> <strong>{content.value}</strong>
-                </p>
-              ))}
-            </div>
-          </p>
+          <p className="mb-4 font-bold">{plan.buy_info.formatted_total} / 1 THÁNG</p>
+          <div>
+            {plan.contents.map((content, index) => (
+              <p key={index} className="mt-2 text-lg">
+                <span className="text-secondary">{content.text}:</span>{' '}
+                <strong>{content.value}</strong>
+              </p>
+            ))}
+          </div>
         </CardContent>
 
         <CardFooter>

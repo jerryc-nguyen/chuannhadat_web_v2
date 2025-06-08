@@ -1,26 +1,21 @@
+import { getCookieServer } from '@app/action';
 import { API_TOKEN_SERVER } from '@common/auth';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import Breadcrumb from '@components/breadcrumb';
 import { SidebarTrigger } from '@components/ui/sidebar';
+import MainNavRight from '@mobile/header/MainNavRight';
 import AvatarIcon from '@views/components/AvatarIcon';
 import FavoriteIcon from '@views/components/FavoriteIcon';
 import NotificationIcon from '@views/components/NotificationIcon';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import MainNavRight from '@mobile/header/MainNavRight';
-import dynamic from 'next/dynamic';
-import { cookies } from 'next/headers';
-import React from 'react';
-
-const ButtonCreatePost = dynamic(async () => (await import('./ButtonCreatePost')).default, {
-  ssr: false,
-});
+import ButtonCreatePost from './ButtonCreatePost';
 
 type HeaderDashboardProps = object;
 
-const HeaderDashboard: React.FC<HeaderDashboardProps> = () => {
-  const isLogged = cookies().has(API_TOKEN_SERVER);
-  const { isMobile } = useGetUserAgentInfo();
+const HeaderDashboard: React.FC<HeaderDashboardProps> = async () => {
+  const isLogged = Boolean(await getCookieServer(API_TOKEN_SERVER));
+  const { isMobile } = await getUserAgentInfo();
   return (
-    <header className="box-border flex h-[70px] items-center justify-between gap-4 border-b bg-muted/40 px-4 py-2 lg:px-6 sticky top-0 bg-white z-20">
+    <header className="sticky top-0 z-20 box-border flex h-[70px] items-center justify-between gap-4 border-b bg-muted/40 bg-white px-4 py-2 lg:px-6">
       <div className="flex items-center gap-x-4">
         {isMobile && <SidebarTrigger />}
         {!isMobile && <Breadcrumb />}

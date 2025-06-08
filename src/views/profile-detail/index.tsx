@@ -38,7 +38,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     select: (data) => data.data,
   });
 
-  const { buildFilterParams } = useFilterState();
+  const { buildFilterParams, applyAllFilters } = useFilterState();
   const filterParams = buildFilterParams({ withLocal: false });
   const {
     data: { data: products, pagination, aggs: aggreations },
@@ -59,12 +59,15 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       setIsUseAggOptions(true);
     }
   }, [aggreations]);
+
   const onFilterChanged = (filterState: Record<string, A>) => {
     updateValues({
       city: filterState.city,
       district: filterState.district,
-      ward: filterState.ward,
+      ward: filterState.ward
     });
+
+    applyAllFilters(filterState);
   };
 
   const EmptyPost = () => {

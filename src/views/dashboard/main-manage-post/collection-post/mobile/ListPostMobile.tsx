@@ -1,8 +1,8 @@
+import { Button } from '@components/ui/button';
+import { Separator } from '@components/ui/separator';
 import { useReactTable } from '@tanstack/react-table';
-import { Product } from '../data/schemas';
-import { BlockImageProduct } from '../components/cells/BlockImageProduct';
-import { TitleTriggerOpenProductDetail } from '../components/cells/TitleTriggerOpenProductDetail';
-import { BlockWarnHiddenPost } from '../components/cells/BlockWarnHiddenPost';
+import { Maximize2, SquarePen } from 'lucide-react';
+import Link from 'next/link';
 import {
   ButtonDelete,
   ButtonRefresh,
@@ -10,12 +10,12 @@ import {
   CheckboxAutoRefresh,
   SwitchButtonToggleShowOnFrontEnd,
 } from '../components/actions';
-import { Separator } from '@components/ui/separator';
-import Link from 'next/link';
-import { Button } from '@components/ui/button';
-import { Maximize2, SquarePen } from 'lucide-react';
-import { BlockCheckHiddenReason } from '../components/cells/BlockCheckHiddenReason';
 import { BlockAdsType } from '../components/cells/BlockAdsType';
+import { BlockCheckHiddenReason } from '../components/cells/BlockCheckHiddenReason';
+import { BlockImageProduct } from '../components/cells/BlockImageProduct';
+import { BlockWarnHiddenPost } from '../components/cells/BlockWarnHiddenPost';
+import { TitleTriggerOpenProductDetail } from '../components/cells/TitleTriggerOpenProductDetail';
+import { Product } from '../data/schemas';
 
 type Props<T> = {
   table: T extends object ? ReturnType<typeof useReactTable<T>> : never;
@@ -42,11 +42,10 @@ export const ListPostMobile = <T extends Product>({ table, contentEmpty }: Props
 };
 
 interface SinglePostProps {
-  key: number;
   product: Product;
 }
 
-function SinglePost({ key, product }: SinglePostProps) {
+function SinglePost({ product }: SinglePostProps) {
   const hide_on_frontend_reason = product.hide_on_frontend_reason;
 
   const images = product.images;
@@ -97,7 +96,7 @@ function SinglePost({ key, product }: SinglePostProps) {
           />
         </div>
         <div className="col-span-3 flex flex-col gap-1 pl-3">
-          <TitleTriggerOpenProductDetail title={title} product={product} className="text-sm mb-0" />
+          <TitleTriggerOpenProductDetail title={title} product={product} className="mb-0 text-sm" />
           <BlockAdsType
             ads_type={adsType}
             expires_after_days={expires_after_days}
@@ -105,7 +104,7 @@ function SinglePost({ key, product }: SinglePostProps) {
           />
         </div>
       </div>
-      <div className="flex flex-wrap gap-1 text-xs mt-2">
+      <div className="mt-2 flex flex-wrap gap-1 text-xs">
         <span className="rounded-sm border p-1 font-medium">{formatted_price || '--'}</span>
         <span className="rounded-sm border p-1 font-medium">{formatted_area || '--'}</span>
         <span className="rounded-sm border p-1 font-medium">{formatted_price_per_m2 || '--'}</span>
@@ -114,7 +113,7 @@ function SinglePost({ key, product }: SinglePostProps) {
           {formatted_kt || '--'}
         </span>
       </div>
-      <div className="flex flex-wrap gap-1 text-xs mt-1">
+      <div className="mt-1 flex flex-wrap gap-1 text-xs">
         <span className="rounded-sm border p-1">{formatted_bussiness_category || '--'}</span>
         <span className="rounded-sm border p-1">{short_location_name || '--'}</span>
       </div>

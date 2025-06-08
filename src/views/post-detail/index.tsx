@@ -2,18 +2,18 @@
 import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 
-import AuthorPost from './components/author-post';
-import OverviewPost from './components/overview-post';
-import FeaturesPost from './components/features-post';
-import DescriptionPost from './components/description-post';
-import { IProductDetail } from '@mobile/searchs/type';
-import NotePost from './components/note-post';
-import { useSetAtom } from 'jotai';
-import { postDetailAtom } from './states/postDetailAtoms';
-import ViewedPosts from './components/ViewedPosts';
-import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import NotFound from '@app/not-found';
 import { usePostDetail } from '@hooks/usePostDetail';
+import { IProductDetail } from '@mobile/searchs/type';
+import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
+import { useSetAtom } from 'jotai';
+import AuthorPost from './components/author-post';
+import DescriptionPost from './components/description-post';
+import FeaturesPost from './components/features-post';
+import NotePost from './components/note-post';
+import OverviewPost from './components/overview-post';
+import ViewedPosts from './components/ViewedPosts';
+import { postDetailAtom } from './states/postDetailAtoms';
 
 type PostDetailDesktopProps = object;
 
@@ -42,7 +42,7 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
   return (
     <>
       <div className="mx-auto mt-5 flex justify-between gap-x-4">
-        <Breadcrumb breadcrumbs={breadcrumbsData} />
+        <Breadcrumb breadcrumbs={breadcrumbsData} isLastLink={true} />
       </div>
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">

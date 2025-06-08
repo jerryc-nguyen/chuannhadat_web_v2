@@ -1,8 +1,8 @@
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
-import HomeDesktop from '@views/home/HomeDesktop';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import HomeMobile from '@mobile/home/HomeMobile';
+import HomeDesktop from '@views/home/HomeDesktop';
 
-export default function HomePage() {
-  const { isMobile } = useGetUserAgentInfo();
+export default async function HomePage() {
+  const { isMobile } = await getUserAgentInfo();
   return isMobile ? <HomeMobile /> : <HomeDesktop />;
 }

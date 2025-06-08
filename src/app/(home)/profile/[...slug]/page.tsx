@@ -1,22 +1,20 @@
 import axiosInstance from '@api/axiosInstance';
 import { services } from '@api/services';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
-import ProfileDetailDesktop from '@views/profile-detail';
-import { useGetUserAgentInfo } from '@hooks/useGetUserAgentInfo';
 import ProfileDetailMobile from '@mobile/profile-detail';
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import type { Params } from '@models';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import ProfileDetailDesktop from '@views/profile-detail';
 import { Metadata } from 'next';
-import React from 'react';
 
 type ProfileDetailPage = {
-  params: {
-    slug: string;
-  };
+  params: Params;
 };
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Params;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,9 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProfileDetailPage({ params }: ProfileDetailPage) {
-  const profileSlug = params.slug[0];
+  const profileSlug = (await params).slug[0];
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { isMobile } = useGetUserAgentInfo();
+  const { isMobile } = await getUserAgentInfo();
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ['get-detail-profile', profileSlug],

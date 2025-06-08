@@ -1,6 +1,6 @@
-import { getTokenClient, getFrontendTokenClient, removeTokenClient } from '@common/cookies';
-import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { set, get } from 'lodash-es';
+import { getFrontendTokenClient, getTokenClient, removeTokenClient } from '@common/cookies';
+import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
+import { get, set } from 'lodash-es';
 
 // Configuration constants
 const DEFAULT_AXIOS_TIMEOUT = 60 * 1000; // 60 seconds
@@ -21,7 +21,7 @@ const axiosInstance = axios.create({
   },
   baseURL: baseUrl,
   timeout: DEFAULT_AXIOS_TIMEOUT,
-  validateStatus: function (status: number) {
+  validateStatus: (status: number) => {
     // Only resolve for successful responses
     return status >= 200 && status < 300;
   },
@@ -42,14 +42,6 @@ axiosInstance.interceptors.request.use(
     const frontendToken = getFrontendTokenClient();
     if (frontendToken) {
       set(request, 'headers.Frontend-Token', frontendToken);
-    }
-
-    // Log outgoing requests in development environment
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`🚀 API Request: ${request.method?.toUpperCase()} ${request.url}`, {
-        params: request.params,
-        data: request.data,
-      });
     }
 
     return request;
@@ -113,26 +105,12 @@ axiosInstance.interceptors.response.use(
     if (process.env.NODE_ENV === 'development') {
       const requestStartedAt = get(response.config, 'meta.requestStartedAt', 0);
       const requestDuration = Date.now() - requestStartedAt;
-      console.log(
-        `✅ API Response: ${response.config.method?.toUpperCase()} ${response.config.url} (${requestDuration}ms)`,
-      );
     }
 
     return response.data;
   },
   async (error: AxiosError) => {
     const config = error.config as RetryConfig | undefined;
-
-    // Calculate and log response time for errors in development
-    if (process.env.NODE_ENV === 'development' && config) {
-      const requestStartedAt = get(config, 'meta.requestStartedAt', 0);
-      const requestDuration = Date.now() - requestStartedAt;
-      console.error(
-        `❌ API Error: ${config.method?.toUpperCase()} ${config.url} (${requestDuration}ms)`,
-        get(error, 'response.data', error.message),
-      );
-    }
-
     // Implement retry logic for network errors or specific HTTP error codes
     if (
       config && // Make sure config exists
@@ -147,10 +125,7 @@ axiosInstance.interceptors.response.use(
 
       // Create a delay before retrying the request
       const retryDelay = RETRY_DELAY * config._retryCount;
-      await new Promise(resolve => setTimeout(resolve, retryDelay));
-
-      console.log(`🔄 Retrying request (${config._retryCount}/${MAX_RETRIES}): ${config.url}`);
-
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
       // Retry the request
       return axiosInstance(config);
     }
@@ -174,8 +149,7 @@ axiosInstance.interceptors.response.use(
 
       // Don't handle auth errors for login/register endpoints
       const isAuthEndpoint =
-        config?.url?.includes('/auth/login') ||
-        config?.url?.includes('/auth/register');
+        config?.url?.includes('/auth/login') || config?.url?.includes('/auth/register');
 
       if (!isAuthEndpoint) {
         handleAuthError();

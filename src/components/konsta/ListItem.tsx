@@ -6,6 +6,7 @@ import { cls } from './cls.js';
 import { useThemeClasses } from './use-theme-classes.js';
 
 import ChevronIcon from './icons/ChevronIcon.jsx';
+import { ClearButton } from '@components/ui/clear-button';
 
 import { ListItemClasses } from './ListItemClasses.js';
 import { ListItemColors } from './ListItemColors.js';
@@ -66,6 +67,12 @@ const ListItem = forwardRef((props: A, ref: A) => {
 
     touchRipple = true,
 
+    // Value and clear handler
+    value,
+    onClear,
+    clearButtonClassName,
+    clearIconClassName,
+
     // Children
     children,
 
@@ -102,9 +109,8 @@ const ListItem = forwardRef((props: A, ref: A) => {
 
   const textColor =
     colors[
-      `${
-        isMenuListItemActive ? 'menuListItemActiveText' : menuListItem ? 'menuListItemText' : 'text'
-      }${theme === 'ios' ? 'Ios' : 'Material'}`
+    `${isMenuListItemActive ? 'menuListItemActiveText' : menuListItem ? 'menuListItemText' : 'text'
+    }${theme === 'ios' ? 'Ios' : 'Material'}`
     ];
 
   const isLink = !!href || href === '' || menuListItem || link;
@@ -172,10 +178,18 @@ const ListItem = forwardRef((props: A, ref: A) => {
             <div className={c.titleWrap}>
               {title && <div className={titleClasses}>{title}</div>}
               {after && <div className={c.after}>{after}</div>}
-              {isLink &&
-                hasChevron &&
-                !menuListItem &&
+              {isLink && hasChevron && !menuListItem && !value &&
                 (chevronIcon || <ChevronIcon className={c.chevron} />)}
+              {value && onClear && (
+                <span className="ml-2">
+                  <ClearButton
+                    onClick={onClear}
+                    className={clearButtonClassName}
+                    iconClassName={clearIconClassName}
+                  />
+                </span>
+
+              )}
             </div>
           )}
           {subtitle && <div className={c.subtitle}>{subtitle}</div>}
