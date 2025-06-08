@@ -70,7 +70,17 @@ export default function ProductCard({
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
-        <div className="w-full text-secondary">{product.bus_cat_type}</div>
+        <div className="w-full text-secondary">
+          {product.bus_cat_type.replace('căn hộ chung cư', 'căn hộ')}
+          {!!product.project && (
+            <>
+              <span> · </span>
+              <a href={product.project.url} className="hover:underline">
+                <b>{product.project.name}</b>
+              </a>
+            </>
+          )}
+        </div>
 
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
@@ -110,14 +120,16 @@ export default function ProductCard({
         )}
       </CardFooter>
 
-      {isLoadingCardProduct && postId === product.uid && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
-          <div role="status">
-            <Spinner />
+      {
+        isLoadingCardProduct && postId === product.uid && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center gap-x-2 rounded-md bg-white/80 text-primary_color">
+            <div role="status">
+              <Spinner />
+            </div>
+            <span className="font-medium">Đang tải...</span>
           </div>
-          <span className="font-medium">Đang tải...</span>
-        </div>
-      )}
-    </Card>
+        )
+      }
+    </Card >
   );
 }
