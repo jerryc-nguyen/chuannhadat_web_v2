@@ -5,6 +5,7 @@ import background_profile from '@assets/images/background_profile.jpg';
 import default_avatar from '@assets/images/default_avatar.png';
 import ButtonPhone from '@components/button-phone';
 import { filterChipOptionsByAggregations } from '@common/filterHelpers';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
 import useSearchAggs from '@components/search-aggs/hooks';
 import {
   DropdownMenu,
@@ -21,7 +22,7 @@ import PostList from '@mobile/searchs/PostList';
 import { useQuery } from '@tanstack/react-query';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { FaCircleCheck } from 'react-icons/fa6';
 import styles from './index.module.scss';
@@ -36,6 +37,12 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
   useSyncParamsToState();
   const { cropSquare } = useResizeImage();
   const { searchAggs } = useSearchAggs();
+  const { resetLocations } = useMainContentNavigator();
+
+  // Reset locations when the component mounts
+  useEffect(() => {
+    resetLocations();
+  }, [resetLocations]);
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],

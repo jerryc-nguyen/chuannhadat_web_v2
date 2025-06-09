@@ -29,9 +29,14 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-  const { updateValues } = useMainContentNavigator();
+  const { updateValues, resetLocations } = useMainContentNavigator();
 
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+
+  // Reset locations when the component mounts
+  useEffect(() => {
+    resetLocations();
+  }, [resetLocations]);
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
