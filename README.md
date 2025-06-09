@@ -4,8 +4,8 @@
 - To view the generated Nginx configuration run:
   - docker exeac -ti nginx cat /etc/nginx/conf.d/default.conf
 
-
 ### Find memory leak components:
+
 ```
 chmod +x scripts/find-memory-leaks.sh
 ```
@@ -46,14 +46,17 @@ OK
 The application has been optimized to prevent crashes that previously required redeployment:
 
 #### Docker Configuration
+
 - Memory limits have been set to 4GB in both build and runtime environments
 - Resource limits have been added to docker-compose.yml to prevent container resource starvation
 - A health check endpoint was added at `/api/health` to monitor application status and auto-restart if needed
 
 #### Memory Leak Prevention
+
 The primary cause of crashes was likely memory leaks from improperly cleaned up event listeners, timers, or intervals.
 
 To prevent these issues:
+
 1. Use the `useCleanupEffect` hook from `src/hooks/useCleanupEffect.ts` instead of regular `useEffect` when:
    - Setting timers with setTimeout or setInterval
    - Adding event listeners
@@ -61,6 +64,7 @@ To prevent these issues:
    - Handling async operations that update state
 
 Example usage:
+
 ```tsx
 import useCleanupEffect from '@hooks/useCleanupEffect';
 
@@ -70,10 +74,10 @@ function MyComponent() {
     helpers.setTimeout(() => {
       console.log('This is safe');
     }, 5000);
-    
+
     // Safe event listener that's automatically removed
     helpers.addEventListener(window, 'resize', handleResize);
-    
+
     // Check if component is still mounted in async functions
     async function fetchData() {
       const result = await api.getData();
@@ -81,26 +85,30 @@ function MyComponent() {
         setData(result); // Safe to update state
       }
     }
-    
+
     fetchData();
   }, []);
-  
+
   return <div>My Component</div>;
 }
 ```
 
 #### Error Handling
+
 - Enhanced error boundaries to provide better diagnostics
 - Added detailed error logging to Sentry for monitoring
 - Improved error recovery mechanism with reset functionality
 
 #### Deployment
+
 When deploying, make sure:
+
 1. The Docker environment has at least 4GB of available memory
 2. Health checks are properly configured
 3. Environment variables are correctly set
 
 For further troubleshooting, see the logs via:
+
 ```bash
 docker compose logs --tail=100 -f
 ```
@@ -110,6 +118,7 @@ docker compose logs --tail=100 -f
 To further improve application stability:
 
 1. **API Error Handling**: An enhanced axios instance has been implemented with:
+
    - Automatic retry for failed network requests and certain error responses (408, 429, 500, 502, 503, 504)
    - Progressive retry delay (increases with each retry attempt)
    - Detailed error logging with request duration metrics
@@ -119,19 +128,20 @@ To further improve application stability:
    ```typescript
    // You can cancel requests to prevent race conditions
    import { cancelTokenSource } from '@api/axiosInstance';
-   
+
    const source = cancelTokenSource();
-   
+
    // Make a cancellable request
-   axiosInstance.get('/some-endpoint', { 
-     cancelToken: source.token 
+   axiosInstance.get('/some-endpoint', {
+     cancelToken: source.token,
    });
-   
+
    // Cancel the request if needed
    source.cancel('Operation cancelled by the user');
    ```
 
 2. **React Query Configuration**: Add retry logic and error handling
+
    ```typescript
    // Example configuration
    const queryClient = new QueryClient({
@@ -146,6 +156,7 @@ To further improve application stability:
    ```
 
 3. **Error Boundaries**: Wrap key sections of your application with error boundaries
+
    ```tsx
    <ErrorBoundary fallback={<p>Something went wrong</p>}>
      <ComponentThatMightError />
@@ -159,12 +170,13 @@ To further improve application stability:
      const checkMemory = () => {
        if ('performance' in window && 'memory' in performance) {
          const memory = performance.memory;
-         if (memory.usedJSHeapSize > 100 * 1024 * 1024) { // 100MB
+         if (memory.usedJSHeapSize > 100 * 1024 * 1024) {
+           // 100MB
            console.warn('High memory usage detected');
          }
        }
      };
-     
+
      helpers.setInterval(checkMemory, 30000); // Every 30 seconds
    }, []);
    ```

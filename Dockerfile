@@ -18,7 +18,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy app configuration files first to leverage caching
-COPY next.config.mjs tsconfig.json tsconfig.paths.json postcss.config.mjs tailwind.config.ts next-env.d.ts next-global.d.ts components.json .eslintrc.json .prettierrc* ./
+COPY next.config.mjs tsconfig.json postcss.config.mjs tailwind.config.ts next-env.d.ts next-global.d.ts components.json .eslintrc.json .prettierrc* ./
 COPY public ./public
 
 # Copy sentry configuration if needed

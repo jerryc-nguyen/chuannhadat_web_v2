@@ -1,6 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs';
 
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -79,6 +78,7 @@ const nextConfig = {
     ];
   },
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'node.js'],
+  output: 'standalone',
 };
 const sentryWebpackPluginOptions = {
   org: 'chuan-nha-dat',
@@ -93,7 +93,6 @@ const sentryWebpackPluginOptions = {
   authToken: process.env.SENTRY_AUTH_TOKEN,
   sourcemaps: {
     deleteSourcemapsAfterUpload: true,
-  }
+  },
 };
-export default withSentryConfig( nextConfig, sentryWebpackPluginOptions );
-
+export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);
