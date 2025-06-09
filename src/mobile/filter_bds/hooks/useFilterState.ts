@@ -12,7 +12,6 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { SORT_CHIP_OPTION } from '../constants';
 import {
-  defaultFilterStateAtom,
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
@@ -30,7 +29,7 @@ export default function useFilterState() {
   const { selectedLocationText } = useFilterLocations();
 
   const resetDataFilter = () => {
-    setFilterState(defaultFilterStateAtom);
+    setFilterState({});
     setLocalFilterState({});
   };
 

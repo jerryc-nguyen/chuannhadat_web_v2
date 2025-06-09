@@ -151,7 +151,7 @@ export default async function RootLayout({
         cz-shortcut-listen="true"
       >
         <NextTopLoader />
-        <ProviderWrapper>{children}</ProviderWrapper>
+        <ProviderWrapper isMobile={isMobile}>{children}</ProviderWrapper>
         {/* Hotjar script */}
         <Script id="hotjar" strategy="afterInteractive">
           {`

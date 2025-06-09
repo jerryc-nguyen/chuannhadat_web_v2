@@ -1,3 +1,5 @@
+'use client';
+
 import { AuthUtils } from "@common/auth";
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "@components/main-content-navigator/constants";
 import { usePathname } from "next/navigation";

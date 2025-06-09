@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styles from './styles/profile-detail.module.scss';
 
 import { searchApi } from '@api/searchApi';
 import { services } from '@api/services';
 import NotFound from '@app/not-found';
 import empty_city from '@assets/images/empty-city.png';
+import { filterChipOptionsByAggregations } from '@common/filterHelpers';
 import useMainContentNavigator from '@components/main-content-navigator/hooks';
 import useSearchAggs from '@components/search-aggs/hooks';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
@@ -28,9 +29,14 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-  const { updateValues } = useMainContentNavigator();
+  const { updateValues, resetLocations } = useMainContentNavigator();
 
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+
+  // Reset locations when the component mounts
+  useEffect(() => {
+    resetLocations();
+  }, [resetLocations]);
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
@@ -58,6 +64,11 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       updateSearchAggs(aggreations);
       setIsUseAggOptions(true);
     }
+  }, [aggreations, setIsUseAggOptions, updateSearchAggs]);
+
+  // Filter out AggProjects when aggreations doesn't contain projects or it's empty
+  const filteredChipOptions = useMemo(() => {
+    return filterChipOptionsByAggregations(listFilterProfileDesktop, aggreations);
   }, [aggreations]);
 
   const onFilterChanged = (filterState: Record<string, A>) => {
@@ -96,7 +107,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
               <h2 className="text-2xl font-bold">Tin đã đăng</h2>
               <PostControls
                 className="mx-1"
-                chipOptions={listFilterProfileDesktop}
+                chipOptions={filteredChipOptions}
                 pagination={pagination}
                 onFilterChange={onFilterChanged}
               />

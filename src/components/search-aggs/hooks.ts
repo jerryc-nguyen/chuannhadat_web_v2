@@ -57,7 +57,7 @@ export default function useSearchAggs() {
       }
     }
 
-    for (const [district_id, wards] of Object.entries(agg.wards || {})) {
+    for (const [_, wards] of Object.entries(agg.wards || {})) {
       if (Array.isArray(wards)) {
         wards.forEach((item) => {
           ward_counts[item.ward_id] = item.count

@@ -4,6 +4,9 @@ import NotFound from '@app/not-found';
 import background_profile from '@assets/images/background_profile.jpg';
 import default_avatar from '@assets/images/default_avatar.png';
 import ButtonPhone from '@components/button-phone';
+import { filterChipOptionsByAggregations } from '@common/filterHelpers';
+import useMainContentNavigator from '@components/main-content-navigator/hooks';
+import useSearchAggs from '@components/search-aggs/hooks';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +22,7 @@ import PostList from '@mobile/searchs/PostList';
 import { useQuery } from '@tanstack/react-query';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { FaCircleCheck } from 'react-icons/fa6';
 import styles from './index.module.scss';
@@ -33,6 +36,13 @@ const PROFILE_IMAGE_SIZE = 100;
 const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }) => {
   useSyncParamsToState();
   const { cropSquare } = useResizeImage();
+  const { searchAggs } = useSearchAggs();
+  const { resetLocations } = useMainContentNavigator();
+
+  // Reset locations when the component mounts
+  useEffect(() => {
+    resetLocations();
+  }, [resetLocations]);
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
@@ -42,6 +52,11 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
     profileData?.avatar_url as string,
   );
+
+  // Filter out AggProjects when aggregations don't contain projects
+  const filteredChipOptions = useMemo(() => {
+    return filterChipOptionsByAggregations(listFilterProfileMobile, searchAggs);
+  }, [searchAggs]);
 
   const profileImage = () => (
     <div className="profile-image w-screen">
@@ -155,7 +170,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     <>
       <h2 className="mb-2 ml-4 mt-4 text-xl font-semibold text-primary_color">Tin đã đăng</h2>
       <div className="my-4">
-        <FilterChips chipOptions={listFilterProfileMobile} />
+        <FilterChips chipOptions={filteredChipOptions} />
       </div>
       <PostList />
     </>

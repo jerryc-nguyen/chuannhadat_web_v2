@@ -13,12 +13,13 @@ import React, { useMemo } from 'react';
 import useCardAuthors from '../hooks/useCardAuthors';
 import { useTopAuthors } from '../hooks/useTopAuthors';
 import HoverCardAuthor from './hover-card-author/HoverCardAuthor';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 export default function CardAuthor({ product, isMobile }: { product: A; isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
   const [filterState] = useAtom(filterStateAtom);
   const { topAuthors } = useTopAuthors(filterState);
-
+  const { resetDataFilter } = useFilterState();
   const author = product.author ?? getAuthorById(product.user_id);
 
   const { buildThumbnailUrl } = useResizeImage();
@@ -71,11 +72,16 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       );
     }
   }, [imgSrc]);
+
+  const handleAuthorClick = () => {
+    resetDataFilter();
+  };
+
   return (
     <div className="flex items-center justify-between gap-x-2">
       <Component authorSlug={author?.slug as string}>
         {imgSrc ? (
-          <Link {...linkTarget} href={`/profile/${author?.slug}`}>
+          <Link {...linkTarget} href={`/profile/${author?.slug}`} onClick={() => handleAuthorClick()}>
             <Image
               width={40}
               height={40}
@@ -100,6 +106,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               {...linkTarget}
               href={`/profile/${author?.slug}`}
               className="flex items-center gap-x-2 text-sm font-semibold leading-none hover:underline"
+              onClick={() => handleAuthorClick()}
             >
               {fullName}
             </Link>

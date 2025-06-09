@@ -33,6 +33,7 @@ export const PARAM_DISTRICT = 'district_id';
 export const PARAM_WARD = 'ward_id';
 export const PARAM_PROJECT = 'project_id';
 export const PARAM_SORT = 'sort';
+export const PARAM_AGG_PROJECTS = 'project_id';
 
 export const enum FilterFieldName {
   None = 'none',
@@ -70,6 +71,7 @@ export const FILTER_FIELDS_TO_PARAMS = [
   'project',
   'sort',
   'busCatType',
+  'aggProjects',
 ];
 
 export const FILTER_FIELDS_PARAMS_MAP: Record<string, A> = {
@@ -85,4 +87,5 @@ export const FILTER_FIELDS_PARAMS_MAP: Record<string, A> = {
   ward: PARAM_WARD,
   project: PARAM_PROJECT,
   sort: PARAM_SORT,
+  aggProjects: PARAM_AGG_PROJECTS,
 };

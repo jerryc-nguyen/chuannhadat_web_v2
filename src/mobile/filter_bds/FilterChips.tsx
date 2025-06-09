@@ -24,6 +24,7 @@ import { LuX } from 'react-icons/lu';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
 import SortOptions from './bts/SortOptions';
+import AggProjects from '@mobile/filter_bds/bts/AggProjects';
 
 type FilterChipsProps = {
   chipOptions: FilterChipOption[];
@@ -55,6 +56,8 @@ export default function FilterChips({ chipOptions, onFilterChipsChanged }: Filte
         return <CategoryType />;
       case FilterFieldName.Project:
         return <Projects />;
+      case FilterFieldName.AggProjects:
+        return <AggProjects />;
       case FilterFieldName.Price:
         return <Price />;
       case FilterFieldName.Area:
