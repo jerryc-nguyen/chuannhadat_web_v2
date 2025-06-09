@@ -13,12 +13,13 @@ import React, { useMemo } from 'react';
 import useCardAuthors from '../hooks/useCardAuthors';
 import { useTopAuthors } from '../hooks/useTopAuthors';
 import HoverCardAuthor from './hover-card-author/HoverCardAuthor';
+import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 
 export default function CardAuthor({ product, isMobile }: { product: A; isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
   const [filterState] = useAtom(filterStateAtom);
   const { topAuthors } = useTopAuthors(filterState);
-
+  const { resetDataFilter } = useFilterState();
   const author = product.author ?? getAuthorById(product.user_id);
 
   const { buildThumbnailUrl } = useResizeImage();
@@ -71,11 +72,16 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       );
     }
   }, [imgSrc]);
+
+  const handleAuthorClick = () => {
+    resetDataFilter();
+  };
+
   return (
     <div className="flex items-center justify-between gap-x-2">
       <Component authorSlug={author?.slug as string}>
         {imgSrc ? (
-          <a {...linkTarget} href={`/profile/${author?.slug}`}>
+          <Link {...linkTarget} href={`/profile/${author?.slug}`} onClick={() => handleAuthorClick()}>
             <Image
               width={40}
               height={40}
@@ -88,7 +94,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               suppressHydrationWarning
               alt="avatar_author"
             />
-          </a>
+          </Link>
         ) : (
           <Skeleton className="h-12 w-12 rounded-full" />
         )}
@@ -96,13 +102,14 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-x-1">
           <Component authorSlug={author?.slug as string}>
-            <a
+            <Link
               {...linkTarget}
               href={`/profile/${author?.slug}`}
               className="flex items-center gap-x-2 text-sm font-semibold leading-none hover:underline"
+              onClick={() => handleAuthorClick()}
             >
               {fullName}
-            </a>
+            </Link>
           </Component>
           {topAuthor && (
             <TooltipHost content="Xếp hạng top môi giới trong khu vực dựa theo tổng số tin mới, được refresh trong 2 tuần gần đây nhất">
