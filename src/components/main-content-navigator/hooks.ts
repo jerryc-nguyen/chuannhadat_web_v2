@@ -7,6 +7,7 @@ import useFilterState from "@mobile/filter_bds/hooks/useFilterState";
 import { useQueryClient } from "@tanstack/react-query";
 import { navigatorApi } from "@components/main-content-navigator/apis";
 import useSearchScope, { SearchScopeEnums } from "@hooks/useSearchScope";
+import useModals from "@mobile/modals/hooks";
 
 type TSubmitProps = {
   contentType?: OptionForSelect;
@@ -23,6 +24,7 @@ export default function useMainContentNavigator() {
   const queryClient = useQueryClient();
   const { applyAllFilters } = useFilterState();
   const { searchScope } = useSearchScope();
+  const { closeModals } = useModals();
 
   // Local state for the component
   const [city, setCity] = useState<OptionForSelect | undefined>(globalCity);
@@ -137,7 +139,7 @@ export default function useMainContentNavigator() {
     return options;
   }, [city, contentType, district, ward]);
 
-  const onSubmitByApplyFilter = useCallback(async (closeModal: () => void) => {
+  const onSubmitByApplyFilter = useCallback(async () => {
     updateValues({ contentType, city, district, ward });
     try {
       applyAllFilters({
@@ -146,11 +148,11 @@ export default function useMainContentNavigator() {
         ward
       });
       queryClient.invalidateQueries({ queryKey: ['useQueryPosts'] });
-      closeModal();
+      closeModals();
     } catch (error) {
       // Handle error silently
     }
-  }, [applyAllFilters, city, contentType, district, queryClient, updateValues, ward]);
+  }, [applyAllFilters, city, closeModals, contentType, district, queryClient, updateValues, ward]);
 
 
   const onSubmitByRedirect = useCallback(async () => {
@@ -160,16 +162,16 @@ export default function useMainContentNavigator() {
       const path = await navigatorApi(navigatorParams())
       window.location.href = path
     } catch (error) {
-      // console.log('error')
+      // Handle error silently
     }
   }, [city, district, navigatorParams, updateValues, ward]);
 
   // Submit function
-  const onSubmit = useCallback(async (closeModal: () => void) => {
+  const onSubmit = useCallback(() => {
     if (searchScope === SearchScopeEnums.Category) {
-      onSubmitByApplyFilter(closeModal)
+      onSubmitByApplyFilter();
     } else {
-      onSubmitByRedirect()
+      onSubmitByRedirect();
     }
   }, [onSubmitByApplyFilter, onSubmitByRedirect, searchScope]);
 

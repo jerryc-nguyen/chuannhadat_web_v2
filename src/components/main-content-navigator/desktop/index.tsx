@@ -4,7 +4,7 @@ import LocationsPicker from '@views/components/LocationsPicker';
 import OptionsTabList from '@mobile/ui/OptionsTabList';
 import useMainContentNavigator from '../hooks';
 
-export default function MainContentNavigator({ closeModal }: { closeModal: () => void }) {
+export default function MainContentNavigator() {
   const {
     localCity,
     localDistrict,
@@ -33,7 +33,7 @@ export default function MainContentNavigator({ closeModal }: { closeModal: () =>
       />
 
       <DialogFooter className='mt-4'>
-        <Button onClick={() => onSubmit(closeModal)}>Áp dụng</Button>
+        <Button onClick={() => onSubmit()}>Áp dụng</Button>
       </DialogFooter>
     </div>
   );

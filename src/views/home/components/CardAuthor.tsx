@@ -75,7 +75,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
     <div className="flex items-center justify-between gap-x-2">
       <Component authorSlug={author?.slug as string}>
         {imgSrc ? (
-          <Link {...linkTarget} href={`/profile/${author?.slug}`}>
+          <a {...linkTarget} href={`/profile/${author?.slug}`}>
             <Image
               width={40}
               height={40}
@@ -88,7 +88,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
               suppressHydrationWarning
               alt="avatar_author"
             />
-          </Link>
+          </a>
         ) : (
           <Skeleton className="h-12 w-12 rounded-full" />
         )}
@@ -96,13 +96,13 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-x-1">
           <Component authorSlug={author?.slug as string}>
-            <Link
+            <a
               {...linkTarget}
               href={`/profile/${author?.slug}`}
               className="flex items-center gap-x-2 text-sm font-semibold leading-none hover:underline"
             >
               {fullName}
-            </Link>
+            </a>
           </Component>
           {topAuthor && (
             <TooltipHost content="Xếp hạng top môi giới trong khu vực dựa theo tổng số tin mới, được refresh trong 2 tuần gần đây nhất">

@@ -60,7 +60,7 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
       />
 
       <DialogFooter className='mt-4'>
-        <Button onClick={() => onSubmit(closeModal)}>Áp dụng</Button>
+        <Button onClick={() => onSubmit()}>Áp dụng</Button>
       </DialogFooter>
     </div>
   );
