@@ -10,7 +10,7 @@ import useMainContentNavigator from '@components/main-content-navigator/hooks';
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText } = useMainContentNavigator();
-  const { openModal, closeModal } = useModals();
+  const { openModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();
 
   const showModalPickLocations = () => {
@@ -18,7 +18,7 @@ export default function MainNavLocationsPicker() {
     openModal({
       name: 'ModalPickLocations',
       title: 'Bạn đang quan tâm nội dung gì?',
-      content: <MainContentNavigator closeModal={closeModal} />,
+      content: <MainContentNavigator />,
       showAsDialog: true,
       allowChildOverflow: true
     });
