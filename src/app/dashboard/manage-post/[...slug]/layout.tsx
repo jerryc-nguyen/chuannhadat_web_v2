@@ -1,29 +1,9 @@
 import PageContainer from "@components/page-container/page-container";
 import { Metadata } from "next";
-import { IBreadcrumbItem } from "@views/dashboard/states/breadcrumbAtom";
-import Breadcrumb from "@views/components/breadcrumb";
 
 type NewPostPageLayoutProps = {
   children: React.ReactNode;
 };
-
-const currentBreadcrumb: IBreadcrumbItem[] = [
-  {
-    link: "/",
-    title: "Trang chủ",
-    isActive: false,
-  },
-  {
-    link: "/",
-    title: "Quản lý tin đăng",
-    isActive: true,
-  },
-  {
-    link: "/",
-    title: "Chỉnh sửa tin bán & cho thuê",
-    isActive: true,
-  },
-];
 
 export const metadata: Metadata = {
   title: 'Chuẩn nhà đất',
