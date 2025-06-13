@@ -43,11 +43,7 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
 
   return (
     <div>
-      <div className='p-3'>
-        <OptionsTabList value={localContentType} options={contentOptions} onChange={onContentTypeChanged} />
-      </div>
 
-      <p className='mt-4 mb-2 px-3 text-l'><b>Tại khu vực nào?</b></p>
       <LocationsPicker
         city={localCity}
         district={localDistrict}

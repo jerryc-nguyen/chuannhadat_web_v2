@@ -14,7 +14,7 @@ export default function MainNavLocationsPicker() {
   const showModalPickLocations = () => {
     openModal({
       name: 'ModalPickLocations',
-      title: 'Bạn muốn xem nội dung gì?',
+      title: 'Chọn khu vực',
       content: <MainContentNavigator openModal={openModal2} closeModal={closeModal2} />,
       maxHeightPercent: 0.7,
       supportPushState: false
