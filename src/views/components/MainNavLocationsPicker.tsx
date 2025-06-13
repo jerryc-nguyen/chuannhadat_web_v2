@@ -17,7 +17,7 @@ export default function MainNavLocationsPicker() {
     copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
       name: 'ModalPickLocations',
-      title: 'Bạn đang quan tâm nội dung gì?',
+      title: 'Chọn khu vực',
       content: <MainContentNavigator />,
       showAsDialog: true,
       allowChildOverflow: true
