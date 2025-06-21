@@ -28,8 +28,7 @@ export const PostFormSchema = yup.object().shape({
   facade: yup.string().nullable(),
   entrance: yup.string().nullable(),
   floors_count: yup.string().nullable(),
-  entrance_direction: yup.string().nullable(),
-  view_direction: yup.string().nullable(),
+  direction: yup.string().nullable(),
   furniture: yup.string().nullable(),
   image_ids: yup.string().required("Đăng tối thiểu 1 ảnh.").nullable()
 });
