@@ -52,6 +52,13 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
         </div>
       )}
 
+      {data?.formatted_entrance && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Đường rộng</span>
+          <span className="text-sm text-secondary">{data?.formatted_entrance}</span>
+        </div>
+      )}
+
       {/* Only show bedrooms if value is greater than 0 */}
       {parseInt(data?.bedrooms_count + '') > 0 && (
         <div className="flex gap-1">
@@ -65,13 +72,6 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold">Số phòng tắm</span>
           <span className="text-md text-secondary">{data?.bathrooms_count}</span>
-        </div>
-      )}
-
-      {data?.formatted_entrance && (
-        <div className="flex gap-1">
-          <span className="min-w-[8rem] text-sm font-semibold">Đường rộng</span>
-          <span className="text-sm text-secondary">{data?.formatted_entrance}</span>
         </div>
       )}
 
