@@ -27,7 +27,6 @@ interface PropertyDetailsFieldsProps {
 
 export default function PropertyDetailsFields({
   form,
-  openModal,
   closeModal
 }: PropertyDetailsFieldsProps) {
   const category_type = form.watch('category_type');

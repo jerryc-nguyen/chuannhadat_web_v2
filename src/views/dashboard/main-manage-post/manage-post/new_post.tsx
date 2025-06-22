@@ -96,7 +96,7 @@ const NewPost: React.FC = () => {
       }
     } catch (error: A) {
       toast.error(error.message);
-      console.log('error', error);
+      // console.log('error', error);
     }
   };
 

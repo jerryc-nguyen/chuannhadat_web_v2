@@ -77,6 +77,11 @@ export interface IProductDetail {
   hide_on_frontend_reason: string | null;
   formatted_publish_at: string;
   formatted_facade_with_label: string;
+  formatted_facade?: string;
+  formatted_entrance?: string;
+  formatted_direction?: string;
+  formatted_furniture?: string;
+  formatted_phap_ly?: string;
   price_per_m2: number;
   formatted_kt: string;
   author: Author;
