@@ -22,8 +22,7 @@ export default function useRouteChangeHandler(options: {
 
       // Check if navigating to a profile page
       if (resetFiltersOnProfilePage && url.includes('/profile/')) {
-        resetDataFilter();
-        resetLocations();
+
       }
     };
 
