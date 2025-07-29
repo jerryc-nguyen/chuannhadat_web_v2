@@ -3,8 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import faceBookIcon from '@assets/icons/Facebook.svg';
-import zaloIcon from '@assets/icons/icons8-zalo.svg';
-import { FaTiktok } from 'react-icons/fa';
 
 type FooterProps = object;
 const listMenuFooter = [
@@ -85,19 +83,9 @@ const listMenuFooter = [
 const listMenuIcon = [
   {
     key: 'icon-facebook',
-    link: 'https://www.facebook.com/chuannhadat',
+    link: 'https://m.me/hotrochuannhadat',
     icon: <Image src={faceBookIcon} alt="facebook-icon" width={20} height={20} />,
-  },
-  {
-    key: 'icon-zalo',
-    link: 'https://zalo.me/0966662192',
-    icon: <Image src={zaloIcon} alt="zalo-icon" width={20} height={20} />,
-  },
-  {
-    key: 'icon-tiktok',
-    link: 'https://www.tiktok.com/@chuannhadat',
-    icon: <FaTiktok className="text-base" />,
-  },
+  }
 ];
 
 const Footer: React.FC<FooterProps> = () => {
@@ -109,12 +97,11 @@ const Footer: React.FC<FooterProps> = () => {
           <div className="my-4 flex flex-col gap-y-1 text-center text-gray-300 text-sm md:text-start">
             <p>Trang chuyên đăng tin bất động sản, nhanh gọn và hiệu quả.</p>
             <p>
-              Nếu bạn muốn góp ý, phản ánh vấn đề, yêu cầu xoá tin, vui lòng nhắn tin cho chúng tôi
-              thông qua trang hỗ trợ trên facebook:
+              Nếu bạn muốn góp ý, phản ánh vấn đề, yêu cầu xoá tin, vui lòng nhắn tin cho chúng tôi qua trang hỗ trợ trên facebook:
             </p>
           </div>
           <div className="flex flex-wrap justify-between">
-            <a href='https://www.facebook.com/hotrochuannhadat' target='_blank' className="text-xl font-bold">
+            <a href='https://m.me/hotrochuannhadat' target='_blank' className="text-xl font-bold">
               fb.com/hotrochuannhadat
             </a>
           </div>
