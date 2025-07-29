@@ -3,6 +3,7 @@ import HeaderMobile from '@mobile/header/HeaderMobile';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Footer from '@views/components/Footer';
 import HeaderDesktop from '@views/components/HeaderDeskop';
+import { FacebookMessenger } from '@/components/facebook-messenger';
 
 export default async function HomeLayout({
   children,
@@ -11,13 +12,14 @@ export default async function HomeLayout({
 }>) {
   const { isMobile } = await getUserAgentInfo();
   const mobileClass = isMobile ? '' : 'px-5 md:px-10';
-
+  const facebookPageId = '669907066214107';
   return (
     <>
       {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
       <main className={`z-5 relative h-fit ${mobileClass}`}>{children}</main>
       <Footer />
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+      <FacebookMessenger pageId={facebookPageId} />
     </>
   );
 }

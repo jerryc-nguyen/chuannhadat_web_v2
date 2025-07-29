@@ -164,6 +164,7 @@ To further improve application stability:
    ```
 
 4. **Memory Monitoring**: Monitor client-side memory usage to detect issues early
+
    ```typescript
    // Check browser memory usage periodically
    useCleanupEffect((helpers) => {
