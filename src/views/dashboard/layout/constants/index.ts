@@ -1,16 +1,16 @@
-import { LuBadgeDollarSign, LuFileText, LuHome, LuRepeat, LuUserCircle } from 'react-icons/lu';
+import { BadgeDollarSign, FileText, Home, UserCircle } from 'lucide-react';
 import { INavLinkGroup } from '../types';
 
 export const listNavDashboard: INavLinkGroup[] = [
   {
     name: 'Dashboard',
     url: '/dashboard',
-    icon: LuHome,
+    icon: Home,
   },
   {
     name: 'Thông tin cá nhân',
     url: '',
-    icon: LuUserCircle,
+    icon: UserCircle,
     links: [
       {
         name: 'Cài đặt tài khoản',
@@ -25,7 +25,7 @@ export const listNavDashboard: INavLinkGroup[] = [
   {
     name: 'Quản lý tin đăng',
     url: '',
-    icon: LuFileText,
+    icon: FileText,
     links: [
       {
         name: 'Đăng tin',
@@ -43,7 +43,7 @@ export const listNavDashboard: INavLinkGroup[] = [
   },
   {
     name: 'Quản lý tài chính',
-    icon: LuBadgeDollarSign,
+    icon: BadgeDollarSign,
     url: '',
     links: [
       {

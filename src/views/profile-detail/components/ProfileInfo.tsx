@@ -3,7 +3,7 @@ import default_avatar from '@assets/images/default_avatar.png';
 import { throttle } from 'lodash-es';
 import { cn, genKey } from '@common/utils';
 import ButtonPhone from '@components/button-phone';
-import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
+import { Facebook, MapPin, Youtube } from 'lucide-react';
 import { CalendarDays } from 'lucide-react';
 import { RiArticleLine } from 'react-icons/ri';
 import React from 'react';
@@ -48,7 +48,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
     <div className="mt-4 flex w-full flex-col items-center gap-y-3 truncate sm:items-start">
       {profileData?.address && (
         <span className="flex w-full items-center gap-x-1 whitespace-nowrap">
-          <LuMapPin className="mr-2 h-5 w-5 text-secondary" />
+          <MapPin className="mr-2 h-5 w-5 text-secondary" />
           <span className="block w-full truncate text-sm text-secondary">
             {profileData?.address}
           </span>
@@ -70,7 +70,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
 
       {profileData?.facebook_url && (
         <div className="flex items-center pt-2">
-          <LuFacebook className="mr-2 h-5 w-5 text-secondary" />
+          <Facebook className="mr-2 h-5 w-5 text-secondary" />
           <a
             href={profileData.facebook_url}
             className="text-secondary hover:text-black"
@@ -83,7 +83,7 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
 
       {profileData?.youtube_url && (
         <div className="flex items-center pt-2">
-          <LuYoutube className="mr-2 h-5 w-5 text-secondary" />
+          <Youtube className="mr-2 h-5 w-5 text-secondary" />
           <a
             href={profileData.youtube_url}
             className="text-secondary hover:text-black"

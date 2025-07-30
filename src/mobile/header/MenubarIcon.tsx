@@ -12,7 +12,7 @@ import useModals from '@mobile/modals/hooks';
 
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
-import { LuMenu, LuUserCircle } from 'react-icons/lu';
+import { Menu, UserCircle } from 'lucide-react';
 
 type MenubarIconProps = {
   isLogged: boolean;
@@ -118,7 +118,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
     return (
       <section>
         <div className="flex items-center gap-x-2 px-6 pt-3">
-          <LuUserCircle className="h-6 w-6" />
+          <UserCircle className="h-6 w-6" />
           <SheetTitle className="text-sm">Xin chào, quý khách</SheetTitle>
         </div>
         <div className="my-4 px-6">
@@ -141,7 +141,7 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
           onClick={() => setOpenMenuBar(true)}
           className="mr-0 rounded-full !bg-white"
         >
-          <LuMenu className="h-5 w-5" />
+          <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
       <SheetContent className="p-0">

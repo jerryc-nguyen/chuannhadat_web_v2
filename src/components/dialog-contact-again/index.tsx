@@ -12,7 +12,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@components/ui/input';
 import React from 'react';
-import { LuSendHorizonal } from 'react-icons/lu';
+import { SendHorizonal } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -217,7 +217,7 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
                 type="submit"
               >
                 {isPending ? 'Đang xác thực' : 'Gửi yêu cầu'}
-                {isPending ? <Loader2 className="animate-spin" /> : <LuSendHorizonal />}
+                {isPending ? <Loader2 className="animate-spin" /> : <SendHorizonal />}
               </Button>
             </DialogFooter>
           </form>

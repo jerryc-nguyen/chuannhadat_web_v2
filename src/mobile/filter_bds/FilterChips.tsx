@@ -20,7 +20,7 @@ import { Button } from '@components/ui/button';
 import { Modal } from '@mobile/modals/states/types';
 import Projects from './bts/desktop/Projects';
 import HorizontalScroller from '@mobile/ui/HorizontalScroller';
-import { LuX } from 'react-icons/lu';
+import { X } from 'lucide-react';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
 import SortOptions from './bts/SortOptions';
@@ -148,7 +148,7 @@ export default function FilterChips({ chipOptions, onFilterChipsChanged }: Filte
           {selectedFilterText(item)}
 
           {isActiveChip(item) && (
-            <LuX
+            <X
               onClick={(e) => {
                 e.stopPropagation();
                 handleRemoveFilter(item);

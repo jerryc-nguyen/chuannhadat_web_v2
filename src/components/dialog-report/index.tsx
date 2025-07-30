@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from '@components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { LuAlertTriangle, LuSendHorizonal } from 'react-icons/lu';
+import { AlertTriangle, SendHorizonal } from 'lucide-react';
 import { Textarea } from '@components/ui/textarea';
 import { Input } from '@components/ui/input';
 import { cn } from '@common/utils';
@@ -114,7 +114,7 @@ const DialogReport: React.FC<DialogReportProps> = () => {
       <TooltipHost content="Báo cáo tin rao có nội dung không đúng">
         <DialogTrigger asChild>
           <Button variant={'outline'}>
-            <LuAlertTriangle className="mr-2" />
+            <AlertTriangle className="mr-2" />
             Phản ánh/Báo xấu
           </Button>
         </DialogTrigger>
@@ -156,8 +156,8 @@ const DialogReport: React.FC<DialogReportProps> = () => {
                                     return checked
                                       ? field.onChange([...field.value, item.id])
                                       : field.onChange(
-                                          field.value?.filter((value) => value !== item.id),
-                                        );
+                                        field.value?.filter((value) => value !== item.id),
+                                      );
                                   }}
                                 />
                               </FormControl>
@@ -264,7 +264,7 @@ const DialogReport: React.FC<DialogReportProps> = () => {
                 type="submit"
               >
                 Gửi yêu cầu
-                <LuSendHorizonal />
+                <SendHorizonal />
               </Button>
             </DialogFooter>
           </form>

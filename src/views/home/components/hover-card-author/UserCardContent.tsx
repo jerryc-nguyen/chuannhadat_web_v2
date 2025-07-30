@@ -1,5 +1,4 @@
 import { services } from '@api/services';
-import { CustomerGender } from '@common/types';
 import { getInitialsName, truncateText } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
@@ -8,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-import { LuFacebook, LuMapPin, LuYoutube } from 'react-icons/lu';
+import { Facebook, MapPin, Youtube } from 'lucide-react';
 
 type UserCardContentProps = {
   authorSlug: string;
@@ -93,7 +92,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       </div>
       {authorData?.facebook_url && (
         <div className="flex items-center pt-2">
-          <LuFacebook className="mr-2 h-4 w-4 opacity-70" />
+          <Facebook className="mr-2 h-4 w-4 opacity-70" />
           <Link
             href={authorData.facebook_url}
             className="text-xs text-secondary hover:text-black"
@@ -104,7 +103,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       )}
       {authorData?.youtube_url && (
         <div className="flex items-center pt-2">
-          <LuYoutube className="mr-2 h-4 w-4 opacity-70" />
+          <Youtube className="mr-2 h-4 w-4 opacity-70" />
           <Link
             href={authorData.youtube_url}
             className="text-xs text-secondary hover:text-black"
@@ -115,7 +114,7 @@ const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
       )}
       {authorData?.address && (
         <div className="flex items-center pt-2">
-          <LuMapPin className="mr-2 h-4 w-4 opacity-70" />
+          <MapPin className="mr-2 h-4 w-4 opacity-70" />
           <span className="text-xs text-secondary">{authorData?.address}</span>
         </div>
       )}

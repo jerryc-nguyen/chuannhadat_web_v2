@@ -22,7 +22,7 @@ import { services } from '@api/services';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { AiFillMessage } from 'react-icons/ai';
 import TooltipHost from '@components/tooltip-host';
 import { FaCircleCheck } from 'react-icons/fa6';
@@ -220,7 +220,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
                   className="w-full bg-primary_color hover:bg-primary_color/80 sm:bottom-0"
                   type="submit"
                 >
-                  {isLoadingCheckPhone && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isLoadingCheckPhone && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Gửi thông tin
                 </Button>
               </form>

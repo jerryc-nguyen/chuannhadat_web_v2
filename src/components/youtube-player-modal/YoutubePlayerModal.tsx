@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
-import { IoIosClose } from 'react-icons/io';
+import { X } from 'lucide-react';
 import { youtubePlayerAtom } from './state';
 
 export const YoutubePlayerModal: React.FC = () => {
@@ -44,7 +44,7 @@ export const YoutubePlayerModal: React.FC = () => {
             className="group rounded-md p-1 text-black transition-all hover:bg-zinc-900/60"
             onClick={handleCloseVideoYoutube}
           >
-            <IoIosClose className="text-3xl text-white/50 group-hover:text-white" />
+            <X className="text-3xl text-white/50 group-hover:text-white" />
           </button>
         </div>
 

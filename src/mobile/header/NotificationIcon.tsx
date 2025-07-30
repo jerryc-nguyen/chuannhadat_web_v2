@@ -19,7 +19,7 @@ import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
 import { Switch } from '@components/ui/switch';
 import { Label } from '@components/ui/label';
-import { BsCheck2All } from 'react-icons/bs';
+import { Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 type NotificationIconProps = {
   isLogged: boolean;
@@ -164,7 +164,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
               <Label htmlFor="airplane-mode">Chưa đọc</Label>
             </div>
             <div onClick={handleMarkReadAll} className="flex items-center gap-x-2">
-              {!isMarkAllRead ? <BsCheck2All className="text-primary_color" /> : null}
+              {!isMarkAllRead ? <Check className="text-primary_color" /> : null}
             </div>
           </section>
           <Separator />

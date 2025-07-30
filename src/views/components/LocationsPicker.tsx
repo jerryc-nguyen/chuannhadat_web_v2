@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import cities from 'src/configs/locations/cities.json';
 import citiesDistricts from 'src/configs/locations/cities_districts.json';
 import districtWards from 'src/configs/locations/districts_wards.json';
-import { LuChevronsUpDown } from 'react-icons/lu';
+import { ChevronsUpDown } from 'lucide-react';
 
 import { OptionForSelect } from '@models';
 import OptionPicker from '@mobile/ui/OptionPicker';
@@ -131,7 +131,7 @@ export default function LocationsPicker({
             className="w-full justify-between pr-2"
           >
             {curCity?.text || 'Chọn Thành Phố'}
-            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -153,7 +153,7 @@ export default function LocationsPicker({
             className="mt-2 w-full justify-between pr-2"
           >
             {curDistrict?.text || 'Chọn Quận / Huyện'}
-            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -175,7 +175,7 @@ export default function LocationsPicker({
             className="mt-2 w-full justify-between pr-2"
           >
             {curWard?.text || 'Chọn Phường / Xã'}
-            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" align="end" side="right">

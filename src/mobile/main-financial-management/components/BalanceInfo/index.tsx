@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { IoWalletOutline } from 'react-icons/io5';
-import { LuInfo } from 'react-icons/lu';
+import { Info } from 'lucide-react';
 import { MdOutlineDiscount } from 'react-icons/md';
 
 import { Card, CardContent } from '@components/ui/card';
@@ -34,7 +34,7 @@ const BalanceInfo: FC = () => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <LuInfo className="text-16" />
+                    <Info className="text-16" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>1 Xu tương đương 1 VNĐ.</p>

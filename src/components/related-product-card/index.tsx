@@ -5,7 +5,7 @@ import useModalPostDetail from '@views/post-detail/hooks/useModalPostDetail';
 import { IProductSummary } from '@views/post-detail/type';
 import React from 'react';
 import { IoImage } from 'react-icons/io5';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import styles from './index.module.scss';
 import { featureProductImage } from '@common/productHelpers';
 
@@ -75,7 +75,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
       </div>
       {isLoadingDataModal && postIdModal === product.uid && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/70 text-white">
-          <LuLoader2 className="mr-2 h-8 w-8 animate-spin" />
+          <Loader2 className="mr-2 h-8 w-8 animate-spin" />
           Đang tải
         </div>
       )}

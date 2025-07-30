@@ -11,7 +11,7 @@ import {
 import { getViewportSize } from '@hooks/useViewportSize';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
-import { IoCloseOutline } from 'react-icons/io5';
+import { X } from 'lucide-react';
 import { Drawer } from 'vaul';
 import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
 import { Modal } from './states/types';
@@ -101,7 +101,7 @@ export function BtsModals1() {
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
               <Drawer.Title className="c-bts__title w-full">{modal?.title}</Drawer.Title>
               <button onClick={onClose} className="c-bts__close">
-                <IoCloseOutline size={30} />
+                <X size={30} />
               </button>
             </div>
             <div
@@ -194,7 +194,7 @@ export function BtsModals2() {
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
               <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
               <button onClick={onClose} className="c-bts__close">
-                <IoCloseOutline size={30} />
+                <X size={30} />
               </button>
             </div>
             <div
@@ -254,7 +254,7 @@ export function BtsModals3() {
             <div className={`c-bts__header flex items-center justify-between ${headerClass}`}>
               <Drawer.Title className="c-bts__title">{modal?.title}</Drawer.Title>
               <button onClick={onClose} className="c-bts__close">
-                <IoCloseOutline size={30} />
+                <X size={30} />
               </button>
             </div>
             <div

@@ -16,7 +16,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { service } from '../../apis';
 import { toast } from 'sonner';
 
@@ -168,7 +168,7 @@ const ContactInfor: React.FC = () => {
             )}
           />
           <Button disabled={isUpdateProfilePending} className="w-fit" type="submit">
-            {isUpdateProfilePending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isUpdateProfilePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>
         </form>

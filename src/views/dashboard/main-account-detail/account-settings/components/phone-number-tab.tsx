@@ -16,7 +16,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { Skeleton } from '@components/ui/skeleton';
 import { AiFillMessage } from 'react-icons/ai';
 
@@ -184,7 +184,7 @@ export const PhoneNumberTab: React.FC = () => {
             )}
           />
           <Button disabled={isUpdateMyPhonePending} className="w-fit sm:bottom-0" type="submit">
-            {isUpdateMyPhonePending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isUpdateMyPhonePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Gửi thông tin
           </Button>
         </form>

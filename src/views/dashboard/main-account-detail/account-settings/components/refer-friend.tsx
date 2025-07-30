@@ -2,7 +2,7 @@
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import React from 'react';
-import { LuCheck, LuClipboard } from 'react-icons/lu';
+import { Check, Clipboard } from 'lucide-react';
 
 import { useAuth } from '@common/auth/AuthContext';
 import { useQuery } from '@tanstack/react-query';
@@ -99,7 +99,7 @@ const ReferFriend: React.FC = () => {
                 size="icon"
                 className="flex h-12 w-fit gap-x-2 rounded-l-none px-4"
               >
-                {isCopy ? <LuCheck className="text-blue-500" /> : <LuClipboard />}
+                {isCopy ? <Check className="text-blue-500" /> : <Clipboard />}
                 {isCopy ? 'Copied!' : 'Copy'}
               </Button>
             </div>
