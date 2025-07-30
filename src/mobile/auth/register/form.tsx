@@ -6,7 +6,6 @@ import registerSchema from './resolver';
 import { Button } from '@components/ui/button';
 import { services } from '@api/services';
 import { useMutation } from '@tanstack/react-query';
-import Link from 'next/link';
 
 import {
   Form,
@@ -27,8 +26,9 @@ import { useAuth } from '@common/auth/AuthContext';
 
 type RegisterFormProps = {
   onClose?: () => void;
+  setActiveTab?: (tab: string) => void;
 };
-export default function RegisterForm({ onClose }: RegisterFormProps) {
+export default function RegisterForm({ onClose, setActiveTab }: RegisterFormProps) {
   const { handleSignIn } = useAuth();
   const router = useRouter();
   const { mutate: registerMutate, isPending: isRegister } = useMutation({
@@ -44,9 +44,8 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
       removeCookie(REFERRAL_CODE);
       onClose && onClose();
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
-      console.debug(error);
     },
   });
   const form = useForm({
@@ -157,9 +156,15 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
         </Button>
         <div className="text-center">
           <span className="pr-1 text-sm"> Bạn đã có tài khoản?</span>
-          <Link href="/sign-in" className="text-sm font-semibold text-blue-400 hover:underline">
+
+          <a
+            onClick={() => {
+              setActiveTab && setActiveTab('login');
+            }}
+            className="text-sm font-semibold text-blue-400 hover:underline"
+          >
             Đăng nhập
-          </Link>
+          </a>
         </div>
       </form>
     </Form>
