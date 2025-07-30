@@ -83,10 +83,6 @@ export function BtsModals1() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  // Early return if no modal - prevents unnecessary DOM rendering
-  if (!modal) {
-    return null;
-  }
 
   if (modal?.showAsDialog) {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
@@ -182,11 +178,6 @@ export function BtsModals2() {
     return buildHeaderClass(modal);
   }, [modal]);
 
-  // Early return if no modal - prevents unnecessary DOM rendering
-  if (!modal) {
-    return null;
-  }
-
   if (modal?.showAsDialog) {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;
   } else {
@@ -246,11 +237,6 @@ export function BtsModals3() {
   const headerClass = useMemo(() => {
     return buildHeaderClass(modal);
   }, [modal]);
-
-  // Early return if no modal - prevents unnecessary DOM rendering
-  if (!modal) {
-    return null;
-  }
 
   if (modal?.showAsDialog) {
     return <DesktopModal modal={modal} onOpenChange={onOpenChange} />;

@@ -19,8 +19,20 @@ import { useMutation } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import React from 'react';
-import LoginSocial from '@components/login-social';
+import React, { Suspense, lazy } from 'react';
+
+// Dynamic import for LoginSocial to avoid loading Firebase bundle immediately
+const LoginSocial = lazy(() => import('@components/login-social'));
+
+// Loading component for social login
+const SocialLoginLoader = () => (
+  <div className="mb-4 flex h-12 items-center justify-center gap-x-3 text-sm">
+    <div className="flex h-full flex-1 items-center justify-center gap-x-2 rounded-md border border-primary_color/30 bg-white px-0 py-3 shadow-lg">
+      <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+      <span className="font-semibold text-gray-400">Đang tải đăng nhập Google...</span>
+    </div>
+  </div>
+);
 
 type LoginFormProps = {
   onClose?: () => void;
@@ -57,15 +69,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
             router.push('/dashboard');
           }
         } catch (e) {
-          console.error('Error handling redirect:', e);
+          // Silent fail for redirect handling - non-critical
         }
       } else {
         toast.error('Tài khoản hoặc mật khẩu không chính xác');
       }
     },
-    onError: (error) => {
+    onError: (_error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
-      console.debug(error);
+      // Silently handle error - user already notified via toast
     },
   });
 
@@ -88,7 +100,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
 
   return (
     <Form {...form}>
-      <LoginSocial handleSuccessLogin={onClose} />
+      <Suspense fallback={<SocialLoginLoader />}>
+        <LoginSocial handleSuccessLogin={onClose} />
+      </Suspense>
 
       <div className="mt-4 flex w-full items-center justify-between gap-x-2">
         <span className="block h-[1px] flex-1 bg-slate-300" />

@@ -1,7 +1,7 @@
 'use client';
 import { AuthProvider } from '@common/auth/AuthContext';
 import { AppProvider } from '@common/context/AppContext';
-import ListModal from '@components/ListModal';
+import ListModal from '@components/ImprovedListModal';
 import { QueryProvider } from '@components/providers';
 import SessionTimeOutPopup from '@components/timeout-popup/SessionTimeOutPopup';
 import { Toaster } from '@components/ui/sonner';
