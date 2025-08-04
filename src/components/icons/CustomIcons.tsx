@@ -9,6 +9,7 @@ import { cn } from "@common/utils";
 interface IconProps {
   className?: string;
   size?: number | string;
+  color?: string;
 }
 
 // Google Icon - Official Google branding
@@ -63,3 +64,58 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ className }) => 
     </svg>
   );
 };
+
+// File Tray Outline Icon - Ionicon style
+export const FileTrayOutline: React.FC<IconProps> = ({ className, size = 24, color = "currentColor" }) => (
+  <svg
+    className={className}
+    width={size}
+    height={size}
+    viewBox="0 0 512 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M384 80H128c-26 0-43 14-48 40L48 272v112a48.14 48.14 0 0048 48h320a48.14 48.14 0 0048-48V272l-32-152c-5-27-23-40-48-40z"
+      fill="none"
+      stroke={color}
+      strokeLinejoin="round"
+      strokeWidth="32"
+    />
+    <path
+      fill="none"
+      stroke={color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="32"
+      d="M48 272h144M320 272h144M192 272a64 64 0 00128 0"
+    />
+  </svg>
+);
+
+// Loading 3 Quarters Icon - Replaces AiOutlineLoading3Quarters
+export const LoadingThreeQuarters: React.FC<IconProps> = ({ className, size = 24, color = "currentColor" }) => (
+  <svg
+    className={cn('animate-spin', className)}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.25"
+    />
+    <path
+      d="M12 2v4"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

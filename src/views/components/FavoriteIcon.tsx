@@ -23,7 +23,7 @@ import {
   ISaveProductPayload,
   ISavedProductsResponse,
 } from '@models/savesPostModel';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSearchParams } from 'next/navigation';
@@ -122,7 +122,7 @@ const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
           </div>
         </Link>
         {isLoadingDelete ? (
-          <AiOutlineLoading3Quarters className="animate-spin text-xl duration-500" />
+          <LoadingThreeQuarters className="animate-spin text-xl duration-500" />
         ) : (
           <HiMiniXMark
             onClick={() => handleRemovePost(post?.product?.uid)}

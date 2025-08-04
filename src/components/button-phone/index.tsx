@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { StatusPhoneNumber } from '@views/post-detail/type';
 import { Copy, CopyCheck } from 'lucide-react';
 import React from 'react';
-import { FaPhone } from 'react-icons/fa6';
+import { Phone as FaPhone } from 'lucide-react';
 import { toast } from 'sonner';
 
 type ButtonPhoneProps = {

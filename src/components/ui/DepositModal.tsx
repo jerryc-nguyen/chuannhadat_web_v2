@@ -17,9 +17,7 @@ import {
 import { useAtom } from 'jotai';
 import React from 'react';
 import Confetti from 'react-confetti';
-import { BsCopy } from 'react-icons/bs';
-import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2';
-import { PiSealCheckFill } from 'react-icons/pi';
+import { Copy, CopyCheck, CircleCheck } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -107,9 +105,9 @@ const DepositModal: React.FC<DepositModalProps> = () => {
             <div className="flex items-center gap-x-2">
               <p>{BANK_ACCOUNT_NUMBER}</p>
               {isCopied ? (
-                <HiOutlineClipboardDocumentCheck className="text-xl" />
+                <CopyCheck className="text-xl text-green-500" />
               ) : (
-                <BsCopy onClick={handleCopy} className="cursor-pointer text-sm" />
+                <Copy onClick={handleCopy} className="cursor-pointer text-sm text-gray-500" />
               )}
             </div>
           </div>
@@ -129,7 +127,7 @@ const DepositModal: React.FC<DepositModalProps> = () => {
   const transactionSuccessful = () => (
     <section className="flex flex-col items-center gap-y-2">
       <div className="mb-2 flex items-center justify-center rounded-full bg-success_color/10 p-5">
-        <PiSealCheckFill className="text-5xl text-success_color" />
+        <CircleCheck className="text-5xl text-success_color" />
       </div>
       <h3 className="text-lg font-semibold">Chuyển khoản thành công</h3>
       <p className="my-4 text-4xl text-success_color">{formattedAmount}</p>
