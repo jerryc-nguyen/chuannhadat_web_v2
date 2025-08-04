@@ -4,7 +4,7 @@ import useResizeImage from '@hooks/useResizeImage';
 import useModalPostDetail from '@views/post-detail/hooks/useModalPostDetail';
 import { IProductSummary } from '@views/post-detail/type';
 import React from 'react';
-import { IoImage } from 'react-icons/io5';
+import { Image as ImageIcon } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
 import styles from './index.module.scss';
 import { featureProductImage } from '@common/productHelpers';
@@ -44,7 +44,7 @@ const RelatedProductCard: React.FC<RelatedProductCardProps> = ({ product }) => {
             />
           </AspectRatio>
           <div className={cn(styles['card-content_thumb'], 'rounded-full bg-black/50 px-2')}>
-            <IoImage size={15} className="text-md text-white" />
+            <ImageIcon size={15} className="text-md text-white" />
             <span className="text-lg text-white">{product?.images_count}</span>
           </div>
         </div>

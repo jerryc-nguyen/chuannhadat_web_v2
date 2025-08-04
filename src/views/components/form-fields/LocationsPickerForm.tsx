@@ -5,7 +5,7 @@ import { UseFormReturn } from 'react-hook-form';
 
 import { useEffect, useMemo, useState } from 'react';
 import { AutoComplete } from '@components/autocomplete';
-import { LoadingSpinner } from '@components/icons/loading-spinner';
+import { LoadingSpinner } from '@components/icons/CustomIcons';
 import { OptionForSelect } from '@models';
 import {
   citiesData,
@@ -52,33 +52,33 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
   const districtsOptions = useMemo(() => {
     return city_id
       ? cityDistrictsData[city_id.toString()]?.map((item) => {
-          return {
-            value: item.value.toString(),
-            label: item.text,
-          };
-        }) || []
+        return {
+          value: item.value.toString(),
+          label: item.text,
+        };
+      }) || []
       : [];
   }, [city_id]);
 
   const wardOptions = useMemo(() => {
     return district_id
       ? districtsWardsData[district_id.toString()]?.map((item) => {
-          return {
-            value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
-            label: item.text,
-          };
-        }) || []
+        return {
+          value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
+          label: item.text,
+        };
+      }) || []
       : [];
   }, [district_id]);
 
   const streetOptions = useMemo(() => {
     return district_id
       ? districtsStreetsData[district_id.toString()]?.map((item) => {
-          return {
-            value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
-            label: item.text,
-          };
-        }) || []
+        return {
+          value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
+          label: item.text,
+        };
+      }) || []
       : [];
   }, [district_id]);
 

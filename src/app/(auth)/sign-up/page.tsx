@@ -2,7 +2,7 @@
 import Logo from '@components/logo';
 import Link from 'next/link';
 import React from 'react';
-import { IoIosArrowBack } from 'react-icons/io';
+import { ChevronLeft } from 'lucide-react';
 import RegisterForm from '@mobile/auth/register/form';
 import { useRouter } from 'next/navigation';
 
@@ -16,7 +16,7 @@ const SignUpPage: React.FC<SignUpPageProps> = () => {
         <section className="px-5 py-10 md:w-1/2 md:p-10">
           <Logo isAlwaysShow />
           <Link href="/" className="my-4 flex items-center gap-x-2 font-medium hover:underline">
-            <IoIosArrowBack />
+            <ChevronLeft />
             Trang chủ
           </Link>
           <h1 className="mb-8 text-2xl font-semibold md:text-3xl xl:text-4xl">Đăng ký tài khoản</h1>
