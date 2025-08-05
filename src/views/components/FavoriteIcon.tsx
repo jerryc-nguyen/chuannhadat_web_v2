@@ -13,7 +13,7 @@ import { LucideHeart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { HiMiniXMark } from 'react-icons/hi2';
+import { X } from 'lucide-react';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
 import { listPostIdSavedAtom } from '@views/home/states';
@@ -34,10 +34,6 @@ import { IViewedProductDetail } from '@mobile/searchs/type';
 import { useIsMobile } from '@hooks';
 
 type FavoriteIconProps = object;
-type PostLoadingType = {
-  id: string;
-  status: boolean;
-};
 
 // TODO: move to constants
 export const viewOptions = [
@@ -124,7 +120,7 @@ const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
         {isLoadingDelete ? (
           <LoadingThreeQuarters className="animate-spin text-xl duration-500" />
         ) : (
-          <HiMiniXMark
+          <X
             onClick={() => handleRemovePost(post?.product?.uid)}
             className="cursor-pointer text-xl hover:text-error_color"
           />

@@ -5,7 +5,7 @@ import { cn, genKey } from '@common/utils';
 import ButtonPhone from '@components/button-phone';
 import { Facebook, MapPin, Youtube } from 'lucide-react';
 import { CalendarDays } from 'lucide-react';
-import { RiArticleLine } from 'react-icons/ri';
+import { BookUser } from 'lucide-react';
 import React from 'react';
 import useCleanupEffect from '@hooks/useCleanupEffect';
 
@@ -61,9 +61,10 @@ export default function ProfileInfo({ profileData }: { profileData: A }) {
         </span>
       )}
 
+
       {parseInt(profileData?.posts_count) > 0 && (
         <span className="flex items-center gap-x-1 whitespace-nowrap">
-          <RiArticleLine className="mr-2 h-5 w-5 text-secondary" />
+          <BookUser className="mr-2 h-5 w-5 text-secondary" />
           <span className="text-sm text-secondary">Số bài đăng {profileData?.posts_count}</span>
         </span>
       )}

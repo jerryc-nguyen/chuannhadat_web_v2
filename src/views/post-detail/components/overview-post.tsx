@@ -15,8 +15,7 @@ import ButtonSave, { type ButtonSaveHandle } from '@views/home/components/Button
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
-import { MapPin, MoveRight, Share2 } from 'lucide-react';
+import { MapPin, MoveRight, Share2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
@@ -47,8 +46,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
 
   const actionLightBox = {
     slide: NextJsImage,
-    iconPrev: () => <GoArrowLeft className="text-3xl opacity-50 hover:opacity-100" />,
-    iconNext: () => <GoArrowRight className="text-3xl opacity-50 hover:opacity-100" />,
+    iconPrev: () => <ArrowLeft className="text-3xl opacity-50 hover:opacity-100" />,
+    iconNext: () => <ArrowRight className="text-3xl opacity-50 hover:opacity-100" />,
     buttonPrev: data?.images.length <= 1 ? () => null : undefined,
     buttonNext: data?.images.length <= 1 ? () => null : undefined,
   };

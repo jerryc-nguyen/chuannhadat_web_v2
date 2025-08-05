@@ -23,7 +23,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@components
 import { cn, genKey } from '@common/utils';
 
 import { usePathname } from 'next/navigation';
-import { FaAngleRight } from 'react-icons/fa6';
+import { ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import { useBalanceRequest } from '@api/balance';
 import { Button } from '@components/ui/button';
@@ -88,7 +88,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                                 <nav.icon className="!h-6 !w-6" />
                                 <span className="text-base font-medium">{nav.name}</span>
                               </div>
-                              <FaAngleRight className="icon-arrow transition-all" />
+                              <ChevronRight className="icon-arrow transition-all" />
                             </div>
                           </SidebarMenuButton>
                         </CollapsibleTrigger>

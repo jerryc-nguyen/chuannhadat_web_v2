@@ -16,21 +16,19 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, MessageSquareMore, CircleCheck as FaCircleCheck } from 'lucide-react';
 import { Skeleton } from '@components/ui/skeleton';
-import { AiFillMessage } from 'react-icons/ai';
 
 import TooltipHost from '@components/tooltip-host';
 import { services } from '@api/services';
 import { ILoginResponse } from '@mobile/auth/types';
-import { FaCircleCheck } from 'react-icons/fa6';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 import CommonAlertDialog from '@components/common-dialog';
 
 export const PhoneNumberTab: React.FC = () => {
   const [openPopupVerifyPhone, setOpenPopupVerifyPhone] = React.useState(false);
   const { currentUser, updateCurrentUser } = useAuth();
-  const [isCopied, setIsCopied] = React.useState(false);
+  const [isCopied] = React.useState(false);
   const isConfirmedPhone = currentUser ? currentUser?.phone_confirmed : true;
   const queryClient = useQueryClient();
   const { data: profileMe } = useQuery({
@@ -112,7 +110,7 @@ export const PhoneNumberTab: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center gap-y-3">
-              <AiFillMessage className="text-5xl text-muted-foreground" />
+              <MessageSquareMore className="text-success_color" size={50} />
               <div>
                 Để xác thực thay đổi số điện thoại. Vui lòng dùng số <b className="text-primary_color/80">{currentUser?.phone}</b> soạn tin nhắn với cú pháp sau :{' '}
                 <b className="text-primary_color/80">xt</b> gửi đến{' '}

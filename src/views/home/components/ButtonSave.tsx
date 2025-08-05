@@ -2,10 +2,11 @@ import React, { useImperativeHandle } from 'react';
 import { Button } from '@components/ui/button';
 import { AxiosError } from 'axios';
 import styles from './CardImageCarousel/CardImageCarousel.module.scss';
-import { PiHeart, PiHeartFill } from 'react-icons/pi';
+import { HeartOutline, HeartFilled } from '@components/icons/CustomIcons';
+
 import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
 import { listPostIdSavedAtom } from '../states';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { cn } from '@common/utils';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -81,20 +82,20 @@ const ButtonSave = React.forwardRef<ButtonSaveHandle, ButtonSaveProps>(
           'opacity-1 invisible absolute right-3 top-3 z-[3] rounded-full opacity-0 transition-all',
           styles['favorite_button'],
           !isLoadingSavePost &&
-            isSaved &&
-            '!visible border-none bg-red-100 !opacity-100 hover:bg-red-100',
+          isSaved &&
+          '!visible border-none bg-red-100 !opacity-100 hover:bg-red-100',
           className,
         )}
       >
         <div className={cn('favorite-icon', isSaved ? 'heart-animate' : '')}>
           {isLoadingSavePost && (
-            <AiOutlineLoading3Quarters
+            <LoadingThreeQuarters
               className={cn('animate-spin duration-500', isSaved ? 'text-error_color' : '')}
             />
           )}
-          {!isLoadingSavePost && !isSaved && <PiHeart className="h-4 w-4" />}
+          {!isLoadingSavePost && !isSaved && <HeartOutline className="h-4 w-4" />}
           {!isLoadingSavePost && isSaved && (
-            <PiHeartFill className={'test_animate h-4 w-4 scale-100 text-error_color'} />
+            <HeartFilled className={'test_animate h-4 w-4 scale-100 text-error_color'} />
           )}
         </div>
       </Button>
