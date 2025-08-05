@@ -1,22 +1,22 @@
 import { withSentryConfig } from '@sentry/nextjs';
+import bundleAnalyzer from '@next/bundle-analyzer';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // This is crucial for Node.js runtime in middleware
-    turbotrace: {
-      // Reduce the number of modules traced for faster builds
-      contextDirectory: process.cwd(),
-    },
     // Enable parallel compilation for faster builds
     webVitalsAttribution: ['CLS', 'LCP'],
     // Faster CSS processing
     optimizeCss: true,
-    // Turbopack optimizations
-    turbo: {
-      // Enable experimental optimizations
-      useSwcLoader: true,
-    },
   },
 
   // Reduce memory usage during build
@@ -35,7 +35,6 @@ const nextConfig = {
   turbopack: {
     resolveAlias: {
       underscore: 'lodash',
-      resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
     },
   },
   eslint: {
@@ -181,4 +180,4 @@ const sentryWebpackPluginOptions = {
     deleteSourcemapsAfterUpload: true,
   },
 };
-export default withSentryConfig(nextConfig, sentryWebpackPluginOptions);
+export default withSentryConfig(withBundleAnalyzer(nextConfig), sentryWebpackPluginOptions);

@@ -111,6 +111,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.4.5",
     "@tanstack/eslint-plugin-query": "^5.51.15",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash-es": "^4.17.12",

@@ -4,7 +4,7 @@ import LoginForm from '@mobile/auth/login/form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { ArrowLeft } from '@components/icons';
+import { ArrowLeft } from 'lucide-react';
 
 type SignInPageProps = object;
 
