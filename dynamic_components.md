@@ -213,13 +213,6 @@ const ServicePackage = lazy(
 );
 ```
 
-### **Bot Protection Dashboard**
-
-```typescript
-// 🎯 IMPACT: -25KB bundle size
-const BotProtectionDashboard = lazy(() => import('@lib/botProtectionDashboard'));
-```
-
 ---
 
 ## 📋 **Implementation Strategy**
