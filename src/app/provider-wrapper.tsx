@@ -8,6 +8,7 @@ import { Toaster } from '@components/ui/sonner';
 import { Provider as JotaiProvider } from 'jotai';
 import dynamic from 'next/dynamic';
 import React from 'react';
+import { LocationProvider } from '@contexts/LocationContext';
 
 // Dynamically import RouteChangeHandler with ssr disabled
 const RouteChangeHandler = dynamic(
@@ -24,15 +25,17 @@ const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children, isMobile })
   return (
     <QueryProvider>
       <JotaiProvider>
-        <AppProvider isMobile={isMobile}>
-          <AuthProvider>
-            {children}
-            <ListModal />
-            <SessionTimeOutPopup />
-            {/* Client-side only component for route change handling */}
-            <RouteChangeHandler />
-          </AuthProvider>
-        </AppProvider>
+        <LocationProvider>
+          <AppProvider isMobile={isMobile}>
+            <AuthProvider>
+              {children}
+              <ListModal />
+              <SessionTimeOutPopup />
+              {/* Client-side only component for route change handling */}
+              <RouteChangeHandler />
+            </AuthProvider>
+          </AppProvider>
+        </LocationProvider>
       </JotaiProvider>
       <Toaster position={isMobile ? 'top-center' : 'bottom-right'} theme="light" richColors />
     </QueryProvider>
