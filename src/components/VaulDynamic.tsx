@@ -4,7 +4,33 @@ import { lazy, Suspense } from 'react';
 import type { ComponentProps } from 'react';
 
 // Dynamic imports for Vaul components
-const VaulDrawer = lazy(() => import('vaul').then(mod => ({ default: mod.Drawer })));
+const DrawerRootComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Root }))
+);
+
+const DrawerPortalComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Portal }))
+);
+
+const DrawerOverlayComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Overlay }))
+);
+
+const DrawerContentComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Content }))
+);
+
+const DrawerTitleComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Title }))
+);
+
+const DrawerTriggerComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Trigger }))
+);
+
+const DrawerCloseComponent = lazy(() => 
+  import('vaul').then(mod => ({ default: mod.Drawer.Close }))
+);
 
 // Loading fallback for drawer interactions
 const DrawerLoader = () => (
@@ -16,51 +42,51 @@ const DrawerLoader = () => (
 );
 
 // Dynamic Drawer Root
-export const DrawerRoot = (props: ComponentProps<typeof VaulDrawer.Root>) => (
+export const DrawerRoot = (props: ComponentProps<typeof DrawerRootComponent>) => (
   <Suspense fallback={<DrawerLoader />}>
-    <VaulDrawer.Root {...props} />
+    <DrawerRootComponent {...props} />
   </Suspense>
 );
 
 // Dynamic Drawer Portal
-export const DrawerPortal = (props: ComponentProps<typeof VaulDrawer.Portal>) => (
+export const DrawerPortal = (props: ComponentProps<typeof DrawerPortalComponent>) => (
   <Suspense fallback={null}>
-    <VaulDrawer.Portal {...props} />
+    <DrawerPortalComponent {...props} />
   </Suspense>
 );
 
 // Dynamic Drawer Overlay  
-export const DrawerOverlay = (props: ComponentProps<typeof VaulDrawer.Overlay>) => (
+export const DrawerOverlay = (props: ComponentProps<typeof DrawerOverlayComponent>) => (
   <Suspense fallback={null}>
-    <VaulDrawer.Overlay {...props} />
+    <DrawerOverlayComponent {...props} />
   </Suspense>
 );
 
 // Dynamic Drawer Content
-export const DrawerContent = (props: ComponentProps<typeof VaulDrawer.Content>) => (
+export const DrawerContent = (props: ComponentProps<typeof DrawerContentComponent>) => (
   <Suspense fallback={<DrawerLoader />}>
-    <VaulDrawer.Content {...props} />
+    <DrawerContentComponent {...props} />
   </Suspense>
 );
 
 // Dynamic Drawer Title
-export const DrawerTitle = (props: ComponentProps<typeof VaulDrawer.Title>) => (
+export const DrawerTitle = (props: ComponentProps<typeof DrawerTitleComponent>) => (
   <Suspense fallback={null}>
-    <VaulDrawer.Title {...props} />
+    <DrawerTitleComponent {...props} />
   </Suspense>
 );
 
 // Dynamic Drawer Trigger
-export const DrawerTrigger = (props: ComponentProps<typeof VaulDrawer.Trigger>) => (
+export const DrawerTrigger = (props: ComponentProps<typeof DrawerTriggerComponent>) => (
   <Suspense fallback={null}>
-    <VaulDrawer.Trigger {...props} />
+    <DrawerTriggerComponent {...props} />
   </Suspense>
 );
 
 // Dynamic Drawer Close
-export const DrawerClose = (props: ComponentProps<typeof VaulDrawer.Close>) => (
+export const DrawerClose = (props: ComponentProps<typeof DrawerCloseComponent>) => (
   <Suspense fallback={null}>
-    <VaulDrawer.Close {...props} />
+    <DrawerCloseComponent {...props} />
   </Suspense>
 );
 

@@ -1,5 +1,6 @@
-import { getViewportSize } from '@hooks/useViewportSize';
-import { isServer } from '@tanstack/react-query';
+// Removed unused imports for SSR consistency
+// import { getViewportSize } from '@hooks/useViewportSize';
+// import { isServer } from '@tanstack/react-query';
 import queryString from 'query-string';
 import * as Sentry from '@sentry/nextjs';
 
@@ -16,11 +17,9 @@ const DEFAULT_IMG =
   'https://images.chuannhadat.com/images/avatars/gg_avatar.png?crop=true&height=150&width=150';
 
 export default function useResizeImage() {
-  let screenWidth = MAX_THUMB_WIDTH;
-
-  if (!isServer) {
-    [screenWidth] = getViewportSize();
-  }
+  // Always use MAX_THUMB_WIDTH for SSR consistency
+  // This prevents hydration mismatches while still providing good quality
+  const screenWidth = MAX_THUMB_WIDTH;
 
   const resize = ({ imageUrl, sizes }: { imageUrl: string; sizes: Record<string, A> }): string => {
     try {
@@ -67,14 +66,12 @@ export default function useResizeImage() {
     width = width ?? thresholdWidth(screenWidth);
     width = width > MAX_THUMB_WIDTH ? MAX_THUMB_WIDTH : width;
     const curRatio = ratio ?? DEFAULT_RATIO;
-    let height = Math.ceil(width / curRatio);
+    const height = Math.ceil(width / curRatio);
 
-    // Check for retina/high DPI display
-    const isRetina = !isServer && window.devicePixelRatio >= 2;
-    if (isRetina) {
-      width = width * 2;
-      height = height * 2;
-    }
+    // Disable retina scaling for SSR consistency
+    // This ensures same URLs are generated on server and client
+    // Note: This may slightly reduce image quality on retina displays
+    // but prevents hydration mismatches
 
     return resize({
       imageUrl: imageUrl,
