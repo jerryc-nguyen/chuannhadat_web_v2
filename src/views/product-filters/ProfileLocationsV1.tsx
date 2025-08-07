@@ -1,6 +1,6 @@
 import { FilterFieldName, OptionForSelect } from '@models';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import LocationsPicker from '@components/LocationsPicker';
+// LocationsPicker component removed - using LocationContext directly
 import useSearchAggs from '@components/search-aggs/hooks';
 
 export default function ProfileLocationsV1() {
@@ -44,20 +44,10 @@ export default function ProfileLocationsV1() {
 
   return (
     <div>
-      <LocationsPicker
-        city={city}
-        district={district}
-        ward={ward}
-        onChangeCity={onSelectCity}
-        onChangeDistrict={onSelectDistrict}
-        onChangeWard={onSelectWard}
-        city_ids={profileLocationAgg.city_ids}
-        district_ids={profileLocationAgg.district_ids}
-        ward_ids={profileLocationAgg.ward_ids}
-        city_counts={profileLocationAgg.city_counts}
-        district_counts={profileLocationAgg.district_count}
-        ward_counts={profileLocationAgg.ward_counts}
-      />
+      {/* LocationsPicker removed - implement using LocationContext directly */}
+      <div className="text-gray-500 p-4">
+        Location picker component removed. Please implement using LocationContext.
+      </div>
     </div>
   );
 }

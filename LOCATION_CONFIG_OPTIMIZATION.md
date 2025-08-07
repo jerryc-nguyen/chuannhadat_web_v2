@@ -44,9 +44,11 @@ function LocationsPicker() {
 ### **✅ After (Optimized Implementation)**
 
 ```tsx
-// GOOD: Progressive loading on-demand
-import { useLocationData } from '@hooks/useLocationData';
+// GOOD: Use LocationContext directly
+import { useLocationContext } from '@contexts/LocationContext';
 
+// DEPRECATED: This component has been removed
+// Use LocationContext directly instead
 function OptimizedLocationsPicker() {
   const {
     cities,        // 3.2KB - loaded immediately (small)
@@ -110,9 +112,9 @@ function OptimizedLocationsPicker() {
 
 ### **Phase 1: Setup Infrastructure (✅ Done)**
 
-- ✅ Created `LocationDataLoader` class
-- ✅ Created `useLocationData` hook
-- ✅ Created example `OptimizedLocationsPicker`
+- ✅ Created `LocationDataLoader` class (REMOVED - replaced by LocationContext)
+- ✅ Created `useLocationData` hook (REMOVED - replaced by LocationContext)
+- ✅ Created example `OptimizedLocationsPicker` (REMOVED - obsolete)
 
 ### **Phase 2: Migrate Components (High Priority)**
 
@@ -138,7 +140,7 @@ import districtWards from 'src/configs/locations/districts_wards.json';
 import districtStreets from 'src/configs/locations/districts_streets.json';
 
 // ✅ Add this instead
-import { useLocationData } from '@hooks/useLocationData';
+import { useLocationContext } from '@contexts/LocationContext';
 ```
 
 **Step 2: Update Component Logic**

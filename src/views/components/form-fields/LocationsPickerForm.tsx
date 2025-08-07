@@ -3,16 +3,11 @@
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { UseFormReturn } from 'react-hook-form';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AutoComplete } from '@components/autocomplete';
 import { LoadingSpinner } from '@components/icons/CustomIcons';
 import { OptionForSelect } from '@models';
-import {
-  citiesData,
-  cityDistrictsData,
-  districtsStreetsData,
-  districtsWardsData,
-} from '@views/dashboard/main-manage-post/manage-post/constant';
+import { useLocationContext } from '@contexts/LocationContext';
 
 interface ILocationForm {
   form: UseFormReturn<A>;
@@ -34,53 +29,69 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
   onChangeStreet,
 }) => {
   const { city_id, district_id } = form.getValues();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // Use LocationContext for data and loading states
+  const {
+    cities,
+    citiesDistricts,
+    districtWards,
+    districtStreets,
+    isLoadingCities,
+    isLoadingDistricts,
+    isLoadingWards,
+    isLoadingStreets,
+    loadCities,
+    loadDistricts,
+    loadWards,
+    loadStreets,
+  } = useLocationContext();
+
+  // Load cities on component mount
   useEffect(() => {
-    console.log('isLoading', isLoading);
-  }, [isLoading]);
+    loadCities();
+  }, [loadCities]);
 
   const citiesOptions = useMemo(() => {
-    return citiesData.map((item) => {
+    return cities.map((item: OptionForSelect) => {
       return {
-        value: item.value.toString(),
-        label: item.text,
+        value: item.value?.toString() || '',
+        label: item.text || '',
       };
     });
-  }, []);
+  }, [cities]);
 
   const districtsOptions = useMemo(() => {
     return city_id
-      ? cityDistrictsData[city_id.toString()]?.map((item) => {
+      ? citiesDistricts[city_id.toString()]?.map((item: OptionForSelect) => {
         return {
-          value: item.value.toString(),
-          label: item.text,
+          value: item.value?.toString() || '',
+          label: item.text || '',
         };
       }) || []
       : [];
-  }, [city_id]);
+  }, [city_id, citiesDistricts]);
 
   const wardOptions = useMemo(() => {
     return district_id
-      ? districtsWardsData[district_id.toString()]?.map((item) => {
+      ? districtWards[district_id.toString()]?.map((item: OptionForSelect) => {
         return {
-          value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
-          label: item.text,
+          value: item.value?.toString() || '',
+          label: item.text || '',
         };
       }) || []
       : [];
-  }, [district_id]);
+  }, [district_id, districtWards]);
 
   const streetOptions = useMemo(() => {
     return district_id
-      ? districtsStreetsData[district_id.toString()]?.map((item) => {
+      ? districtStreets[district_id.toString()]?.map((item: OptionForSelect) => {
         return {
-          value: item.value ? item.value.toString() : item.id ? item.id.toString() : '',
-          label: item.text,
+          value: item.value?.toString() || '',
+          label: item.text || '',
         };
       }) || []
       : [];
-  }, [district_id]);
+  }, [district_id, districtStreets]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
@@ -94,15 +105,20 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
             </FormLabel>
             <AutoComplete
               selectedValue={city_id}
-              onSelectedValueChange={(value) => {
+              onSelectedValueChange={async (value) => {
                 field.onChange(value?.value || '');
                 onChangeCity({ value: value?.value, text: value?.label || '' });
+
+                // Load districts when city is selected
+                if (value?.value) {
+                  await loadDistricts(value.value);
+                }
               }}
               items={citiesOptions}
               placeholder={'Chọn Tỉnh/ Thành phố'}
               emptyMessage="Không tìm thấy nội dung"
-              disabled={isLoading}
-              endAdornment={isLoading ? <LoadingSpinner /> : null}
+              disabled={isLoadingCities}
+              endAdornment={isLoadingCities ? <LoadingSpinner /> : null}
             />
             <FormMessage />
           </FormItem>
@@ -119,15 +135,23 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
             </FormLabel>
             <AutoComplete
               selectedValue={field.value}
-              onSelectedValueChange={(value) => {
+              onSelectedValueChange={async (value) => {
                 field.onChange(value?.value || '');
                 onChangeDistrict({ value: value?.value, text: value?.label || '' });
+
+                // Load wards and streets when district is selected
+                if (value?.value) {
+                  await Promise.all([
+                    loadWards(value.value),
+                    loadStreets(value.value)
+                  ]);
+                }
               }}
               items={districtsOptions}
               placeholder={'Chọn Quận/ Huyện'}
               emptyMessage="Không tìm thấy nội dung"
-              disabled={isLoading || !city_id}
-              endAdornment={isLoading ? <LoadingSpinner /> : null}
+              disabled={isLoadingDistricts || !city_id}
+              endAdornment={isLoadingDistricts ? <LoadingSpinner /> : null}
             />
             <FormMessage />
           </FormItem>
@@ -149,8 +173,8 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
               items={wardOptions}
               placeholder={'Chọn Phường/ Xã'}
               emptyMessage="Không tìm thấy nội dung"
-              disabled={isLoading || !district_id}
-              endAdornment={isLoading ? <LoadingSpinner /> : null}
+              disabled={isLoadingWards || !district_id}
+              endAdornment={isLoadingWards ? <LoadingSpinner /> : null}
             />
           </FormItem>
         )}
@@ -171,8 +195,8 @@ const LocationsPickerForm: React.FC<ILocationForm> = ({
               items={streetOptions}
               placeholder={'Chọn Đường/ Phố'}
               emptyMessage="Không tìm thấy nội dung"
-              disabled={isLoading || !district_id}
-              endAdornment={isLoading ? <LoadingSpinner /> : null}
+              disabled={isLoadingStreets || !district_id}
+              endAdornment={isLoadingStreets ? <LoadingSpinner /> : null}
             />
           </FormItem>
         )}
