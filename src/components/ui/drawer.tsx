@@ -1,19 +1,29 @@
 "use client"
 
 import * as React from "react"
-import { Drawer as DrawerPrimitive } from "vaul"
+import { Drawer as DrawerDynamic, preloadVaul } from "@components/VaulDynamic"
 
 import { cn } from "@/common/utils"
+
+// Re-export for compatibility but with dynamic loading
+const DrawerPrimitive = DrawerDynamic;
 
 const Drawer = ({
   shouldScaleBackground = true,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root
-    shouldScaleBackground={shouldScaleBackground}
-    {...props}
-  />
-)
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
+  // Preload Vaul when Drawer is rendered (user interaction imminent)
+  React.useEffect(() => {
+    preloadVaul();
+  }, []);
+
+  return (
+    <DrawerPrimitive.Root
+      shouldScaleBackground={shouldScaleBackground}
+      {...props}
+    />
+  );
+};
 Drawer.displayName = "Drawer"
 
 const DrawerTrigger = DrawerPrimitive.Trigger

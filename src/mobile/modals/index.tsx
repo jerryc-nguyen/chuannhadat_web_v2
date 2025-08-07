@@ -12,7 +12,7 @@ import { getViewportSize } from '@hooks/useViewportSize';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import { X } from 'lucide-react';
-import { Drawer } from 'vaul';
+import { Drawer, preloadVaul } from '@components/VaulDynamic';
 import { btsModal2Atom, btsModal3Atom, btsModalAtom } from './states';
 import { Modal } from './states/types';
 import './style.scss';
@@ -48,6 +48,13 @@ export function BtsModals1() {
   const { historyBack } = useBrowserPushState();
   const [modal, setModal] = useAtom(btsModalAtom);
   const [contentStyle, setContentStyle] = useState({});
+
+  // Preload Vaul when modal state is set (user interaction likely)
+  useEffect(() => {
+    if (modal && !modal.showAsDialog) {
+      preloadVaul();
+    }
+  }, [modal]);
 
   useEffect(() => {
     function handleResize() {

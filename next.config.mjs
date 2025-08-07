@@ -105,7 +105,7 @@ const nextConfig = {
   },
 
   // Webpack optimizations for faster builds
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config, { dev, isServer }) => {
     // Production optimizations
     if (!dev) {
       // Enable persistent caching
@@ -116,27 +116,83 @@ const nextConfig = {
         },
       };
 
-      // Optimize bundle splitting for faster builds
+      // Optimize bundle splitting for smaller chunks
       config.optimization.splitChunks = {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000, // ~240KB max chunk size
         cacheGroups: {
+          // Split React separately (highest priority)
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            chunks: 'all',
+            priority: 50,
+          },
+          // Split Firebase separately
+          firebase: {
+            test: /[\\/]node_modules[\\/]firebase[\\/]/,
+            name: 'firebase',
+            chunks: 'all',
+            priority: 45,
+          },
+          // Split Sentry separately
+          sentry: {
+            test: /[\\/]node_modules[\\/]@sentry[\\/]/,
+            name: 'sentry',
+            chunks: 'all',
+            priority: 40,
+          },
+          // Split TanStack Query separately
+          tanstack: {
+            test: /[\\/]node_modules[\\/]@tanstack[\\/]/,
+            name: 'tanstack',
+            chunks: 'all',
+            priority: 35,
+          },
+          // Split Radix UI components
+          radix: {
+            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+            name: 'radix',
+            chunks: 'all',
+            priority: 30,
+          },
+
+          // Split Embla Carousel (core UI component)
+          embla: {
+            test: /[\\/]node_modules[\\/]embla-carousel.*[\\/]/,
+            name: 'embla',
+            chunks: 'all',
+            priority: 30,
+          },
+          // Split heavy UI libraries (on-demand loading)
+          ui: {
+            test: /[\\/]node_modules[\\/](swiper|yet-another-react-lightbox|react-confetti|vaul|@hello-pangea\/dnd|react-dropzone|react-google-recaptcha|sonner|@tanstack\/react-table|react-day-picker|react-resizable-panels|react-paginate|cmdk)[\\/]/,
+            name: 'ui-heavy',
+            chunks: 'all',
+            priority: 25,
+          },
+          // Split Radix interactive components (on-demand loading)
+          radixInteractive: {
+            test: /[\\/]node_modules[\\/]@radix-ui[\\/]react-(dialog|dropdown-menu|context-menu|hover-card|menubar|alert-dialog|toast|collapsible|accordion)[\\/]/,
+            name: 'radix-interactive',
+            chunks: 'all',
+            priority: 24,
+          },
+          // Split utilities
+          utils: {
+            test: /[\\/]node_modules[\\/](lodash-es|date-fns|clsx)[\\/]/,
+            name: 'utils',
+            chunks: 'all',
+            priority: 20,
+          },
+          // Default vendor chunk for remaining packages
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
             priority: 10,
-          },
-          react: {
-            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            name: 'react',
-            chunks: 'all',
-            priority: 20,
-          },
-          radix: {
-            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
-            name: 'radix',
-            chunks: 'all',
-            priority: 15,
+            maxSize: 200000, // ~200KB max for remaining vendors
           },
         },
       };
@@ -157,6 +213,16 @@ const nextConfig = {
     // Exclude heavy modules from server bundle when possible
     if (isServer) {
       config.externals = [...(config.externals || []), 'canvas', 'jsdom'];
+    }
+
+    // Exclude dev-only packages from production bundle
+    if (!dev) {
+      // Properly handle externals array
+      if (Array.isArray(config.externals)) {
+        config.externals.push('@tanstack/react-query-devtools');
+      } else {
+        config.externals = [...(config.externals || []), '@tanstack/react-query-devtools'];
+      }
     }
 
     return config;
