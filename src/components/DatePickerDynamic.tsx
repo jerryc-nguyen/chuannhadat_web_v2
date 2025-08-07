@@ -2,6 +2,7 @@
 
 import { lazy, Suspense } from 'react';
 import type { ComponentProps } from 'react';
+import type { DateRange } from 'react-day-picker';
 
 // Dynamic import for react-day-picker
 const DayPicker = lazy(() =>
@@ -47,11 +48,8 @@ export const DayPickerDynamic = (props: ComponentProps<typeof DayPicker>) => (
   </Suspense>
 );
 
-// Date range picker interface
-export interface DateRange {
-  from?: Date;
-  to?: Date;
-}
+// Note: Using DateRange type from react-day-picker
+// No need to define custom interface - using imported one
 
 // Dynamic date range picker
 export const DateRangePickerDynamic = ({
@@ -110,3 +108,6 @@ export const useDatePickerDynamic = () => {
 };
 
 export default DayPickerDynamic;
+
+// Re-export DateRange type for convenience
+export type { DateRange };

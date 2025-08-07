@@ -3,33 +3,40 @@
 import { lazy, Suspense } from 'react';
 import type { ComponentProps } from 'react';
 
+// SSR Safety Check
+const isClient = typeof window !== 'undefined';
+
 // Dynamic imports for Vaul components
-const DrawerRootComponent = lazy(() => 
+const DrawerRootComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Root }))
 );
 
-const DrawerPortalComponent = lazy(() => 
+const DrawerPortalComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Portal }))
 );
 
-const DrawerOverlayComponent = lazy(() => 
+const DrawerOverlayComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Overlay }))
 );
 
-const DrawerContentComponent = lazy(() => 
+const DrawerContentComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Content }))
 );
 
-const DrawerTitleComponent = lazy(() => 
+const DrawerTitleComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Title }))
 );
 
-const DrawerTriggerComponent = lazy(() => 
+const DrawerTriggerComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Trigger }))
 );
 
-const DrawerCloseComponent = lazy(() => 
+const DrawerCloseComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Close }))
+);
+
+const DrawerDescriptionComponent = lazy(() =>
+  import('vaul').then(mod => ({ default: mod.Drawer.Description }))
 );
 
 // Loading fallback for drawer interactions
@@ -47,6 +54,7 @@ export const DrawerRoot = (props: ComponentProps<typeof DrawerRootComponent>) =>
     <DrawerRootComponent {...props} />
   </Suspense>
 );
+DrawerRoot.displayName = "DrawerRoot";
 
 // Dynamic Drawer Portal
 export const DrawerPortal = (props: ComponentProps<typeof DrawerPortalComponent>) => (
@@ -54,6 +62,7 @@ export const DrawerPortal = (props: ComponentProps<typeof DrawerPortalComponent>
     <DrawerPortalComponent {...props} />
   </Suspense>
 );
+DrawerPortal.displayName = "DrawerPortal";
 
 // Dynamic Drawer Overlay  
 export const DrawerOverlay = (props: ComponentProps<typeof DrawerOverlayComponent>) => (
@@ -61,6 +70,7 @@ export const DrawerOverlay = (props: ComponentProps<typeof DrawerOverlayComponen
     <DrawerOverlayComponent {...props} />
   </Suspense>
 );
+DrawerOverlay.displayName = "DrawerOverlay";
 
 // Dynamic Drawer Content
 export const DrawerContent = (props: ComponentProps<typeof DrawerContentComponent>) => (
@@ -68,6 +78,7 @@ export const DrawerContent = (props: ComponentProps<typeof DrawerContentComponen
     <DrawerContentComponent {...props} />
   </Suspense>
 );
+DrawerContent.displayName = "DrawerContent";
 
 // Dynamic Drawer Title
 export const DrawerTitle = (props: ComponentProps<typeof DrawerTitleComponent>) => (
@@ -75,6 +86,7 @@ export const DrawerTitle = (props: ComponentProps<typeof DrawerTitleComponent>) 
     <DrawerTitleComponent {...props} />
   </Suspense>
 );
+DrawerTitle.displayName = "DrawerTitle";
 
 // Dynamic Drawer Trigger
 export const DrawerTrigger = (props: ComponentProps<typeof DrawerTriggerComponent>) => (
@@ -82,6 +94,7 @@ export const DrawerTrigger = (props: ComponentProps<typeof DrawerTriggerComponen
     <DrawerTriggerComponent {...props} />
   </Suspense>
 );
+DrawerTrigger.displayName = "DrawerTrigger";
 
 // Dynamic Drawer Close
 export const DrawerClose = (props: ComponentProps<typeof DrawerCloseComponent>) => (
@@ -89,10 +102,21 @@ export const DrawerClose = (props: ComponentProps<typeof DrawerCloseComponent>) 
     <DrawerCloseComponent {...props} />
   </Suspense>
 );
+DrawerClose.displayName = "DrawerClose";
+
+// Dynamic Drawer Description
+export const DrawerDescription = (props: ComponentProps<typeof DrawerDescriptionComponent>) => (
+  <Suspense fallback={null}>
+    <DrawerDescriptionComponent {...props} />
+  </Suspense>
+);
+DrawerDescription.displayName = "DrawerDescription";
 
 // Utility function to preload Vaul when user interaction is likely
 export const preloadVaul = () => {
-  import('vaul');
+  if (isClient) {
+    import('vaul');
+  }
 };
 
 // Export the dynamic Drawer object that matches Vaul's API
@@ -102,6 +126,7 @@ export const Drawer = {
   Overlay: DrawerOverlay,
   Content: DrawerContent,
   Title: DrawerTitle,
+  Description: DrawerDescription,
   Trigger: DrawerTrigger,
   Close: DrawerClose,
 };

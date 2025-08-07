@@ -1,15 +1,11 @@
 "use client";
 
-import { lazy, Suspense } from 'react';
-import type { ComponentProps } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
+import type { DropzoneOptions, DropzoneState, DropzoneProps } from 'react-dropzone';
 
-// Dynamic import for react-dropzone
+// Dynamic import for react-dropzone component
 const ReactDropzone = lazy(() =>
   import('react-dropzone').then((mod) => ({ default: mod.default }))
-);
-
-const useDropzone = lazy(() =>
-  import('react-dropzone').then((mod) => ({ default: mod.useDropzone }))
 );
 
 // Loading fallback for file upload
@@ -32,9 +28,41 @@ export const DropzoneDynamic = (props: any) => (
   </Suspense>
 );
 
-// Hook wrapper for useDropzone
+// Dynamic wrapper component that uses useDropzone internally
+const DropzoneWrapper = lazy(() =>
+  import('react-dropzone').then((mod) => ({
+    default: ({ children, ...props }: any) => {
+      const { getRootProps, getInputProps, isDragActive } = mod.useDropzone(props);
+
+      return (
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          {children ? children({ isDragActive, getRootProps, getInputProps }) : null}
+        </div>
+      );
+    }
+  }))
+);
+
+// Hook-like interface for dropzone functionality
 export const useDropzoneDynamic = () => {
-  return useDropzone;
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Preload the dropzone module
+    import('react-dropzone').then(() => setIsLoaded(true));
+  }, []);
+
+  return {
+    isLoaded,
+    DropzoneWrapper: ({ children, ...props }: any) => (
+      <Suspense fallback={<DropzoneLoader />}>
+        <DropzoneWrapper {...props}>
+          {children}
+        </DropzoneWrapper>
+      </Suspense>
+    )
+  };
 };
 
 // Utility function to preload dropzone when user hovers over upload area
@@ -43,15 +71,32 @@ export const preloadDropzone = () => {
 };
 
 // Simple file upload component with dynamic loading
-export const FileUploadDynamic = ({ onDrop, accept, multiple = true, ...props }: {
+// Usage: <FileUploadDynamic onDrop={handleDrop}>{(state) => <div>Drop zone content</div>}</FileUploadDynamic>
+export const FileUploadDynamic = ({
+  onDrop,
+  accept,
+  multiple = true,
+  children,
+  ...props
+}: {
   onDrop: (acceptedFiles: File[]) => void;
   accept?: Record<string, string[]>;
   multiple?: boolean;
-  children?: React.ReactNode;
-}) => (
+  children?: (state: DropzoneState) => React.ReactElement;
+} & Omit<DropzoneProps, 'onDrop' | 'accept' | 'multiple' | 'children'>) => (
   <Suspense fallback={<DropzoneLoader />}>
-    <ReactDropzone onDrop={onDrop} accept={accept} multiple={multiple} {...props} />
+    <ReactDropzone
+      onDrop={onDrop}
+      accept={accept}
+      multiple={multiple}
+      {...props}
+    >
+      {children}
+    </ReactDropzone>
   </Suspense>
 );
 
 export default DropzoneDynamic;
+
+// Re-export types for convenience
+export type { DropzoneOptions, DropzoneState, DropzoneProps } from 'react-dropzone';

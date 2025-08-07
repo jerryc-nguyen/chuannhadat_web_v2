@@ -1,3 +1,17 @@
+// Apply polyfills immediately before any other imports
+if (typeof global.self === 'undefined') {
+  global.self = global;
+}
+if (typeof global.window === 'undefined') {
+  global.window = undefined;
+}
+if (typeof global.document === 'undefined') {
+  global.document = undefined;
+}
+if (typeof global.navigator === 'undefined') {
+  global.navigator = undefined;
+}
+
 import { createServer } from 'http';
 import { parse } from 'url';
 import next from 'next';

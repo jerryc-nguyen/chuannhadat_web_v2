@@ -1,32 +1,12 @@
 "use client";
 
-import { lazy, Suspense } from 'react';
-import type { ComponentProps } from 'react';
-
-// Dynamic imports for TanStack Table components and hooks
-const useReactTable = lazy(() =>
-  import('@tanstack/react-table').then((mod) => ({ default: mod.useReactTable }))
-);
-
-const getCoreRowModel = lazy(() =>
-  import('@tanstack/react-table').then((mod) => ({ default: mod.getCoreRowModel }))
-);
-
-const getSortedRowModel = lazy(() =>
-  import('@tanstack/react-table').then((mod) => ({ default: mod.getSortedRowModel }))
-);
-
-const getFilteredRowModel = lazy(() =>
-  import('@tanstack/react-table').then((mod) => ({ default: mod.getFilteredRowModel }))
-);
-
-const getPaginationRowModel = lazy(() =>
-  import('@tanstack/react-table').then((mod) => ({ default: mod.getPaginationRowModel }))
-);
-
-const flexRender = lazy(() =>
-  import('@tanstack/react-table').then((mod) => ({ default: mod.flexRender }))
-);
+import { lazy, Suspense, useState, useEffect } from 'react';
+import type {
+  Table,
+  ColumnDef,
+  TableOptions,
+  RowData
+} from '@tanstack/react-table';
 
 // Loading fallback for data tables
 const TableLoader = () => (
@@ -71,33 +51,61 @@ const TableLoader = () => (
   </div>
 );
 
-// Dynamic table hooks wrapper
-export const useReactTableDynamic = async (options: any) => {
-  const useTable = await import('@tanstack/react-table').then(mod => mod.useReactTable);
-  return useTable(options);
-};
+// Hook to load TanStack Table utilities dynamically
+export const useTableDynamic = () => {
+  const [tableUtils, setTableUtils] = useState<any>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-// Dynamic model functions
-export const getTableModels = async () => {
-  const [core, sorted, filtered, pagination] = await Promise.all([
-    import('@tanstack/react-table').then(mod => mod.getCoreRowModel),
-    import('@tanstack/react-table').then(mod => mod.getSortedRowModel),
-    import('@tanstack/react-table').then(mod => mod.getFilteredRowModel),
-    import('@tanstack/react-table').then(mod => mod.getPaginationRowModel),
-  ]);
+  useEffect(() => {
+    let mounted = true;
+
+    const loadTableUtils = async () => {
+      try {
+        const tableModule = await import('@tanstack/react-table');
+        if (mounted) {
+          setTableUtils({
+            useReactTable: tableModule.useReactTable,
+            getCoreRowModel: tableModule.getCoreRowModel,
+            getSortedRowModel: tableModule.getSortedRowModel,
+            getFilteredRowModel: tableModule.getFilteredRowModel,
+            getPaginationRowModel: tableModule.getPaginationRowModel,
+            flexRender: tableModule.flexRender,
+          });
+          setIsLoaded(true);
+        }
+      } catch (error) {
+        console.error('Failed to load @tanstack/react-table:', error);
+      }
+    };
+
+    loadTableUtils();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return {
-    getCoreRowModel: core,
-    getSortedRowModel: sorted,
-    getFilteredRowModel: filtered,
-    getPaginationRowModel: pagination,
+    ...tableUtils,
+    isLoaded,
+    preload: preloadTable
   };
 };
 
-// Dynamic flex render function
+// Utility functions for direct imports (when you don't need the hook)
+export const getTableModels = async () => {
+  const tableModule = await import('@tanstack/react-table');
+  return {
+    getCoreRowModel: tableModule.getCoreRowModel,
+    getSortedRowModel: tableModule.getSortedRowModel,
+    getFilteredRowModel: tableModule.getFilteredRowModel,
+    getPaginationRowModel: tableModule.getPaginationRowModel,
+  };
+};
+
 export const flexRenderDynamic = async (cell: any, context: any) => {
-  const render = await import('@tanstack/react-table').then(mod => mod.flexRender);
-  return render(cell, context);
+  const { flexRender } = await import('@tanstack/react-table');
+  return flexRender(cell, context);
 };
 
 // Simple dynamic table component
@@ -123,14 +131,12 @@ export const preloadTable = () => {
   import('@tanstack/react-table');
 };
 
-// Hook to load table utilities dynamically
-export const useTableDynamic = () => {
-  return {
-    useReactTable: useReactTableDynamic,
-    getModels: getTableModels,
-    flexRender: flexRenderDynamic,
-    preload: preloadTable
-  };
-};
-
 export default TableDynamic;
+
+// Re-export types for convenience
+export type {
+  Table,
+  ColumnDef,
+  TableOptions,
+  RowData
+} from '@tanstack/react-table';

@@ -163,11 +163,11 @@ const nextConfig = {
             test: /[\\/]node_modules[\\/]embla-carousel.*[\\/]/,
             name: 'embla',
             chunks: 'all',
-            priority: 30,
+            priority: 28,
           },
           // Split heavy UI libraries (on-demand loading)
           ui: {
-            test: /[\\/]node_modules[\\/](swiper|yet-another-react-lightbox|react-confetti|vaul|@hello-pangea\/dnd|react-dropzone|react-google-recaptcha|sonner|@tanstack\/react-table|react-day-picker|react-resizable-panels|react-paginate|cmdk)[\\/]/,
+            test: /[\\/]node_modules[\\/](swiper|yet-another-react-lightbox|react-confetti|vaul|@hello-pangea\/dnd|react-dropzone|react-google-recaptcha|sonner|react-day-picker|react-resizable-panels|react-paginate|cmdk)[\\/]/,
             name: 'ui-heavy',
             chunks: 'all',
             priority: 25,
@@ -223,6 +223,31 @@ const nextConfig = {
       } else {
         config.externals = [...(config.externals || []), '@tanstack/react-query-devtools'];
       }
+    }
+
+    // Add polyfill for 'self' variable to prevent SSR errors
+    if (config.isServer) {
+      // More comprehensive polyfill for server-side rendering
+      const defineGlobal = (name, value) => {
+        try {
+          if (typeof global[name] === 'undefined') {
+            Object.defineProperty(global, name, {
+              value: value,
+              writable: true,
+              enumerable: false,
+              configurable: true,
+            });
+          }
+        } catch (e) {
+          // Fallback for older Node.js versions
+          global[name] = value;
+        }
+      };
+
+      defineGlobal('self', global);
+      defineGlobal('window', undefined);
+      defineGlobal('document', undefined);
+      defineGlobal('navigator', undefined);
     }
 
     return config;

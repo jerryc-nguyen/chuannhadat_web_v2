@@ -52,7 +52,7 @@ export default function LightboxDynamic({ usePlugins, ...props }: LightboxDynami
         }
 
         const loadedPlugins = await Promise.all(pluginPromises);
-        setPlugins(loadedPlugins.map(plugin => plugin.default));
+        setPlugins(loadedPlugins.filter(plugin => plugin?.default).map(plugin => plugin.default));
         setStylesLoaded(true);
       } catch (error) {
         // Silently handle plugin loading errors
