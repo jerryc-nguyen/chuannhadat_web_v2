@@ -17,10 +17,21 @@ const nextConfig = {
     webVitalsAttribution: ['CLS', 'LCP'],
     // Faster CSS processing
     optimizeCss: true,
+    // ✅ CRITICAL FOR PAGESPEED: Enable modern CSS optimization
+    cssChunking: true, // Better CSS chunk management
+    // Enable app router optimizations
+    appDir: true,
   },
 
   // Reduce memory usage during build
   generateEtags: false,
+
+  // ✅ PAGESPEED OPTIMIZATIONS
+  compress: true, // Enable gzip compression
+  poweredByHeader: false, // Remove X-Powered-By header for security
+
+  // Enable static optimization
+  trailingSlash: false,
 
   // Optimize compilation
   compiler: {
@@ -55,6 +66,8 @@ const nextConfig = {
     additionalData: `@use "src/styles/variables/_index.scss" as *; `,
   },
   images: {
+    // Keep unoptimized since you have your own image resizing service
+    // Your custom resizer with quality control is better for cost management
     unoptimized: true,
     remotePatterns: [
       {
