@@ -4,25 +4,13 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import useBrowserPopstate from './popstate-handler/hooks';
 
-// Dynamic imports for ALL modal components (including BtsModals)
-const BtsModals1 = lazy(() => import('@mobile/modals').then(module => ({
-  default: module.BtsModals1
-})));
-const BtsModals2 = lazy(() => import('@mobile/modals').then(module => ({
-  default: module.BtsModals2
-})));
-const BtsModals3 = lazy(() => import('@mobile/modals').then(module => ({
-  default: module.BtsModals3
-})));
+// Temporary: Use direct imports to isolate webpack runtime issue
+import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 
-// Dynamic imports for heavy components
-const DepositModal = lazy(() => import('./ui/DepositModal'));
-const ModalPostDetail = lazy(() => import('@views/post-detail/components/modal-post-detail'));
-const YoutubePlayerModal = lazy(() =>
-  import('./youtube-player-modal/YoutubePlayerModal').then(module => ({
-    default: module.YoutubePlayerModal
-  }))
-);
+// Temporary: Use direct imports to isolate webpack runtime issue
+import DepositModal from './ui/DepositModal';
+import ModalPostDetail from '@views/post-detail/components/modal-post-detail';
+import { YoutubePlayerModal } from './youtube-player-modal/YoutubePlayerModal';
 
 // Lightweight components - keep static
 import SidePanel from './SidePanel';
@@ -141,43 +129,13 @@ export default function ImprovedListModal() {
       <SidePanel />
       <ConfirmEmailModal />
 
-      {/* Dynamically load BtsModals only when needed */}
-      {showBtsModal1 && (
-        <Suspense fallback={<ModalLoader />}>
-          <BtsModals1 />
-        </Suspense>
-      )}
-
-      {showBtsModal2 && (
-        <Suspense fallback={<ModalLoader />}>
-          <BtsModals2 />
-        </Suspense>
-      )}
-
-      {showBtsModal3 && (
-        <Suspense fallback={<ModalLoader />}>
-          <BtsModals3 />
-        </Suspense>
-      )}
-
-      {/* Dynamically load heavy modals */}
-      {showPostDetail && (
-        <Suspense fallback={<ModalLoader />}>
-          <ModalPostDetail />
-        </Suspense>
-      )}
-
-      {showDeposit && (
-        <Suspense fallback={<ModalLoader />}>
-          <DepositModal />
-        </Suspense>
-      )}
-
-      {showYoutube && (
-        <Suspense fallback={<ModalLoader />}>
-          <YoutubePlayerModal />
-        </Suspense>
-      )}
+      {/* Temporary: Direct rendering to isolate webpack runtime issue */}
+      {showBtsModal1 && <BtsModals1 />}
+      {showBtsModal2 && <BtsModals2 />}
+      {showBtsModal3 && <BtsModals3 />}
+      {showPostDetail && <ModalPostDetail />}
+      {showDeposit && <DepositModal />}
+      {showYoutube && <YoutubePlayerModal />}
     </>
   );
 } 
