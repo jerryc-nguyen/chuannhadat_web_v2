@@ -17,7 +17,7 @@ docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deplo
 ```
 
 ```
-docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3 -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3
+docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3 -f Dockerfile.v2 . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3
 ```
 
 ### IMAGES CND NOTES

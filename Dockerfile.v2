@@ -5,8 +5,8 @@ FROM node:20-alpine AS base
 FROM base AS builder
 WORKDIR /app
 
-# Set memory limit for Node.js during build
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+# Set memory limit for Node.js during build (increased per BUILD_OPTIMIZATION.md)
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 # Disable Next.js telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -32,6 +32,7 @@ COPY ecosystem.config.js ./
 
 # Copy remaining files (if any)
 COPY . .
+COPY .env.beta .env
 
 # Remove local environment variables
 RUN rm -rf .env.local
@@ -45,7 +46,7 @@ WORKDIR /app
 
 ENV GENERATE_SOURCEMAP=false
 ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Install PM2 globally
