@@ -10,7 +10,7 @@ const CDN_MAPS: Record<string, A> = {
   'chuannhadat-assets-dev.sgp1.digitaloceanspaces.com': 's3-images-dev.b-cdn.net',
 };
 
-export const MAX_THUMB_WIDTH = 480;
+export const MAX_THUMB_WIDTH = 376; // ✅ Reduced from 480 to match actual display size
 const DEFAULT_RATIO = 16 / 9;
 
 const DEFAULT_IMG =
@@ -75,7 +75,12 @@ export default function useResizeImage() {
 
     return resize({
       imageUrl: imageUrl,
-      sizes: { width: width, height: height },
+      sizes: {
+        width: width,
+        height: height,
+        f: 'webp', // ✅ Force WebP format for better compression
+        q: 80      // ✅ Optimize quality for performance
+      },
     });
   };
 
