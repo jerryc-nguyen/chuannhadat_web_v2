@@ -6,7 +6,7 @@ import type { Metadata, Viewport } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import Head from 'next/head';
 import Script from 'next/script';
-import NextTopLoader from 'nextjs-toploader';
+import NextTopLoaderDynamic from '@/components/NextTopLoaderDynamic';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
 
@@ -152,7 +152,7 @@ export default async function RootLayout({
         )}
         cz-shortcut-listen="true"
       >
-        <NextTopLoader />
+        <NextTopLoaderDynamic />
         <ProviderWrapper isMobile={isMobile}>{children}</ProviderWrapper>
         {/* Hotjar script - deferred for PageSpeed */}
         <Script id="hotjar" strategy="lazyOnload">

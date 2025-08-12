@@ -40,15 +40,17 @@ export const ListTopAuthor = () => {
                   src={
                     typeof imgSrc === 'string'
                       ? buildThumbnailUrl({
-                          imageUrl: imgSrc,
-                          width: 64,
-                          ratio: 1,
-                        })
+                        imageUrl: imgSrc,
+                        width: 64,
+                        ratio: 1,
+                      })
                       : imgSrc
                   }
                   className="aspect-square rounded-full"
                   unoptimized
                   alt="avatar_author"
+                  loading={index < 6 ? 'eager' : 'lazy'}
+                  priority={index < 3}
                 />
               </Link>
 
