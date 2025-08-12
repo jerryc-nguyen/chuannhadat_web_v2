@@ -11,7 +11,7 @@ import { isLoadingModal, selectedPostId } from '../../post-detail/states/modalPo
 import useModalPostDetail from '../../post-detail/hooks/useModalPostDetail';
 import styles from '../styles/ProductCard.module.scss';
 import CardAuthor from './CardAuthor';
-import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
+import ThumbsCarousel from './ThumbsCarousel';
 import LoadingProductCard from './LoadingProductCard';
 import BusCatType from './product-card/BusCatType';
 
@@ -20,6 +20,8 @@ type ProductCardProps = {
   isShowAuthor?: boolean;
   className?: string;
   isShowVideoYoutube?: boolean;
+  isFirstProduct?: boolean;
+  productIndex?: number;
 };
 
 export default function ProductCard({
@@ -27,6 +29,8 @@ export default function ProductCard({
   isShowAuthor = true,
   className,
   isShowVideoYoutube = true,
+  isFirstProduct = false,
+  productIndex = 0,
 }: ProductCardProps) {
   // ✅ Use dedicated hook for modal management
   const { handleOpenModal } = useModalPostDetail();
@@ -36,7 +40,7 @@ export default function ProductCard({
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
 
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
-  if (!product || product?.images?.length == 0) {
+  if (!product) {
     return <LoadingProductCard />;
   }
 
@@ -59,11 +63,13 @@ export default function ProductCard({
           youtube_url={product.youtube_url}
           isDisplay={Boolean(product.youtube_url && isShowVideoYoutube)}
         />
-        <CardImageCarousel
+        <ThumbsCarousel
           handleClickCardImage={() => {
             handleOpenModal(product.uid);
           }}
           product={product}
+          isEager={isFirstProduct}
+          productIndex={productIndex}
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
