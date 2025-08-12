@@ -45,10 +45,8 @@ export default function ThumbsCarousel({
   isEager = false,
   productIndex = 0,
 }: ThumbsCarouselProps) {
-  const [isInViewport, setIsInViewport] = useState(productIndex < 6); // Initialize above-fold as true
-  const [isCarouselInitialized, setIsCarouselInitialized] = useState(
-    productIndex < 6 && (product.images_count >= 2) // Initialize above-fold multi-image carousels
-  );
+  const [isInViewport, setIsInViewport] = useState(false); // Start false for SSR, hydrate to true for above-fold
+  const [isCarouselInitialized, setIsCarouselInitialized] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { buildThumbnailUrl } = useResizeImage();
@@ -59,13 +57,18 @@ export default function ThumbsCarousel({
 
   // Debug logging removed - carousel working correctly
 
-  // ✅ Intersection Observer for viewport detection (only for below-fold products)
+  // ✅ Hydration and viewport detection
   useEffect(() => {
-    // Skip intersection observer for above-fold products (already initialized)
     if (isAboveFold) {
+      // For above-fold products, set to viewport immediately after hydration
+      setIsInViewport(true);
+      if (hasMultipleImages) {
+        setIsCarouselInitialized(true);
+      }
       return;
     }
 
+    // For below-fold products, use intersection observer
     if (!containerRef.current) {
       return;
     }
@@ -123,8 +126,8 @@ export default function ThumbsCarousel({
     );
   }
 
-  // ✅ SSR Mode: Only first image for SEO
-  if (!isInViewport && !isAboveFold) {
+  // ✅ SSR Mode: Only first image for SEO (server-side or below-fold not in viewport)
+  if (!isInViewport) {
     return (
       <section ref={containerRef} className="relative w-full flex-shrink-0">
         {firstImage && (
