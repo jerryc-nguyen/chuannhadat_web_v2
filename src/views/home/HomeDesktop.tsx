@@ -27,6 +27,7 @@ const HomeDesktop: React.FC = () => {
     with_title: true,
     with_users: true,
     page: currentPage,
+    per_page: 8, // ✅ Load 8 products initially for better performance
   };
 
   const { products, data } = useQueryPosts(filterParams);
@@ -56,7 +57,11 @@ const HomeDesktop: React.FC = () => {
         pagination={data?.pagination}
       />
 
-      <PostList dataPostList={products} />
+      <PostList
+        dataPostList={products}
+        filterParams={filterParams}
+        currentPage={currentPage}
+      />
 
       {/* Pagination removed - will be replaced with infinite scroll */}
     </section>

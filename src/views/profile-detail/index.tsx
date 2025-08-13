@@ -54,6 +54,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       searchApi({
         ...filterParams,
         page: currentPage,
+        per_page: 8, // ✅ Load 8 products initially for better performance
         author_slug: profileSlug,
         aggs_for: 'profile',
       }),
@@ -115,6 +116,12 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
                 dataPostList={products}
                 isShowAuthor={false}
+                filterParams={{
+                  ...filterParams,
+                  author_slug: profileSlug,
+                  aggs_for: 'profile',
+                }}
+                currentPage={currentPage}
               />
               {/* Pagination removed - will be replaced with infinite scroll */}
             </div>

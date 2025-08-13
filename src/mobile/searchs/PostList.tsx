@@ -14,7 +14,7 @@ import useQueryPosts from '@hooks/useQueryPosts';
 import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import ProductCardV2 from './ProductCardV2';
+import InfiniteProductLoaderMobile from './InfiniteProductLoaderMobile';
 
 // TODO: Move to views/home
 
@@ -34,6 +34,7 @@ export default function PostList() {
   });
   filterParams.with_users = true;
   filterParams.page = currentPage;
+  filterParams.per_page = 4; // ✅ Load 4 products initially for mobile
 
   const { products, data, aggreations } = useQueryPosts(filterParams);
 
@@ -88,11 +89,11 @@ export default function PostList() {
         </div>
       </div>
 
-      {products?.map((product: A) => {
-        return <ProductCardV2 key={product?.id} product={product} />;
-      })}
-
-      {/* Pagination removed - will be replaced with infinite scroll */}
+      <InfiniteProductLoaderMobile
+        initialProducts={products}
+        filterParams={filterParams}
+        currentPage={currentPage}
+      />
     </div>
   );
 }
