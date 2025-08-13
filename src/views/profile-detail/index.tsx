@@ -16,7 +16,7 @@ import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import PostControls from '@views/home/components/PostControls';
 import PostList from '@views/home/components/PostList';
-import { PostPagination } from '@views/home/components/PostPagination';
+
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ProfileImage from './components/ProfileImage';
@@ -116,16 +116,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
                 dataPostList={products}
                 isShowAuthor={false}
               />
-              <PostPagination
-                total_pages={pagination.total_pages}
-                currentPage={currentPage}
-                onPageChange={(page) => {
-                  const selected = page.selected + 1;
-                  // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
-                  router.push(pathname + '?page=' + selected);
-                }}
-                emptyComponent={EmptyPost}
-              />
+              {/* Pagination removed - will be replaced with infinite scroll */}
             </div>
           </div>
         </section>

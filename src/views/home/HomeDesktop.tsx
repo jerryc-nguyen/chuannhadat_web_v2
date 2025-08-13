@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { ListTopAuthor } from './components/ListTopAuthor';
-import { PostPagination } from './components/PostPagination';
+
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 
 const HomeDesktop: React.FC = () => {
@@ -19,9 +19,9 @@ const HomeDesktop: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = searchParams?.get( 'page' ) ? parseInt( searchParams.get( 'page' ) as string ) : 1;
+  const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
   const { buildFilterParams } = useFilterState();
-  let filterParams = buildFilterParams( { withLocal: false } );
+  let filterParams = buildFilterParams({ withLocal: false });
   filterParams = {
     ...filterParams,
     with_title: true,
@@ -29,8 +29,8 @@ const HomeDesktop: React.FC = () => {
     page: currentPage,
   };
 
-  const { products, data } = useQueryPosts( filterParams );
-  useLoadMissingAuthors( data );
+  const { products, data } = useQueryPosts(filterParams);
+  useLoadMissingAuthors(data);
 
   const EmptyPost = () => {
     return (
@@ -58,16 +58,7 @@ const HomeDesktop: React.FC = () => {
 
       <PostList dataPostList={products} />
 
-      <PostPagination
-        total_pages={data.pagination.total_pages}
-        currentPage={currentPage}
-        onPageChange={( page ) => {
-          const selected = page.selected + 1;
-          // @todo: cần merge params vì có thể path hiện tại đang dùng params khác
-          router.push( pathname + '?page=' + selected );
-        }}
-        emptyComponent={EmptyPost}
-      />
+      {/* Pagination removed - will be replaced with infinite scroll */}
     </section>
   );
 };

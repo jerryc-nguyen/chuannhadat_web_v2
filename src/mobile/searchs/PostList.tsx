@@ -10,7 +10,7 @@ import { ChevronDown } from 'lucide-react';
 import empty_city from '@assets/images/empty-city.png';
 import useSearchAggs from '@components/search-aggs/hooks';
 import useQueryPosts from '@hooks/useQueryPosts';
-import { PostPagination } from '@views/home/components/PostPagination';
+
 import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -92,15 +92,7 @@ export default function PostList() {
         return <ProductCardV2 key={product?.id} product={product} />;
       })}
 
-      <PostPagination
-        total_pages={data?.pagination?.total_pages}
-        currentPage={currentPage}
-        onPageChange={(page) => {
-          const selected = page.selected + 1;
-          router.push(pathname + '?page=' + selected);
-        }}
-        emptyComponent={EmptyPost}
-      />
+      {/* Pagination removed - will be replaced with infinite scroll */}
     </div>
   );
 }
