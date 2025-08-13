@@ -287,12 +287,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     return (
       <Sheet onOpenChange={setOpenSavePost} open={openSavedPost}>
         <SheetTrigger asChild>
-          <div className="relative">
-            <Button size={'icon'} variant="outline" className="rounded-full">
-              <LucideHeart className="h-5 w-5" />
-            </Button>
+          <Button size={'icon'} variant="outline" className="rounded-full relative" aria-label="Xem tin đã lưu và tin đã xem">
+            <LucideHeart className="h-5 w-5" />
             {isShowBadge && renderBadge()}
-          </div>
+          </Button>
         </SheetTrigger>
         <SheetContent className="w-[90vw] p-0">
           <SheetHeader className="p-3">
@@ -308,12 +306,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   return (
     <Popover onOpenChange={setOpenSavePost} open={openSavedPost}>
       <PopoverTrigger asChild>
-        <div className="relative">
-          <Button size={'icon'} variant="outline" className="rounded-full">
-            <LucideHeart className="h-5 w-5" />
-          </Button>
+        <Button size={'icon'} variant="outline" className="rounded-full relative" aria-label="Xem tin đã lưu và tin đã xem">
+          <LucideHeart className="h-5 w-5" />
           {isShowBadge && renderBadge()}
-        </div>
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         className={cn('w-[23rem] p-0', {

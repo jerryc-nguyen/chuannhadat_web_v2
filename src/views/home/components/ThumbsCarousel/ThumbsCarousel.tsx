@@ -129,7 +129,7 @@ export default function ThumbsCarousel({
   // ✅ SSR Mode: Only first image for SEO (server-side or below-fold not in viewport)
   if (!isInViewport) {
     return (
-      <section ref={containerRef} className="relative w-full flex-shrink-0">
+      <section ref={containerRef} className="relative w-full flex-shrink-0" role="img" aria-label={getOptimizedAltText()}>
         {firstImage && (
           <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
             <BlurImage
