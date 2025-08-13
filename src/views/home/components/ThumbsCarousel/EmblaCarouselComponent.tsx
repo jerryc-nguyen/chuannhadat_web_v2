@@ -130,6 +130,7 @@ export default function EmblaCarouselComponent({
                   fill
                   loading={isEager && index === 0 ? 'eager' : 'lazy'}
                   priority={isEager && index === 0}
+                  fetchPriority={isEager && index === 0 ? 'high' : 'auto'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="h-full w-full object-cover transition-all hover:scale-105"
                   onClick={(e) => {
