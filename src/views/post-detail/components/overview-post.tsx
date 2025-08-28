@@ -15,8 +15,7 @@ import ButtonSave, { type ButtonSaveHandle } from '@views/home/components/Button
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
-import { LuMapPin, LuMoveRight, LuShare2 } from 'react-icons/lu';
+import { MapPin, MoveRight, Share2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import Lightbox, { createModule, PLUGIN_THUMBNAILS, PluginProps } from 'yet-another-react-lightbox';
 import Counter from 'yet-another-react-lightbox/plugins/counter';
@@ -47,8 +46,8 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
 
   const actionLightBox = {
     slide: NextJsImage,
-    iconPrev: () => <GoArrowLeft className="text-3xl opacity-50 hover:opacity-100" />,
-    iconNext: () => <GoArrowRight className="text-3xl opacity-50 hover:opacity-100" />,
+    iconPrev: () => <ArrowLeft className="text-3xl opacity-50 hover:opacity-100" />,
+    iconNext: () => <ArrowRight className="text-3xl opacity-50 hover:opacity-100" />,
     buttonPrev: data?.images.length <= 1 ? () => null : undefined,
     buttonNext: data?.images.length <= 1 ? () => null : undefined,
   };
@@ -149,7 +148,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         <div className="action flex gap-x-4">
           <Button disabled variant={'outline'}>
             Chia sẻ
-            <LuShare2 className="ml-2" />
+            <Share2 className="ml-2" />
           </Button>
           <div className="flex h-full items-center rounded-md border px-3 opacity-50 transition-all">
             Lưu tin
@@ -237,7 +236,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
       />
       <h2 className="mb-2 mt-4 line-clamp-2 whitespace-normal text-2xl font-bold">{data?.title}</h2>
       <div className="my-2 flex max-w-[90%] flex-nowrap items-center gap-x-2 text-lg text-secondary">
-        <LuMapPin />
+        <MapPin />
         <TooltipHost isOverflow content={data?.full_address}>
           {data?.full_address}
         </TooltipHost>
@@ -261,7 +260,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               <TooltipTrigger asChild>
                 <Button onClick={handleSharePost} variant={'outline'}>
                   {isCopied ? 'Đã sao chép' : 'Chia sẻ'}
-                  <LuShare2 className="ml-2" />
+                  <Share2 className="ml-2" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -296,7 +295,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
               variant={'link'}
             >
               Xem chi tiết
-              <LuMoveRight className="ml-2" />
+              <MoveRight className="ml-2" />
             </Button>
           )}
         </div>

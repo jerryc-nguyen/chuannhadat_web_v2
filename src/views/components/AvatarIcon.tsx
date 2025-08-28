@@ -18,7 +18,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { LuUserCircle } from 'react-icons/lu';
+import { UserCircle } from 'lucide-react';
 
 type AvatarIconProps = {
   isLogged: boolean;
@@ -131,7 +131,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
         showModalLoginAndRegister();
       }}
     >
-      <LuUserCircle className="h-5 w-5" />
+      <UserCircle className="h-5 w-5" />
     </Button>
   );
 };

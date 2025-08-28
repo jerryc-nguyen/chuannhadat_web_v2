@@ -48,7 +48,7 @@ services:
       - redis_data:/data
     command: redis-server --appendonly yes
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -85,6 +85,26 @@ services:
       - VIRTUAL_PORT=4000
       - LETSENCRYPT_HOST=chuannhadat.com
       - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
+    command: 'node server.js'
+
+  chuannhadat_next_v3:
+    restart: always
+    image: registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3
+    container_name: chuannhadat_next_v3
+    ports:
+      - '4600:4600'
+    env_file:
+      - .env.production
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=https://api-production.chuannhadat.com
+      - VIRTUAL_HOST=beta.chuannhadat.com
+      - VIRTUAL_NETWORK=nginx-proxy
+      - VIRTUAL_PORT=4600
+      - LETSENCRYPT_HOST=beta.chuannhadat.com
+      - LETSENCRYPT_EMAIL=jerryc.nguyen91@gmail.com
+      - NODE_ENV=production
+      - ENABLE_BOT_PROTECTION=false
+      - REDIS_URL=redis://redis:6379
     command: 'node server.js'
 
 volumes:

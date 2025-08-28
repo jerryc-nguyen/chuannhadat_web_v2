@@ -27,7 +27,7 @@ export default function ModalSelectRegisterOrLogin({
   };
 
   return (
-    <Tabs defaultValue={activeTab}>
+    <Tabs value={activeTab} onValueChange={handleShowModalLoginAndRegister}>
       <TabsList className="flex w-full h-11">
         {authOptions.map((option) => {
           return (
@@ -51,7 +51,7 @@ export default function ModalSelectRegisterOrLogin({
       </TabsContent>
       <TabsContent value="register">
         <div className="mt-8">
-          <RegisterForm onClose={onClose} />
+          <RegisterForm onClose={onClose} setActiveTab={setActiveTab} />
         </div>
       </TabsContent>
     </Tabs>

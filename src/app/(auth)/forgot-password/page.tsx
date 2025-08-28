@@ -15,17 +15,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import forgot_password from '@assets/icons/Forgot password-bro.svg';
 import Image from 'next/image';
-import { IoIosArrowBack } from 'react-icons/io';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { services } from '@api/services';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { LuLoader2 } from 'react-icons/lu';
-import { AiFillMessage } from 'react-icons/ai';
+import { Loader2, MessageCircleMore, CircleCheck, ChevronLeft } from 'lucide-react';
 import TooltipHost from '@components/tooltip-host';
-import { FaCircleCheck } from 'react-icons/fa6';
 import CommonAlertDialog from '@components/common-dialog';
 import { IVerifyPhoneResponse } from '@models/modelResponse';
 import { SMS_PHONE_NUMBER } from '@common/constants';
@@ -131,7 +128,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
         description={
           typePopup === PopupType.VerifySuccess ? (
             <div className="flex flex-col items-center justify-center gap-y-3">
-              <FaCircleCheck className="text-5xl text-success_color" />
+              <CircleCheck className="text-5xl text-success_color" />
               <p>
                 Tài khoản với SĐT <b className="text-primary_color">{resetPhone}</b> đã được cấp lại mật khẩu mới: <b className="text-success_color">123456</b>,
                 vui lòng đăng nhập và thay đổi mật khẩu của bạn tại:
@@ -141,7 +138,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
             </div>
           ) : (
             <div className="flex flex-col justify-center gap-y-3">
-              <AiFillMessage className="mx-auto text-5xl text-muted-foreground" />
+              <MessageCircleMore className="mx-auto text-5xl text-muted-foreground" />
               <div>
                 <p>
                   Xin chào <b className="font-medium text-primary_color">{account?.name}</b>, để
@@ -168,7 +165,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
         <section className="mt-10 flex items-center gap-x-10 md:mt-5">
           <section className="flex-1">
             <Link href="/" className="mb-4 flex items-center gap-x-2 font-medium hover:underline">
-              <IoIosArrowBack />
+              <ChevronLeft />
               Trang chủ
             </Link>
             <h1 className="text-2xl font-semibold md:text-3xl xl:text-4xl">Quên mật khẩu ?</h1>
@@ -220,7 +217,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
                   className="w-full bg-primary_color hover:bg-primary_color/80 sm:bottom-0"
                   type="submit"
                 >
-                  {isLoadingCheckPhone && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isLoadingCheckPhone && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Gửi thông tin
                 </Button>
               </form>

@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocationPicker } from '@contexts/LocationContext';
 
-import cities from 'src/configs/locations/cities.json';
-import citiesDistricts from 'src/configs/locations/cities_districts.json';
-import districtWards from 'src/configs/locations/districts_wards.json';
-import districtStreets from 'src/configs/locations/districts_streets.json';
+
 
 import { OptionForSelect } from '@models';
 import OptionPicker from '@mobile/ui/OptionPicker';
@@ -45,27 +43,52 @@ export default function LocationsPicker({
     modalOption = {}
   }
 
+  // Get location data from context
+  const {
+    cities,
+    citiesDistricts,
+    districtWards,
+    districtStreets,
+    loadCities,
+    loadDistrictsForCity,
+    loadWardsForDistrict,
+    loadStreetsForDistrict
+  } = useLocationPicker();
+
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
   const [curWard, setCurWard] = useState<OptionForSelect | undefined>(ward);
   const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>(street);
 
+  // Auto-load data when selections change
+  useEffect(() => {
+    if (curCity?.value) {
+      loadDistrictsForCity(curCity.value);
+    }
+  }, [curCity?.value, loadDistrictsForCity]);
+
+  useEffect(() => {
+    if (curDistrict?.value) {
+      loadWardsForDistrict(curDistrict.value);
+      if (withStreet) {
+        loadStreetsForDistrict(curDistrict.value);
+      }
+    }
+  }, [curDistrict?.value, loadWardsForDistrict, loadStreetsForDistrict, withStreet]);
+
   const districtOptions = useMemo(() => {
-    //@ts-ignore: read field of object
-    return citiesDistricts[curCity?.value + '']
-  }, [curCity?.value])
+    return citiesDistricts[curCity?.value + ''] || []
+  }, [citiesDistricts, curCity?.value])
 
   const wardOptions = useMemo(() => {
     return curDistrict?.value
-      // @ts-ignore: ok
-      ? districtWards[curDistrict?.value + ''] : []
-  }, [curDistrict?.value])
+      ? districtWards[curDistrict?.value + ''] || [] : []
+  }, [districtWards, curDistrict?.value])
 
   const streetOptions = useMemo(() => {
     return curDistrict?.value
-      // @ts-ignore: ok
-      ? districtStreets[curDistrict?.value + ''] : []
-  }, [curDistrict?.value])
+      ? districtStreets[curDistrict?.value + ''] || [] : []
+  }, [districtStreets, curDistrict?.value])
 
   const resetDistrict = () => {
     setCurDistrict(undefined);
@@ -81,8 +104,8 @@ export default function LocationsPicker({
 
   const populateCity = () => {
     if (curCity?.value && !curCity?.text) {
-      city = cities.find((option) => option.value.toString() == curCity?.value)
-      setCurCity(city)
+      const foundCity = cities.find((option) => option.value?.toString() === curCity?.value?.toString())
+      setCurCity(foundCity)
     }
   }
 
@@ -192,6 +215,7 @@ export default function LocationsPicker({
             onSelectCity({ value: '', text: '' })
           }}
           onClick={() => {
+            loadCities(); // Load cities only when user clicks
             openModal({
               name: 'city',
               title: 'Thành Phố',

@@ -1,3 +1,5 @@
+// Import polyfills first to ensure globals are available
+import './lib/polyfills';
 import * as Sentry from '@sentry/nextjs';
 
 export async function register() {

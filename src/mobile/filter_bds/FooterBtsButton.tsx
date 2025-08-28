@@ -3,7 +3,7 @@ import useFilterState from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import { Button } from '@components/ui/button';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { FilterChipOption } from './types';
 
 type Props = {
@@ -31,7 +31,7 @@ export default function FooterBtsButton({ filterOption, onChange }: Props) {
 
   return (
     <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter(filterOption)}>
-      {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
     </Button>
   );

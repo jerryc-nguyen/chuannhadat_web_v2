@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@components/ui/card';
 import { IProductDetail } from '@mobile/searchs/type';
 import { useEffect, useRef, useState } from 'react';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 type IProps = {
   product?: IProductDetail;
@@ -47,7 +47,7 @@ export default function ProductDescription({ product }: IProps) {
             onClick={handleToggleExpand}
             className="mt-2 flex items-center justify-center gap-2 text-blue-500 hover:underline"
           >
-            Xem thêm <IoIosArrowDown />
+            Xem thêm <ChevronDown />
           </Button>
         )}
         {isExpanded && (
@@ -56,7 +56,7 @@ export default function ProductDescription({ product }: IProps) {
             onClick={handleToggleExpand}
             className="mt-2 flex items-center justify-center gap-2 text-blue-500 hover:underline"
           >
-            Thu gọn <IoIosArrowUp />
+            Thu gọn <ChevronUp />
           </Button>
         )}
       </CardFooter>

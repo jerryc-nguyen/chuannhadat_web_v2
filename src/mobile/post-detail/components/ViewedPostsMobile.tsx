@@ -6,7 +6,7 @@ import ProductCard from '@mobile/searchs/ProductCard';
 import { IProduct } from '@mobile/searchs/type';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
-import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type ViewedPostsMobileProps = {
   productUid: string;
@@ -76,7 +76,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
             onClick={handleScrollPrevious}
             className="rounded-full"
           >
-            <LuChevronLeft className="text-xl" />
+            <ChevronLeft className="text-xl" />
           </Button>
           <Button
             variant="outline"
@@ -90,7 +90,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
             {isFetching && pageNumber !== 1 ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
-              <LuChevronRight className="text-xl" />
+              <ChevronRight className="text-xl" />
             )}
           </Button>
         </section>

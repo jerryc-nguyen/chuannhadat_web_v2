@@ -11,12 +11,11 @@ import {
 } from '@components/ui/table';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { FaFacebook } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
-import { CgSpinner } from 'react-icons/cg';
+import { GoogleIcon } from '@components/icons/CustomIcons';
+import { LoadingSpinner } from '@components/icons/CustomIcons';
 import { toast } from 'sonner';
 import { signInWithPopup, signOut } from 'firebase/auth';
-import { auth, facebookProvider, googleProvider } from '@common/firebase';
+import { auth, googleProvider } from '@common/firebase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
 import { Skeleton } from '@components/ui/skeleton';
@@ -30,9 +29,7 @@ interface IDataConnectResponse {
 
 const ConnectSocial: React.FC = () => {
   const [loadingConnectGoogle, setLoadingConnectGoogle] = useState(false);
-  const [loadingConnectFacebook, setLoadingConnectFacebook] = useState(false);
   const [dataGoogle, setDataGoogle] = useState<IDataConnectResponse | undefined>(undefined);
-  const [dataFacebook, setDataFacebook] = useState<IDataConnectResponse | undefined>(undefined);
   const queryClient = useQueryClient();
   const { data: oauthsData, isFetching } = useQuery({
     queryKey: ['get-oauths'],
@@ -51,16 +48,7 @@ const ConnectSocial: React.FC = () => {
 
   React.useEffect(() => {
     if (!isFetching) {
-      const dataFacebook = oauthsData?.find((item: A) => item.provider === 'facebook');
       const dataGoogle = oauthsData?.find((item: A) => item.provider === 'google_oauth2');
-      if (dataFacebook) {
-        setDataFacebook({
-          email: dataFacebook.email,
-          name: dataFacebook.oauth_name,
-          photo: dataFacebook.oauth_avatar,
-          uid: dataFacebook.id,
-        });
-      }
       if (dataGoogle) {
         setDataGoogle({
           email: dataGoogle.email,
@@ -90,48 +78,6 @@ const ConnectSocial: React.FC = () => {
       toast.success('Liên kết google thành công');
     },
   });
-  const { mutate: connectFacebook } = useMutation({
-    mutationFn: services.oauths.connectFacebook,
-    onError: (error) => {
-      toast.error('Liên kết facebook thất bại' + error);
-      setLoadingConnectFacebook(false);
-    },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['get-oauths'],
-        })
-        .then(() => {
-          setLoadingConnectFacebook(false);
-        });
-      toast.success('Liên kết facebook thành công');
-    },
-  });
-  const handleConnectFacebook = async (checked: boolean) => {
-    if (checked) {
-      try {
-        setLoadingConnectFacebook(true);
-        const response = (await signInWithPopup(auth, facebookProvider)) as A;
-        const data = response.user.providerData[0];
-        connectFacebook({
-          email: data.email,
-          name: data.displayName,
-          photo: data.photoURL,
-          uid: data.uid,
-        });
-      } catch (error) {
-        toast.error(
-          'Liên kết facebook thất bại, tài khoản facebook chứa email đã liên kết với ứng dụng',
-        );
-        setLoadingConnectFacebook(false);
-      }
-    } else {
-      setDataFacebook(undefined);
-      await signOut(auth).then(() => {
-        deleteMutation(dataFacebook?.uid as string);
-      });
-    }
-  };
 
   const handleConnectGoogle = async (checked: boolean) => {
     if (checked) {
@@ -179,7 +125,7 @@ const ConnectSocial: React.FC = () => {
     </TableRow>
   );
   const onRenderTableBody = () => {
-    if (!oauthsData && !dataFacebook && !dataGoogle) {
+    if (!oauthsData && !dataGoogle) {
       return (
         <TableBody>
           {renderLoadingData()}
@@ -191,62 +137,7 @@ const ConnectSocial: React.FC = () => {
         <TableBody>
           <TableRow>
             <TableCell className="flex items-center gap-x-3">
-              <FaFacebook className="text-3xl text-primary_color" />
-              <div className="flex flex-col">
-                <p className="font-semibold text-primary_color">Facebook</p>
-                <span className="text-xs text-secondary">
-                  {dataFacebook ? dataFacebook.name : 'Facebook chưa được liên kết'}
-                </span>
-              </div>
-            </TableCell>
-            <TableCell className="">
-              {dataFacebook ? (
-                <div className="flex items-center gap-x-2">
-                  <Image
-                    alt="avatar-facebook"
-                    height={40}
-                    width={40}
-                    className="h-10 w-10 rounded-full bg-slate-300"
-                    src={dataFacebook.photo}
-                  />
-                  <span className="font-medium">{dataFacebook.name}</span>
-                </div>
-              ) : (
-                'Không có thông tin'
-              )}
-            </TableCell>
-            <TableCell className={cn(dataFacebook ? 'text-primary_color' : 'text-black')}>
-              {dataFacebook ? 'Đã kết nối' : 'Chưa kết nối'}
-            </TableCell>
-            <TableCell>
-              <div className="flex h-6 w-11 items-center justify-center rounded-full">
-                <Switch
-                  checked={!!dataFacebook}
-                  onCheckedChange={handleConnectFacebook}
-                  className={cn(
-                    dataFacebook
-                      ? '!bg-primary_color'
-                      : loadingConnectFacebook
-                        ? 'invisible w-0 opacity-0'
-                        : 'visible opacity-100',
-                    'transition-all',
-                  )}
-                  id="facbook-mode"
-                />
-                <CgSpinner
-                  className={cn(
-                    'animate-spin transition-all',
-                    loadingConnectFacebook
-                      ? 'visible h-6 w-6 opacity-100'
-                      : 'invisible h-0 w-0 opacity-0',
-                  )}
-                />
-              </div>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="flex items-center gap-x-3">
-              <FcGoogle className="text-3xl" />
+              <GoogleIcon className="text-3xl" />
               <div className="flex flex-col">
                 <p className="font-semibold text-success_color">Google</p>
                 <span className="text-xs text-secondary">
@@ -288,7 +179,7 @@ const ConnectSocial: React.FC = () => {
                   )}
                   id="facbook-mode"
                 />
-                <CgSpinner
+                <LoadingSpinner
                   className={cn(
                     'animate-spin transition-all',
                     loadingConnectGoogle

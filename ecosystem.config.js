@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'chuannhadat-web',
-      script: 'server.js',
+      script: 'src/server.js',
       instances: 'max', // Use max to leverage all available CPUs
       exec_mode: 'cluster', // Use cluster mode for load balancing across instances
       autorestart: true, // Auto restart if app crashes
@@ -22,6 +22,8 @@ module.exports = {
       node_args: [
         '--max-old-space-size=4096', // Set max heap size to 4GB
         '--expose-gc', // Expose garbage collector for PM2 monitoring
+        '--require',
+        './polyfill-globals.js', // Load polyfills before any other code
       ],
       // Health check
       status_check_period: 10000, // Check app status every 10 seconds

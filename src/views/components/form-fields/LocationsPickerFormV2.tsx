@@ -1,9 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
-
-import cities from 'src/configs/locations/cities.json';
-import citiesDistricts from 'src/configs/locations/cities_districts.json';
-import districtWards from 'src/configs/locations/districts_wards.json';
-import districtStreets from 'src/configs/locations/districts_streets.json';
+import { useLocationContext } from '@contexts/LocationContext';
 
 import { OptionForSelect } from '@models';
 
@@ -36,6 +32,18 @@ export default function LocationsPickerFormV2({
   onChangeStreet,
   onChangedFullAddress
 }: ILocationForm) {
+
+  // Use LocationContext for data
+  const {
+    cities,
+    citiesDistricts,
+    districtWards,
+    districtStreets,
+    loadCities,
+    loadDistricts,
+    loadWards,
+    loadStreets,
+  } = useLocationContext();
 
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
@@ -70,51 +78,46 @@ export default function LocationsPickerFormV2({
   };
 
   const districtOptions = useMemo(() => {
-    //@ts-ignore: read field of object
-    return citiesDistricts[city.value + ''] || []
-  }, [city?.value])
+    return curCity?.value ? citiesDistricts[curCity.value + ''] || [] : [];
+  }, [curCity?.value, citiesDistricts]);
 
   const wardOptions = useMemo(() => {
-    return curDistrict?.value
-      // @ts-ignore: ok
-      ? districtWards[curDistrict?.value + ''] || [] : []
-  }, [curDistrict?.value])
+    return curDistrict?.value ? districtWards[curDistrict.value + ''] || [] : [];
+  }, [curDistrict?.value, districtWards]);
 
   const streetOptions = useMemo(() => {
-    return curDistrict?.value
-      // @ts-ignore: ok
-      ? districtStreets[curDistrict?.value + ''] || [] : []
-  }, [curDistrict?.value])
+    return curDistrict?.value ? districtStreets[curDistrict.value + ''] || [] : [];
+  }, [curDistrict?.value, districtStreets]);
 
   const populateCity = () => {
     if (curCity?.value && !curCity?.text) {
-      city = cities.find((option) => option.value.toString() == curCity?.value)
-      setCurCity(city)
+      const foundCity = cities.find((option) => option.value?.toString() === curCity?.value?.toString())
+      setCurCity(foundCity)
     }
   }
 
   const populateDistrict = () => {
     if (curCity?.value && curDistrict?.value && !curDistrict?.text) {
-      district = districtOptions.find((option: A) => option.value.toString() == curDistrict?.value)
-      setCurDistrict(district)
+      const foundDistrict = districtOptions.find((option: OptionForSelect) => option.value?.toString() === curDistrict?.value?.toString())
+      setCurDistrict(foundDistrict)
     }
   }
 
   const populateWard = () => {
     if (curDistrict?.value && curWard?.value && !curWard?.text) {
-      ward = wardOptions.find((option: A) => option.value.toString() == curWard?.value)
-      setCurWard(ward)
+      const foundWard = wardOptions.find((option: OptionForSelect) => option.value?.toString() === curWard?.value?.toString())
+      setCurWard(foundWard)
     }
   }
 
   const populateStreet = () => {
     if (curStreet?.value && !curStreet?.text) {
-      street = streetOptions.find((option: A) => option.value.toString() == curStreet?.value)
-      setCurStreet(street)
+      const foundStreet = streetOptions.find((option: OptionForSelect) => option.value?.toString() === curStreet?.value?.toString())
+      setCurStreet(foundStreet)
     }
   }
 
-  const onSelectCity = (city?: OptionForSelect) => {
+  const onSelectCity = async (city?: OptionForSelect) => {
     const finalOption = city?.value != 'all' ? city : undefined;
 
     resetDistrict();
@@ -125,6 +128,11 @@ export default function LocationsPickerFormV2({
     onChangeCity(finalOption);
     updateFullAddress({ city: finalOption });
     form.setValue('city_id', finalOption?.value);
+
+    // Load districts for selected city
+    if (finalOption?.value) {
+      await loadDistricts(finalOption.value.toString());
+    }
   };
 
   const fullAddress = ({ city, district, ward, street }: { city?: OptionForSelect, district?: OptionForSelect, ward?: OptionForSelect, street?: OptionForSelect }): string => {
@@ -144,7 +152,7 @@ export default function LocationsPickerFormV2({
     }
   }
 
-  const onSelectDistrict = (district?: OptionForSelect) => {
+  const onSelectDistrict = async (district?: OptionForSelect) => {
     const finalOption = district?.value != 'all' ? district : undefined;
 
     resetWard();
@@ -155,6 +163,14 @@ export default function LocationsPickerFormV2({
     onChangeDistrict(finalOption);
     updateFullAddress({ district: finalOption });
     form.setValue('district_id', finalOption?.value);
+
+    // Load wards and streets for selected district
+    if (finalOption?.value) {
+      await Promise.all([
+        loadWards(finalOption.value.toString()),
+        loadStreets(finalOption.value.toString())
+      ]);
+    }
   };
 
   const onSelectWard = (option?: OptionForSelect) => {
@@ -172,9 +188,31 @@ export default function LocationsPickerFormV2({
     setOpenStreetDropdown(false);
     onChangeStreet(finalOption);
     updateFullAddress({ street: finalOption });
-    console.log('onSelectStreet', finalOption)
     form.setValue('street_id', finalOption?.value);
   };
+
+  // Load cities on component mount
+  useEffect(() => {
+    loadCities();
+  }, [loadCities]);
+
+  // Load initial data based on pre-selected values
+  useEffect(() => {
+    const loadInitialData = async () => {
+      if (curCity?.value) {
+        await loadDistricts(curCity.value.toString());
+
+        if (curDistrict?.value) {
+          await Promise.all([
+            loadWards(curDistrict.value.toString()),
+            loadStreets(curDistrict.value.toString())
+          ]);
+        }
+      }
+    };
+
+    loadInitialData();
+  }, [curCity?.value, curDistrict?.value, loadDistricts, loadWards, loadStreets]);
 
   useEffect(() => {
     populateOptions();
