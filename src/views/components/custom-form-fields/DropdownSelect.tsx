@@ -3,7 +3,7 @@ import { Popover, PopoverContent } from "@components/ui/popover";
 import OptionPicker from "@mobile/ui/OptionPicker";
 import { OptionForSelect } from "@models";
 import { PopoverTrigger } from "@radix-ui/react-popover";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { ChevronsUpDown } from "lucide-react";
 import { ClearButton } from "@components/ui/clear-button";
 import { cn } from "@common/utils";
 
@@ -54,7 +54,7 @@ const DropdownSelectField = ({
             {selectedOption?.value && showClear && (
               <ClearButton onClick={clearSelection} />
             )}
-            {!selectedOption?.value && <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
+            {!selectedOption?.value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
           </div>
         </Button>
       </PopoverTrigger>

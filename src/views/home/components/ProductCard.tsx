@@ -1,17 +1,17 @@
-import { services } from '@api/services';
+// Removed unused services import
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
 import { cn } from '@common/utils';
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
 import Spinner from '@components/ui/spinner';
 import { YoutubePlayerAction } from '@components/youtube-player-modal';
-import { useQueryClient } from '@tanstack/react-query';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import Link from 'next/link';
 import { isLoadingModal, selectedPostId } from '../../post-detail/states/modalPostDetailAtoms';
+import useModalPostDetail from '../../post-detail/hooks/useModalPostDetail';
 import styles from '../styles/ProductCard.module.scss';
 import CardAuthor from './CardAuthor';
-import CardImageCarousel from './CardImageCarousel/CardImageCarousel';
+import ThumbsCarousel from './ThumbsCarousel';
 import LoadingProductCard from './LoadingProductCard';
 import BusCatType from './product-card/BusCatType';
 
@@ -20,6 +20,8 @@ type ProductCardProps = {
   isShowAuthor?: boolean;
   className?: string;
   isShowVideoYoutube?: boolean;
+  isFirstProduct?: boolean;
+  productIndex?: number;
 };
 
 export default function ProductCard({
@@ -27,22 +29,18 @@ export default function ProductCard({
   isShowAuthor = true,
   className,
   isShowVideoYoutube = true,
+  isFirstProduct = false,
+  productIndex = 0,
 }: ProductCardProps) {
-  const queryClient = useQueryClient();
+  // ✅ Use dedicated hook for modal management
+  const { handleOpenModal } = useModalPostDetail();
 
-  const [postId, setSelectedPostId] = useAtom(selectedPostId);
+  // ✅ Only keep atoms that are actually used for UI state
+  const postId = useAtomValue(selectedPostId);
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
 
-  const openModalPostDetail = async (postId: string) => {
-    setSelectedPostId(postId);
-    await queryClient.prefetchQuery({
-      queryKey: ['get-detail-post', postId],
-      queryFn: () => services.posts.getDetailPost(postId),
-    });
-  };
-
   const isShowInfoPrice = product?.formatted_price || product?.formatted_price_per_m2;
-  if (!product || product?.images?.length == 0) {
+  if (!product) {
     return <LoadingProductCard />;
   }
 
@@ -65,11 +63,13 @@ export default function ProductCard({
           youtube_url={product.youtube_url}
           isDisplay={Boolean(product.youtube_url && isShowVideoYoutube)}
         />
-        <CardImageCarousel
+        <ThumbsCarousel
           handleClickCardImage={() => {
-            openModalPostDetail(product.uid);
+            handleOpenModal(product.uid);
           }}
           product={product}
+          isEager={isFirstProduct}
+          productIndex={productIndex}
         />
       </CardContent>
       <CardFooter className="flex-col p-0 pt-4">
@@ -77,7 +77,7 @@ export default function ProductCard({
 
         <Link className="invisible opacity-0" href={product.detail_path} />
         <h3
-          onClick={() => openModalPostDetail(product.uid)}
+          onClick={() => handleOpenModal(product.uid)}
           className="c-ads_color mt-2 line-clamp-2 w-full cursor-pointer font-semibold text-primary"
         >
           {product?.title}

@@ -5,7 +5,7 @@ import SortOptions from '@mobile/filter_bds/bts/SortOptions';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
-import { IoChevronDown } from 'react-icons/io5';
+import { ChevronDown } from 'lucide-react';
 
 import empty_city from '@assets/images/empty-city.png';
 import useSearchAggs from '@components/search-aggs/hooks';
@@ -84,7 +84,7 @@ export default function PostList() {
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
             {selectedSortText || 'Sắp xếp'}
           </span>
-          <IoChevronDown />
+          <ChevronDown />
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import broker from '@assets/images/broker.png';
 import personal from '@assets/images/personal.png';
 import { CustomerGender, CustomerType } from '@common/types';
-import { LuContact, LuLock, LuMail, LuPhone, LuUserCog2, LuUserPlus2 } from 'react-icons/lu';
+import { Contact, Lock, Mail, Phone, UserCog2, UserPlus2 } from 'lucide-react';
 import {
   ContactInfor,
   EmailTab,
@@ -23,7 +23,7 @@ export const listTabAccountSetting = [
   {
     title: 'Trang cá nhân',
     tabValue: AccountSettingTab.PERSONAL_WALL,
-    icon: LuUserCog2,
+    icon: UserCog2,
     tabComponent: PersonalTab,
   },
   // {
@@ -35,31 +35,31 @@ export const listTabAccountSetting = [
   {
     title: 'Thông tin liên hệ',
     tabValue: AccountSettingTab.CONTACT_INFO,
-    icon: LuContact,
+    icon: Contact,
     tabComponent: ContactInfor,
   },
   {
     title: 'Email',
     tabValue: AccountSettingTab.EMAIL,
-    icon: LuMail,
+    icon: Mail,
     tabComponent: EmailTab,
   },
   {
     title: 'Số điện thoại',
     tabValue: AccountSettingTab.PHONE_NUMBER,
-    icon: LuPhone,
+    icon: Phone,
     tabComponent: PhoneNumberTab,
   },
   {
     title: 'Mật khẩu',
     tabValue: AccountSettingTab.PASSWORD,
-    icon: LuLock,
+    icon: Lock,
     tabComponent: PasswordTab,
   },
   {
     title: 'Giới thiệu bạn bè',
     tabValue: AccountSettingTab.REFER_FRIEND,
-    icon: LuUserPlus2,
+    icon: UserPlus2,
     tabComponent: ReferFriend,
   },
 ];

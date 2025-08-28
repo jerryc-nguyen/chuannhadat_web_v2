@@ -3,13 +3,14 @@
 import React from 'react';
 import { Label } from '@components/ui/label';
 import { Switch } from '@components/ui/switch';
-import { BsCheck2All } from 'react-icons/bs';
+import { ListChecks } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import { Badge } from '@components/ui/badge';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
 import { usePaginatedNotifications } from '@hooks';
+
 
 interface IProps {
   onRedirect: (notif: A) => void;
@@ -101,7 +102,7 @@ const NotificationsList: React.FC<IProps> = ({ onRedirect }) => {
           </div>
           {!isMarkAllRead ? (
             <div onClick={() => makeMarkReadAll()} className="flex items-center gap-x-2">
-              <BsCheck2All className="text-primary_color" />
+              <ListChecks className="text-primary_color" />
               <p className="cursor-pointer text-xs font-semibold text-primary_color hover:underline">
                 Đánh dấu đã đọc tất cả
               </p>

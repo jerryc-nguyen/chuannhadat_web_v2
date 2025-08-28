@@ -5,9 +5,7 @@ import { Card, CardContent, CardFooter, CardTitle } from '@components/ui/card';
 
 import Image from 'next/image';
 import React from 'react';
-import { HiOutlineNewspaper } from 'react-icons/hi2';
-import { MdManageAccounts } from 'react-icons/md';
-import { RiMenuSearchLine, RiVipCrown2Fill } from 'react-icons/ri';
+import { Newspaper, PackageSearch, Crown, BookUser } from 'lucide-react';
 
 const listFeedback = [
   {
@@ -41,11 +39,13 @@ const listFeedback = [
     type: 'Môi giới bất động sản',
   },
 ];
+
+
 const listMainService = [
   {
     key: 1,
     title: 'Đăng tin bất động sản',
-    icon: <HiOutlineNewspaper className="text-lg" />,
+    icon: <Newspaper className="text-lg" />,
     contents: [
       'Đơn giản hóa quá trình đăng tin, giúp bạn dễ dàng tiếp cận hàng ngàn khách hàng tiềm năng.',
       'Hỗ trợ đăng tin cho mọi loại hình bất động sản, từ nhà ở, căn hộ chung cư, đến đất nền và bất động sản thương mại.',
@@ -54,7 +54,7 @@ const listMainService = [
   {
     key: 2,
     title: 'Tìm kiếm, lọc bất động sản',
-    icon: <RiMenuSearchLine className="text-lg" />,
+    icon: <PackageSearch className="text-lg" />,
     contents: [
       'Cung cấp công cụ tìm kiếm thông minh, giúp bạn nhanh chóng tìm được bất động sản phù hợp với nhu cầu.',
       'Tìm kiếm theo vị trí, giá cả, diện tích, hướng nhà, và nhiều tiêu chí khác.',
@@ -63,7 +63,7 @@ const listMainService = [
   {
     key: 3,
     title: 'Dịch vụ tin VIP',
-    icon: <RiVipCrown2Fill className="text-lg" />,
+    icon: <Crown className="text-lg" />,
     contents: [
       'Nổi bật tin đăng của bạn với các gói tin VIP, giúp tăng khả năng tiếp cận và nhận được nhiều lượt xem hơn.',
       'Lựa chọn đa dạng các gói VIP phù hợp với nhu cầu và ngân sách.',
@@ -72,7 +72,7 @@ const listMainService = [
   {
     key: 4,
     title: 'Quản lý tài khoản, tin đăng',
-    icon: <MdManageAccounts className="text-lg" />,
+    icon: <BookUser className="text-lg" />,
     contents: [
       'Giao diện thân thiện, cho phép bạn quản lý bài đăng, kiểm tra lượt xem, và chỉnh sửa thông tin một cách dễ dàng.',
       'Quản lý tài khoản, nạp tiền, và sử dụng dịch vụ tiện lợi.',

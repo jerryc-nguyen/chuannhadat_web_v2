@@ -1,6 +1,5 @@
 import ListCheckOptions from './ListCheckOptions';
 import { useMemo, useState } from 'react';
-import { IoFileTrayOutline } from 'react-icons/io5';
 import { OptionForSelect } from '@models';
 import { stringToSlug } from '@common/utils';
 import SearchBox from '@components/SearchBox';

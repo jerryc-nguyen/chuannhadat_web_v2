@@ -1,8 +1,3 @@
-import cities from "src/configs/locations/cities.json";
-import citiesDistricts from "src/configs/locations/cities_districts.json";
-import districtsStreets from "src/configs/locations/districts_streets.json";
-import districtsWards from "src/configs/locations/districts_wards.json";
-import districtsProjects from "src/configs/locations/districts_projects.json";
 
 export const defaultMapCenter = {
   lat: 35.8799866,
@@ -61,40 +56,3 @@ export const furnitureTypeOptions = [
   { value: "basic_furniture", text: "Hoàn thiện cơ bản" },
   { value: "unfinished_furniture", text: "Bàn giao thô" }
 ]
-
-type LocationData = {
-  value: number;
-  text: string;
-};
-
-type Cities = LocationData[];
-
-type CitiesDistricts = {
-  [key: string]: LocationData[];
-};
-
-type DistrictsStreets = {
-  [key: string]: {
-    id?: number;
-    value?: number;
-    text: string;
-  }[];
-};
-
-type DistrictsWards = {
-  [key: string]: {
-    id?: number;
-    value?: number;
-    text: string;
-  }[];
-};
-
-type DistrictsProjects = {
-  [key: string]: LocationData[];
-};
-
-export const citiesData = cities as Cities;
-export const cityDistrictsData = citiesDistricts as CitiesDistricts;
-export const districtsStreetsData = districtsStreets as DistrictsStreets;
-export const districtsWardsData = districtsWards as DistrictsWards;
-export const districtsProjectsData = districtsProjects as DistrictsProjects;

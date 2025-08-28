@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai';
-import { FaPlay } from 'react-icons/fa6';
+import { Play as FaPlay } from 'lucide-react';
 import { youtubePlayerAtom } from './state';
 
 type YoutubePlayerActionProps = {

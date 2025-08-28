@@ -4,7 +4,7 @@ import MainContentNavigator from '@components/main-content-navigator/mobile';
 import { Button } from '@components/ui/button';
 import useModals from '@mobile/modals/hooks';
 import React from 'react';
-import { LuChevronsUpDown, LuMapPin } from 'react-icons/lu';
+import { ChevronsUpDown, MapPin } from 'lucide-react';
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText } = useMainContentNavigator();
@@ -32,12 +32,12 @@ export default function MainNavLocationsPicker() {
         onClick={() => showModalPickLocations()}
       >
         <span className="flex flex-1 items-center overflow-hidden">
-          <LuMapPin className={`mr-1 h-4 w-4 shrink-0 text-secondary ${btnActiveClass}`} />
+          <MapPin className={`mr-1 h-4 w-4 shrink-0 text-secondary ${btnActiveClass}`} />
           <span className="w-full overflow-hidden text-ellipsis text-nowrap font-medium">
             {selectedLocationFullText || 'Chọn khu vực'}
           </span>
         </span>
-        <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+        <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
       </Button>
     </>
   );

@@ -4,7 +4,7 @@ import LoginForm from '@mobile/auth/login/form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { IoIosArrowBack } from 'react-icons/io';
+import { ArrowLeft } from 'lucide-react';
 
 type SignInPageProps = object;
 
@@ -16,7 +16,7 @@ const SignInPage: React.FC<SignInPageProps> = () => {
         <section className="px-5 py-10 md:w-1/2 md:p-10">
           <Logo isAlwaysShow />
           <Link href="/" className="my-4 flex items-center gap-x-2 font-medium hover:underline">
-            <IoIosArrowBack />
+            <ArrowLeft />
             Trang chủ
           </Link>
           <h1 className="mb-8 text-2xl font-semibold md:text-3xl xl:text-4xl">Đăng nhập</h1>

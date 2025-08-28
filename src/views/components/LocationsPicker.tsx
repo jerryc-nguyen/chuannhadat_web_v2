@@ -1,9 +1,6 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-
-import cities from 'src/configs/locations/cities.json';
-import citiesDistricts from 'src/configs/locations/cities_districts.json';
-import districtWards from 'src/configs/locations/districts_wards.json';
-import { LuChevronsUpDown } from 'react-icons/lu';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import { useLocationPicker } from '@contexts/LocationContext';
+import { ChevronsUpDown } from 'lucide-react';
 
 import { OptionForSelect } from '@models';
 import OptionPicker from '@mobile/ui/OptionPicker';
@@ -12,21 +9,7 @@ import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover'
 
 import { Button } from '@components/ui/button';
 
-export default function LocationsPicker({
-  city,
-  district,
-  ward,
-  theme,
-  city_ids = [],
-  district_ids = [],
-  ward_ids = [],
-  city_counts,
-  district_counts,
-  ward_counts,
-  onChangeDistrict,
-  onChangeWard,
-  onChangeCity,
-}: {
+interface LocationsPickerProps {
   theme?: string;
   city?: OptionForSelect;
   district?: OptionForSelect;
@@ -40,7 +23,41 @@ export default function LocationsPicker({
   onChangeCity: (city?: OptionForSelect) => void;
   onChangeDistrict: (district?: OptionForSelect) => void;
   onChangeWard: (ward?: OptionForSelect) => void;
-}) {
+  // New props for data injection
+  cities?: OptionForSelect[];
+  citiesDistricts?: Record<string, OptionForSelect[]>;
+  districtWards?: Record<string, OptionForSelect[]>;
+  isLoadingDistricts?: boolean;
+  isLoadingWards?: boolean;
+}
+
+export default function LocationsPicker({
+  city,
+  district,
+  ward,
+  theme: _theme,
+  city_ids = [],
+  district_ids = [],
+  ward_ids = [],
+  city_counts: _city_counts,
+  district_counts: _district_counts,
+  ward_counts: _ward_counts,
+  onChangeDistrict,
+  onChangeWard,
+  onChangeCity,
+}: Omit<LocationsPickerProps, 'cities' | 'citiesDistricts' | 'districtWards' | 'isLoadingDistricts' | 'isLoadingWards'>) {
+
+  // Get location data from context
+  const {
+    cities,
+    citiesDistricts,
+    districtWards,
+    isLoadingDistricts,
+    isLoadingWards,
+    loadCities,
+    loadDistrictsForCity,
+    loadWardsForDistrict
+  } = useLocationPicker();
 
   const [curCity, setCurCity] = useState<OptionForSelect | undefined>(city);
   const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(district);
@@ -49,6 +66,20 @@ export default function LocationsPicker({
   const [openCityDropdown, setOpenCityDropdown] = useState(false);
   const [openDistrictDropdown, setOpenDistrictDropdown] = useState(false);
   const [openWardDropdown, setOpenWardDropdown] = useState(false);
+
+  // Auto-load districts when city changes
+  useEffect(() => {
+    if (curCity?.value) {
+      loadDistrictsForCity(curCity.value);
+    }
+  }, [curCity?.value, loadDistrictsForCity]);
+
+  // Auto-load wards when district changes
+  useEffect(() => {
+    if (curDistrict?.value) {
+      loadWardsForDistrict(curDistrict.value);
+    }
+  }, [curDistrict?.value, loadWardsForDistrict]);
 
   const resetDistrict = () => {
     setCurDistrict(undefined);
@@ -92,22 +123,20 @@ export default function LocationsPicker({
     } else {
       return cities
     }
-  }, [city_ids])
+  }, [cities, city_ids])
 
   const districtOptions = useMemo(() => {
-    //@ts-ignore: read field of object
     const districts = citiesDistricts[curCity?.value + ''] || []
     if (Array.isArray(district_ids) && district_ids.length > 0) {
       return districts.filter((item: OptionForSelect) => district_ids.includes(item.value + ''))
     } else {
       return districts
     }
-  }, [curCity?.value, district_ids])
+  }, [citiesDistricts, curCity?.value, district_ids])
 
   const wardOptions = useMemo(() => {
     const wards = curDistrict?.value
-      // @ts-ignore: ok
-      ? districtWards[curDistrict?.value + ''] : []
+      ? districtWards[curDistrict?.value + ''] || [] : []
 
     if (Array.isArray(ward_ids) && ward_ids.length > 0) {
       return wards.filter((item: OptionForSelect) => ward_ids.includes(item.value + ''))
@@ -115,13 +144,21 @@ export default function LocationsPicker({
       return wards
     }
 
-  }, [curDistrict?.value, ward_ids])
+  }, [districtWards, curDistrict?.value, ward_ids])
 
   const containerRef = useRef(null);
 
   return (
     <div ref={containerRef}>
-      <Popover open={openCityDropdown} onOpenChange={setOpenCityDropdown}>
+      <Popover
+        open={openCityDropdown}
+        onOpenChange={(open) => {
+          if (open) {
+            loadCities(); // Load cities only when user opens dropdown
+          }
+          setOpenCityDropdown(open);
+        }}
+      >
         <PopoverTrigger asChild>
 
           <Button
@@ -131,7 +168,7 @@ export default function LocationsPicker({
             className="w-full justify-between pr-2"
           >
             {curCity?.text || 'Chọn Thành Phố'}
-            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -151,9 +188,10 @@ export default function LocationsPicker({
             role="combobox"
             aria-expanded={openDistrictDropdown}
             className="mt-2 w-full justify-between pr-2"
+            disabled={!curCity || isLoadingDistricts}
           >
-            {curDistrict?.text || 'Chọn Quận / Huyện'}
-            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {isLoadingDistricts ? 'Đang tải...' : (curDistrict?.text || 'Chọn Quận / Huyện')}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -173,9 +211,10 @@ export default function LocationsPicker({
             role="combobox"
             aria-expanded={openWardDropdown}
             className="mt-2 w-full justify-between pr-2"
+            disabled={!curDistrict || isLoadingWards}
           >
-            {curWard?.text || 'Chọn Phường / Xã'}
-            <LuChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {isLoadingWards ? 'Đang tải...' : (curWard?.text || 'Chọn Phường / Xã')}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" align="end" side="right">

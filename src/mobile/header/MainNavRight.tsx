@@ -2,7 +2,7 @@
 import React from 'react';
 import { useAuth } from '@common/auth/AuthContext';
 import { Button } from '@components/ui/button';
-import { LuUserCircle } from 'react-icons/lu';
+import { UserCircle } from 'lucide-react';
 import NotificationIcon from './NotificationIcon';
 import { Skeleton } from '@components/ui/skeleton';
 import Image from 'next/image';
@@ -55,7 +55,7 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
           size="icon"
           className="rounded-full"
         >
-          <LuUserCircle className="h-5 w-5" />
+          <UserCircle className="h-5 w-5" />
         </Button>
       );
     }

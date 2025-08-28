@@ -1,6 +1,6 @@
 import React from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
-import { IoImage } from 'react-icons/io5';
+import { Image as IoImage } from 'lucide-react';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProduct } from './type';
 import useModals from '@mobile/modals/hooks';
