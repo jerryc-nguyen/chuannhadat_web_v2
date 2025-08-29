@@ -9,6 +9,7 @@ import Script from 'next/script';
 import NextTopLoaderDynamic from '@/components/NextTopLoaderDynamic';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
+import { checkIsLoggedInServer } from './action';
 
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
@@ -129,6 +130,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { isMobile } = await getUserAgentInfo();
+  const isLoggedIn = await checkIsLoggedInServer();
 
   return (
     <html lang="vi-VN" suppressHydrationWarning={true}>
@@ -151,6 +153,7 @@ export default async function RootLayout({
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}
         cz-shortcut-listen="true"
+        {...(isLoggedIn && { 'data-testid': 'userLoggedIn' })}
       >
         <NextTopLoaderDynamic />
         <ProviderWrapper isMobile={isMobile}>{children}</ProviderWrapper>

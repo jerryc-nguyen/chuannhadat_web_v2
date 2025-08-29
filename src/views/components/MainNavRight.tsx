@@ -49,6 +49,7 @@ export default function MainNavRight({ isLogged }: MainNavRightProps) {
           asChild
           className="text-md ml-2 hidden cursor-pointer items-center gap-x-2 rounded-md border bg-primary_color/80 px-6 py-2 font-medium text-white hover:bg-primary_color md:flex"
           onClick={showModalLoginAndRegister}
+          data-testid="showLoginModalBtn"
         >
           <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <p>Đăng nhập</p>

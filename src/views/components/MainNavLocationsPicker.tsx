@@ -12,15 +12,18 @@ export default function MainNavLocationsPicker() {
   const { selectedLocationFullText } = useMainContentNavigator();
   const { openModal } = useModals();
   const { copyFilterStatesToLocal } = useFilterState();
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const showModalPickLocations = () => {
+    setIsOpen(true);
     copyFilterStatesToLocal([FilterFieldName.Locations]);
     openModal({
       name: 'ModalPickLocations',
       title: 'Chọn khu vực',
       content: <MainContentNavigator />,
       showAsDialog: true,
-      allowChildOverflow: true
+      allowChildOverflow: true,
+      onClose: () => setIsOpen(false)
     });
   };
 
@@ -31,6 +34,10 @@ export default function MainNavLocationsPicker() {
       <Button
         variant="outline"
         role="combobox"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-label="Chọn khu vực"
+        aria-describedby="desktop-location-picker-description"
         className={`text-md w-full items-center justify-between gap-x-3 rounded-full px-3 text-secondary ${btnActiveClass}`}
         onClick={() => showModalPickLocations()}
       >
@@ -44,6 +51,11 @@ export default function MainNavLocationsPicker() {
           <ChevronsUpDown className="h-4 w-4 opacity-50" />
         </span>
       </Button>
+
+      {/* Hidden description for screen readers */}
+      <span id="desktop-location-picker-description" className="sr-only">
+        Nhấn để mở danh sách các khu vực có thể chọn
+      </span>
     </>
   );
 }
