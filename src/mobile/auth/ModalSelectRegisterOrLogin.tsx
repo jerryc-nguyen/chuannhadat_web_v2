@@ -35,6 +35,7 @@ export default function ModalSelectRegisterOrLogin({
               key={option.value}
               className="flex-1 rounded-md py-2"
               value={option.value}
+              data-testid={`${option.value}-tab`}
               onClick={() => {
                 handleShowModalLoginAndRegister(option.value);
               }}

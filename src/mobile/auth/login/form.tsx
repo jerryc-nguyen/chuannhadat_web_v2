@@ -125,6 +125,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
                   {...field}
                   autoComplete="phone"
                   id="phone"
+                  data-testid="loginPhoneInput"
                   placeholder="Nhập số điện thoại/ Email"
                 />
               </FormControl>
@@ -151,6 +152,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
                   type="password"
                   {...field}
                   id="password"
+                  data-testid="loginPasswordInput"
                   placeholder="Nhập mật khẩu"
                 />
               </FormControl>
@@ -169,6 +171,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
         </div>
 
         <Button
+          data-testid="loginSubmitBtn"
           type="submit"
           disabled={isPending}
           className="text-md flex w-full items-center gap-x-2 rounded-md bg-primary_color/80 px-4 py-2 font-semibold text-white focus-within:animate-pulse hover:bg-primary_color"
