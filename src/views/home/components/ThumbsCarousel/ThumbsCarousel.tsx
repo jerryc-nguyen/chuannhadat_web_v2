@@ -129,7 +129,7 @@ export default function ThumbsCarousel({
   // ✅ SSR Mode: Only first image for SEO (server-side or below-fold not in viewport)
   if (!isInViewport) {
     return (
-      <section ref={containerRef} className="relative w-full flex-shrink-0">
+      <section ref={containerRef} className="relative w-full flex-shrink-0" role="img" aria-label={getOptimizedAltText()}>
         {firstImage && (
           <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
             <BlurImage
@@ -138,6 +138,7 @@ export default function ThumbsCarousel({
               fill
               loading={isEager ? 'eager' : 'lazy'}
               priority={isEager}
+              fetchPriority={isEager ? 'high' : 'auto'}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="h-full w-full object-cover transition-all hover:scale-105"
               onClick={(e) => {
@@ -174,6 +175,7 @@ export default function ThumbsCarousel({
               fill
               loading={isEager ? 'eager' : 'lazy'}
               priority={isEager}
+              fetchPriority={isEager ? 'high' : 'auto'}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="h-full w-full object-cover transition-all hover:scale-105"
               onClick={(e) => {
@@ -210,6 +212,7 @@ export default function ThumbsCarousel({
               fill
               loading={isEager ? 'eager' : 'lazy'}
               priority={isEager}
+              fetchPriority={isEager ? 'high' : 'auto'}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="h-full w-full object-cover"
             />

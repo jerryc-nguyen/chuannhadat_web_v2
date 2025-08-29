@@ -10,11 +10,11 @@ import { ChevronDown } from 'lucide-react';
 import empty_city from '@assets/images/empty-city.png';
 import useSearchAggs from '@components/search-aggs/hooks';
 import useQueryPosts from '@hooks/useQueryPosts';
-import { PostPagination } from '@views/home/components/PostPagination';
+
 import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import ProductCardV2 from './ProductCardV2';
+import InfiniteProductLoaderMobile from './InfiniteProductLoaderMobile';
 
 // TODO: Move to views/home
 
@@ -34,6 +34,7 @@ export default function PostList() {
   });
   filterParams.with_users = true;
   filterParams.page = currentPage;
+  filterParams.per_page = 4; // ✅ Load 4 products initially for mobile
 
   const { products, data, aggreations } = useQueryPosts(filterParams);
 
@@ -88,18 +89,10 @@ export default function PostList() {
         </div>
       </div>
 
-      {products?.map((product: A) => {
-        return <ProductCardV2 key={product?.id} product={product} />;
-      })}
-
-      <PostPagination
-        total_pages={data?.pagination?.total_pages}
+      <InfiniteProductLoaderMobile
+        initialProducts={products}
+        filterParams={filterParams}
         currentPage={currentPage}
-        onPageChange={(page) => {
-          const selected = page.selected + 1;
-          router.push(pathname + '?page=' + selected);
-        }}
-        emptyComponent={EmptyPost}
       />
     </div>
   );

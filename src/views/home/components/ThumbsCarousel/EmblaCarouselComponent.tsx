@@ -113,12 +113,12 @@ export default function EmblaCarouselComponent({
   }, [emblaApi, updateScrollState]);
 
   return (
-    <div className="relative">
+    <div className="relative" role="region" aria-label="Property images carousel">
       {/* Main carousel */}
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">
+      <div className="overflow-hidden" ref={emblaRef} role="group" aria-live="polite">
+        <div className="flex" role="list">
           {images.map((image: A, index: number) => (
-            <div key={image.id} className="flex-[0_0_100%]">
+            <div key={image.id} className="flex-[0_0_100%]" role="listitem" aria-label={`Image ${index + 1} of ${images.length}`}>
               <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
                 <BlurImage
                   src={buildThumbnailUrl({
@@ -130,6 +130,7 @@ export default function EmblaCarouselComponent({
                   fill
                   loading={isEager && index === 0 ? 'eager' : 'lazy'}
                   priority={isEager && index === 0}
+                  fetchPriority={isEager && index === 0 ? 'high' : 'auto'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="h-full w-full object-cover transition-all hover:scale-105"
                   onClick={(e) => {
@@ -150,13 +151,15 @@ export default function EmblaCarouselComponent({
           <button
             className={cn(
               "absolute left-2 top-1/2 transform -translate-y-1/2 z-10",
-              "bg-black/20 hover:bg-black/40 text-white p-2 rounded-full transition-all",
-              "opacity-0 group-hover:opacity-100",
+              "bg-black/20 hover:bg-black/40 focus:bg-black/60 text-white p-2 rounded-full transition-all",
+              "opacity-0 group-hover:opacity-100 focus:opacity-100",
+              "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black/20",
               !canScrollPrev && "opacity-50 cursor-not-allowed"
             )}
             onClick={scrollPrev}
             disabled={!canScrollPrev}
             aria-label="Previous image"
+            tabIndex={0}
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -165,13 +168,15 @@ export default function EmblaCarouselComponent({
           <button
             className={cn(
               "absolute right-2 top-1/2 transform -translate-y-1/2 z-10",
-              "bg-black/20 hover:bg-black/40 text-white p-2 rounded-full transition-all",
-              "opacity-0 group-hover:opacity-100",
+              "bg-black/20 hover:bg-black/40 focus:bg-black/60 text-white p-2 rounded-full transition-all",
+              "opacity-0 group-hover:opacity-100 focus:opacity-100",
+              "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black/20",
               !canScrollNext && "opacity-50 cursor-not-allowed"
             )}
             onClick={scrollNext}
             disabled={!canScrollNext}
             aria-label="Next image"
+            tabIndex={0}
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -192,10 +197,13 @@ export default function EmblaCarouselComponent({
                   key={index}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all",
+                    "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-1 focus:ring-offset-black/20",
                     index === selectedIndex ? "bg-white" : "bg-white/40 hover:bg-white/60"
                   )}
                   onClick={() => scrollTo(index)}
                   aria-label={`Go to image ${index + 1}`}
+                  aria-current={index === selectedIndex ? "true" : "false"}
+                  tabIndex={0}
                 />
               ))}
             </div>

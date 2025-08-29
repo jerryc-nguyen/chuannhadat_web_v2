@@ -5,7 +5,7 @@ import { useIsInVerticalCenterZone } from '@hooks/useIsInVerticalCenterZone';
 import useModals from '@mobile/modals/hooks';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import CardAuthor from '@views/home/components/CardAuthor';
-import CardImageCarousel from '@views/home/components/CardImageCarousel/CardImageCarousel';
+import ThumbsCarousel from '@views/home/components/ThumbsCarousel/ThumbsCarousel';
 import BusCatType from '@views/home/components/product-card/BusCatType';
 import { useRef } from 'react';
 import PostDetailMobile from '../post-detail/PostDetailMobile';
@@ -38,7 +38,7 @@ export const ProductDetailTitleBts = ({ product }: { product: A }) => {
     </div>
   );
 };
-export default function ProductCard({ product }: { product: IProduct }) {
+export default function ProductCard({ product, productIndex = 0 }: { product: IProduct; productIndex?: number }) {
   const { openModal } = useModals();
   const divRef = useRef<HTMLDivElement | null>(null);
   const isInCenter = useIsInVerticalCenterZone(divRef as React.RefObject<HTMLElement>);
@@ -73,7 +73,12 @@ export default function ProductCard({ product }: { product: IProduct }) {
       <div className="flex-center relative">
         <YoutubePlayerAction youtube_url={product.youtube_url} />
         {product.images && product.images.length > 0 && (
-          <CardImageCarousel handleClickCardImage={showDetailPostModal} product={product} />
+          <ThumbsCarousel
+            product={product}
+            isEager={productIndex < 4} // ✅ Mobile: first 4 products are above fold
+            productIndex={productIndex}
+            handleClickCardImage={showDetailPostModal}
+          />
         )}
       </div>
       <div className="p-4">

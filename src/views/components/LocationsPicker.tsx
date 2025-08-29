@@ -165,6 +165,8 @@ export default function LocationsPicker({
             variant="outline"
             role="combobox"
             aria-expanded={openCityDropdown}
+            aria-haspopup="listbox"
+            aria-label="Chọn thành phố"
             className="w-full justify-between pr-2"
           >
             {curCity?.text || 'Chọn Thành Phố'}
@@ -187,6 +189,8 @@ export default function LocationsPicker({
             variant="outline"
             role="combobox"
             aria-expanded={openDistrictDropdown}
+            aria-haspopup="listbox"
+            aria-label="Chọn quận/huyện"
             className="mt-2 w-full justify-between pr-2"
             disabled={!curCity || isLoadingDistricts}
           >
@@ -210,6 +214,8 @@ export default function LocationsPicker({
             variant="outline"
             role="combobox"
             aria-expanded={openWardDropdown}
+            aria-haspopup="listbox"
+            aria-label="Chọn phường/xã"
             className="mt-2 w-full justify-between pr-2"
             disabled={!curDistrict || isLoadingWards}
           >

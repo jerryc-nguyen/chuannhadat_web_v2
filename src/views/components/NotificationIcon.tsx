@@ -35,10 +35,8 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="relative">
-          <Button size={'icon'} variant={'outline'} className="rounded-full">
-            <LucideBell className="h-5 w-5" />
-          </Button>
+        <Button size={'icon'} variant={'outline'} className="rounded-full relative" aria-label="Xem thông báo">
+          <LucideBell className="h-5 w-5" />
 
           {isShowBadge && (
             <Badge
@@ -59,7 +57,7 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
               )}
             </Badge>
           )}
-        </div>
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         className={cn('w-[23rem] p-0', {

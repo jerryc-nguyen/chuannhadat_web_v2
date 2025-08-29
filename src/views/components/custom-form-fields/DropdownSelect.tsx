@@ -45,6 +45,8 @@ const DropdownSelectField = ({
           variant="outline"
           role="combobox"
           aria-expanded={openDropdown}
+          aria-haspopup="listbox"
+          aria-label={placeholder || 'Chọn tùy chọn'}
           className="w-full justify-between pr-2"
         >
           <span className={cn("truncate", !selectedOption && "text-muted-foreground")}>
