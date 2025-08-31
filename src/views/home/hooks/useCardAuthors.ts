@@ -1,16 +1,19 @@
 import { TCardAuthor, TLoadedCardAuthors, loadedCardAuthorsAtom } from '../states';
 import { useAtom } from 'jotai';
+import { useCallback } from 'react';
 
 export default function useCardAuthors() {
   const [allAuthors, setAllAuthors] = useAtom(loadedCardAuthorsAtom);
 
-  const appendCardAuthors = (authors: TLoadedCardAuthors) => {
-    setAllAuthors({ ...allAuthors, ...authors });
-  };
+  // ✅ Memoize appendCardAuthors to prevent unnecessary re-renders
+  const appendCardAuthors = useCallback((authors: TLoadedCardAuthors) => {
+    setAllAuthors(prevAuthors => ({ ...prevAuthors, ...authors }));
+  }, [setAllAuthors]);
 
-  const getAuthorById = (id: number): TCardAuthor | undefined => {
+  // ✅ Memoize getAuthorById for consistency
+  const getAuthorById = useCallback((id: number): TCardAuthor | undefined => {
     return allAuthors[id] as unknown as TCardAuthor;
-  };
+  }, [allAuthors]);
 
   return {
     appendCardAuthors,
