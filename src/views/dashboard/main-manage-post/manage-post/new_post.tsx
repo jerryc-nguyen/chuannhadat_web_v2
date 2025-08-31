@@ -140,7 +140,7 @@ const NewPost: React.FC = () => {
               Trở lại
             </Button>
           </Link>
-          <Button type="submit">Đăng tin và thanh toán</Button>
+          <Button type="submit" data-testid="submitPostBtn">Đăng tin và thanh toán</Button>
         </div>
       </form>
     </Form>
