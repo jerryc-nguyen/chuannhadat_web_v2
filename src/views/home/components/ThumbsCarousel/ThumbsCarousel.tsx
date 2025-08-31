@@ -4,7 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
+
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@common/utils';
 import useResizeImage from '@hooks/useResizeImage';
@@ -118,10 +118,10 @@ export default function ThumbsCarousel({
   if (!firstImage) {
     return (
       <section ref={containerRef} className="relative w-full flex-shrink-0">
-        <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden flex items-center justify-center">
+        <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden flex items-center justify-center">
           <div className="text-muted-foreground text-sm">No image available</div>
+          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
         </AspectRatio>
-        <ButtonSave postUid={product.uid} />
       </section>
     );
   }
@@ -131,7 +131,7 @@ export default function ThumbsCarousel({
     return (
       <section ref={containerRef} className="relative w-full flex-shrink-0" role="img" aria-label={getOptimizedAltText()}>
         {firstImage && (
-          <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
+          <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden">
             <BlurImage
               src={buildThumbnailUrl({ imageUrl: firstImage.url })}
               alt={getOptimizedAltText()}
@@ -146,19 +146,9 @@ export default function ThumbsCarousel({
                 handleClickCardImage?.();
               }}
             />
-
-            {/* Image count badge for multiple images */}
-            {hasMultipleImages && (
-              <Badge
-                variant="secondary"
-                className="absolute top-2 right-2 bg-black/60 text-white text-xs"
-              >
-                1/{product.images_count}
-              </Badge>
-            )}
+            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
           </AspectRatio>
         )}
-        <ButtonSave postUid={product.uid} />
       </section>
     );
   }
@@ -168,7 +158,7 @@ export default function ThumbsCarousel({
     return (
       <section ref={containerRef} className="relative w-full flex-shrink-0">
         {firstImage && (
-          <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
+          <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden">
             <BlurImage
               src={buildThumbnailUrl({ imageUrl: firstImage.url })}
               alt={getOptimizedAltText()}
@@ -183,9 +173,9 @@ export default function ThumbsCarousel({
                 handleClickCardImage?.();
               }}
             />
+            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
           </AspectRatio>
         )}
-        <ButtonSave postUid={product.uid} />
       </section>
     );
   }
@@ -201,10 +191,11 @@ export default function ThumbsCarousel({
           onImageClick={handleClickCardImage}
           getOptimizedAltText={getOptimizedAltText}
           isEager={isEager}
+          postUid={product.uid}
         />
       ) : (
         // Loading state: Show first image with carousel controls hint
-        <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
+        <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden">
           {firstImage && (
             <BlurImage
               src={buildThumbnailUrl({ imageUrl: firstImage.url })}
@@ -251,10 +242,9 @@ export default function ThumbsCarousel({
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
+          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
         </AspectRatio>
       )}
-
-      <ButtonSave postUid={product.uid} />
     </section>
   );
 }

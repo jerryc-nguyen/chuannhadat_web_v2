@@ -4,11 +4,11 @@ import React, { useState, useCallback, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Fade from 'embla-carousel-fade';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { cn } from '@common/utils';
 import useResizeImage from '@hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
+import ButtonSave from '../ButtonSave';
 
 type EmblaCarouselComponentProps = {
   images: A[];
@@ -17,6 +17,7 @@ type EmblaCarouselComponentProps = {
   onImageClick?: () => void;
   getOptimizedAltText: () => string;
   isEager?: boolean;
+  postUid: string;
 };
 
 /**
@@ -26,8 +27,9 @@ type EmblaCarouselComponentProps = {
  * - Starts with first image only
  * - Preloads other images on first navigation
  * - Smooth fade transitions
- * - Touch/swipe support
+ * - Touch/swipe support (mobile only for performance)
  * - Keyboard navigation
+ * - Performance optimized: disables touch events on desktop
  */
 export default function EmblaCarouselComponent({
   images,
@@ -36,11 +38,23 @@ export default function EmblaCarouselComponent({
   onImageClick,
   getOptimizedAltText,
   isEager = false,
+  postUid,
 }: EmblaCarouselComponentProps) {
+  // ✅ Detect if device supports touch for performance optimization
+  const isTouchDevice = typeof window !== 'undefined' &&
+    ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       duration: 20, // Fast transitions
+      // ✅ Disable drag/touch on desktop for better performance
+      dragFree: false,
+      containScroll: 'trimSnaps',
+      // Only enable touch/drag on touch devices
+      watchDrag: isTouchDevice,
+      watchResize: true,
+      watchSlides: true,
     },
     [Fade()]
   );
@@ -113,7 +127,7 @@ export default function EmblaCarouselComponent({
   }, [emblaApi, updateScrollState]);
 
   return (
-    <div className="relative" role="region" aria-label="Property images carousel">
+    <div className="card-content_carousel group relative" role="region" aria-label="Property images carousel">
       {/* Main carousel */}
       <div className="overflow-hidden" ref={emblaRef} role="group" aria-live="polite">
         <div className="flex" role="list">
@@ -181,13 +195,11 @@ export default function EmblaCarouselComponent({
             <ChevronRight className="w-4 h-4" />
           </button>
 
-          {/* Image counter badge */}
-          <Badge
-            variant="secondary"
-            className="absolute top-2 right-2 bg-black/60 text-white text-xs z-10"
-          >
-            {selectedIndex + 1}/{images.length}
-          </Badge>
+          {/* ButtonSave in badge position */}
+          <ButtonSave
+            postUid={postUid}
+            className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100"
+          />
 
           {/* Dot navigation */}
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10">
