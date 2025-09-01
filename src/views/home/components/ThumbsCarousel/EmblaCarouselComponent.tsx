@@ -198,7 +198,7 @@ export default function EmblaCarouselComponent({
           {/* ButtonSave in badge position */}
           <ButtonSave
             postUid={postUid}
-            className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100"
+            className="!absolute !top-2 !right-2 !visible !opacity-100"
           />
 
           {/* Dot navigation */}

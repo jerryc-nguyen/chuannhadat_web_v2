@@ -120,7 +120,7 @@ export default function ThumbsCarousel({
       <section ref={containerRef} className="relative w-full flex-shrink-0">
         <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden flex items-center justify-center">
           <div className="text-muted-foreground text-sm">No image available</div>
-          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
+          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
         </AspectRatio>
       </section>
     );
@@ -146,7 +146,7 @@ export default function ThumbsCarousel({
                 handleClickCardImage?.();
               }}
             />
-            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
+            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
           </AspectRatio>
         )}
       </section>
@@ -173,7 +173,7 @@ export default function ThumbsCarousel({
                 handleClickCardImage?.();
               }}
             />
-            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
+            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
           </AspectRatio>
         )}
       </section>
@@ -242,7 +242,7 @@ export default function ThumbsCarousel({
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !z-10 !visible !opacity-100" />
+          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
         </AspectRatio>
       )}
     </section>
