@@ -23,7 +23,7 @@ export default function MainNavLocationsPicker() {
       content: <MainContentNavigator />,
       showAsDialog: true,
       allowChildOverflow: true,
-      onClose: () => setIsOpen(false)
+      onClosed: () => setIsOpen(false)
     });
   };
 

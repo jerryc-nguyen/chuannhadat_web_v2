@@ -20,7 +20,7 @@ export default function MainNavLocationsPicker() {
       content: <MainContentNavigator openModal={openModal2} closeModal={closeModal2} />,
       maxHeightPercent: 0.7,
       supportPushState: false,
-      onClose: () => setIsOpen(false)
+      onClosed: () => setIsOpen(false)
     });
   };
 
