@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import { Skeleton } from '@components/ui/skeleton';
 import ProductCard from './ProductCard';
+import useCardAuthors from '../hooks/useCardAuthors';
 
 interface InfiniteProductLoaderProps {
   initialProducts: A[];
@@ -22,6 +23,7 @@ export default function InfiniteProductLoader({
   const [allProducts, setAllProducts] = useState(initialProducts);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const [hasStartedLoading, setHasStartedLoading] = useState(false);
+  const { appendCardAuthors } = useCardAuthors();
 
   const {
     data,
@@ -36,6 +38,7 @@ export default function InfiniteProductLoader({
         ...filterParams,
         page: pageParam,
         per_page: 12, // Load 12 more products per batch
+        with_users: true, // ✅ Include users data for authors
       }),
     getNextPageParam: (lastPage, allPages) => {
       const nextPageNum = currentPage + allPages.length + 1;
@@ -64,13 +67,20 @@ export default function InfiniteProductLoader({
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // Update products when new data arrives
+  // Update products and authors when new data arrives
   useEffect(() => {
     if (data?.pages) {
       const newProducts = data.pages.flatMap(page => page.data);
       setAllProducts([...initialProducts, ...newProducts]);
+
+      // ✅ Append authors data from all pages (now safe with memoized appendCardAuthors)
+      data.pages.forEach(page => {
+        if (page.users) {
+          appendCardAuthors(page.users);
+        }
+      });
     }
-  }, [data, initialProducts]);
+  }, [data, initialProducts, appendCardAuthors]);
 
   // Handle empty state after hooks
   if (!initialProducts || initialProducts.length === 0) {

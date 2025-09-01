@@ -118,8 +118,6 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
         return <Building className="text-xl" />;
       case FilterFieldName.Price:
         return <DollarSign className="text-xl" />;
-      case FilterFieldName.Area:
-        return <AreaIcon className="text-xl" />;
       case FilterFieldName.Sort:
         return <SortUpIcon className="text-xl" />;
       default:

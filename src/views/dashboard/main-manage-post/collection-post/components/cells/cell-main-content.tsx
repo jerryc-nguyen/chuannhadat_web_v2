@@ -8,8 +8,7 @@ import { isLoadingModal, selectedPostId } from '@views/post-detail/states/modalP
 import { useAtomValue } from 'jotai';
 import { Maximize2, SquarePen } from 'lucide-react';
 import Link from 'next/link';
-import { Fragment } from 'react';
-import hideOnFrontendReasonConstant from '../../constant/hide_on_frontend_reason';
+
 import { Product } from '../../data/schemas';
 import {
   ButtonDelete,
