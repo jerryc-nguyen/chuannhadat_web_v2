@@ -23,8 +23,7 @@ import { useQuery } from '@tanstack/react-query';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useMemo } from 'react';
-import { BsThreeDots } from 'react-icons/bs';
-import { FaCircleCheck } from 'react-icons/fa6';
+import { MoreHorizontal as BsThreeDots, CircleCheck as FaCircleCheck } from 'lucide-react';
 import styles from './index.module.scss';
 
 type ProfileDetailMobileProps = {

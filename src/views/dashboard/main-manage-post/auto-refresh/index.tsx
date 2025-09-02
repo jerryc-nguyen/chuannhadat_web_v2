@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@components/ui/button';
-import { LuClipboardEdit, LuPlus, LuTrash2 } from 'react-icons/lu';
+import { ClipboardEdit, Plus, Trash2 } from 'lucide-react';
 import { useAtom, useSetAtom } from 'jotai';
 import { breadcrumbAtom, IBreadcrumbItem } from '@views/dashboard/states/breadcrumbAtom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -194,7 +194,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
         onClick={handleAddScheduleTime}
         className="flex items-center gap-x-2 bg-blue-500 hover:bg-blue-600"
       >
-        <LuPlus />
+        <Plus />
         Thêm thời gian
       </Button>
     </div>
@@ -251,11 +251,11 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
               <TableCell className="text-sm">Đang tải...</TableCell>
               <TableCell>
                 <Button disabled className="mr-2 bg-green-500 hover:bg-green-600">
-                  <LuClipboardEdit className="mr-2" />
+                  <ClipboardEdit className="mr-2" />
                   Cập nhật
                 </Button>
                 <Button disabled className="bg-red-500 hover:bg-red-600">
-                  <LuTrash2 className="mr-2" />
+                  <Trash2 className="mr-2" />
                   Xóa
                 </Button>
               </TableCell>
@@ -269,14 +269,14 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
                     onClick={() => handleUpdateScheduleTime(schedule.id, schedule.formatted_time)}
                     className="mr-2 bg-green-500 hover:bg-green-600"
                   >
-                    <LuClipboardEdit className="mr-2" />
+                    <ClipboardEdit className="mr-2" />
                     Cập nhật
                   </Button>
                   <Button
                     onClick={() => handleShowDialogWarning(schedule.id)}
                     className="bg-red-500 hover:bg-red-600"
                   >
-                    <LuTrash2 className="mr-2" />
+                    <Trash2 className="mr-2" />
                     Xóa
                   </Button>
                 </TableCell>

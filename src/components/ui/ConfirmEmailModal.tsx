@@ -13,7 +13,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { services } from '@api/services';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '@common/auth/AuthContext';
 
 const ConfirmEmailModal: React.FC = () => {
@@ -96,7 +96,7 @@ const ConfirmEmailModal: React.FC = () => {
             }}
             disabled={isPending}
           >
-            {isPending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             OK
           </AlertDialogAction>
         </AlertDialogFooter>

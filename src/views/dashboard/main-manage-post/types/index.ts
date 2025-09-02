@@ -28,8 +28,7 @@ export interface IPostForm {
   facade?: string;
   entrance?: string;
   floors_count?: string;
-  entrance_direction?: string;
-  view_direction?: string;
+  direction?: string;
   furniture?: string;
   image_ids: string;
   youtube_url?: string;

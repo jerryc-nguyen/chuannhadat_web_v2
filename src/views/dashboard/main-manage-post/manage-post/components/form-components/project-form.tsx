@@ -64,6 +64,8 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                         variant="outline"
                         role="combobox"
                         aria-expanded={openDropdown}
+                        aria-haspopup="listbox"
+                        aria-label="Tìm nhanh dự án"
                         className="w-full justify-between pr-2"
                       >
                         <span className={cn("truncate", !selectedOption && "text-muted-foreground")}>

@@ -27,7 +27,6 @@ interface PropertyDetailsFieldsProps {
 
 export default function PropertyDetailsFields({
   form,
-  openModal,
   closeModal
 }: PropertyDetailsFieldsProps) {
   const category_type = form.watch('category_type');
@@ -174,9 +173,9 @@ export default function PropertyDetailsFields({
         <ListItemBtsPicker
           options={directionOptions}
           modalOptions={{ title: isApartment ? 'Hướng ban công' : 'Hướng nhà/ đất' }}
-          value={form.watch('entrance_direction')}
+          value={form.watch('direction')}
           onSelect={(option) => {
-            if (typeof option.value === 'string') form.setValue('entrance_direction', option.value);
+            if (typeof option.value === 'string') form.setValue('direction', option.value);
           }}
           footer={
             <div className="px-4 pt-4">
@@ -184,10 +183,10 @@ export default function PropertyDetailsFields({
                 variant="default"
                 className="w-full"
                 onClick={() => {
-                  form.setValue('entrance_direction', '');
+                  form.setValue('direction', '');
                   closeModal();
                 }}
-                disabled={!form.watch('entrance_direction')}
+                disabled={!form.watch('direction')}
               >
                 Xóa
               </Button>

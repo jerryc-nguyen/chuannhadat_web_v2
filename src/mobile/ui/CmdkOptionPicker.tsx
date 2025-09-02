@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { LuCheck, LuLoader2 } from 'react-icons/lu';
+import { Check, Loader2 } from 'lucide-react';
 
 export default function CmdkOptionPicker({
   options,
@@ -70,7 +70,7 @@ export default function CmdkOptionPicker({
         {!!isAjaxSearching && (
           <CommandList>
             <CommandEmpty>
-              <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             </CommandEmpty>
           </CommandList>
         )}
@@ -88,7 +88,7 @@ export default function CmdkOptionPicker({
                     onSelect && onSelect(listItem);
                   }}
                 >
-                  <LuCheck
+                  <Check
                     className={cn(
                       'mr-2 h-4 w-4',
                       curValue?.text === listItem.text ? 'opacity-100' : 'opacity-0',

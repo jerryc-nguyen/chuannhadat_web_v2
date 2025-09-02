@@ -1,7 +1,7 @@
 'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
+import { DynamicSidebar, SidebarLoader } from '@components/ui/dynamic';
 import {
-  Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
@@ -23,11 +23,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@components
 import { cn, genKey } from '@common/utils';
 
 import { usePathname } from 'next/navigation';
-import { FaAngleRight } from 'react-icons/fa6';
+import { ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import { useBalanceRequest } from '@api/balance';
 import { Button } from '@components/ui/button';
-import { LuCreditCard } from 'react-icons/lu';
+import { CreditCard } from 'lucide-react';
 import { useDepositModal } from '@components/ui/DepositModal';
 type SidebarDashboardProps = object;
 
@@ -60,115 +60,117 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
     loadBalance();
   }, [fetchBalance]);
   return (
-    <Sidebar className={styles.sidebarWrapper} collapsible="offcanvas">
-      <SidebarHeader className="flex h-[70px] items-center justify-center">
-        <Logo isAlwaysShow />
-      </SidebarHeader>
-      <SidebarContent className="sidebar-content">
-        <SidebarGroup>
-          <SidebarGroupLabel>Danh sách cài đặt</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {listNavDashboard.map((nav) => {
-                if (nav.links) {
-                  return (
-                    <Collapsible key={nav.name} defaultOpen className="group/collapsible">
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton
-                            isActive={pathname.includes(nav.name as string)}
-                            className={cn(
-                              'h-10 cursor-pointer border-[1.5px] border-transparent transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10',
-                              getClassActiveHover(),
-                            )}
-                            asChild
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-x-2">
-                                <nav.icon className="!h-6 !w-6" />
-                                <span className="text-base font-medium">{nav.name}</span>
+    <Suspense fallback={<SidebarLoader />}>
+      <DynamicSidebar className={styles.sidebarWrapper} collapsible="offcanvas">
+        <SidebarHeader className="flex h-[70px] items-center justify-center">
+          <Logo isAlwaysShow />
+        </SidebarHeader>
+        <SidebarContent className="sidebar-content">
+          <SidebarGroup>
+            <SidebarGroupLabel>Danh sách cài đặt</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {listNavDashboard.map((nav) => {
+                  if (nav.links) {
+                    return (
+                      <Collapsible key={nav.name} defaultOpen className="group/collapsible">
+                        <SidebarMenuItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton
+                              isActive={pathname.includes(nav.name as string)}
+                              className={cn(
+                                'h-10 cursor-pointer border-[1.5px] border-transparent transition-all hover:!bg-slate-200 group-data-[collapsible=icon]:!size-10',
+                                getClassActiveHover(),
+                              )}
+                              asChild
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-x-2">
+                                  <nav.icon className="!h-6 !w-6" />
+                                  <span className="text-base font-medium">{nav.name}</span>
+                                </div>
+                                <ChevronRight className="icon-arrow transition-all" />
                               </div>
-                              <FaAngleRight className="icon-arrow transition-all" />
-                            </div>
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="pl-1">
-                          <SidebarMenuSub>
-                            {nav.links?.map((navLink, index) => (
-                              <SidebarMenuSubItem
-                                onClick={() => setOpenMobile(false)}
-                                className={cn(
-                                  'rounded-md border-[1.5px] border-transparent text-base transition-all hover:cursor-pointer',
-                                  getActiveLink(navLink.url),
-                                  getClassActiveHover(),
-                                )}
-                                key={genKey(index)}
-                              >
-                                <Link
-                                  className="block h-full w-full px-4 py-2"
-                                  href={`/dashboard/${navLink.url}`}
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="pl-1">
+                            <SidebarMenuSub>
+                              {nav.links?.map((navLink, index) => (
+                                <SidebarMenuSubItem
+                                  onClick={() => setOpenMobile(false)}
+                                  className={cn(
+                                    'rounded-md border-[1.5px] border-transparent text-base transition-all hover:cursor-pointer',
+                                    getActiveLink(navLink.url),
+                                    getClassActiveHover(),
+                                  )}
+                                  key={genKey(index)}
                                 >
-                                  {navLink.name}
-                                </Link>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </SidebarMenuItem>
-                    </Collapsible>
-                  );
-                } else {
-                  return (
-                    <SidebarMenuButton
-                      key={nav.name}
-                      onClick={() => setOpenMobile(false)}
-                      isActive={pathname.includes(nav.name as string)}
-                      className={cn(
-                        'h-10 cursor-pointer border-[1.5px] border-transparent transition-all group-data-[collapsible=icon]:!size-10',
-                        getActiveLink(nav.url as string),
-                        getClassActiveHover(),
-                      )}
-                      asChild
-                    >
-                      <Link
-                        href={nav.url as string}
-                        className="flex h-full w-full items-center gap-x-2"
+                                  <Link
+                                    className="block h-full w-full px-4 py-2"
+                                    href={`/dashboard/${navLink.url}`}
+                                  >
+                                    {navLink.name}
+                                  </Link>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </SidebarMenuItem>
+                      </Collapsible>
+                    );
+                  } else {
+                    return (
+                      <SidebarMenuButton
+                        key={nav.name}
+                        onClick={() => setOpenMobile(false)}
+                        isActive={pathname.includes(nav.name as string)}
+                        className={cn(
+                          'h-10 cursor-pointer border-[1.5px] border-transparent transition-all group-data-[collapsible=icon]:!size-10',
+                          getActiveLink(nav.url as string),
+                          getClassActiveHover(),
+                        )}
+                        asChild
                       >
-                        <nav.icon className="!h-6 !w-6" />
-                        <span className="text-base font-medium">{nav.name}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  );
-                }
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter className="p-4">
-        <Card className="rounded-md p-3" x-chunk="dashboard-02-chunk-0">
-          <CardHeader className="rounded-sm border p-2 text-center hover:bg-slate-50">
-            <CardDescription className="font-medium text-secondary">
-              Tài khoản chính
-            </CardDescription>
-            <CardTitle className="!mt-0 text-lg font-bold text-green-600">
-              {balanceData?.tk_chinh}
-            </CardTitle>
-          </CardHeader>
-          <CardHeader className="my-2 rounded-sm border p-2 text-center hover:bg-slate-50">
-            <CardDescription className="font-medium text-secondary">Tài khoản KM</CardDescription>
-            <CardTitle className="!mt-0 text-lg font-bold text-yellow-600">
-              {balanceData?.tk_km}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <Button onClick={onOpenModalDeposit} className="w-full">
-              <LuCreditCard className="mr-2 h-4 w-4" /> Nạp tiền
-            </Button>
-          </CardContent>
-        </Card>
-      </SidebarFooter>
-    </Sidebar>
+                        <Link
+                          href={nav.url as string}
+                          className="flex h-full w-full items-center gap-x-2"
+                        >
+                          <nav.icon className="!h-6 !w-6" />
+                          <span className="text-base font-medium">{nav.name}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    );
+                  }
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter className="p-4">
+          <Card className="rounded-md p-3" x-chunk="dashboard-02-chunk-0">
+            <CardHeader className="rounded-sm border p-2 text-center hover:bg-slate-50">
+              <CardDescription className="font-medium text-secondary">
+                Tài khoản chính
+              </CardDescription>
+              <CardTitle className="!mt-0 text-lg font-bold text-green-600">
+                {balanceData?.tk_chinh}
+              </CardTitle>
+            </CardHeader>
+            <CardHeader className="my-2 rounded-sm border p-2 text-center hover:bg-slate-50">
+              <CardDescription className="font-medium text-secondary">Tài khoản KM</CardDescription>
+              <CardTitle className="!mt-0 text-lg font-bold text-yellow-600">
+                {balanceData?.tk_km}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Button onClick={onOpenModalDeposit} className="w-full">
+                <CreditCard className="mr-2 h-4 w-4" /> Nạp tiền
+              </Button>
+            </CardContent>
+          </Card>
+        </SidebarFooter>
+      </DynamicSidebar>
+    </Suspense>
   );
 };
 

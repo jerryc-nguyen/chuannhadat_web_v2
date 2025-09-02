@@ -17,7 +17,7 @@ import { Input } from '@components/ui/input';
 import Image from 'next/image';
 import { useAuth } from '@common/auth/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
-import { LuLoader2, LuUpload } from 'react-icons/lu';
+import { Loader2, Upload } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { service } from '../../apis';
@@ -173,9 +173,9 @@ const PersonalTab: React.FC = () => {
                     type="button"
                   >
                     {isUpdateAvatarPending ? (
-                      <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      <LuUpload className="mr-1" />
+                      <Upload className="mr-1" />
                     )}
                     Tải hình ảnh lên
                   </Button>
@@ -348,7 +348,7 @@ const PersonalTab: React.FC = () => {
             />
           )}
           <Button disabled={isUpdateProfilePending} className="w-fit" type="submit">
-            {isUpdateProfilePending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isUpdateProfilePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>
         </form>

@@ -19,10 +19,14 @@ import { FilterFieldName } from '@models';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import React from 'react';
-import { BiArea } from 'react-icons/bi';
-import { BsSortUp } from 'react-icons/bs';
-import { LuBuilding, LuLoader2, LuX } from 'react-icons/lu';
-import { PiCurrencyCircleDollar } from 'react-icons/pi';
+import {
+  Square as AreaIcon,
+  ArrowUp as SortUpIcon,
+  Building,
+  Loader2,
+  X,
+  DollarSign
+} from 'lucide-react';
 import styles from '../styles/FilterChip.module.scss';
 import AggProjects from '@mobile/filter_bds/bts/AggProjects';
 
@@ -111,13 +115,11 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   const onRenderIconChip = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
       case FilterFieldName.Project:
-        return <LuBuilding className="text-xl" />;
+        return <Building className="text-xl" />;
       case FilterFieldName.Price:
-        return <PiCurrencyCircleDollar className="text-xl" />;
-      case FilterFieldName.Area:
-        return <BiArea className="text-xl" />;
+        return <DollarSign className="text-xl" />;
       case FilterFieldName.Sort:
-        return <BsSortUp className="text-xl" />;
+        return <SortUpIcon className="text-xl" />;
       default:
         break;
     }
@@ -163,7 +165,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
             </div>
           </PopoverTrigger>
           {isActiveChip(filterChipItem) && (
-            <LuX
+            <X
               onClick={() => handleRemoveFilter(filterChipItem)}
               className="cursor-pointer text-xl"
             />
@@ -183,7 +185,7 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
           </section>
           {searchScope != SearchScopeEnums.ManagePosts && (
             <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>
-              {isLoading && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
             </Button>
           )}

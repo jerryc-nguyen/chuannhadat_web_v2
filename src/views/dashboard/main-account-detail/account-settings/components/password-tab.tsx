@@ -15,7 +15,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { service } from '../../apis';
 
@@ -145,7 +145,7 @@ const PasswordTab: React.FC = () => {
             )}
           />
           <Button disabled={isUpdateMyPasswordPending} className="w-fit" type="submit">
-            {isUpdateMyPasswordPending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isUpdateMyPasswordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>
         </form>

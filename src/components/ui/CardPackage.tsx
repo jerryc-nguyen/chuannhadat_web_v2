@@ -1,7 +1,7 @@
 import { Button } from '@components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import React from 'react';
-import { LuCheck } from 'react-icons/lu';
+import { Check } from 'lucide-react';
 
 type CardPackageProps = {
   cardTitle: string;
@@ -38,7 +38,7 @@ const CardPackage: React.FC<CardPackageProps> = ({
             {listPreferential &&
               listPreferential.map((item) => (
                 <li key={item} className="mb-2 flex items-center gap-x-2 text-sm">
-                  <LuCheck className="text-blue-400" />
+                  <Check className="text-blue-400" />
                   <span>{item}</span>
                 </li>
               ))}

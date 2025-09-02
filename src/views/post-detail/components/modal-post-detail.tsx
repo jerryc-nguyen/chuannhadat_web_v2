@@ -34,15 +34,15 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   // };
 
   React.useEffect(() => {
-    if (data) {
-      setIsOpenModal(true);
-      if (postContentRef.current) {
-        postContentRef.current.scrollTop = 0;
-      }
+    // Scroll to top when modal opens and data loads
+    if (data && isOpenModal && postContentRef.current) {
+      postContentRef.current.scrollTop = 0;
     }
+
+    // Update loading state for UI feedback
     setIsLoadingModal(isLoading);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isLoading, postId]);
+  }, [data, isLoading, postId, isOpenModal]);
 
   const breadcrumbsData = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
@@ -71,14 +71,27 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
           ref={postContentRef}
           className="post-content relative flex flex-1 justify-between gap-x-4 overflow-x-auto p-0"
         >
-          <div className="content-post flex h-fit flex-[3] flex-col gap-y-4 overflow-hidden">
-            <OverviewPost isInsideModal data={data as IProductDetail} />
-            <FeaturesPost data={data as IProductDetail} />
-            <DescriptionPost data={data as IProductDetail} />
-            <ViewedPosts isInsideModal productUid={data?.uid as string} />
-            <NotePost />
-          </div>
-          <AuthorPost data={data as IProductDetail} />
+          {isLoading && !data ? (
+            // Loading state when modal opens before data arrives
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="flex flex-col items-center gap-4">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                <p className="text-sm text-gray-600">Đang tải thông tin bài đăng...</p>
+              </div>
+            </div>
+          ) : (
+            // Content when data is loaded
+            <>
+              <div className="content-post flex h-fit flex-[3] flex-col gap-y-4 overflow-hidden">
+                <OverviewPost isInsideModal data={data as IProductDetail} />
+                <FeaturesPost data={data as IProductDetail} />
+                <DescriptionPost data={data as IProductDetail} />
+                <ViewedPosts isInsideModal productUid={data?.uid as string} />
+                <NotePost />
+              </div>
+              <AuthorPost data={data as IProductDetail} />
+            </>
+          )}
         </section>
       </SheetContent>
     </Sheet>

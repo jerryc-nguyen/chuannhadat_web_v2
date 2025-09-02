@@ -1,20 +1,11 @@
 'use client';
 import { cn } from '@common/utils';
 import { Avatar, AvatarImage } from '@components/ui/avatar';
-import { Button } from '@components/ui/button';
 import { Card, CardContent, CardFooter, CardTitle } from '@components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@components/ui/form';
-import { Input } from '@components/ui/input';
-import { Textarea } from '@components/ui/textarea';
-import { zodResolver } from '@hookform/resolvers/zod';
+
 import Image from 'next/image';
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { HiMail } from 'react-icons/hi';
-import { HiOutlineNewspaper, HiPhone } from 'react-icons/hi2';
-import { MdManageAccounts } from 'react-icons/md';
-import { RiMenuSearchLine, RiVipCrown2Fill } from 'react-icons/ri';
-import { z } from 'zod';
+import { Newspaper, PackageSearch, Crown, BookUser } from 'lucide-react';
 
 const listFeedback = [
   {
@@ -48,11 +39,13 @@ const listFeedback = [
     type: 'Môi giới bất động sản',
   },
 ];
+
+
 const listMainService = [
   {
     key: 1,
     title: 'Đăng tin bất động sản',
-    icon: <HiOutlineNewspaper className="text-lg" />,
+    icon: <Newspaper className="text-lg" />,
     contents: [
       'Đơn giản hóa quá trình đăng tin, giúp bạn dễ dàng tiếp cận hàng ngàn khách hàng tiềm năng.',
       'Hỗ trợ đăng tin cho mọi loại hình bất động sản, từ nhà ở, căn hộ chung cư, đến đất nền và bất động sản thương mại.',
@@ -61,7 +54,7 @@ const listMainService = [
   {
     key: 2,
     title: 'Tìm kiếm, lọc bất động sản',
-    icon: <RiMenuSearchLine className="text-lg" />,
+    icon: <PackageSearch className="text-lg" />,
     contents: [
       'Cung cấp công cụ tìm kiếm thông minh, giúp bạn nhanh chóng tìm được bất động sản phù hợp với nhu cầu.',
       'Tìm kiếm theo vị trí, giá cả, diện tích, hướng nhà, và nhiều tiêu chí khác.',
@@ -70,7 +63,7 @@ const listMainService = [
   {
     key: 3,
     title: 'Dịch vụ tin VIP',
-    icon: <RiVipCrown2Fill className="text-lg" />,
+    icon: <Crown className="text-lg" />,
     contents: [
       'Nổi bật tin đăng của bạn với các gói tin VIP, giúp tăng khả năng tiếp cận và nhận được nhiều lượt xem hơn.',
       'Lựa chọn đa dạng các gói VIP phù hợp với nhu cầu và ngân sách.',
@@ -79,7 +72,7 @@ const listMainService = [
   {
     key: 4,
     title: 'Quản lý tài khoản, tin đăng',
-    icon: <MdManageAccounts className="text-lg" />,
+    icon: <BookUser className="text-lg" />,
     contents: [
       'Giao diện thân thiện, cho phép bạn quản lý bài đăng, kiểm tra lượt xem, và chỉnh sửa thông tin một cách dễ dàng.',
       'Quản lý tài khoản, nạp tiền, và sử dụng dịch vụ tiện lợi.',
@@ -87,29 +80,7 @@ const listMainService = [
   },
 ];
 const AboutChuanNhaDat: React.FC = () => {
-  const formSchema = z.object({
-    fullname: z.string().min(1, {
-      message: 'Nhập họ tên của bạn',
-    }),
-    email: z.string().email({
-      message: 'Vui lòng nhập địa chỉ email hợp lệ',
-    }),
-    message: z.string(),
-  });
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      fullname: '',
-      email: '',
-      message: '',
-    },
-  });
-  const { control, handleSubmit } = form;
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('🚀 ~ values:', values);
-  };
-  
   return (
     <section
       className={cn('flex flex-col gap-y-10 px-5 py-10 text-lg md:w-4/5 lg:mx-auto lg:px-0')}
@@ -246,122 +217,7 @@ const AboutChuanNhaDat: React.FC = () => {
           ))}
         </div>
       </section>
-      <section
-        id="connect"
-        className="flex flex-col items-center justify-between gap-x-10 gap-y-5 lg:flex-row"
-      >
-        <div className="lg:w-1/3">
-          <h2 className="mb-4 text-3xl font-bold">Nếu bạn cần hỗ trợ</h2>
-          <p>Liên hệ qua Email ? Hãy điền form sau. Chúng tôi sẽ phản hồi nhanh nhất có thể.</p>
-          <div className="hidden md:block">
-            <h3 className="mt-2 text-xl font-semibold md:mt-4">
-              Chúng tôi rất muốn nghe từ bạn{' '}
-              <p className="text-base font-medium text-secondary">
-                hoặc chỉ cần liên hệ trực tiếp với chúng tôi qua :
-              </p>
-            </h3>
-            <ul className="mt-4 flex flex-col gap-y-2 text-sm">
-              <li className="flex items-center gap-x-2 text-nowrap">
-                <HiPhone className="text-xl" />
-                <span> 0966662192 ( Linh )</span>
-              </li>
-              <li className="flex items-center gap-x-2 text-nowrap">
-                <HiMail className="text-xl" />
-                <span>Chuannhadat@gmail.com</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="w-full rounded-md bg-[#f3f5f7] p-5 md:p-10 lg:w-2/3">
-          <Form {...form}>
-            <form className="mt-4 flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
-              <FormField
-                name="fullname"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      aria-required
-                      htmlFor="fullname"
-                      className="mb-2 block text-sm font-medium"
-                    >
-                      Họ và tên
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        required
-                        {...field}
-                        autoComplete="fullname"
-                        id="phone"
-                        placeholder="Họ và tên"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
 
-              <FormField
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      aria-required
-                      htmlFor="email"
-                      className="mb-2 block text-sm font-medium"
-                    >
-                      Email
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        required
-                        autoComplete="email"
-                        type="email"
-                        {...field}
-                        id="email"
-                        placeholder="Email"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="message"
-                control={control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      aria-required
-                      htmlFor="message"
-                      className="mb-2 block text-sm font-medium"
-                    >
-                      Tin nhắn
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        required
-                        className="min-h-[150px]"
-                        autoComplete="message"
-                        {...field}
-                        id="message"
-                        placeholder="Tin nhắn"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                type="submit"
-                className="flex w-fit items-center gap-x-2 rounded-md px-6 py-2 font-semibold text-white focus-within:animate-pulse"
-              >
-                Gửi yêu cầu
-              </Button>
-            </form>
-          </Form>
-        </div>
-      </section>
     </section>
   );
 };

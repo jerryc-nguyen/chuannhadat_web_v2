@@ -13,7 +13,7 @@ import { LucideHeart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { HiMiniXMark } from 'react-icons/hi2';
+import { X } from 'lucide-react';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
 import { listPostIdSavedAtom } from '@views/home/states';
@@ -23,7 +23,7 @@ import {
   ISaveProductPayload,
   ISavedProductsResponse,
 } from '@models/savesPostModel';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSearchParams } from 'next/navigation';
@@ -34,10 +34,6 @@ import { IViewedProductDetail } from '@mobile/searchs/type';
 import { useIsMobile } from '@hooks';
 
 type FavoriteIconProps = object;
-type PostLoadingType = {
-  id: string;
-  status: boolean;
-};
 
 // TODO: move to constants
 export const viewOptions = [
@@ -122,9 +118,9 @@ const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
           </div>
         </Link>
         {isLoadingDelete ? (
-          <AiOutlineLoading3Quarters className="animate-spin text-xl duration-500" />
+          <LoadingThreeQuarters className="animate-spin text-xl duration-500" />
         ) : (
-          <HiMiniXMark
+          <X
             onClick={() => handleRemovePost(post?.product?.uid)}
             className="cursor-pointer text-xl hover:text-error_color"
           />
@@ -291,12 +287,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
     return (
       <Sheet onOpenChange={setOpenSavePost} open={openSavedPost}>
         <SheetTrigger asChild>
-          <div className="relative">
-            <Button size={'icon'} variant="outline" className="rounded-full">
-              <LucideHeart className="h-5 w-5" />
-            </Button>
+          <Button size={'icon'} variant="outline" className="rounded-full relative" aria-label="Xem tin đã lưu và tin đã xem">
+            <LucideHeart className="h-5 w-5" />
             {isShowBadge && renderBadge()}
-          </div>
+          </Button>
         </SheetTrigger>
         <SheetContent className="w-[90vw] p-0">
           <SheetHeader className="p-3">
@@ -312,12 +306,10 @@ const FavoriteIcon: React.FC<FavoriteIconProps> = () => {
   return (
     <Popover onOpenChange={setOpenSavePost} open={openSavedPost}>
       <PopoverTrigger asChild>
-        <div className="relative">
-          <Button size={'icon'} variant="outline" className="rounded-full">
-            <LucideHeart className="h-5 w-5" />
-          </Button>
+        <Button size={'icon'} variant="outline" className="rounded-full relative" aria-label="Xem tin đã lưu và tin đã xem">
+          <LucideHeart className="h-5 w-5" />
           {isShowBadge && renderBadge()}
-        </div>
+        </Button>
       </PopoverTrigger>
       <PopoverContent
         className={cn('w-[23rem] p-0', {

@@ -49,8 +49,7 @@ const defaultValues: IPostForm = {
   facade: '',
   entrance: '',
   floors_count: '',
-  entrance_direction: '',
-  view_direction: '',
+  direction: '',
   furniture: '',
   image_ids: '',
   youtube_url: '',
@@ -97,7 +96,7 @@ const NewPost: React.FC = () => {
       }
     } catch (error: A) {
       toast.error(error.message);
-      console.log('error', error);
+      // console.log('error', error);
     }
   };
 
@@ -141,7 +140,7 @@ const NewPost: React.FC = () => {
               Trở lại
             </Button>
           </Link>
-          <Button type="submit">Đăng tin và thanh toán</Button>
+          <Button type="submit" data-testid="submitPostBtn">Đăng tin và thanh toán</Button>
         </div>
       </form>
     </Form>

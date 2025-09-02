@@ -142,7 +142,7 @@ const ProductInfoForm: React.FC<A> = ({ form }) => {
 
             <FormField
               control={form.control}
-              name="entrance_direction"
+              name="direction"
               render={({ field }) => (
                 <FormItem className="grid gap-2">
                   <FormLabel>{isApartment ? 'Hướng ban công' : 'Hướng nhà/ đất'}</FormLabel>

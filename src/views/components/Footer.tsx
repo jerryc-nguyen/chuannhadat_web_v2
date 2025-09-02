@@ -1,12 +1,8 @@
 import Logo from '@components/logo';
-import { HiPhone } from 'react-icons/hi';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import faceBookIcon from '@assets/icons/Facebook.svg';
-import zaloIcon from '@assets/icons/icons8-zalo.svg';
-import { HiMail } from 'react-icons/hi';
-import { FaTiktok } from 'react-icons/fa';
 
 type FooterProps = object;
 const listMenuFooter = [
@@ -87,19 +83,9 @@ const listMenuFooter = [
 const listMenuIcon = [
   {
     key: 'icon-facebook',
-    link: 'https://www.facebook.com/chuannhadat',
+    link: 'https://m.me/hotrochuannhadat',
     icon: <Image src={faceBookIcon} alt="facebook-icon" width={20} height={20} />,
-  },
-  {
-    key: 'icon-zalo',
-    link: 'https://zalo.me/0966662192',
-    icon: <Image src={zaloIcon} alt="zalo-icon" width={20} height={20} />,
-  },
-  {
-    key: 'icon-tiktok',
-    link: 'https://www.tiktok.com/@chuannhadat',
-    icon: <FaTiktok className="text-base" />,
-  },
+  }
 ];
 
 const Footer: React.FC<FooterProps> = () => {
@@ -108,25 +94,15 @@ const Footer: React.FC<FooterProps> = () => {
       <section className="relative flex flex-col justify-between pb-10 pt-12 md:flex-row md:gap-x-6 lg:gap-x-10">
         <div className="relative z-[1] md:max-w-[400px]">
           <Logo className="justify-center md:justify-start" isAlwaysShow />
-          <div className="my-4 flex flex-col gap-y-1 text-center text-sm text-secondary md:text-start">
-            <p>Trang chuyên đăng tin bất động sản miễn phí.</p>
+          <div className="my-4 flex flex-col gap-y-1 text-center text-gray-300 text-sm md:text-start">
+            <p>Trang chuyên đăng tin bất động sản, nhanh gọn và hiệu quả.</p>
             <p>
-              Nếu bạn muốn góp ý, phản ánh vấn đề, yêu cầu xoá tin, vui lòng liên hệ với chúng tôi
-              qua thông tin bên dưới
+              Nếu bạn muốn góp ý, phản ánh vấn đề, yêu cầu xoá tin, vui lòng nhắn tin cho chúng tôi qua trang hỗ trợ trên facebook:
             </p>
           </div>
-          <div className="flex flex-wrap justify-between gap-y-4 border-t border-[#3E4550] pt-4">
-            <a className="flex items-center gap-x-2 text-nowrap" href='tel:+84 966662192'>
-              <HiPhone className="text-xl" />
-              <span> 0966662192 ( Linh )</span>
-            </a>
-            <a
-              href="mailto:Chuannhadat@gmail.com"
-              target="_blank"
-              className="flex items-center gap-x-2 text-nowrap"
-            >
-              <HiMail className="text-xl" />
-              <span>Chuannhadat@gmail.com</span>
+          <div className="flex flex-wrap justify-between">
+            <a href='https://m.me/hotrochuannhadat' target='_blank' className="text-xl font-bold">
+              fb.com/hotrochuannhadat
             </a>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { LuLoader2 } from 'react-icons/lu';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import * as Yup from 'yup';
 
@@ -108,7 +108,7 @@ const EmailTab: React.FC = () => {
             )}
           />
           <Button disabled={isPending} className="relative w-fit sm:bottom-0" type="submit">
-            {isPending && <LuLoader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>
         </form>

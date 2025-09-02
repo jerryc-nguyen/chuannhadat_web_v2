@@ -18,7 +18,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { LuUserCircle } from 'react-icons/lu';
+import { UserCircle } from 'lucide-react';
 
 type AvatarIconProps = {
   isLogged: boolean;
@@ -61,18 +61,20 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
     return (
       <DropdownMenu open={openDropdownMenu} onOpenChange={setOpenDropdownMenu}>
         <DropdownMenuTrigger className="cursor-pointer" asChild>
-          {currentUser?.avatar_url ? (
-            <Image
-              alt={currentUser.full_name}
-              width={40}
-              height={40}
-              className="rounded-full"
-              src={buildThumbnailUrl({ imageUrl: currentUser.avatar_url, width: 40, ratio: 1 })}
-              object-fit="cover"
-            />
-          ) : (
-            <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
-          )}
+          <button type="button" aria-label={`Menu tài khoản của ${currentUser?.full_name || 'người dùng'}`}>
+            {currentUser?.avatar_url ? (
+              <Image
+                alt={currentUser.full_name}
+                width={40}
+                height={40}
+                className="rounded-full"
+                src={buildThumbnailUrl({ imageUrl: currentUser.avatar_url, width: 40, ratio: 1 })}
+                object-fit="cover"
+              />
+            ) : (
+              <Skeleton className="h-10 w-10 rounded-full bg-primary_color" />
+            )}
+          </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="w-56"
@@ -127,11 +129,12 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
       variant="outline"
       size="icon"
       className="rounded-full"
+      aria-label="Đăng nhập hoặc đăng ký"
       onClick={() => {
         showModalLoginAndRegister();
       }}
     >
-      <LuUserCircle className="h-5 w-5" />
+      <UserCircle className="h-5 w-5" />
     </Button>
   );
 };

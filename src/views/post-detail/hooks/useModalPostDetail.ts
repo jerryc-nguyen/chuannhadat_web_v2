@@ -15,8 +15,14 @@ export default function useModalPostDetail() {
     setIsOpenModal(false);
   };
   const handleOpenModal = async (postId: string) => {
+    // 1. Set post ID
     setSelectedPostId(postId);
-    await queryClient.prefetchQuery({
+
+    // 2. Open modal immediately
+    setIsOpenModal(true);
+
+    // 3. Prefetch data for better performance
+    queryClient.prefetchQuery({
       queryKey: ['get-detail-post', postId],
       queryFn: () => services.posts.getDetailPost(postId),
     });

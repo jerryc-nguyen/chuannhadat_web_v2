@@ -17,10 +17,45 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
         </div>
       )}
 
+      {data?.formatted_price && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Giá</span>
+          <span className="text-sm text-secondary">{data?.formatted_price}</span>
+        </div>
+      )}
+
+      {data?.formatted_area && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Diện tích</span>
+          <span className="text-sm text-secondary">{data?.formatted_area}</span>
+        </div>
+      )}
+
       {data?.formatted_price_per_m2 && (
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold">Giá / m2</span>
           <span className="text-sm text-secondary">{data?.formatted_price_per_m2}</span>
+        </div>
+      )}
+
+      {data?.formatted_facade && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Mặt tiền</span>
+          <span className="text-sm text-secondary">{data?.formatted_facade}</span>
+        </div>
+      )}
+
+      {data?.formatted_kt && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Kích thước</span>
+          <span className="text-sm text-secondary">{data?.formatted_kt}</span>
+        </div>
+      )}
+
+      {data?.formatted_entrance && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Đường rộng</span>
+          <span className="text-sm text-secondary">{data?.formatted_entrance}</span>
         </div>
       )}
 
@@ -48,11 +83,27 @@ export const FeaturesList = ({ data }: FeaturesPostProps) => {
         </div>
       )}
 
-      {data?.phap_ly && (
+      {data?.formatted_direction && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Hướng</span>
+          <span className="text-sm text-secondary">{data?.formatted_direction}</span>
+        </div>
+      )}
+
+      {data?.formatted_furniture && (
+        <div className="flex gap-1">
+          <span className="min-w-[8rem] text-sm font-semibold">Nội thất</span>
+          <span className="text-sm text-secondary">
+            {data?.formatted_furniture}
+          </span>
+        </div>
+      )}
+
+      {data?.formatted_phap_ly && (
         <div className="flex gap-1">
           <span className="min-w-[8rem] text-sm font-semibold">Pháp lý</span>
-          <span className="text-md text-secondary">
-            {data?.phap_ly ? 'Sổ hồng/sổ đỏ' : 'Chưa có sổ'}
+          <span className="text-black-500 font-bold">
+            {data?.formatted_phap_ly}
           </span>
         </div>
       )}

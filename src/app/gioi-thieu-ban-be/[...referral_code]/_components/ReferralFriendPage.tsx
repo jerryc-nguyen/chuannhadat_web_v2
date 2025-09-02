@@ -25,7 +25,7 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { IoIosArrowBack } from 'react-icons/io';
+import { ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
 type ReferralFriendPageProps = {
   referral_code: string;
@@ -103,7 +103,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = (props) => {
         <section className="mt-10 flex items-end gap-x-10 md:mt-5">
           <section className="flex-1">
             <Link href="/" className="mb-4 flex items-center gap-x-2 font-medium hover:underline">
-              <IoIosArrowBack />
+              <ChevronLeft />
               Trang chủ
             </Link>
             <p className="mb-4 block text-sm text-secondary lg:hidden">

@@ -13,7 +13,11 @@ chmod +x scripts/find-memory-leaks.sh
 ### Build web docker production
 
 ```
-docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2 -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v2
+docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3_released -f Dockerfile . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3_released
+```
+
+```
+docker build --platform linux/x86_64 -t registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3 -f Dockerfile.v2 . && docker push registry.gitlab.com/mkt-devops/web-deployments:chuannhadat_next_v3
 ```
 
 ### IMAGES CND NOTES
@@ -164,6 +168,7 @@ To further improve application stability:
    ```
 
 4. **Memory Monitoring**: Monitor client-side memory usage to detect issues early
+
    ```typescript
    // Check browser memory usage periodically
    useCleanupEffect((helpers) => {
