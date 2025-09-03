@@ -18,7 +18,7 @@ VPS_USER="${DEPLOY_VPS_USER:-root}"
 DEPLOY_PATH="${DEPLOY_PATH:-/var/web}"
 DOCKER_SERVICES=("chuannhadat_next")
 REGISTRY="${DEPLOY_REGISTRY:-registry.gitlab.com/mkt-devops/web-deployments}"
-DEFAULT_TAG="${DEPLOY_TAG:-chuannhadat_next_v2}"
+DEFAULT_TAG="${DEPLOY_TAG:-chuannhadat_next_v3_released}"
 DEPLOY_TOKEN_USERNAME="${DEPLOY_TOKEN_USERNAME:-gitlab+deploy-token-123456}"
 DEPLOY_TOKEN="${DEPLOY_TOKEN:-your-token-here}"
 
