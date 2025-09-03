@@ -164,7 +164,7 @@ export default function EmblaCarouselComponent({
           {/* Previous button */}
           <button
             className={cn(
-              "absolute left-2 top-1/2 transform -translate-y-1/2 z-10",
+              "absolute left-2 top-1/2 transform -translate-y-1/2",
               "bg-black/20 hover:bg-black/40 focus:bg-black/60 text-white p-2 rounded-full transition-all",
               "opacity-0 group-hover:opacity-100 focus:opacity-100",
               "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black/20",
@@ -181,7 +181,7 @@ export default function EmblaCarouselComponent({
           {/* Next button */}
           <button
             className={cn(
-              "absolute right-2 top-1/2 transform -translate-y-1/2 z-10",
+              "absolute right-2 top-1/2 transform -translate-y-1/2",
               "bg-black/20 hover:bg-black/40 focus:bg-black/60 text-white p-2 rounded-full transition-all",
               "opacity-0 group-hover:opacity-100 focus:opacity-100",
               "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black/20",
@@ -202,7 +202,7 @@ export default function EmblaCarouselComponent({
           />
 
           {/* Dot navigation */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
             <div className="flex gap-1">
               {images.map((_, index) => (
                 <button
