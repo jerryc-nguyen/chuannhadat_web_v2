@@ -1,6 +1,7 @@
 .profile_detail_wrapper {
   display: flex;
   flex-direction: column;
+  padding-bottom: 50px;
 
   &:global(.profile-image) {
     width: calc(100vw - 10px);
