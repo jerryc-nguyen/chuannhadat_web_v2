@@ -54,7 +54,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
       searchApi({
         ...filterParams,
         page: currentPage,
-        per_page: 8, // ✅ Load 8 products initially for better performance
+        per_page: 9, // ✅ Load 8 products initially for better performance
         author_slug: profileSlug,
         aggs_for: 'profile',
       }),

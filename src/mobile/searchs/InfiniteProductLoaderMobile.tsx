@@ -35,7 +35,7 @@ export default function InfiniteProductLoaderMobile({
       searchApi({
         ...filterParams,
         page: pageParam,
-        per_page: 8, // Load 8 more products per batch for mobile
+        per_page: 9, // Load 8 more products per batch for mobile
         with_users: true, // ✅ Include users data for authors
       }),
     getNextPageParam: (lastPage, allPages) => {
