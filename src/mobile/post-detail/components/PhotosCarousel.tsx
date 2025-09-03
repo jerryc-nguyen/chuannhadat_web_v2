@@ -46,6 +46,7 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
       )}
       {openSlideImage && product?.images_count > 1 && (
         <Lightbox
+          className="mobile-lightbox-images"
           open={openSlideImage}
           controller={{ closeOnPullDown: true }}
           index={indexImageActive}
