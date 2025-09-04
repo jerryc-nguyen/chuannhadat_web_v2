@@ -9,6 +9,7 @@ import { Skeleton } from '@components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
 import { YoutubePlayerAction } from '@components/youtube-player-modal';
 import useCleanupEffect from '@hooks/useCleanupEffect';
+import useResizeImage from '@hooks/useResizeImage';
 import { IProductDetail } from '@mobile/searchs/type';
 import { useMutation } from '@tanstack/react-query';
 import ButtonSave, { type ButtonSaveHandle } from '@views/home/components/ButtonSave';
@@ -43,6 +44,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
   const [isCopied, setIsCopied] = React.useState(false);
   const { onCloseModal } = useModalPostDetail();
   const router = useRouter();
+  const { buildThumbnailUrl } = useResizeImage();
 
   const actionLightBox = {
     slide: NextJsImage,
@@ -218,17 +220,25 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         styles={{ root: { pointerEvents: 'auto' } }}
         slides={data?.images.map((item) => ({
           src: item.url,
-          width: 3840,
-          height: 2560,
+          thumbnail: buildThumbnailUrl({
+            imageUrl: item.url,
+            width: 100,
+            ratio: 16 / 9,
+          }),
         }))}
+        carousel={{
+          finite: false,
+          preload: data?.images.length
+        }}
         thumbnails={{
           vignette: false,
           padding: 0,
           border: 0,
-          height: 60,
-          width: 90,
+          height: 66,
+          width: 100,
           imageFit: 'cover',
-          hidden: data?.images.length <= 1,
+          hidden: false,
+          showToggle: false,
         }}
         counter={{ container: { style: { top: '0' } } }}
         render={actionLightBox}

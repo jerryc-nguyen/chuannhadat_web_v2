@@ -7,6 +7,8 @@ import { Button } from '@components/ui/button';
 import ProductCard from './ProductCard';
 import useCardAuthors from '../hooks/useCardAuthors';
 
+const AUTO_LOAD_PAGES = 5;
+
 interface InfiniteProductLoaderProps {
   initialProducts: A[];
   filterParams: A;
@@ -20,7 +22,7 @@ export default function InfiniteProductLoader({
   filterParams,
   currentPage,
   isShowAuthor = true,
-  autoLoadPages = 3,
+  autoLoadPages = AUTO_LOAD_PAGES,
 }: InfiniteProductLoaderProps) {
   // ✅ All hooks must be called at the top level
   const [allProducts, setAllProducts] = useState(initialProducts);
