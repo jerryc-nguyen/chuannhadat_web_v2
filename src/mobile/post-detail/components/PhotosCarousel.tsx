@@ -44,8 +44,9 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
           />
         </AspectRatio>
       )}
-      {openSlideImage && product?.images_count > 1 && (
+      {openSlideImage && (
         <Lightbox
+          className="mobile-lightbox-images"
           open={openSlideImage}
           controller={{ closeOnPullDown: true }}
           index={indexImageActive}
@@ -60,6 +61,11 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
           }}
           slides={product?.images.map((item) => ({
             src: item.url,
+            thumbnail: buildThumbnailUrl({
+              imageUrl: item.url,
+              width: 100,
+              ratio: 16 / 9,
+            }),
           }))}
           thumbnails={{
             vignette: false,
@@ -68,7 +74,8 @@ export default function PhotosCarousel({ product }: { product: IProductDetail })
             height: 50, // Reduced height for better fit on small screens
             width: 70, // Reduced width for better fit on small screens
             imageFit: 'cover',
-            hidden: product?.images && product?.images.length <= 1,
+            hidden: false,
+            showToggle: false,
           }}
           counter={{ container: { style: { top: '0' } } }}
           render={{

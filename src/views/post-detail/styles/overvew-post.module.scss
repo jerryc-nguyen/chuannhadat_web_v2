@@ -39,31 +39,63 @@
     grid-template-columns: 3fr 2fr;
     grid-template-rows: 1fr 1fr;
 
-    &>div:first-child {
+    & > div:first-child {
       grid-column: 1;
       grid-row: 1 / span 2;
     }
   }
 }
 
-.lightbox_images:global(.yarl__thumbnails_container) {
-  background-color: rgb(45, 45, 45);
+// Target the lightbox when it has our custom class
+.lightbox_images {
+  // Style the thumbnails container
+  :global(.yarl__thumbnails_container) {
+    background-color: rgb(45, 45, 45);
+  }
 
-  .yarl__thumbnails_thumbnail {
-    border: 2px solid white !important;
+  // Style individual thumbnails with higher specificity
+  :global(.yarl__thumbnails_container) :global(.yarl__thumbnails_thumbnail) {
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    overflow: hidden;
 
     &:hover {
-      border: 2px solid yellow !important;
+      border: 2px solid #ffd700;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     }
 
     img {
       width: 90px;
       height: 60px;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
   }
 
-  .yarl__thumbnails_thumbnail_active {
-    border: 2px solid yellow !important;
+  // Style the active thumbnail with even higher specificity
+  :global(.yarl__thumbnails_container) :global(.yarl__thumbnails_thumbnail_active) {
+    border: 3px solid #ffd700;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    position: relative;
+    z-index: 10;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border: 1px solid #fff;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    img {
+      filter: brightness(1.1);
+    }
   }
 }

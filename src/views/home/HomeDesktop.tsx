@@ -27,7 +27,7 @@ const HomeDesktop: React.FC = () => {
     with_title: true,
     with_users: true,
     page: currentPage,
-    per_page: 8, // ✅ Load 8 products initially for better performance
+    per_page: 9, // ✅ Load 8 products initially for better performance
   };
 
   const { products, data } = useQueryPosts(filterParams);
