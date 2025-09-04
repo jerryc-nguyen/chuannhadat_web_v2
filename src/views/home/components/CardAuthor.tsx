@@ -101,16 +101,24 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
       </Component>
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center gap-x-1">
-          <Component authorSlug={author?.slug as string}>
-            <Link
-              {...linkTarget}
-              href={`/profile/${author?.slug}`}
-              className="flex items-center gap-x-2 text-sm font-semibold leading-none hover:underline"
-              onClick={() => handleAuthorClick()}
-            >
-              {fullName}
-            </Link>
-          </Component>
+          {author?.slug && (
+            <Component authorSlug={author?.slug as string}>
+              <Link
+                {...linkTarget}
+                href={`/profile/${author?.slug}`}
+                className="flex items-center gap-x-2 text-sm font-semibold leading-none hover:underline"
+                onClick={() => handleAuthorClick()}
+              >
+                {fullName}
+              </Link>
+            </Component>
+          )}
+
+          {!author?.slug && (
+            <Component authorSlug={author?.slug as string}>
+              <Skeleton className="h-4 w-24" />
+            </Component>
+          )}
           {topAuthor && (
             <TooltipHost content="Xếp hạng top môi giới trong khu vực dựa theo tổng số tin mới, được refresh trong 2 tuần gần đây nhất">
               <span className="flex items-center gap-x-1 pl-2 text-lg">

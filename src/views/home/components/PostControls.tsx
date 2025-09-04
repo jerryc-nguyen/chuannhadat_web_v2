@@ -19,6 +19,7 @@ const PostControls: React.FC<PostControlsProps> = ({
   className,
   onFilterChange
 }) => {
+
   return (
     <div
       id="post-control-desktop"
