@@ -228,7 +228,11 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
         }))}
         carousel={{
           finite: false,
-          preload: data?.images.length
+          preload: data?.images.length,
+        }}
+        animation={{
+          fade: 0,
+          swipe: 0,
         }}
         thumbnails={{
           vignette: false,
