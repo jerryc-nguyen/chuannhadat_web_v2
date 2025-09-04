@@ -81,13 +81,15 @@ const ContactInfor: React.FC = () => {
       </div>
       <Form {...form}>
         <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
-          <FormItem>
-            <FormLabel className="text-base">Email</FormLabel>
-            <FormControl>
-              <Input disabled placeholder="Email đăng ký" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
+          {currentUser?.email && (
+            <FormItem>
+              <FormLabel className="text-base">Email</FormLabel>
+              <FormControl>
+                <Input value={currentUser?.email} disabled placeholder="Email đăng ký" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
           <FormItem>
             <FormLabel className="text-base">Số điện thoại</FormLabel>
             <FormControl>

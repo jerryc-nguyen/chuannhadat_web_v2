@@ -20,7 +20,6 @@ import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import React from 'react';
 import {
-  Square as AreaIcon,
   ArrowUp as SortUpIcon,
   Building,
   Loader2,
