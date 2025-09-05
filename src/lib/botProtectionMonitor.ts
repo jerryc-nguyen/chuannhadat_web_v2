@@ -26,6 +26,8 @@ const DEFAULT_RATE_LIMIT = 60;
 const GOOGLE_RATE_LIMIT = 120;
 const BING_RATE_LIMIT = 100;
 const FACEBOOK_RATE_LIMIT = 50;
+const BOT_LEVEL_2 = 40;
+const BOT_LEVEL_3 = 20;
 
 // Minimal logging for performance (reserved for future use)
 const _logDebug = (message: string) => {
@@ -81,28 +83,28 @@ function getBotRateLimit(userAgent: string | null): number {
   }
 
   // Other legitimate search engines
-  if (ua.includes('yandexbot') || ua.includes('yandex')) return 80;
-  if (ua.includes('baiduspider') || ua.includes('baidu')) return 80;
-  if (ua.includes('duckduckbot') || ua.includes('duckduckgo')) return 80;
-  if (ua.includes('slurp') || ua.includes('yahoo')) return 80; // Yahoo
-  if (ua.includes('applebot') || ua.includes('apple')) return 80;
+  if (ua.includes('yandexbot') || ua.includes('yandex')) return BOT_LEVEL_2;
+  if (ua.includes('baiduspider') || ua.includes('baidu')) return BOT_LEVEL_2;
+  if (ua.includes('duckduckbot') || ua.includes('duckduckgo')) return BOT_LEVEL_2;
+  if (ua.includes('slurp') || ua.includes('yahoo')) return BOT_LEVEL_2; // Yahoo
+  if (ua.includes('applebot') || ua.includes('apple')) return BOT_LEVEL_2;
 
   // Social media crawlers - moderate limits
   if (ua.includes('facebookexternalhit') || ua.includes('facebookbot') || ua.includes('facebook')) {
     return FACEBOOK_RATE_LIMIT; // Facebook gets moderate limit
   }
 
-  if (ua.includes('twitterbot') || ua.includes('twitter')) return 40;
-  if (ua.includes('linkedinbot') || ua.includes('linkedin')) return 40;
-  if (ua.includes('whatsapp')) return 40;
-  if (ua.includes('telegram')) return 40;
-  if (ua.includes('discord')) return 40;
+  if (ua.includes('twitterbot') || ua.includes('twitter')) return BOT_LEVEL_2;
+  if (ua.includes('linkedinbot') || ua.includes('linkedin')) return BOT_LEVEL_2;
+  if (ua.includes('whatsapp')) return BOT_LEVEL_2;
+  if (ua.includes('telegram')) return BOT_LEVEL_2;
+  if (ua.includes('discord')) return BOT_LEVEL_2;
 
   // SEO and monitoring tools - lower limits
-  if (ua.includes('ahrefsbot') || ua.includes('ahrefs')) return 20;
-  if (ua.includes('semrushbot') || ua.includes('semrush')) return 20;
-  if (ua.includes('mj12bot')) return 20;
-  if (ua.includes('dotbot')) return 20;
+  if (ua.includes('ahrefsbot') || ua.includes('ahrefs')) return BOT_LEVEL_3;
+  if (ua.includes('semrushbot') || ua.includes('semrush')) return BOT_LEVEL_3;
+  if (ua.includes('mj12bot')) return BOT_LEVEL_3;
+  if (ua.includes('dotbot')) return BOT_LEVEL_3;
 
   // Monitoring tools - higher limits
   if (ua.includes('uptimerobot') || ua.includes('pingdom') || ua.includes('gtmetrix')) {
@@ -112,6 +114,10 @@ function getBotRateLimit(userAgent: string | null): number {
   // Generic bots - strict limits
   if (ua.includes('bot') || ua.includes('crawler') || ua.includes('spider') || ua.includes('scraper')) {
     return 10;
+  }
+
+  if (ua.includes('curl/')) {
+    return 5;
   }
 
   // Regular users get standard limit
@@ -160,6 +166,11 @@ export async function monitorBotProtection(
 
   // Single rate limit check - no double checking
   const rateLimitResult = await rateLimit(ip, userAgent, effectiveRateLimit);
+
+  if (DEBUG) {
+    // eslint-disable-next-line no-console
+    console.log(`[BOT-RATE] ${userAgent?.substring(0, 50)} → ${rateLimitResult.remaining} req/min`);
+  }
 
   // Early return if rate limited - skip all other expensive checks
   if (!rateLimitResult.success) {

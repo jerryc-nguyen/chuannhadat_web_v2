@@ -82,15 +82,15 @@ export const rateLimit = async (
 
   // Efficient cleanup - only when needed and non-blocking
   if (ipRequestCounts.size > 1000 && now % 30 === 0) {
-    // Clean every 30 seconds when map gets large
-    setImmediate(() => {
+    // Clean every 30 seconds when map gets large (Edge Runtime compatible)
+    setTimeout(() => {
       const cutoff = windowStart - windowSizeInSeconds; // Keep one extra window
       for (const [ipKey, data] of ipRequestCounts.entries()) {
         if (data.timestamp < cutoff) {
           ipRequestCounts.delete(ipKey);
         }
       }
-    });
+    }, 0);
   }
 
   return {
