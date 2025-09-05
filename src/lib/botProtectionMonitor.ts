@@ -1,20 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit } from './botProtection';
 
-// Simple IP extraction function
+// Enhanced IP extraction function for Cloudflare + nginx setup
 function getClientIp(req: NextRequest): string {
-  // Check common proxy headers first
-  const forwarded = req.headers.get('x-forwarded-for');
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
-  }
+  // Priority 1: Cloudflare's real IP header (most reliable when behind Cloudflare)
+  const cfConnectingIp = req.headers.get('cf-connecting-ip');
+  if (cfConnectingIp) return cfConnectingIp.trim();
 
+  // Priority 2: Check headers in order of reliability for Docker+Nginx setup
   const realIp = req.headers.get('x-real-ip');
-  if (realIp) {
-    return realIp.trim();
+  if (realIp) return realIp.trim();
+
+  // Priority 3: Nginx typically forwards original client IP in x-forwarded-for
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    // x-forwarded-for can contain multiple IPs (client, proxy1, proxy2, ...)
+    // The first one is typically the original client
+    const ips = forwardedFor.split(',');
+    if (ips.length > 0) {
+      return ips[0].trim();
+    }
   }
 
-  // Fallback to default if no headers found
+  // Priority 4: Alternative headers
+  const xClientIp = req.headers.get('x-client-ip');
+  if (xClientIp) return xClientIp.trim();
+
+  // Fall back to default if no headers found
   return '0.0.0.0';
 }
 
@@ -87,7 +99,7 @@ function getBotRateLimit(userAgent: string | null): number {
   if (ua.includes('baiduspider') || ua.includes('baidu')) return BOT_LEVEL_2;
   if (ua.includes('duckduckbot') || ua.includes('duckduckgo')) return BOT_LEVEL_2;
   if (ua.includes('slurp') || ua.includes('yahoo')) return BOT_LEVEL_2; // Yahoo
-  if (ua.includes('applebot') || ua.includes('apple')) return BOT_LEVEL_2;
+  if (ua.includes('applebot')) return BOT_LEVEL_2;  // Only detect actual Apple bot, not AppleWebKit
 
   // Social media crawlers - moderate limits
   if (ua.includes('facebookexternalhit') || ua.includes('facebookbot') || ua.includes('facebook')) {
@@ -147,10 +159,29 @@ export async function monitorBotProtection(
   const userAgent = req.headers.get('user-agent');
   const ip = getClientIp(req) || '0.0.0.0';
 
+  // Debug: Compare different IP extraction methods
+  if (DEBUG) {
+    const cfIp = req.headers.get('cf-connecting-ip');
+    const realIp = req.headers.get('x-real-ip');
+    const forwardedFor = req.headers.get('x-forwarded-for');
+
+    // eslint-disable-next-line no-console
+    console.log(`[IP-DEBUG] Final: ${ip}, CF: ${cfIp}, Real: ${realIp}, Forwarded: ${forwardedFor}`);
+  }
+
   // Fast path - check for common exclusions first (no logging overhead)
   if (isRateLimitExcluded(pathname, req.nextUrl.toString(), req)) {
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[EXCLUDED] ${pathname} - IP: ${ip}`);
+    }
+
+    // Create response with real IP header for excluded requests
+    const response = NextResponse.next();
+    response.headers.set('x-client-real-ip', ip);
+
     return {
-      response: null,
+      response,
       result: createBasicResult(req.nextUrl.toString(), ip, userAgent, false)
     };
   }
@@ -176,7 +207,7 @@ export async function monitorBotProtection(
   if (!rateLimitResult.success) {
     if (DEBUG) {
       // eslint-disable-next-line no-console
-      console.log(`🚫 RATE LIMITED ${pathname}: ${userAgent}`);
+      console.log(`🚫 RATE LIMITED ${pathname}: IP=${ip}, UA=${userAgent?.substring(0, 50)}, Limit=${effectiveRateLimit}, Remaining=${rateLimitResult.remaining}`);
     }
 
     const response = NextResponse.json(
@@ -186,6 +217,8 @@ export async function monitorBotProtection(
         headers: {
           'Retry-After': '60',
           'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Limit': effectiveRateLimit.toString(),
+          'X-Client-Real-IP': ip, // Add real IP to response headers
         }
       }
     );
@@ -213,7 +246,12 @@ export async function monitorBotProtection(
     };
   }
 
-  // Request allowed - minimal result object
+  // Request allowed - create response with real IP header for downstream use
+  const response = NextResponse.next();
+  response.headers.set('x-client-real-ip', ip);
+  response.headers.set('x-rate-limit-remaining', rateLimitResult.remaining.toString());
+  response.headers.set('x-rate-limit-limit', effectiveRateLimit.toString());
+
   const result: BotDetectionResult = {
     timestamp: new Date().toISOString(),
     url: req.nextUrl.toString(),
@@ -233,7 +271,7 @@ export async function monitorBotProtection(
     }
   };
 
-  return { response: null, result };
+  return { response, result };
 }
 
 // Create minimal result objects for excluded requests
