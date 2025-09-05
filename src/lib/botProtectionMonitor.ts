@@ -1,46 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit } from './botProtection';
-import { getClientIp } from '../middleware/bot-protection';
+
+// Simple IP extraction function
+function getClientIp(req: NextRequest): string {
+  // Check common proxy headers first
+  const forwarded = req.headers.get('x-forwarded-for');
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+
+  const realIp = req.headers.get('x-real-ip');
+  if (realIp) {
+    return realIp.trim();
+  }
+
+  // Fallback to default if no headers found
+  return '0.0.0.0';
+}
 
 // Enable debug mode for local development
 const DEBUG = process.env.DEBUG_BOT_PROTECTION === 'true';
 
-// Helper functions for controlled logging
-const log = {
-  error: (message: string, ...args: unknown[]) => {
-    // Always log errors (level >= 1)
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.error(`[BOT-MONITOR] ❌ ${message}`, ...args);
-    }
-  },
-  info: (message: string, ...args: unknown[]) => {
-    // Only log important info (level >= 2)
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log(`[BOT-MONITOR] ${message}`, ...args);
-    }
-  },
-  verbose: (message: string, ...args: unknown[]) => {
-    // Only log verbose details (level >= 3)
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log(`[BOT-MONITOR] 🔍 ${message}`, ...args);
-    }
-  },
-  storage: (message: string, ...args: unknown[]) => {
-    // Only log storage actions if forced or debug (level >= 2)
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log(`[BOT-MONITOR] 📝 ${message}`, ...args);
-    }
-  },
-  result: (message: string, ...args: unknown[]) => {
-    // Only log important results (level >= 2)
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log(`[BOT-MONITOR] ${message}`, ...args);
-    }
+// Configuration from environment
+const DEFAULT_RATE_LIMIT = 60;
+const GOOGLE_RATE_LIMIT = 120;
+const BING_RATE_LIMIT = 100;
+const FACEBOOK_RATE_LIMIT = 50;
+
+// Minimal logging for performance (reserved for future use)
+const _logDebug = (message: string) => {
+  if (DEBUG) {
+    // eslint-disable-next-line no-console
+    console.log(`[BOT-MONITOR] ${message}`);
   }
 };
 
@@ -69,77 +60,73 @@ export type { BotDetectionResult };
 
 // Removed unused interfaces
 
-// Lightweight rate limit assignment - optimized for speed
+// Lightweight rate limit assignment based on user agent patterns
 function getBotRateLimit(userAgent: string | null): number {
-  if (!userAgent) return 60;
+  if (!userAgent) return DEFAULT_RATE_LIMIT;
 
-  // Use single toLowerCase call and early returns for performance
   const ua = userAgent.toLowerCase();
 
-  // Check most specific patterns first (PageSpeed gets unlimited)
-  if (ua.includes('lighthouse') || ua.includes('pagespeed')) return 999;
+  // PageSpeed/Lighthouse gets unlimited (highest priority)
+  if (ua.includes('lighthouse') || ua.includes('pagespeed') || ua.includes('googleother')) {
+    return 999;
+  }
 
-  // Search engines get standard limit
-  if (ua.includes('google') || ua.includes('bing')) return 60;
+  // Major search engines - configurable limits
+  if (ua.includes('googlebot') || ua.includes('google')) {
+    return GOOGLE_RATE_LIMIT;
+  }
 
-  // Social media crawlers get moderate limit  
-  if (ua.includes('facebook') || ua.includes('twitter')) return 30;
+  if (ua.includes('bingbot') || ua.includes('bing') || ua.includes('msnbot')) {
+    return BING_RATE_LIMIT;
+  }
 
-  // Generic bots get strict limit
-  if (ua.includes('bot') || ua.includes('crawler')) return 10;
+  // Other legitimate search engines
+  if (ua.includes('yandexbot') || ua.includes('yandex')) return 80;
+  if (ua.includes('baiduspider') || ua.includes('baidu')) return 80;
+  if (ua.includes('duckduckbot') || ua.includes('duckduckgo')) return 80;
+  if (ua.includes('slurp') || ua.includes('yahoo')) return 80; // Yahoo
+  if (ua.includes('applebot') || ua.includes('apple')) return 80;
 
-  return 60; // Default for regular users
+  // Social media crawlers - moderate limits
+  if (ua.includes('facebookexternalhit') || ua.includes('facebookbot') || ua.includes('facebook')) {
+    return FACEBOOK_RATE_LIMIT; // Facebook gets moderate limit
+  }
+
+  if (ua.includes('twitterbot') || ua.includes('twitter')) return 40;
+  if (ua.includes('linkedinbot') || ua.includes('linkedin')) return 40;
+  if (ua.includes('whatsapp')) return 40;
+  if (ua.includes('telegram')) return 40;
+  if (ua.includes('discord')) return 40;
+
+  // SEO and monitoring tools - lower limits
+  if (ua.includes('ahrefsbot') || ua.includes('ahrefs')) return 20;
+  if (ua.includes('semrushbot') || ua.includes('semrush')) return 20;
+  if (ua.includes('mj12bot')) return 20;
+  if (ua.includes('dotbot')) return 20;
+
+  // Monitoring tools - higher limits
+  if (ua.includes('uptimerobot') || ua.includes('pingdom') || ua.includes('gtmetrix')) {
+    return 60;
+  }
+
+  // Generic bots - strict limits
+  if (ua.includes('bot') || ua.includes('crawler') || ua.includes('spider') || ua.includes('scraper')) {
+    return 10;
+  }
+
+  // Regular users get standard limit
+  return DEFAULT_RATE_LIMIT;
 }
 
 // Function to check if a path should be excluded from rate limiting
 export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRequest): boolean {
   // Exclude specific paths
   if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
-    log.storage(`Excluded path: ${pathname}`);
     return true;
   }
 
-  // Exclude Next.js AJAX requests (used for client navigation)
-  let isNextJsAjax = false;
-
-  // Check URL for _rsc parameter variants
-  if (url) {
-    isNextJsAjax = isNextJsAjax ||
-      url.includes('_rsc=') ||
-      url.includes('?_rsc') ||
-      url.includes('&_rsc');
-  }
-
-  // Check for Next.js-specific headers if request object available
-  if (req) {
-    const referer = req.headers.get('referer') || '';
-    isNextJsAjax = isNextJsAjax ||
-      referer.includes('_rsc') ||
-      req.headers.has('x-nextjs-data') ||
-      req.headers.has('next-router-state-tree') ||
-      req.headers.has('next-url');
-
-    // Enhanced logging of the detection method
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log(`🔎 AJAX CHECK:
-      - URL _rsc check: ${url?.includes('_rsc')}
-      - referer _rsc: ${referer.includes('_rsc')}
-      - x-nextjs-data: ${req.headers.has('x-nextjs-data')}
-      - next-router-state-tree: ${req.headers.has('next-router-state-tree')}
-      - next-url: ${req.headers.has('next-url')}
-      `);
-    }
-  }
-
-  if (isNextJsAjax) {
-    // Print the URL for debugging
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${url || pathname}`);
-    }
-
-    log.storage(`Excluded AJAX request: ${url || pathname}`);
+  // Quick check for Next.js AJAX requests (client navigation)
+  if (url?.includes('_rsc=') || req?.headers.has('x-nextjs-data')) {
     return true;
   }
 
@@ -164,6 +151,12 @@ export async function monitorBotProtection(
 
   // Get rate limit based on user agent (lightweight check)
   const effectiveRateLimit = getBotRateLimit(userAgent);
+
+  // Debug logging to show rate limit assignment
+  if (DEBUG && effectiveRateLimit !== DEFAULT_RATE_LIMIT) {
+    // eslint-disable-next-line no-console
+    console.log(`[BOT-RATE] ${userAgent?.substring(0, 50)} → ${effectiveRateLimit} req/min`);
+  }
 
   // Single rate limit check - no double checking
   const rateLimitResult = await rateLimit(ip, userAgent, effectiveRateLimit);
