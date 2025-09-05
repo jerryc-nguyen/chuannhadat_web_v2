@@ -1,12 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  rateLimit,
-  isKnownBot,
-  verifySearchEngineBot,
-  isSuspiciousBot,
-  hasSuspiciousHeaders,
-  hasUnusualRequestPattern,
-} from './botProtection';
+import { rateLimit } from './botProtection';
 import { getClientIp } from '../middleware/bot-protection';
 
 // Enable debug mode for local development
@@ -14,33 +7,38 @@ const DEBUG = process.env.DEBUG_BOT_PROTECTION === 'true';
 
 // Helper functions for controlled logging
 const log = {
-  error: (message: string, ...args: any[]) => {
+  error: (message: string, ...args: unknown[]) => {
     // Always log errors (level >= 1)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.error(`[BOT-MONITOR] ❌ ${message}`, ...args);
     }
   },
-  info: (message: string, ...args: any[]) => {
+  info: (message: string, ...args: unknown[]) => {
     // Only log important info (level >= 2)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`[BOT-MONITOR] ${message}`, ...args);
     }
   },
-  verbose: (message: string, ...args: any[]) => {
+  verbose: (message: string, ...args: unknown[]) => {
     // Only log verbose details (level >= 3)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`[BOT-MONITOR] 🔍 ${message}`, ...args);
     }
   },
-  storage: (message: string, ...args: any[]) => {
+  storage: (message: string, ...args: unknown[]) => {
     // Only log storage actions if forced or debug (level >= 2)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`[BOT-MONITOR] 📝 ${message}`, ...args);
     }
   },
-  result: (message: string, ...args: any[]) => {
+  result: (message: string, ...args: unknown[]) => {
     // Only log important results (level >= 2)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`[BOT-MONITOR] ${message}`, ...args);
     }
   }
@@ -66,122 +64,31 @@ interface BotDetectionResult {
   };
 }
 
-// Store recent bot detection logs in memory
-// This is used by both middleware and API routes
-const recentBotLogs: BotDetectionResult[] = [];
-const MAX_LOGS = 20000;
-
-// Export the interface for use in API routes
+// Export the interface for use in API routes (if needed in future)
 export type { BotDetectionResult };
 
-// Function to send logs to the API for Redis storage
-// This is called after in-memory storage and avoids direct Redis dependency in middleware
-async function sendLogToAPI(botLog: BotDetectionResult): Promise<void> {
-  // Skip in production builds
-  if (process.env.NODE_ENV === 'production') {
-    // In production, we'll use a separate process or worker to handle logs
-    return;
-  }
+// Removed unused interfaces
 
-  try {
-    // Construct absolute URL based on request origin or environment
-    const baseUrl = typeof window !== 'undefined'
-      ? window.location.origin
-      : process.env.NEXT_PUBLIC_BASE_CHUANHADAT_DOMAIN || 'http://localhost:3000';
+// Lightweight rate limit assignment - optimized for speed
+function getBotRateLimit(userAgent: string | null): number {
+  if (!userAgent) return 60;
 
-    // Use fetch with no-wait to avoid blocking
-    fetch(`${baseUrl}/api/bot-protection/logs`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Add an API key if configured
-        ...(process.env.BOT_PROTECTION_DASHBOARD_KEY && {
-          'x-api-key': process.env.BOT_PROTECTION_DASHBOARD_KEY
-        })
-      },
-      body: JSON.stringify(botLog)
-    }).catch(err => {
-      // Silently catch errors to avoid breaking the middleware
-      log.error('Error sending log to API:', err);
-    });
+  // Use single toLowerCase call and early returns for performance
+  const ua = userAgent.toLowerCase();
 
-    log.verbose('Log sent to API for processing');
-  } catch (error) {
-    // Don't let errors in API storage affect the middleware
-    log.error('Error initializing log API call:', error);
-  }
-}
+  // Check most specific patterns first (PageSpeed gets unlimited)
+  if (ua.includes('lighthouse') || ua.includes('pagespeed')) return 999;
 
-// Store bot detection log for dashboard/monitoring
-// This is a simplified version that only uses memory storage
-// Redis functionality will be added only in the API routes
-function storeDetectionLog(detectionResult: BotDetectionResult) {
-  log.storage(`Storing detection log for ${detectionResult.url}`);
+  // Search engines get standard limit
+  if (ua.includes('google') || ua.includes('bing')) return 60;
 
-  // Store the log in memory (for all environments)
-  recentBotLogs.unshift(detectionResult);
+  // Social media crawlers get moderate limit  
+  if (ua.includes('facebook') || ua.includes('twitter')) return 30;
 
-  // Trim the in-memory logs to prevent memory growth
-  if (recentBotLogs.length > MAX_LOGS) {
-    recentBotLogs.length = MAX_LOGS;
-  }
+  // Generic bots get strict limit
+  if (ua.includes('bot') || ua.includes('crawler')) return 10;
 
-  // Also send the log to the API for Redis storage
-  // This is done non-blocking and won't affect middleware performance
-  sendLogToAPI(detectionResult);
-}
-
-// Get logs (simplified version for middleware)
-// The full Redis implementation is in the API route
-export function getBotLogs(): BotDetectionResult[] {
-  return [...recentBotLogs];
-}
-
-// Clear logs (simplified version for middleware)
-// The full Redis implementation is in the API route
-export function clearBotLogs(): void {
-  recentBotLogs.length = 0;
-}
-
-// First, add a proper type for botType at the top of the file
-interface BotTypeInfo {
-  name: string;
-  rateLimit: number;
-}
-
-// Extract patterns that matched in the user agent
-function getMatchedPatterns(userAgent: string | null): string[] {
-  if (!userAgent) return [];
-
-  const patterns = [
-    { name: 'crawl', regex: /crawl/i },
-    { name: 'bot', regex: /bot/i },
-    { name: 'spider', regex: /spider/i },
-    { name: 'scraper', regex: /scraper/i },
-    { name: 'curl', regex: /curl/i },
-    { name: 'wget', regex: /wget/i },
-    { name: 'phantom', regex: /phantom/i },
-    { name: 'headless', regex: /headless/i },
-    { name: 'archiver', regex: /archiver/i },
-    { name: 'slurp', regex: /slurp/i },
-    { name: 'facebook', regex: /facebook/i },
-    { name: 'chrome-lighthouse', regex: /chrome-lighthouse/i },
-    { name: 'dataminr', regex: /dataminr/i },
-    { name: 'semrush', regex: /semrush/i },
-    { name: 'python', regex: /python/i },
-    { name: 'ahrefs', regex: /ahrefs/i },
-    { name: 'screaming frog', regex: /screaming frog/i },
-  ];
-
-  const matches = patterns
-    .filter(pattern => pattern.regex.test(userAgent))
-    .map(pattern => pattern.name);
-
-  if (DEBUG && matches.length > 0) {
-    console.log(`[BOT-MONITOR] Pattern matches for UA: ${matches.join(', ')}`);
-  }
-
-  return matches;
+  return 60; // Default for regular users
 }
 
 // Function to check if a path should be excluded from rate limiting
@@ -214,6 +121,7 @@ export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRe
 
     // Enhanced logging of the detection method
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`🔎 AJAX CHECK:
       - URL _rsc check: ${url?.includes('_rsc')}
       - referer _rsc: ${referer.includes('_rsc')}
@@ -227,6 +135,7 @@ export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRe
   if (isNextJsAjax) {
     // Print the URL for debugging
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`⚠️⚠️⚠️ EXCLUDING NEXT.JS AJAX REQUEST: ${url || pathname}`);
     }
 
@@ -237,295 +146,93 @@ export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRe
   return false;
 }
 
-// Bot protection middleware with enhanced monitoring
+// Lightweight bot protection middleware - optimized for speed
 export async function monitorBotProtection(
   req: NextRequest
 ): Promise<{ response: NextResponse | null; result: BotDetectionResult }> {
-  const start = Date.now();
-  const url = req.nextUrl.toString();
   const pathname = req.nextUrl.pathname;
-  const searchParams = req.nextUrl.searchParams.toString();
   const userAgent = req.headers.get('user-agent');
   const ip = getClientIp(req) || '0.0.0.0';
 
-  // Preprocessing - Do this once instead of repeatedly
-  const lowerUA = userAgent?.toLowerCase() || '';
-
-  log.verbose(`Processing request: ${url}`);
-  log.verbose(`URL searchParams: ${searchParams}`);
-  log.verbose(`IP: ${ip}, UA: ${lowerUA.substring(0, 30)}...`);
-
-  // Fast path - check for common exclusions first
-  if (isRateLimitExcluded(pathname, url, req)) {
-    const result = createBasicResult(url, ip, userAgent, false);
-    log.storage(`Path excluded from rate limiting: ${pathname}`);
-    storeDetectionLog(result);
-    return { response: null, result };
+  // Fast path - check for common exclusions first (no logging overhead)
+  if (isRateLimitExcluded(pathname, req.nextUrl.toString(), req)) {
+    return {
+      response: null,
+      result: createBasicResult(req.nextUrl.toString(), ip, userAgent, false)
+    };
   }
 
-  // Fast bot detection - check once and store result
-  const botType = detectBotType(lowerUA, ip);
+  // Get rate limit based on user agent (lightweight check)
+  const effectiveRateLimit = getBotRateLimit(userAgent);
 
-  // Add better debugging
-  if (botType && DEBUG) {
-    console.log(`[BOT-RATE] Detected bot: ${botType.name} with rate limit ${botType.rateLimit}`);
+  // Single rate limit check - no double checking
+  const rateLimitResult = await rateLimit(ip, userAgent, effectiveRateLimit);
+
+  // Early return if rate limited - skip all other expensive checks
+  if (!rateLimitResult.success) {
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`🚫 RATE LIMITED ${pathname}: ${userAgent}`);
+    }
+
+    const response = NextResponse.json(
+      { error: 'Too Many Requests', code: 'RATE_LIMIT' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': '60',
+          'X-RateLimit-Remaining': '0',
+        }
+      }
+    );
+
+    return {
+      response,
+      result: {
+        timestamp: new Date().toISOString(),
+        url: req.nextUrl.toString(),
+        ip,
+        userAgent,
+        isBot: false,
+        isSuspicious: false,
+        requestDenied: true,
+        rateLimited: true,
+        rateLimitRemaining: 0,
+        suspiciousDetails: {
+          isKnownSearchEngine: false,
+          hasSuspiciousUserAgent: false,
+          hasSuspiciousHeaders: false,
+          hasUnusualPattern: false,
+          matchedPatterns: [],
+        }
+      }
+    };
   }
 
-  // Create the detection result object for normal processing
+  // Request allowed - minimal result object
   const result: BotDetectionResult = {
     timestamp: new Date().toISOString(),
-    url,
+    url: req.nextUrl.toString(),
     ip,
     userAgent,
     isBot: false,
     isSuspicious: false,
     requestDenied: false,
     rateLimited: false,
-    rateLimitRemaining: 0,
+    rateLimitRemaining: rateLimitResult.remaining,
     suspiciousDetails: {
       isKnownSearchEngine: false,
       hasSuspiciousUserAgent: false,
       hasSuspiciousHeaders: false,
       hasUnusualPattern: false,
-      matchedPatterns: getMatchedPatterns(userAgent),
+      matchedPatterns: [],
     }
   };
 
-  // 1. Check for rate limiting
-  log.verbose(`Checking rate limit for IP: ${ip}`);
-  let effectiveRateLimit = 60; // Default rate limit
-  if (botType) {
-    effectiveRateLimit = botType.rateLimit;
-  }
-
-  // Pass all parameters explicitly to avoid confusion
-  const rateLimitResult = await rateLimit(
-    ip,                // First parameter: IP address
-    userAgent,         // Second parameter: User agent (string)
-    effectiveRateLimit // Third parameter: Max requests
-  );
-  result.rateLimited = !rateLimitResult.success;
-  result.rateLimitRemaining = rateLimitResult.remaining;
-  log.verbose(`Rate limit result: ${JSON.stringify(rateLimitResult)}`);
-
-  // 2. Check if it's a known search engine bot
-  const isSearchEngineBot = isKnownBot(userAgent);
-  result.suspiciousDetails.isKnownSearchEngine = isSearchEngineBot;
-  if (isSearchEngineBot) log.verbose(`Known search engine detected`);
-
-  // 3. If it claims to be a search engine, verify it
-  let isVerifiedBot = false;
-  if (isSearchEngineBot) {
-    log.verbose(`Verifying search engine bot claim`);
-    isVerifiedBot = await verifySearchEngineBot(ip, userAgent);
-    log.verbose(`Verification result: ${isVerifiedBot ? 'Legitimate' : 'Spoofed'}`);
-  }
-
-  // 4. Check for suspicious characteristics
-  const suspiciousUA = isSuspiciousBot(userAgent);
-  const suspiciousHeaders = hasSuspiciousHeaders(req);
-  const unusualPattern = hasUnusualRequestPattern(req);
-
-  result.suspiciousDetails.hasSuspiciousUserAgent = suspiciousUA;
-  result.suspiciousDetails.hasSuspiciousHeaders = suspiciousHeaders;
-  result.suspiciousDetails.hasUnusualPattern = unusualPattern;
-
-  log.verbose(`Suspicious UA: ${suspiciousUA}`);
-  log.verbose(`Suspicious headers: ${suspiciousHeaders}`);
-  log.verbose(`Unusual request pattern: ${unusualPattern}`);
-
-  // Determine if this is a bot and if it's suspicious
-  result.isBot = isSearchEngineBot || suspiciousUA;
-  result.isSuspicious = (isSearchEngineBot && !isVerifiedBot) ||
-    suspiciousUA ||
-    suspiciousHeaders ||
-    unusualPattern;
-
-  // Decide whether to block the request
-  // Only block rate-limited requests, handle suspicious bots via rate limiting
-  result.requestDenied = result.rateLimited;
-
-  // If it's a suspicious bot but not verified, apply stricter rate limiting
-  if (result.isSuspicious && !(isSearchEngineBot && isVerifiedBot)) {
-    // Check if the bot exceeds our special lower rate limit
-    const stricterRateLimitResult = await rateLimit(ip, userAgent, 5); // 5 req/min for suspicious bots
-
-    if (!stricterRateLimitResult.success) {
-      result.rateLimited = true;
-      result.requestDenied = true;
-    }
-
-    result.rateLimitRemaining = stricterRateLimitResult.remaining;
-
-    log.verbose(`Applied stricter rate limit to suspicious bot: ${userAgent?.substring(0, 50)}`);
-    log.verbose(`Stricter rate limit result: ${JSON.stringify(stricterRateLimitResult)}`);
-  }
-
-  // Store the log using our storage function
-  storeDetectionLog(result);
-
-  // Always show log storage regardless of DEBUG setting
-  const homepageFlag = result.url.match(/\/(home|index)?(\?|$)/) ? ' 🏠 HOME PAGE' : '';
-
-  // Control storage logs with environment variable
-  if (DEBUG) {
-    console.log(`💾💾💾 BOT LOG STORED for${homepageFlag}: ${result.url}`);
-    console.log(`💾💾💾 Current log count: ${recentBotLogs.length}`);
-  }
-
-  // Log to console
-  const executionTime = Date.now() - start;
-  log.info(`${result.requestDenied ? '🚫 BLOCKED' : '✅ ALLOWED'} ${url}: ${userAgent} (${executionTime}ms)`);
-
-  if ((result.isBot || result.isSuspicious) && DEBUG) {
-    log.verbose(`Bot details: ${JSON.stringify({
-      type: 'bot_detection',
-      ...result
-    }, null, 2)}`);
-  }
-
-  // If the request should be denied, return 429 response
-  if (result.requestDenied) {
-    console.log(`🚫 RATE LIMITED ${url}: ${userAgent}`);
-
-    // Use 429 status code with appropriate headers
-    const response = NextResponse.json(
-      {
-        error: 'Too Many Requests',
-        code: 'RATE_LIMIT',
-        message: 'Please reduce request rate'
-      },
-      {
-        status: 429,
-        headers: {
-          // Add Retry-After header (in seconds)
-          // This helps bots know when to retry
-          'Retry-After': '60',
-
-          // Additional helpful headers
-          'X-RateLimit-Limit': result.rateLimitRemaining ?
-            (result.rateLimitRemaining + 1).toString() : '5',
-          'X-RateLimit-Remaining': '0',
-          'X-RateLimit-Reset': (Math.floor(Date.now() / 1000) + 60).toString()
-        }
-      }
-    );
-
-    return { response, result };
-  }
-
-  log.verbose(`Request processing complete in ${executionTime}ms`);
-  // Otherwise continue with the request
   return { response: null, result };
 }
 
-// Helper functions to optimize performance
-
-// Update the detectBotType function declaration
-function detectBotType(lowerUA: string, ip: string): BotTypeInfo | null {
-  // Same implementation, but with more debugging for Facebook
-
-  // Early return if no user agent
-  if (!lowerUA) return null;
-
-  // Debug all user agents to see what's happening
-  if (DEBUG) {
-    console.log(`[BOT-DETECT] Checking UA: ${lowerUA.substring(0, 50)}`);
-  }
-
-  // Check for PageSpeed/Lighthouse
-  if (lowerUA.includes('lighthouse') ||
-    lowerUA.includes('pagespeed') ||
-    lowerUA.includes('chrome-lighthouse') ||
-    lowerUA.includes('googleother')) {
-    return { name: 'PageSpeed', rateLimit: 999 };
-  }
-
-  // Facebook detection needs to be more specific
-  // Facebook bots have specific user agents we should check for
-  if (lowerUA.includes('facebook') || (lowerUA.includes('instagram') && lowerUA.includes('bot'))) {
-
-    if (DEBUG) {
-      console.log(`[FACEBOOK-BOT] Detected Facebook/Instagram bot: ${lowerUA}`);
-    }
-
-    // Always return true for testing, can add IP check later
-    return { name: 'Facebook', rateLimit: 10 };
-  }
-
-  // Check for ChatGPT
-  const isChatGpt = lowerUA.includes('chatgpt') ||
-    lowerUA.includes('gptbot') ||
-    lowerUA.includes('openai');
-
-  if (isChatGpt) {
-    const isChatGptIP = checkIPRange(ip, [
-      '23.98.', '52.152.', '20.15.', '13.107.', '20.37.',
-      '20.40.', '20.43.', '20.193.', '20.195.', '20.82.',
-      '52.146.', '104.40.', '104.42.', '104.44.', '104.45.'
-    ]);
-
-    if (isChatGptIP) {
-      return { name: 'ChatGPT', rateLimit: 10 };
-    }
-  }
-
-  // Check for Google
-  if (lowerUA.includes('google')) {
-    const isGoogleIP = checkIPRange(ip, [
-      '66.249.', '64.233.', '216.239.', '172.217.',
-      '34.', '35.', '209.85.'
-    ]);
-
-    if (isGoogleIP) {
-      return { name: 'Google', rateLimit: 60 };
-    }
-  }
-
-  // Check for Bing
-  if (lowerUA.includes('bing') || lowerUA.includes('msn')) {
-    const isBingIP = checkIPRange(ip, [
-      '157.55.', '207.46.', '40.77.', '13.66.', '131.253.',
-      '199.30.', '157.56.', '20.31.', '20.175.', '20.186.'
-    ]);
-
-    if (isBingIP) {
-      return { name: 'Bing', rateLimit: 60 };
-    }
-  }
-
-  // Check for SemRush
-  if (lowerUA.includes('semrush')) {
-    const isSemrushIP = checkIPRange(ip, ['185.191.', '203.131.', '45.82.']);
-
-    if (isSemrushIP) {
-      return { name: 'SemRush', rateLimit: 10 };
-    }
-  }
-
-  // Check for other bots - allow but with very strict rate limit
-  // This is a catch-all for any bot-like behavior
-  if (lowerUA.includes('bot') ||
-    lowerUA.includes('crawler') ||
-    lowerUA.includes('spider') ||
-    lowerUA.includes('scraper')) {
-
-    // Don't validate IP for unknown bots, just identify them
-    return { name: 'OtherBot', rateLimit: 5 };
-  }
-
-  return null;
-}
-
-// Helper to check IP range once
-function checkIPRange(ip: string, prefixes: string[]): boolean {
-  for (const prefix of prefixes) {
-    if (ip.startsWith(prefix)) return true;
-  }
-  return false;
-}
-
-// Create standardized result objects
+// Create minimal result objects for excluded requests
 function createBasicResult(url: string, ip: string, userAgent: string | null, isBot: boolean): BotDetectionResult {
   return {
     timestamp: new Date().toISOString(),
@@ -539,27 +246,6 @@ function createBasicResult(url: string, ip: string, userAgent: string | null, is
     rateLimitRemaining: 0,
     suspiciousDetails: {
       isKnownSearchEngine: isBot,
-      hasSuspiciousUserAgent: false,
-      hasSuspiciousHeaders: false,
-      hasUnusualPattern: false,
-      matchedPatterns: isBot ? [] : getMatchedPatterns(userAgent),
-    }
-  };
-}
-
-function createAllowedBotResult(url: string, ip: string, userAgent: string | null, botType: { name: string, rateLimit: number }): BotDetectionResult {
-  return {
-    timestamp: new Date().toISOString(),
-    url,
-    ip,
-    userAgent,
-    isBot: true,
-    isSuspicious: false,
-    requestDenied: false,
-    rateLimited: false,
-    rateLimitRemaining: botType.rateLimit,
-    suspiciousDetails: {
-      isKnownSearchEngine: true,
       hasSuspiciousUserAgent: false,
       hasSuspiciousHeaders: false,
       hasUnusualPattern: false,

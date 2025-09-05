@@ -10,15 +10,25 @@ const DEBUG = process.env.DEBUG_BOT_PROTECTION === 'true';
 // This avoids Redis dependencies in the middleware context
 const ipRequestCounts = new Map<string, { count: number, timestamp: number }>();
 
+// DNS result cache to avoid repeated lookups for the same IPs
+// Cache results for 1 hour to balance performance and accuracy
+const dnsCache = new Map<string, {
+  result: boolean,
+  timestamp: number,
+  hostname?: string
+}>();
+const DNS_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+
 // Redis will only be used in the API routes, not middleware
 export const rateLimit = async (
   ip: string,
   userAgent?: string | null,
-  maxRequests: number = 60, // Default value if not provided
-  windowSizeInSeconds: number = 60
+  maxRequests = 60, // Default value if not provided
+  windowSizeInSeconds = 60
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> => {
   // Log all parameters for debugging
   if (DEBUG) {
+    // eslint-disable-next-line no-console
     console.log(`[RATE-LIMIT-DEBUG] Parameters:
       - IP: ${ip}
       - userAgent: ${userAgent ? userAgent.substring(0, 30) + '...' : 'null'}
@@ -63,16 +73,42 @@ export const rateLimit = async (
 
   // Log the decision
   if (DEBUG) {
+    // eslint-disable-next-line no-console
     console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${record.count}/${maxRequests}, Allowed: ${isAllowed}`);
   }
 
   // Periodically clean up old records (do this async to not block)
   if (now % 10 === 0) { // Clean every ~10 seconds
     setTimeout(() => {
+      // Clean rate limit records
       for (const [ipKey, data] of ipRequestCounts.entries()) {
         if (data.timestamp < windowStart) {
           ipRequestCounts.delete(ipKey);
         }
+      }
+
+      // Clean DNS cache and enforce size limits
+      const currentTime = Date.now();
+      let cleanedCount = 0;
+
+      for (const [cacheKey, cacheData] of dnsCache.entries()) {
+        if (currentTime - cacheData.timestamp > DNS_CACHE_TTL) {
+          dnsCache.delete(cacheKey);
+          cleanedCount++;
+        }
+      }
+
+      // Enforce cache size limit (max 1000 entries)
+      if (dnsCache.size > 1000) {
+        const entries = Array.from(dnsCache.entries());
+        entries.sort((a, b) => a[1].timestamp - b[1].timestamp); // Sort by oldest first
+        const toDelete = entries.slice(0, dnsCache.size - 800); // Keep newest 800
+        toDelete.forEach(([key]) => dnsCache.delete(key));
+      }
+
+      if (DEBUG && (cleanedCount > 0 || ipRequestCounts.size > 100)) {
+        // eslint-disable-next-line no-console
+        console.log(`[CLEANUP] Cleaned ${cleanedCount} DNS cache entries, ${ipRequestCounts.size} rate limit entries`);
       }
     }, 0);
   }
@@ -97,6 +133,7 @@ export const allowedBots: Record<string, boolean> = {
   'storebot-google': true,
   'google-searchbyimage': true,
   'google web preview': true,
+  'google-site-verification': true,
 
   // Bing bots
   'bingbot': true,
@@ -110,6 +147,28 @@ export const allowedBots: Record<string, boolean> = {
   'facebookbot': true,
   'facebook-api': true,
   'instagram': true,
+
+  // Other legitimate search engines
+  'yandexbot': true,
+  'baiduspider': true,
+  'duckduckbot': true,
+  'slurp': true, // Yahoo
+  'twitterbot': true,
+  'linkedinbot': true,
+  'whatsapp': true,
+  'telegrambot': true,
+  'applebot': true,
+  'discordbot': true,
+
+  // SEO and monitoring tools (legitimate)
+  'ahrefsbot': true,
+  'semrushbot': true,
+  'mj12bot': true,
+  'dotbot': true,
+  'uptimerobot': true,
+  'pingdom': true,
+  'gtmetrix': true,
+  'lighthouse': true,
 };
 
 // Check if a user agent belongs to a known bot
@@ -127,60 +186,153 @@ export const isKnownBot = (userAgent: string | null): boolean => {
   return false;
 };
 
-// Advanced bot verification via DNS lookup
+// Advanced bot verification via reverse DNS lookup
+// This is the official method recommended by Google and other search engines
 export const verifySearchEngineBot = async (ip: string, userAgent: string | null): Promise<boolean> => {
   if (!userAgent) return false;
 
-  userAgent = userAgent.toLowerCase();
+  const lowerUA = userAgent.toLowerCase();
 
-  // IP-based verification 
-  // Google IPs
-  if (userAgent.includes('google') && (
-    ip.startsWith('66.249.') || // Core Googlebot range
-    ip.startsWith('64.233.') ||
-    ip.startsWith('216.239.') ||
-    ip.startsWith('172.217.') ||
-    ip.startsWith('34.') ||
-    ip.startsWith('35.') ||
-    ip.startsWith('209.85.')
-  )) {
-    return true;
+  // Check DNS cache first
+  const cacheKey = `${ip}:${lowerUA.substring(0, 20)}`;
+  const cached = dnsCache.get(cacheKey);
+  if (cached && (Date.now() - cached.timestamp) < DNS_CACHE_TTL) {
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[BOT-VERIFY] Cache hit for ${ip} → ${cached.result}`);
+    }
+    return cached.result;
   }
 
-  // Bing IPs
-  if ((userAgent.includes('bing') || userAgent.includes('msn')) && (
-    ip.startsWith('157.55.') ||
-    ip.startsWith('207.46.') ||
-    ip.startsWith('40.77.') ||
-    ip.startsWith('13.66.') ||
-    ip.startsWith('131.253.') ||
-    ip.startsWith('199.30.') ||
-    ip.startsWith('157.56.') ||
-    ip.startsWith('20.31.') ||
-    ip.startsWith('20.175.') ||
-    ip.startsWith('20.186.')
-  )) {
-    return true;
-  }
+  try {
+    // Use Node.js dns module for reverse DNS lookup
+    const dns = await import('dns');
+    const { promisify } = await import('util');
 
-  // Facebook IPs
-  if ((userAgent.includes('facebook') || userAgent.includes('instagram')) && (
-    ip.startsWith('31.13.') ||    // Facebook main range
-    ip.startsWith('66.220.') ||   // Facebook range
-    ip.startsWith('69.63.') ||    // Facebook range
-    ip.startsWith('69.171.') ||   // Facebook range
-    ip.startsWith('74.119.') ||   // Facebook range
-    ip.startsWith('103.4.') ||    // Facebook Asia Pacific
-    ip.startsWith('173.252.') ||  // Facebook range
-    ip.startsWith('179.60.') ||   // Facebook range
-    ip.startsWith('185.89.') ||   // Facebook Europe
-    ip.startsWith('157.240.')     // Facebook range
-  )) {
-    return true;
-  }
+    // Add timeout to prevent hanging
+    const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
+      return Promise.race([
+        promise,
+        new Promise<T>((_, reject) =>
+          setTimeout(() => reject(new Error('DNS lookup timeout')), timeoutMs)
+        )
+      ]);
+    };
 
-  // For other user agents, fall back to a lenient approach
-  return isKnownBot(userAgent);
+    const reverse = promisify(dns.reverse);
+    const lookup = promisify(dns.lookup);
+
+    // Step 1: Reverse DNS lookup to get hostname (with 5s timeout)
+    const hostnames = await withTimeout(reverse(ip), 5000);
+    if (!hostnames || hostnames.length === 0) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[BOT-VERIFY] No reverse DNS found for ${ip}`);
+      }
+      // Cache negative result
+      dnsCache.set(cacheKey, { result: false, timestamp: Date.now() });
+      return false;
+    }
+
+    const hostname = hostnames[0].toLowerCase();
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[BOT-VERIFY] ${ip} → ${hostname}`);
+    }
+
+    // Step 2: Verify hostname matches expected patterns
+    let isValidHostname = false;
+
+    if (lowerUA.includes('google')) {
+      // Google: *.googlebot.com or *.google.com
+      isValidHostname = hostname.endsWith('.googlebot.com') ||
+        hostname.endsWith('.google.com');
+    } else if (lowerUA.includes('bing') || lowerUA.includes('msn')) {
+      // Bing: *.search.msn.com
+      isValidHostname = hostname.endsWith('.search.msn.com');
+    } else if (lowerUA.includes('facebook')) {
+      // Facebook: *.facebook.com
+      isValidHostname = hostname.endsWith('.facebook.com');
+    } else if (lowerUA.includes('yandex')) {
+      // Yandex: *.yandex.ru or *.yandex.net
+      isValidHostname = hostname.endsWith('.yandex.ru') ||
+        hostname.endsWith('.yandex.net');
+    } else if (lowerUA.includes('baidu')) {
+      // Baidu: *.baidu.com or *.baidu.jp
+      isValidHostname = hostname.endsWith('.baidu.com') ||
+        hostname.endsWith('.baidu.jp');
+    } else if (lowerUA.includes('duckduckgo')) {
+      // DuckDuckGo: *.duckduckgo.com
+      isValidHostname = hostname.endsWith('.duckduckgo.com');
+    } else if (lowerUA.includes('twitter') || lowerUA.includes('twitterbot')) {
+      // Twitter: *.twitter.com
+      isValidHostname = hostname.endsWith('.twitter.com');
+    } else if (lowerUA.includes('linkedin')) {
+      // LinkedIn: *.linkedin.com
+      isValidHostname = hostname.endsWith('.linkedin.com');
+    } else if (lowerUA.includes('yahoo') || lowerUA.includes('slurp')) {
+      // Yahoo: *.crawl.yahoo.net
+      isValidHostname = hostname.endsWith('.crawl.yahoo.net');
+    } else if (lowerUA.includes('apple') || lowerUA.includes('applebot')) {
+      // Apple: *.applebot.apple.com
+      isValidHostname = hostname.endsWith('.applebot.apple.com');
+    } else if (lowerUA.includes('whatsapp')) {
+      // WhatsApp: *.whatsapp.net or *.whatsapp.com
+      isValidHostname = hostname.endsWith('.whatsapp.net') ||
+        hostname.endsWith('.whatsapp.com');
+    } else if (lowerUA.includes('telegram')) {
+      // Telegram: *.telegram.org
+      isValidHostname = hostname.endsWith('.telegram.org');
+    } else if (lowerUA.includes('discord')) {
+      // Discord: *.discord.com or *.discordapp.com
+      isValidHostname = hostname.endsWith('.discord.com') ||
+        hostname.endsWith('.discordapp.com');
+    }
+
+    if (!isValidHostname) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[BOT-VERIFY] Invalid hostname pattern: ${hostname} for UA: ${lowerUA.substring(0, 50)}`);
+      }
+      // Cache negative result
+      dnsCache.set(cacheKey, { result: false, timestamp: Date.now(), hostname });
+      return false;
+    }
+
+    // Step 3: Forward DNS lookup to verify IP matches (with 5s timeout)
+    const lookupResult = await withTimeout(lookup(hostname), 5000);
+    const isVerified = lookupResult.address === ip;
+
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[BOT-VERIFY] ${hostname} → ${lookupResult.address}, matches: ${isVerified}`);
+    }
+
+    // Cache the result (both positive and negative)
+    dnsCache.set(cacheKey, { result: isVerified, timestamp: Date.now(), hostname });
+
+    return isVerified;
+
+  } catch (error) {
+    // If DNS lookup fails, fall back to lenient approach for known bots
+    // This prevents blocking legitimate crawlers due to DNS issues
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[BOT-VERIFY] DNS lookup failed for ${ip}: ${error}`);
+    }
+
+    // For known bot user agents, be lenient when DNS fails
+    // Better to allow a legitimate bot than block it
+    const fallbackResult = isKnownBot(userAgent);
+
+    // Cache fallback result for shorter time (15 minutes) to retry sooner
+    dnsCache.set(cacheKey, {
+      result: fallbackResult,
+      timestamp: Date.now() - (DNS_CACHE_TTL - 15 * 60 * 1000) // Expire in 15 min
+    });
+
+    return fallbackResult;
+  }
 };
 
 // Bot detection patterns
@@ -265,46 +417,35 @@ export const hasUnusualRequestPattern = (req: NextRequest): boolean => {
   return false;
 };
 
-// Update the getMatchedPatterns function to handle Facebook correctly
-function getMatchedPatterns(userAgent: string | null): string[] {
-  if (!userAgent) return [];
+// Utility function to get cache statistics (for monitoring)
+export const getCacheStats = () => {
+  const now = Date.now();
+  let expiredDnsEntries = 0;
+  let expiredRateLimitEntries = 0;
 
-  const lowerUA = userAgent.toLowerCase();
-
-  // Special case for Facebook - avoid flagging it as suspicious
-  if (lowerUA.includes('facebookexternalhit') ||
-    lowerUA.includes('facebookcatalog') ||
-    lowerUA.includes('facebookbot')) {
-    return ['facebook-legitimate'];
+  for (const [, data] of dnsCache.entries()) {
+    if (now - data.timestamp > DNS_CACHE_TTL) {
+      expiredDnsEntries++;
+    }
   }
 
-  const patterns = [
-    { name: 'crawl', regex: /crawl/i },
-    { name: 'bot', regex: /bot(?!chovy|tle)/i }, // Exclude "botchovy", "bottle", etc.
-    { name: 'spider', regex: /spider/i },
-    { name: 'scraper', regex: /scraper/i },
-    { name: 'curl', regex: /curl/i },
-    { name: 'wget', regex: /wget/i },
-    { name: 'phantom', regex: /phantom/i },
-    { name: 'headless', regex: /headless/i },
-    { name: 'archiver', regex: /archiver/i },
-    { name: 'slurp', regex: /slurp/i },
-    // Removed facebook from suspicious patterns
-    { name: 'chrome-lighthouse', regex: /chrome-lighthouse/i },
-    { name: 'dataminr', regex: /dataminr/i },
-    { name: 'semrush', regex: /semrush/i },
-    { name: 'python', regex: /python/i },
-    { name: 'ahrefs', regex: /ahrefs/i },
-    { name: 'screaming frog', regex: /screaming frog/i },
-  ];
-
-  const matches = patterns
-    .filter(pattern => pattern.regex.test(userAgent))
-    .map(pattern => pattern.name);
-
-  if (DEBUG && matches.length > 0) {
-    console.log(`[BOT-MONITOR] Pattern matches for UA: ${matches.join(', ')}`);
+  const windowStart = Math.floor(now / 1000) - (Math.floor(now / 1000) % 60);
+  for (const [, data] of ipRequestCounts.entries()) {
+    if (data.timestamp < windowStart) {
+      expiredRateLimitEntries++;
+    }
   }
 
-  return matches;
-}
+  return {
+    dnsCache: {
+      total: dnsCache.size,
+      expired: expiredDnsEntries,
+      active: dnsCache.size - expiredDnsEntries
+    },
+    rateLimitCache: {
+      total: ipRequestCounts.size,
+      expired: expiredRateLimitEntries,
+      active: ipRequestCounts.size - expiredRateLimitEntries
+    }
+  };
+};
