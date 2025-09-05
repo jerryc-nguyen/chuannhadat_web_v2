@@ -2,10 +2,20 @@ import useModals from '@mobile/modals/hooks';
 import useFilterState from '../hooks/useFilterState';
 import { FilterFieldName, OptionForSelect } from '@models';
 import LocationsPicker from '@mobile/ui/LocationsPicker';
+import { useLocationPicker } from '@contexts/LocationContext';
+import { useEffect } from 'react';
 
 export default function Locations() {
   const { openModal3, closeModal3 } = useModals();
   const { setLocalFieldValue, localFilterState } = useFilterState();
+
+  // Preload cities when this component mounts
+  const { loadCities } = useLocationPicker();
+
+  useEffect(() => {
+    // Preload cities as soon as the locations filter opens
+    loadCities();
+  }, [loadCities]);
 
   const city = localFilterState.city;
   const district = localFilterState.district;

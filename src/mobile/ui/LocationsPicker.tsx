@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocationPicker } from '@contexts/LocationContext';
 
-
-
 import { OptionForSelect } from '@models';
 import OptionPicker from '@mobile/ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
@@ -215,7 +213,6 @@ export default function LocationsPicker({
             onSelectCity({ value: '', text: '' })
           }}
           onClick={() => {
-            loadCities(); // Load cities only when user clicks
             openModal({
               name: 'city',
               title: 'Thành Phố',

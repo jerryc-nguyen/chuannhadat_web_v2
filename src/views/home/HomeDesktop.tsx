@@ -4,6 +4,7 @@ import useQueryPosts from '@hooks/useQueryPosts';
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { listFilterDesktop } from '@mobile/filter_bds/constants';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import { useFilterChipsUI } from '@hooks/useFilterChipsUI';
 import PostControls from '@views/home/components/PostControls';
 import PostList from '@views/home/components/PostList';
 import Image from 'next/image';
@@ -16,8 +17,8 @@ import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 const HomeDesktop: React.FC = () => {
   useSyncParamsToState();
 
-  const router = useRouter();
-  const pathname = usePathname();
+  const _router = useRouter();
+  const _pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
   const { buildFilterParams } = useFilterState();
@@ -33,7 +34,10 @@ const HomeDesktop: React.FC = () => {
   const { products, data } = useQueryPosts(filterParams);
   useLoadMissingAuthors(data);
 
-  const EmptyPost = () => {
+  // Filter chips based on current filter state
+  const { filteredChipOptions } = useFilterChipsUI(listFilterDesktop);
+
+  const _EmptyPost = () => {
     return (
       <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
         <Image className="mb-6 w-2/3" src={empty_city} alt="no-notification" />
@@ -53,7 +57,7 @@ const HomeDesktop: React.FC = () => {
 
       <PostControls
         className="w-[calc(100vw-8px)] -translate-x-5 px-5 md:-translate-x-10 md:px-10"
-        chipOptions={listFilterDesktop}
+        chipOptions={filteredChipOptions}
         pagination={data?.pagination}
       />
 

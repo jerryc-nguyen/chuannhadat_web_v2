@@ -9,16 +9,37 @@ export const shortenLocationName = (string?: string) => {
 }
 
 export const formatRealEstateText = (text: string): string => {
+  if (!text) return '';
+
+  // Check if we're in the browser environment
+  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    // First convert newlines to br tags, then decode HTML entities
+    const textWithBr = text
+      .replace(/\r\n/g, '\n') // Normalize Windows line endings
+      .replace(/\r/g, '\n') // Normalize Mac line endings
+      .replace(/\n/g, '<br/>'); // Convert newlines to br tags
+
+    // Use browser's built-in HTML entity decoder
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = textWithBr;
+
+    // Get the HTML with entities decoded but tags preserved
+    return tempDiv.innerHTML
+      .replace(/<br\s*\/?>/gi, '<br/>') // Normalize all br tags
+      .trim();
+  }
+
+  // Fallback for server-side rendering
   return text
-    .replace(/❌❌/g, '\n❌❌')   // Line break before warning emojis
-    .replace(/🔥🔥🔥/g, '\n🔥🔥🔥')  // Add line break before fire emojis
-    .replace(/💥💥💥/g, '\n💥💥💥')
-    .replace(/Chỉ /g, '\nChỉ ')
-    .replace(/(?<=\d) tỷ/g, ' tỷ')  // Ensure space before "tỷ"
-    .replace(/(?<=\d)m2/g, 'm2')    // Ensure spacing consistency
-    .replace(/ - /g, '\n- ')        // Break line before location details
-    .replace(/\+ /g, '\n+ ')
-    .replace(/\. /g, '.\n')
-    .replace(/\* /g, '\n *')
+    .replace(/\r\n/g, '\n') // Normalize Windows line endings
+    .replace(/\r/g, '\n') // Normalize Mac line endings
+    .replace(/\n/g, '<br/>') // Convert newlines to br tags
+    .replace(/<br\s*\/?>/gi, '<br/>') // Normalize all br tags
+    .replace(/&amp;/g, '&') // Decode HTML entities
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
     .trim();
 }

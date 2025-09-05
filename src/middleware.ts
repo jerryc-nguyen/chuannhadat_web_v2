@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { applyBotProtection } from './middleware/bot-protection';
+import { monitorBotProtection } from './lib/botProtectionMonitor';
 import { handleUrlRedirects } from './middleware/url-redirects';
 
 // Enable debug mode for local development
@@ -7,40 +7,43 @@ const DEBUG = process.env.DEBUG_MIDDLEWARE === 'true';
 
 // Helper functions for controlled logging
 const log = {
-  error: (message: string, ...args: A[]) => {
+  error: (message: string, ...args: unknown[]) => {
     // Always log errors (level >= 1)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.error(`[MIDDLEWARE] ❌ ${message}`, ...args);
     }
   },
-  info: (message: string, ...args: A[]) => {
+  info: (message: string, ...args: unknown[]) => {
     // Only log important info (level >= 2)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`[MIDDLEWARE] ${message}`, ...args);
     }
   },
-  verbose: (message: string, ...args: A[]) => {
+  verbose: (message: string, ...args: unknown[]) => {
     // Only log verbose details (level >= 3)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`[MIDDLEWARE] 🔍 ${message}`, ...args);
     }
   },
-  highlight: (message: string, ...args: A[]) => {
+  highlight: (message: string, ...args: unknown[]) => {
     // Only log highlighted messages (level >= 2)
     if (DEBUG) {
+      // eslint-disable-next-line no-console
       console.log(`🔵🔵🔵 ${message}`, ...args);
     }
   },
 };
 
-// This runs in Node.js runtime (not Edge)
+// Lightweight middleware - no special runtime needed
 export const config = {
   matcher: [
     '/', // Explicitly match the home route
     '/post/:path*', // Post detail pages
     '/profile/:path*', // Profile detail pages
     '/category/:path*', // Category pages
-    '/bot-protection-dashboard', // Dashboard route
     '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
   ],
 };
@@ -69,41 +72,11 @@ export async function middleware(req: NextRequest) {
     log.verbose(`Processing: ${pathname}`);
     log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
 
-    // Enhanced debugging for RSC requests
-    const urlString = req.nextUrl.toString();
-    const fullRequestUrl = `${req.nextUrl.protocol}//${req.nextUrl.host}${req.nextUrl.pathname}${req.nextUrl.search}`;
-    const searchParamsString = req.nextUrl.searchParams.toString();
-    const rawHeadersUrl = req.headers.get('referer') || '';
-    const rawUrl = req.url || '';
-
-    // Debug full request URL information
-    if (DEBUG) {
-      console.log(`🔍🔍🔍 URL INSPECTION:
-      - pathname: ${pathname}
-      - urlString: ${urlString}
-      - fullRequestUrl: ${fullRequestUrl}
-      - searchParams: ${searchParamsString}
-      - rawUrl: ${rawUrl}
-      - referer: ${rawHeadersUrl}
-      - headers: ${JSON.stringify(Object.fromEntries([...req.headers.entries()].filter(([k]) => k.includes('rsc') || k === 'x-nextjs-data')), null, 2)}
-      `);
-    }
-
-    // Check for _rsc in multiple possible locations
+    // Quick RSC detection for client-side navigation
     const hasRscParam =
       req.nextUrl.searchParams.has('_rsc') ||
-      urlString.includes('_rsc=') ||
-      searchParamsString.includes('_rsc') ||
-      rawUrl.includes('_rsc') ||
-      rawHeadersUrl.includes('_rsc') ||
+      req.nextUrl.toString().includes('_rsc=') ||
       req.headers.has('x-nextjs-data');
-
-    if (hasRscParam) {
-      log.highlight(`[RSC] Client navigation detected: ${urlString}`);
-      log.info(
-        `RSC detection: searchParams=${req.nextUrl.searchParams.has('_rsc')}, nextUrlString=${urlString.includes('_rsc=')}, searchParamsString=${searchParamsString.includes('_rsc')}, rawUrl=${rawUrl.includes('_rsc')}, referer=${rawHeadersUrl.includes('_rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}`,
-      );
-    }
 
     // Skip middleware for static files
     if (
@@ -120,14 +93,14 @@ export async function middleware(req: NextRequest) {
       return NextResponse.next();
     }
 
-    // Apply bot protection first - if it returns a response, use it
+    // Apply lightweight bot protection - single function call
     log.verbose('Applying bot protection');
     const startTime = Date.now();
-    const botProtectionResponse = await applyBotProtection(req);
+    const { response: botProtectionResponse } = await monitorBotProtection(req);
     log.verbose(`Bot protection applied in ${Date.now() - startTime}ms`);
 
     // If the bot protection returns a 429, return it immediately
-    if (botProtectionResponse && botProtectionResponse.status === 429) {
+    if (botProtectionResponse) {
       log.verbose('Rate limit exceeded, returning 429');
       return botProtectionResponse;
     }

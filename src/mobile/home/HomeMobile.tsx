@@ -9,15 +9,19 @@ import { dehydrate, HydrationBoundary, QueryClientProvider } from '@tanstack/rea
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { listFilterMobile } from '@mobile/filter_bds/constants';
 import { ListTopAuthor } from '@views/home/components/ListTopAuthor';
+import { useFilterChipsUI } from '@hooks/useFilterChipsUI';
 
 export default function HomeMobile() {
   useSyncParamsToState();
   const queryClient = getQueryClient();
 
+  // Filter chips based on current filter state
+  const { filteredChipOptions } = useFilterChipsUI(listFilterMobile);
+
   return (
     <div className="content-bg-color">
       <div className="mb-4 mt-4">
-        <FilterChips chipOptions={listFilterMobile} />
+        <FilterChips chipOptions={filteredChipOptions} />
       </div>
 
       <QueryClientProvider client={queryClient}>
