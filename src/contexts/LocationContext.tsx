@@ -56,7 +56,14 @@ export function LocationProvider({ children }: LocationProviderProps) {
 
   // Load cities data - now called on demand
   const loadCities = useCallback(async () => {
-    if (globalLocationCache.cities || globalLoadingStates.cities) return;
+    // If cities are already cached, make sure local state is updated
+    if (globalLocationCache.cities) {
+      setCities(globalLocationCache.cities);
+      return;
+    }
+
+    // If already loading, wait for it to complete
+    if (globalLoadingStates.cities) return;
 
     try {
       globalLoadingStates.cities = true;

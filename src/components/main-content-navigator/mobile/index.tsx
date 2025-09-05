@@ -3,24 +3,29 @@ import { DialogFooter } from '@components/ui/dialog';
 
 import { Modal } from '@mobile/modals/states/types';
 import LocationsPicker from '@mobile/ui/LocationsPicker';
-import OptionsTabList from '@mobile/ui/OptionsTabList';
 import { OptionForSelect } from '@models';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import useMainContentNavigator from '../hooks';
+import { useLocationPicker } from '@contexts/LocationContext';
 
 export default function MainContentNavigator({ openModal, closeModal }: { openModal: (modal: Modal) => void, closeModal: () => void }) {
   const {
     localCity,
     localDistrict,
     localWard,
-    localContentType,
-    contentOptions,
     onSelectCity: originalOnSelectCity,
     onSelectDistrict: originalOnSelectDistrict,
     onSelectWard: originalOnSelectWard,
-    onContentTypeChanged,
     onSubmit
   } = useMainContentNavigator();
+
+  // Preload cities when this modal opens
+  const { loadCities } = useLocationPicker();
+
+  useEffect(() => {
+    // Preload cities as soon as the location picker modal opens
+    loadCities();
+  }, [loadCities]);
 
   // Wrap the selection handlers to add the closeModal call
   const onSelectCity = useCallback((city?: OptionForSelect) => {
