@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import faceBookIcon from '@assets/icons/Facebook.svg';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 type FooterProps = object;
 const listMenuFooter = [
@@ -54,7 +55,7 @@ const listMenuFooter = [
       {
         key: 3,
         value: 'Đăng tin mới',
-        link: '/dashboard/manage-post/new-post',
+        link: DASHBOARD_ROUTES.posts.new,
       },
     ],
   },

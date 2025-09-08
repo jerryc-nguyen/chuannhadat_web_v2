@@ -16,6 +16,7 @@ import { BlockImageProduct } from '../components/cells/BlockImageProduct';
 import { BlockWarnHiddenPost } from '../components/cells/BlockWarnHiddenPost';
 import { TitleTriggerOpenProductDetail } from '../components/cells/TitleTriggerOpenProductDetail';
 import { Product } from '../data/schemas';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 type Props<T> = {
   table: T extends object ? ReturnType<typeof useReactTable<T>> : never;
@@ -123,7 +124,7 @@ function SinglePost({ product }: SinglePostProps) {
         <ButtonRefresh productId={productId} />
 
         <CheckboxAutoRefresh productId={productId} auto_refresh_product={auto_refresh_product} />
-        <Link href={`/dashboard/manage-post/${productUid}`}>
+        <Link href={`${DASHBOARD_ROUTES.posts.edit}/${productUid}`}>
           <Button variant="outline" size="sm" className="mb-2 h-8 justify-start gap-2">
             <SquarePen size={16} /> <span className="text-sm">Sửa</span>
           </Button>
@@ -132,7 +133,7 @@ function SinglePost({ product }: SinglePostProps) {
 
         <ButtonDelete productId={productId} />
       </div>
-    </div>
+    </div >
   );
 }
 

@@ -8,11 +8,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { DataTable } from './components/data-table';
 import { ProductQuery, productQuerySchema } from './data/schemas/product-query-schema';
 import { productQueryFromDefaultValues } from './data/type/product-query';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 export default function TaskDataTable() {
   useBreadcrumb([
     {
-      link: '/manage-post/collection-post',
+      link: DASHBOARD_ROUTES.posts.index,
       title: 'Danh sách tin đăng',
       isActive: true,
     },

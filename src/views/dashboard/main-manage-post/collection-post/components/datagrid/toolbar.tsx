@@ -30,6 +30,7 @@ import { createPortal } from 'react-dom';
 import { cn } from '@common/utils';
 import { useIsMobile } from '@hooks';
 import FilterChips from './filter-chips';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 const options = [
   {
@@ -204,7 +205,7 @@ const ButtonPostArticle = () => {
 
   const ContentButton = ({ className }: { className?: string }) => {
     return (
-      <Link href="/dashboard/manage-post/new-post" className={className}>
+      <Link href={DASHBOARD_ROUTES.posts.new} className={className}>
         <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
           <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <Plus />

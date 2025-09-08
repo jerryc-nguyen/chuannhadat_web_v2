@@ -4,30 +4,32 @@ import { useAuth } from '@common/auth/AuthContext';
 import Link from 'next/link';
 import { Button } from '@components/ui/button';
 import { useRouter } from 'next/navigation';
+import { DASHBOARD_ROUTES } from '@common/router';
+
 const listMenubar = [
   {
     id: 0,
-    href: '/dashboard',
+    href: DASHBOARD_ROUTES.index,
     title: 'Trang quản lý',
   },
   {
     id: 1,
-    href: '/dashboard/manage-post/collection-post',
+    href: DASHBOARD_ROUTES.posts.index,
     title: 'Quản lý tin đăng',
   },
   {
     id: 2,
-    href: '/dashboard/account-settings',
+    href: DASHBOARD_ROUTES.profile.accountSettings,
     title: 'Cài đặt tài khoản',
   },
   {
     id: 3,
-    href: '/dashboard/manage-post/new-post',
+    href: DASHBOARD_ROUTES.posts.new,
     title: 'Đăng tin',
   },
   {
     id: 4,
-    href: '/dashboard/top-up',
+    href: DASHBOARD_ROUTES.balance.topup,
     title: 'Nạp tiền',
   },
 ];

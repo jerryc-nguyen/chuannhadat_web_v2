@@ -1,10 +1,11 @@
 import { BadgeDollarSign, FileText, Home, UserCircle } from 'lucide-react';
 import { INavLinkGroup } from '../types';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 export const listNavDashboard: INavLinkGroup[] = [
   {
     name: 'Dashboard',
-    url: '/dashboard',
+    url: DASHBOARD_ROUTES.index,
     icon: Home,
   },
   {
@@ -14,11 +15,11 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Cài đặt tài khoản',
-        url: '/account-settings',
+        url: DASHBOARD_ROUTES.profile.accountSettings,
       },
       {
         name: 'Thông báo',
-        url: '/notifications',
+        url: DASHBOARD_ROUTES.profile.notifications,
       },
     ],
   },
@@ -29,15 +30,15 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Đăng tin',
-        url: '/manage-post/new-post',
+        url: DASHBOARD_ROUTES.posts.new,
       },
       {
         name: 'Danh sách tin',
-        url: '/manage-post/collection-post',
+        url: DASHBOARD_ROUTES.posts.index,
       },
       {
         name: 'Thời gian tự động làm mới',
-        url: '/manage-post/auto-refresh',
+        url: DASHBOARD_ROUTES.posts.autoRefresh,
       },
     ],
   },
@@ -48,39 +49,20 @@ export const listNavDashboard: INavLinkGroup[] = [
     links: [
       {
         name: 'Thông tin số dư',
-        url: '/balance-information',
+        url: DASHBOARD_ROUTES.balance.summary,
       },
       {
         name: 'Nạp tiền vào tài khoản',
-        url: '/top-up',
+        url: DASHBOARD_ROUTES.balance.topup,
       },
       {
         name: 'Lịch sử nạp tiền',
-        url: '/recharge-history',
+        url: DASHBOARD_ROUTES.balance.topUpHistory,
       },
       {
         name: 'Mua gói dịch vụ',
-        url: '/service-package',
-      },
-      // {
-      //   name: 'Dùng mã quà tặng / KM',
-      //   url: '/code-promotion',
-      // },
+        url: DASHBOARD_ROUTES.balance.pricingPlans,
+      }
     ],
-  },
-  // {
-  //   name: 'Quản lý yêu cầu',
-  //   url: '',
-  //   icon: LuRepeat,
-  //   links: [
-  //     {
-  //       name: 'Yêu cầu liên hệ lại',
-  //       url: '/request/call-back',
-  //     },
-  //     {
-  //       name: 'Yêu cầu tư vấn',
-  //       url: '/request/advise',
-  //     },
-  //   ],
-  // },
+  }
 ];

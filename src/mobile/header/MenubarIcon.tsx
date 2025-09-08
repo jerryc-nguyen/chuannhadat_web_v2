@@ -9,7 +9,7 @@ import {
 } from '@components/ui/sheet';
 import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
 import useModals from '@mobile/modals/hooks';
-
+import { DASHBOARD_ROUTES } from '@common/router';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { Menu, UserCircle } from 'lucide-react';
@@ -27,22 +27,22 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
   const listMenubar = [
     {
       id: 0,
-      href: isDashboardPage ? '/' : '/dashboard',
+      href: isDashboardPage ? '/' : DASHBOARD_ROUTES.index,
       title: isDashboardPage ? 'Trang chủ' : 'Trang quản lý',
     },
     {
       id: 1,
-      href: '/dashboard/manage-post/collection-post',
+      href: DASHBOARD_ROUTES.posts.index,
       title: 'Quản lý tin đăng',
     },
     {
       id: 2,
-      href: '/dashboard/account-settings',
+      href: DASHBOARD_ROUTES.profile.accountSettings,
       title: 'Cài đặt tài khoản',
     },
     {
       id: 4,
-      href: '/dashboard/top-up',
+      href: DASHBOARD_ROUTES.balance.topup,
       title: 'Nạp tiền',
     },
   ];
@@ -71,11 +71,11 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
 
         <div className="mb-4 px-6">
           <Button className="flex w-full items-center gap-x-2">
-            <a href="/dashboard/manage-post/new-post">Đăng tin</a>
+            <a href={DASHBOARD_ROUTES.posts.new}>Đăng tin</a>
           </Button>
 
           <Button className="mt-2 flex w-full items-center gap-x-2">
-            <a href="/dashboard/top-up">Nạp tiền</a>
+            <a href={DASHBOARD_ROUTES.balance.topup}>Nạp tiền</a>
           </Button>
         </div>
 

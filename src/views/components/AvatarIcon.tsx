@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { UserCircle } from 'lucide-react';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 type AvatarIconProps = {
   isLogged: boolean;
@@ -97,22 +98,22 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href={isDashboardPage ? '/' : '/dashboard'} className="w-full">
+              <Link href={isDashboardPage ? '/' : DASHBOARD_ROUTES.index} className="w-full">
                 {isDashboardPage ? 'Trang chủ' : 'Trang quản lý'}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/manage-post/collection-post" className="w-full">
+              <Link href={DASHBOARD_ROUTES.posts.index} className="w-full">
                 Quản lý tin đăng
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/account-settings" className="w-full">
+              <Link href={DASHBOARD_ROUTES.profile.accountSettings} className="w-full">
                 Cài đặt tài khoản
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href="/dashboard/top-up" className="w-full">
+              <Link href={DASHBOARD_ROUTES.balance.topup} className="w-full">
                 Nạp tiền
               </Link>
             </DropdownMenuItem>

@@ -5,14 +5,14 @@ import { Button } from '@components/ui/button';
 import { LucidePenSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-
+import { DASHBOARD_ROUTES } from '@common/router';
 const ButtonCreatePost = () => {
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
 
   return (
     <Link
-      href="/dashboard/manage-post/new-post"
+      href={DASHBOARD_ROUTES.posts.new}
       target="_blank"
       className={cn(hideDangtinButton && 'hidden')}
     >

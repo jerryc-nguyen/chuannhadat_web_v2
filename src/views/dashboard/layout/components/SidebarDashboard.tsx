@@ -37,16 +37,12 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
   const pathname = usePathname() || '';
   const { setOpenMobile } = useSidebar();
   const getActiveLink = (url: string) => {
-    if (url === '/dashboard')
-      return pathname === url
-        ? 'border-[1.5px] border-blue-300 bg-primary_color/10 text-primary_color'
-        : '';
-    return pathname.includes(url)
+    return pathname == url
       ? 'border-[1.5px] border-blue-300 bg-primary_color/10 text-primary_color'
       : '';
   };
   const getClassActiveHover = () => {
-    return 'hover:!border-[1.5px] hover:!border-blue-300 hover:!bg-primary_color/10 hover:!text-primary_color';
+    return 'hover:!border-[1.5px] hover:!border-blue-300 hover:!text-primary_color';
   };
 
   React.useEffect(() => {
@@ -107,7 +103,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
                                 >
                                   <Link
                                     className="block h-full w-full px-4 py-2"
-                                    href={`/dashboard/${navLink.url}`}
+                                    href={navLink.url}
                                   >
                                     {navLink.name}
                                   </Link>

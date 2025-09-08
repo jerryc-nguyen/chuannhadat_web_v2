@@ -21,6 +21,7 @@ import { BlockImageProduct } from './BlockImageProduct';
 import { TitleTriggerOpenProductDetail } from './TitleTriggerOpenProductDetail';
 import { BlockWarnHiddenPost } from './BlockWarnHiddenPost';
 import { BlockCheckHiddenReason } from './BlockCheckHiddenReason';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
   const hide_on_frontend_reason = row.original.hide_on_frontend_reason;
@@ -93,7 +94,7 @@ export const CellMainContent: ColumnDef<Product>['cell'] = ({ row }) => {
           <div className="flex flex-col">
             <ButtonRefresh productId={productId} />
 
-            <Link href={`/dashboard/manage-post/${productUid}`}>
+            <Link href={`${DASHBOARD_ROUTES.posts.edit}/${productUid}`}>
               <Button variant="outline" size="sm" className="mb-2 h-8 justify-start gap-2">
                 <SquarePen size={16} /> <span className="text-sm">Cập nhật tin</span>
               </Button>

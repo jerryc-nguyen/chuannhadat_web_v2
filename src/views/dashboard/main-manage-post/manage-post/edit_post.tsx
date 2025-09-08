@@ -20,6 +20,7 @@ import { PostFormSchema } from './form-schemas';
 import { FormMobile } from './mobile/form-create';
 import { useManagePostsCache } from '../collection-post/hooks/useManagePostsCache';
 import { getQueryClient } from "@api/react-query";
+import { DASHBOARD_ROUTES } from '@common/router';
 
 const EditPost = ({ productUid }: { productUid: string }) => {
   const { updateRowData } = useManagePostsCache();
@@ -27,7 +28,7 @@ const EditPost = ({ productUid }: { productUid: string }) => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
   useBreadcrumb([
     {
-      link: '/manage-post/new-post',
+      link: DASHBOARD_ROUTES.posts.index,
       title: 'Chỉnh sửa tin bán & cho thuê',
       isActive: true,
     }
@@ -97,7 +98,7 @@ const EditPost = ({ productUid }: { productUid: string }) => {
           </div> */}
         </div>
         <div className="sticky bottom-2 z-[40] mt-6 flex justify-between rounded-lg border bg-card p-3">
-          <Link href={`/dashboard/manage-post/collection-post`}>
+          <Link href={DASHBOARD_ROUTES.posts.index}>
             <Button type="button" variant="ghost">
               Trở lại
             </Button>

@@ -24,6 +24,7 @@ import { useBreadcrumb } from '@hooks/useBreadcrumb';
 import React, { useEffect, useRef } from 'react';
 import { FormMobile } from './mobile/form-create';
 import { useAuth } from '@common/auth/AuthContext';
+import { DASHBOARD_ROUTES } from '@common/router';
 
 /**
  * TODO: Split file to smaller components
@@ -62,7 +63,7 @@ const NewPost: React.FC = () => {
   useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
   useBreadcrumb([
     {
-      link: '/manage-post/new-post',
+      link: DASHBOARD_ROUTES.posts.new,
       title: 'Đăng tin mới',
       isActive: true,
     },
@@ -88,7 +89,7 @@ const NewPost: React.FC = () => {
       if (res.status) {
         toast.success('Đăng tin thành công');
         setTimeout(() => {
-          window.location.href = '/dashboard/manage-post/collection-post';
+          window.location.href = DASHBOARD_ROUTES.posts.index;
         }, 1500);
       } else {
         // @ts-ignore: ok
@@ -135,7 +136,7 @@ const NewPost: React.FC = () => {
           </div> */}
         </div>
         <div className="sticky bottom-2 z-[40] mt-6 flex justify-between rounded-lg border bg-card p-3">
-          <Link href={`/dashboard/manage-post/collection-post`}>
+          <Link href={DASHBOARD_ROUTES.posts.index}>
             <Button type="button" variant="ghost">
               Trở lại
             </Button>
