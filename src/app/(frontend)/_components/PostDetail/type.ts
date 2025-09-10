@@ -1,4 +1,4 @@
-import { IProductDetail } from '@mobile/searchs/type';
+import { IProductDetail } from '../CategoryPage/mobile/searchs/type';
 
 export type AuthorPostProps = {
   data: IProductDetail;

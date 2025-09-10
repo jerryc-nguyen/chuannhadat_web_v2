@@ -2,9 +2,9 @@
 
 import { useIsMobile } from '@hooks';
 import useModals from '@mobile/modals/hooks';
-import PostDetailMobile from '@mobile/post-detail/PostDetailMobile';
-import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
-import { ProductDetailTitleBts } from '@mobile/searchs/ProductCardV2';
+import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetailMobile';
+import AuthorInfo from '@frontend/PostDetail/mobile/post-detail/components/AuthorInfo';
+import { ProductDetailTitleBts } from '@frontend/CategoryPage/mobile/searchs/ProductCardV2';
 import useModalPostDetail from '@frontend/PostDetail/hooks/useModalPostDetail';
 import { Product } from '../../data/schemas';
 import { cn } from '@common/utils';

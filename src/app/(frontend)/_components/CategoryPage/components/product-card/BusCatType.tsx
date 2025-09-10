@@ -1,5 +1,5 @@
 import { cn } from '@common/utils';
-import { IProject } from '@mobile/searchs/type';
+import { IProject } from '../../mobile/searchs/type';
 
 type BusCatTypeProps = {
   busCatType: string;

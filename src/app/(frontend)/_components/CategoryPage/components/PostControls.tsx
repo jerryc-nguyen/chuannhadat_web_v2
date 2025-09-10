@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FilterChip from './FilterChip';
-import { FilterChipOption } from '@mobile/filter_bds/types';
+import { FilterChipOption } from '../mobile/filter_bds/types';
 import { cn } from '@common/utils';
 
 type PostControlsProps = {

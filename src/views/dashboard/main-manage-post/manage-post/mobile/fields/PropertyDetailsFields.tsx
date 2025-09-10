@@ -12,7 +12,7 @@ import { RoundedOptionsNumberInput } from '../../components/form-components/fiel
 import {
   roomsOptionsForCreate,
   facadeOptionsForCreate,
-} from '@mobile/filter_bds/constants';
+} from '@frontend/CategoryPage/mobile/filter_bds/constants';
 import {
   directionOptions,
   furnitureTypeOptions,

@@ -11,7 +11,7 @@ import {
   IRegisterResponse,
   LoginResponse,
 } from '@mobile/auth/types';
-import { Author, IProductDetail } from '@mobile/searchs/type';
+import { Author, IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import {
   IConnectOauthsPayload,
   IRequestCallbackPayload,

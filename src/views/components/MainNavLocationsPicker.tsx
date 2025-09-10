@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 import useModals from '@mobile/modals/hooks';
 import { FilterFieldName } from '@models';
 import React from 'react';

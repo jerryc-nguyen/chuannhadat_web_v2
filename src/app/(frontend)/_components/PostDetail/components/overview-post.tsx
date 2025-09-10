@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@compo
 import { YoutubePlayerAction } from '@components/youtube-player-modal';
 import useCleanupEffect from '@hooks/useCleanupEffect';
 import useResizeImage from '@hooks/useResizeImage';
-import { IProductDetail } from '@mobile/searchs/type';
+import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
 import { useMutation } from '@tanstack/react-query';
 import ButtonSave, { type ButtonSaveHandle } from '@frontend/CategoryPage/components/ButtonSave';
 import Image from 'next/image';

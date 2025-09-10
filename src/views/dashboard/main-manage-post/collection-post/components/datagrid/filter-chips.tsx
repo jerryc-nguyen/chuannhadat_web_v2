@@ -2,7 +2,7 @@
 import { useIsMobile } from '@hooks';
 import { listChipsQuery } from '../../constant/list_chips_query';
 import FilterChip from '@frontend/CategoryPage/components/FilterChip';
-import FilterChips from '@mobile/filter_bds/FilterChips';
+import FilterChips from '@frontend/CategoryPage/mobile/filter_bds/FilterChips';
 
 interface TFilterChipsProps {
   onFilterChipsChanged?: (state: Record<string, A>) => void;

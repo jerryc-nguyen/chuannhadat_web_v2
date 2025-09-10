@@ -16,9 +16,9 @@ import {
 } from '@components/ui/dropdown-menu';
 import { useSyncParamsToState } from '@hooks';
 import useResizeImage from '@hooks/useResizeImage';
-import { listFilterProfileMobile } from '@mobile/filter_bds/constants';
-import FilterChips from '@mobile/filter_bds/FilterChips';
-import PostList from '@mobile/searchs/PostList';
+import { listFilterProfileMobile } from '@frontend/CategoryPage/mobile/filter_bds/constants';
+import FilterChips from '@frontend/CategoryPage/mobile/filter_bds/FilterChips';
+import PostList from '@frontend/CategoryPage/mobile/searchs/PostList';
 import { useQuery } from '@tanstack/react-query';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';

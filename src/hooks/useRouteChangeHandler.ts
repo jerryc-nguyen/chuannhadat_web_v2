@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 import useMainContentNavigator from '@components/main-content-navigator/hooks';
 
 /**

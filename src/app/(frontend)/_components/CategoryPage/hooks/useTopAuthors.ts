@@ -1,5 +1,5 @@
 import { services } from '@api/services';
-import { FilterState } from '@mobile/filter_bds/types';
+import { FilterState } from '../mobile/filter_bds/types';
 import { ISeachAuthorPayload } from '@models/modelPayload';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
@@ -26,7 +26,7 @@ export const useTopAuthors = (filterState: FilterState) => {
 
   return {
     filterState,
-    topAuthors: topAuthors ?? [], 
+    topAuthors: topAuthors ?? [],
     isFetching,
   };
 };

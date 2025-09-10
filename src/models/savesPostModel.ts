@@ -1,4 +1,4 @@
-import { IProductDetail } from '@mobile/searchs/type';
+import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { HttpStatusCode } from 'axios';
 
 export interface ISavesSummaryResponse {

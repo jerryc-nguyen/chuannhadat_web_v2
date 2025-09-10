@@ -24,7 +24,7 @@ import { X } from 'lucide-react';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
 import BusCatType from './bts/BusCatType';
 import SortOptions from './bts/SortOptions';
-import AggProjects from '@mobile/filter_bds/bts/AggProjects';
+import AggProjects from './bts/AggProjects';
 
 type FilterChipsProps = {
   chipOptions: FilterChipOption[];

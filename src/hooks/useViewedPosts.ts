@@ -1,5 +1,5 @@
 import { services } from '@api/services';
-import { IViewedProductDetail } from '@mobile/searchs/type';
+import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { Pagination } from '@models/savesPostModel';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';

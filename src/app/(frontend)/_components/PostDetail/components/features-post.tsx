@@ -1,5 +1,5 @@
 import { Skeleton } from '@components/ui/skeleton';
-import { IProductDetail } from '@mobile/searchs/type';
+import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
 import React from 'react';
 
 type FeaturesPostProps = {

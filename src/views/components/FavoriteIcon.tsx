@@ -30,7 +30,7 @@ import { useSearchParams } from 'next/navigation';
 import { useViewedPosts } from '@hooks/useViewedPosts';
 import OptionsTabList from '@mobile/ui/OptionsTabList';
 import { OptionForSelect } from '@models';
-import { IViewedProductDetail } from '@mobile/searchs/type';
+import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { useIsMobile } from '@hooks';
 
 type FavoriteIconProps = object;

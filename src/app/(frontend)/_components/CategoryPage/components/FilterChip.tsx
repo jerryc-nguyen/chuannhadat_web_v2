@@ -3,18 +3,18 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
-import Area from '@mobile/filter_bds/bts/Area';
-import BusCatType from '@mobile/filter_bds/bts/BusCatType';
-import BusinessTypeButtons from '@mobile/filter_bds/bts/BusinessTypeButtons';
-import CategoryType from '@mobile/filter_bds/bts/CategoryType';
-import Projects from '@mobile/filter_bds/bts/desktop/Projects';
-import Direction from '@mobile/filter_bds/bts/Direction';
-import Price from '@mobile/filter_bds/bts/Price';
-import Rooms from '@mobile/filter_bds/bts/Rooms';
-import SortOptions from '@mobile/filter_bds/bts/SortOptions';
-import FilterModal from '@mobile/filter_bds/FilterModal';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
-import { FilterChipOption } from '@mobile/filter_bds/types';
+import Area from '../mobile/filter_bds/bts/Area';
+import BusCatType from '../mobile/filter_bds/bts/BusCatType';
+import BusinessTypeButtons from '../mobile/filter_bds/bts/BusinessTypeButtons';
+import CategoryType from '../mobile/filter_bds/bts/CategoryType';
+import Projects from '../mobile/filter_bds/bts/desktop/Projects';
+import Direction from '../mobile/filter_bds/bts/Direction';
+import Price from '../mobile/filter_bds/bts/Price';
+import Rooms from '../mobile/filter_bds/bts/Rooms';
+import SortOptions from '../mobile/filter_bds/bts/SortOptions';
+import FilterModal from '../mobile/filter_bds/FilterModal';
+import useFilterState from '../mobile/filter_bds/hooks/useFilterState';
+import { FilterChipOption } from '../mobile/filter_bds/types';
 import { FilterFieldName } from '@models';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
@@ -27,7 +27,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import styles from '../styles/FilterChip.module.scss';
-import AggProjects from '@mobile/filter_bds/bts/AggProjects';
+import AggProjects from '../mobile/filter_bds/bts/AggProjects';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;

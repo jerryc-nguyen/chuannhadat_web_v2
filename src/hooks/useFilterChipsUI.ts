@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { FilterChipOption } from '@mobile/filter_bds/types';
+import { FilterChipOption } from '@frontend/CategoryPage/mobile/filter_bds/types';
 import { FilterFieldName } from '@models';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 
 /**
  * Custom hook to handle chip UI logic and filtering

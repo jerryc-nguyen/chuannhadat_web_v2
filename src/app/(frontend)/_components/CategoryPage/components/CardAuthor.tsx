@@ -4,7 +4,7 @@ import { cn } from '@common/utils';
 import TooltipHost from '@components/tooltip-host';
 import { Skeleton } from '@components/ui/skeleton';
 import useResizeImage from '@hooks/useResizeImage';
-import { filterStateAtom } from '@mobile/filter_bds/states';
+import { filterStateAtom } from '../mobile/filter_bds/states';
 import { HoverCardAuthorMobile } from './hover-card-author/HoverCardAuthorMobile';
 import { useAtom } from 'jotai';
 import Image, { StaticImageData } from 'next/image';
@@ -13,7 +13,7 @@ import React, { useMemo } from 'react';
 import useCardAuthors from '../hooks/useCardAuthors';
 import { useTopAuthors } from '../hooks/useTopAuthors';
 import HoverCardAuthor from './hover-card-author/HoverCardAuthor';
-import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '../mobile/filter_bds/hooks/useFilterState';
 
 export default function CardAuthor({ product, isMobile }: { product: A; isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();

@@ -3,7 +3,7 @@ import NotFound from '@app/not-found';
 import { cn } from '@common/utils';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/sheet';
 import { usePostDetail } from '@hooks/usePostDetail';
-import { IProductDetail } from '@mobile/searchs/type';
+import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
 import { useAtom, useSetAtom } from 'jotai';
 import React, { useMemo } from 'react';

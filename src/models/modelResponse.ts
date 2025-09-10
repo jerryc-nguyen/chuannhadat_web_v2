@@ -1,7 +1,7 @@
 import { Pagination } from './savesPostModel';
 import { HttpStatusCode } from 'axios';
 import { ILoginResponse } from '@mobile/auth/types';
-import { IViewedProductDetail } from '@mobile/searchs/type';
+import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 
 export interface IViewedPostResonpse extends IResponseData<IViewedProductDetail[]> {
   pagination: Pagination;
