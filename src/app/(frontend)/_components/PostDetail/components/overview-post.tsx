@@ -12,7 +12,7 @@ import useCleanupEffect from '@hooks/useCleanupEffect';
 import useResizeImage from '@hooks/useResizeImage';
 import { IProductDetail } from '@mobile/searchs/type';
 import { useMutation } from '@tanstack/react-query';
-import ButtonSave, { type ButtonSaveHandle } from '@frontend/HomePage/components/ButtonSave';
+import ButtonSave, { type ButtonSaveHandle } from '@frontend/CategoryPage/components/ButtonSave';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';

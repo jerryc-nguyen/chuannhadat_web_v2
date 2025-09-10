@@ -13,7 +13,7 @@ import { useFilterChipsUI } from '@hooks/useFilterChipsUI';
 // Import from the same feature folder
 import { ListTopAuthor } from './components/ListTopAuthor';
 
-export default function HomeMobile() {
+export default function CategoryMobile() {
   useSyncParamsToState();
   const queryClient = getQueryClient();
 

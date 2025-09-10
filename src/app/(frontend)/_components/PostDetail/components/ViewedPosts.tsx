@@ -5,7 +5,7 @@ import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@component
 import { Skeleton } from '@components/ui/skeleton';
 import useCleanupEffect from '@hooks/useCleanupEffect';
 import { useViewedPosts } from '@hooks/useViewedPosts';
-import ProductCard from '@frontend/HomePage/components/ProductCard';
+import ProductCard from '@frontend/CategoryPage/components/ProductCard';
 import { Loader2 } from 'lucide-react';
 import React, { memo, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';

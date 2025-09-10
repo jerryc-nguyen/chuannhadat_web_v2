@@ -15,7 +15,7 @@ import PostList from './components/PostList';
 import { ListTopAuthor } from './components/ListTopAuthor';
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 
-const HomeDesktop: React.FC = () => {
+const CategoryDesktop: React.FC = () => {
   useSyncParamsToState();
 
   const _router = useRouter();
@@ -73,4 +73,4 @@ const HomeDesktop: React.FC = () => {
   );
 };
 
-export default HomeDesktop;
+export default CategoryDesktop;

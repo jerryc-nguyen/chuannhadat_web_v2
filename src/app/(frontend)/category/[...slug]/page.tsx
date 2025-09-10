@@ -2,7 +2,7 @@ import axiosInstance from '@api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
-import HomePage from '@frontend/HomePage';
+import CategoryPage from '@frontend/CategoryPage';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -18,6 +18,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return createMetadata(rawMetadata);
 }
 
-export default function CategoryPage() {
-  return <HomePage />;
+export default function Page() {
+  return <CategoryPage />;
 }

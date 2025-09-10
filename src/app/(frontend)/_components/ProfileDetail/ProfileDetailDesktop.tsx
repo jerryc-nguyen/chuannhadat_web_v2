@@ -14,8 +14,8 @@ import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { listFilterProfileDesktop } from '@mobile/filter_bds/constants';
 import useFilterState from '@mobile/filter_bds/hooks/useFilterState';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import PostControls from '@frontend/HomePage/components/PostControls';
-import PostList from '@frontend/HomePage/components/PostList';
+import PostControls from '@frontend/CategoryPage/components/PostControls';
+import PostList from '@frontend/CategoryPage/components/PostList';
 
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

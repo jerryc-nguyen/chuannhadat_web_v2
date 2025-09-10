@@ -1,5 +1,5 @@
-import HomePage from '@frontend/HomePage';
+import CategoryPage from '@frontend/CategoryPage';
 
 export default function Page() {
-  return <HomePage />;
+  return <CategoryPage />;
 }
