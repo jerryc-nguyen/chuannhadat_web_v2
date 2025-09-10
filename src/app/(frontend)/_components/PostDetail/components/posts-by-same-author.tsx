@@ -1,5 +1,5 @@
 import { services } from '@api/services';
-import RelatedCard from '@app/(frontend)/_components/PostDetail/components/related-product-card';
+import RelatedCard from '@frontend/PostDetail/components/related-product-card';
 import { Card, CardContent } from '@components/ui/card';
 import {
   Carousel,
@@ -76,7 +76,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = (props) => {
   return (
     <>
       <h3 className="mt-6 cursor-pointer text-lg font-bold">
-        Tin khác của {fullNameAuthor}
+        Tin khác của 223 {fullNameAuthor}
       </h3>
       <span className='text-gray text-xs italic'>
         Chỉ hiện tin có ngày đăng trong 2 tuần gần nhất

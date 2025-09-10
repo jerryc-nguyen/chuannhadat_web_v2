@@ -10,11 +10,11 @@ import { authorAtom, postDetailAtom } from '@mobile/post-detail/states';
 import type { IProductDetail } from '@mobile/searchs/type';
 import Section from '@mobile/ui/Section';
 import { isServer, useMutation } from '@tanstack/react-query';
-import { FeaturesList } from '@frontend/PostDetail/components/features-post';
+import { FeaturesList } from './components/features-post';
 import { useSetAtom } from 'jotai';
 import React, { useEffect } from 'react';
 import ProductDescription from './components/ProductDescription';
-import './PostDetailMobile.scss';
+import './styles/PostDetailMobile.scss';
 
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);

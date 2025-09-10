@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import { openModalDetail } from '@views/post-detail/states/modalPostDetailAtoms';
+import { openModalDetail } from '@frontend/PostDetail/states/modalPostDetailAtoms';
 import { removeBrowserHistoryModalsState } from './utils';
 import useModals from '@mobile/modals/hooks';
 import { historyPushedPathAtom } from './states';

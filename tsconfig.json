@@ -27,7 +27,10 @@
       "@models/*": ["src/models/*"],
       "@hooks/*": ["src/hooks/*"],
       "@components/*": ["src/components/*"],
-      "@views/*": ["src/views/*"]
+      "@views/*": ["src/views/*"],
+      "@frontend/*": ["src/app/(frontend)/_components/*"],
+      "@dashboard/*": ["src/app/dashboard/_components/*"],
+      "@common/*": ["src/common/*"]
     },
     "plugins": [
       {

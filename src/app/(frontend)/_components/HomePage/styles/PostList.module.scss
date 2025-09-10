@@ -1,0 +1,19 @@
+.post_list_wrapper {
+  .post_list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+
+    @include media-breakpoint-down('2xl') {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @include media-breakpoint-down(lg) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include media-breakpoint-down(sm) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+}

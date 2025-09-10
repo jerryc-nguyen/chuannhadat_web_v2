@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import useBrowserPopstate from './popstate-handler/hooks';
 
@@ -9,7 +9,7 @@ import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
 
 // Temporary: Use direct imports to isolate webpack runtime issue
 import DepositModal from './ui/DepositModal';
-import ModalPostDetail from '@views/post-detail/components/modal-post-detail';
+import ModalPostDetail from '@frontend/PostDetail/components/modal-post-detail';
 import { YoutubePlayerModal } from './youtube-player-modal/YoutubePlayerModal';
 
 // Lightweight components - keep static
@@ -18,7 +18,7 @@ import ConfirmEmailModal from './ui/ConfirmEmailModal';
 
 // State imports
 import { btsModalAtom, btsModal2Atom, btsModal3Atom } from '@mobile/modals/states';
-import { openModalDetail } from '@views/post-detail/states/modalPostDetailAtoms';
+import { openModalDetail } from '@frontend/PostDetail/states/modalPostDetailAtoms';
 import { openModalDepositAtom } from '@views/dashboard/states/depositAtoms';
 import { youtubePlayerAtom } from './youtube-player-modal/state';
 
