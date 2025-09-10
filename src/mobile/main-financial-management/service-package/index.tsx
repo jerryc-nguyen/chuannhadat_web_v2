@@ -14,7 +14,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 const ServicePackageView = () => {
   const { currentUser } = useAuth();
   const [currentServicePackage, setCurrentServicePackage] = React.useState<ServicePackageInfo>();

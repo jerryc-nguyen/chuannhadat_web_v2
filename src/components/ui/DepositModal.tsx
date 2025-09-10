@@ -13,7 +13,7 @@ import {
   depositAmountAtom,
   openModalDepositAtom,
   statusTransactionAtom,
-} from '@views/dashboard/states/depositAtoms';
+} from '@dashboard/DashboardLayout/states/depositAtoms';
 import { useAtom } from 'jotai';
 import React from 'react';
 import Confetti from 'react-confetti';

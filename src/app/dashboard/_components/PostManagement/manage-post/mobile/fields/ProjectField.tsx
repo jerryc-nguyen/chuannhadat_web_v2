@@ -6,7 +6,7 @@ import List from '@components/konsta/List';
 import { CardTitle } from '@components/ui/card';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 import { Button } from '@components/ui/button';
-import { IPostForm } from '@views/dashboard/main-manage-post/types';
+import { IPostForm } from '../../types';
 
 interface ProjectFieldProps {
   form: UseFormReturn<IPostForm>;

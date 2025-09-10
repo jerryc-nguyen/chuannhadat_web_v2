@@ -3,7 +3,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import React from 'react';
 
 export const useBreadcrumb = (breadcrumb: IBreadcrumbItem[]) => {
@@ -16,6 +16,6 @@ export const useBreadcrumb = (breadcrumb: IBreadcrumbItem[]) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return null;
 };

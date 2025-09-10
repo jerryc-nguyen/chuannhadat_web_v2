@@ -1,4 +1,4 @@
-import { SummaryDashboard } from '@views/dashboard/summary';
+import { SummaryDashboard } from '@dashboard/DashboardLayout';
 import { Metadata } from 'next';
 import React from 'react';
 

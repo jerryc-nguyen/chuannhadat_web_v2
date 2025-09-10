@@ -12,7 +12,7 @@ import {
 import { Button } from '@components/ui/button';
 import { ClipboardEdit, Plus, Trash2 } from 'lucide-react';
 import { useAtom, useSetAtom } from 'jotai';
-import { breadcrumbAtom, IBreadcrumbItem } from '@views/dashboard/states/breadcrumbAtom';
+import { breadcrumbAtom, IBreadcrumbItem } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertDialog,
@@ -33,11 +33,11 @@ import {
   showDialogTimePickerAtom,
   contentDialogTimerPickerAtom,
   defaultTimeRefresh,
-} from '@views/dashboard/main-manage-post/states/autorefreshAtoms';
+} from '@dashboard/PostManagement/states/autorefreshAtoms';
 
 import EmptyTable from '@components/empty-table';
-import { DialogTimePicker } from '@views/dashboard/main-manage-post/auto-refresh/components';
-import { services } from '@views/dashboard/main-manage-post/apis';
+import { DialogTimePicker } from '@dashboard/PostManagement/auto-refresh/components';
+import { services } from '@dashboard/PostManagement/apis';
 import CardPackage from '@components/ui/CardPackage';
 
 const AutoRefreshMobile: React.FC = () => {

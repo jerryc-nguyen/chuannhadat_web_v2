@@ -1,5 +1,4 @@
-import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import TaskDataTable from '@views/dashboard/main-manage-post/collection-post';
+import PostManagement from '@dashboard/PostManagement';
 import { Metadata } from 'next';
 import React from 'react';
 
@@ -9,16 +8,7 @@ export const metadata: Metadata = {
 };
 
 const NewPostPage: React.FC = async () => {
-  const { isMobile } = await getUserAgentInfo();
-  if (isMobile) {
-    return (
-      <div className="">
-        <TaskDataTable />
-      </div>
-    );
-  } else {
-    return <TaskDataTable />;
-  }
+  return <PostManagement />;
 };
 
 export default NewPostPage;

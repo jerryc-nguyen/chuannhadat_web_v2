@@ -1,6 +1,6 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import AutoRefreshMobile from '@mobile/main-manage-post/auto-refresh';
-import AutoRefreshDesktop from '@views/dashboard/main-manage-post/auto-refresh';
+import AutoRefreshDesktop from '@dashboard/PostManagement/auto-refresh';
 import { Metadata } from 'next';
 import React from 'react';
 

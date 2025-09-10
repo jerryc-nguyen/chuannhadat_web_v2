@@ -19,7 +19,7 @@ import ConfirmEmailModal from './ui/ConfirmEmailModal';
 // State imports
 import { btsModalAtom, btsModal2Atom, btsModal3Atom } from '@mobile/modals/states';
 import { openModalDetail } from '@frontend/PostDetail/states/modalPostDetailAtoms';
-import { openModalDepositAtom } from '@views/dashboard/states/depositAtoms';
+import { openModalDepositAtom } from '@dashboard/DashboardLayout/states/depositAtoms';
 import { youtubePlayerAtom } from './youtube-player-modal/state';
 
 // Optimized loading fallback

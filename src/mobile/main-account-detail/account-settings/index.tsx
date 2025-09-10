@@ -1,12 +1,12 @@
 'use client';
 import { cn, genKey } from '@common/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
-import { listTabAccountSetting } from '@views/dashboard/main-account-detail/constants';
+import { listTabAccountSetting } from '@dashboard/AccountDetail/constants';
 import {
   breadcrumbAtom,
   defaultBreadcrumb,
   IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';

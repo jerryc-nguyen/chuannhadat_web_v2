@@ -10,7 +10,7 @@ import {
 } from '@components/ui/breadcrumb';
 
 import { genKey } from '@common/utils';
-import { IBreadcrumbItem } from '@views/dashboard/states/breadcrumbAtom';
+import { IBreadcrumbItem } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 
 type BreadcrumbProps = {
   breadcrumbs: IBreadcrumbItem[];

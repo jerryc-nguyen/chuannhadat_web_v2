@@ -6,7 +6,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 
 import { useQuery } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';

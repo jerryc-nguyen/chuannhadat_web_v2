@@ -13,7 +13,7 @@ import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 
 const HistoryView = () => {
   const { fetchHistoryTransaction } = useBalanceRequest();

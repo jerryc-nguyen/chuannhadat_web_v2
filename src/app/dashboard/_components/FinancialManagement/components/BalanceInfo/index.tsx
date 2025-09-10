@@ -1,7 +1,7 @@
 import { CND_TEXT_COLORS } from '@common/constants';
 import useBalance from '@mobile/main-financial-management/hooks';
 import { IBalanceResponse } from '@mobile/main-financial-management/types';
-import FigureCard, { CardIcons } from '@views/dashboard/components/FigureCard';
+import FigureCard, { CardIcons } from '@dashboard/DashboardLayout/components/FigureCard';
 import { FC, useEffect, useState } from 'react';
 
 const BalanceInfo: FC<{ title: string }> = ({ title }) => {

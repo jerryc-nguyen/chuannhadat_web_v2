@@ -1,8 +1,8 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import type { Params } from '@models';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import ManageProductApis from '@views/dashboard/main-manage-post/manage-post/apis/product-api';
-import EditPost from '@views/dashboard/main-manage-post/manage-post/edit_post';
+import ManageProductApis from '@dashboard/PostManagement/manage-post/apis/product-api';
+import EditPost from '@dashboard/PostManagement/manage-post/edit_post';
 
 export default async function PostDetailPage({ params }: { params: Params }) {
   const { slug } = await params;

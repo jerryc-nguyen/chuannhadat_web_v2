@@ -1,38 +1,37 @@
 'use client';
 
-import '@styles/pages/mobile/finacial-management/balance.scss';
-import { format, parseISO } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-
+import { format, parseISO } from 'date-fns';
+import '@styles/pages/mobile/finacial-management/history.scss';
 import { useBalanceRequest } from '@api/balance';
+import { ITransactionResponse } from '../types';
 import TableComponent from '@components/table';
+import NoteDescriptions from '../components/NoteDescription';
+import BalanceInfo from '../components/BalanceInfo';
+import { useSetAtom } from 'jotai';
 import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
-import { useSetAtom } from 'jotai';
-import BalanceInfo from '../components/BalanceInfo';
-import NoteDescriptions from '../components/NoteDescription';
-import { ITransactionResponse } from '../types';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 
-const BalanceView = () => {
-  const { fetchTransaction } = useBalanceRequest();
+const HistoryView = () => {
+  const { fetchHistoryTransaction } = useBalanceRequest();
 
-  const [transactionData, setTransactionData] = useState<ITransactionResponse[]>([]);
+  const [historyTransactionData, setHistoryTransactionData] = useState<ITransactionResponse[]>([]);
 
   useEffect(() => {
     const loadTransaction = async () => {
       try {
-        const result = await fetchTransaction();
-        setTransactionData(result.data);
+        const result = await fetchHistoryTransaction();
+        setHistoryTransactionData(result.data);
       } catch (error) {
         console.error('Error loading transaction', error);
       }
     };
 
     loadTransaction();
-  }, [fetchTransaction]);
+  }, [fetchHistoryTransaction]);
 
   const columns = [
     {
@@ -75,8 +74,8 @@ const BalanceView = () => {
   React.useEffect(() => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
       {
-        link: '/balance-information',
-        title: 'Thông tin số dư',
+        link: '/recharge-history',
+        title: 'Lịch sử nạp tiền',
         isActive: true,
       },
     ];
@@ -88,12 +87,15 @@ const BalanceView = () => {
   }, []);
   return (
     <div>
-      <BalanceInfo title="Thông tin số dư" />
-      <h3 className="mb-4 text-2xl font-bold">Biến động số dư</h3>
-      <TableComponent columns={columns} data={transactionData} />
-      <NoteDescriptions />
+      <BalanceInfo title="Lịch sử nạp tiền" />
+
+      <div className="c-historyFluctuation">
+        <h3 className="my-4 mt-8 text-xl font-bold">Lịch sử nạp tiền của bạn</h3>
+        <TableComponent columns={columns} data={historyTransactionData} />
+        <NoteDescriptions />
+      </div>
     </div>
   );
 };
 
-export default BalanceView;
+export default HistoryView;

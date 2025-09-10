@@ -12,7 +12,7 @@ import {
 import { Button } from '@components/ui/button';
 import { ClipboardEdit, Plus, Trash2 } from 'lucide-react';
 import { useAtom, useSetAtom } from 'jotai';
-import { breadcrumbAtom, IBreadcrumbItem } from '@views/dashboard/states/breadcrumbAtom';
+import { breadcrumbAtom, IBreadcrumbItem } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   AlertDialog,
@@ -33,7 +33,7 @@ import {
   showDialogTimePickerAtom,
   contentDialogTimerPickerAtom,
   defaultTimeRefresh,
-} from '@views/dashboard/main-manage-post/states/autorefreshAtoms';
+} from '../states/autorefreshAtoms';
 
 import EmptyTable from '@components/empty-table';
 import { DialogTimePicker } from './components';
