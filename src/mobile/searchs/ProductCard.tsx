@@ -8,8 +8,8 @@ import PostDetailMobile from '../post-detail/PostDetailMobile';
 import Image from 'next/image';
 import AuthorInfo from '@mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
-import ButtonSave from '@views/home/components/ButtonSave';
-import LoadingProductCard from '@views/home/components/LoadingProductCard';
+import ButtonSave from '@frontend/CategoryPage/components/ButtonSave';
+import LoadingProductCard from '@frontend/CategoryPage/components/LoadingProductCard';
 
 const styles: A = {
   imagesCountWrapper: {

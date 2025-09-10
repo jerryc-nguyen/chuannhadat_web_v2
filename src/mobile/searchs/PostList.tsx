@@ -11,7 +11,7 @@ import empty_city from '@assets/images/empty-city.png';
 import useSearchAggs from '@components/search-aggs/hooks';
 import useQueryPosts from '@hooks/useQueryPosts';
 
-import useLoadMissingAuthors from '@views/home/hooks/useLoadMissingAuthors';
+import useLoadMissingAuthors from '@frontend/CategoryPage/hooks/useLoadMissingAuthors';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import InfiniteProductLoaderMobile from './InfiniteProductLoaderMobile';

@@ -4,7 +4,7 @@ import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import Spinner from '@components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
-import { isLoadingModal, selectedPostId } from '@views/post-detail/states/modalPostDetailAtoms';
+import { isLoadingModal, selectedPostId } from '@frontend/PostDetail/states/modalPostDetailAtoms';
 import { useAtomValue } from 'jotai';
 import { Maximize2, SquarePen } from 'lucide-react';
 import Link from 'next/link';

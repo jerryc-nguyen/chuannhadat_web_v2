@@ -13,7 +13,7 @@ import ButtonSave from '../ButtonSave';
 
 // ✅ Dynamic import Embla carousel only when needed  
 const EmblaCarouselComponent = dynamic(
-  () => import('@/views/home/components/ThumbsCarousel/EmblaCarouselComponent'),
+  () => import('./EmblaCarouselComponent'),
   {
     ssr: false,
     loading: () => (

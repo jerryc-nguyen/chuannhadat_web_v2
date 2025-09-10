@@ -1,4 +1,4 @@
-import { CardNewSkeleton } from "@views/news/components/Skeleton";
+import { CardNewSkeleton } from "@frontend/NewsPage/components/Skeleton";
 
 export default function Loading() {
   return (

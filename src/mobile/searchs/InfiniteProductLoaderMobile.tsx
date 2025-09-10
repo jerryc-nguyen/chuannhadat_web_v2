@@ -4,7 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { searchApi } from '@api/searchApi';
 import { Skeleton } from '@components/ui/skeleton';
 import ProductCardV2 from './ProductCardV2';
-import useCardAuthors from '../../views/home/hooks/useCardAuthors';
+import useCardAuthors from '@frontend/CategoryPage/hooks/useCardAuthors';
 
 interface InfiniteProductLoaderMobileProps {
   initialProducts: A[];

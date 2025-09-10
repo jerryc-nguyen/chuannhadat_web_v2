@@ -8,7 +8,7 @@ import { dehydrate, HydrationBoundary, QueryClientProvider } from '@tanstack/rea
 
 import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
 import { listFilterMobile } from '@mobile/filter_bds/constants';
-import { ListTopAuthor } from '@views/home/components/ListTopAuthor';
+import { ListTopAuthor } from '@frontend/CategoryPage/components/ListTopAuthor';
 import { useFilterChipsUI } from '@hooks/useFilterChipsUI';
 
 export default function HomeMobile() {

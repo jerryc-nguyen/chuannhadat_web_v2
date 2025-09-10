@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { useSetAtom } from 'jotai';
-import { listPostIdSavedAtom } from '@views/home/states';
+import { listPostIdSavedAtom } from '@frontend/CategoryPage/states';
 import { AxiosError } from 'axios';
 import {
   ActionSaveProduct,

@@ -1,7 +1,7 @@
 
 import { useIsMobile } from '@hooks';
 import { listChipsQuery } from '../../constant/list_chips_query';
-import FilterChip from '@views/home/components/FilterChip';
+import FilterChip from '@frontend/CategoryPage/components/FilterChip';
 import FilterChips from '@mobile/filter_bds/FilterChips';
 
 interface TFilterChipsProps {

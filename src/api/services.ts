@@ -3,7 +3,7 @@ import { FRONTEND_TOKEN } from '@common/auth';
 import { getCookie } from '@common/cookies';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { IArticleDetail, INews, ResponseNewsByCategory } from '@views/news/types';
+import { IArticleDetail, INews, ResponseNewsByCategory } from '@frontend/NewsPage/types';
 import { IProductSummary } from '@frontend/PostDetail/type';
 import {
   IFormPropsLogin,
