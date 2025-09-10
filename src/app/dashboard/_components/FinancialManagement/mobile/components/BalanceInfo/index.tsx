@@ -1,5 +1,5 @@
-import useBalance from '@mobile/main-financial-management/hooks';
-import { IBalanceResponse } from '@mobile/main-financial-management/types';
+import useBalance from '../../hooks';
+import { IBalanceResponse } from '../../types';
 import { FC, useEffect, useState } from 'react';
 
 import { Info } from 'lucide-react';

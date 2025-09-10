@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { balanceInfoAtom } from '@mobile/main-financial-management/states';
+import { balanceInfoAtom } from '../mobile/states';
 import { useAtom } from 'jotai';
 import { IBalanceResponse } from '../types';
 import { BalanceUtils } from '@common/balance';

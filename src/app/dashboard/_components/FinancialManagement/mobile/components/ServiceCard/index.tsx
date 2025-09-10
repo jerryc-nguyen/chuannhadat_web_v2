@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useBalanceRequest } from '@api/balance';
 import { services } from '@api/services';
-import { Service } from '@mobile/main-financial-management/types';
+import { Service } from '../../types';
 import useModals from '@mobile/modals/hooks';
 import '@styles/pages/mobile/finacial-management/service-package.scss';
 import { useMutation } from '@tanstack/react-query';
@@ -45,13 +45,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
     onSuccess: (data) => {
       data.status
         ? openModal({
-            name: plan.plan_name,
-            title: plan.plan_name,
-            content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-            footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
-            maxHeightPercent: 0.5,
-            isHiddenScroll: true,
-          })
+          name: plan.plan_name,
+          title: plan.plan_name,
+          content: <PaymentDialog plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+          footer: <BuyButton plan={plan} onBuy={handleBuy} isLoading={isLoading} />,
+          maxHeightPercent: 0.5,
+          isHiddenScroll: true,
+        })
         : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
     },
     onError: (error: A) => {

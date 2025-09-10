@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@components/ui/card';
-import { ITransactionResponse } from '@mobile/main-financial-management/types';
+import { ITransactionResponse } from '../../types';
 import { format, isToday, parseISO, isYesterday } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -74,9 +74,8 @@ const TransactionActivity: React.FC<{
                       <div className="mr-3 flex-shrink-0">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
                           <span
-                            className={`${
-                              transaction.code === 1019 ? 'text-green-500' : 'text-blue-500'
-                            } text-lg`}
+                            className={`${transaction.code === 1019 ? 'text-green-500' : 'text-blue-500'
+                              } text-lg`}
                           >
                             {transaction.formatted_amount[0] !== '+' ? '🚀' : '➕'}
                           </span>
