@@ -1,4 +1,4 @@
-import useScrollRestoration from '@hooks/useScrollRestoration';
+import useScrollRestoration from '@common/hooks/useScrollRestoration';
 
 /**
  * Component that handles route changes without rendering anything

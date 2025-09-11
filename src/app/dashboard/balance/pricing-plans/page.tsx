@@ -1,7 +1,7 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import ServicePackageViewMobile from '@mobile/main-financial-management/service-package';
+import ServicePackageViewMobile from '@dashboard/FinancialManagement/pricing-plans/mobile';
 // Next Imports
-import ServicePackageViewDesktop from '@views/dashboard/main-financial-management/service-package';
+import ServicePackageViewDesktop from '@app/dashboard/_components/FinancialManagement/pricing-plans';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {

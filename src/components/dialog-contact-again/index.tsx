@@ -27,9 +27,9 @@ import {
   FormMessage,
 } from '@components/ui/form';
 import { useMutation } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { contactsApi } from '@app/dashboard/request/api/contacts';
 import { toast } from 'sonner';
-import { IRequestCallbackPayload } from '@models/modelPayload';
+import { IRequestCallbackPayload } from '@common/models/modelPayload';
 import { Loader2 } from 'lucide-react';
 
 type DialogContactAgainProps = {
@@ -49,7 +49,7 @@ const DialogContactAgain: React.FC<DialogContactAgainProps> = ({
   const [openDialog, setOpenDialog] = React.useState(false);
   const { mutate: requestMutate, isPending } = useMutation({
     mutationKey: ['request-callbacks'],
-    mutationFn: services.manage_contacts.requestCallback,
+    mutationFn: contactsApi.requestCallback,
     onSuccess: (data) => {
       if (data.status) {
         toast.success('Gửi yêu cầu thành công');

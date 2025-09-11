@@ -1,8 +1,8 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import type { Params } from '@models';
+import type { Params } from '@common/models';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import ManageProductApis from '@views/dashboard/main-manage-post/manage-post/apis/product-api';
-import EditPost from '@views/dashboard/main-manage-post/manage-post/edit_post';
+import ManageProductApis from '@dashboard/PostManagement/manage-posts/apis/product-api';
+import EditPost from '@dashboard/PostManagement/manage-posts/EditPost';
 
 export default async function PostDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
@@ -22,13 +22,7 @@ export default async function PostDetailPage({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      {isMobile ? (
-        <div className="c-mobileApp">
-          <EditPost productUid={productUid} />
-        </div>
-      ) : (
-        <EditPost productUid={productUid} />
-      )}
+      <EditPost productUid={productUid} isMobile={isMobile} />
     </HydrationBoundary>
   );
 }

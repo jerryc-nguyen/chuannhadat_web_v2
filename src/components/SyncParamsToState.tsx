@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
 
 const SyncParamsToState = () => {
   useSyncParamsToState();

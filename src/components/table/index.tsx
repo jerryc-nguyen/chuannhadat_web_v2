@@ -1,4 +1,4 @@
-import useCleanupEffect from '@hooks/useCleanupEffect';
+import useCleanupEffect from '@common/hooks/useCleanupEffect';
 import React, { useState } from 'react';
 
 interface DataType {

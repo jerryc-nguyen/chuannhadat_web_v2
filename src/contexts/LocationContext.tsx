@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { OptionForSelect } from '@models';
+import { OptionForSelect } from '@common/models';
 
 interface LocationContextType {
   // Data

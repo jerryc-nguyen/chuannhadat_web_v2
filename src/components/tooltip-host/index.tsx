@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@common/utils';
-import useCleanupEffect from '@hooks/useCleanupEffect';
+import useCleanupEffect from '@common/hooks/useCleanupEffect';
 import React from 'react';
 
 type TooltipHostProps = {

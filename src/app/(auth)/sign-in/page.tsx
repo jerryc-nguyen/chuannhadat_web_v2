@@ -1,6 +1,6 @@
 'use client';
 import Logo from '@components/logo';
-import LoginForm from '@mobile/auth/login/form';
+import LoginForm from '@frontend/features/auth/mobile/login/form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';

@@ -1,18 +1,10 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import NewPost from '@views/dashboard/main-manage-post/manage-post/new_post';
+import NewPost from '@dashboard/PostManagement/manage-posts/NewPost';
 import React from 'react';
 
 const NewPostPage: React.FC = async () => {
   const { isMobile } = await getUserAgentInfo();
-  if (isMobile) {
-    return (
-      <div className="c-mobileApp">
-        <NewPost />
-      </div>
-    );
-  } else {
-    return <NewPost />;
-  }
+  return <NewPost isMobile={isMobile} />
 };
 
 export default NewPostPage;
