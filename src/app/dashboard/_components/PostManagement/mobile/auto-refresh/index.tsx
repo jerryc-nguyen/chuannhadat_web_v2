@@ -38,8 +38,6 @@ import {
 
 import EmptyTable from '@components/empty-table';
 import { DialogTimePicker } from '@dashboard/PostManagement/auto-refresh/components';
-import { services } from '@dashboard/PostManagement/apis';
-import CardPackage from '@components/ui/CardPackage';
 
 const AutoRefreshMobile: React.FC = () => {
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
@@ -293,34 +291,6 @@ const AutoRefreshMobile: React.FC = () => {
     </div>
   );
 
-  const refeshListPackage = () => (
-    <div>
-      <h2 className="mb-2 text-lg font-semibold">Các gói đăng tin</h2>
-      <div className="flex flex-col gap-x-4 gap-y-4 lg:flex-row">
-        <CardPackage
-          cardTitle="Gói làm mới 1"
-          pricePackage="100 Xu"
-          unitTime="tháng"
-          description="Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top"
-          listPreferential={['Số lần làm mới tin: 300']}
-        />
-        <CardPackage
-          cardTitle="Gói làm mới 2"
-          pricePackage="200 Xu"
-          unitTime="tháng"
-          description="Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top"
-          listPreferential={['Số lần làm mới tin: 800']}
-        />
-        <CardPackage
-          cardTitle="Gói làm mới 3"
-          pricePackage="500 Xu"
-          unitTime="tháng"
-          description="Gói làm mới tin đăng giúp bạn tiết kiệm thời gian và đẩy tin lên top"
-          listPreferential={['Số lần làm mới tin: 2000']}
-        />
-      </div>
-    </div>
-  );
   const renderDialogScheduleTime = () => (
     <DialogTimePicker
       isLoadingSubmit={isLoadingDialog}
@@ -359,7 +329,6 @@ const AutoRefreshMobile: React.FC = () => {
       {addTimeRefresh()}
       {numberRefreshPost()}
       {refreshSettingsTable()}
-      {refeshListPackage()}
       {renderDialogScheduleTime()}
       {renderDialogWarning()}
     </section>

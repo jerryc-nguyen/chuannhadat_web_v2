@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useBalanceRequest } from '@common/api/balance';
-import { subscriptionApi } from '../api/subscription';
+import { subscriptionApi } from '@dashboard/FinancialManagement/api/subscription';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
