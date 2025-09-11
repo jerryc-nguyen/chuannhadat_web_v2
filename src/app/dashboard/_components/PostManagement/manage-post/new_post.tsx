@@ -7,7 +7,7 @@ import { businessTypeOptions, categoryTypeOptions } from './constant';
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@components/ui/button';
-import { useIsMobile, useSyncQueryToUrl } from '@hooks';
+import { useIsMobile, useSyncQueryToUrl } from '@common/hooks';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { IPostForm } from '../types';
@@ -20,7 +20,7 @@ import ProjectForm from './components/form-components/project-form';
 
 import { PostFormSchema } from './form-schemas';
 
-import { useBreadcrumb } from '@hooks/useBreadcrumb';
+import { useBreadcrumb } from '@common/hooks/useBreadcrumb';
 import React, { useEffect, useRef } from 'react';
 import { FormMobile } from './mobile/form-create';
 import { useAuth } from '@common/auth/AuthContext';

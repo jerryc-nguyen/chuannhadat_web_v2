@@ -3,14 +3,14 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './styles/profile-detail.module.scss';
 
-import { searchApi } from '@api/searchApi';
-import { services } from '@api/services';
+import { searchApi } from '@common/api/searchApi';
+import { profilesApi } from './api/profiles';
 import NotFound from '@app/not-found';
 import empty_city from '@assets/images/empty-city.png';
 import { filterChipOptionsByAggregations } from '@common/filterHelpers';
-import useMainContentNavigator from '@components/main-content-navigator/hooks';
-import useSearchAggs from '@components/search-aggs/hooks';
-import { useSyncParamsToState } from '@hooks/useSyncParamsToState';
+import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
+import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
 import { listFilterProfileDesktop } from '../CategoryPage/mobile/filter_bds/constants';
 import useFilterState from '../CategoryPage/mobile/filter_bds/hooks/useFilterState';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
@@ -40,7 +40,7 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
-    queryFn: () => services.profiles.getProfileSlug(profileSlug),
+    queryFn: () => profilesApi.getProfileSlug(profileSlug),
     select: (data) => data.data,
   });
 

@@ -1,4 +1,4 @@
-import { FilterFieldName } from '@models';
+import { FilterFieldName } from '@common/models';
 import useFilterState from '../hooks/useFilterState';
 import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs';
 

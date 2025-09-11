@@ -6,7 +6,7 @@ import Fade from 'embla-carousel-fade';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { cn } from '@common/utils';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
 import ButtonSave from '../ButtonSave';
 

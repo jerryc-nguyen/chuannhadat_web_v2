@@ -1,12 +1,12 @@
-import { searchApi } from '@api/searchApi';
+import { searchApi } from '@common/api/searchApi';
 import { AuthUtils } from '@common/auth';
-import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
 import {
   FILTER_FIELDS_PARAMS_MAP,
   FILTER_FIELDS_TO_PARAMS,
   FilterFieldName,
   OptionForSelect,
-} from '@models';
+} from '@common/models';
 import { useAtom, useAtomValue } from 'jotai';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
@@ -18,7 +18,7 @@ import {
 } from '../states';
 import { FilterChipOption, FilterState } from '../types';
 
-import { useFilterLocations } from '@mobile/locations/hooks';
+import { useFilterLocations } from '@components/features/navigation/mobile-locations/hooks';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);

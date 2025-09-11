@@ -1,6 +1,6 @@
-import { services } from '@api/services';
+import { searchApi } from '../api/search';
 import { FilterState } from '../mobile/filter_bds/types';
-import { ISeachAuthorPayload } from '@models/modelPayload';
+import { ISeachAuthorPayload } from '@common/models/modelPayload';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
@@ -19,7 +19,7 @@ export const useTopAuthors = (filterState: FilterState) => {
 
   const { data: topAuthors, isFetching } = useQuery({
     queryKey: ['top-authors', payloadTopAuthors],
-    queryFn: () => services.searchs.topAuthors(payloadTopAuthors),
+    queryFn: () => searchApi.topAuthors(payloadTopAuthors),
     enabled: Object.values(payloadTopAuthors).some((value) => !!value),
     select: (data) => data.data,
   });

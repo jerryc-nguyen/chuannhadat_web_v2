@@ -3,7 +3,7 @@ import { shortenLocationName } from '@common/stringHelpers';
 import { cn } from '@common/utils';
 import TooltipHost from '@components/tooltip-host';
 import { Skeleton } from '@components/ui/skeleton';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import { filterStateAtom } from '../mobile/filter_bds/states';
 import { HoverCardAuthorMobile } from './hover-card-author/HoverCardAuthorMobile';
 import { useAtom } from 'jotai';

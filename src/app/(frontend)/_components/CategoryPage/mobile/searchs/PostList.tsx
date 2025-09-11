@@ -1,15 +1,15 @@
 'use client';
 import { Button } from '@components/ui/button';
-import { useRefCallback } from '@hooks/useRefCallback';
+import { useRefCallback } from '@common/hooks/useRefCallback';
 import SortOptions from '../filter_bds/bts/SortOptions';
 import useFilterState from '../filter_bds/hooks/useFilterState';
-import useModals from '@mobile/modals/hooks';
-import { FilterFieldName } from '@models';
+import useModals from '@components/features/layout/mobile-modals/hooks';
+import { FilterFieldName } from '@common/models';
 import { ChevronDown } from 'lucide-react';
 
 import empty_city from '@assets/images/empty-city.png';
-import useSearchAggs from '@components/search-aggs/hooks';
-import useQueryPosts from '@hooks/useQueryPosts';
+import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import useQueryPosts from '@common/hooks/useQueryPosts';
 
 import useLoadMissingAuthors from '@frontend/CategoryPage/hooks/useLoadMissingAuthors';
 import Image from 'next/image';

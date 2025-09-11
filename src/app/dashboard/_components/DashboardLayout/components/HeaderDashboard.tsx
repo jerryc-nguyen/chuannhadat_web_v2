@@ -3,10 +3,10 @@ import { API_TOKEN_SERVER } from '@common/auth';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import Breadcrumb from '@components/breadcrumb';
 import { SidebarTrigger } from '@components/ui/sidebar';
-import MainNavRight from '@mobile/header/MainNavRight';
-import AvatarIcon from '@views/components/AvatarIcon';
-import FavoriteIcon from '@views/components/FavoriteIcon';
-import NotificationIcon from '@views/components/NotificationIcon';
+import MainNavRight from '@components/features/layout/mobile-header/MainNavRight';
+import AvatarIcon from '@components/desktop/components/AvatarIcon';
+import FavoriteIcon from '@components/desktop/components/FavoriteIcon';
+import NotificationIcon from '@components/desktop/components/NotificationIcon';
 import ButtonCreatePost from './ButtonCreatePost';
 
 type HeaderDashboardProps = object;

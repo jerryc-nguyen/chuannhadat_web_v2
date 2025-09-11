@@ -1,8 +1,8 @@
 'use client';
 
-import { services } from '@api/services';
+import { newsApi } from './api/news';
 import SyncParamsToState from '@components/SyncParamsToState';
-import { useIsMobile } from '@hooks';
+import { useIsMobile } from '@common/hooks';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import NormalArticleCard from './components/NormalArticleCard';
 import PrimaryArticleCard from './components/PrimaryArticleCard';
@@ -13,7 +13,7 @@ export function NewsList() {
 
   const { data } = useSuspenseQuery({
     queryKey: ['get-news'],
-    queryFn: services.news.getNews,
+    queryFn: newsApi.getNews,
     select: (data) => data.data,
   });
 

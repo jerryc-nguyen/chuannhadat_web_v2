@@ -1,7 +1,7 @@
-import useModals from '@mobile/modals/hooks';
+import useModals from '@components/features/layout/mobile-modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
-import { searchApi } from '@api/searchApi';
+import { searchApi } from '@common/api/searchApi';
 import { Button } from '@components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { FilterChipOption } from './types';

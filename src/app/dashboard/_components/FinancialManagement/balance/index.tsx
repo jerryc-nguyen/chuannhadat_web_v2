@@ -4,7 +4,7 @@ import '@styles/pages/mobile/finacial-management/balance.scss';
 import { format, parseISO } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 
-import { useBalanceRequest } from '@api/balance';
+import { useBalanceRequest } from '@common/api/balance';
 import TableComponent from '@components/table';
 import {
   breadcrumbAtom,

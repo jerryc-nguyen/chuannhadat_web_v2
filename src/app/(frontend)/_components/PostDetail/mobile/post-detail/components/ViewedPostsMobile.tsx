@@ -1,7 +1,7 @@
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
-import { useViewedPosts } from '@hooks/useViewedPosts';
+import { useViewedPosts } from '@common/hooks/useViewedPosts';
 import ProductCard from '@frontend/CategoryPage/mobile/searchs/ProductCard';
 import { IProduct } from '@frontend/CategoryPage/mobile/searchs/type';
 import { Loader2 } from 'lucide-react';

@@ -3,9 +3,9 @@ import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 import NotFound from '@app/not-found';
-import { usePostDetail } from '@hooks/usePostDetail';
+import { usePostDetail } from '@common/hooks/usePostDetail';
 import { IProductDetail } from '../CategoryPage/mobile/searchs/type';
-import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@views/components/breadcrumb';
+import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@components/desktop/components/breadcrumb';
 import { useSetAtom } from 'jotai';
 import AuthorPost from './components/author-post';
 import DescriptionPost from './components/description-post';

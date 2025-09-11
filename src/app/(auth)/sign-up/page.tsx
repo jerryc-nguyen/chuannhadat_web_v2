@@ -3,7 +3,7 @@ import Logo from '@components/logo';
 import Link from 'next/link';
 import React from 'react';
 import { ChevronLeft } from 'lucide-react';
-import RegisterForm from '@mobile/auth/register/form';
+import RegisterForm from '@components/features/auth/mobile/register/form';
 import { useRouter } from 'next/navigation';
 
 type SignUpPageProps = object;

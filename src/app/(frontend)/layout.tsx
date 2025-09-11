@@ -1,8 +1,8 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import HeaderMobile from '@mobile/header/HeaderMobile';
+import HeaderMobile from '@components/features/layout/mobile-header/HeaderMobile';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import Footer from '@views/components/Footer';
-import HeaderDesktop from '@views/components/HeaderDeskop';
+import Footer from '@components/desktop/components/Footer';
+import HeaderDesktop from '@components/desktop/components/HeaderDeskop';
 import FacebookMessengerDynamic from '@/components/FacebookMessengerDynamic';
 
 export default async function HomeLayout({

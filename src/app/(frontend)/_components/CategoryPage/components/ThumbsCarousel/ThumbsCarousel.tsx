@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@common/utils';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
 import ButtonSave from '../ButtonSave';
 

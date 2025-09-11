@@ -1,6 +1,6 @@
 import useFilterState from '../../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from '@models';
-import useMainContentNavigator from '@components/main-content-navigator/hooks';
+import { FilterFieldName, OptionForSelect } from '@common/models';
+import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 
 export default function Projects() {

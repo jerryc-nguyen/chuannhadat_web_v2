@@ -6,7 +6,7 @@ import '@styles/pages/desktop/finacial-management/service-package.scss';
 import { ServicePackageInfo } from '../types';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@common/auth/AuthContext';
-import { services } from '@api/services';
+import { subscriptionApi } from '../../api/subscription';
 import ServiceCard from '../components/ServiceCard';
 import Link from 'next/link';
 import { useSetAtom } from 'jotai';
@@ -22,7 +22,7 @@ const ServicePackageView = () => {
   const { data } = useQuery({
     queryKey: ['subscriptionPlans', currentUser],
     queryFn: () =>
-      currentUser ? services.subscription_plans.getSubscriptionPlans() : Promise.resolve(null),
+      currentUser ? subscriptionApi.getSubscriptionPlans() : Promise.resolve(null),
     enabled: !!currentUser,
     staleTime: 300000,
   });

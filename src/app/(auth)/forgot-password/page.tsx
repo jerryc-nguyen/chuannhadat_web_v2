@@ -17,14 +17,14 @@ import forgot_password from '@assets/icons/Forgot password-bro.svg';
 import Image from 'next/image';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { services } from '@api/services';
+import { authApi } from '@common/api/auth';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Loader2, MessageCircleMore, CircleCheck, ChevronLeft } from 'lucide-react';
 import TooltipHost from '@components/tooltip-host';
 import CommonAlertDialog from '@components/common-dialog';
-import { IVerifyPhoneResponse } from '@models/modelResponse';
+import { IVerifyPhoneResponse } from '@common/models/modelResponse';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 
 type ForgotPasswordProps = object;
@@ -41,7 +41,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
 
   // Call api
   const { mutate: resetPassword } = useMutation({
-    mutationFn: services.auth.checkResetPassword,
+    mutationFn: authApi.checkResetPassword,
     onError: (err: AxiosError<A>) => {
       console.error('Có lỗi khi gửi yêu cầu', err);
     },
@@ -52,7 +52,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
     },
   });
   const { mutate: checkPhone, isPending: isLoadingCheckPhone } = useMutation({
-    mutationFn: services.auth.verifyPhone,
+    mutationFn: authApi.verifyPhone,
     onError: (err: AxiosError<A>) => {
       console.error('Có lỗi khi gửi yêu cầu', err);
     },

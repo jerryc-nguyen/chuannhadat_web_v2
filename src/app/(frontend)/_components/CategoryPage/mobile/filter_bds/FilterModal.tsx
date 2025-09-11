@@ -1,13 +1,13 @@
 import React from 'react';
 import { List, ListItem } from '@components/konsta';
 
-import { FilterFieldName } from '@models';
+import { FilterFieldName } from '@common/models';
 import Area from './bts/Area';
 import Price from './bts/Price';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
-import useModals from '@mobile/modals/hooks';
+import useModals from '@components/features/layout/mobile-modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import Direction from './bts/Direction';
 import Bed from './bts/Bed';

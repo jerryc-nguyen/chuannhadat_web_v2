@@ -1,7 +1,7 @@
-import { FilterFieldName, OptionForSelect } from '@models';
+import { FilterFieldName, OptionForSelect } from '@common/models';
 
 import useFilterState from '../hooks/useFilterState';
-import ListChips from '@mobile/ui/ListChips';
+import ListChips from '@components/mobile-ui/ListChips';
 
 export default function Bath({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
   const { getLocalFieldValue, setLocalFieldValue, filterFieldOptions } = useFilterState();

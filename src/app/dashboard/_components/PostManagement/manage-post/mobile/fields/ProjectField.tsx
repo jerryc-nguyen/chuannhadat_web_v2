@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { OptionForSelect } from '@models';
+import { OptionForSelect } from '@common/models';
 import ListItem from '@components/konsta/ListItem';
 import List from '@components/konsta/List';
 import { CardTitle } from '@components/ui/card';

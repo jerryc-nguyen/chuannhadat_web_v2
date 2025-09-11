@@ -1,7 +1,7 @@
 import background_profile from '@assets/images/background_profile.jpg';
 import Image, { StaticImageData } from 'next/image';
 import default_avatar from '@assets/images/default_avatar.png';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import { useState } from 'react';
 
 export default function ProfileImage({ profileData }: { profileData: A }) {

@@ -1,7 +1,7 @@
 'use client';
 import { searchParamsToObj } from '@common/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useBreadcrumb, useSyncQueryToUrl } from '@hooks';
+import { useBreadcrumb, useSyncQueryToUrl } from '@common/hooks';
 import { merge } from 'lodash-es';
 import { useSearchParams } from 'next/navigation';
 import { FormProvider, useForm } from 'react-hook-form';

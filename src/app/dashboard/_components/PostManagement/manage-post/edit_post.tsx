@@ -2,8 +2,8 @@
 
 import { Button } from '@components/ui/button';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useIsMobile, useSyncQueryToUrl } from '@hooks';
-import { useBreadcrumb } from '@hooks/useBreadcrumb';
+import { useIsMobile, useSyncQueryToUrl } from '@common/hooks';
+import { useBreadcrumb } from '@common/hooks/useBreadcrumb';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -19,7 +19,7 @@ import ProjectForm from './components/form-components/project-form';
 import { PostFormSchema } from './form-schemas';
 import { FormMobile } from './mobile/form-create';
 import { useManagePostsCache } from '../collection-post/hooks/useManagePostsCache';
-import { getQueryClient } from "@api/react-query";
+import { getQueryClient } from "@common/api/react-query";
 import { DASHBOARD_ROUTES } from '@common/router';
 
 const EditPost = ({ productUid }: { productUid: string }) => {

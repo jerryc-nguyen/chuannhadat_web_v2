@@ -12,7 +12,7 @@ import {
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { profileApi } from '@dashboard/AccountDetail/api/profile';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@common/auth/AuthContext';
 
@@ -26,7 +26,7 @@ const ConfirmEmailModal: React.FC = () => {
   const [isConfirmSuccess, setIsConfirmSuccess] = React.useState(false);
   const { data: profileMe } = useQuery({
     queryKey: ['get-profile-me'],
-    queryFn: services.profiles.getMyProfile,
+    queryFn: profileApi.getMyProfile,
     select: (data) => data.data,
   });
   React.useEffect(() => {
@@ -37,7 +37,7 @@ const ConfirmEmailModal: React.FC = () => {
   }, [profileMe]);
 
   const { mutate: confirmEmail, isPending } = useMutation({
-    mutationFn: services.profiles.confirmEmail,
+    mutationFn: profileApi.confirmEmail,
     onError: () => {
       router.replace('/', undefined);
     },

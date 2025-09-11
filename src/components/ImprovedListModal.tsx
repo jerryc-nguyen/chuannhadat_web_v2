@@ -2,25 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import useBrowserPopstate from './popstate-handler/hooks';
+import useBrowserPopstate from './features/navigation/popstate-handler/hooks';
 
 // Temporary: Use direct imports to isolate webpack runtime issue
-import { BtsModals1, BtsModals2, BtsModals3 } from '@mobile/modals';
+import { BtsModals1, BtsModals2, BtsModals3 } from '@components/features/layout/mobile-modals';
 
 // Temporary: Use direct imports to isolate webpack runtime issue
 import DepositModal from './ui/DepositModal';
 import ModalPostDetail from '@frontend/PostDetail/components/modal-post-detail';
-import { YoutubePlayerModal } from './youtube-player-modal/YoutubePlayerModal';
+import { YoutubePlayerModal } from './features/media/youtube-player-modal/YoutubePlayerModal';
 
 // Lightweight components - keep static
-import SidePanel from './SidePanel';
+import SidePanel from './features/layout/SidePanel';
 import ConfirmEmailModal from './ui/ConfirmEmailModal';
 
 // State imports
-import { btsModalAtom, btsModal2Atom, btsModal3Atom } from '@mobile/modals/states';
+import { btsModalAtom, btsModal2Atom, btsModal3Atom } from '@components/features/layout/mobile-modals/states';
 import { openModalDetail } from '@frontend/PostDetail/states/modalPostDetailAtoms';
 import { openModalDepositAtom } from '@dashboard/DashboardLayout/states/depositAtoms';
-import { youtubePlayerAtom } from './youtube-player-modal/state';
+import { youtubePlayerAtom } from './features/media/youtube-player-modal/state';
 
 // Optimized loading fallback
 const ModalLoader = () => (

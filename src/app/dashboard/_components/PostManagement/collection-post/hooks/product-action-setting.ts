@@ -1,4 +1,4 @@
-import { getQueryClient } from '@api/react-query';
+import { getQueryClient } from '@common/api/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { get } from 'lodash-es';
 import ProductApiService from '../apis/product-api';

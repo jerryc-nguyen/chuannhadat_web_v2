@@ -4,13 +4,13 @@ import { AxiosError } from 'axios';
 import styles from './CardImageCarousel/CardImageCarousel.module.scss';
 import { HeartOutline, HeartFilled } from '@components/icons/CustomIcons';
 
-import { ActionSaveProduct, ISaveProductPayload } from '@models/savesPostModel';
+import { ActionSaveProduct, ISaveProductPayload } from '@common/models/savesPostModel';
 import { listPostIdSavedAtom } from '../states';
 import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { cn } from '@common/utils';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { savesApi } from '../api/saves';
 import { toast } from 'sonner';
 type ButtonSaveProps = {
   postUid: string;
@@ -46,7 +46,7 @@ const ButtonSave = React.forwardRef<ButtonSaveHandle, ButtonSaveProps>(
       setIsSaved(isPostSaved);
     }, [isPostSaved]);
     const { mutate: savePostMutate } = useMutation({
-      mutationFn: services.saves.savePost,
+      mutationFn: savesApi.savePost,
       onError: (err: AxiosError<A>) => {
         console.error('Error fetching update', err);
       },

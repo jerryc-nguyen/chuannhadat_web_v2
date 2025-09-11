@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { useBalanceRequest } from '@api/balance';
-import { services } from '@api/services';
+import { useBalanceRequest } from '@common/api/balance';
+import { subscriptionApi } from '../api/subscription';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
@@ -19,7 +19,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
 
   const buyPlanMutation = useMutation({
     mutationFn: async (planId: number) => {
-      return await services.subscription_plans.buySubscriptionPlans(planId);
+      return await subscriptionApi.buySubscriptionPlans(planId);
     },
     onSuccess: (data) => {
       if (data.status) {
@@ -38,7 +38,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
 
   const buyPlanValidatorMutation = useMutation({
     mutationFn: async (planId: number) => {
-      return await services.subscription_plans.validateBuySubscriptionPlans(planId);
+      return await subscriptionApi.validateBuySubscriptionPlans(planId);
     },
     onSuccess: (data) => {
       data.status

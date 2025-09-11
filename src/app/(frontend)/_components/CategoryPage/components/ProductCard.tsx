@@ -4,7 +4,7 @@ import BadRoomIcon from '@assets/icons/bedroom-icon';
 import { cn } from '@common/utils';
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card';
 import Spinner from '@components/ui/spinner';
-import { YoutubePlayerAction } from '@components/youtube-player-modal';
+import { YoutubePlayerAction } from '@components/features/media/youtube-player-modal';
 import { useAtomValue } from 'jotai';
 import Link from 'next/link';
 import { isLoadingModal, selectedPostId } from '@frontend/PostDetail/states/modalPostDetailAtoms';

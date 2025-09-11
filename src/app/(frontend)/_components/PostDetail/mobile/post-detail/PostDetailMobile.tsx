@@ -1,14 +1,14 @@
 'use client';
 
-import { services } from '@api/services';
+import { postsApi } from '../../api/posts';
 import NotFound from '@app/not-found';
 import Spinner from '@components/ui/spinner';
-import { usePostDetail } from '@hooks/usePostDetail';
+import { usePostDetail } from '@common/hooks/usePostDetail';
 import AuthorInfo from './components/AuthorInfo';
 import PhotosCarousel from './components/PhotosCarousel';
 import { authorAtom, postDetailAtom } from './states';
 import type { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
-import Section from '@mobile/ui/Section';
+import Section from '@components/mobile-ui/Section';
 import { isServer, useMutation } from '@tanstack/react-query';
 import { FeaturesList } from '@frontend/PostDetail/components/features-post';
 import { useSetAtom } from 'jotai';
@@ -32,7 +32,7 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
   });
 
   const { mutate: addViewPost } = useMutation({
-    mutationFn: services.trackings.viewProduct,
+    mutationFn: postsApi.viewProduct,
   });
 
   useEffect(() => {

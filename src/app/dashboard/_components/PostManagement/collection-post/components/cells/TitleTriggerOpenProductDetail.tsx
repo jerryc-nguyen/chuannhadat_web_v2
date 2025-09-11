@@ -1,7 +1,7 @@
 'use client';
 
-import { useIsMobile } from '@hooks';
-import useModals from '@mobile/modals/hooks';
+import { useIsMobile } from '@common/hooks';
+import useModals from '@components/features/layout/mobile-modals/hooks';
 import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetailMobile';
 import AuthorInfo from '@frontend/PostDetail/mobile/post-detail/components/AuthorInfo';
 import { ProductDetailTitleBts } from '@frontend/CategoryPage/mobile/searchs/ProductCardV2';

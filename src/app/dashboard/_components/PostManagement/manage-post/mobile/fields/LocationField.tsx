@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { OptionForSelect } from '@models';
+import { OptionForSelect } from '@common/models';
 import List from '@components/konsta/List';
 import { CardTitle } from '@components/ui/card';
-import LocationsPicker from '@mobile/ui/LocationsPicker';
+import LocationsPicker from '@components/mobile-ui/LocationsPicker';
 import { IPostForm } from '../../../types';
 
 interface LocationFieldProps {

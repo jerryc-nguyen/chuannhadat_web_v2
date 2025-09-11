@@ -1,4 +1,4 @@
-import { ILoginResponse } from '@mobile/auth/types';
+import { ILoginResponse } from '@components/features/auth/mobile/types';
 import { getFromStorage, removeFromStorage, saveToStorage } from './localstorage';
 import { getCookie } from './cookies';
 

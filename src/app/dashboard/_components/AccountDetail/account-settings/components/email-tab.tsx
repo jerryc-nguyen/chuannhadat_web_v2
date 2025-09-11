@@ -1,4 +1,4 @@
-import { services } from '@api/services';
+import { profileApi } from '../../api/profile';
 import { Button } from '@components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@components/ui/form';
 import { Input } from '@components/ui/input';
@@ -35,7 +35,7 @@ const EmailTab: React.FC = () => {
     currentUser?.unconfirmed_email,
   );
   const { mutate: updateEmail, isPending } = useMutation({
-    mutationFn: services.profiles.updateEmail,
+    mutationFn: profileApi.updateEmail,
     onError: (err: AxiosError<A>) => {
       toast.error(`Cập nhật email không thành công ${err.message}`);
     },
@@ -44,7 +44,7 @@ const EmailTab: React.FC = () => {
         toast.success('Cập nhật email thành công');
         const data = await queryClient.fetchQuery({
           queryKey: ['get-profile-me'],
-          queryFn: services.profiles.getMyProfile,
+          queryFn: profileApi.getMyProfile,
         });
         updateCurrentUser(data.data);
       } else {

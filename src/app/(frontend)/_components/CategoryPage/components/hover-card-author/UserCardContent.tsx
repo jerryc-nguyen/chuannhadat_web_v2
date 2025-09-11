@@ -1,4 +1,4 @@
-import { services } from '@api/services';
+import { profilesApi } from '@frontend/ProfileDetail/api/profiles';
 import { getInitialsName, truncateText } from '@common/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Button } from '@components/ui/button';
@@ -16,7 +16,7 @@ type UserCardContentProps = {
 const UserCardContent: React.FC<UserCardContentProps> = ({ authorSlug }) => {
   const { data: authorData, status } = useQuery({
     queryKey: ['get-author-by-slug', authorSlug],
-    queryFn: () => services.profiles.getProfileSlug(authorSlug),
+    queryFn: () => profilesApi.getProfileSlug(authorSlug),
     enabled: !!authorSlug,
     select: (data) => data.data,
   });

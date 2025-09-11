@@ -1,5 +1,5 @@
 'use client';
-import { services } from '@api/services';
+import { contactsApi } from '../api/contacts';
 import { IColumnTable } from '@components/common-table';
 import CommonTableView from '@components/common-table/CommonTableView';
 import {
@@ -17,7 +17,7 @@ type CallbackPageProps = object;
 const CallbackPage: React.FC<CallbackPageProps> = () => {
   const { data: listRequest, isPending } = useQuery({
     queryKey: ['get-list-request'],
-    queryFn: services.manage_contacts.getListRequest,
+    queryFn: contactsApi.getListRequest,
     select: (data) => data.data,
   });
 

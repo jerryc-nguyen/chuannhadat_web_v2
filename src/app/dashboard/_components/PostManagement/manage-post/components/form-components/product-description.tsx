@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { BadgeInfo } from 'lucide-react';
-import { useIsMobile } from '@hooks';
+import { useIsMobile } from '@common/hooks';
 
 // TODO: Remove ProductDescriptionForm component, use single field, add Typescript
 

@@ -7,7 +7,7 @@ import { Facebook, MapPin, Youtube } from 'lucide-react';
 import { CalendarDays } from 'lucide-react';
 import { BookUser } from 'lucide-react';
 import React from 'react';
-import useCleanupEffect from '@hooks/useCleanupEffect';
+import useCleanupEffect from '@common/hooks/useCleanupEffect';
 
 export default function ProfileInfo({ profileData }: { profileData: A }) {
   const [isVisible, setIsVisible] = React.useState(false);

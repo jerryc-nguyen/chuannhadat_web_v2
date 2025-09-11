@@ -1,5 +1,5 @@
 'use client';
-import { services } from '@api/services';
+import { newsApi } from '@frontend/NewsPage/api/news';
 import { cn } from '@common/utils';
 import SyncParamsToState from '@components/SyncParamsToState';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ export const NewsDetail = ({ slug }: { slug: string }) => {
   const { data: newsByCategory } = useSuspenseQuery({
     queryKey: ['get-news-by-category', slug],
     queryFn: async () => {
-      return services.news.getNewsByCategory(slug);
+      return newsApi.getNewsByCategory(slug);
     },
   });
 
@@ -22,7 +22,7 @@ export const NewsDetail = ({ slug }: { slug: string }) => {
     queryKey: ['get-news-detail', ref],
     queryFn: async () => {
       if (!ref) return null;
-      const res = await services.news.getNewsDetail(ref);
+      const res = await newsApi.getNewsDetail(ref);
       return res.data;
     },
   });

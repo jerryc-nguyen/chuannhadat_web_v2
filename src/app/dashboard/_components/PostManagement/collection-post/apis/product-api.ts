@@ -1,6 +1,6 @@
 
 import { API_ROUTES } from '@common/router';
-import axiosInstance from '@api/axiosInstance';
+import axiosInstance from '@common/api/axiosInstance';
 import { ProductQuery } from '../data/schemas/product-query-schema';
 import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput, UpVipProductInput } from '../data/schemas/product-action-schema';
 

@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
 import { useQueryClient } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { postsApi } from '../api/posts';
 import { postDetailAtom } from '../states/postDetailAtoms';
 
 export default function useModalPostDetail() {
@@ -24,7 +24,7 @@ export default function useModalPostDetail() {
     // 3. Prefetch data for better performance
     queryClient.prefetchQuery({
       queryKey: ['get-detail-post', postId],
-      queryFn: () => services.posts.getDetailPost(postId),
+      queryFn: () => postsApi.getDetailPost(postId),
     });
   };
   return {

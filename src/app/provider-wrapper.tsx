@@ -20,7 +20,7 @@ const ListModal = dynamic(
 );
 
 const SessionTimeOutPopup = dynamic(
-  () => import('@components/timeout-popup/SessionTimeOutPopup'),
+  () => import('@components/features/auth/timeout-popup/SessionTimeOutPopup'),
   { ssr: false }
 );
 

@@ -6,10 +6,10 @@ import { Check, Clipboard } from 'lucide-react';
 
 import { useAuth } from '@common/auth/AuthContext';
 import { useQuery } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { referralsApi } from '@app/(frontend)/gioi-thieu-ban-be/api/referrals';
 import CommonTableView from '@components/common-table/CommonTableView';
 import { IColumnTable } from '@components/common-table';
-import { IReferralData } from '@models/modelResponse';
+import { IReferralData } from '@common/models/modelResponse';
 import { Skeleton } from '@components/ui/skeleton';
 
 const ReferFriend: React.FC = () => {
@@ -17,7 +17,7 @@ const ReferFriend: React.FC = () => {
   const { currentUser } = useAuth();
   const { data: listReferral, isPending } = useQuery({
     queryKey: ['list-referral'],
-    queryFn: services.referralls.getListReferralFriend,
+    queryFn: referralsApi.getListReferralFriend,
     select: (data) => data.data,
   });
   const handleCopyUrlRefer = async () => {

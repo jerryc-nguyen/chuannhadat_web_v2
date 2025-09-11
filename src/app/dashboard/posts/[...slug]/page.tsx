@@ -1,5 +1,5 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import type { Params } from '@models';
+import type { Params } from '@common/models';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import ManageProductApis from '@dashboard/PostManagement/manage-post/apis/product-api';
 import EditPost from '@dashboard/PostManagement/manage-post/edit_post';

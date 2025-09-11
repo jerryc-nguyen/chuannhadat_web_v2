@@ -1,6 +1,6 @@
 import { cn } from '@common/utils';
 import { AspectRatio } from '@components/ui/AspectRatio';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import useModalPostDetail from '../../hooks/useModalPostDetail';
 import { IProductSummary } from '../../type';
 import React from 'react';

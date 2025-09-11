@@ -1,12 +1,12 @@
 'use client';
-import { services } from '@api/services';
+import { profilesApi } from '../api/profiles';
 import NotFound from '@app/not-found';
 import background_profile from '@assets/images/background_profile.jpg';
 import default_avatar from '@assets/images/default_avatar.png';
 import ButtonPhone from '@components/button-phone';
 import { filterChipOptionsByAggregations } from '@common/filterHelpers';
-import useMainContentNavigator from '@components/main-content-navigator/hooks';
-import useSearchAggs from '@components/search-aggs/hooks';
+import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
+import useSearchAggs from '@components/features/search/search-aggs/hooks';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { useSyncParamsToState } from '@hooks';
-import useResizeImage from '@hooks/useResizeImage';
+import { useSyncParamsToState } from '@common/hooks';
+import useResizeImage from '@common/hooks/useResizeImage';
 import { listFilterProfileMobile } from '@frontend/CategoryPage/mobile/filter_bds/constants';
 import FilterChips from '@frontend/CategoryPage/mobile/filter_bds/FilterChips';
 import PostList from '@frontend/CategoryPage/mobile/searchs/PostList';
@@ -45,7 +45,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
 
   const { data: profileData } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
-    queryFn: () => services.profiles.getProfileSlug(profileSlug),
+    queryFn: () => profilesApi.getProfileSlug(profileSlug),
     select: (data) => data.data,
   });
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(

@@ -1,4 +1,4 @@
-import axiosMapsInstance from '@api/axiosMapsInstance';
+import axiosMapsInstance from '@common/api/axiosMapsInstance';
 import { API_ROUTES } from '@common/router';
 
 interface LocationResponse {

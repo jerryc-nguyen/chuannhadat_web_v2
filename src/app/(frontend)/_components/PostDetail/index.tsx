@@ -1,7 +1,7 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { postsApi } from './api/posts';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import type { Params } from '@models';
+import type { Params } from '@common/models';
 import PostDetailDesktop from './PostDetailDesktop';
 import PostDetailMobile from './PostDetailMobile';
 
@@ -19,11 +19,11 @@ export default async function PostDetail({ params }: PostDetailProps) {
   // Prefetch api in server
   await queryClient.prefetchQuery({
     queryKey: ['get-detail-post', productUid],
-    queryFn: () => services.posts.getDetailPost(productUid),
+    queryFn: () => postsApi.getDetailPost(productUid),
   });
   await queryClient.prefetchQuery({
     queryKey: ['get-posts-same-author', productUid],
-    queryFn: () => services.posts.getPostsSameAuthor(productUid),
+    queryFn: () => postsApi.getPostsSameAuthor(productUid),
   });
 
   const dehydratedState = dehydrate(queryClient);

@@ -25,10 +25,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import HorizontalScroller from '@mobile/ui/HorizontalScroller';
+import HorizontalScroller from '@components/mobile-ui/HorizontalScroller';
 import { createPortal } from 'react-dom';
 import { cn } from '@common/utils';
-import { useIsMobile } from '@hooks';
+import { useIsMobile } from '@common/hooks';
 import FilterChips from './filter-chips';
 import { DASHBOARD_ROUTES } from '@common/router';
 

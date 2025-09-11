@@ -25,7 +25,7 @@ import { cn, genKey } from '@common/utils';
 import { usePathname } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
-import { useBalanceRequest } from '@api/balance';
+import { useBalanceRequest } from '@common/api/balance';
 import { Button } from '@components/ui/button';
 import { CreditCard } from 'lucide-react';
 import { useDepositModal } from '@components/ui/DepositModal';

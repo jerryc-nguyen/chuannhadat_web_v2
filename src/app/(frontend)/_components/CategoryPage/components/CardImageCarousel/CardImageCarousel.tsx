@@ -1,7 +1,7 @@
 import { cn } from '@common/utils';
 import { Carousel, CarouselContent, type CarouselApi } from '@components/ui/carousel';
-import useCleanupEffect from '@hooks/useCleanupEffect';
-import useResizeImage from '@hooks/useResizeImage';
+import useCleanupEffect from '@common/hooks/useCleanupEffect';
+import useResizeImage from '@common/hooks/useResizeImage';
 import { EmblaCarouselType } from 'embla-carousel';
 import Fade from 'embla-carousel-fade';
 import useEmblaCarousel from 'embla-carousel-react';

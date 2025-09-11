@@ -1,6 +1,6 @@
-import { services } from '@api/services';
+import { profilesApi } from './api/profiles';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import type { Params } from '@models';
+import type { Params } from '@common/models';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import ProfileDetailDesktop from './ProfileDetailDesktop';
 import ProfileDetailMobile from './ProfileDetailMobile';
@@ -16,7 +16,7 @@ export default async function ProfileDetail({ params }: ProfileDetailProps) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ['get-detail-profile', profileSlug],
-    queryFn: () => services.profiles.getProfileSlug(profileSlug),
+    queryFn: () => profilesApi.getProfileSlug(profileSlug),
   });
 
   const dehydratedState = dehydrate(queryClient);

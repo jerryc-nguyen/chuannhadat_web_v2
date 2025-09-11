@@ -1,11 +1,11 @@
 import { UseFormReturn, ControllerRenderProps } from 'react-hook-form';
 import { CardTitle } from '@components/ui/card';
 import List from '@components/konsta/List';
-import ListItemBtsPicker from '@mobile/bts-pickers/ListItemBtsPicker';
+import ListItemBtsPicker from '@components/features/form/mobile-pickers/ListItemBtsPicker';
 import { FormField, FormItem, FormMessage } from '@components/ui/form';
 import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
-import { OptionForSelect } from '@models';
+import { OptionForSelect } from '@common/models';
 import { IPostForm } from '../../../types';
 import { isLandProperty, isHouseProperty, isApartmentProperty } from '@common/productHelpers';
 import { RoundedOptionsNumberInput } from '../../components/form-components/fields/rounded-options-number-input';

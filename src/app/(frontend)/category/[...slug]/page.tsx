@@ -1,4 +1,4 @@
-import axiosInstance from '@api/axiosInstance';
+import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';

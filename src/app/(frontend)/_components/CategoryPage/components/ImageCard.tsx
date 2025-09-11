@@ -2,7 +2,7 @@ import { DEFAULT_THUMB_IMAGE } from '@common/constants';
 import BlurImage from '@components/BlurImage';
 import { AspectRatio } from '@components/ui/AspectRatio';
 import { CarouselItem } from '@components/ui/carousel';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import React from 'react';
 
 type ImageCardProps = {

@@ -1,8 +1,8 @@
 import BedRoomIcon from '@assets/icons/badroom-icon';
 import BadRoomIcon from '@assets/icons/bedroom-icon';
-import { YoutubePlayerAction } from '@components/youtube-player-modal';
-import { useIsInVerticalCenterZone } from '@hooks/useIsInVerticalCenterZone';
-import useModals from '@mobile/modals/hooks';
+import { YoutubePlayerAction } from '@components/features/media/youtube-player-modal';
+import { useIsInVerticalCenterZone } from '@common/hooks/useIsInVerticalCenterZone';
+import useModals from '@components/features/layout/mobile-modals/hooks';
 import AuthorInfo from '@frontend/PostDetail/mobile/post-detail/components/AuthorInfo';
 import CardAuthor from '@frontend/CategoryPage/components/CardAuthor';
 import ThumbsCarousel from '@frontend/CategoryPage/components/ThumbsCarousel/ThumbsCarousel';

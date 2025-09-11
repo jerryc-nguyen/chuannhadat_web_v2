@@ -8,7 +8,7 @@ import { useSetAtom } from 'jotai';
 import React from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter hook
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
-import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
+import { usePaginatedNotifications } from '@common/hooks/usePaginatedNotifications';
 
 const NotificationsMobile: React.FC = () => {
   const setBreadCrumb = useSetAtom(breadcrumbAtom);

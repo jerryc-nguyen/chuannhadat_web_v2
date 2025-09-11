@@ -1,4 +1,4 @@
-import { getQueryClient } from '@api/react-query';
+import { getQueryClient } from '@common/api/react-query';
 import { get, set } from 'lodash-es';
 
 type TValueUpdate = {

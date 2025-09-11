@@ -12,7 +12,7 @@ import {
 import { Button } from '@components/ui/button';
 import { LoadingSpinner } from '@components/icons/CustomIcons';
 import useProductActionSetting from '../../hooks/product-action-setting';
-import { useBalanceRequest } from '@api/balance';
+import { useBalanceRequest } from '@common/api/balance';
 import { get } from 'lodash-es';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 import { toast } from 'sonner';

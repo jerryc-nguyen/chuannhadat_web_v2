@@ -12,7 +12,7 @@ import {
 } from '@components/ui/command';
 import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
 import { Skeleton } from '@components/ui/skeleton';
-import { OptionForSelect } from '@models';
+import { OptionForSelect } from '@common/models';
 
 type Props<T extends string> = {
   selectedValue: T;

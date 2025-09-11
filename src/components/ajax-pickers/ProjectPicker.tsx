@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { OptionForSelect } from '@models';
-import { services } from '@api/services';
-import CmdkOptionPicker from '@mobile/ui/CmdkOptionPicker';
+import { OptionForSelect } from '@common/models';
+import { autocompleteApi } from '@frontend/CategoryPage/api/autocomplete';
+import CmdkOptionPicker from '@components/mobile-ui/CmdkOptionPicker';
 import { debounce } from 'lodash-es';
 
 interface ProjectPickerProps {
@@ -44,7 +44,7 @@ export default function ProjectPicker({
 
   const { isLoading: isSearching, data: response } = useQuery({
     queryKey: ['filter_projects', params],
-    queryFn: () => services.autocompletes.projects(params),
+    queryFn: () => autocompleteApi.projects(params),
     enabled: debouncedKeyword.length > 0 || Object.keys(extraParams).length > 0
   });
 

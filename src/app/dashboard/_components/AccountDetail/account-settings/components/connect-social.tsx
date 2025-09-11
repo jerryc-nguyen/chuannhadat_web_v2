@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '@common/firebase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { services } from '@api/services';
+import { oauthApi } from '../../api/oauth';
 import { Skeleton } from '@components/ui/skeleton';
 
 interface IDataConnectResponse {
@@ -33,11 +33,11 @@ const ConnectSocial: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: oauthsData, isFetching } = useQuery({
     queryKey: ['get-oauths'],
-    queryFn: services.oauths.getOauths,
+    queryFn: oauthApi.getOauths,
     select: (data) => data.data,
   });
   const { mutate: deleteMutation } = useMutation({
-    mutationFn: services.oauths.deleteOauth,
+    mutationFn: oauthApi.deleteOauth,
     onSuccess: () => {
       toast.success('Hủy liên kết thành công');
     },
@@ -62,7 +62,7 @@ const ConnectSocial: React.FC = () => {
   }, [isFetching, oauthsData]);
 
   const { mutate: connectGoogle } = useMutation({
-    mutationFn: services.oauths.connectGoogle,
+    mutationFn: oauthApi.connectGoogle,
     onError: (error) => {
       toast.error('Liên kết google thất bại' + error);
       setLoadingConnectGoogle(false);

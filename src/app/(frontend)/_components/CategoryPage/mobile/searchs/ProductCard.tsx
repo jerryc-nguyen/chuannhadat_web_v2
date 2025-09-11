@@ -1,9 +1,9 @@
 import React from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import { Image as IoImage } from 'lucide-react';
-import useResizeImage from '@hooks/useResizeImage';
+import useResizeImage from '@common/hooks/useResizeImage';
 import { IProduct } from './type';
-import useModals from '@mobile/modals/hooks';
+import useModals from '@components/features/layout/mobile-modals/hooks';
 import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetailMobile';
 import Image from 'next/image';
 import AuthorInfo from '@frontend/PostDetail/mobile/post-detail/components/AuthorInfo';

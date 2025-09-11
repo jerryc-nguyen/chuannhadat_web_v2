@@ -1,5 +1,6 @@
 'use client';
 import React, { MouseEvent } from 'react';
+import { scheduledRefreshApi } from '../../api/scheduled-refresh';
 import { Card, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Table,
@@ -54,12 +55,12 @@ const AutoRefreshMobile: React.FC = () => {
   // Get list schedule time
   const { data, isSuccess, isFetching } = useQuery({
     queryKey: ['refresh-time'],
-    queryFn: services.scheduledRefreshs.getScheduledRefreshs,
+    queryFn: scheduledRefreshApi.getScheduledRefreshs,
   });
 
   // Create schedule time
   const { mutate: createMutate, isPending: isCreatePending } = useMutation({
-    mutationFn: services.scheduledRefreshs.createScheduledRefreshs,
+    mutationFn: scheduledRefreshApi.createScheduledRefreshs,
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching create', err);
     },
@@ -72,7 +73,7 @@ const AutoRefreshMobile: React.FC = () => {
 
   // Delete schedule time
   const { mutate: deleteMutate, isPending: isDeletePending } = useMutation({
-    mutationFn: services.scheduledRefreshs.deleteScheduledRefreshs,
+    mutationFn: scheduledRefreshApi.deleteScheduledRefreshs,
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching delete', err);
     },
@@ -84,7 +85,7 @@ const AutoRefreshMobile: React.FC = () => {
   });
   // Update schedule time
   const { mutate: updateMutate, isPending: isUpdatePending } = useMutation({
-    mutationFn: services.scheduledRefreshs.updateScheduledRefreshs,
+    mutationFn: scheduledRefreshApi.updateScheduledRefreshs,
     onError: (err: AxiosError<A>) => {
       console.error('Error fetching update', err);
     },

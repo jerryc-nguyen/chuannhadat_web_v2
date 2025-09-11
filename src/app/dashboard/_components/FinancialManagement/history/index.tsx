@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import '@styles/pages/mobile/finacial-management/history.scss';
-import { useBalanceRequest } from '@api/balance';
+import { useBalanceRequest } from '@common/api/balance';
 import { ITransactionResponse } from '../types';
 import TableComponent from '@components/table';
 import NoteDescriptions from '../components/NoteDescription';

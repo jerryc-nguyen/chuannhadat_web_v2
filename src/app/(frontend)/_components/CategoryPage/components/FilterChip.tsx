@@ -1,8 +1,8 @@
-import { searchApi } from '@api/searchApi';
+import { searchApi } from '@common/api/searchApi';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import useSearchScope, { SearchScopeEnums } from '@hooks/useSearchScope';
+import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
 import Area from '../mobile/filter_bds/bts/Area';
 import BusCatType from '../mobile/filter_bds/bts/BusCatType';
 import BusinessTypeButtons from '../mobile/filter_bds/bts/BusinessTypeButtons';
@@ -15,9 +15,9 @@ import SortOptions from '../mobile/filter_bds/bts/SortOptions';
 import FilterModal from '../mobile/filter_bds/FilterModal';
 import useFilterState from '../mobile/filter_bds/hooks/useFilterState';
 import { FilterChipOption } from '../mobile/filter_bds/types';
-import { FilterFieldName } from '@models';
+import { FilterFieldName } from '@common/models';
 import { useQuery } from '@tanstack/react-query';
-import ProfileLocationsV2 from '@views/product-filters/ProfileLocationsV2';
+import ProfileLocationsV2 from '@components/desktop/product-filters/ProfileLocationsV2';
 import React from 'react';
 import {
   ArrowUp as SortUpIcon,

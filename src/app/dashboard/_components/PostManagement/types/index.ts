@@ -1,4 +1,4 @@
-import { OptionForSelect, TPhoto } from '@models';
+import { OptionForSelect, TPhoto } from '@common/models';
 
 export interface IPayloadCreateSchedule {
   hour: string;

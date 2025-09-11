@@ -1,7 +1,7 @@
-import { FilterFieldName, OptionForSelect } from '@models';
-import ListCheckOptions from '@mobile/ui/ListCheckOptions';
+import { FilterFieldName, OptionForSelect } from '@common/models';
+import ListCheckOptions from '@components/mobile-ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import useSearchAggs from '@components/search-aggs/hooks';
+import useSearchAggs from '@components/features/search/search-aggs/hooks';
 import DualRangeSlider from '@components/dual-range-slider';
 import { formatAreaText } from '@common/utils';
 import { debounce } from 'lodash-es';

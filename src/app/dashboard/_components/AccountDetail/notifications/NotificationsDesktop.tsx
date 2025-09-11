@@ -9,7 +9,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@components/ui/card';
 import { Badge } from '@components/ui/badge';
-import { usePaginatedNotifications } from '@hooks/usePaginatedNotifications';
+import { usePaginatedNotifications } from '@common/hooks/usePaginatedNotifications';
 import { Bell, Clock, ExternalLink, Mail, MailOpen } from 'lucide-react';
 import { cn } from '@common/utils';
 

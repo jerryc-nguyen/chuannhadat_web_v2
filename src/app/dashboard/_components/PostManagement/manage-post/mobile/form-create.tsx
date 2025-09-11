@@ -1,9 +1,9 @@
 'use client';
 
 import { useFormContext, useWatch } from 'react-hook-form';
-import useModals from '@mobile/modals/hooks';
+import useModals from '@components/features/layout/mobile-modals/hooks';
 import { useState } from 'react';
-import { OptionForSelect } from '@models';
+import { OptionForSelect } from '@common/models';
 import { IPostForm } from '../../types';
 
 // Import modular field components

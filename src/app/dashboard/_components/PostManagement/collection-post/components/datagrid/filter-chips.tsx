@@ -1,5 +1,5 @@
 
-import { useIsMobile } from '@hooks';
+import { useIsMobile } from '@common/hooks';
 import { listChipsQuery } from '../../constant/list_chips_query';
 import FilterChip from '@frontend/CategoryPage/components/FilterChip';
 import FilterChips from '@frontend/CategoryPage/mobile/filter_bds/FilterChips';

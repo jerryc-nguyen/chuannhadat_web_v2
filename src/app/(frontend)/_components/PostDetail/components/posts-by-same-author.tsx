@@ -1,4 +1,4 @@
-import { services } from '@api/services';
+import { postsApi } from '../api/posts';
 import RelatedCard from '@frontend/PostDetail/components/related-product-card';
 import { Card, CardContent } from '@components/ui/card';
 import {
@@ -36,7 +36,7 @@ const PostsBySameAuthor: React.FC<PostsBySameAuthorProps> = (props) => {
     status,
   } = useQuery({
     queryKey: ['get-posts-same-author', productId],
-    queryFn: () => services.posts.getPostsSameAuthor(productId),
+    queryFn: () => postsApi.getPostsSameAuthor(productId),
     enabled: !!productId,
     select: (data) => data.data,
   });

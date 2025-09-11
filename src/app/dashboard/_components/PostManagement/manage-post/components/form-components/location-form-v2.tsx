@@ -6,8 +6,8 @@ import { Label } from '@/components/ui/label';
 import { MapPin } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
-import { OptionForSelect } from '@models';
-import LocationsPickerFormV2 from '@views/components/form-fields/LocationsPickerFormV2';
+import { OptionForSelect } from '@common/models';
+import LocationsPickerFormV2 from '@components/desktop/components/form-fields/LocationsPickerFormV2';
 import { FormField, FormItem, FormLabel } from '@components/ui/form';
 import { useWatch } from 'react-hook-form';
 

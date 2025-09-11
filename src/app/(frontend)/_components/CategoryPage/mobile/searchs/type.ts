@@ -1,4 +1,4 @@
-import { TPhoto } from '@models';
+import { TPhoto } from '@common/models';
 
 export interface IProject {
   url: string;

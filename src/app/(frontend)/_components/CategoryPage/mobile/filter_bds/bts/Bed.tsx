@@ -1,6 +1,6 @@
-import { FilterFieldName, OptionForSelect } from '@models';
+import { FilterFieldName, OptionForSelect } from '@common/models';
 
-import ListChips from '@mobile/ui/ListChips';
+import ListChips from '@components/mobile-ui/ListChips';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Bed({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {

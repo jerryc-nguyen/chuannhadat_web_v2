@@ -3,7 +3,7 @@ import { loadedCardAuthorsAtom } from '../states';
 import useCardAuthors from './useCardAuthors';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { cardAuthors } from '@api/searchApi';
+import { cardAuthors } from '@common/api/searchApi';
 
 export default function useLoadMissingAuthors(data: A) {
   useHydrateAtoms([[loadedCardAuthorsAtom, data?.users || {}]]);

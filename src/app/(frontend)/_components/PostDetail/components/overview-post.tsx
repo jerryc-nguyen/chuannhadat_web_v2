@@ -1,4 +1,4 @@
-import { services } from '@api/services';
+import { postsApi } from '../api/posts';
 import { useAuth } from '@common/auth/AuthContext';
 import { DEFAULT_THUMB_IMAGE } from '@common/constants';
 import { cn } from '@common/utils';
@@ -7,9 +7,9 @@ import TooltipHost from '@components/tooltip-host';
 import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
-import { YoutubePlayerAction } from '@components/youtube-player-modal';
-import useCleanupEffect from '@hooks/useCleanupEffect';
-import useResizeImage from '@hooks/useResizeImage';
+import { YoutubePlayerAction } from '@components/features/media/youtube-player-modal';
+import useCleanupEffect from '@common/hooks/useCleanupEffect';
+import useResizeImage from '@common/hooks/useResizeImage';
 import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
 import { useMutation } from '@tanstack/react-query';
 import ButtonSave, { type ButtonSaveHandle } from '@frontend/CategoryPage/components/ButtonSave';
@@ -54,7 +54,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
     buttonNext: data?.images.length <= 1 ? () => null : undefined,
   };
   const { mutate: addViewPost } = useMutation({
-    mutationFn: services.trackings.viewProduct,
+    mutationFn: postsApi.viewProduct,
   });
   useCleanupEffect(
     (helpers) => {

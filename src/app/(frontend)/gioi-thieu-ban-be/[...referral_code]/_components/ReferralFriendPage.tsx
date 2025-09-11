@@ -1,5 +1,6 @@
 'use client';
-import { services } from '@api/services';
+import { referralsApi } from '../api/referrals';
+import { authApi } from '@common/api/auth';
 import forgot_password from '@assets/icons/Refer a friend-bro.svg';
 import { REFERRAL_CODE } from '@common/auth';
 import { useAuth } from '@common/auth/AuthContext';
@@ -17,8 +18,8 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import registerSchema from '@mobile/auth/register/resolver';
-import { IRegisterResponse } from '@mobile/auth/types';
+import registerSchema from '@components/features/auth/mobile/register/resolver';
+import { IRegisterResponse } from '@components/features/auth/mobile/types';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -48,7 +49,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = (props) => {
   const { control, handleSubmit, reset } = form;
   const { data } = useSuspenseQuery({
     queryKey: ['get-referral-detail', referral_code],
-    queryFn: () => services.referralls.getReferralDetail(referral_code as string),
+    queryFn: () => referralsApi.getReferralDetail(referral_code as string),
     select: (data) => data.data,
   });
   const createQueryString = React.useCallback(
@@ -68,7 +69,7 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { mutate: registerMutate, isPending: isRegister } = useMutation({
-    mutationFn: services.auth.signUp,
+    mutationFn: authApi.signUp,
     onSuccess: (response: IRegisterResponse) => {
       if (response.code === 200 && response.status) {
         const userData = response.data;

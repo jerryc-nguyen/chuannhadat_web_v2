@@ -20,8 +20,8 @@ import { Loader2, MessageSquareMore, CircleCheck as FaCircleCheck } from 'lucide
 import { Skeleton } from '@components/ui/skeleton';
 
 import TooltipHost from '@components/tooltip-host';
-import { services } from '@api/services';
-import { ILoginResponse } from '@mobile/auth/types';
+import { profileApi } from '../../api/profile';
+import { ILoginResponse } from '@components/features/auth/mobile/types';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 import CommonAlertDialog from '@components/common-dialog';
 
@@ -33,7 +33,7 @@ export const PhoneNumberTab: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: profileMe } = useQuery({
     queryKey: ['get-profile-me'],
-    queryFn: services.profiles.getMyProfile,
+    queryFn: profileApi.getMyProfile,
     select: (data) => data.data,
     enabled: openPopupVerifyPhone && !isConfirmedPhone,
     refetchInterval: 2000,
@@ -67,7 +67,7 @@ export const PhoneNumberTab: React.FC = () => {
   const { handleSubmit, control, reset } = form;
 
   const { mutate: updateMyPhone, isPending: isUpdateMyPhonePending } = useMutation({
-    mutationFn: services.profiles.updateMyPhone,
+    mutationFn: profileApi.updateMyPhone,
     onError: (err: AxiosError<A>) => {
       console.error('Có lỗi khi gửi yêu cầu', err);
     },

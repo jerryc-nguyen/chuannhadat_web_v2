@@ -6,8 +6,8 @@ import { Image } from 'lucide-react';
 import { FormDescription, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
 import { Input } from '@components/ui/input';
-import { IUploadedImage } from '@components/image-uploader/types';
-import ImageUploader, { convertToUploadedImages } from '@components/image-uploader';
+import { IUploadedImage } from '@components/features/media/image-uploader/types';
+import ImageUploader, { convertToUploadedImages } from '@components/features/media/image-uploader';
 
 type ImageFormProps = {
   form: A;
