@@ -51,12 +51,14 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   onFilterChipsChanged?: (state: Record<string, A>) => void;
   onClickSearch: () => void;
+  isMobile: boolean;
 }
 
 export function DataTableToolbar<TData>({
   table,
   onFilterChipsChanged,
   onClickSearch,
+  isMobile,
 }: DataTableToolbarProps<TData>) {
   const form = useFormContext<ProductQuery>();
   const selectedOption = form.watch('visibility');
@@ -129,7 +131,7 @@ export function DataTableToolbar<TData>({
             <></>
           )}
 
-          <ButtonPostArticle />
+          <ButtonPostArticle isMobile={isMobile} />
         </div>
       </div>
 
@@ -200,8 +202,7 @@ export function SelectSearchTarget({
   );
 }
 
-const ButtonPostArticle = () => {
-  const isMobile = useIsMobile();
+const ButtonPostArticle = ({ isMobile }: { isMobile: boolean }) => {
 
   const ContentButton = ({ className }: { className?: string }) => {
     return (

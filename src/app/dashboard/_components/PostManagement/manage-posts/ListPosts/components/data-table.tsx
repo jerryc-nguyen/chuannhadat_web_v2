@@ -113,6 +113,7 @@ export function DataTable() {
         table={table}
         onFilterChipsChanged={onFilterChipsChanged}
         onClickSearch={refetch}
+        isMobile={false}
       />
       <div className="rounded-md border">
         <Table className="bg-white/30">

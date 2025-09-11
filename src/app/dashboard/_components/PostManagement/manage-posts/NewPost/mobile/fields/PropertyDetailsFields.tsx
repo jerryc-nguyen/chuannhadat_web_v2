@@ -8,7 +8,7 @@ import { Label } from '@components/ui/label';
 import { OptionForSelect } from '@common/models';
 import { IPostForm } from '@dashboard/PostManagement/types';
 import { isLandProperty, isHouseProperty, isApartmentProperty } from '@common/productHelpers';
-import { RoundedOptionsNumberInput } from '@dashboard/PostManagement/manage-post/components/form-components/fields/rounded-options-number-input';
+import { RoundedOptionsNumberInput } from '@dashboard/PostManagement/manage-posts/components/form-components/fields/rounded-options-number-input';
 import {
   roomsOptionsForCreate,
   facadeOptionsForCreate,
@@ -17,7 +17,7 @@ import {
   directionOptions,
   furnitureTypeOptions,
   phapLyTypeOptions,
-} from '@dashboard/PostManagement/manage-post/constant';
+} from '@dashboard/PostManagement/manage-posts/constant';
 
 interface PropertyDetailsFieldsProps {
   form: UseFormReturn<IPostForm>;

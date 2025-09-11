@@ -10,12 +10,12 @@ import { OptionForSelect } from '@common/models';
 import { IPostForm } from '@dashboard/PostManagement/types';
 import { readMoney } from '@common/priceHelpers';
 import { isLandProperty } from '@common/productHelpers';
-import { RoundedOptionsNumberInput } from '@app/dashboard/_components/PostManagement/manage-post/components/form-components/fields/rounded-options-number-input';
+import { RoundedOptionsNumberInput } from '@app/dashboard/_components/PostManagement/manage-posts/components/form-components/fields/rounded-options-number-input';
 import PriceOptions from '../PriceOptions';
 import {
   businessTypeOptions,
   categoryTypeOptions,
-} from '@dashboard/PostManagement/manage-post/constant';
+} from '@dashboard/PostManagement/manage-posts/constant';
 import {
   roomsOptionsForCreate,
   areaOptionsForCreate,

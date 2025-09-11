@@ -1,5 +1,5 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import PostManagement from '@dashboard/PostManagement/manage-post/ListPosts';
+import PostManagement from '@dashboard/PostManagement/manage-posts/ListPosts';
 import { Metadata } from 'next';
 import React from 'react';
 

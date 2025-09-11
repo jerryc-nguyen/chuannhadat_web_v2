@@ -14,7 +14,7 @@ import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 import { useEffect } from 'react';
 import { ProductQuery } from '../data/schemas';
-import { useListPostsForm } from '@dashboard/PostManagement/manage-post/ListPosts/hooks/useListPosts';
+import { useListPostsForm } from '@dashboard/PostManagement/manage-posts/ListPosts/hooks/useListPosts';
 
 const columns: ColumnDef<Product>[] = [
   {
@@ -113,6 +113,7 @@ const MobileDataTable: React.FC = () => {
         table={table}
         onFilterChipsChanged={onFilterChipsChanged}
         onClickSearch={refetch}
+        isMobile={true}
       />
       <ListPostMobile table={table} contentEmpty="Chưa có bài đăng nào" />
       <DataTablePagination table={table} isMobile={true} />

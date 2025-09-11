@@ -1,5 +1,5 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import NewPost from '@dashboard/PostManagement/manage-post/NewPost';
+import NewPost from '@dashboard/PostManagement/manage-posts/NewPost';
 import React from 'react';
 
 const NewPostPage: React.FC = async () => {
