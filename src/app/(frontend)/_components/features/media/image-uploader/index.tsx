@@ -5,7 +5,7 @@ import ThumbDragAndDropZone from './component/thumbs-container';
 import { IUploadedImage } from './types';
 import ImageUploadApiService, { UploadFolders } from './apis';
 import Image from 'next/image';
-import { TPhoto } from '@common/models';
+import { TPhoto } from '@common/types';
 
 const baseStyle: CSSProperties = {
   alignItems: 'center',

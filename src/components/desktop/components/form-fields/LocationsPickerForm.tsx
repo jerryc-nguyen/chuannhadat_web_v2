@@ -6,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { useEffect, useMemo } from 'react';
 import { AutoComplete } from '@components/autocomplete';
 import { LoadingSpinner } from '@components/icons/CustomIcons';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { useLocationContext } from '@contexts/LocationContext';
 
 interface ILocationForm {

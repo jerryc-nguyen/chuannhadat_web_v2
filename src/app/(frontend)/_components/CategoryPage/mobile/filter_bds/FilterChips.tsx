@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 import Price from './bts/Price';
 import Area from './bts/Area';
 import FooterBtsButton from './FooterBtsButton';

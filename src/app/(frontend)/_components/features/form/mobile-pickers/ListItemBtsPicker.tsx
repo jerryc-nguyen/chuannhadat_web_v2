@@ -1,7 +1,7 @@
 import ListItem from "@components/konsta/ListItem";
 import useModals from "@frontend/features/layout/mobile-modals/hooks";
 
-import { OptionForSelect } from "@common/models";
+import { OptionForSelect } from "@common/types";
 import ListCheckOptions from "@components/mobile-ui/ListCheckOptions";
 import { Modal } from "@frontend/features/layout/mobile-modals/states/types";
 

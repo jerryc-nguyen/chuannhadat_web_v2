@@ -1,6 +1,6 @@
 import { postsApi } from '@frontend/PostDetail/api/posts';
 import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
-import { Pagination } from '@common/models/savesPostModel';
+import { IPagination } from '@common/types/api';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -16,7 +16,7 @@ type UseViewedPostsReturn = {
   isFetching: boolean;
   pageNumber: number;
   setPageNumber: React.Dispatch<React.SetStateAction<number>>;
-  pagination: Pagination | undefined;
+  pagination: IPagination | undefined;
   deleteViewedPost: (productUid: string) => Promise<void>;
   isDeleting: boolean;
 };

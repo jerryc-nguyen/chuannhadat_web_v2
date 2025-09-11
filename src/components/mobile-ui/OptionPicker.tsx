@@ -1,6 +1,6 @@
 import ListCheckOptions from './ListCheckOptions';
 import { useMemo, useState } from 'react';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { stringToSlug } from '@common/utils';
 import SearchBox from '@components/SearchBox';
 import CmdkOptionPicker from './CmdkOptionPicker';

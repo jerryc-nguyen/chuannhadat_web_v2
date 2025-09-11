@@ -1,5 +1,5 @@
 import { ALL_OPTION } from '@common/constants';
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 import { FilterChipOption } from '../types';
 
 export const defaultProjects: OptionForSelect[] = [

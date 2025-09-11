@@ -2,7 +2,7 @@ import React from 'react';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import { Image as IoImage } from 'lucide-react';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { IProduct } from './type';
+import { IProductData } from './type';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetailMobile';
 import Image from 'next/image';
@@ -52,7 +52,7 @@ const ProductDetailTitleBts = ({ product }: { product: A }) => {
     </div>
   );
 };
-export default function ProductCard({ product }: { product: IProduct }) {
+export default function ProductCard({ product }: { product: IProductData }) {
   const { buildThumbnailUrl } = useResizeImage();
   const { openModal } = useModals();
 
@@ -72,7 +72,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
 
   const genImageSrc = React.useMemo(() => {
     return buildThumbnailUrl({
-      imageUrl: product?.featured_image_url,
+      imageUrl: product?.featured_image_url || '',
     });
   }, [buildThumbnailUrl, product?.featured_image_url]);
 

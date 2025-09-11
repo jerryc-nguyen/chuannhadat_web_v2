@@ -10,7 +10,7 @@ import 'swiper/css/thumbs';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 
 import useResizeImage from '@common/hooks/useResizeImage';
-import { TPhoto } from '@common/models';
+import { TPhoto } from '@common/types';
 export default function SliderImage({ listImg }: { listImg: TPhoto[] }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const { buildThumbnailUrl } = useResizeImage();

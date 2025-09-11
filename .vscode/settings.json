@@ -14,20 +14,56 @@
   // Feature-Driven Development folder structure recommendations
   "workspace.recommended.structure": {
     "src/app/(frontend)/_components": "Main frontend features directory (co-located with Next.js App Router)",
-    "src/app/(frontend)/_components/[FeatureName]": "Feature named in PascalCase (e.g., CategoryPage, PostDetail, ProfileDetail)",
-    "src/app/(frontend)/_components/[FeatureName]/components": "Components specific to the feature",
+    "src/app/(frontend)/_components/[FeatureName]": "Feature named in PascalCase (e.g., CategoryPage, NewsPage, PostDetail, ProfileDetail)",
+    "src/app/(frontend)/_components/[FeatureName]/api": "API functions specific to the feature",
+    "src/app/(frontend)/_components/[FeatureName]/components": "UI components specific to the feature",
     "src/app/(frontend)/_components/[FeatureName]/hooks": "Custom hooks used by the feature",
-    "src/app/(frontend)/_components/[FeatureName]/types": "TypeScript types for the feature (or type.ts)",
-    "src/app/(frontend)/_components/[FeatureName]/constants": "Constants used by the feature",
+    "src/app/(frontend)/_components/[FeatureName]/mobile": "Mobile-specific components and logic for the feature",
     "src/app/(frontend)/_components/[FeatureName]/states": "State management for the feature (Jotai atoms)",
     "src/app/(frontend)/_components/[FeatureName]/styles": "Feature-specific styles (SCSS modules)",
-    "src/app/(frontend)/_components/[FeatureName]/mobile": "Mobile-specific components for the feature",
-    "src/app/dashboard/_components": "Dashboard features directory",
-    "src/views": "Legacy shared components and dashboard features (being phased out)",
-    "src/common": "Shared utilities across features",
-    "src/hooks": "Shared hooks across features",
-    "src/components": "Shared components across features",
-    "src/api": "Shared API functions across features"
+    "src/app/(frontend)/_components/[FeatureName]/type.ts": "TypeScript types for the feature",
+    "src/app/(frontend)/_components/features": "Additional feature modules (auth, form, layout, media, navigation, notification, search)",
+    "src/app/(frontend)/_components/features/[module]/mobile": "Mobile-specific implementations for feature modules",
+    "src/app/(frontend)/_components/features/[module]/states": "State management for feature modules",
+    "src/app/(frontend)/_components/features/[module]/hooks": "Hooks specific to feature modules",
+    "src/app/dashboard/_components": "Dashboard features directory with comprehensive structure",
+    "src/app/dashboard/_components/[FeatureName]": "Dashboard feature in PascalCase (e.g., AccountDetail, FinancialManagement, PostManagement)",
+    "src/app/dashboard/_components/[FeatureName]/api": "API functions for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/apis": "Alternative API directory structure",
+    "src/app/dashboard/_components/[FeatureName]/components": "UI components for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/hooks": "Custom hooks for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/states": "State management (atoms) for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/types": "TypeScript types for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/constants": "Constants for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/mobile": "Mobile-specific implementations for dashboard features",
+    "src/app/dashboard/_components/[FeatureName]/styles": "SCSS modules for dashboard features",
+    "src/app/dashboard/_components/features": "Shared dashboard feature components (datagrid, etc.)",
+    "src/common": "Shared utilities and common functionality across features",
+    "src/common/api": "Shared API functions and configurations",
+    "src/common/auth": "Authentication-related utilities and components",
+    "src/common/hooks": "Shared custom hooks across the application",
+    "src/common/models": "Data models and type definitions",
+    "src/common/seo": "SEO-related utilities and components",
+    "src/common/utils": "General utility functions",
+    "src/common/context": "React contexts for global state",
+    "src/components": "Shared UI components library",
+    "src/components/ui": "Shadcn/ui components and primitives",
+    "src/components/desktop": "Desktop-specific shared components",
+    "src/components/mobile-ui": "Mobile-specific shared components",
+    "src/components/konsta": "Konsta UI components for mobile",
+    "src/assets": "Static assets (icons, images, styles, fonts)",
+    "src/assets/icons": "SVG icons and icon components",
+    "src/assets/images": "Image files and assets",
+    "src/assets/styles": "Global styles, variables, and themes",
+    "src/configs": "Configuration files and constants",
+    "src/contexts": "React contexts for application-wide state",
+    "src/hooks": "Legacy shared hooks directory",
+    "src/lib": "Library files and third-party integrations",
+    "src/middleware": "Next.js middleware functions",
+    "src/models": "Legacy data models directory",
+    "src/stores": "State management stores",
+    "src/styles": "Global styles and style utilities",
+    "src/utils": "Legacy utility functions directory"
   },
 
   // File templates for new frontend features
@@ -35,26 +71,53 @@
     "index.tsx": "import { getUserAgentInfo } from '@common/getUserAgentInfo';\nimport FeatureDesktop from './FeatureDesktop';\nimport FeatureMobile from './FeatureMobile';\n\nexport default async function FeatureName() {\n  const { isMobile } = await getUserAgentInfo();\n  return isMobile ? <FeatureMobile /> : <FeatureDesktop />;\n}",
     "FeatureDesktop.tsx": "'use client';\n\nexport default function FeatureDesktop() {\n  return (\n    <div>\n      {/* Desktop implementation */}\n    </div>\n  );\n}",
     "FeatureMobile.tsx": "'use client';\n\nexport default function FeatureMobile() {\n  return (\n    <div>\n      {/* Mobile implementation */}\n    </div>\n  );\n}",
+    "api/index.ts": "// Feature-specific API functions\n",
     "components/index.ts": "// Export feature-specific components\n",
     "hooks/index.ts": "// Export feature-specific hooks\n",
     "states.tsx": "import { atom } from 'jotai';\n\n// Feature-specific atoms\n",
     "type.ts": "// Feature-specific TypeScript types\n",
-    "styles/Feature.module.scss": "// Feature-specific styles\n"
+    "styles/Feature.module.scss": "// Feature-specific styles\n",
+    "mobile/index.tsx": "'use client';\n\nexport default function FeatureMobile() {\n  return (\n    <div>\n      {/* Mobile-specific implementation */}\n    </div>\n  );\n}",
+    "components/FeatureCard.tsx": "'use client';\n\nexport default function FeatureCard() {\n  return (\n    <div>\n      {/* Feature card component */}\n    </div>\n  );\n}",
+    "hooks/useFeature.ts": "import { useState, useEffect } from 'react';\n\nexport function useFeature() {\n  // Custom hook logic\n  return {};\n}",
+    "states/featureAtoms.ts": "import { atom } from 'jotai';\n\nexport const featureStateAtom = atom(null);\n"
   },
 
   // File associations
   "files.associations": {
+    "*/app/(frontend)/_components/*/api/*.ts": "typescript",
     "*/app/(frontend)/_components/*/components/*.tsx": "typescriptreact",
     "*/app/(frontend)/_components/*/hooks/*.ts": "typescript",
+    "*/app/(frontend)/_components/*/mobile/*.tsx": "typescriptreact",
     "*/app/(frontend)/_components/*/states.tsx": "typescriptreact",
     "*/app/(frontend)/_components/*/type.ts": "typescript",
     "*/app/(frontend)/_components/*/styles/*.scss": "scss",
+    "*/app/(frontend)/_components/features/*/mobile/*.tsx": "typescriptreact",
+    "*/app/(frontend)/_components/features/*/states/*.ts": "typescript",
+    "*/app/(frontend)/_components/features/*/hooks/*.ts": "typescript",
+    "*/app/dashboard/_components/*/api/*.ts": "typescript",
+    "*/app/dashboard/_components/*/apis/*.ts": "typescript",
     "*/app/dashboard/_components/*/components/*.tsx": "typescriptreact",
-    "*/views/*/apis/*.ts": "typescript",
-    "*/views/*/components/*.tsx": "typescriptreact",
-    "*/views/*/hooks/*.ts": "typescript",
-    "*/views/*/types/*.ts": "typescript",
-    "*/views/*/constants/*.ts": "typescript"
+    "*/app/dashboard/_components/*/hooks/*.ts": "typescript",
+    "*/app/dashboard/_components/*/mobile/*.tsx": "typescriptreact",
+    "*/app/dashboard/_components/*/states/*.ts": "typescript",
+    "*/app/dashboard/_components/*/types/*.ts": "typescript",
+    "*/app/dashboard/_components/*/constants/*.ts": "typescript",
+    "*/app/dashboard/_components/*/styles/*.scss": "scss",
+    "*/common/api/*.ts": "typescript",
+    "*/common/hooks/*.ts": "typescript",
+    "*/common/models/*.ts": "typescript",
+    "*/common/seo/*.tsx": "typescriptreact",
+    "*/common/utils/*.ts": "typescript",
+    "*/components/ui/*.tsx": "typescriptreact",
+    "*/components/desktop/*.tsx": "typescriptreact",
+    "*/components/mobile-ui/*.tsx": "typescriptreact",
+    "*/components/konsta/*.js": "javascript",
+    "*/components/konsta/*.jsx": "javascriptreact",
+    "*/assets/styles/**/*.scss": "scss",
+    "*/configs/**/*.json": "json",
+    "*/lib/*.ts": "typescript",
+    "*/middleware/*.ts": "typescript"
   },
 
   // UI Development Guidelines
@@ -78,18 +141,31 @@
   // Frontend feature development guidelines
   "frontend.development.guidelines": {
     "featureStructure": "Co-located with Next.js App Router in src/app/(frontend)/_components/[FeatureName]",
+    "dashboardStructure": "Complex dashboard features in src/app/dashboard/_components/[FeatureName]",
     "importAliases": {
       "@frontend/[FeatureName]": "For importing from other features",
       "@dashboard/[FeatureName]": "For dashboard features",
-      "@common/*": "For shared utilities"
+      "@common/*": "For shared utilities",
+      "@components/*": "For shared UI components"
     },
     "namingConventions": {
-      "features": "PascalCase (e.g., CategoryPage, PostDetail)",
+      "features": "PascalCase (e.g., CategoryPage, NewsPage, PostDetail, ProfileDetail)",
+      "dashboardFeatures": "PascalCase (e.g., AccountDetail, FinancialManagement, PostManagement)",
       "components": "PascalCase with descriptive names",
       "hooks": "camelCase starting with 'use'",
-      "atoms": "camelCase ending with 'Atom'"
+      "atoms": "camelCase ending with 'Atom'",
+      "types": "PascalCase with descriptive names",
+      "api": "camelCase for functions, PascalCase for types"
     },
-    "responsiveDesign": "Always implement both Desktop and Mobile components"
+    "responsiveDesign": "Always implement both Desktop and Mobile components",
+    "fileOrganization": {
+      "frontendFeatures": "api/, components/, hooks/, mobile/, states/, styles/, type.ts",
+      "dashboardFeatures": "api/, apis/, components/, hooks/, states/, types/, constants/, mobile/, styles/",
+      "commonStructure": "Organize by functionality (api/, auth/, hooks/, models/, seo/, utils/)"
+    },
+    "stateManagement": "Use Jotai atoms in states/ directory for local state",
+    "styling": "Use SCSS modules in styles/ directory with .module.scss extension",
+    "apiIntegration": "Keep API functions in api/ or apis/ directory with proper error handling"
   },
 
   // Snippet prefixes for quick feature development

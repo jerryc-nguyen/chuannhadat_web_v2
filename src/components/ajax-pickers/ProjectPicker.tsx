@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { autocompleteApi } from '@frontend/CategoryPage/api/autocomplete';
 import CmdkOptionPicker from '@components/mobile-ui/CmdkOptionPicker';
 import { debounce } from 'lodash-es';

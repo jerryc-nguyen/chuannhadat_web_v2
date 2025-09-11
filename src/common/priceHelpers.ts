@@ -1,4 +1,4 @@
-import { OptionForSelect } from "@common/models";
+import { OptionForSelect } from "@common/types";
 export const MOT_NGHIN = 1_000
 export const MOT_TRIEU = 1_000_000
 export const MOT_TY = 1_000_000_000

@@ -6,7 +6,7 @@ import {
   FILTER_FIELDS_TO_PARAMS,
   FilterFieldName,
   OptionForSelect,
-} from '@common/models';
+} from '@common/types';
 import { useAtom, useAtomValue } from 'jotai';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';

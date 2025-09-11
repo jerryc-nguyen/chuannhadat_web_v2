@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { FilterChipOption } from '@frontend/CategoryPage/mobile/filter_bds/types';
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 
 /**

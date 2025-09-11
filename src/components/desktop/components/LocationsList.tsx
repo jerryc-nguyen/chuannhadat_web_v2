@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import OptionPicker from '@components/mobile-ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 import { Checkbox, List, ListItem } from '@components/konsta';

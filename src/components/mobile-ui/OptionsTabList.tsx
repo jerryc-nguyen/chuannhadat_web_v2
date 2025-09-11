@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 
 import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { useState } from 'react';

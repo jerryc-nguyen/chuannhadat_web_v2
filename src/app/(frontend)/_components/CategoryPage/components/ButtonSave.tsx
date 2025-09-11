@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import styles from './CardImageCarousel/CardImageCarousel.module.scss';
 import { HeartOutline, HeartFilled } from '@components/icons/CustomIcons';
 
-import { ActionSaveProduct, ISaveProductPayload } from '@common/models/savesPostModel';
+import { ActionSaveProduct, ISaveProductPayload } from '@common/types/saves';
 import { listPostIdSavedAtom } from '../states';
 import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { cn } from '@common/utils';

@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 
 export interface FilterState {
   businessType?: OptionForSelect;

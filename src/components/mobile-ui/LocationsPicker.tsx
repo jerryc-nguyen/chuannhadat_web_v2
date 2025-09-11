@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocationPicker } from '@contexts/LocationContext';
 
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import OptionPicker from '@components/mobile-ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 

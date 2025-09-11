@@ -4,7 +4,7 @@ import { useRefCallback } from '@common/hooks/useRefCallback';
 import SortOptions from '../filter_bds/bts/SortOptions';
 import useFilterState from '../filter_bds/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 import { ChevronDown } from 'lucide-react';
 
 import empty_city from '@assets/images/empty-city.png';

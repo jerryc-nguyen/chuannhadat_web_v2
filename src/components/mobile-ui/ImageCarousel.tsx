@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { TPhoto } from '@common/models';
+import { TPhoto } from '@common/types';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import React from 'react';
 type ImageCarouselProps = {

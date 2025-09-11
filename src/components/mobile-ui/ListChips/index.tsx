@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import './style.scss';
 import HorizontalScroller from '../HorizontalScroller';
 

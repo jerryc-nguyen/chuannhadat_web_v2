@@ -15,7 +15,7 @@ import SortOptions from '../mobile/filter_bds/bts/SortOptions';
 import FilterModal from '../mobile/filter_bds/FilterModal';
 import useFilterState from '../mobile/filter_bds/hooks/useFilterState';
 import { FilterChipOption } from '../mobile/filter_bds/types';
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@components/desktop/product-filters/ProfileLocationsV2';
 import React from 'react';

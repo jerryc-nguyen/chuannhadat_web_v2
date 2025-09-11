@@ -29,7 +29,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { contactsApi } from '@app/dashboard/request/api/contacts';
 import { toast } from 'sonner';
-import { IRequestCallbackPayload } from '@common/models/modelPayload';
+import { IRequestCallbackPayload } from '@common/types/saves';
 import { Loader2 } from 'lucide-react';
 
 type DialogContactAgainProps = {

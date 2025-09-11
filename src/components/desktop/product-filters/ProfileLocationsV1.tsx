@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 // LocationsPicker component removed - using LocationContext directly
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';

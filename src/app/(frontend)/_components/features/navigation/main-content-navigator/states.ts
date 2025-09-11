@@ -1,4 +1,4 @@
-import { OptionForSelect } from "@common/models";
+import { OptionForSelect } from "@common/types";
 import { atom } from "jotai";
 
 export const MCNContentTypeAtom = atom<OptionForSelect>();

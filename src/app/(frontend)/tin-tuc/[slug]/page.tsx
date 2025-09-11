@@ -1,6 +1,6 @@
 import { seoApi } from '@frontend/NewsPage/api/seo';
 import { createMetadata } from '@common/seo';
-import type { Params } from '@common/models';
+import type { Params } from '@common/types';
 import { Metadata } from 'next';
 import { NewsDetail } from './_components/NewsDetail';
 

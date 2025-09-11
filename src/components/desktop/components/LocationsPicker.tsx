@@ -2,7 +2,7 @@ import { useState, useRef, useMemo, useEffect } from 'react';
 import { useLocationPicker } from '@contexts/LocationContext';
 import { ChevronsUpDown } from 'lucide-react';
 
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import OptionPicker from '@components/mobile-ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';

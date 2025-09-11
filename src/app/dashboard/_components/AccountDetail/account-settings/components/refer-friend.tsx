@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { referralsApi } from '@app/(frontend)/gioi-thieu-ban-be/api/referrals';
 import CommonTableView from '@components/common-table/CommonTableView';
 import { IColumnTable } from '@components/common-table';
-import { IReferralData } from '@common/models/modelResponse';
+import { IReferralData } from '@common/types/api';
 import { Skeleton } from '@components/ui/skeleton';
 
 const ReferFriend: React.FC = () => {

@@ -1,6 +1,6 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { IReferralListResponse, IReferralsDetailResponse } from '@common/models/modelResponse';
+import { IReferralListResponse, IReferralsDetailResponse } from '@common/types/api';
 
 export const referralsApi = {
   getReferralDetail: async (referral_code: string): Promise<IReferralsDetailResponse> => {

@@ -1,6 +1,6 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { IProfileMeResponse, IResponseData } from '@common/models/modelResponse';
+import { IProfileMeResponse, IResponseData } from '@common/types/api';
 
 export const profileApi = {
   getMyProfile: async (): Promise<IProfileMeResponse> => {

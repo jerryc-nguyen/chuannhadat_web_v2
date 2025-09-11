@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 
 import useFilterState from '../hooks/useFilterState';
 import ListChips from '@components/mobile-ui/ListChips';
