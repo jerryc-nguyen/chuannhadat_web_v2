@@ -17,7 +17,7 @@ import ProductTypeForm from './components/form-components/product-type';
 import ProjectForm from './components/form-components/project-form';
 
 import { PostFormSchema } from './form-schemas';
-import { FormMobile } from './mobile/form-create';
+import { CreateForm } from './NewPost/mobile/CreateForm';
 import { useManagePostsCache } from '../collection-post/hooks/useManagePostsCache';
 import { getQueryClient } from "@common/api/react-query";
 import { DASHBOARD_ROUTES } from '@common/router';
@@ -51,7 +51,7 @@ const EditPost = ({ productUid }: { productUid: string }) => {
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = async (data: A) => {
+  const onSubmit = async (product: A) => {
     if (!product) {
       toast.error('Tin đăng đã bị xoá');
       return;
@@ -81,7 +81,7 @@ const EditPost = ({ productUid }: { productUid: string }) => {
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
             {isMobile ? (
-              <FormMobile />
+              <CreateForm />
             ) : (
               <>
                 <ProductTypeForm form={form} />

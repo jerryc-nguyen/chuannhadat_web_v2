@@ -1,8 +1,8 @@
 import { UseFormReturn } from 'react-hook-form';
 import { CardTitle } from '@components/ui/card';
 import List from '@components/konsta/List';
-import { IPostForm } from '../../../types';
-import { InputYoutube, UploadImages } from '../../components/form-components/image-form';
+import { IPostForm } from '@dashboard/PostManagement/types';
+import { InputYoutube, UploadImages } from '@dashboard/PostManagement/manage-post/components/form-components/image-form';
 
 interface MediaFieldsProps {
   form: UseFormReturn<IPostForm>;

@@ -4,7 +4,7 @@ import { OptionForSelect } from '@common/models';
 import List from '@components/konsta/List';
 import { CardTitle } from '@components/ui/card';
 import LocationsPicker from '@components/mobile-ui/LocationsPicker';
-import { IPostForm } from '../../../types';
+import { IPostForm } from '@dashboard/PostManagement/types';
 
 interface LocationFieldProps {
   form: UseFormReturn<IPostForm>;

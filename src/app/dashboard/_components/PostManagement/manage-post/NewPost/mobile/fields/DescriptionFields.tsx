@@ -1,8 +1,8 @@
 import { UseFormReturn } from 'react-hook-form';
 import { CardTitle } from '@components/ui/card';
 import List from '@components/konsta/List';
-import { IPostForm } from '../../../types';
-import { InputDescription, InputTitle } from '../../components/form-components/product-description';
+import { IPostForm } from '@dashboard/PostManagement/types';
+import { InputDescription, InputTitle } from '@dashboard/PostManagement/manage-post/components/form-components/product-description';
 
 interface DescriptionFieldsProps {
   form: UseFormReturn<IPostForm>;

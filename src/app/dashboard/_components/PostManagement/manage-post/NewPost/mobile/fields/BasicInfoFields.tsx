@@ -7,15 +7,15 @@ import { FormField, FormItem, FormMessage } from '@components/ui/form';
 import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
 import { OptionForSelect } from '@common/models';
-import { IPostForm } from '../../../types';
+import { IPostForm } from '@dashboard/PostManagement/types';
 import { readMoney } from '@common/priceHelpers';
 import { isLandProperty } from '@common/productHelpers';
-import { RoundedOptionsNumberInput } from '../../components/form-components/fields/rounded-options-number-input';
+import { RoundedOptionsNumberInput } from '@app/dashboard/_components/PostManagement/manage-post/components/form-components/fields/rounded-options-number-input';
 import PriceOptions from '../PriceOptions';
 import {
   businessTypeOptions,
   categoryTypeOptions,
-} from '../../constant';
+} from '@dashboard/PostManagement/manage-post/constant';
 import {
   roomsOptionsForCreate,
   areaOptionsForCreate,

@@ -4,7 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { useState } from 'react';
 import { OptionForSelect } from '@common/models';
-import { IPostForm } from '../../types';
+import { IPostForm } from '@dashboard/PostManagement/types';
 
 // Import modular field components
 import BasicInfoFields from './fields/BasicInfoFields';
@@ -17,7 +17,7 @@ import MediaFields from './fields/MediaFields';
 /**
  * Mobile form for creating/editing property listings
  */
-export const FormMobile: React.FC = () => {
+export const CreateForm: React.FC = () => {
   const { openModal, closeModal } = useModals();
   const form = useFormContext<IPostForm>();
 
