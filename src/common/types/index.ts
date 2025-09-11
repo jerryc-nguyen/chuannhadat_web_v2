@@ -17,7 +17,6 @@ export {
 
 // Generic API types and responses
 export type {
-  IFormResponse,
   IResponseData,
   INotificationResponse,
   INotificationData,

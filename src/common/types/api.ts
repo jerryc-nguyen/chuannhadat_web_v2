@@ -6,17 +6,6 @@ import { HttpStatusCode } from 'axios';
  */
 
 /**
- * Generic form response interface for API calls
- * Used across authentication, notifications, and financial management modules
- */
-export interface IFormResponse<T> {
-  code: number;
-  data: T;
-  status: boolean | number;
-  message: string;
-}
-
-/**
  * Generic API response wrapper
  */
 export interface IResponseData<T> {

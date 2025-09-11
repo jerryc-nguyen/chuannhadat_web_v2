@@ -1,5 +1,3 @@
-import { IFormResponse } from '@common/types';
-
 export interface IBalanceResponse {
   tk_chinh: string;
   tk_km: string;
