@@ -1,53 +1,48 @@
 'use client';
 
-import { Table } from '@/components/ui/table';
-import { searchApi } from '@common/api/searchApi';
-import { DataGridContent, DataGridHeader, DataTablePagination } from '@dashboard/features/datagrid';
-import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import { useIsMobile } from '@common/hooks';
-import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
-import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import * as React from 'react';
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { ProductQuery } from '../data/schemas';
-import { Product } from '../data/schemas/product-schema';
+import React from 'react';
+import { FormProvider, useFormContext } from 'react-hook-form';
+import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
 import { useAdminCollectionPost } from '../hooks/use-collection-post';
-import { ListPostMobile } from '../mobile/ListPostMobile';
-import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from './cells';
-import { DataTableColumnHeader } from './datagrid/column-header';
-import { DataTableToolbar } from './datagrid/toolbar';
+import { Product } from '../data/schemas/product-schema';
+import { ListPostMobile } from './ListPostMobile';
+import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from '../components/cells';
+import { DataTableToolbar } from '../components/datagrid/toolbar';
+import { DataTablePagination } from '@dashboard/features/datagrid';
+import { searchApi } from '@common/api/searchApi';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
+import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
+import { useEffect } from 'react';
+import { ProductQuery } from '../data/schemas';
+import { useListPostsForm } from '@dashboard/PostManagement/manage-post/ListPosts/hooks/useListPosts';
+
 const columns: ColumnDef<Product>[] = [
   {
     id: 'select',
     header: CellHeaderSelectAll,
     cell: CellSelect,
   },
-
   {
     accessorKey: 'images',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Mô tả" className="container" />
+      <div className="container">Mô tả</div>
     ),
     cell: CellMainContent,
     enableSorting: false,
     enableHiding: false,
   },
-
   {
     accessorKey: 'id',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Thông tin khác" />,
+    header: ({ column }) => <div>Thông tin khác</div>,
     cell: CellStatus,
     enableSorting: false,
     enableHiding: false,
   },
 ];
 
-export function DataTable() {
+const MobileDataTable: React.FC = () => {
   const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
   const { buildFilterParams } = useFilterState();
-
-  const isMobile = useIsMobile();
 
   const { watch, setValue } = useFormContext<ProductQuery>();
 
@@ -58,6 +53,7 @@ export function DataTable() {
   const productsList = Array.isArray(cachedData?.data) ? cachedData.data : [];
   const totalRecords: number = cachedData?.pagination?.total_count ?? 0;
   const totalPages: number = cachedData?.pagination?.total_pages ?? 0;
+
   useEffect(() => {
     if (cachedData?.aggs) {
       updateSearchAggs(cachedData.aggs);
@@ -97,7 +93,7 @@ export function DataTable() {
     },
   });
 
-  const onFilterChipsChanged = async (state: Record<string, A>) => {
+  const onFilterChipsChanged = async (state: Record<string, any>) => {
     const filterParams = buildFilterParams({ withLocal: false, overrideStates: state });
     const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' };
     try {
@@ -118,16 +114,22 @@ export function DataTable() {
         onFilterChipsChanged={onFilterChipsChanged}
         onClickSearch={refetch}
       />
-      {isMobile && <ListPostMobile table={table} contentEmpty="Chưa có bài đăng nào" />}
-      {!isMobile && (
-        <div className="rounded-md border">
-          <Table className="bg-white/30">
-            <DataGridHeader table={table} />
-            <DataGridContent table={table} columns={columns} />
-          </Table>
-        </div>
-      )}
-      <DataTablePagination table={table} isMobile={isMobile} />
+      <ListPostMobile table={table} contentEmpty="Chưa có bài đăng nào" />
+      <DataTablePagination table={table} isMobile={true} />
     </div>
   );
-}
+};
+
+const ListPostsMobile: React.FC = () => {
+  const { searchForm } = useListPostsForm();
+
+  return (
+    <div className="flex h-full flex-1 flex-col space-y-8 md:pr-3">
+      <FormProvider {...searchForm}>
+        <MobileDataTable />
+      </FormProvider>
+    </div>
+  );
+};
+
+export default ListPostsMobile;

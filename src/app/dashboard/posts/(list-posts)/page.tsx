@@ -1,4 +1,5 @@
-import PostManagement from '@dashboard/PostManagement';
+import { getUserAgentInfo } from '@common/getUserAgentInfo';
+import PostManagement from '@dashboard/PostManagement/manage-post/ListPosts';
 import { Metadata } from 'next';
 import React from 'react';
 
@@ -8,7 +9,13 @@ export const metadata: Metadata = {
 };
 
 const NewPostPage: React.FC = async () => {
-  return <PostManagement />;
+
+  const { isMobile } = await getUserAgentInfo();
+
+  return (
+    <PostManagement isMobile={isMobile} />
+  );
+
 };
 
 export default NewPostPage;
