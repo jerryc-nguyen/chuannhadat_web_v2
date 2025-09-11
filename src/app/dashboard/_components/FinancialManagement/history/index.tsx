@@ -6,8 +6,8 @@ import '@styles/pages/mobile/finacial-management/history.scss';
 import { useBalanceRequest } from '@common/api/balance';
 import { ITransactionResponse } from '../types';
 import TableComponent from '@components/table';
-import NoteDescriptions from '../components/NoteDescription';
-import BalanceInfo from '../components/BalanceInfo';
+import NoteDescriptions from './NoteDescription';
+import BalanceInfo from '../balance/BalanceInfo';
 import { useSetAtom } from 'jotai';
 import {
   breadcrumbAtom,

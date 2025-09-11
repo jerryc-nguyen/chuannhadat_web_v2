@@ -12,8 +12,8 @@ import {
   type IBreadcrumbItem,
 } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
-import BalanceInfo from '../components/BalanceInfo';
-import NoteDescriptions from '../components/NoteDescription';
+import BalanceInfo from './BalanceInfo';
+import NoteDescriptions from '../history/NoteDescription';
 import { ITransactionResponse } from '../types';
 
 const BalanceView = () => {

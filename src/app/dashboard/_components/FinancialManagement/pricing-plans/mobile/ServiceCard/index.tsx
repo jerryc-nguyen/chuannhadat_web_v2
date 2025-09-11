@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useBalanceRequest } from '@common/api/balance';
 import { subscriptionApi } from '@dashboard/FinancialManagement/api/subscription';
-import { Service } from '../../types';
+import { Service } from '@dashboard/FinancialManagement/types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import '@styles/pages/mobile/finacial-management/service-package.scss';
 import { useMutation } from '@tanstack/react-query';

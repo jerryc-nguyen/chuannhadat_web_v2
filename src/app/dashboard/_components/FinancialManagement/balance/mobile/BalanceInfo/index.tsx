@@ -1,5 +1,5 @@
-import useBalance from '../../hooks';
-import { IBalanceResponse } from '../../types';
+import useBalance from '@dashboard/FinancialManagement/hooks';
+import { IBalanceResponse } from '@dashboard/FinancialManagement/types';
 import { FC, useEffect, useState } from 'react';
 
 import { Info } from 'lucide-react';

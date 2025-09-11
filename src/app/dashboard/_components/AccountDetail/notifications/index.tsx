@@ -1,6 +1,6 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import NotificationsDesktop from './NotificationsDesktop';
-import NotificationsMobile from '../mobile/notifications';
+import NotificationsMobile from './mobile';
 
 interface NotificationsProps {
   isMobile?: boolean;

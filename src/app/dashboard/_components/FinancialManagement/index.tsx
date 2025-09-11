@@ -1,6 +1,6 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import FinancialManagementDesktop from './balance';
-import FinancialManagementMobile from './mobile/balance';
+import FinancialManagementMobile from './balance/mobile';
 
 interface FinancialManagementProps {
   isMobile?: boolean;

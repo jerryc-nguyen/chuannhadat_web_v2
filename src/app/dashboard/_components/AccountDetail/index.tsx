@@ -1,6 +1,6 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import AccountDetailDesktop from './account-settings';
-import AccountDetailMobile from './mobile/account-settings';
+import AccountDetailMobile from './account-settings/mobile';
 
 interface AccountDetailProps {
   isMobile?: boolean;

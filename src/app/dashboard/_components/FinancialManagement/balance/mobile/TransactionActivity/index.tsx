@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@components/ui/card';
-import { ITransactionResponse } from '../../types';
+import { ITransactionResponse } from '../../../types';
 import { format, isToday, parseISO, isYesterday } from 'date-fns';
 import { vi } from 'date-fns/locale';
 

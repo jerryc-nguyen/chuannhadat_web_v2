@@ -17,7 +17,7 @@ import {
 } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
 import React from 'react';
-import BalanceInfo from '../components/BalanceInfo';
+import BalanceInfo from '../balance/BalanceInfo';
 
 const TopUpView = () => {
   const { currentUser, bankTransferNote } = useAuth();

@@ -5,9 +5,9 @@ import React, { useEffect, useState } from 'react';
 import '@styles/pages/mobile/finacial-management/history.scss';
 
 import { useBalanceRequest } from '@common/api/balance';
-import { ITransactionResponse } from '../types';
-import BalanceInfo from '../components/BalanceInfo';
-import TransactionActivity from '../components/TransactionActivity';
+import { ITransactionResponse } from '@dashboard/FinancialManagement/types';
+import BalanceInfo from '@dashboard/FinancialManagement/balance/mobile/BalanceInfo';
+import TransactionActivity from '@dashboard/FinancialManagement/balance/mobile/TransactionActivity';
 import { useSetAtom } from 'jotai';
 import {
   breadcrumbAtom,

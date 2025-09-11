@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@components/ui/button';
-import { Service } from '../../types';
+import { Service } from '@dashboard/FinancialManagement/types';
 
 interface PaymentDialogProps {
   plan: Service;

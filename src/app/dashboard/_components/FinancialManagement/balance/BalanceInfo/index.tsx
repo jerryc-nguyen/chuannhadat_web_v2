@@ -1,6 +1,6 @@
 import { CND_TEXT_COLORS } from '@common/constants';
-import useBalance from '../../mobile/hooks';
-import { IBalanceResponse } from '../../mobile/types';
+import useBalance from '@dashboard/FinancialManagement/hooks';
+import { IBalanceResponse } from '@dashboard/FinancialManagement/types';
 import FigureCard, { CardIcons } from '@dashboard/DashboardLayout/components/FigureCard';
 import { FC, useEffect, useState } from 'react';
 
