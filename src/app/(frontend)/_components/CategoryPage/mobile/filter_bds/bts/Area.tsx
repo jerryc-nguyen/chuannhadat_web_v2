@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 import ListCheckOptions from '@components/mobile-ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';

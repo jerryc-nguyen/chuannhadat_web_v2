@@ -1,7 +1,7 @@
 import { Button } from "@components/ui/button";
 import { Popover, PopoverContent } from "@components/ui/popover";
 import OptionPicker from "@components/mobile-ui/OptionPicker";
-import { OptionForSelect } from "@common/models";
+import { OptionForSelect } from "@common/types";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { ChevronsUpDown } from "lucide-react";
 import { ClearButton } from "@components/ui/clear-button";

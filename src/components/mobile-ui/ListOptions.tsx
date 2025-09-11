@@ -1,5 +1,5 @@
 import { List, ListItem } from '@components/konsta';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 
 import { ReactElement } from 'react';
 

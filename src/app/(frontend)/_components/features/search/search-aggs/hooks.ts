@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useAtom } from "jotai";
 import { isUseAggOptionsAtom, searchAggsAtom } from "./states";
-import { OptionForSelect } from "@common/models";
+import { OptionForSelect } from "@common/types";
 
 export default function useSearchAggs() {
   const [searchAggs, setSearchAggs] = useAtom(searchAggsAtom);

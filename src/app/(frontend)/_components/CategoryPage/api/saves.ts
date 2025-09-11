@@ -2,8 +2,8 @@ import axiosInstance from '@common/api/axiosInstance';
 import { getCookie } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import { API_ROUTES } from '@common/router';
-import { IResponseData } from '@common/models/modelResponse';
-import { ISaveProductPayload, ISavedProductsResponse, ISavesSummaryResponse } from '@common/models/savesPostModel';
+import { IResponseData } from '@common/types/api';
+import { ISaveProductPayload, ISavedProductsResponse, ISavesSummaryResponse } from '@common/types/saves';
 
 export const savesApi = {
   savePost: async (payload: ISaveProductPayload): Promise<IResponseData<any>> => {

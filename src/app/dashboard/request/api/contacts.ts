@@ -1,7 +1,7 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { IRequestCallbackPayload } from '@common/models/modelPayload';
-import { IListRequestResponse, IRequestCallbackResponse } from '@common/models/modelResponse';
+import { IRequestCallbackPayload } from '@common/types/saves';
+import { IListRequestResponse, IRequestCallbackResponse } from '@common/types/api';
 
 export const contactsApi = {
   requestCallback: async (payload: IRequestCallbackPayload): Promise<IRequestCallbackResponse> => {

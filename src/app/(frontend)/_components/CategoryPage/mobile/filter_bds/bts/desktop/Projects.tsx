@@ -1,5 +1,5 @@
 import useFilterState from '../../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 

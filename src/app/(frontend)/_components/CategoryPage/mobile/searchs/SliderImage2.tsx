@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { TPhoto } from '@common/models';
+import { TPhoto } from '@common/types';
 export default function SliderImage2({ listImg }: { listImg: TPhoto[] }) {
   const { buildThumbnailUrl } = useResizeImage();
 

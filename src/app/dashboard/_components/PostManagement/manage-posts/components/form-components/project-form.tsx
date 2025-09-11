@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { FormField, FormItem } from '@components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { Button } from '@components/ui/button';

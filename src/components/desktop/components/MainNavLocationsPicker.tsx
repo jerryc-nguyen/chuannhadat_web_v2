@@ -2,7 +2,7 @@
 import { Button } from '@components/ui/button';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 import React from 'react';
 import { ChevronsUpDown, MapPin } from 'lucide-react';
 import MainContentNavigator from '@frontend/features/navigation/main-content-navigator/desktop';

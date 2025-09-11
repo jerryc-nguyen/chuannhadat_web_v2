@@ -1,6 +1,6 @@
 import { profilesApi } from './api/profiles';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import type { Params } from '@common/models';
+import type { Params } from '@common/types';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import ProfileDetailDesktop from './ProfileDetailDesktop';
 import ProfileDetailMobile from './ProfileDetailMobile';

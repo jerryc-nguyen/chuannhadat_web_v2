@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { INotificationResponse } from '../types';
+import { INotificationResponse } from '@common/types';
 
 export const pageAtom = atom<number>(1);
 export const perPageAtom = atom<number>(10);

@@ -22,14 +22,14 @@ import {
   ActionSaveProduct,
   ISaveProductPayload,
   ISavedProductsResponse,
-} from '@common/models/savesPostModel';
+} from '@common/types/saves';
 import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSearchParams } from 'next/navigation';
 import { useViewedPosts } from '@common/hooks/useViewedPosts';
 import OptionsTabList from '@components/mobile-ui/OptionsTabList';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { useIsMobile } from '@common/hooks';
 

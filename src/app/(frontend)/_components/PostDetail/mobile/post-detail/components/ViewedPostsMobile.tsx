@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
 import { useViewedPosts } from '@common/hooks/useViewedPosts';
 import ProductCard from '@frontend/CategoryPage/mobile/searchs/ProductCard';
-import { IProduct } from '@frontend/CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -106,7 +106,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
         <CarouselContent>
           {listProduct.map((product, index) => (
             <CarouselItem key={product?.id || index}>
-              <ProductCard product={product as unknown as IProduct} />
+              <ProductCard product={product.product} />
             </CarouselItem>
           ))}
         </CarouselContent>

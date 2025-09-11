@@ -1,4 +1,4 @@
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 import { ProductQueryFieldName } from '../data/type/product-query';
 import { FilterChipOption } from '@frontend/CategoryPage/mobile/filter_bds/types';
 

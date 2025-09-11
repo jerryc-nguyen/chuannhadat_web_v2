@@ -1,5 +1,5 @@
 import ListChips from '@components/mobile-ui/ListChips';
-import { OptionForSelect, FilterFieldName } from '@common/models';
+import { OptionForSelect, FilterFieldName } from '@common/types';
 import useFilterState from '../hooks/useFilterState';
 
 export default function Rooms() {

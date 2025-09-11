@@ -24,7 +24,7 @@ import { toast } from 'sonner';
 import { Loader2, MessageCircleMore, CircleCheck, ChevronLeft } from 'lucide-react';
 import TooltipHost from '@components/tooltip-host';
 import CommonAlertDialog from '@components/common-dialog';
-import { IVerifyPhoneResponse } from '@common/models/modelResponse';
+import { IVerifyPhoneResponse } from '@common/types/api';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 
 type ForgotPasswordProps = object;

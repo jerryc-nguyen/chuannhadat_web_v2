@@ -1,9 +1,4 @@
-export interface IFormResponse<T> {
-  code: number;
-  data: T;
-  status: boolean | number;
-  message: string;
-}
+import { IFormResponse } from '@common/types';
 
 export interface IBalanceResponse {
   tk_chinh: string;

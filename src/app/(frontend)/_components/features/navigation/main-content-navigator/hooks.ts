@@ -1,4 +1,4 @@
-import { OptionForSelect } from "@common/models"
+import { OptionForSelect } from "@common/types"
 import { useAtom } from "jotai";
 import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from "./states";
 import { useCallback, useMemo, useState } from "react";

@@ -10,13 +10,6 @@ export interface IFormPropsRegister extends IFormPropsLogin {
   referral_code?: string;
 }
 
-export interface IFormResponse<T> {
-  code: number;
-  data: T;
-  status: boolean | number;
-  message: string;
-}
-
 export type LoginResponse = {
   data: ILoginResponse;
   status: boolean;

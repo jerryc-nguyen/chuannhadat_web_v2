@@ -9,7 +9,7 @@ import ThumbsCarousel from '@frontend/CategoryPage/components/ThumbsCarousel/Thu
 import BusCatType from '@frontend/CategoryPage/components/product-card/BusCatType';
 import { useRef } from 'react';
 import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetailMobile';
-import { IProduct } from './type';
+import { IProductData } from './type';
 
 export const ProductDetailTitleBts = ({ product }: { product: A }) => {
   return (
@@ -38,7 +38,7 @@ export const ProductDetailTitleBts = ({ product }: { product: A }) => {
     </div>
   );
 };
-export default function ProductCard({ product, productIndex = 0 }: { product: IProduct; productIndex?: number }) {
+export default function ProductCard({ product, productIndex = 0 }: { product: IProductData; productIndex?: number }) {
   const { openModal } = useModals();
   const divRef = useRef<HTMLDivElement | null>(null);
   const isInCenter = useIsInVerticalCenterZone(divRef as React.RefObject<HTMLElement>);
@@ -82,7 +82,7 @@ export default function ProductCard({ product, productIndex = 0 }: { product: IP
         )}
       </div>
       <div className="p-4">
-        {product.bus_cat_type && <BusCatType busCatType={product.bus_cat_type} project={product.project} />}
+        {product.bus_cat_type && <BusCatType busCatType={product.bus_cat_type} project={'project' in product ? product.project : undefined} />}
         <a
           onClick={showDetailPostModal}
           href={`/post/${product.slug}`}

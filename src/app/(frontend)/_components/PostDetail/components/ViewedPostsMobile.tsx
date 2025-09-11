@@ -3,7 +3,6 @@ import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
 import { useViewedPosts } from '@common/hooks/useViewedPosts';
 import ProductCard from '../../CategoryPage/mobile/searchs/ProductCard';
-import { IProduct } from '../../CategoryPage/mobile/searchs/type';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -32,7 +31,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
         isScrollNext.current = false;
       }, 0.2);
     }
-  }, [listProduct.length]);
+  }, [listProduct, api]);
 
   const handleScrollNext = () => {
     if (pagination && pageNumber < pagination?.total_pages) {
@@ -106,7 +105,7 @@ const ViewedPostsMobile: React.FC<ViewedPostsMobileProps> = ({ productUid }) => 
         <CarouselContent>
           {listProduct.map((product, index) => (
             <CarouselItem key={product?.id || index}>
-              <ProductCard product={product as unknown as IProduct} />
+              <ProductCard product={product.product} />
             </CarouselItem>
           ))}
         </CarouselContent>

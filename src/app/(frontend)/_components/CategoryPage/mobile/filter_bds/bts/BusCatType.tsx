@@ -1,6 +1,6 @@
 import ListCheckOptions from '@components/mobile-ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
-import { FilterFieldName, OptionForSelect } from '@common/models';
+import { FilterFieldName, OptionForSelect } from '@common/types';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 
 export default function BusCatType({

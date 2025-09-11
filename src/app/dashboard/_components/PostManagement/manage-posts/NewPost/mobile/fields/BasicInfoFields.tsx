@@ -6,7 +6,7 @@ import ListItem from '@components/konsta/ListItem';
 import { FormField, FormItem, FormMessage } from '@components/ui/form';
 import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { IPostForm } from '@dashboard/PostManagement/types';
 import { readMoney } from '@common/priceHelpers';
 import { isLandProperty } from '@common/productHelpers';

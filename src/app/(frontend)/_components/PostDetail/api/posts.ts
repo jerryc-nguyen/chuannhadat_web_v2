@@ -2,9 +2,9 @@ import axiosInstance from '@common/api/axiosInstance';
 import { getCookie } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import { API_ROUTES } from '@common/router';
-import { IViewedPostsPayload } from '@common/models/modelPayload';
-import { IViewedPostResonpse } from '@common/models/modelResponse';
-import { ISavesSummaryResponse } from '@common/models/savesPostModel';
+import { IViewedPostsPayload } from '@common/types/saves';
+import { IViewedPostsResponse } from '@common/types/api';
+import { ISavesSummaryResponse } from '@common/types/saves';
 import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { IProductSummary } from '@frontend/PostDetail/type';
 
@@ -24,7 +24,7 @@ export const postsApi = {
     );
   },
 
-  getViewedPosts: async (payload: IViewedPostsPayload): Promise<IViewedPostResonpse> => {
+  getViewedPosts: async (payload: IViewedPostsPayload): Promise<IViewedPostsResponse> => {
     return axiosInstance.get(API_ROUTES.POSTS.VIEWED_PRODUCTS_V2, {
       params: payload,
       headers: {
@@ -33,7 +33,7 @@ export const postsApi = {
     });
   },
 
-  deleteViewedPosts: async (product_uid: string): Promise<IViewedPostResonpse> => {
+  deleteViewedPosts: async (product_uid: string): Promise<IViewedPostsResponse> => {
     return axiosInstance.delete(`${API_ROUTES.POSTS.VIEWD_PRODUCTS}/${product_uid}`, {
       headers: {
         'Frontend-Token': getCookie(FRONTEND_TOKEN),

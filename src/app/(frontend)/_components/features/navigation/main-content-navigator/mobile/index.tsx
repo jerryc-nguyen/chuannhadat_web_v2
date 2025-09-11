@@ -3,7 +3,7 @@ import { DialogFooter } from '@components/ui/dialog';
 
 import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
 import LocationsPicker from '@components/mobile-ui/LocationsPicker';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { useCallback, useEffect } from 'react';
 import useMainContentNavigator from '../hooks';
 import { useLocationPicker } from '@contexts/LocationContext';

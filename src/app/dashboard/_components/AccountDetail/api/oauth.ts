@@ -1,7 +1,7 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { IConnectOauthsPayload } from '@common/models/modelPayload';
-import { IConnectOauthsResponse } from '@common/models/modelResponse';
+import { IConnectOauthsPayload } from '@common/types/user';
+import { IConnectOauthsResponse } from '@common/types/api';
 
 export const oauthApi = {
   connectGoogle: async (data: IConnectOauthsPayload): Promise<IConnectOauthsResponse> => {

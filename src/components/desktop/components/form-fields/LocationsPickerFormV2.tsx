@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocationContext } from '@contexts/LocationContext';
 
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 
 import { UseFormReturn } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form';

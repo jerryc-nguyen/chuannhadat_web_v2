@@ -5,7 +5,7 @@ import ListItemBtsPicker from '@frontend/features/form/mobile-pickers/ListItemBt
 import { FormField, FormItem, FormMessage } from '@components/ui/form';
 import { Button } from '@components/ui/button';
 import { Label } from '@components/ui/label';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { IPostForm } from '@dashboard/PostManagement/types';
 import { isLandProperty, isHouseProperty, isApartmentProperty } from '@common/productHelpers';
 import { RoundedOptionsNumberInput } from '@dashboard/PostManagement/manage-posts/components/form-components/fields/rounded-options-number-input';

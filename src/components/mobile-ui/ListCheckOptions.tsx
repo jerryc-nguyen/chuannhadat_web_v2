@@ -1,7 +1,7 @@
 import { Checkbox, List, ListItem } from '@components/konsta';
 
 import { ReactElement } from 'react';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import * as React from 'react';
 
 const ListCheckOptions = ({

@@ -1,11 +1,11 @@
 import { searchApi } from '../api/search';
 import { FilterState } from '../mobile/filter_bds/types';
-import { ISeachAuthorPayload } from '@common/models/modelPayload';
+import { ISearchAuthorPayload } from '@common/types/saves';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 
 export const useTopAuthors = (filterState: FilterState) => {
-  const payloadTopAuthors: ISeachAuthorPayload = React.useMemo(() => {
+  const payloadTopAuthors: ISearchAuthorPayload = React.useMemo(() => {
     const filterParams = {
       business_type: filterState.businessType?.value as string,
       category_type: filterState.categoryType?.value as string,

@@ -1,7 +1,7 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
-import type { Params } from '@common/models';
+import type { Params } from '@common/types';
 import { Metadata } from 'next';
 import PostDetail from '@frontend/PostDetail';
 

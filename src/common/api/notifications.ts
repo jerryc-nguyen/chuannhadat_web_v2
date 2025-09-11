@@ -1,13 +1,13 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { NotificationsResponse } from '@common/models/modelResponse';
+import { INotificationsResponse } from '@common/types/api';
 
 export const notificationsApi = {
   getNotifications: async (params: {
     page: number;
     per_page: number;
     filter_status: 'read' | 'unread' | null;
-  }): Promise<NotificationsResponse> => {
+  }): Promise<INotificationsResponse> => {
     return axiosInstance.get(API_ROUTES.NOTIFICATION.LIST, {
       params,
     });

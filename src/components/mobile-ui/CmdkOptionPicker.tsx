@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { cn, stringToSlug } from '@common/utils';
 import {
   Command,

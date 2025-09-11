@@ -3,7 +3,7 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { useState } from 'react';
-import { OptionForSelect } from '@common/models';
+import { OptionForSelect } from '@common/types';
 import { IPostForm } from '@dashboard/PostManagement/types';
 
 // Import modular field components

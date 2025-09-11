@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { filterStateAtom, localFilterStateAtom } from '@frontend/CategoryPage/mobile/filter_bds/states';
 import { useAtom, useAtomValue } from 'jotai';
-import { FilterFieldName } from '@common/models';
+import { FilterFieldName } from '@common/types';
 
 export function useFilterLocations() {
   const [filterState] = useAtom(filterStateAtom);
