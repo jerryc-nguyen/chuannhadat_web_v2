@@ -1,4 +1,4 @@
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import { searchApi } from '@common/api/searchApi';

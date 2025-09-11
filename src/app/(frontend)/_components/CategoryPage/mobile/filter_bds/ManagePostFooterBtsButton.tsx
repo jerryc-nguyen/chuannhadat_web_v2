@@ -1,4 +1,4 @@
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import { Button } from '@components/ui/button';
 import { FilterChipOption } from './types';

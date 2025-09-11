@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import LoginForm from '@components/features/auth/mobile/login/form';
-import RegisterForm from '@components/features/auth/mobile/register/form';
+import LoginForm from '@frontend/features/auth/mobile/login/form';
+import RegisterForm from '@frontend/features/auth/mobile/register/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
 const authOptions = [

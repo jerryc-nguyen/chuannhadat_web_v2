@@ -3,7 +3,7 @@ import { API_TOKEN_SERVER } from '@common/auth';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import Breadcrumb from '@components/breadcrumb';
 import { SidebarTrigger } from '@components/ui/sidebar';
-import MainNavRight from '@components/features/layout/mobile-header/MainNavRight';
+import MainNavRight from '@frontend/features/layout/mobile-header/MainNavRight';
 import AvatarIcon from '@components/desktop/components/AvatarIcon';
 import FavoriteIcon from '@components/desktop/components/FavoriteIcon';
 import NotificationIcon from '@components/desktop/components/NotificationIcon';

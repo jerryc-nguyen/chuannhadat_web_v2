@@ -7,7 +7,7 @@ import Price from './bts/Price';
 import BusinessTypeButtons from './bts/BusinessTypeButtons';
 import CategoryType from './bts/CategoryType';
 import Locations from './bts/Locations';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import useFilterState from './hooks/useFilterState';
 import Direction from './bts/Direction';
 import Bed from './bts/Bed';

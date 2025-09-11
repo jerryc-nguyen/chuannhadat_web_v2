@@ -6,7 +6,7 @@ import OptionPicker from '@components/mobile-ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 
 import { List, ListItem } from '@components/konsta';
-import { Modal } from '@components/features/layout/mobile-modals/states/types';
+import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
 
 type LocationsPickerProps = {
   withStreet?: boolean;

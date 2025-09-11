@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
-import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
+import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 
 /**
  * Custom hook to handle route changes

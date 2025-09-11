@@ -2,8 +2,8 @@
 
 import { Table } from '@/components/ui/table';
 import { searchApi } from '@common/api/searchApi';
-import { DataGridContent, DataGridHeader, DataTablePagination } from '@components/features/data-grid';
-import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import { DataGridContent, DataGridHeader, DataTablePagination } from '@dashboard/features/datagrid';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import { useIsMobile } from '@common/hooks';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';

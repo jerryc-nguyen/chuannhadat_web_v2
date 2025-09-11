@@ -5,8 +5,8 @@ import background_profile from '@assets/images/background_profile.jpg';
 import default_avatar from '@assets/images/default_avatar.png';
 import ButtonPhone from '@components/button-phone';
 import { filterChipOptionsByAggregations } from '@common/filterHelpers';
-import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
-import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import {
   DropdownMenu,
   DropdownMenuContent,

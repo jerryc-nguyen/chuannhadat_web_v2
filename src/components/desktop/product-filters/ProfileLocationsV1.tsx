@@ -1,7 +1,7 @@
 import { FilterFieldName, OptionForSelect } from '@common/models';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
 // LocationsPicker component removed - using LocationContext directly
-import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 
 export default function ProfileLocationsV1() {
   const { setLocalFieldValue, localFilterState } = useFilterState();

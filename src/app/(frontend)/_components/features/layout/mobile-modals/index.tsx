@@ -1,4 +1,4 @@
-import { useBrowserPushState } from '@components/features/navigation/popstate-handler/hooks';
+import { useBrowserPushState } from '@frontend/features/navigation/popstate-handler/hooks';
 import {
   Dialog,
   DialogContent,

@@ -5,7 +5,7 @@ import { getCookie, removeCookie } from '@common/cookies';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { useAuth } from '@common/auth/AuthContext';
-import { LoginResponse } from '@components/features/auth/mobile/types';
+import { LoginResponse } from '@frontend/features/auth/mobile/types';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Loader2 } from 'lucide-react';

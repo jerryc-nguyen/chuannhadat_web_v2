@@ -1,8 +1,8 @@
 'use client';
-import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
-import MainContentNavigator from '@components/features/navigation/main-content-navigator/mobile';
+import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
+import MainContentNavigator from '@frontend/features/navigation/main-content-navigator/mobile';
 import { Button } from '@components/ui/button';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import React from 'react';
 import { ChevronsUpDown, MapPin } from 'lucide-react';
 

@@ -1,6 +1,6 @@
 import { Pagination } from './savesPostModel';
 import { HttpStatusCode } from 'axios';
-import { ILoginResponse } from '@components/features/auth/mobile/types';
+import { ILoginResponse } from '@frontend/features/auth/mobile/types';
 import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 
 export interface IViewedPostResonpse extends IResponseData<IViewedProductDetail[]> {

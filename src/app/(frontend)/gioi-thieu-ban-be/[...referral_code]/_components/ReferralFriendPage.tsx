@@ -18,8 +18,8 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import registerSchema from '@components/features/auth/mobile/register/resolver';
-import { IRegisterResponse } from '@components/features/auth/mobile/types';
+import registerSchema from '@frontend/features/auth/mobile/register/resolver';
+import { IRegisterResponse } from '@frontend/features/auth/mobile/types';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';

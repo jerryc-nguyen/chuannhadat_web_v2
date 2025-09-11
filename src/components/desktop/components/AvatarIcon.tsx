@@ -12,8 +12,8 @@ import {
 import { Skeleton } from '@components/ui/skeleton';
 import useResizeImage from '@common/hooks/useResizeImage';
 import { useAuth } from '@common/auth/AuthContext';
-import ModalSelectRegisterOrLogin from '@components/features/auth/mobile/ModalSelectRegisterOrLogin';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSelectRegisterOrLogin';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

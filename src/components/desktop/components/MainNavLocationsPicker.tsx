@@ -1,12 +1,12 @@
 'use client';
 import { Button } from '@components/ui/button';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { FilterFieldName } from '@common/models';
 import React from 'react';
 import { ChevronsUpDown, MapPin } from 'lucide-react';
-import MainContentNavigator from '@components/features/navigation/main-content-navigator/desktop';
-import useMainContentNavigator from '@components/features/navigation/main-content-navigator/hooks';
+import MainContentNavigator from '@frontend/features/navigation/main-content-navigator/desktop';
+import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText } = useMainContentNavigator();

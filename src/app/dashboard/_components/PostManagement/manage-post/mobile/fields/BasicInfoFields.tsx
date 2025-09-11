@@ -1,7 +1,7 @@
 import { UseFormReturn, ControllerRenderProps } from 'react-hook-form';
 import { CardTitle } from '@components/ui/card';
 import List from '@components/konsta/List';
-import ListItemBtsPicker from '@components/features/form/mobile-pickers/ListItemBtsPicker';
+import ListItemBtsPicker from '@frontend/features/form/mobile-pickers/ListItemBtsPicker';
 import ListItem from '@components/konsta/ListItem';
 import { FormField, FormItem, FormMessage } from '@components/ui/form';
 import { Button } from '@components/ui/button';

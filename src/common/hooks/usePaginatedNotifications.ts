@@ -2,7 +2,7 @@
 import { useAtom } from 'jotai';
 import React from 'react';
 import { useAuth } from '@common/auth/AuthContext';
-import { notificationsDataAtom, totalAtom, totalUnreadAtom } from '@components/features/notification/mobile/states';
+import { notificationsDataAtom, totalAtom, totalUnreadAtom } from '@frontend/features/notification/mobile/states';
 import { useMutation } from '@tanstack/react-query';
 import { notificationsApi } from '@common/api/notifications';
 import type { AxiosError } from 'axios';

@@ -1,6 +1,6 @@
 import { FilterFieldName, OptionForSelect } from '@common/models';
 import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
-import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import LocationsList from '@components/desktop/components/LocationsList';
 
 export default function ProfileLocationsV2() {

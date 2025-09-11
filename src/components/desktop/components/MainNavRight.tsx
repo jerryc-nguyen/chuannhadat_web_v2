@@ -2,8 +2,8 @@
 import { useAuth } from '@common/auth/AuthContext';
 
 import { Button } from '@components/ui/button';
-import ModalSelectRegisterOrLogin from '@components/features/auth/mobile/ModalSelectRegisterOrLogin';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSelectRegisterOrLogin';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { LucideLogIn, LucidePenSquare } from 'lucide-react';
 import Link from 'next/link';
 import AvatarIcon from './AvatarIcon';

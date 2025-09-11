@@ -18,7 +18,7 @@ import {
 } from '../states';
 import { FilterChipOption, FilterState } from '../types';
 
-import { useFilterLocations } from '@components/features/navigation/mobile-locations/hooks';
+import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);

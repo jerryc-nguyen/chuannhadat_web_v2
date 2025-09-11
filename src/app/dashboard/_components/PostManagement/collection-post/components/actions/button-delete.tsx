@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import ProductApiService from '../../apis/product-api';

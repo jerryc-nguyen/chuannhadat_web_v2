@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { ChevronsUp } from 'lucide-react';
 import UpVipProductForm from '../up-vip-form';
 

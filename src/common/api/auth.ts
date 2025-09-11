@@ -1,6 +1,6 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { IFormPropsLogin, IFormPropsRegister, IRegisterResponse, LoginResponse } from '@components/features/auth/mobile/types';
+import { IFormPropsLogin, IFormPropsRegister, IRegisterResponse, LoginResponse } from '@frontend/features/auth/mobile/types';
 import { IConnectOauthsPayload } from '@common/models/modelPayload';
 import { IVerifyPhoneResponse } from '@common/models/modelResponse';
 import { HttpStatusCode } from 'axios';

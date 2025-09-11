@@ -1,5 +1,5 @@
 import ListItem from "@components/konsta/ListItem";
-import { Modal } from "@components/features/layout/mobile-modals/states/types";
+import { Modal } from "@frontend/features/layout/mobile-modals/states/types";
 
 type IListItemBtsInputProps = {
   openModal: (modal: Modal) => void,
@@ -8,7 +8,7 @@ type IListItemBtsInputProps = {
   modal: Modal
 }
 
-export default function ListItemBtsInput({ displayText, closeAfterSelect, modal, openModal }: IListItemBtsInputProps) {
+export default function ListItemBtsInput({ displayText, modal, openModal }: IListItemBtsInputProps) {
 
   return (
     <ListItem

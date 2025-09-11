@@ -7,7 +7,7 @@ import TooltipHost from '@components/tooltip-host';
 import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
-import { YoutubePlayerAction } from '@components/features/media/youtube-player-modal';
+import { YoutubePlayerAction } from '@frontend/features/media/youtube-player-modal';
 import useCleanupEffect from '@common/hooks/useCleanupEffect';
 import useResizeImage from '@common/hooks/useResizeImage';
 import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';

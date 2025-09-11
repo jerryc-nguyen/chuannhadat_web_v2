@@ -1,4 +1,4 @@
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import useFilterState from '../hooks/useFilterState';
 import { FilterFieldName, OptionForSelect } from '@common/models';
 import LocationsPicker from '@components/mobile-ui/LocationsPicker';

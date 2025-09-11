@@ -7,8 +7,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@components/ui/sheet';
-import ModalSelectRegisterOrLogin from '@components/features/auth/mobile/ModalSelectRegisterOrLogin';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSelectRegisterOrLogin';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';

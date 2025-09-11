@@ -15,8 +15,8 @@ import { Separator } from '@components/ui/separator';
 import { useAuth } from '@common/auth/AuthContext';
 import { useIdleTimer } from 'react-idle-timer';
 import { useRouter } from 'next/navigation';
-import ModalSelectRegisterOrLogin from '@components/features/auth/mobile/ModalSelectRegisterOrLogin';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSelectRegisterOrLogin';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 
 const SessionTimeOutPopup = () => {
   const [showSessionTimeout, setShowSessionTimeout] = useAtom(isShowSessionTimout);

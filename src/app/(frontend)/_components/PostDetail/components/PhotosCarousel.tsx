@@ -1,5 +1,5 @@
 import { AspectRatio } from '@components/ui/AspectRatio';
-import { YoutubePlayerAction } from '@components/features/media/youtube-player-modal';
+import { YoutubePlayerAction } from '@frontend/features/media/youtube-player-modal';
 import useResizeImage from '@common/hooks/useResizeImage';
 import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
 import ImageCarousel from '@components/mobile-ui/ImageCarousel';

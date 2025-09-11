@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormContext, useWatch } from 'react-hook-form';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { useState } from 'react';
 import { OptionForSelect } from '@common/models';
 import { IPostForm } from '../../types';

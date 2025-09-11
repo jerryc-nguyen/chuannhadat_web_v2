@@ -7,7 +7,7 @@ import useFilterState from "@frontend/CategoryPage/mobile/filter_bds/hooks/useFi
 import { useQueryClient } from "@tanstack/react-query";
 import { navigatorApi } from "./apis";
 import useSearchScope, { SearchScopeEnums } from "@common/hooks/useSearchScope";
-import useModals from "@components/features/layout/mobile-modals/hooks";
+import useModals from "@frontend/features/layout/mobile-modals/hooks";
 
 type TSubmitProps = {
   contentType?: OptionForSelect;

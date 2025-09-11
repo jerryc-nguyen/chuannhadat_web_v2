@@ -7,7 +7,7 @@ import { useHydrateAtoms } from 'jotai/utils';
 
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import useSearchScope from './useSearchScope';
-import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from '@components/features/navigation/main-content-navigator/states';
+import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from '@frontend/features/navigation/main-content-navigator/states';
 
 function useSyncParamsToState() {
   const currentPage = usePathname();

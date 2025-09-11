@@ -21,7 +21,7 @@ import { Skeleton } from '@components/ui/skeleton';
 
 import TooltipHost from '@components/tooltip-host';
 import { profileApi } from '../../api/profile';
-import { ILoginResponse } from '@components/features/auth/mobile/types';
+import { ILoginResponse } from '@frontend/features/auth/mobile/types';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 import CommonAlertDialog from '@components/common-dialog';
 

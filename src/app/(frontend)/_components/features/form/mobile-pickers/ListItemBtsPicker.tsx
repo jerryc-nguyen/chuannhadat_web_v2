@@ -1,9 +1,9 @@
 import ListItem from "@components/konsta/ListItem";
-import useModals from "@components/features/layout/mobile-modals/hooks";
+import useModals from "@frontend/features/layout/mobile-modals/hooks";
 
 import { OptionForSelect } from "@common/models";
 import ListCheckOptions from "@components/mobile-ui/ListCheckOptions";
-import { Modal } from "@components/features/layout/mobile-modals/states/types";
+import { Modal } from "@frontend/features/layout/mobile-modals/states/types";
 
 type IListItemBtsPickerProps = {
   options: Array<OptionForSelect>,

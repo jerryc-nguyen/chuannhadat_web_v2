@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { useBalanceRequest } from '@common/api/balance';
 import { subscriptionApi } from '@dashboard/FinancialManagement/api/subscription';
 import { Service } from '../../types';
-import useModals from '@components/features/layout/mobile-modals/hooks';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import '@styles/pages/mobile/finacial-management/service-package.scss';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';

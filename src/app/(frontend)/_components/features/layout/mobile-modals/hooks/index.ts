@@ -2,8 +2,8 @@ import { useAtom } from 'jotai';
 import { btsModal2Atom, btsModalAtom, btsModal3Atom } from '../states';
 import { Modal } from '../states/types';
 
-import { useBrowserPushState } from '@components/features/navigation/popstate-handler/hooks';
-import { updateCurrentUrlSearchParams } from '@components/features/navigation/popstate-handler/utils';
+import { useBrowserPushState } from '@frontend/features/navigation/popstate-handler/hooks';
+import { updateCurrentUrlSearchParams } from '@frontend/features/navigation/popstate-handler/utils';
 
 export default function useModals() {
   const { trackPushPath } = useBrowserPushState();

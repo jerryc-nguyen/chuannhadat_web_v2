@@ -9,8 +9,8 @@ import {
   setTokenClient,
 } from '@common/cookies';
 import { CustomerGender } from '@common/types';
-import { currentUserAtom } from '@components/features/auth/mobile/states';
-import { ILoginResponse } from '@components/features/auth/mobile/types';
+import { currentUserAtom } from '@frontend/features/auth/mobile/states';
+import { ILoginResponse } from '@frontend/features/auth/mobile/types';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import React, { createContext, useContext, useEffect, useState } from 'react';

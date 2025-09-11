@@ -2,7 +2,7 @@
 
 import { profileApi } from '@dashboard/AccountDetail/api/profile';
 import { getTokenClient } from '@common/cookies';
-import { currentUserAtom } from '@components/features/auth/mobile/states';
+import { currentUserAtom } from '@frontend/features/auth/mobile/states';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { useHydrateAtoms } from 'jotai/utils';
 

@@ -1,7 +1,7 @@
 import ListCheckOptions from '@components/mobile-ui/ListCheckOptions';
 import useFilterState from '../hooks/useFilterState';
 import { FilterFieldName, OptionForSelect } from '@common/models';
-import useSearchAggs from '@components/features/search/search-aggs/hooks';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 
 export default function AggProjects({ onSelect }: { onSelect?: (option: OptionForSelect) => void }) {
   const { getLocalFieldValue, setLocalFieldValue } = useFilterState();

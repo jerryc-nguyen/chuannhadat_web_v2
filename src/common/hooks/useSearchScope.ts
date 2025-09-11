@@ -1,7 +1,7 @@
 'use client';
 
 import { AuthUtils } from "@common/auth";
-import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "@components/features/navigation/main-content-navigator/constants";
+import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "@frontend/features/navigation/main-content-navigator/constants";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
