@@ -3,13 +3,6 @@
  * Contains filter parameters, search options, and related functionality
  */
 
-/**
- * Photo type for image objects
- */
-export type TPhoto = {
-  id: number;
-  url: string;
-};
 
 /**
  * Route parameters type for dynamic routes

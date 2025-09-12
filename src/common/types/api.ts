@@ -25,10 +25,3 @@ export interface IPagination {
   page: number;
   per_page: number;
 }
-
-
-
-/**
- * Profile me response
- */
-export type IProfileMeResponse = IResponseData<any>;

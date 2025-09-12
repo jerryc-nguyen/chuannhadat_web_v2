@@ -3,11 +3,17 @@
  * Organized by domain for better discoverability and maintainability
  */
 
+/**
+ * Photo type for image objects
+ */
+export type TPhoto = {
+  id: number;
+  url: string;
+};
+
 // User and authentication related types and enums
 export type {
-  IUserProfile,
-  IOAuthPayload,
-  IConnectOauthsPayload,
+  IUser,
 } from './user';
 
 export {
@@ -19,12 +25,10 @@ export {
 export type {
   IResponseData,
   IPagination,
-  IProfileMeResponse,
 } from './api';
 
 // Search and filter related types
 export type {
-  TPhoto,
   Params,
   Range,
   OptionForSelect,

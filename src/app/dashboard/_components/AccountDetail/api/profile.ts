@@ -1,9 +1,9 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { IProfileMeResponse, IResponseData } from '@common/types/api';
+import { IResponseData } from '@common/types';
 
 export const profileApi = {
-  getMyProfile: async (): Promise<IProfileMeResponse> => {
+  getMyProfile: async (): Promise<IResponseData<any>> => {
     return axiosInstance.get(API_ROUTES.PROFILES.GET_MY_PROFILE);
   },
 

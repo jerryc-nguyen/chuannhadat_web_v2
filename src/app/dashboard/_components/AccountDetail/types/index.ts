@@ -21,3 +21,14 @@ export interface IModalUpdateProfile {
  * OAuth connection response
  */
 export type IConnectOauthsResponse = IResponseData<any>;
+
+/**
+ * OAuth connection payload
+ */
+export interface IConnectOauthsPayload {
+  uid: string;
+  email: string;
+  name: string;
+  photo: string;
+  referral_code?: string;
+}
