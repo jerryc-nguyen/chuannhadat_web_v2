@@ -1,7 +1,7 @@
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import useFilterState from './hooks/useFilterState';
+import useFilterState from '../hooks/useFilterState';
 import { Button } from '@components/ui/button';
-import { FilterChipOption } from './types';
+import { FilterChipOption } from '../types';
 
 export default function ManagePostsFooterBtsButton({ filterOption }: { filterOption: FilterChipOption }) {
   const { closeModals } = useModals();

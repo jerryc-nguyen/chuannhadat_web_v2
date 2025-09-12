@@ -3,18 +3,18 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
-import Area from '../mobile/filter_bds/bts/Area';
-import BusCatType from '../mobile/filter_bds/bts/BusCatType';
-import BusinessTypeButtons from '../mobile/filter_bds/bts/BusinessTypeButtons';
-import CategoryType from '../mobile/filter_bds/bts/CategoryType';
-import Projects from '../mobile/filter_bds/bts/desktop/Projects';
-import Direction from '../mobile/filter_bds/bts/Direction';
-import Price from '../mobile/filter_bds/bts/Price';
-import Rooms from '../mobile/filter_bds/bts/Rooms';
-import SortOptions from '../mobile/filter_bds/bts/SortOptions';
-import FilterModal from '../mobile/filter_bds/FilterModal';
-import useFilterState from '../mobile/filter_bds/hooks/useFilterState';
-import { FilterChipOption } from '../mobile/filter_bds/types';
+import Area from '../../features/search/filter-conditions/bts/Area';
+import BusCatType from '../../features/search/filter-conditions/bts/BusCatType';
+import BusinessTypeButtons from '../../features/search/filter-conditions/bts/BusinessTypeButtons';
+import CategoryType from '../../features/search/filter-conditions/bts/CategoryType';
+import Projects from '../../features/search/filter-conditions/bts/desktop/Projects';
+import Direction from '../../features/search/filter-conditions/bts/Direction';
+import Price from '../../features/search/filter-conditions/bts/Price';
+import Rooms from '../../features/search/filter-conditions/bts/Rooms';
+import SortOptions from '../../features/search/filter-conditions/bts/SortOptions';
+import FilterModal from '../../features/search/filter-conditions/mobile/FilterModal';
+import useFilterState from '../../features/search/filter-conditions/hooks/useFilterState';
+import { FilterChipOption } from '../../features/search/filter-conditions/types';
 import { FilterFieldName } from '@common/types';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@components/desktop/product-filters/ProfileLocationsV2';
@@ -27,7 +27,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import styles from '../styles/FilterChip.module.scss';
-import AggProjects from '../mobile/filter_bds/bts/AggProjects';
+import AggProjects from '../../features/search/filter-conditions/bts/AggProjects';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;

@@ -1,8 +1,8 @@
 'use client';
 import { Button } from '@components/ui/button';
 import { useRefCallback } from '@common/hooks/useRefCallback';
-import SortOptions from '../filter_bds/bts/SortOptions';
-import useFilterState from '../filter_bds/hooks/useFilterState';
+import SortOptions from '../../../features/search/filter-conditions/bts/SortOptions';
+import useFilterState from '../../../features/search/filter-conditions/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { FilterFieldName } from '@common/types';
 import { ChevronDown } from 'lucide-react';

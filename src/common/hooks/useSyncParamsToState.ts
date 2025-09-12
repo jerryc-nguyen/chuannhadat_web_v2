@@ -2,7 +2,7 @@
 
 import { toParamsApi } from '@common/api/searchApi';
 import { ReadonlyURLSearchParams, usePathname, useSearchParams } from 'next/navigation';
-import { filterStateAtom } from '@frontend/CategoryPage/mobile/filter_bds/states';
+import { filterStateAtom } from '@app/(frontend)/_components/features/search/filter-conditions/states';
 import { useHydrateAtoms } from 'jotai/utils';
 
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';

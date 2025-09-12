@@ -2,8 +2,8 @@
 import empty_city from '@assets/images/empty-city.png';
 import useQueryPosts from '@common/hooks/useQueryPosts';
 import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
-import { listFilterDesktop } from './mobile/filter_bds/constants';
-import useFilterState from './mobile/filter_bds/hooks/useFilterState';
+import { listFilterDesktop } from '../features/search/filter-conditions/constants';
+import useFilterState from '../features/search/filter-conditions/hooks/useFilterState';
 import { useFilterChipsUI } from '@common/hooks/useFilterChipsUI';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

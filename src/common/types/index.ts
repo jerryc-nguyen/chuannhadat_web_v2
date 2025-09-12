@@ -30,24 +30,4 @@ export type {
   OptionForSelect,
 } from './search';
 
-// Export constants from search types
-export {
-  PARAM_BUSINESS_TYPE,
-  PARAM_CATEGORY_TYPE,
-  PARAM_PRICE,
-  PARAM_AREA,
-  PARAM_BED,
-  PARAM_BATH,
-  PARAM_DIRECTION,
-  PARAM_CITY,
-  PARAM_DISTRICT,
-  PARAM_WARD,
-  PARAM_PROJECT,
-  PARAM_SORT,
-  PARAM_AGG_PROJECTS,
-  FilterFieldName,
-  FILTER_FIELDS_TO_PARAMS,
-  FILTER_FIELDS_PARAMS_MAP,
-} from './search';
-
-// ActionSaveProduct is already exported from saves types section above
+export { FilterFieldName } from './search';

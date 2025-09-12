@@ -1,5 +1,5 @@
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import useFilterState from './hooks/useFilterState';
+import useFilterState from '../hooks/useFilterState';
 import { Button } from '@components/ui/button';
 
 export default function FooterSortBtsButton() {

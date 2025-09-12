@@ -2,16 +2,16 @@ import React from 'react';
 import { List, ListItem } from '@components/konsta';
 
 import { FilterFieldName } from '@common/types';
-import Area from './bts/Area';
-import Price from './bts/Price';
-import BusinessTypeButtons from './bts/BusinessTypeButtons';
-import CategoryType from './bts/CategoryType';
-import Locations from './bts/Locations';
+import Area from '../bts/Area';
+import Price from '../bts/Price';
+import BusinessTypeButtons from '../bts/BusinessTypeButtons';
+import CategoryType from '../bts/CategoryType';
+import Locations from '../bts/Locations';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import useFilterState from './hooks/useFilterState';
-import Direction from './bts/Direction';
-import Bed from './bts/Bed';
-import Bath from './bts/Bath';
+import useFilterState from '../hooks/useFilterState';
+import Direction from '../bts/Direction';
+import Bed from '../bts/Bed';
+import Bath from '../bts/Bath';
 
 export const DEFAULT_MODAL_HEIGHTS = {
   [FilterFieldName.Rooms]: 270,

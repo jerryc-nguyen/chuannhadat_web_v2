@@ -2,11 +2,10 @@ import { searchApi } from '@common/api/searchApi';
 import { AuthUtils } from '@common/auth';
 import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
 import {
-  FILTER_FIELDS_PARAMS_MAP,
-  FILTER_FIELDS_TO_PARAMS,
   FilterFieldName,
   OptionForSelect,
 } from '@common/types';
+
 import { useAtom, useAtomValue } from 'jotai';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
@@ -16,7 +15,7 @@ import {
   filterStateAtom,
   localFilterStateAtom,
 } from '../states';
-import { FilterChipOption, FilterState } from '../types';
+import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterChipOption, FilterState } from '../types';
 
 import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
 

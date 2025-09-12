@@ -11,7 +11,7 @@ import { DataTableToolbar } from '../components/datagrid/toolbar';
 import { DataTablePagination } from '@dashboard/features/datagrid';
 import { searchApi } from '@common/api/searchApi';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '@app/(frontend)/_components/features/search/filter-conditions/hooks/useFilterState';
 import { useEffect } from 'react';
 import { ProductQuery } from '../data/schemas';
 import { useListPostsForm } from '@dashboard/PostManagement/manage-posts/ListPosts/hooks/useListPosts';
