@@ -5,7 +5,7 @@ import Breadcrumb from '@components/breadcrumb';
 import { SidebarTrigger } from '@components/ui/sidebar';
 import MainNavRight from '@frontend/features/layout/mobile-header/MainNavRight';
 import AvatarIcon from '@components/desktop/components/AvatarIcon';
-import FavoriteIcon from '@components/desktop/components/FavoriteIcon';
+import FavoriteIcon from '@frontend/features/main-nav-rights/FavoriteIcon/FavoriteIcon';
 import NotificationIcon from '@components/desktop/components/NotificationIcon';
 import ButtonCreatePost from './ButtonCreatePost';
 

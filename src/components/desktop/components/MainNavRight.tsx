@@ -7,7 +7,7 @@ import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { LucideLogIn, LucidePenSquare } from 'lucide-react';
 import Link from 'next/link';
 import AvatarIcon from './AvatarIcon';
-import FavoriteIcon from './FavoriteIcon';
+import FavoriteIcon from '@frontend/features/main-nav-rights/FavoriteIcon/FavoriteIcon';
 import NotificationIcon from './NotificationIcon';
 import { DASHBOARD_ROUTES } from '@common/router';
 type MainNavRightProps = {
