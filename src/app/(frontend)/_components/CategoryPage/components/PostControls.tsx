@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FilterChip from './FilterChip';
+import FilterChip from '../../features/search/filter-conditions/desktop/FilterChip';
 import { FilterChipOption } from '../../features/search/filter-conditions/types';
 import { cn } from '@common/utils';
 

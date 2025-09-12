@@ -3,18 +3,18 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
-import Area from '../../features/search/filter-conditions/bts/Area';
-import BusCatType from '../../features/search/filter-conditions/bts/BusCatType';
-import BusinessTypeButtons from '../../features/search/filter-conditions/bts/BusinessTypeButtons';
-import CategoryType from '../../features/search/filter-conditions/bts/CategoryType';
-import Projects from '../../features/search/filter-conditions/bts/desktop/Projects';
-import Direction from '../../features/search/filter-conditions/bts/Direction';
-import Price from '../../features/search/filter-conditions/bts/Price';
-import Rooms from '../../features/search/filter-conditions/bts/Rooms';
-import SortOptions from '../../features/search/filter-conditions/bts/SortOptions';
-import FilterModal from '../../features/search/filter-conditions/mobile/FilterModal';
-import useFilterState from '../../features/search/filter-conditions/hooks/useFilterState';
-import { FilterChipOption } from '../../features/search/filter-conditions/types';
+import Area from '../bts/Area';
+import BusCatType from '../bts/BusCatType';
+import BusinessTypeButtons from '../bts/BusinessTypeButtons';
+import CategoryType from '../bts/CategoryType';
+import Projects from '../bts/desktop/Projects';
+import Direction from '../bts/Direction';
+import Price from '../bts/Price';
+import Rooms from '../bts/Rooms';
+import SortOptions from '../bts/SortOptions';
+import FilterModal from '../mobile/FilterModal';
+import useFilterState from '../hooks/useFilterState';
+import { FilterChipOption } from '../types';
 import { FilterFieldName } from '@common/types';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@components/desktop/product-filters/ProfileLocationsV2';
@@ -26,8 +26,8 @@ import {
   X,
   DollarSign
 } from 'lucide-react';
-import styles from '../styles/FilterChip.module.scss';
-import AggProjects from '../../features/search/filter-conditions/bts/AggProjects';
+import styles from '../FilterChip.module.scss';
+import AggProjects from '../bts/AggProjects';
 
 type FilterChipProps = {
   filterChipItem: FilterChipOption;

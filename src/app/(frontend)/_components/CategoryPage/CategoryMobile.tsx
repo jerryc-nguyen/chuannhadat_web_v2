@@ -1,5 +1,5 @@
 'use client';
-import FilterChips from '../features/search/filter-conditions/desktop/FilterChips';
+import FilterChips from '../features/search/filter-conditions/mobile/FilterChips';
 import PostList from './mobile/searchs/PostList';
 
 import { getQueryClient } from '@common/api/react-query';
