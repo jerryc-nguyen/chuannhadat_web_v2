@@ -14,7 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@components/ui/sheet';
-import { usePaginatedNotifications } from '@common/hooks/usePaginatedNotifications';
+import { usePaginatedNotifications } from '@frontend/features/notification/hooks/usePaginatedNotifications';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
 import { Switch } from '@components/ui/switch';

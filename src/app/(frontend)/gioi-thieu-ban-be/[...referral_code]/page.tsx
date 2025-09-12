@@ -1,4 +1,4 @@
-import ReferralFriendPage from './_components/ReferralFriendPage';
+import ReferralFriendPage from '@frontend/ReferralFriend';
 type Params = Promise<{ referral_code: string[] }>;
 type ReferralPageProps = {
   params: Params;

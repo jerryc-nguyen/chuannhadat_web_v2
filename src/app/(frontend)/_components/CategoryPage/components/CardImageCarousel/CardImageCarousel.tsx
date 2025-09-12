@@ -6,9 +6,9 @@ import { EmblaCarouselType } from 'embla-carousel';
 import Fade from 'embla-carousel-fade';
 import useEmblaCarousel from 'embla-carousel-react';
 import React from 'react';
-import ButtonSave from '../ButtonSave';
+import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 import ImageCard from '../ImageCard';
-import ImageSliderAction from '../ImageSliderAction';
+import ImageSliderAction from './ImageSliderAction';
 import styles from './CardImageCarousel.module.scss';
 
 type CardImageCarouselProps = {

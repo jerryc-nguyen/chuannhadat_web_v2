@@ -16,7 +16,7 @@ export enum CustomerGender {
 /**
  * User profile and authentication related types
  */
-export interface IUserProfile {
+export interface IUser {
   address: string;
   api_token: string;
   avatar_url: string;
@@ -41,47 +41,4 @@ export interface IUserProfile {
   unconfirmed_email?: string;
   phone_confirmed?: boolean;
   last_credit_id?: number;
-}
-
-/**
- * Referral and social features types
- */
-export interface IReferralData {
-  avatar: string;
-  email: string;
-  formatted_created_at: string;
-  full_name: string;
-  phone: string;
-  success: boolean;
-}
-
-export interface ITopAuthor {
-  avatar_url: string;
-  full_name: string;
-  id: number;
-  phone: string;
-  slug: string;
-  top_position: number;
-}
-
-/**
- * OAuth and social login types
- */
-export interface IOAuthPayload {
-  uid: string;
-  email: string;
-  name: string;
-  photo: string;
-  referral_code?: string;
-}
-
-/**
- * OAuth connection payload
- */
-export interface IConnectOauthsPayload {
-  uid: string;
-  email: string;
-  name: string;
-  photo: string;
-  referral_code?: string;
 }

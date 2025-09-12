@@ -4,7 +4,7 @@ import { Table } from '@/components/ui/table';
 import { searchApi } from '@common/api/searchApi';
 import { DataGridContent, DataGridHeader, DataTablePagination } from '@dashboard/features/datagrid';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import * as React from 'react';
 import { useEffect } from 'react';

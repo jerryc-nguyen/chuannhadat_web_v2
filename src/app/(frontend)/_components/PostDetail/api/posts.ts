@@ -2,9 +2,9 @@ import axiosInstance from '@common/api/axiosInstance';
 import { getCookie } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import { API_ROUTES } from '@common/router';
-import { IViewedPostsPayload } from '@common/types/saves';
-import { IViewedPostsResponse } from '@common/types/api';
-import { ISavesSummaryResponse } from '@common/types/saves';
+import { IViewedPostsPayload } from '@frontend/features/product-detail-actions/save-post/types';
+import { IViewedPostsResponse } from '@frontend/PostDetail/type';
+import { ISavesSummaryResponse } from '@frontend/features/product-detail-actions/save-post/types';
 import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
 import { IProductSummary } from '@frontend/PostDetail/type';
 

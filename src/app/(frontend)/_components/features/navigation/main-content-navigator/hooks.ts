@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from "./states";
 import { useCallback, useMemo, useState } from "react";
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "./constants";
-import useFilterState from "@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState";
+import useFilterState from "@frontend/features/search/filter-conditions/hooks/useFilterState";
 import { useQueryClient } from "@tanstack/react-query";
 import { navigatorApi } from "./apis";
 import useSearchScope, { SearchScopeEnums } from "@common/hooks/useSearchScope";

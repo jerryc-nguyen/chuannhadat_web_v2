@@ -11,22 +11,20 @@ import { filterChipOptionsByAggregations } from '@common/filterHelpers';
 import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
-import { listFilterProfileDesktop } from '../CategoryPage/mobile/filter_bds/constants';
-import useFilterState from '../CategoryPage/mobile/filter_bds/hooks/useFilterState';
+import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import PostControls from '@frontend/CategoryPage/components/PostControls';
 import PostList from '@frontend/CategoryPage/components/PostList';
 
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
   useSyncParamsToState();
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
   const { updateValues, resetLocations } = useMainContentNavigator();

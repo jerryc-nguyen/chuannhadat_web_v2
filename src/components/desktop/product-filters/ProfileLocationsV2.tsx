@@ -1,5 +1,5 @@
 import { FilterFieldName, OptionForSelect } from '@common/types';
-import useFilterState from '@frontend/CategoryPage/mobile/filter_bds/hooks/useFilterState';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import LocationsList from '@components/desktop/components/LocationsList';
 
