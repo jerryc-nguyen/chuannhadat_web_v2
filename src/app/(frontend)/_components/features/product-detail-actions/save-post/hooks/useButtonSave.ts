@@ -4,9 +4,9 @@ import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { ActionSaveProduct, ISaveProductPayload } from '@app/(frontend)/_components/features/product-detail-actions/save-post/types';
-import { listPostIdSavedAtom } from '@app/(frontend)/_components/CategoryPage/states';
-import { savesApi } from '@app/(frontend)/_components/CategoryPage/api/saves';
+import { ActionSaveProduct, ISaveProductPayload } from '@frontend/features/product-detail-actions/save-post/types';
+import { listPostIdSavedAtom } from '@frontend/CategoryPage/states';
+import { savesApi } from '@frontend/CategoryPage/api/saves';
 
 export interface UseButtonSaveProps {
   postUid: string;

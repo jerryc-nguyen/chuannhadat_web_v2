@@ -1,8 +1,8 @@
-import { IRequestCallbackContent, IRequestCallbackResponse } from '@app/(frontend)/_components/features/profile-detail-actions/types';
+import { IRequestCallbackContent, IRequestCallbackResponse } from '@frontend/features/profile-detail-actions/types';
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { IResponseData } from '@common/types';
-import { IRequestCallbackPayload } from '@app/(frontend)/_components/features/product-detail-actions/save-post/types';
+import { IRequestCallbackPayload } from '@frontend/features/product-detail-actions/save-post/types';
 
 type IListRequestResponse = IResponseData<IRequestCallbackContent[]>;
 

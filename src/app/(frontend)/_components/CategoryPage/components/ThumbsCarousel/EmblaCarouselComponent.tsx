@@ -8,7 +8,7 @@ import { AspectRatio } from '@/components/ui/AspectRatio';
 import { cn } from '@common/utils';
 import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
-import ButtonSave from '../../../features/product-detail-actions/save-post/ButtonSave';
+import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 
 type EmblaCarouselComponentProps = {
   images: A[];

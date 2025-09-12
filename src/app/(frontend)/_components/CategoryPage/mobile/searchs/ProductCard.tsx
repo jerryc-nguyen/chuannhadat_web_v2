@@ -8,7 +8,7 @@ import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetail
 import Image from 'next/image';
 import AuthorInfo from '@frontend/PostDetail/mobile/post-detail/components/AuthorInfo';
 import Link from 'next/link';
-import ButtonSave from '@app/(frontend)/_components/features/product-detail-actions/save-post/ButtonSave';
+import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 import LoadingProductCard from '@frontend/CategoryPage/components/LoadingProductCard';
 
 const styles: A = {

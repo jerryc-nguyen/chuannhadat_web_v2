@@ -22,7 +22,7 @@ import {
   ActionSaveProduct,
   ISaveProductPayload,
   ISavedProductsResponse,
-} from '@app/(frontend)/_components/features/product-detail-actions/save-post/types';
+} from '@frontend/features/product-detail-actions/save-post/types';
 import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { toast } from 'sonner';
 import { useAuth } from '@common/auth/AuthContext';
