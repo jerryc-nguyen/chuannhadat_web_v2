@@ -1,6 +1,6 @@
 import { searchApi } from '../api/search';
 import { FilterState } from '../mobile/filter_bds/types';
-import { ISearchAuthorPayload } from '@common/types/saves';
+import { ISearchAuthorPayload } from '@app/(frontend)/_components/features/product-detail-actions/save-post/types';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 

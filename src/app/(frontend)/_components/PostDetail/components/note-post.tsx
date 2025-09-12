@@ -1,5 +1,5 @@
 import React from 'react';
-import DialogReport from '@components/dialog-report';
+import DialogReport from '@frontend/features/product-detail-actions/dialog-report';
 type NotePostProps = object;
 
 const NotePost: React.FC<NotePostProps> = () => {

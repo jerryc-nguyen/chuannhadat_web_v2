@@ -44,14 +44,7 @@ export interface IUserProfile {
 }
 
 
-export interface ITopAuthor {
-  avatar_url: string;
-  full_name: string;
-  id: number;
-  phone: string;
-  slug: string;
-  top_position: number;
-}
+
 
 /**
  * OAuth and social login types

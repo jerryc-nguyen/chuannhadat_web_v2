@@ -27,73 +27,8 @@ export interface IPagination {
 }
 
 
-/**
- * OAuth connection response
- */
-export type IConnectOauthsResponse = IResponseData<any>;
-
-
-/**
- * Top author structure
- */
-export interface ITopAuthor {
-  avatar_url: string;
-  full_name: string;
-  id: number;
-  phone: string;
-  slug: string;
-  top_position: number;
-}
-
-/**
- * Verify phone response data
- */
-export interface IVerifyPhoneResponseData {
-  name: string;
-  avatar: string;
-}
-
-/**
- * Request callback content
- */
-export interface IRequestCallbackContent {
-  content: string;
-  email: string;
-  formatted_created_at: string;
-  full_name: string;
-  id: number;
-  phone: string;
-}
-
-/**
- * Viewed posts response
- */
-export interface IViewedPostsResponse extends IResponseData<any[]> {
-  pagination: IPagination;
-}
-
-/**
- * Request callback response
- */
-export type IRequestCallbackResponse = IResponseData<any>;
-
-/**
- * List of request callbacks response
- */
-export type IListRequestResponse = IResponseData<IRequestCallbackContent[]>;
-
 
 /**
  * Profile me response
  */
 export type IProfileMeResponse = IResponseData<any>;
-
-/**
- * Top authors response
- */
-export type TopAuthorsResponse = IResponseData<ITopAuthor[]>;
-
-/**
- * Verify phone response
- */
-export type IVerifyPhoneResponse = IResponseData<IVerifyPhoneResponseData>;

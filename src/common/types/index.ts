@@ -19,14 +19,7 @@ export {
 export type {
   IResponseData,
   IPagination,
-  IConnectOauthsResponse,
-  ITopAuthor,
-  IVerifyPhoneResponseData,
-  IRequestCallbackContent,
-  IViewedPostsResponse,
   IProfileMeResponse,
-  TopAuthorsResponse,
-  IVerifyPhoneResponse,
 } from './api';
 
 // Search and filter related types
@@ -36,19 +29,6 @@ export type {
   Range,
   OptionForSelect,
 } from './search';
-
-// Save and favorite related types
-export type {
-  ISaveProductPayload,
-  IViewedPostsPayload,
-  IRequestCallbackPayload,
-  ISearchAuthorPayload,
-  ISavesSummaryResponse,
-  ISavedProductsResponse,
-  ISavedProduct,
-} from './saves';
-
-export { ActionSaveProduct } from './saves';
 
 // Export constants from search types
 export {

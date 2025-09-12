@@ -1,3 +1,4 @@
+import { IPagination, IResponseData } from '@common/types/api';
 import { IProductDetail, IProductList } from '../CategoryPage/mobile/searchs/type';
 
 export type AuthorPostProps = {
@@ -14,3 +15,10 @@ export enum StatusPhoneNumber {
 // Note: IProductSummary is now replaced by IProductList for consistency
 // Use IProductList for listing views and IProductDetail for detail views
 export type IProductSummary = IProductList;
+
+/**
+ * Viewed posts response
+ */
+export interface IViewedPostsResponse extends IResponseData<any[]> {
+  pagination: IPagination;
+}

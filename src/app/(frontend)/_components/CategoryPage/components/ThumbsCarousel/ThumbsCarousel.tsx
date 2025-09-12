@@ -9,7 +9,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@common/utils';
 import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
-import ButtonSave from '../ButtonSave';
+import ButtonSave from '../../../features/product-detail-actions/save-post/ButtonSave';
 
 // ✅ Dynamic import Embla carousel only when needed  
 const EmblaCarouselComponent = dynamic(

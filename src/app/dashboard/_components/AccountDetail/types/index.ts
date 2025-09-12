@@ -1,4 +1,4 @@
-import { CustomerGender, CustomerType } from '@common/types';
+import { CustomerGender, CustomerType, IResponseData } from '@common/types';
 
 export interface IModalUpdatePassoword {
   current_password?: string;
@@ -17,3 +17,7 @@ export interface IModalUpdateProfile {
   website_url?: string;
   youtube_url?: string;
 }
+/**
+ * OAuth connection response
+ */
+export type IConnectOauthsResponse = IResponseData<any>;
