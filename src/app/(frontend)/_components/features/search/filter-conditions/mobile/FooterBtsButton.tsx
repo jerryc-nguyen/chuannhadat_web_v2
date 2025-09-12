@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { searchApi } from '@common/api/searchApi';
 import { Button } from '@components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { FilterChipOption } from '../types';
+import { FilterChipOption } from '@common/types';
 
 type Props = {
   filterOption: FilterChipOption;

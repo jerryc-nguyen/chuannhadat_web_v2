@@ -55,3 +55,13 @@ export const enum FilterFieldName {
   BusCatType = 'busCatType',
   AggProjects = 'aggProjects',
 }
+
+export interface FilterChipOption {
+  id: FilterFieldName;
+  text: string;
+}
+
+export const SORT_CHIP_OPTION = {
+  id: FilterFieldName.Sort,
+  text: 'Sắp xếp',
+}

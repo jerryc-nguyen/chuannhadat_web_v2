@@ -28,11 +28,6 @@ export interface FilterFieldOptions {
   directionOptions: OptionForSelect[];
   roomOptions: OptionForSelect[];
 }
-export interface FilterChipOption {
-  id: FilterFieldName;
-  text: string;
-}
-
 
 /**
  * Parameter constants for API query strings

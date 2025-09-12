@@ -32,6 +32,7 @@ export type {
   Params,
   Range,
   OptionForSelect,
+  FilterChipOption,
 } from './search';
 
-export { FilterFieldName } from './search';
+export { FilterFieldName, SORT_CHIP_OPTION } from './search';

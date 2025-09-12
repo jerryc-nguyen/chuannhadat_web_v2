@@ -7,7 +7,7 @@ import '@styles/pages/mobile/home.scss';
 import { dehydrate, HydrationBoundary, QueryClientProvider } from '@tanstack/react-query';
 
 import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
-import { listFilterMobile } from '../features/search/filter-conditions/constants';
+import { listFilterMobile } from './constants';
 import { useFilterChipsUI } from '@common/hooks/useFilterChipsUI';
 
 // Import from the same feature folder

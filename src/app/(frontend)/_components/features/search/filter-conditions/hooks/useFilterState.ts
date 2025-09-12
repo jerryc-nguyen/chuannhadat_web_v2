@@ -4,18 +4,19 @@ import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
 import {
   FilterFieldName,
   OptionForSelect,
+  SORT_CHIP_OPTION,
+  FilterChipOption
 } from '@common/types';
 
 import { useAtom, useAtomValue } from 'jotai';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
-import { SORT_CHIP_OPTION } from '../constants';
 import {
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
 } from '../states';
-import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterChipOption, FilterState } from '../types';
+import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterState } from '../types';
 
 import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
 
