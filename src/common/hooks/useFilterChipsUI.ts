@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { FilterChipOption } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterChipOption } from '@frontend/features/search/filter-conditions/types';
 import { FilterFieldName } from '@common/types';
-import useFilterState from '@app/(frontend)/_components/features/search/filter-conditions/hooks/useFilterState';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 
 /**
  * Custom hook to handle chip UI logic and filtering

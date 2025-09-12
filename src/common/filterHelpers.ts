@@ -1,5 +1,5 @@
 import { FilterFieldName } from '@common/types';
-import { FilterChipOption } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterChipOption } from '@frontend/features/search/filter-conditions/types';
 
 /**
  * Filters out AggProjects from the chip options when aggregations don't contain projects

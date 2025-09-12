@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import useFilterState from '@app/(frontend)/_components/features/search/filter-conditions/hooks/useFilterState';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { FilterFieldName } from '@common/types';
 import React from 'react';

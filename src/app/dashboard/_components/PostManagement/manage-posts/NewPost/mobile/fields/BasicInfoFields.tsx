@@ -19,7 +19,7 @@ import {
 import {
   roomsOptionsForCreate,
   areaOptionsForCreate,
-} from '@app/(frontend)/_components/features/search/filter-conditions/constants';
+} from '@frontend/features/search/filter-conditions/constants';
 
 interface BasicInfoFieldsProps {
   form: UseFormReturn<IPostForm>;

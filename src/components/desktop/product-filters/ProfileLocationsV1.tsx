@@ -1,5 +1,5 @@
 import { FilterFieldName, OptionForSelect } from '@common/types';
-import useFilterState from '@app/(frontend)/_components/features/search/filter-conditions/hooks/useFilterState';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 // LocationsPicker component removed - using LocationContext directly
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 

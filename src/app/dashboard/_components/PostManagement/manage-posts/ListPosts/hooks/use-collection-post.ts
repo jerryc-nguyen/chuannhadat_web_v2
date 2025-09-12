@@ -1,7 +1,7 @@
 import { toParamsApi } from '@common/api/searchApi';
 import { searchParamsToObj } from '@common/utils';
 import { SearchScopeEnums } from '@common/hooks/useSearchScope';
-import useFilterState from '@app/(frontend)/_components/features/search/filter-conditions/hooks/useFilterState';
+import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
