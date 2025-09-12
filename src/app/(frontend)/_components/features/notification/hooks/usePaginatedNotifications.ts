@@ -4,7 +4,7 @@ import React from 'react';
 import { useAuth } from '@common/auth/AuthContext';
 import { notificationsDataAtom, totalAtom, totalUnreadAtom } from '@frontend/features/notification/mobile/states';
 import { useMutation } from '@tanstack/react-query';
-import { notificationsApi } from '@common/api/notifications';
+import { notificationsApi } from '../api/notifications';
 import type { AxiosError } from 'axios';
 import { defaultPageNumber, defaultPageSize } from '@common/constants';
 export type TypeNotification = 'read' | 'unread' | null;
@@ -47,7 +47,7 @@ export function usePaginatedNotifications() {
         });
       }
     },
-    onError: (err: AxiosError<A>) => {
+    onError: (err: AxiosError) => {
       console.error('Error fetching balance', err);
     },
   });

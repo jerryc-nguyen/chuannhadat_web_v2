@@ -1,5 +1,5 @@
 'use client';
-import { referralsApi } from '../api/referrals';
+import { referralsApi } from '@dashboard/AccountDetail/api/referrals';
 import { authApi } from '@common/api/auth';
 import forgot_password from '@assets/icons/Refer a friend-bro.svg';
 import { REFERRAL_CODE } from '@common/auth';
@@ -28,6 +28,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
+
 type ReferralFriendPageProps = {
   referral_code: string;
 };
@@ -83,13 +84,12 @@ const ReferralFriendPage: React.FC<ReferralFriendPageProps> = (props) => {
       }
       removeCookie(REFERRAL_CODE);
     },
-    onError: (error) => {
+    onError: (_error) => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
-      throw new Error(error.message);
       reset();
     },
   });
-  const onSubmit = (data: A) => {
+  const onSubmit = (data: { phone: string; password: string; confirmPassword: string }) => {
     registerMutate({
       phone: data.phone,
       password: data.password,

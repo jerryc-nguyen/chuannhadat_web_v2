@@ -1,6 +1,6 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
-import { INotificationsResponse } from '@common/types/api';
+import { INotificationsResponse } from '../types';
 
 export const notificationsApi = {
   getNotifications: async (params: {

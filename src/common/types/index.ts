@@ -18,18 +18,12 @@ export {
 // Generic API types and responses
 export type {
   IResponseData,
-  INotificationResponse,
-  INotificationData,
   IPagination,
-  INotificationsResponse,
-  IReferralsDetailResponse,
   IConnectOauthsResponse,
-  IReferralData,
   ITopAuthor,
   IVerifyPhoneResponseData,
   IRequestCallbackContent,
   IViewedPostsResponse,
-  IReferralListResponse,
   IProfileMeResponse,
   TopAuthorsResponse,
   IVerifyPhoneResponse,

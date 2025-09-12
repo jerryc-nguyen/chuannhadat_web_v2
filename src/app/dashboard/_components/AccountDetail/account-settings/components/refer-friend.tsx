@@ -6,10 +6,10 @@ import { Check, Clipboard } from 'lucide-react';
 
 import { useAuth } from '@common/auth/AuthContext';
 import { useQuery } from '@tanstack/react-query';
-import { referralsApi } from '@app/(frontend)/gioi-thieu-ban-be/api/referrals';
+import { referralsApi } from '@dashboard/AccountDetail/api/referrals';
 import CommonTableView from '@components/common-table/CommonTableView';
 import { IColumnTable } from '@components/common-table';
-import { IReferralData } from '@common/types/api';
+import { IReferralData } from '@dashboard/AccountDetail/types/referral'
 import { Skeleton } from '@components/ui/skeleton';
 
 const ReferFriend: React.FC = () => {

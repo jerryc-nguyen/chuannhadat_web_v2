@@ -4,7 +4,7 @@ import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import NotificationsList from '@components/desktop/notification/NotificationsList';
-import { usePaginatedNotifications } from '@common/hooks/usePaginatedNotifications';
+import { usePaginatedNotifications } from '@frontend/features/notification/hooks/usePaginatedNotifications';
 import { LucideBell } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';

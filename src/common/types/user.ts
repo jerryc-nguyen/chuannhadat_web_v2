@@ -43,17 +43,6 @@ export interface IUserProfile {
   last_credit_id?: number;
 }
 
-/**
- * Referral and social features types
- */
-export interface IReferralData {
-  avatar: string;
-  email: string;
-  formatted_created_at: string;
-  full_name: string;
-  phone: string;
-  success: boolean;
-}
 
 export interface ITopAuthor {
   avatar_url: string;
