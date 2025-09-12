@@ -7,12 +7,12 @@ import {
 import { useSetAtom } from 'jotai';
 import React from 'react';
 import { usePaginatedNotifications } from '../hooks/usePaginatedNotifications';
-import NotificationHeader from '../NotificationHeader';
+import NotificationHeader from './NotificationHeader';
 import NotificationList from '../NotificationList';
 
 const NotificationsMobile: React.FC = () => {
   const setBreadCrumb = useSetAtom(breadcrumbAtom);
-  const { notifications: notificationsList, makeMarkRead } = usePaginatedNotifications();
+  const { notifications: notificationsList, makeMarkRead, makeMarkReadAll } = usePaginatedNotifications();
 
   React.useEffect(() => {
     const currentBreadCrumb: IBreadcrumbItem[] = [
@@ -31,7 +31,10 @@ const NotificationsMobile: React.FC = () => {
 
   return (
     <section className="space-y-4 md:space-y-6 px-4 md:px-0">
-      <NotificationHeader notifications={notificationsList} />
+      <NotificationHeader
+        notifications={notificationsList}
+        onMarkAllAsRead={makeMarkReadAll}
+      />
       <NotificationList notifications={notificationsList} onMarkAsRead={makeMarkRead} />
     </section>
   );

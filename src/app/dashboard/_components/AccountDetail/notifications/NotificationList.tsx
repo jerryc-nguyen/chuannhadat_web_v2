@@ -5,16 +5,10 @@ import { Bell } from 'lucide-react';
 import { AxiosResponse } from 'axios';
 import { IResponseData } from '@common/types/api';
 import NotificationItem from './NotificationItem';
+import { INotificationData } from './types';
 
 interface NotificationListProps {
-  notifications: Array<{
-    id: number;
-    title: string;
-    description: string;
-    formatted_created_at: string;
-    is_read: boolean;
-    redirect_url: string;
-  }>;
+  notifications: INotificationData[];
   onMarkAsRead: (id: number) => Promise<AxiosResponse<IResponseData<null>>>;
 }
 

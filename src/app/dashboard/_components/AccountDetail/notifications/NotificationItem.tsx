@@ -5,16 +5,10 @@ import { cn } from '@common/utils';
 import { Clock, ExternalLink, Mail, MailOpen } from 'lucide-react';
 import { AxiosResponse } from 'axios';
 import { IResponseData } from '@common/types/api';
+import { INotificationData } from './types';
 
 interface NotificationItemProps {
-  notification: {
-    id: number;
-    title: string;
-    description: string;
-    formatted_created_at: string;
-    is_read: boolean;
-    redirect_url: string;
-  };
+  notification: INotificationData;
   onMarkAsRead: (id: number) => Promise<AxiosResponse<IResponseData<null>>>;
 }
 
