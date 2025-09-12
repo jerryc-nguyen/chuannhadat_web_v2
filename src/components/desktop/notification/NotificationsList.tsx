@@ -9,7 +9,7 @@ import { Separator } from '@components/ui/separator';
 import { Badge } from '@components/ui/badge';
 import no_notification from '@assets/images/no-notification.jpg';
 import Image from 'next/image';
-import { usePaginatedNotifications } from '@frontend/features/notification/hooks/usePaginatedNotifications';
+import { usePaginatedNotifications } from '@dashboard/AccountDetail/notifications/hooks/usePaginatedNotifications';
 
 
 interface IProps {
