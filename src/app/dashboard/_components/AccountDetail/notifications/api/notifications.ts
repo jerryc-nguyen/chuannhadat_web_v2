@@ -13,11 +13,11 @@ export const notificationsApi = {
     });
   },
 
-  makeMarkReadAll: async (): Promise<any> => {
+  markAsReadAll: async (): Promise<any> => {
     return axiosInstance.post(API_ROUTES.NOTIFICATION.MARK_ALL_READ);
   },
 
-  makeMarkRead: async (id: number) => {
+  markAsRead: async (id: number) => {
     return axiosInstance.put(`${API_ROUTES.NOTIFICATION.READ}`, { id });
   },
 };

@@ -37,7 +37,7 @@ export function usePaginatedNotifications() {
     },
   });
   const { mutateAsync: makeMarkReadAll } = useMutation({
-    mutationFn: notificationsApi.makeMarkReadAll,
+    mutationFn: notificationsApi.markAsReadAll,
     onSuccess: (data) => {
       if (data.success) {
         fetchNotification({
@@ -48,7 +48,28 @@ export function usePaginatedNotifications() {
       }
     },
     onError: (err: AxiosError) => {
-      console.error('Error fetching balance', err);
+      console.error('Error marking all as read', err);
+    },
+  });
+
+  const { mutateAsync: makeMarkRead } = useMutation({
+    mutationFn: (id: number) => notificationsApi.markAsRead(id),
+    onSuccess: (data, id) => {
+      if (data.status) {
+        // Update the local state to mark the notification as read
+        setNotifications((prev) =>
+          prev.map((notification) =>
+            notification.id === id
+              ? { ...notification, is_read: true }
+              : notification
+          )
+        );
+        // Update the unread count
+        setTotalUnread((prev) => Math.max(0, prev - 1));
+      }
+    },
+    onError: (err: AxiosError) => {
+      console.error('Error marking notification as read', err);
     },
   });
 
@@ -115,6 +136,7 @@ export function usePaginatedNotifications() {
     handleFilter,
     typeFilter: typeNotificationRef.current,
     makeMarkReadAll,
+    makeMarkRead,
     totalUnread,
     currentTotalCount,
   };

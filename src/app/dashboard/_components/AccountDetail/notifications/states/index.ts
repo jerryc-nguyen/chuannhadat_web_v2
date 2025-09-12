@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { INotificationResponse } from '../types';
+import { INotificationData } from '../types';
 
 export const pageAtom = atom<number>(0);
 export const perPageAtom = atom<number>(10);
@@ -19,4 +19,4 @@ export const paginationAtom = atom(
   },
 );
 
-export const notificationsDataAtom = atom<INotificationResponse[]>([]);
+export const notificationsDataAtom = atom<INotificationData[]>([]);

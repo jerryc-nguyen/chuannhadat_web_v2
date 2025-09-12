@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-import { FilterChipOption } from '@frontend/features/search/filter-conditions/types';
-import { FilterFieldName } from '@common/types';
+import { FilterChipOption, FilterFieldName } from '@common/types';
 import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 
 /**
