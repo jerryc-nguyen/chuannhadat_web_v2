@@ -3,13 +3,11 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSetAtom } from 'jotai';
 import { listPostIdSavedAtom } from '@frontend/CategoryPage/states';
-import { useViewedPosts } from '@common/hooks/useViewedPosts';
 import { favoritesApi } from '../api/favorites';
-import { FavoriteData } from '../types';
 
 /**
  * Main hook for managing favorites functionality
- * Handles data fetching, state management, and badge visibility
+ * Handles saved posts data fetching, state management, and badge visibility
  */
 export const useFavorites = (isOpen: boolean) => {
   const { currentUser } = useAuth();
@@ -32,18 +30,6 @@ export const useFavorites = (isOpen: boolean) => {
     staleTime: 0,
   });
 
-  // Fetch viewed posts
-  const {
-    listProduct: viewedPosts,
-    pagination: viewedPagination,
-    isFetching: isViewedFetching,
-    deleteViewedPost,
-  } = useViewedPosts({
-    productUid: '',
-    defaultPageSize: 20,
-    enabled: isOpen,
-  });
-
   // Update badge visibility based on saved posts
   useEffect(() => {
     if (isSuccess) {
@@ -57,7 +43,7 @@ export const useFavorites = (isOpen: boolean) => {
     if (savedSummary) {
       setListPostIdSaved(savedSummary.saved_product_uids);
     }
-  }, [savedSummary?.saved_product_uids, setListPostIdSaved]);
+  }, [savedSummary, setListPostIdSaved]);
 
   // Invalidate queries when needed
   const invalidateQueries = async () => {
@@ -67,19 +53,11 @@ export const useFavorites = (isOpen: boolean) => {
     ]);
   };
 
-  const favoriteData: FavoriteData = {
+  return {
     savedSummary,
     savedPosts,
-    viewedPosts,
-    viewedPagination,
-  };
-
-  return {
-    favoriteData,
     isSavedFetching,
-    isViewedFetching,
     showBadge,
-    deleteViewedPost,
     invalidateQueries,
   };
 };
