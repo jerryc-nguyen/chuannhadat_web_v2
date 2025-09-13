@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 import { Skeleton } from '@components/ui/skeleton';
 import { Button } from '@components/ui/button';
 import ProductCard from './ProductCard';

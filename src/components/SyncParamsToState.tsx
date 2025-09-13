@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
+import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 
 const SyncParamsToState = () => {
   useSyncParamsToState();

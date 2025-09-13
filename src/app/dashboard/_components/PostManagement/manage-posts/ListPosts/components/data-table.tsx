@@ -1,7 +1,7 @@
 'use client';
 
 import { Table } from '@/components/ui/table';
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 import { DataGridContent, DataGridHeader, DataTablePagination } from '@dashboard/features/datagrid';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
