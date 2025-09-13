@@ -14,7 +14,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { useSyncParamsToState } from '@common/hooks';
+import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import useResizeImage from '@common/hooks/useResizeImage';
 import { listFilterProfileMobile } from '@frontend/CategoryPage/constants';
 import FilterChips from '@frontend/features/search/filter-conditions/mobile/FilterChips';

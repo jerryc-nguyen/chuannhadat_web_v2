@@ -13,6 +13,7 @@ export interface IResponseData<T> {
   status: boolean | number;
   message?: string;
   data: T;
+  pagination?: IPagination;
 }
 
 

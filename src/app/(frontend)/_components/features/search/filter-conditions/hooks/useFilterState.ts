@@ -1,6 +1,6 @@
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 import { AuthUtils } from '@common/auth';
-import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
+import useSearchScope, { SearchScopeEnums } from '@frontend/features/search/hooks/useSearchScope';
 import {
   FilterFieldName,
   OptionForSelect,

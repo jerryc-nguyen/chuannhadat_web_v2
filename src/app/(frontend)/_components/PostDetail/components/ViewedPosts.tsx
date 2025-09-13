@@ -4,7 +4,7 @@ import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
 import { Skeleton } from '@components/ui/skeleton';
 import useCleanupEffect from '@common/hooks/useCleanupEffect';
-import { useViewedPosts } from '@common/hooks/useViewedPosts';
+import { useViewedPosts } from '@frontend/features/main-nav-rights/FavoriteIcon/hooks/useViewedPosts';
 import ProductCard from '@frontend/CategoryPage/components/ProductCard';
 import { Loader2 } from 'lucide-react';
 import React, { memo, useRef } from 'react';

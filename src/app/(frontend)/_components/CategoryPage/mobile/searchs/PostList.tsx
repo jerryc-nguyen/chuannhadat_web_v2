@@ -9,7 +9,7 @@ import { ChevronDown } from 'lucide-react';
 
 import empty_city from '@assets/images/empty-city.png';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import useQueryPosts from '@common/hooks/useQueryPosts';
+import useQueryPosts from '@frontend/features/search/hooks/useQueryPosts';
 
 import useLoadMissingAuthors from '@frontend/CategoryPage/hooks/useLoadMissingAuthors';
 import Image from 'next/image';

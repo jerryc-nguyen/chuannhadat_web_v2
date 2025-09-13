@@ -1,5 +1,5 @@
 import { removeEmpty } from '@common/utils';
-import axiosInstance from './axiosInstance';
+import axiosInstance from '@common/api/axiosInstance';
 
 export async function searchApi(params = {}): Promise<A> {
   return axiosInstance.get('/api/v1/searchs', {

@@ -1,5 +1,4 @@
-import { IPagination } from '@common/types';
-import { HttpStatusCode } from 'axios';
+import { IResponseData } from '@common/types';
 
 /**
  * Save product action enum
@@ -40,29 +39,8 @@ export interface IViewedPostsPayload {
 }
 
 /**
- * Save summary response
+ * Save summary response - using generic IResponseData
  */
-export interface ISavesSummaryResponse {
-  data: {
-    saved_product_uids: string[];
-  };
-}
-
-/**
- * Saved products response
- */
-export interface ISavedProductsResponse {
-  code: HttpStatusCode;
-  status: boolean;
-  pagination: IPagination;
-  data: ISavedProduct[];
-}
-
-/**
- * Individual saved product
- */
-export interface ISavedProduct {
-  id: number;
-  product: any; // This should be IProductDetail, but importing would create circular dependency
-  created_at: string;
-}
+export type ISavesSummaryResponse = IResponseData<{
+  saved_product_uids: string[];
+}>;

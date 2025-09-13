@@ -9,7 +9,7 @@ import { ListPostMobile } from './ListPostMobile';
 import { CellHeaderSelectAll, CellMainContent, CellSelect, CellStatus } from '../components/cells';
 import { DataTableToolbar } from '../components/datagrid/toolbar';
 import { DataTablePagination } from '@dashboard/features/datagrid';
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import { useEffect } from 'react';

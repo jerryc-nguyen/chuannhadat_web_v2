@@ -6,7 +6,7 @@ import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "./constants";
 import useFilterState from "@frontend/features/search/filter-conditions/hooks/useFilterState";
 import { useQueryClient } from "@tanstack/react-query";
 import { navigatorApi } from "./apis";
-import useSearchScope, { SearchScopeEnums } from "@common/hooks/useSearchScope";
+import useSearchScope, { SearchScopeEnums } from "@frontend/features/search/hooks/useSearchScope";
 import useModals from "@frontend/features/layout/mobile-modals/hooks";
 
 type TSubmitProps = {
