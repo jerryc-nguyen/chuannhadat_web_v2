@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
-import { favoritesApi } from '../api/favorites';
+import { savesApi } from '../api/saves';
+import { ActionSaveProduct } from '@frontend/features/product-detail-actions/save-post/types';
 
 /**
  * Hook for handling favorite-related mutations
@@ -13,7 +14,11 @@ export const useFavoriteMutations = (
 ) => {
   // Mutation for removing saved posts
   const { mutateAsync: removeSavedPostMutation } = useMutation({
-    mutationFn: favoritesApi.removeSavedPost,
+    mutationFn: (productUid: string) =>
+      savesApi.savePost({
+        product_uid: productUid,
+        action: ActionSaveProduct.Unlike,
+      }),
     onError: (err: AxiosError) => {
       console.error('Error removing saved post:', err);
       toast.error('Xóa tin lưu không thành công');

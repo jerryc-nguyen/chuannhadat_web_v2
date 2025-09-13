@@ -1,9 +1,21 @@
-import { ISavedProductsResponse, ISavesSummaryResponse } from '@frontend/features/product-detail-actions/save-post/types';
-import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
-import { OptionForSelect } from '@common/types';
+import { ISavedProducts, IProductList, OptionForSelect, IResponseData, IPagination } from '@common/types';
+
+/**
+ * Type for viewed product history/details
+ * Uses the consolidated IProductDetail type
+ */
+export interface IViewedProductDetail {
+  id: number;
+  product: IProductList;
+  created_at: string;
+  activity_id: number;
+}
+
+// Response types - using generic IResponseData consistently
+export type ISavesSummaryResponse = IResponseData<{ saved_product_uids: string[] }>;
 
 // Re-export types from existing modules for convenience
-export type { ISavedProductsResponse, ISavesSummaryResponse, IViewedProductDetail, OptionForSelect };
+export type { OptionForSelect };
 
 // Favorite-specific types
 export interface FavoriteState {
@@ -22,9 +34,12 @@ export interface FavoriteActions {
 
 export interface FavoriteData {
   savedSummary?: ISavesSummaryResponse['data'];
-  savedPosts?: ISavedProductsResponse;
+  savedPosts?: {
+    data: ISavedProducts[];
+    pagination: IPagination;
+  };
   viewedPosts: IViewedProductDetail[];
-  viewedPagination?: any;
+  viewedPagination?: IPagination;
 }
 
 // View options for the tab selector

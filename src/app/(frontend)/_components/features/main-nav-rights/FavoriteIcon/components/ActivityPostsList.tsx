@@ -5,11 +5,12 @@ import { X } from 'lucide-react';
 import { timeAgo } from '@common/utils';
 import EmptyPost from '@assets/images/empty-state_wap_v1.svg';
 import { LoadingThreeQuarters } from '@components/icons/CustomIcons';
-import { ISavedProductsResponse, IViewedProductDetail } from '../types';
+import { IViewedProductDetail } from '../types';
+import { ISavedProducts, IPagination } from '@common/types';
 
 interface ActivityPostsListProps {
-  data: ISavedProductsResponse['data'] | IViewedProductDetail[];
-  pagination?: ISavedProductsResponse['pagination'];
+  data: ISavedProducts[] | IViewedProductDetail[];
+  pagination?: IPagination;
   loadingRemovePostId: string;
   handleRemovePost: (uid: string) => Promise<void>;
 }
@@ -27,7 +28,7 @@ const ActivityPostsList: React.FC<ActivityPostsListProps> = ({
       </div>
     );
 
-  return data.map((post: ISavedProductsResponse['data'][0] | IViewedProductDetail) => {
+  return data.map((post: ISavedProducts | IViewedProductDetail) => {
     const formatted_price = post?.product?.formatted_price;
     const formatted_area = post?.product?.formatted_area;
     const formatted_kt = post?.product?.formatted_kt;

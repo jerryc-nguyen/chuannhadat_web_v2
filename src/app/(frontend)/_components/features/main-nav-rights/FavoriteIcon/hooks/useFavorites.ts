@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@common/auth/AuthContext';
 import { useSetAtom } from 'jotai';
 import { listPostIdSavedAtom } from '@frontend/CategoryPage/states';
-import { favoritesApi } from '../api/favorites';
+import { savesApi } from '../api/saves';
 
 /**
  * Main hook for managing favorites functionality
@@ -18,14 +18,14 @@ export const useFavorites = (isOpen: boolean) => {
   // Fetch saved posts summary
   const { data: savedSummary, isSuccess } = useQuery({
     queryKey: ['save_summary', currentUser?.api_token],
-    queryFn: () => favoritesApi.getSavedSummary(),
+    queryFn: () => savesApi.savedSummary(),
     select: (data) => data.data,
   });
 
   // Fetch saved posts list
   const { data: savedPosts, isFetching: isSavedFetching } = useQuery({
     queryKey: ['list_saves_post'],
-    queryFn: () => favoritesApi.getSavedPosts(),
+    queryFn: () => savesApi.savedPosts(),
     enabled: isOpen,
     staleTime: 0,
   });
