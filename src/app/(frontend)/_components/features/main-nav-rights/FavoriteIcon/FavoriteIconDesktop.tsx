@@ -5,7 +5,7 @@ import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { LucideHeart } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useFavoriteIcon } from './hooks';
+import { useFavorites } from './hooks';
 import { FavoriteBadge, FavoriteContent } from './components';
 
 interface FavoriteIconDesktopProps {
@@ -17,20 +17,8 @@ const FavoriteIconDesktop: React.FC<FavoriteIconDesktopProps> = ({ isOpen, onOpe
   const searchParams = useSearchParams();
   const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
 
-  const {
-    selectedTab,
-    loadingDeleteUid,
-    showBadge,
-    savedSummary,
-    savedPosts,
-    viewedPosts,
-    viewedPagination,
-    isSavedFetching,
-    isViewedFetching,
-    setSelectedTab,
-    handleRemoveSavedPost,
-    handleRemoveViewedPost,
-  } = useFavoriteIcon(isOpen);
+  // Get only the data needed for the badge
+  const { showBadge, savedSummary } = useFavorites(isOpen);
 
   return (
     <Popover onOpenChange={onOpenChange} open={isOpen}>
@@ -49,17 +37,7 @@ const FavoriteIconDesktop: React.FC<FavoriteIconDesktopProps> = ({ isOpen, onOpe
       >
         <FavoriteContent
           isMobile={false}
-          selectedTab={selectedTab}
-          onTabChange={setSelectedTab}
-          savedPosts={savedPosts}
-          viewedPosts={viewedPosts}
-          viewedPagination={viewedPagination}
-          isSavedFetching={isSavedFetching}
-          isViewedFetching={isViewedFetching}
-          savedSummary={savedSummary}
-          loadingDeleteUid={loadingDeleteUid}
-          onRemoveSavedPost={handleRemoveSavedPost}
-          onRemoveViewedPost={handleRemoveViewedPost}
+          isOpen={isOpen}
         />
       </PopoverContent>
     </Popover>

@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@components/ui/sheet';
 import { LucideHeart } from 'lucide-react';
-import { useFavoriteIcon } from './hooks';
+import { useFavorites } from './hooks';
 import { FavoriteBadge, FavoriteContent } from './components';
 
 interface FavoriteIconMobileProps {
@@ -12,20 +12,8 @@ interface FavoriteIconMobileProps {
 }
 
 const FavoriteIconMobile: React.FC<FavoriteIconMobileProps> = ({ isOpen, onOpenChange }) => {
-  const {
-    selectedTab,
-    loadingDeleteUid,
-    showBadge,
-    savedSummary,
-    savedPosts,
-    viewedPosts,
-    viewedPagination,
-    isSavedFetching,
-    isViewedFetching,
-    setSelectedTab,
-    handleRemoveSavedPost,
-    handleRemoveViewedPost,
-  } = useFavoriteIcon(isOpen);
+  // Get only the data needed for the badge
+  const { showBadge, savedSummary } = useFavorites(isOpen);
 
   return (
     <Sheet onOpenChange={onOpenChange} open={isOpen}>
@@ -40,17 +28,7 @@ const FavoriteIconMobile: React.FC<FavoriteIconMobileProps> = ({ isOpen, onOpenC
           <SheetTitle className="pt-6">
             <FavoriteContent
               isMobile={true}
-              selectedTab={selectedTab}
-              onTabChange={setSelectedTab}
-              savedPosts={savedPosts}
-              viewedPosts={viewedPosts}
-              viewedPagination={viewedPagination}
-              isSavedFetching={isSavedFetching}
-              isViewedFetching={isViewedFetching}
-              savedSummary={savedSummary}
-              loadingDeleteUid={loadingDeleteUid}
-              onRemoveSavedPost={handleRemoveSavedPost}
-              onRemoveViewedPost={handleRemoveViewedPost}
+              isOpen={isOpen}
             />
           </SheetTitle>
         </SheetHeader>

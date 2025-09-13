@@ -1,46 +1,49 @@
 import React from 'react';
 import { Separator } from '@components/ui/separator';
 import OptionsTabList from '@components/mobile-ui/OptionsTabList';
-import { VIEW_OPTIONS, ISavedProductsResponse, ISavesSummaryResponse, IViewedProductDetail, OptionForSelect } from '../types';
+import { VIEW_OPTIONS } from '../types';
+import { useFavorites, useFavoriteMutations, useFavoriteState } from '../hooks';
+import { useViewedPosts } from '../hooks/useViewedPosts';
 import LoadingListPost from './LoadingListPost';
 import ActivityPostsList from './ActivityPostsList';
 
 interface FavoriteContentProps {
   isMobile: boolean;
-  selectedTab: OptionForSelect;
-  onTabChange: (selected: OptionForSelect) => void;
-  savedPosts?: ISavedProductsResponse;
-  viewedPosts: IViewedProductDetail[];
-  viewedPagination?: any;
-  isSavedFetching: boolean;
-  isViewedFetching: boolean;
-  savedSummary?: ISavesSummaryResponse['data'];
-  loadingDeleteUid: string;
-  onRemoveSavedPost: (uid: string) => Promise<void>;
-  onRemoveViewedPost: (uid: string) => Promise<void>;
+  isOpen: boolean;
 }
 
 const FavoriteContent: React.FC<FavoriteContentProps> = ({
   isMobile,
-  selectedTab,
-  onTabChange,
-  savedPosts,
-  viewedPosts,
-  viewedPagination,
-  isSavedFetching,
-  isViewedFetching,
-  savedSummary,
-  loadingDeleteUid,
-  onRemoveSavedPost,
-  onRemoveViewedPost,
+  isOpen,
 }) => {
+  // Use hooks directly instead of intermediate useFavoriteIcon
+  const { selectedTab, setSelectedTab, loadingDeleteUid, setLoadingDeleteUid } = useFavoriteState();
+
+  // Saved posts logic
+  const { savedSummary, savedPosts, isSavedFetching, invalidateQueries } = useFavorites(isOpen);
+
+  // Viewed posts logic
+  const {
+    listProduct: viewedPosts,
+    pagination: viewedPagination,
+    isFetching: isViewedFetching,
+    deleteViewedPost,
+  } = useViewedPosts({
+    productUid: '',
+    defaultPageSize: 20,
+    enabled: isOpen,
+  });
+
+  // Mutations for both saved and viewed posts
+  const { handleRemoveSavedPost, handleRemoveViewedPost } = useFavoriteMutations(invalidateQueries, setLoadingDeleteUid);
+
   return (
     <>
       <div className="px-0 py-2 text-center text-lg font-semibold lg:px-5">
         <OptionsTabList
           options={VIEW_OPTIONS}
           value={selectedTab}
-          onChange={onTabChange}
+          onChange={setSelectedTab}
         />
       </div>
       <Separator />
@@ -56,7 +59,7 @@ const FavoriteContent: React.FC<FavoriteContentProps> = ({
               data={savedPosts?.data ?? []}
               pagination={savedPosts?.pagination}
               loadingRemovePostId={loadingDeleteUid}
-              handleRemovePost={onRemoveSavedPost}
+              handleRemovePost={handleRemoveSavedPost}
             />
           )
         ) : (
@@ -68,7 +71,7 @@ const FavoriteContent: React.FC<FavoriteContentProps> = ({
                 data={viewedPosts}
                 pagination={viewedPagination}
                 loadingRemovePostId={loadingDeleteUid}
-                handleRemovePost={onRemoveViewedPost}
+                handleRemovePost={(uid) => handleRemoveViewedPost(uid, deleteViewedPost)}
               />
             )}
           </>
