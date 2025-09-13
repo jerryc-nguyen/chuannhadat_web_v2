@@ -1,6 +1,6 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import Breadcrumb from '@components/breadcrumb';
-import { HeaderDashboard, SidebarDashboard } from '@views/dashboard/layout/components';
+import { HeaderDashboard, SidebarDashboard } from '@dashboard/DashboardLayout/components';
 import React, { Suspense } from 'react';
 import { DynamicSidebarProvider, SidebarLoader } from '@components/ui/dynamic';
 import './index.scss';

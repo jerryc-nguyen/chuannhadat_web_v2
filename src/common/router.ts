@@ -1,3 +1,23 @@
+export const DASHBOARD_ROUTES = {
+  index: '/dashboard',
+  profile: {
+    accountSettings: '/dashboard/account-settings',
+    notifications: '/dashboard/notifications',
+  },
+  posts: {
+    index: '/dashboard/posts',
+    new: '/dashboard/posts/new',
+    edit: '/dashboard/posts',
+    autoRefresh: '/dashboard/posts/auto-refresh',
+  },
+  balance: {
+    summary: '/dashboard/balance',
+    topup: '/dashboard/balance/top-up',
+    topUpHistory: '/dashboard/balance/top-up-history',
+    pricingPlans: '/dashboard/balance/pricing-plans'
+  },
+}
+
 export const API_ROUTES = {
   AUTH: {
     LOGIN_BY_PHONE: 'api/v1/authentications/login_by_phone',

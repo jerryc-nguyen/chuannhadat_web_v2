@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from '@components/ui/breadcrumb';
 import { useAtomValue } from 'jotai';
-import { breadcrumbAtom } from '@views/dashboard/states/breadcrumbAtom';
+import { breadcrumbAtom } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import Link from 'next/link';
 import { genKey } from '@common/utils';
 type BreadcrumbProps = object;

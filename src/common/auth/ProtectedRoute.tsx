@@ -3,8 +3,8 @@
 import { useAuth } from '@common/auth/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import useModals from '@mobile/modals/hooks';
-import ModalSelectRegisterOrLogin from '@mobile/auth/ModalSelectRegisterOrLogin';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
+import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSelectRegisterOrLogin';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
