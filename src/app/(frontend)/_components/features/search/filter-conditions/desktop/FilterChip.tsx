@@ -1,8 +1,8 @@
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import useSearchScope, { SearchScopeEnums } from '@common/hooks/useSearchScope';
+import useSearchScope, { SearchScopeEnums } from '@frontend/features/search/hooks/useSearchScope';
 import Area from '../bts/Area';
 import BusCatType from '../bts/BusCatType';
 import BusinessTypeButtons from '../bts/BusinessTypeButtons';

@@ -11,7 +11,7 @@ import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSele
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import MenubarIcon from './MenubarIcon';
 import useResizeImage from '@common/hooks/useResizeImage';
-import FavoriteIcon from '@components/desktop/components/FavoriteIcon';
+import FavoriteIcon from '@frontend/features/main-nav-rights/FavoriteIcon/FavoriteIcon';
 
 type MainNavRightProps = {
   isLogged: boolean;

@@ -1,10 +1,10 @@
 'use client';
 import empty_city from '@assets/images/empty-city.png';
-import useQueryPosts from '@common/hooks/useQueryPosts';
-import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
+import useQueryPosts from '@frontend/features/search/hooks/useQueryPosts';
+import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import { listFilterDesktop } from './constants';
 import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
-import { useFilterChipsUI } from '@common/hooks/useFilterChipsUI';
+import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChipsUI';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';

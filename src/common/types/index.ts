@@ -35,4 +35,13 @@ export type {
   FilterChipOption,
 } from './search';
 
+// Product related types
+export type {
+  IProject,
+  Author,
+  IProductList,
+  ISavedProducts,
+  IViewedProducts,
+} from './product';
+
 export { FilterFieldName, SORT_CHIP_OPTION } from './search';

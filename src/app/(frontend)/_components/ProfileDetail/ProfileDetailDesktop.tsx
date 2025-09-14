@@ -3,14 +3,14 @@
 import React, { useEffect, useMemo } from 'react';
 import styles from './styles/profile-detail.module.scss';
 
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 import { profilesApi } from './api/profiles';
 import NotFound from '@app/not-found';
 import empty_city from '@assets/images/empty-city.png';
 import { filterChipOptionsByAggregations } from '@common/filterHelpers';
 import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import { useSyncParamsToState } from '@common/hooks/useSyncParamsToState';
+import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
 import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';

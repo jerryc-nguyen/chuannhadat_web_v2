@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
-import { searchApi } from '@common/api/searchApi';
+import { searchApi } from '@frontend/features/search/api/searchApi';
 
 interface FilterParams {
   [key: string]: any;
