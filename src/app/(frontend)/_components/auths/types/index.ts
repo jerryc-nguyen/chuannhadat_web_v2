@@ -7,6 +7,7 @@ export interface IVerifyPhoneResponseData {
   name: string;
   avatar: string;
   email?: string;
+  public_token: string
 }
 
 

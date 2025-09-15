@@ -1,3 +1,9 @@
+export const FRONTEND_ROUTES = {
+  forgotPassword: '/users/forgot-password',
+  signIn: '/users/sign-in',
+  signUp: '/users/sign-up',
+}
+
 export const DASHBOARD_ROUTES = {
   index: '/dashboard',
   profile: {

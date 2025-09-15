@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import faceBookIcon from '@assets/icons/Facebook.svg';
-import { DASHBOARD_ROUTES } from '@common/router';
+import { DASHBOARD_ROUTES, FRONTEND_ROUTES } from '@common/router';
 
 type FooterProps = object;
 const listMenuFooter = [
@@ -45,12 +45,12 @@ const listMenuFooter = [
       {
         key: 1,
         value: 'Đăng ký',
-        link: '/sign-up',
+        link: FRONTEND_ROUTES.signUp,
       },
       {
         key: 2,
         value: 'Đăng nhập',
-        link: '/sign-in',
+        link: FRONTEND_ROUTES.signIn,
       },
       {
         key: 3,

@@ -1,9 +1,12 @@
 'use client';
 import React from 'react';
-import { Copy } from 'lucide-react';
+import { Copy, Loader2 } from 'lucide-react';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 import { toast } from 'sonner';
 import { IVerifyPhoneResponseData } from '../../auths/types';
+import { authApi } from '@app/(frontend)/_components/auths/api';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 interface GuideProps {
   account: IVerifyPhoneResponseData;
@@ -11,6 +14,27 @@ interface GuideProps {
 }
 
 const Guide: React.FC<GuideProps> = ({ account, onCopy }) => {
+  const { mutate: resetPasswordByEmail, isPending: isEmailResetPending } = useMutation({
+    mutationFn: authApi.resetPasswordByEmail,
+    onError: (err: AxiosError) => {
+      console.error('Lỗi khi gửi email reset mật khẩu:', err);
+      toast.error(`Gửi email reset mật khẩu thất bại: ${err.message}`);
+    },
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success('Đã gửi link reset mật khẩu qua email thành công!');
+      } else {
+        toast.error(data.message);
+      }
+    },
+  });
+
+  const handleEmailReset = () => {
+    if (account.email) {
+      resetPasswordByEmail(account.email);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center gap-y-3">
       <div>
@@ -52,7 +76,14 @@ const Guide: React.FC<GuideProps> = ({ account, onCopy }) => {
             <p className="text-sm text-gray-600">
               Reset mật khẩu bằng email: <b className="text-primary_color/80">{account.email}</b>
             </p>
-            <button className="bg-primary_color text-white px-4 py-2 rounded-md mt-2">Gửi link reset mật khẩu qua email</button>
+            <button
+              onClick={handleEmailReset}
+              disabled={isEmailResetPending}
+              className="bg-primary_color text-white px-4 py-2 rounded-md mt-2 hover:bg-primary_color/80 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isEmailResetPending && <Loader2 className="h-4 w-4 animate-spin" />}
+              Gửi link reset mật khẩu qua email
+            </button>
           </div>
         )}
 
@@ -61,7 +92,7 @@ const Guide: React.FC<GuideProps> = ({ account, onCopy }) => {
           <br />
           {(account.email) && (
             <>Bạn vui lòng sử dụng
-              <b> cách 2: nhận link reset qua email</b> hoặc liên hệ cho chúng tôi qua Facebook.
+              <b> cách 2: nhận link reset qua email</b> hoặc liên hệ chúng tôi qua Facebook.
             </>
           )}
           {(!account.email) && ('Bạn vui lòng liên hệ cho chúng tôi qua Facebook.')}
