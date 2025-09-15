@@ -12,7 +12,7 @@ export const usePasswordReset = (token: string | null, setFocus?: (field: 'newPa
   const [isSuccess, setIsSuccess] = useState(false);
 
   const { mutate: resetPassword, isPending } = useMutation({
-    mutationFn: authApi.resetPassword,
+    mutationFn: authApi.updateNewPassword,
     onError: (err: AxiosError) => {
       console.error('Lỗi khi đặt lại mật khẩu:', err);
       toast.error(`Đặt lại mật khẩu thất bại: ${err.message}`);
@@ -39,9 +39,9 @@ export const usePasswordReset = (token: string | null, setFocus?: (field: 'newPa
     }
 
     resetPassword({
-      token,
-      new_password: data.newPassword,
-      confirm_password: data.confirmPassword,
+      security_token: token,
+      password: data.newPassword,
+      password_confirmation: data.confirmPassword,
     });
   };
 

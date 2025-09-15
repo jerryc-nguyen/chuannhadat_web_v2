@@ -30,8 +30,8 @@ export const authApi = {
     });
   },
 
-  resetPassword: async (data: { token: string; new_password: string; confirm_password: string }): Promise<{ status: boolean; message: string }> => {
-    return axiosInstance.post(API_ROUTES.AUTH.CHANGE_PASSWORD, data);
+  updateNewPassword: async (data: { security_token: string; password: string; password_confirmation: string }): Promise<{ status: boolean; message: string }> => {
+    return axiosInstance.post(API_ROUTES.AUTH.UPDATE_NEW_PASSWORD, data);
   },
 
   resetPasswordByEmail: async (public_token: string): Promise<{ status: boolean; message: string }> => {

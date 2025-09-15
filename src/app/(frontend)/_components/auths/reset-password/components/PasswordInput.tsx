@@ -8,8 +8,7 @@ interface PasswordInputProps {
   onChange: (value: string) => void;
   placeholder: string;
   showPassword: boolean;
-  onToggleVisibility: () => void;
-  error?: string;
+  onToggleVisibility: () => void
 }
 
 const PasswordInput: React.FC<PasswordInputProps> = ({
@@ -17,8 +16,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   onChange,
   placeholder,
   showPassword,
-  onToggleVisibility,
-  error,
+  onToggleVisibility
 }) => {
   return (
     <div className="relative">
@@ -40,9 +38,6 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
           <Eye className="h-4 w-4" />
         )}
       </button>
-      {error && (
-        <p className="text-sm text-red-600 mt-1">{error}</p>
-      )}
     </div>
   );
 };

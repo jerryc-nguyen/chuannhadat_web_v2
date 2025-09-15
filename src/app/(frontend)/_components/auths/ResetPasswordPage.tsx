@@ -30,7 +30,6 @@ const ResetPasswordPage: React.FC = () => {
     handleSubmit,
     control,
     setFocus,
-    errors,
     showNewPassword,
     showConfirmPassword,
     toggleNewPasswordVisibility,
@@ -89,7 +88,6 @@ const ResetPasswordPage: React.FC = () => {
                         placeholder="Nhập mật khẩu mới"
                         showPassword={showNewPassword}
                         onToggleVisibility={toggleNewPasswordVisibility}
-                        error={errors.newPassword?.message}
                       />
                     </FormControl>
                     <FormMessage />
@@ -110,7 +108,6 @@ const ResetPasswordPage: React.FC = () => {
                         placeholder="Nhập lại mật khẩu mới"
                         showPassword={showConfirmPassword}
                         onToggleVisibility={toggleConfirmPasswordVisibility}
-                        error={errors.confirmPassword?.message}
                       />
                     </FormControl>
                     <FormMessage />
