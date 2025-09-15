@@ -30,8 +30,8 @@ const Guide: React.FC<GuideProps> = ({ account, onCopy }) => {
   });
 
   const handleEmailReset = () => {
-    if (account.email) {
-      resetPasswordByEmail(account.email);
+    if (account.public_token) {
+      resetPasswordByEmail(account.public_token);
     }
   };
 
