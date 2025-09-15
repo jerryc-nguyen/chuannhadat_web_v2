@@ -6,6 +6,7 @@ import { IResponseData } from "@common/types";
 export interface IVerifyPhoneResponseData {
   name: string;
   avatar: string;
+  email?: string;
 }
 
 

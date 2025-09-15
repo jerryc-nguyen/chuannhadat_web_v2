@@ -21,11 +21,11 @@ import { authApi } from '@common/api/auth';
 import { AxiosError } from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Loader2, MessageCircleMore, CircleCheck, ChevronLeft } from 'lucide-react';
-import TooltipHost from '@components/tooltip-host';
+import { Loader2, ChevronLeft } from 'lucide-react';
 import CommonAlertDialog from '@components/common-dialog';
-import { IVerifyPhoneResponse } from './types';
-import { SMS_PHONE_NUMBER } from '@common/constants';
+import { IVerifyPhoneResponseData } from './types';
+import ReceivedResetSms from './forgot-password/ReceivedResetSms';
+import Guide from './forgot-password/Guide';
 
 type ForgotPasswordProps = object;
 enum PopupType {
@@ -35,9 +35,8 @@ enum PopupType {
 const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   const [openPopupResetPassword, setOpenPopupResetPassword] = React.useState(false);
   const [resetPhone, setResetPhone] = React.useState('');
-  const [account, setAccount] = React.useState<IVerifyPhoneResponse['data'] | undefined>(undefined);
+  const [account, setAccount] = React.useState<IVerifyPhoneResponseData | undefined>(undefined);
   const [typePopup, setTypePopup] = React.useState(PopupType.SendingMessage);
-  const [isCopied, setIsCopied] = React.useState(false);
 
   // Call api
   const { mutate: resetPassword } = useMutation({
@@ -55,16 +54,19 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
     mutationFn: authApi.verifyPhone,
     onError: (err: AxiosError<A>) => {
       console.error('Có lỗi khi gửi yêu cầu', err);
+      toast.error(`Có lỗi khi kiểm tra số điện thoại: ${err.message}`);
+      setFocus('phoneReset');
     },
 
-    onSuccess: (data) => {
-      if (data.status) {
+    onSuccess: (response) => {
+      if (response.status) {
+        console.log('response', response);
         setTypePopup(PopupType.SendingMessage);
         setOpenPopupResetPassword(true);
-        setAccount(data.data);
+        setAccount(response.data);
       } else {
-        toast.error(data.message);
-        reset();
+        toast.error(response.message);
+        setFocus('phoneReset');
       }
     },
   });
@@ -99,7 +101,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
       phoneReset: '',
     },
   });
-  const { handleSubmit, control, reset } = form;
+  const { handleSubmit, control, setFocus } = form;
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     checkPhone(values.phoneReset);
@@ -109,8 +111,6 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
   const handleCopy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text.replaceAll('.', ''));
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -127,31 +127,14 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = () => {
         }
         description={
           typePopup === PopupType.VerifySuccess ? (
-            <div className="flex flex-col items-center justify-center gap-y-3">
-              <CircleCheck className="text-5xl text-success_color" />
-              <p>
-                Tài khoản với SĐT <b className="text-primary_color">{resetPhone}</b> đã được cấp lại mật khẩu mới: <b className="text-success_color">123456</b>,
-                vui lòng đăng nhập và thay đổi mật khẩu của bạn tại:
-                <br />
-                <b>Cài đặt tài khoản</b> / <b>Mật khẩu</b>
-              </p>
-            </div>
+            <ReceivedResetSms resetPhone={resetPhone} />
           ) : (
-            <div className="flex flex-col justify-center gap-y-3">
-              <MessageCircleMore className="mx-auto text-5xl text-muted-foreground" />
-              <div>
-                <p>
-                  Xin chào <b className="font-medium text-primary_color">{account?.name}</b>, để
-                  reset lại mật khẩu, vui lòng soạn tin nhắn theo cú pháp sau :
-                  <b className="text-primary_color/80"> reset</b> gửi đến{' '}
-                  <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
-                    <b onClick={() => handleCopy(SMS_PHONE_NUMBER)} className="text-primary_color/80">
-                      {SMS_PHONE_NUMBER}
-                    </b>
-                  </TooltipHost>
-                </p>
-              </div>
-            </div>
+            account && (
+              <Guide
+                account={account}
+                onCopy={handleCopy}
+              />
+            )
           )
         }
         textButtonRight="Đóng"
