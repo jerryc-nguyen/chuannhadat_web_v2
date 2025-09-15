@@ -24,6 +24,7 @@ import { profileApi } from '../../api/profile';
 import { ILoginResponse } from '@frontend/features/auth/mobile/types';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 import CommonAlertDialog from '@components/common-dialog';
+import { formatPhoneNumber } from '@common/stringHelpers';
 
 export const PhoneNumberTab: React.FC = () => {
   const [openPopupVerifyPhone, setOpenPopupVerifyPhone] = React.useState(false);
@@ -39,6 +40,8 @@ export const PhoneNumberTab: React.FC = () => {
     refetchInterval: 2000,
   });
 
+  const messageError = 'Vui lòng nhập số điện thoại hợp lệ (10 số và không có dấu phân cách)';
+
   React.useEffect(() => {
     if (profileMe) {
       updateCurrentUser(profileMe as ILoginResponse);
@@ -52,10 +55,10 @@ export const PhoneNumberTab: React.FC = () => {
         message: 'Số điện thoại không được để trống, vui lòng nhập số điện thoại mới',
       })
       .min(7, {
-        message: 'Vui lòng nhập số điện thoại hợp lệ',
+        message: messageError,
       })
       .max(10, {
-        message: 'Vui lòng nhập số điện thoại hợp lệ',
+        message: messageError,
       }),
   });
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,12 +67,14 @@ export const PhoneNumberTab: React.FC = () => {
       newPhoneNumber: '',
     },
   });
-  const { handleSubmit, control, reset } = form;
+  const { handleSubmit, control, setFocus } = form;
 
   const { mutate: updateMyPhone, isPending: isUpdateMyPhonePending } = useMutation({
     mutationFn: profileApi.updateMyPhone,
     onError: (err: AxiosError<A>) => {
       console.error('Có lỗi khi gửi yêu cầu', err);
+      toast.error(`Cập nhật số điện thoại không thành công: ${err.message}`);
+      setFocus('newPhoneNumber');
     },
     onSuccess: (data: A) => {
       if (data.status) {
@@ -80,8 +85,8 @@ export const PhoneNumberTab: React.FC = () => {
         }, 300);
       } else {
         toast.error(data.message);
+        setFocus('newPhoneNumber');
       }
-      reset();
     },
   });
 
@@ -98,13 +103,13 @@ export const PhoneNumberTab: React.FC = () => {
       <CommonAlertDialog
         isOpen={openPopupVerifyPhone}
         handleOpenChange={setOpenPopupVerifyPhone}
-        title={isConfirmedPhone ? 'Xác thực thành công' : 'Xác thực số điện thoại: ' + currentUser?.phone}
+        title={isConfirmedPhone ? 'Xác thực thành công' : 'Xác thực số điện thoại: ' + formatPhoneNumber(currentUser?.phone)}
         description={
           isConfirmedPhone ? (
             <div className="flex flex-col items-center justify-center gap-y-3">
-              <FaCircleCheck className="text-5xl text-success_color" />
+              <FaCircleCheck className="text-5xl text-success_color" size={50} />
               <p>
-                SĐT <b className="text-success_color">{currentUser?.phone}</b> của bạn đã được xác
+                SĐT <b className="text-success_color">{formatPhoneNumber(currentUser?.phone)}</b> của bạn đã được xác
                 thực thành công.
               </p>
             </div>
@@ -112,7 +117,7 @@ export const PhoneNumberTab: React.FC = () => {
             <div className="flex flex-col items-center justify-center gap-y-3">
               <MessageSquareMore className="text-success_color" size={50} />
               <div>
-                Để xác thực thay đổi số điện thoại. Vui lòng dùng số <b className="text-primary_color/80">{currentUser?.phone}</b> soạn tin nhắn với cú pháp sau :{' '}
+                Để xác thực thay đổi số điện thoại. Vui lòng dùng số <b className="text-primary_color/80">{formatPhoneNumber(currentUser?.phone)}</b> soạn tin nhắn với cú pháp sau :{' '}
                 <b className="text-primary_color/80">xt</b> gửi đến{' '}
                 <TooltipHost content={isCopied ? 'Copy thành công' : 'Click vào để copy'}>
                   <b onClick={() => handleCopy(SMS_PHONE_NUMBER)} className="text-primary_color/80">
@@ -154,7 +159,7 @@ export const PhoneNumberTab: React.FC = () => {
       ) : (
         currentUser.phone && (
           <p className="mt-4">
-            Số điện thoại hiện tại của bạn là <b>{currentUser?.phone}</b>
+            Số điện thoại hiện tại của bạn là <b>{formatPhoneNumber(currentUser?.phone)}</b>
             {!isConfirmedPhone && <i>(chưa được xác thực)</i>}
           </p>
         )
