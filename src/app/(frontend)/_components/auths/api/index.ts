@@ -1,9 +1,9 @@
+import { IConnectOauthsPayload } from '@dashboard/AccountDetail/types';
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { IFormPropsLogin, IFormPropsRegister, IRegisterResponse, LoginResponse } from '@frontend/features/auth/mobile/types';
-import { IConnectOauthsPayload } from '@common/types/user';
-import { IVerifyPhoneResponse } from '@common/types/api';
 import { HttpStatusCode } from 'axios';
+import { IVerifyPhoneResponse } from '@frontend/auths/types';
 
 export const authApi = {
   signIn: async (data: IFormPropsLogin): Promise<LoginResponse> => {
@@ -28,5 +28,13 @@ export const authApi = {
     return axiosInstance.post(API_ROUTES.AUTH.CHECK_RESET_PASSWORD, {
       phone: phone,
     });
+  },
+
+  updateNewPassword: async (data: { security_token: string; password: string; password_confirmation: string }): Promise<{ status: boolean; message: string }> => {
+    return axiosInstance.post(API_ROUTES.AUTH.UPDATE_NEW_PASSWORD, data);
+  },
+
+  resetPasswordByEmail: async (public_token: string): Promise<{ status: boolean; message: string }> => {
+    return axiosInstance.post('/api/v1/authentications/forgot_password', { public_token });
   },
 };

@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { Loader2, Upload } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { service } from '../../apis';
+import { profileApi } from '../../api/profile';
 
 import { listCustomerGender, listCustomerType } from '../../constants';
 import { CustomerGender, CustomerType } from '@common/types';
@@ -35,8 +35,8 @@ const PersonalTab: React.FC = () => {
 
   // Update profile me
   const { mutate: updateMyProfile, isPending: isUpdateProfilePending } = useMutation({
-    mutationFn: service.profiles.updateMyProfile,
-    onError: (err: AxiosError<A>) => {
+    mutationFn: profileApi.updateMyProfile,
+    onError: (err: AxiosError) => {
       console.error('Error fetching update', err);
     },
     onSuccess: () => {
@@ -48,16 +48,15 @@ const PersonalTab: React.FC = () => {
   });
   // Upload avatar
   const { mutate: updateMyAvatar, isPending: isUpdateAvatarPending } = useMutation({
-    mutationFn: service.profiles.updateMyAvatar,
-    onError: (err: AxiosError<A>) => {
+    mutationFn: profileApi.updateMyAvatar,
+    onError: (err: AxiosError) => {
       console.error('Error fetching update', err);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['get-profile-me'],
       });
-      toast.success('Cập nhật thông tin thành công');
-      reset();
+      toast.success('Cập nhật avatar thành công');
     },
   });
   const formSchema = z

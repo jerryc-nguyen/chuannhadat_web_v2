@@ -30,39 +30,43 @@ const EmailTab: React.FC = () => {
   });
 
   const queryClient = useQueryClient();
-  const { handleSubmit, control, reset } = form;
+  const { handleSubmit, control, setFocus } = form;
   const [unconfirmEmail, setUnconfirmEmail] = useState<string | undefined>(
     currentUser?.unconfirmed_email,
   );
   const { mutate: updateEmail, isPending } = useMutation({
     mutationFn: profileApi.updateEmail,
-    onError: (err: AxiosError<A>) => {
+    onError: (err: AxiosError) => {
       toast.error(`Cập nhật email không thành công ${err.message}`);
+      setFocus('newEmail');
     },
-    onSuccess: async (data: A) => {
+    onSuccess: async (data, variables) => {
       if (data.status) {
-        toast.success('Cập nhật email thành công');
-        const data = await queryClient.fetchQuery({
+        toast.success('Gửi yêu cầu thay đổi email thành công');
+        const profileData = await queryClient.fetchQuery({
           queryKey: ['get-profile-me'],
           queryFn: profileApi.getMyProfile,
         });
-        updateCurrentUser(data.data);
+        updateCurrentUser(profileData.data);
+        // Only set unconfirm email when API update is successful
+        if (variables !== currentUser?.email) {
+          setUnconfirmEmail(variables);
+        }
       } else {
         toast.error(data.message);
+        setFocus('newEmail');
       }
-      reset();
     },
   });
 
   useEffect(() => {
-    setUnconfirmEmail(currentUser?.unconfirmed_email);
+    if (currentUser?.email != currentUser?.unconfirmed_email) {
+      setUnconfirmEmail(currentUser?.unconfirmed_email);
+    }
   }, [currentUser]);
 
   function onSubmit(values: Yup.InferType<typeof formSchema>) {
     updateEmail(values.newEmail as string);
-    if (values.newEmail != currentUser?.email) {
-      setUnconfirmEmail(values.newEmail);
-    }
   }
 
   return (
@@ -72,9 +76,10 @@ const EmailTab: React.FC = () => {
       </div>
       {unconfirmEmail && (
         <div className="mt-4 rounded-md border bg-primary_color/10 p-6">
+          <b>Bạn đã gửi yêu cầu cập nhật email mới!</b>
           <p>
             Hệ thống đã gửi một email xác thực đến email{' '}
-            <b className="text-yellow-500">{unconfirmEmail}</b>
+            <b>{unconfirmEmail}</b>
           </p>
           <p>Nếu chưa nhận được email, bạn có thể yêu cầu lại bằng form bên dưới</p>
         </div>

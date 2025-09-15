@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
-import { service } from '../../apis';
+import { profileApi } from '../../api/profile';
 import { toast } from 'sonner';
 
 const ContactInfor: React.FC = () => {
@@ -56,8 +56,8 @@ const ContactInfor: React.FC = () => {
 
   // Update schedule time
   const { mutate: updateMyProfile, isPending: isUpdateProfilePending } = useMutation({
-    mutationFn: service.profiles.updateMyProfile,
-    onError: (err: AxiosError<A>) => {
+    mutationFn: profileApi.updateMyProfile,
+    onError: (err: AxiosError) => {
       console.error('Error fetching update', err);
     },
     onSuccess: () => {

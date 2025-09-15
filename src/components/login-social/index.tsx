@@ -1,5 +1,5 @@
 'use client';
-import { authApi } from '@common/api/auth';
+import { authApi } from '@app/(frontend)/_components/auths/api';
 import { REFERRAL_CODE } from '@common/auth';
 import { getCookie, removeCookie } from '@common/cookies';
 import { cn } from '@common/utils';

@@ -17,7 +17,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { service } from '../../apis';
+import { profileApi } from '../../api/profile';
 
 const defaultValues = {
   currentPassword: '',
@@ -29,11 +29,11 @@ const PasswordTab: React.FC = () => {
 
   // Update schedule time
   const { mutate: updateMyPassword, isPending: isUpdateMyPasswordPending } = useMutation({
-    mutationFn: service.profiles.updateMyPassword,
-    onError: (err: AxiosError<A>) => {
+    mutationFn: profileApi.updateMyPassword,
+    onError: (err: AxiosError) => {
       console.error('Error fetching update', err);
     },
-    onSuccess: (data: A) => {
+    onSuccess: (data) => {
       if (data.status) {
         toast.success('Cập nhật mật khẩu thành công');
       } else {

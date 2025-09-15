@@ -16,10 +16,11 @@ import {
 import { Button } from '@components/ui/button';
 import { useAuth } from '@common/auth/AuthContext';
 import { useMutation } from '@tanstack/react-query';
-import { authApi } from '@common/api/auth';
+import { authApi } from '@app/(frontend)/_components/auths/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import React, { Suspense, lazy } from 'react';
+import { FRONTEND_ROUTES } from '@common/router';
 
 // Dynamic import for LoginSocial to avoid loading Firebase bundle immediately
 const LoginSocial = lazy(() => import('@components/login-social'));
@@ -163,7 +164,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
         <div className="flex justify-end">
           <Link
             onClick={onClose}
-            href="/forgot-password"
+            href={FRONTEND_ROUTES.forgotPassword}
             className="text-sm font-semibold text-blue-400 hover:underline"
           >
             Quên mật khẩu?
