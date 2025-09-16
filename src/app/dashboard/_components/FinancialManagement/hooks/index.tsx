@@ -13,7 +13,7 @@ export default function useBalance() {
     useAtom(balanceInfoAtom);
 
   useEffect(() => {
-    setBalanceInfo(storedBalanceInfo);
+    setBalanceInfo(storedBalanceInfo || undefined);
   }, []);
 
   return {

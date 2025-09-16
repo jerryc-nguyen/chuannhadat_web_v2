@@ -2,22 +2,16 @@
 
 import { newsApi } from './api/news';
 import SyncParamsToState from '@components/SyncParamsToState';
-import { useIsMobile } from '@common/hooks';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import NormalArticleCard from './components/NormalArticleCard';
 import PrimaryArticleCard from './components/PrimaryArticleCard';
-import NewsMobile from './NewsMobile';
 
-export function NewsList() {
-  const isMobile = useIsMobile();
-
+export default function NewsList() {
   const { data } = useSuspenseQuery({
     queryKey: ['get-news'],
     queryFn: newsApi.getNews,
     select: (data) => data.data,
   });
-
-  if (isMobile) return <NewsMobile data={data} />;
 
   return (
     <section className="container pt-4">

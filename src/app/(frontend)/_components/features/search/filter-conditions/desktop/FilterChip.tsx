@@ -14,7 +14,7 @@ import Rooms from '../bts/Rooms';
 import SortOptions from '../bts/SortOptions';
 import FilterModal from '../mobile/FilterModal';
 import useFilterState from '../hooks/useFilterState';
-import { FilterChipOption } from '../types';
+import { FilterChipOption } from '@common/types';
 import { FilterFieldName } from '@common/types';
 import { useQuery } from '@tanstack/react-query';
 import ProfileLocationsV2 from '@components/desktop/product-filters/ProfileLocationsV2';

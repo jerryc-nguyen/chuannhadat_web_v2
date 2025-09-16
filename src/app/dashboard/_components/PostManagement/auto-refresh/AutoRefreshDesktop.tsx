@@ -44,6 +44,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
     handleShowDialogWarning,
     onDissmisDialogWarning,
     setShowDialogWarning,
+    handleSubmitDeleteSchedule,
   } = useAutoRefresh();
   // Render components
   const addTimeRefresh = () => (
@@ -70,7 +71,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
               <Skeleton className="h-[32px] w-[100px]" />
             ) : (
               <CardDescription className="text-2xl font-bold text-blue-500">
-                {overviews?.free_refresh_count} lần
+                {overviews?.free_refresh_count as React.ReactNode} lần
               </CardDescription>
             )}
           </CardHeader>
@@ -82,7 +83,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
               <Skeleton className="h-[32px] w-[100px]" />
             ) : (
               <CardDescription className="text-2xl font-bold text-yellow-500">
-                {overviews?.paid_refresh_count} lần
+                {overviews?.paid_refresh_count as React.ReactNode} lần
               </CardDescription>
             )}
           </CardHeader>
@@ -165,7 +166,7 @@ const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
           <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
           <AlertDialogAction
             disabled={isDeletePending}
-            onClick={(event) => handleSubmitDeleteSchedule(event as MouseEvent<HTMLButtonElement>)}
+            onClick={(event) => handleSubmitDeleteSchedule(event as React.MouseEvent<HTMLButtonElement>)}
           >
             {isDeletePending ? (
               <>

@@ -15,7 +15,7 @@ import { DEFAULT_MODAL_HEIGHTS } from './FilterModal';
 import Direction from '../bts/Direction';
 import useFilterState from '../hooks/useFilterState';
 import { cn } from '@common/utils';
-import { FilterChipOption } from '../types';
+import { FilterChipOption } from '@common/types';
 import { Button } from '@components/ui/button';
 import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
 import Projects from '../bts/desktop/Projects';

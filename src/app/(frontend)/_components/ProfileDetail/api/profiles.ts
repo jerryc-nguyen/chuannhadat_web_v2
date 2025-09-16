@@ -1,7 +1,7 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { Author } from '@frontend/CategoryPage/mobile/searchs/type';
+import { Author } from '@common/types/product';
 
 export const profilesApi = {
   getProfileSlug: async (slug: string): Promise<{ data: Author }> => {

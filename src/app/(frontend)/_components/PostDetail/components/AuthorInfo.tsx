@@ -2,15 +2,15 @@ import { Button } from '@components/ui/button';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { authorAtom } from '../states';
+import { authorAtom } from '@frontend/PostDetail/mobile/post-detail/states';
 
 const AuthorInfo: React.FC = () => {
-  const [author] = useAtom( authorAtom );
-  const [, setIsVisible] = useState( false );
+  const [author] = useAtom(authorAtom);
+  const [, setIsVisible] = useState(false);
 
   const handlePhoneClick = () => {
-    setIsVisible( true );
-    navigator.clipboard.writeText( author?.phone || '' );
+    setIsVisible(true);
+    navigator.clipboard.writeText(author?.phone || '');
     window.location.href = `tel:${author?.phone}`;
   };
 

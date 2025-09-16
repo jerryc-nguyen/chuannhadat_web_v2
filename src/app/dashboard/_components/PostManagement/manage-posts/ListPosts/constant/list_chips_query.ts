@@ -1,6 +1,6 @@
 import { FilterFieldName } from '@common/types';
 import { ProductQueryFieldName } from '../data/type/product-query';
-import { FilterChipOption } from '@frontend/features/search/filter-conditions/types';
+import { FilterChipOption } from '@common/types';
 
 export interface QueryChipOption {
   id: ProductQueryFieldName;

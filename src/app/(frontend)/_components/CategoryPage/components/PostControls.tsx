@@ -1,15 +1,15 @@
 import React from 'react';
 
 import FilterChip from '../../features/search/filter-conditions/desktop/FilterChip';
-import { FilterChipOption } from '../../features/search/filter-conditions/types';
+import { FilterChipOption, IPagination, OptionForSelect } from '@common/types';
 import { cn } from '@common/utils';
 
 type PostControlsProps = {
   chipOptions: FilterChipOption[];
-  pagination: A;
+  pagination: IPagination;
   isShowListChips?: boolean;
   className?: string;
-  onFilterChange?: (filterState: Record<string, A>) => void;
+  onFilterChange?: (filterState: Record<string, OptionForSelect>) => void;
 };
 
 const PostControls: React.FC<PostControlsProps> = ({

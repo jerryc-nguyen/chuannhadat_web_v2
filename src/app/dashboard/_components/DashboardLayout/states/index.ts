@@ -1,4 +1,4 @@
-import { IBalanceResponse } from '@dashboard/FinancialManagement/mobile/types';
+import { IBalanceResponse } from '@dashboard/FinancialManagement/types';
 import { atom } from 'jotai';
 
 const initialData = {

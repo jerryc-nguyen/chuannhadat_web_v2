@@ -2,7 +2,7 @@ import { IRequestCallbackContent, IRequestCallbackResponse } from '@frontend/fea
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { IResponseData } from '@common/types';
-import { IRequestCallbackPayload } from '@frontend/features/product-detail-actions/save-post/types';
+import { IRequestCallbackPayload } from '@frontend/features/profile-detail-actions/types';
 
 type IListRequestResponse = IResponseData<IRequestCallbackContent[]>;
 
