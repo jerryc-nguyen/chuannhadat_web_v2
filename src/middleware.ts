@@ -72,15 +72,18 @@ export async function middleware(req: NextRequest) {
     log.verbose(`Processing: ${pathname}`);
     log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
 
-    // Quick RSC detection for client-side navigation
+    // Enhanced RSC detection for client-side navigation
     const hasRscParam =
       req.nextUrl.searchParams.has('_rsc') ||
       req.nextUrl.toString().includes('_rsc=') ||
-      req.headers.has('x-nextjs-data');
+      req.headers.has('x-nextjs-data') ||
+      req.headers.get('rsc') === '1' ||
+      req.headers.get('next-router-prefetch') === '1';
 
-    // Skip middleware for static files
+    // Skip middleware for static files and RSC requests
     if (
       pathname.startsWith('/_next/') ||
+      pathname.startsWith('/monitoring') ||
       pathname.endsWith('.json') ||
       pathname.endsWith('.ico') ||
       pathname.endsWith('.png') ||
@@ -89,7 +92,7 @@ export async function middleware(req: NextRequest) {
       pathname === '/sitemap.xml' ||
       hasRscParam // Skip AJAX requests for client-side transitions
     ) {
-      log.verbose(`Skipping middleware for: ${hasRscParam ? 'RSC request' : 'static file'}`);
+      log.verbose(`Skipping middleware for: ${hasRscParam ? 'RSC request' : pathname.startsWith('/monitoring') ? 'monitoring request' : 'static file'}`);
       return NextResponse.next();
     }
 

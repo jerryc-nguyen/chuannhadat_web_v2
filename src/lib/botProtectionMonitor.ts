@@ -143,8 +143,14 @@ export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRe
     return true;
   }
 
-  // Quick check for Next.js AJAX requests (client navigation)
-  if (url?.includes('_rsc=') || req?.headers.has('x-nextjs-data')) {
+  // Enhanced check for Next.js AJAX requests (client navigation)
+  if (
+    url?.includes('_rsc=') ||
+    req?.headers.has('x-nextjs-data') ||
+    req?.headers.get('rsc') === '1' ||
+    req?.headers.get('next-router-prefetch') === '1' ||
+    req?.nextUrl?.searchParams.has('_rsc')
+  ) {
     return true;
   }
 
