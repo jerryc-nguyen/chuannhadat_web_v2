@@ -5,6 +5,12 @@ import { handleUrlRedirects } from './middleware/url-redirects';
 // Enable debug mode for local development
 const DEBUG = process.env.DEBUG_MIDDLEWARE === 'true';
 
+// Log configuration on startup
+if (DEBUG) {
+  // eslint-disable-next-line no-console
+  console.log(`[MIDDLEWARE-CONFIG] DEBUG=${DEBUG}, NODE_ENV=${process.env.NODE_ENV}`);
+}
+
 // Helper functions for controlled logging
 const log = {
   error: (message: string, ...args: unknown[]) => {
@@ -40,11 +46,15 @@ const log = {
 // Lightweight middleware - no special runtime needed
 export const config = {
   matcher: [
-    '/', // Explicitly match the home route
-    '/post/:path*', // Post detail pages
-    '/profile/:path*', // Profile detail pages
-    '/category/:path*', // Category pages
-    '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - Files with extensions (.png, .jpg, .svg, etc.)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 };
 
@@ -63,38 +73,76 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    log.highlight(`MAIN MIDDLEWARE EXECUTED for: ${req.nextUrl.pathname}`);
-
     const pathname = req.nextUrl.pathname;
+    const url = req.nextUrl.toString();
 
-    // Log all requests to help with debugging
-    log.info(`Request path: ${pathname}`);
-    log.verbose(`Processing: ${pathname}`);
-    log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
-
-    // Enhanced RSC detection for client-side navigation
+    // Enhanced RSC detection for client-side navigation - check this FIRST
     const hasRscParam =
       req.nextUrl.searchParams.has('_rsc') ||
-      req.nextUrl.toString().includes('_rsc=') ||
+      url.includes('_rsc=') ||
       req.headers.has('x-nextjs-data') ||
       req.headers.get('rsc') === '1' ||
       req.headers.get('next-router-prefetch') === '1';
 
-    // Skip middleware for static files and RSC requests
+    // Debug RSC detection
+    if (DEBUG && (url.includes('_rsc') || req.headers.has('x-nextjs-data'))) {
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] URL: ${url} | hasRscParam: ${hasRscParam} | Headers: rsc=${req.headers.get('rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}, next-router-prefetch=${req.headers.get('next-router-prefetch')}`);
+    }
+
+    // IMMEDIATE early return for RSC requests - no logging, no processing
+    if (hasRscParam) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[RSC-SKIP] ${pathname}${req.nextUrl.search}`);
+      }
+      return NextResponse.next();
+    }
+
+    // IMMEDIATE early return for monitoring requests
+    if (pathname.startsWith('/monitoring')) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[MONITORING-SKIP] ${pathname}`);
+      }
+      return NextResponse.next();
+    }
+
+    // IMMEDIATE early return for static files
     if (
       pathname.startsWith('/_next/') ||
-      pathname.startsWith('/monitoring') ||
       pathname.endsWith('.json') ||
       pathname.endsWith('.ico') ||
       pathname.endsWith('.png') ||
       pathname.endsWith('.svg') ||
+      pathname.endsWith('.jpg') ||
+      pathname.endsWith('.jpeg') ||
+      pathname.endsWith('.webp') ||
+      pathname.endsWith('.gif') ||
+      pathname.endsWith('.css') ||
+      pathname.endsWith('.js') ||
       pathname === '/robots.txt' ||
       pathname === '/sitemap.xml' ||
-      hasRscParam // Skip AJAX requests for client-side transitions
+      pathname === '/manifest.json'
     ) {
-      log.verbose(`Skipping middleware for: ${hasRscParam ? 'RSC request' : pathname.startsWith('/monitoring') ? 'monitoring request' : 'static file'}`);
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[STATIC-SKIP] ${pathname}`);
+      }
       return NextResponse.next();
     }
+
+    // Debug - log requests that will be processed
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[PROCESS] ${pathname}${req.nextUrl.search} | UA: ${req.headers.get('user-agent')?.substring(0, 50)}`);
+    }
+
+    // Only log for requests that will be processed
+    log.highlight(`MAIN MIDDLEWARE EXECUTED for: ${pathname}`);
+    log.info(`Request path: ${pathname}`);
+    log.verbose(`Processing: ${pathname}`);
+    log.verbose(`Method: ${req.method}, URL: ${url}`);
 
     // Apply lightweight bot protection - single function call
     log.verbose('Applying bot protection');

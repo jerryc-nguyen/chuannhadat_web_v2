@@ -179,7 +179,7 @@ export async function monitorBotProtection(
   if (isRateLimitExcluded(pathname, req.nextUrl.toString(), req)) {
     if (DEBUG) {
       // eslint-disable-next-line no-console
-      console.log(`[EXCLUDED] ${pathname} - IP: ${ip}`);
+      console.log(`[BOT-EXCLUDED] ${pathname} - IP: ${ip}`);
     }
 
     // Create response with real IP header for excluded requests
