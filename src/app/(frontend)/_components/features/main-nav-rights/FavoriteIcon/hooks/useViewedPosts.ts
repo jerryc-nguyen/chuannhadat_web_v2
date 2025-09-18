@@ -1,5 +1,5 @@
 import { postsApi } from '@frontend/PostDetail/api/posts';
-import { IViewedProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
+import { IViewedProductDetail } from '../types';
 import { IPagination } from '@common/types/api';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';

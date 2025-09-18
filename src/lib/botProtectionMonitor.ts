@@ -138,13 +138,48 @@ function getBotRateLimit(userAgent: string | null): number {
 
 // Function to check if a path should be excluded from rate limiting
 export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRequest): boolean {
-  // Exclude specific paths
-  if (pathname.startsWith('/_next/') || pathname.startsWith('/monitoring')) {
+  // Exclude specific paths - match middleware exclusions exactly
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/monitoring') ||
+    pathname.startsWith('/api/') ||
+    pathname.endsWith('.json') ||
+    pathname.endsWith('.ico') ||
+    pathname.endsWith('.png') ||
+    pathname.endsWith('.svg') ||
+    pathname.endsWith('.jpg') ||
+    pathname.endsWith('.jpeg') ||
+    pathname.endsWith('.webp') ||
+    pathname.endsWith('.gif') ||
+    pathname.endsWith('.css') ||
+    pathname.endsWith('.js') ||
+    pathname.endsWith('.map') ||
+    pathname.endsWith('.woff') ||
+    pathname.endsWith('.woff2') ||
+    pathname.endsWith('.ttf') ||
+    pathname.endsWith('.eot') ||
+    pathname === '/robots.txt' ||
+    pathname === '/sitemap.xml' ||
+    pathname === '/manifest.json' ||
+    pathname === '/favicon.ico'
+  ) {
     return true;
   }
 
-  // Quick check for Next.js AJAX requests (client navigation)
-  if (url?.includes('_rsc=') || req?.headers.has('x-nextjs-data')) {
+  // Enhanced check for Next.js AJAX requests (client navigation) - match middleware exactly
+  // CRITICAL: Check x-original-uri header for RSC params (nginx strips them from URL)
+  const originalUri = req?.headers.get('x-original-uri') || '';
+  if (
+    url?.includes('_rsc=') ||
+    originalUri.includes('_rsc=') ||  // NEW: Check original URI from nginx
+    req?.headers.has('x-nextjs-data') ||
+    req?.headers.has('rsc') ||
+    req?.headers.get('next-router-prefetch') === '1' ||
+    req?.headers.get('purpose') === 'prefetch' ||
+    req?.headers.get('x-middleware-prefetch') === '1' ||
+    req?.headers.get('x-nextjs-prefetch') === '1' ||
+    req?.nextUrl?.searchParams.has('_rsc')
+  ) {
     return true;
   }
 
@@ -173,7 +208,7 @@ export async function monitorBotProtection(
   if (isRateLimitExcluded(pathname, req.nextUrl.toString(), req)) {
     if (DEBUG) {
       // eslint-disable-next-line no-console
-      console.log(`[EXCLUDED] ${pathname} - IP: ${ip}`);
+      console.log(`[BOT-EXCLUDED] ${pathname} - IP: ${ip}`);
     }
 
     // Create response with real IP header for excluded requests
@@ -201,6 +236,8 @@ export async function monitorBotProtection(
   if (DEBUG) {
     // eslint-disable-next-line no-console
     console.log(`[BOT-RATE] ${userAgent?.substring(0, 50)} → ${rateLimitResult.remaining} req/min`);
+    // eslint-disable-next-line no-console
+    console.log(`[RATE-RESULT] IP: ${ip}, Success: ${rateLimitResult.success}, Remaining: ${rateLimitResult.remaining}, Limit: ${rateLimitResult.limit}, URL: ${req.nextUrl.toString()}`);
   }
 
   // Early return if rate limited - skip all other expensive checks

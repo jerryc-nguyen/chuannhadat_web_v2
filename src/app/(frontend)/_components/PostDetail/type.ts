@@ -1,5 +1,6 @@
 import { IPagination, IResponseData } from '@common/types/api';
-import { IProductDetail, IProductList } from '../CategoryPage/mobile/searchs/type';
+import { IProductList } from '@common/types/product';
+import { IProductDetail } from '../CategoryPage/mobile/searchs/type';
 
 export type AuthorPostProps = {
   data: IProductDetail;

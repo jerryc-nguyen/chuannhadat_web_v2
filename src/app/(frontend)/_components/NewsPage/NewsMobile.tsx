@@ -1,9 +1,16 @@
-'use server';
+'use client';
 
-import ArticleCard from './components/ArticleCard';
-import { INews } from '../types';
+import ArticleCard from './mobile/ArticleCard';
+import { INews } from '@frontend/NewsPage/types';
+import { newsApi } from './api/news';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-function NewsMobile({ data }: { data: INews }) {
+function NewsMobile() {
+  const { data } = useSuspenseQuery({
+    queryKey: ['get-news'],
+    queryFn: newsApi.getNews,
+    select: (data) => data.data,
+  });
   return (
     <section className="p-4 pt-4">
       {data?.map((item, index) => (

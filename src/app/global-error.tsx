@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
-import * as Sentry from '@sentry/nextjs';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
 
@@ -18,17 +17,6 @@ export default function GlobalError({ error, reset }: { error: ErrorWithDigest; 
   useEffect(() => {
     // Log error to console for debugging
     console.error('Global application error:', error);
-
-    // Capture detailed error info in Sentry
-    Sentry.captureException(error, {
-      extra: {
-        errorName: error.name,
-        errorMessage: error.message,
-        errorStack: error.stack,
-        digest: error.digest,
-        time: new Date().toISOString(),
-      }
-    });
   }, [error]);
 
   return (

@@ -1,5 +1,6 @@
 import { useBalanceRequest } from '@common/api/balance';
 import { subscriptionApi } from '@dashboard/FinancialManagement/api/subscription';
+import { profileApi } from '@dashboard/AccountDetail/api/profile';
 import { useAuth } from '@common/auth/AuthContext';
 import {
   BANK_ACCOUNT_NAME,
@@ -177,13 +178,13 @@ export const useDepositModal = () => {
   };
   const { mutate: checkDepositMutate } = useMutation({
     mutationKey: ['check-deposit_qr'],
-    mutationFn: subscriptionApi.checkDeposit,
+    mutationFn: profileApi.checkDeposit,
     onSuccess: async (data) => {
       if (data.status) {
         // Deposit success -> update statusTransaction to true, open modal congratulation and fetch balance
         // open modal congratulation  with case when user in page top-up
         setStatusTransaction(true);
-        setDepositAmount(data.data?.amount);
+        // Note: API doesn't return amount, keeping existing depositAmount value
         !isOpenDepositModal && setOpenDepositModal(true);
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
         await fetchBalance();
