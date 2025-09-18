@@ -77,7 +77,7 @@ export const rateLimit = async (
   // Log the decision
   if (DEBUG) {
     // eslint-disable-next-line no-console
-    console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${record.count}/${maxRequests}, Allowed: ${isAllowed}`);
+    console.log(`[RATE-LIMIT] IP: ${ip}, Count: ${record.count}/${maxRequests}, Allowed: ${isAllowed}, UA: ${userAgent?.substring(0, 30)}`);
   }
 
   // Efficient cleanup - only when needed and non-blocking

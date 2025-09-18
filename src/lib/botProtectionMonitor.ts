@@ -170,7 +170,7 @@ export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRe
   if (
     url?.includes('_rsc=') ||
     req?.headers.has('x-nextjs-data') ||
-    req?.headers.get('rsc') === '1' ||
+    req?.headers.has('rsc') ||  // Changed from === '1' to just checking if header exists
     req?.headers.get('next-router-prefetch') === '1' ||
     req?.headers.get('purpose') === 'prefetch' ||
     req?.headers.get('x-middleware-prefetch') === '1' ||
@@ -234,7 +234,7 @@ export async function monitorBotProtection(
     // eslint-disable-next-line no-console
     console.log(`[BOT-RATE] ${userAgent?.substring(0, 50)} → ${rateLimitResult.remaining} req/min`);
     // eslint-disable-next-line no-console
-    console.log(`[RATE-RESULT] IP: ${ip}, Success: ${rateLimitResult.success}, Remaining: ${rateLimitResult.remaining}, Limit: ${rateLimitResult.limit}`);
+    console.log(`[RATE-RESULT] IP: ${ip}, Success: ${rateLimitResult.success}, Remaining: ${rateLimitResult.remaining}, Limit: ${rateLimitResult.limit}, URL: ${req.nextUrl.toString()}`);
   }
 
   // Early return if rate limited - skip all other expensive checks
