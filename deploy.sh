@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deployment automation script for Docker to VPS
+# Optimized deployment automation script for Docker to VPS
 # Usage: ./deploy.sh [tag]
 #        ./deploy.sh --restart (to restart services only without rebuilding/pushing)
 #        ./deploy.sh --use-current-login [tag] (to use current Docker login instead of deploy token)
@@ -25,6 +25,7 @@ DEPLOY_TOKEN="${DEPLOY_TOKEN:-your-token-here}"
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Parse command-line options
@@ -32,26 +33,29 @@ RESTART_ONLY=false
 USE_CURRENT_LOGIN=false
 TAG=$DEFAULT_TAG
 
-if [ "$1" == "--restart" ]; then
-  RESTART_ONLY=true
-  echo -e "${YELLOW}Restart-only mode activated. Skipping build and push.${NC}"
-  # If there's a second argument, it's the tag
-  if [ -n "$2" ]; then
-    TAG=$2
-  fi
-elif [ "$1" == "--use-current-login" ]; then
-  USE_CURRENT_LOGIN=true
-  echo -e "${YELLOW}Using current Docker login instead of deploy token.${NC}"
-  # If there's a second argument, it's the tag
-  if [ -n "$2" ]; then
-    TAG=$2
-  fi
-else
-  # If the first argument exists and doesn't start with --, it's the tag
-  if [ -n "$1" ] && [[ "$1" != --* ]]; then
-    TAG=$1
-  fi
-fi
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --restart)
+      RESTART_ONLY=true
+      echo -e "${YELLOW}Restart-only mode activated. Skipping build and push.${NC}"
+      shift
+      ;;
+    --use-current-login)
+      USE_CURRENT_LOGIN=true
+      echo -e "${YELLOW}Using current Docker login instead of deploy token.${NC}"
+      shift
+      ;;
+    --*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      TAG=$1
+      shift
+      ;;
+  esac
+done
 
 IMAGE_NAME="$REGISTRY:$TAG"
 
@@ -69,15 +73,33 @@ if [ "$RESTART_ONLY" = false ]; then
     fi
   fi
 
-  echo -e "${YELLOW}Starting deployment process for $IMAGE_NAME${NC}"
+  echo -e "${YELLOW}Starting optimized deployment process for $IMAGE_NAME${NC}"
 
-  # Step 1: Build Docker image
-  echo -e "${YELLOW}Building Docker image...${NC}"
-  docker build --platform linux/x86_64 -t $IMAGE_NAME -f Dockerfile . || { echo "Docker build failed"; exit 1; }
+  # Enable BuildKit for better caching and performance
+  export DOCKER_BUILDKIT=1
+  export COMPOSE_DOCKER_CLI_BUILD=1
+
+  # Prepare build arguments
+  BUILD_ARGS="--platform linux/x86_64"
+  BUILD_ARGS="$BUILD_ARGS --build-arg BUILDKIT_INLINE_CACHE=1"
+  BUILD_ARGS="$BUILD_ARGS --cache-from $IMAGE_NAME"
+
+  # Step 1: Build Docker image with optimized Dockerfile
+  echo -e "${YELLOW}Building optimized Docker image with enhanced caching...${NC}"
+  docker build \
+    $BUILD_ARGS \
+    -t $IMAGE_NAME \
+    -f Dockerfile.optimized \
+    . || { echo "Docker build failed"; exit 1; }
 
   # Step 2: Push to registry
   echo -e "${YELLOW}Pushing to registry...${NC}"
   docker push $IMAGE_NAME || { echo "Docker push failed"; exit 1; }
+
+  # Show image size for comparison
+  echo -e "${BLUE}📊 Image size:${NC}"
+  docker images $IMAGE_NAME --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
 else
   echo -e "${YELLOW}Connecting to VPS to restart services only...${NC}"
 fi
@@ -96,11 +118,11 @@ ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
       echo "Using existing Docker login on VPS. Ensure you're already logged in on the VPS."
     fi
     
-    echo "Pulling latest image..."
+    echo "Pulling latest optimized image..."
     docker pull $IMAGE_NAME
   fi
   
-  echo "Restarting services..."
+  echo "Restarting services with optimized image..."
   for service in ${DOCKER_SERVICES[@]}; do
     echo "Restarting \$service..."
     docker compose stop \$service
@@ -108,23 +130,36 @@ ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP << EOF
     docker compose up -d \$service
   done
   
-  # Only clean up if not in restart-only mode
+  # Enhanced cleanup for optimized builds
   if [ "$RESTART_ONLY" = false ]; then
-    echo "Cleaning up old images..."
+    echo "Cleaning up old images and build cache..."
     docker image prune -a -f
+    docker builder prune -f
   fi
   
-  echo "Service restart completed."
+  echo "Service restart completed with optimized image."
 EOF
 
-echo -e "${GREEN}Process completed successfully!${NC}"
+echo -e "${GREEN}✅ Optimized deployment completed successfully!${NC}"
 
 # Optional: Show running containers on VPS
 echo -e "${YELLOW}Current running containers on VPS:${NC}"
-ssh $VPS_USER@$VPS_IP "docker ps"
+ssh $VPS_USER@$VPS_IP "docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'"
+
+# Show deployment summary
+echo -e "${BLUE}📋 Deployment Summary:${NC}"
+echo -e "  Image: $IMAGE_NAME"
+echo -e "  Dockerfile: Dockerfile.optimized"
+echo -e "  Environment: Runtime from docker-compose"
+echo -e "  BuildKit: Enabled"
+echo -e "  Cache: Optimized multi-stage build"
 
 # Log out of Docker registry
 if [ "$RESTART_ONLY" = false ] && [ "$USE_CURRENT_LOGIN" = false ]; then
   echo -e "${YELLOW}Logging out of GitLab registry...${NC}"
   docker logout $REGISTRY
 fi
+
+# Clean up local build cache periodically (optional)
+echo -e "${YELLOW}🧹 Cleaning up local build cache...${NC}"
+docker builder prune -f
