@@ -96,26 +96,31 @@ export async function middleware(req: NextRequest) {
     }
 
     // Enhanced RSC detection for client-side navigation - check this FIRST
+    // CRITICAL: Check x-original-uri header for RSC params (nginx strips them from URL)
+    const originalUri = req.headers.get('x-original-uri') || '';
     const hasRscParam =
       req.nextUrl.searchParams.has('_rsc') ||
       url.includes('_rsc=') ||
+      originalUri.includes('_rsc=') ||  // NEW: Check original URI from nginx
       req.headers.has('x-nextjs-data') ||
-      req.headers.has('rsc') ||  // Changed from === '1' to just checking if header exists
+      req.headers.has('rsc') ||
       req.headers.get('next-router-prefetch') === '1' ||
       req.headers.get('purpose') === 'prefetch' ||
       req.headers.get('x-middleware-prefetch') === '1' ||
       req.headers.get('x-nextjs-prefetch') === '1';
 
     // Debug RSC detection
-    if (DEBUG && (url.includes('_rsc') || req.headers.has('x-nextjs-data') || req.headers.get('rsc') || req.headers.get('next-router-prefetch'))) {
+    if (DEBUG && (url.includes('_rsc') || originalUri.includes('_rsc') || req.headers.has('x-nextjs-data') || req.headers.get('rsc') || req.headers.get('next-router-prefetch'))) {
       // eslint-disable-next-line no-console
       console.log(`[RSC-DEBUG] URL: ${url}`);
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] Original URI: ${originalUri}`);
       // eslint-disable-next-line no-console
       console.log(`[RSC-DEBUG] hasRscParam: ${hasRscParam}`);
       // eslint-disable-next-line no-console
       console.log(`[RSC-DEBUG] Headers: rsc=${req.headers.get('rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}, next-router-prefetch=${req.headers.get('next-router-prefetch')}, purpose=${req.headers.get('purpose')}`);
       // eslint-disable-next-line no-console
-      console.log(`[RSC-DEBUG] URL checks: includes_rsc=${url.includes('_rsc')}, searchParams_rsc=${req.nextUrl.searchParams.has('_rsc')}`);
+      console.log(`[RSC-DEBUG] URL checks: includes_rsc=${url.includes('_rsc')}, searchParams_rsc=${req.nextUrl.searchParams.has('_rsc')}, originalUri_rsc=${originalUri.includes('_rsc')}`);
     }
 
     // IMMEDIATE early return for RSC requests - no logging, no processing

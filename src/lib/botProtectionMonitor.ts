@@ -167,10 +167,13 @@ export function isRateLimitExcluded(pathname: string, url?: string, req?: NextRe
   }
 
   // Enhanced check for Next.js AJAX requests (client navigation) - match middleware exactly
+  // CRITICAL: Check x-original-uri header for RSC params (nginx strips them from URL)
+  const originalUri = req?.headers.get('x-original-uri') || '';
   if (
     url?.includes('_rsc=') ||
+    originalUri.includes('_rsc=') ||  // NEW: Check original URI from nginx
     req?.headers.has('x-nextjs-data') ||
-    req?.headers.has('rsc') ||  // Changed from === '1' to just checking if header exists
+    req?.headers.has('rsc') ||
     req?.headers.get('next-router-prefetch') === '1' ||
     req?.headers.get('purpose') === 'prefetch' ||
     req?.headers.get('x-middleware-prefetch') === '1' ||
