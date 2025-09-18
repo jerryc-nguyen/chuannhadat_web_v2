@@ -82,7 +82,10 @@ export async function middleware(req: NextRequest) {
       url.includes('_rsc=') ||
       req.headers.has('x-nextjs-data') ||
       req.headers.get('rsc') === '1' ||
-      req.headers.get('next-router-prefetch') === '1';
+      req.headers.get('next-router-prefetch') === '1' ||
+      req.headers.get('purpose') === 'prefetch' ||
+      req.headers.get('x-middleware-prefetch') === '1' ||
+      req.headers.get('x-nextjs-prefetch') === '1';
 
     // Debug RSC detection
     if (DEBUG && (url.includes('_rsc') || req.headers.has('x-nextjs-data'))) {
@@ -111,6 +114,7 @@ export async function middleware(req: NextRequest) {
     // IMMEDIATE early return for static files
     if (
       pathname.startsWith('/_next/') ||
+      pathname.startsWith('/api/') ||
       pathname.endsWith('.json') ||
       pathname.endsWith('.ico') ||
       pathname.endsWith('.png') ||
@@ -121,9 +125,15 @@ export async function middleware(req: NextRequest) {
       pathname.endsWith('.gif') ||
       pathname.endsWith('.css') ||
       pathname.endsWith('.js') ||
+      pathname.endsWith('.map') ||
+      pathname.endsWith('.woff') ||
+      pathname.endsWith('.woff2') ||
+      pathname.endsWith('.ttf') ||
+      pathname.endsWith('.eot') ||
       pathname === '/robots.txt' ||
       pathname === '/sitemap.xml' ||
-      pathname === '/manifest.json'
+      pathname === '/manifest.json' ||
+      pathname === '/favicon.ico'
     ) {
       if (DEBUG) {
         // eslint-disable-next-line no-console
@@ -136,6 +146,8 @@ export async function middleware(req: NextRequest) {
     if (DEBUG) {
       // eslint-disable-next-line no-console
       console.log(`[PROCESS] ${pathname}${req.nextUrl.search} | UA: ${req.headers.get('user-agent')?.substring(0, 50)}`);
+      // eslint-disable-next-line no-console
+      console.log(`[HEADERS] RSC: ${req.headers.get('rsc')}, x-nextjs-data: ${req.headers.has('x-nextjs-data')}, next-router-prefetch: ${req.headers.get('next-router-prefetch')}, purpose: ${req.headers.get('purpose')}`);
     }
 
     // Only log for requests that will be processed
@@ -151,7 +163,7 @@ export async function middleware(req: NextRequest) {
     log.verbose(`Bot protection applied in ${Date.now() - startTime}ms`);
 
     // If the bot protection returns a 429, return it immediately
-    if (botProtectionResponse) {
+    if (botProtectionResponse && botProtectionResponse.status === 429) {
       log.verbose('Rate limit exceeded, returning 429');
       return botProtectionResponse;
     }

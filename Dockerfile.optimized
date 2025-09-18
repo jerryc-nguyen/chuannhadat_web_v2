@@ -1,0 +1,84 @@
+FROM node:20-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+
+# Copy package files first for better caching
+COPY package.json package-lock.json ./
+
+# Handle cross-platform compatibility (macOS -> Linux)
+# Install production dependencies including optional deps
+RUN npm install --omit=dev --include=optional --ignore-scripts --no-audit && npm cache clean --force
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+
+# Set memory limit for Node.js during build
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Disable Next.js telemetry during build
+ENV NEXT_TELEMETRY_DISABLED=1
+# Disable source maps to speed up the build
+ENV GENERATE_SOURCEMAP=false
+
+# Copy package files and install ALL dependencies (including devDependencies)
+COPY package.json package-lock.json ./
+# Handle cross-platform compatibility for build dependencies
+# Install ALL dependencies including devDependencies and optional deps (needed for build tools like cross-env)
+# Install sharp for the correct platform (Linux Alpine)
+RUN npm install --include=dev --include=optional --ignore-scripts --no-audit && \
+    npm install --platform=linuxmusl --arch=x64 sharp
+
+# Copy ONLY the necessary files for build (in order of change frequency)
+COPY next.config.mjs tsconfig.json postcss.config.mjs tailwind.config.ts ./
+COPY next-env.d.ts next-global.d.ts components.json .eslintrc.json ./
+COPY polyfill-globals.js ./
+COPY .env ./
+COPY public ./public
+COPY src ./src
+
+# Build the application
+RUN NODE_ENV=production npm run build
+
+# Production image - minimal size
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV GENERATE_SOURCEMAP=false
+
+# Install PM2 globally in a single layer
+RUN npm install -g pm2@latest && npm cache clean --force
+
+# Create user and directories
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs && \
+    mkdir -p logs .next && \
+    chown -R nextjs:nodejs logs .next
+
+# Copy production dependencies from deps stage
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Copy built application from builder stage
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+# Copy ecosystem config
+COPY --chown=nextjs:nodejs ecosystem.config.js ./
+
+USER nextjs
+
+EXPOSE 4500
+ENV PORT=4500
+ENV HOSTNAME="0.0.0.0"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:4500/api/health || exit 1
+
+CMD ["pm2-runtime", "ecosystem.config.js"]

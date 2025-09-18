@@ -2,7 +2,6 @@
 // import { getViewportSize } from '@common/hooks/useViewportSize';
 // import { isServer } from '@tanstack/react-query';
 import queryString from 'query-string';
-import * as Sentry from '@sentry/nextjs';
 
 const CDN_MAPS: Record<string, A> = {
   'chuannhadat-assets.sgp1.digitaloceanspaces.com': 'images.chuannhadat.com',
@@ -25,7 +24,7 @@ export default function useResizeImage() {
     try {
       new URL(String(imageUrl));
     } catch (error) {
-      Sentry.captureException(error, { extra: { imageUrl } });
+      console.warn('Invalid image URL:', imageUrl, error);
       return DEFAULT_IMG;
     }
     if (imageUrl === '[object Object]') return DEFAULT_IMG;
