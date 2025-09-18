@@ -4,6 +4,7 @@
 # Usage: ./deploy.sh [tag]
 #        ./deploy.sh --restart (to restart services only without rebuilding/pushing)
 #        ./deploy.sh --use-current-login [tag] (to use current Docker login instead of deploy token)
+#        ./deploy.sh --ssh (SSH into server without any deployment actions)
 
 # Load configuration from .env file if it exists
 if [ -f .env.deploy ]; then
@@ -31,6 +32,7 @@ NC='\033[0m' # No Color
 # Parse command-line options
 RESTART_ONLY=false
 USE_CURRENT_LOGIN=false
+SSH_ONLY=false
 TAG=$DEFAULT_TAG
 
 # Parse arguments
@@ -46,6 +48,11 @@ while [[ $# -gt 0 ]]; do
       echo -e "${YELLOW}Using current Docker login instead of deploy token.${NC}"
       shift
       ;;
+    --ssh)
+      SSH_ONLY=true
+      echo -e "${YELLOW}SSH-only mode activated. Connecting to server without deployment.${NC}"
+      shift
+      ;;
     --*)
       echo "Unknown option $1"
       exit 1
@@ -58,6 +65,36 @@ while [[ $# -gt 0 ]]; do
 done
 
 IMAGE_NAME="$REGISTRY:$TAG"
+
+# Handle SSH-only mode
+if [ "$SSH_ONLY" = true ]; then
+  echo -e "${YELLOW}Connecting to VPS via SSH...${NC}"
+  echo -e "${BLUE}🔗 SSH Connection Details:${NC}"
+  echo -e "  Server: $VPS_IP"
+  echo -e "  User: $VPS_USER"
+  echo -e "  Path: $DEPLOY_PATH"
+  echo ""
+
+  # SSH into the server with pseudo-terminal for interactive session
+  ssh -t -o StrictHostKeyChecking=no $VPS_USER@$VPS_IP "
+    echo 'Connected to \$(hostname) at \$(pwd)'
+    echo 'Type \"exit\" or Ctrl+D to disconnect'
+    echo ''
+    # Change to deployment directory
+    cd $DEPLOY_PATH
+    echo \"Current directory: \$(pwd)\"
+    echo 'Available commands:'
+    echo '  docker ps           - Show running containers'
+    echo '  docker compose logs - View logs'
+    echo '  docker compose ps   - Show compose services'
+    echo '  ls -la              - List files'
+    echo ''
+    # Start interactive bash shell
+    exec /bin/bash
+  "
+  echo -e "${GREEN}✅ SSH session ended${NC}"
+  exit 0
+fi
 
 # Handle Docker login
 if [ "$RESTART_ONLY" = false ]; then

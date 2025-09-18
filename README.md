@@ -290,8 +290,6 @@ The bot protection system is implemented as middleware in `src/middleware/bot-pr
 ### Bot Protection Configuration
 
 - `ENABLE_BOT_PROTECTION`: Enable or disable bot protection (true/false)
-- `BOT_PROTECTION_LOG_LEVEL`: Control verbosity of bot protection logs (0=silent, 1=errors only, 2=important, 3=verbose)
-- `BOT_PROTECTION_FORCE_LOGS`: Force visibility of logs regardless of environment (true/false)
 
 ### Firebase Configuration
 
