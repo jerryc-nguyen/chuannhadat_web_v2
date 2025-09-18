@@ -1,12 +1,12 @@
 'use client';
-import { services } from '@api/services';
+import { contactsApi } from '../api/contacts';
 import { IColumnTable } from '@components/common-table';
 import CommonTableView from '@components/common-table/CommonTableView';
 import {
   breadcrumbAtom,
   defaultBreadcrumb,
   type IBreadcrumbItem,
-} from '@views/dashboard/states/breadcrumbAtom';
+} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 
 import { useQuery } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
@@ -17,7 +17,7 @@ type CallbackPageProps = object;
 const CallbackPage: React.FC<CallbackPageProps> = () => {
   const { data: listRequest, isPending } = useQuery({
     queryKey: ['get-list-request'],
-    queryFn: services.manage_contacts.getListRequest,
+    queryFn: contactsApi.getListRequest,
     select: (data) => data.data,
   });
 

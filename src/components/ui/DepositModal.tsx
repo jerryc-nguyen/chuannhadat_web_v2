@@ -1,5 +1,6 @@
-import { useBalanceRequest } from '@api/balance';
-import { services } from '@api/services';
+import { useBalanceRequest } from '@common/api/balance';
+import { subscriptionApi } from '@dashboard/FinancialManagement/api/subscription';
+import { profileApi } from '@dashboard/AccountDetail/api/profile';
 import { useAuth } from '@common/auth/AuthContext';
 import {
   BANK_ACCOUNT_NAME,
@@ -7,13 +8,13 @@ import {
   BANK_FULL_NAME,
   SMS_SUPPORT_NUMBER,
 } from '@common/constants';
-import useCleanupEffect from '@hooks/useCleanupEffect';
+import useCleanupEffect from '@common/hooks/useCleanupEffect';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   depositAmountAtom,
   openModalDepositAtom,
   statusTransactionAtom,
-} from '@views/dashboard/states/depositAtoms';
+} from '@dashboard/DashboardLayout/states/depositAtoms';
 import { useAtom } from 'jotai';
 import React from 'react';
 import Confetti from 'react-confetti';
@@ -177,13 +178,13 @@ export const useDepositModal = () => {
   };
   const { mutate: checkDepositMutate } = useMutation({
     mutationKey: ['check-deposit_qr'],
-    mutationFn: services.profiles.checkDeposit,
+    mutationFn: profileApi.checkDeposit,
     onSuccess: async (data) => {
       if (data.status) {
         // Deposit success -> update statusTransaction to true, open modal congratulation and fetch balance
         // open modal congratulation  with case when user in page top-up
         setStatusTransaction(true);
-        setDepositAmount(data.data?.amount);
+        // Note: API doesn't return amount, keeping existing depositAmount value
         !isOpenDepositModal && setOpenDepositModal(true);
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
         await fetchBalance();

@@ -43,3 +43,10 @@ export const formatRealEstateText = (text: string): string => {
     .replace(/&nbsp;/g, ' ')
     .trim();
 }
+
+export const formatPhoneNumber = (phoneNumber?: string) => {
+  if (!phoneNumber) {
+    return '';
+  }
+  return phoneNumber.replace(/(\d{4})(\d{3})(\d{3})/, '$1.$2.$3');
+}

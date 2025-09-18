@@ -1,6 +1,6 @@
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
-import { StatusPhoneNumber } from '@views/post-detail/type';
+import { StatusPhoneNumber } from '@frontend/PostDetail/type';
 import { Copy, CopyCheck } from 'lucide-react';
 import React from 'react';
 import { Phone as FaPhone } from 'lucide-react';

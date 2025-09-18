@@ -5,6 +5,12 @@ import { handleUrlRedirects } from './middleware/url-redirects';
 // Enable debug mode for local development
 const DEBUG = process.env.DEBUG_MIDDLEWARE === 'true';
 
+// Log configuration on startup
+if (DEBUG) {
+  // eslint-disable-next-line no-console
+  console.log(`[MIDDLEWARE-CONFIG] DEBUG=${DEBUG}, NODE_ENV=${process.env.NODE_ENV}`);
+}
+
 // Helper functions for controlled logging
 const log = {
   error: (message: string, ...args: unknown[]) => {
@@ -40,11 +46,15 @@ const log = {
 // Lightweight middleware - no special runtime needed
 export const config = {
   matcher: [
-    '/', // Explicitly match the home route
-    '/post/:path*', // Post detail pages
-    '/profile/:path*', // Profile detail pages
-    '/category/:path*', // Category pages
-    '/((?!_next|api|_static|_vercel|\\..*).*)', // Everything else except excluded paths
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - Files with extensions (.png, .jpg, .svg, etc.)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 };
 
@@ -62,36 +72,142 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Log EVERY request that hits middleware (before any filtering)
+  if (DEBUG) {
+    // eslint-disable-next-line no-console
+    console.log(`[MIDDLEWARE-ENTRY] ${req.method} ${req.nextUrl.toString()} | UA: ${req.headers.get('user-agent')?.substring(0, 30)}`);
+  }
+
   try {
-    log.highlight(`MAIN MIDDLEWARE EXECUTED for: ${req.nextUrl.pathname}`);
-
     const pathname = req.nextUrl.pathname;
+    const url = req.nextUrl.toString();
 
-    // Log all requests to help with debugging
-    log.info(`Request path: ${pathname}`);
-    log.verbose(`Processing: ${pathname}`);
-    log.verbose(`Method: ${req.method}, URL: ${req.nextUrl.toString()}`);
+    // Debug raw request information
+    if (DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(`[RAW-REQUEST] Method: ${req.method}, URL: ${url}, Pathname: ${pathname}`);
+      // eslint-disable-next-line no-console
+      console.log(`[RAW-REQUEST] Host: ${req.headers.get('host')}, Origin: ${req.headers.get('origin')}, Referer: ${req.headers.get('referer')}`);
 
-    // Quick RSC detection for client-side navigation
+      // Log ALL headers to see what's actually coming through
+      const allHeaders = Object.fromEntries(req.headers.entries());
+      // eslint-disable-next-line no-console
+      console.log(`[ALL-HEADERS] ${JSON.stringify(allHeaders, null, 2)}`);
+    }
+
+    // Enhanced RSC detection for client-side navigation - check this FIRST
+    // CRITICAL: Check x-original-uri header for RSC params (nginx strips them from URL)
+    const originalUri = req.headers.get('x-original-uri') || '';
     const hasRscParam =
       req.nextUrl.searchParams.has('_rsc') ||
-      req.nextUrl.toString().includes('_rsc=') ||
-      req.headers.has('x-nextjs-data');
+      url.includes('_rsc=') ||
+      originalUri.includes('_rsc=') ||  // NEW: Check original URI from nginx
+      req.headers.has('x-nextjs-data') ||
+      req.headers.has('rsc') ||
+      req.headers.get('next-router-prefetch') === '1' ||
+      req.headers.get('purpose') === 'prefetch' ||
+      req.headers.get('x-middleware-prefetch') === '1' ||
+      req.headers.get('x-nextjs-prefetch') === '1';
 
-    // Skip middleware for static files
+    // Debug RSC detection
+    if (DEBUG && (url.includes('_rsc') || originalUri.includes('_rsc') || req.headers.has('x-nextjs-data') || req.headers.get('rsc') || req.headers.get('next-router-prefetch'))) {
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] URL: ${url}`);
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] Original URI: ${originalUri}`);
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] hasRscParam: ${hasRscParam}`);
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] Headers: rsc=${req.headers.get('rsc')}, x-nextjs-data=${req.headers.has('x-nextjs-data')}, next-router-prefetch=${req.headers.get('next-router-prefetch')}, purpose=${req.headers.get('purpose')}`);
+      // eslint-disable-next-line no-console
+      console.log(`[RSC-DEBUG] URL checks: includes_rsc=${url.includes('_rsc')}, searchParams_rsc=${req.nextUrl.searchParams.has('_rsc')}, originalUri_rsc=${originalUri.includes('_rsc')}`);
+    }
+
+    // IMMEDIATE early return for RSC requests - no logging, no processing
+    if (hasRscParam) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[RSC-SKIP] ${pathname}${req.nextUrl.search} | Headers: rsc=${req.headers.get('rsc')}, prefetch=${req.headers.get('next-router-prefetch')}`);
+      }
+      return NextResponse.next();
+    }
+
+    // IMMEDIATE early return for monitoring requests
+    if (pathname.startsWith('/monitoring')) {
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[MONITORING-SKIP] ${pathname}`);
+      }
+      return NextResponse.next();
+    }
+
+    // IMMEDIATE early return for static files
     if (
       pathname.startsWith('/_next/') ||
+      pathname.startsWith('/api/') ||
       pathname.endsWith('.json') ||
       pathname.endsWith('.ico') ||
       pathname.endsWith('.png') ||
       pathname.endsWith('.svg') ||
+      pathname.endsWith('.jpg') ||
+      pathname.endsWith('.jpeg') ||
+      pathname.endsWith('.webp') ||
+      pathname.endsWith('.gif') ||
+      pathname.endsWith('.css') ||
+      pathname.endsWith('.js') ||
+      pathname.endsWith('.map') ||
+      pathname.endsWith('.woff') ||
+      pathname.endsWith('.woff2') ||
+      pathname.endsWith('.ttf') ||
+      pathname.endsWith('.eot') ||
       pathname === '/robots.txt' ||
       pathname === '/sitemap.xml' ||
-      hasRscParam // Skip AJAX requests for client-side transitions
+      pathname === '/manifest.json' ||
+      pathname === '/favicon.ico'
     ) {
-      log.verbose(`Skipping middleware for: ${hasRscParam ? 'RSC request' : 'static file'}`);
+      if (DEBUG) {
+        // eslint-disable-next-line no-console
+        console.log(`[STATIC-SKIP] ${pathname}`);
+      }
       return NextResponse.next();
     }
+
+    // Debug - log requests that will be processed
+    if (DEBUG) {
+      // Get IP for logging
+      const cfConnectingIp = req.headers.get('cf-connecting-ip');
+      const realIp = req.headers.get('x-real-ip');
+      const forwardedFor = req.headers.get('x-forwarded-for');
+      const finalIp = cfConnectingIp || realIp || (forwardedFor ? forwardedFor.split(',')[0].trim() : '0.0.0.0');
+
+      // eslint-disable-next-line no-console
+      console.log(`[PROCESS] ${url} | IP: ${finalIp} | UA: ${req.headers.get('user-agent')?.substring(0, 50)}`);
+      // eslint-disable-next-line no-console
+      console.log(`[HEADERS] RSC: ${req.headers.get('rsc')}, x-nextjs-data: ${req.headers.has('x-nextjs-data')}, next-router-prefetch: ${req.headers.get('next-router-prefetch')}, purpose: ${req.headers.get('purpose')}`);
+
+      // Debug all query parameters
+      // eslint-disable-next-line no-console
+      console.log(`[QUERY-PARAMS] Full search: "${req.nextUrl.search}", _rsc param: ${req.nextUrl.searchParams.get('_rsc')}, has _rsc: ${req.nextUrl.searchParams.has('_rsc')}`);
+
+      // Debug all headers that might be RSC-related
+      const allHeaders = Array.from(req.headers.entries());
+      const rscHeaders = allHeaders.filter(([key]) =>
+        key.includes('rsc') ||
+        key.includes('next') ||
+        key.includes('router') ||
+        key.includes('prefetch')
+      );
+      if (rscHeaders.length > 0) {
+        // eslint-disable-next-line no-console
+        console.log(`[RSC-HEADERS] Found: ${JSON.stringify(rscHeaders)}`);
+      }
+    }
+
+    // Only log for requests that will be processed
+    log.highlight(`MAIN MIDDLEWARE EXECUTED for: ${pathname}`);
+    log.info(`Request path: ${pathname}`);
+    log.verbose(`Processing: ${pathname}`);
+    log.verbose(`Method: ${req.method}, URL: ${url}`);
 
     // Apply lightweight bot protection - single function call
     log.verbose('Applying bot protection');
@@ -100,7 +216,7 @@ export async function middleware(req: NextRequest) {
     log.verbose(`Bot protection applied in ${Date.now() - startTime}ms`);
 
     // If the bot protection returns a 429, return it immediately
-    if (botProtectionResponse) {
+    if (botProtectionResponse && botProtectionResponse.status === 429) {
       log.verbose('Rate limit exceeded, returning 429');
       return botProtectionResponse;
     }
@@ -113,9 +229,9 @@ export async function middleware(req: NextRequest) {
       return redirectResponse;
     }
 
-    // If no middleware provided a response, proceed with the request
+    // If no middleware provided a response, use the bot protection response (which has headers set)
     log.verbose('No middleware actions, proceeding with request');
-    return NextResponse.next();
+    return botProtectionResponse || NextResponse.next();
   } catch (error) {
     // Log any errors but never crash the application
     log.error('Global middleware error:', error);

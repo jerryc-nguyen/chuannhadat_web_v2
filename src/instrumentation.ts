@@ -1,15 +1,6 @@
 // Import polyfills first to ensure globals are available
 import './lib/polyfills';
-import * as Sentry from '@sentry/nextjs';
 
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('../sentry.server.config');
-  }
-
-  if (process.env.NEXT_RUNTIME === 'edge') {
-    await import('../sentry.edge.config');
-  }
+  // Instrumentation setup can be added here if needed
 }
-
-export const onRequestError = Sentry.captureRequestError;

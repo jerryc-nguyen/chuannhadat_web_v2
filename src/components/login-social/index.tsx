@@ -1,11 +1,11 @@
 'use client';
-import { services } from '@api/services';
+import { authApi } from '@app/(frontend)/_components/auths/api';
 import { REFERRAL_CODE } from '@common/auth';
 import { getCookie, removeCookie } from '@common/cookies';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { useAuth } from '@common/auth/AuthContext';
-import { LoginResponse } from '@mobile/auth/types';
+import { LoginResponse } from '@frontend/features/auth/mobile/types';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Loader2 } from 'lucide-react';
@@ -47,7 +47,7 @@ const LoginSocial: React.FC<LoginSocialProps> = ({ handleSuccessLogin, className
   const [loadingFirebase, setLoadingFirebase] = React.useState(false);
   const { login } = useAuth();
   const { mutate: loginGoogle } = useMutation({
-    mutationFn: services.auth.loginGoogle,
+    mutationFn: authApi.loginGoogle,
     onSuccess: (response: LoginResponse) => {
       if (response.status) {
         const userData = response.data;

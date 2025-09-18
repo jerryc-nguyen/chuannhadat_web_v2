@@ -17,6 +17,6 @@
       "error",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
     ],
-    "no-console": "error"
+    "no-console": "off"
   }
 }

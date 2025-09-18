@@ -1,0 +1,110 @@
+import ListCheckOptions from './ListCheckOptions';
+import { useMemo, useState } from 'react';
+import { OptionForSelect } from '@common/types';
+import { stringToSlug } from '@common/utils';
+import SearchBox from '@components/SearchBox';
+import CmdkOptionPicker from './CmdkOptionPicker';
+import ListEmptyMessage from './ListEmptyMessage';
+
+export default function OptionPicker({
+  options,
+  value,
+  searchable,
+  onSelect,
+  searchPlaceHolder,
+  emptyMessage,
+  theme,
+}: {
+  theme?: string;
+  options: Array<OptionForSelect>;
+  value?: OptionForSelect;
+  onSelect: (option: OptionForSelect) => void;
+  searchable?: boolean;
+  searchPlaceHolder?: string;
+  emptyMessage?: string;
+}) {
+  theme = theme ?? 'cmdk';
+
+  return (
+    <>
+      {theme != 'cmdk' && (
+        <IosOptionPicker
+          searchable={searchable}
+          options={options}
+          value={value}
+          onSelect={onSelect}
+          emptyMessage={emptyMessage}
+          searchPlaceHolder={searchPlaceHolder}
+        />
+      )}
+      {theme == 'cmdk' && (
+        <CmdkOptionPicker
+          searchable={searchable}
+          options={options}
+          value={value}
+          onSelect={onSelect}
+          emptyMessage={emptyMessage}
+          searchPlaceHolder={searchPlaceHolder}
+        />
+      )}
+    </>
+  );
+}
+
+export function IosOptionPicker({
+  options,
+  value,
+  searchable,
+  onSelect,
+  emptyMessage,
+}: {
+  options: Array<OptionForSelect>;
+  value?: OptionForSelect;
+  onSelect: (option: OptionForSelect) => void;
+  searchable?: boolean;
+  searchPlaceHolder?: string;
+  emptyMessage?: string;
+}) {
+  const [curOption, setCurOption] = useState(value);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: A) => {
+    setSearchQuery(e.target.value);
+  };
+  const handleClear = () => {
+    setSearchQuery('');
+  };
+
+  const filteredItems = searchQuery
+    ? options.filter((item: A) => stringToSlug(item.text).includes(stringToSlug(searchQuery)))
+    : options;
+
+  const isEmptyList = useMemo((): boolean => {
+    return (
+      (filteredItems[0]?.value == 'all' && filteredItems.length === 1) || filteredItems.length === 0
+    );
+  }, [filteredItems]);
+
+  return (
+    <>
+      {searchable && (
+        <div className="c-optionPicker__search bg-white px-2 py-3">
+          <SearchBox onInput={handleSearch} onClear={handleClear} />
+        </div>
+      )}
+
+      {isEmptyList ? (
+        <ListEmptyMessage message={emptyMessage ?? 'Không tìm thấy'} size={35} />
+      ) : (
+        <ListCheckOptions
+          options={filteredItems}
+          selectedOption={curOption}
+          onSelect={(option: OptionForSelect) => {
+            setCurOption(option);
+            onSelect(option);
+          }}
+        ></ListCheckOptions>
+      )}
+    </>
+  );
+}

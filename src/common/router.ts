@@ -1,3 +1,29 @@
+export const FRONTEND_ROUTES = {
+  forgotPassword: '/users/forgot-password',
+  signIn: '/users/sign-in',
+  signUp: '/users/sign-up',
+}
+
+export const DASHBOARD_ROUTES = {
+  index: '/dashboard',
+  profile: {
+    accountSettings: '/dashboard/account-settings',
+    notifications: '/dashboard/notifications',
+  },
+  posts: {
+    index: '/dashboard/posts',
+    new: '/dashboard/posts/new',
+    edit: '/dashboard/posts',
+    autoRefresh: '/dashboard/posts/auto-refresh',
+  },
+  balance: {
+    summary: '/dashboard/balance',
+    topup: '/dashboard/balance/top-up',
+    topUpHistory: '/dashboard/balance/top-up-history',
+    pricingPlans: '/dashboard/balance/pricing-plans'
+  },
+}
+
 export const API_ROUTES = {
   AUTH: {
     LOGIN_BY_PHONE: 'api/v1/authentications/login_by_phone',
@@ -5,9 +31,9 @@ export const API_ROUTES = {
     REGISTER_BY_PHONE: 'api/v1/authentications/register_by_phone',
     FORGOT_PASSWORD: 'auth/forgot-password',
     VERIFY_CODE: 'auth/verify-reset-password-token',
-    VERIFY_PHONE: '/api/v1/authentications/check_phone',
+    VERIFY_PHONE: 'api/v1/authentications/check_phone',
     CHECK_RESET_PASSWORD: 'api/v1/authentications/check_reset_password',
-    CHANGE_PASSWORD: 'auth/reset-password',
+    UPDATE_NEW_PASSWORD: 'api/v1/authentications/update_new_password',
     LOGOUT: 'auth/logout',
   },
   OAUTHS: {

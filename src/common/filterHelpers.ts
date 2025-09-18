@@ -1,5 +1,5 @@
-import { FilterFieldName } from '@models';
-import { FilterChipOption } from '@mobile/filter_bds/types';
+import { FilterFieldName } from '@common/types';
+import { FilterChipOption } from '@common/types';
 
 /**
  * Filters out AggProjects from the chip options when aggregations don't contain projects

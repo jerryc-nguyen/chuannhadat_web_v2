@@ -1,0 +1,109 @@
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useBalanceRequest } from '@common/api/balance';
+import { subscriptionApi } from '@dashboard/FinancialManagement/api/subscription';
+import { useMutation } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import { toast } from 'sonner';
+import { Service } from '../../types';
+import PaymentDialog from '../PaymentDialog';
+
+interface ServiceCardProps {
+  plan: Service;
+}
+
+const ServiceCard: React.FC<ServiceCardProps> = ({ plan }) => {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { fetchBalance } = useBalanceRequest();
+
+  const buyPlanMutation = useMutation({
+    mutationFn: async (planId: number) => {
+      return await subscriptionApi.buySubscriptionPlans(planId);
+    },
+    onSuccess: (data) => {
+      if (data.status) {
+        toast.success(data.message || 'Mua gói thành công!');
+        fetchBalance();
+        handleCloseDialog();
+      } else toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
+    },
+    onError: (error: A) => {
+      toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
+  const buyPlanValidatorMutation = useMutation({
+    mutationFn: async (planId: number) => {
+      return await subscriptionApi.validateBuySubscriptionPlans(planId);
+    },
+    onSuccess: (data) => {
+      data.status
+        ? setDialogOpen(true)
+        : toast.error(data.message || 'Số tiền trong tài khoản không đủ!');
+    },
+    onError: (error: A) => {
+      console.log(error);
+      toast.error(error.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
+    },
+  });
+
+  const handleBuyNowClick = (planId: number) => {
+    buyPlanValidatorMutation.mutate(planId);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handleBuy = (planId: number) => {
+    setIsLoading(true);
+    buyPlanMutation.mutate(planId); // Call the mutation and pass planId as variable
+  };
+
+  return (
+    <>
+      <Card className="max-w-sm">
+        <CardHeader>
+          <CardTitle className="font-semibold">{plan.plan_name}</CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-2">
+          <p className="mb-4 font-bold">{plan.buy_info.formatted_total} / 1 THÁNG</p>
+          <div>
+            {plan.contents.map((content, index) => (
+              <p key={index} className="mt-2 text-lg">
+                <span className="text-secondary">{content.text}:</span>{' '}
+                <strong>{content.value}</strong>
+              </p>
+            ))}
+          </div>
+        </CardContent>
+
+        <CardFooter>
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={() => handleBuyNowClick(plan.plan_id)}
+          >
+            Mua ngay
+          </Button>
+        </CardFooter>
+      </Card>
+
+      {isDialogOpen && (
+        <PaymentDialog
+          plan={plan}
+          isLoading={isLoading}
+          onClose={handleCloseDialog}
+          onBuy={() => handleBuy(plan.plan_id)} // Pass plan.plan_id to handleBuy
+        />
+      )}
+    </>
+  );
+};
+
+export default ServiceCard;

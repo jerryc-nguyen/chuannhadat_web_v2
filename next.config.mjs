@@ -1,4 +1,3 @@
-import { withSentryConfig } from '@sentry/nextjs';
 import bundleAnalyzer from '@next/bundle-analyzer';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -35,9 +34,9 @@ const nextConfig = {
 
   // Optimize compilation
   compiler: {
-    // Remove console logs in production for faster builds
+    // Remove console logs in production for faster builds, but keep debug logs when DEBUG flags are set
     removeConsole:
-      process.env.NODE_ENV === 'production'
+      process.env.NODE_ENV === 'production' && !process.env.DEBUG_MIDDLEWARE
         ? {
             exclude: ['error', 'warn'],
           }
@@ -213,19 +212,5 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx', 'node.js'],
   output: 'standalone',
 };
-const sentryWebpackPluginOptions = {
-  org: 'chuan-nha-dat',
-  project: 'javascript-nextjs',
-  silent: true,
-  widenClientFileUpload: true,
-  reactComponentAnnotation: { enabled: true },
-  tunnelRoute: '/monitoring',
-  hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-  sourcemaps: {
-    deleteSourcemapsAfterUpload: true,
-  },
-};
-export default withSentryConfig(withBundleAnalyzer(nextConfig), sentryWebpackPluginOptions);
+
+export default withBundleAnalyzer(nextConfig);
