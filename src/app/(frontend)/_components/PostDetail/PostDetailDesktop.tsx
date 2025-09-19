@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 
 import NotFound from '@app/not-found';
 import { usePostDetail } from '@common/hooks/usePostDetail';
-import { IProductDetail } from '../CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@components/desktop/components/breadcrumb';
 import { useSetAtom } from 'jotai';
 import AuthorPost from './components/author-post';

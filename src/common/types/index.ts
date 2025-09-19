@@ -42,6 +42,7 @@ export type {
   IProductList,
   ISavedProducts,
   IViewedProducts,
+  IProductDetail,
 } from './product';
 
 export { FilterFieldName, SORT_CHIP_OPTION } from './search';

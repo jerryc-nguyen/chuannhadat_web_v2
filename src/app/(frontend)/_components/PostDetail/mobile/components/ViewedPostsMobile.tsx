@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@components/ui/carousel';
 import { useViewedPosts } from '@frontend/features/main-nav-rights/FavoriteIcon/hooks/useViewedPosts';
 import ProductCard from '@frontend/CategoryPage/mobile/searchs/ProductCard';
-import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types';
 import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
