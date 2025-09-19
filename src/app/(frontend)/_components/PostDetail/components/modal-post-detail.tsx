@@ -14,7 +14,6 @@ import DescriptionPost from './description-post';
 import FeaturesPost from './features-post';
 import NotePost from './note-post';
 import OverviewPost from './overview-post';
-import ViewedPosts from './ViewedPosts';
 
 type ModalPostDetailProps = object;
 
@@ -86,7 +85,6 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
                 <OverviewPost isInsideModal data={data as IProductDetail} />
                 <FeaturesPost data={data as IProductDetail} />
                 <DescriptionPost data={data as IProductDetail} />
-                <ViewedPosts isInsideModal productUid={data?.uid as string} />
                 <NotePost />
               </div>
               <AuthorPost data={data as IProductDetail} />
