@@ -1,6 +1,6 @@
 'use client';
 import { referralsApi } from '@dashboard/AccountDetail/api/referrals';
-import { authApi } from '@app/(frontend)/_components/auths/api';
+import { authApi } from '@frontend/auths/api';
 import forgot_password from '@assets/icons/Refer a friend-bro.svg';
 import { REFERRAL_CODE } from '@common/auth';
 import { useAuth } from '@common/auth/AuthContext';
