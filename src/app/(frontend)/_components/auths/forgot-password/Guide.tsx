@@ -4,7 +4,7 @@ import { Copy, Loader2 } from 'lucide-react';
 import { SMS_PHONE_NUMBER } from '@common/constants';
 import { toast } from 'sonner';
 import { IVerifyPhoneResponseData } from '../../auths/types';
-import { authApi } from '@app/(frontend)/_components/auths/api';
+import { authApi } from '@frontend/auths/api';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 

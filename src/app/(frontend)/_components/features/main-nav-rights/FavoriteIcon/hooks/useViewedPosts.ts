@@ -21,7 +21,6 @@ type UseViewedPostsReturn = {
   isDeleting: boolean;
 };
 
-// TODO: check if listProduct & viewedPosts is duplicate
 export const useViewedPosts = ({
   productUid,
   defaultPageSize = 3,
@@ -63,10 +62,8 @@ export const useViewedPosts = ({
 
   useEffect(() => {
     if (viewedPosts?.data) {
-      setListProduct((data) => {
-        const activeData = data.filter((item) => item !== undefined);
-        return [...activeData, ...viewedPosts.data];
-      });
+      // Replace the data instead of accumulating to prevent duplicates
+      setListProduct(viewedPosts.data);
     }
   }, [viewedPosts?.data]);
 

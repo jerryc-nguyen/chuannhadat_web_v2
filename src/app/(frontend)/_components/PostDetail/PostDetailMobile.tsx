@@ -1,17 +1,17 @@
 'use client';
 
-import { postsApi } from './api/posts';
 import NotFound from '@app/not-found';
 import Spinner from '@components/ui/spinner';
 import { usePostDetail } from '@common/hooks/usePostDetail';
-import AuthorInfo from './mobile/post-detail/components/AuthorInfo';
-import PhotosCarousel from './mobile/post-detail/components/PhotosCarousel';
-import { authorAtom, postDetailAtom } from './mobile/post-detail/states';
-import type { IProductDetail } from '../CategoryPage/mobile/searchs/type';
+import AuthorInfo from './mobile/components/AuthorInfo';
+import PhotosCarousel from './mobile/components/PhotosCarousel';
+import { authorAtom, postDetailAtom } from './mobile/states';
+import type { IProductDetail } from '@common/types';
 import Section from '@components/mobile-ui/Section';
-import { isServer, useMutation } from '@tanstack/react-query';
+import { isServer } from '@tanstack/react-query';
 import { FeaturesList } from './components/features-post';
 import { useSetAtom } from 'jotai';
+import usePostDetailTracking from './hooks/usePostDetailTracking';
 import React, { useEffect } from 'react';
 import ProductDescription from './components/ProductDescription';
 import './styles/PostDetailMobile.scss';
@@ -19,6 +19,9 @@ import './styles/PostDetailMobile.scss';
 export default function PostDetailMobile({ productUid }: { productUid: string }) {
   const setPostDetail = useSetAtom(postDetailAtom);
   const setAuthor = useSetAtom(authorAtom);
+
+  // Use the centralized tracking hook
+  const { trackPostView } = usePostDetailTracking();
 
   const {
     data: product,
@@ -31,23 +34,18 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
     refetchOnWindowFocus: true, // Optional: refetch when window is focused
   });
 
-  const { mutate: addViewPost } = useMutation({
-    mutationFn: postsApi.viewProduct,
-  });
-
   useEffect(() => {
     if (product) {
       setAuthor(product.author);
     }
-  }, [product]);
+  }, [product, setAuthor]);
 
+  // Track view when component mounts (for mobile direct access)
   React.useEffect(() => {
-    if (productUid) {
-      addViewPost({
-        product_uid: productUid,
-      });
+    if (productUid && productUid !== '/') {
+      trackPostView(productUid);
     }
-  }, [productUid]);
+  }, [productUid, trackPostView]);
 
   useEffect(() => {
     if (product) {

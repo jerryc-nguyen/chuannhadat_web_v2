@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 import { ActionSaveProduct, ISaveProductPayload } from '@frontend/features/product-detail-actions/save-post/types';
 import { listPostIdSavedAtom } from '@frontend/CategoryPage/states';
-import { savesApi } from '@app/(frontend)/_components/features/main-nav-rights/FavoriteIcon/api/saves';
+import { savesApi } from '@frontend/features/main-nav-rights/FavoriteIcon/api/saves';
 
 export interface UseButtonSaveProps {
   postUid: string;

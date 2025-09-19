@@ -2,7 +2,7 @@ import { Button } from '@components/ui/button';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { authorAtom } from '@frontend/PostDetail/mobile/post-detail/states';
+import { authorAtom } from '@frontend/PostDetail/mobile/states';
 
 const AuthorInfo: React.FC = () => {
   const [author] = useAtom(authorAtom);

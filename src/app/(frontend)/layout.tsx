@@ -1,9 +1,9 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import HeaderMobile from '@frontend/features/layout/mobile-header/HeaderMobile';
-import { GoogleAnalytics } from '@next/third-parties/google';
 import Footer from '@components/desktop/components/Footer';
 import HeaderDesktop from '@components/desktop/components/HeaderDeskop';
 import FacebookMessengerDynamic from '@/components/FacebookMessengerDynamic';
+import GoogleAnalytics from '@frontend/analytics/GoogleAnalytics';
 
 export default async function HomeLayout({
   children,
@@ -18,7 +18,7 @@ export default async function HomeLayout({
       {isMobile ? <HeaderMobile /> : <HeaderDesktop />}
       <main className={`z-5 relative h-fit ${mobileClass}`}>{children}</main>
       <Footer />
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
       <FacebookMessengerDynamic pageId={facebookPageId} />
     </>
   );

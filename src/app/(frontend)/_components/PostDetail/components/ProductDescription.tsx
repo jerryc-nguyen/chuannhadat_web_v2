@@ -1,7 +1,7 @@
 import FormatHtml from '@components/FormatHtml';
 import { Button } from '@components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@components/ui/card';
-import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types'
 import { useEffect, useRef, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 

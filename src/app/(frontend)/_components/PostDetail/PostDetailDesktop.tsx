@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 
 import NotFound from '@app/not-found';
 import { usePostDetail } from '@common/hooks/usePostDetail';
-import { IProductDetail } from '../CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@components/desktop/components/breadcrumb';
 import { useSetAtom } from 'jotai';
 import AuthorPost from './components/author-post';
@@ -12,7 +12,6 @@ import DescriptionPost from './components/description-post';
 import FeaturesPost from './components/features-post';
 import NotePost from './components/note-post';
 import OverviewPost from './components/overview-post';
-import ViewedPosts from './components/ViewedPosts';
 import { postDetailAtom } from './states/postDetailAtoms';
 
 type PostDetailDesktopProps = object;
@@ -49,7 +48,6 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
           <OverviewPost isLoading={isLoading} data={data as IProductDetail} />
           <FeaturesPost isLoading={isLoading} data={data as IProductDetail} />
           <DescriptionPost isLoading={isLoading} data={data as IProductDetail} />
-          <ViewedPosts productUid={data?.uid as string} />
           <NotePost />
         </div>
         <AuthorPost className="!top-16" data={data as IProductDetail} />

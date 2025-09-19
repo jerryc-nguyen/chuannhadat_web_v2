@@ -16,7 +16,7 @@ import {
 import { Button } from '@components/ui/button';
 import { useAuth } from '@common/auth/AuthContext';
 import { useMutation } from '@tanstack/react-query';
-import { authApi } from '@app/(frontend)/_components/auths/api';
+import { authApi } from '@frontend/auths/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import React, { Suspense, lazy } from 'react';

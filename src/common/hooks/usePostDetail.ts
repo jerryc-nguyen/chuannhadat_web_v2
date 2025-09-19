@@ -1,6 +1,6 @@
 import { postsApi } from '@frontend/PostDetail/api/posts';
 import { useQuery } from '@tanstack/react-query';
-import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types';
 
 /**
  * Custom hook to fetch post details by post ID

@@ -5,7 +5,7 @@ import { API_ROUTES } from '@common/router';
 import { IViewedPostsPayload } from '@frontend/features/product-detail-actions/save-post/types';
 import { IViewedPostsResponse } from '@frontend/PostDetail/type';
 import { ISavesSummaryResponse } from '@frontend/features/product-detail-actions/save-post/types';
-import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types';
 import { IProductSummary } from '@frontend/PostDetail/type';
 
 export const postsApi = {

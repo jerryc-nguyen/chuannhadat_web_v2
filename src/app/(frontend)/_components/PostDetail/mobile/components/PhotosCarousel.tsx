@@ -1,7 +1,7 @@
 import { AspectRatio } from '@components/ui/AspectRatio';
 import { YoutubePlayerAction } from '@frontend/features/media/youtube-player-modal';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { IProductDetail } from '@frontend/CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types';
 import ImageCarousel from '@components/mobile-ui/ImageCarousel';
 import { useState } from 'react';
 import { CircleChevronLeft as GoArrowLeft, CircleChevronRight as GoArrowRight } from 'lucide-react';

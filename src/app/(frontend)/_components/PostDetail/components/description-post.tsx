@@ -1,5 +1,5 @@
 import FormatHtml from '@components/FormatHtml';
-import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
+import { IProductDetail } from '@common/types'
 import React from 'react';
 
 type DescriptionPostProps = {
