@@ -7,6 +7,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@components/ui/select';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import timeIcon from '@assets/icons/time.svg';
@@ -30,12 +37,27 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
   const [contentDialog, setContentDialog] = useAtom(contentDialogTimerPickerAtom);
   const [showDialog, setShowDialog] = useAtom(showDialogTimePickerAtom);
+
+  // Parse current time value
+  const [hours, minutes] = timeRefresh.split(':').map(Number);
+
   const formatTime = (timeString: string) => {
     const [hours, minutes] = timeString.split(':').map(Number);
     return `${hours} giờ ${minutes} phút`;
   };
-  const handleChangeTimeRefresh = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeRefresh(event.target.value);
+
+  // Generate hour and minute options
+  const hourOptions = Array.from({ length: 24 }, (_, i) => i);
+  const minuteOptions = Array.from({ length: 60 }, (_, i) => i);
+
+  const handleHourChange = (value: string) => {
+    const newTime = `${value.padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    setTimeRefresh(newTime);
+  };
+
+  const handleMinuteChange = (value: string) => {
+    const newTime = `${hours.toString().padStart(2, '0')}:${value.padStart(2, '0')}`;
+    setTimeRefresh(newTime);
   };
   const onDissmisDialog = () => {
     setContentDialog(undefined);
@@ -48,21 +70,53 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
           <DialogHeader>
             <DialogTitle className="mb-2"> Lựa chọn thời gian</DialogTitle>
             <DialogDescription>
-              <div className="flex items-center gap-x-2">
-                <div className="relative max-w-[8rem]">
-                  <div className="pointer-events-none absolute inset-y-0 end-0 top-0 flex items-center pe-3.5">
-                    <Image src={timeIcon} alt="ic_eyy_off" width={16} height={16} />
-                  </div>
-                  <input
-                    type="time"
-                    id="time"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm leading-none text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    value={timeRefresh}
-                    onChange={handleChangeTimeRefresh}
-                    required
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center gap-x-3">
+                  <Image src={timeIcon} alt="time icon" width={20} height={20} />
+                  <p className="text-lg font-bold text-secondary">{formatTime(timeRefresh)}</p>
                 </div>
-                <p className="text-lg font-bold text-secondary">{formatTime(timeRefresh)}</p>
+
+                <div className="flex items-center gap-x-3">
+                  {/* Hour Selector */}
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Giờ
+                    </label>
+                    <Select value={hours.toString()} onValueChange={handleHourChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Chọn giờ" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[200px]">
+                        {hourOptions.map((hour) => (
+                          <SelectItem key={hour} value={hour.toString()}>
+                            {hour.toString().padStart(2, '0')}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="text-xl font-bold text-gray-400 mt-6">:</div>
+
+                  {/* Minute Selector */}
+                  <div className="flex-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Phút
+                    </label>
+                    <Select value={minutes.toString()} onValueChange={handleMinuteChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Chọn phút" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[200px]">
+                        {minuteOptions.map((minute) => (
+                          <SelectItem key={minute} value={minute.toString()}>
+                            {minute.toString().padStart(2, '0')}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </div>
             </DialogDescription>
           </DialogHeader>
