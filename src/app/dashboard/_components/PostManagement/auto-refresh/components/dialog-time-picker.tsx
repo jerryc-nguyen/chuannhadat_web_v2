@@ -18,13 +18,9 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import timeIcon from '@assets/icons/time.svg';
 import React from 'react';
-import { useAtom } from 'jotai';
-import {
-  contentDialogTimerPickerAtom,
-  defaultTimeRefresh,
-  showDialogTimePickerAtom,
-  timeRefreshAtom,
-} from '../states/autorefreshAtoms';
+import { useIsMobile } from '@common/hooks/useMobile';
+import { useTimePickerLogic } from '../hooks/useTimePickerLogic';
+import DialogTimePickerMobile from './dialog-time-picker-mobile';
 
 type DialogTimePickerProps = {
   isLoadingSubmit: boolean;
@@ -33,39 +29,40 @@ type DialogTimePickerProps = {
 };
 
 const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
-  const { isLoadingSubmit, handleSubmit } = props;
-  const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
-  const [contentDialog, setContentDialog] = useAtom(contentDialogTimerPickerAtom);
-  const [showDialog, setShowDialog] = useAtom(showDialogTimePickerAtom);
+  const { isLoadingSubmit, handleSubmit, type } = props;
+  const isMobile = useIsMobile();
 
-  // Parse current time value
-  const [hours, minutes] = timeRefresh.split(':').map(Number);
+  // Use the shared hook for all time picker logic
+  const {
+    timeRefresh,
+    contentDialog,
+    showDialog,
+    setShowDialog,
+    hours,
+    minutes,
+    hourOptions,
+    minuteOptions,
+    formatTime,
+    handleHourChange,
+    handleMinuteChange,
+    onDismissDialog,
+  } = useTimePickerLogic();
 
-  const formatTime = (timeString: string) => {
-    const [hours, minutes] = timeString.split(':').map(Number);
-    return `${hours} giờ ${minutes} phút`;
-  };
+  // If mobile, use the mobile-optimized component
+  if (isMobile) {
+    return (
+      <DialogTimePickerMobile
+        isLoadingSubmit={isLoadingSubmit}
+        handleSubmit={handleSubmit}
+        type={type}
+      />
+    );
+  }
 
-  // Generate hour and minute options
-  const hourOptions = Array.from({ length: 24 }, (_, i) => i);
-  const minuteOptions = Array.from({ length: 60 }, (_, i) => i);
-
-  const handleHourChange = (value: string) => {
-    const newTime = `${value.padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    setTimeRefresh(newTime);
-  };
-
-  const handleMinuteChange = (value: string) => {
-    const newTime = `${hours.toString().padStart(2, '0')}:${value.padStart(2, '0')}`;
-    setTimeRefresh(newTime);
-  };
-  const onDissmisDialog = () => {
-    setContentDialog(undefined);
-    setTimeRefresh(defaultTimeRefresh);
-  };
+  // Desktop version continues below
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
-      <DialogContent onCloseAutoFocus={onDissmisDialog}>
+      <DialogContent onCloseAutoFocus={onDismissDialog}>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle className="mb-2"> Lựa chọn thời gian</DialogTitle>
@@ -82,7 +79,7 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Giờ
                     </label>
-                    <Select value={hours.toString()} onValueChange={handleHourChange}>
+                    <Select value={hours.toString()} onValueChange={(value) => handleHourChange(value)}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Chọn giờ" />
                       </SelectTrigger>
@@ -103,7 +100,7 @@ const DialogTimePicker: React.FC<DialogTimePickerProps> = (props) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Phút
                     </label>
-                    <Select value={minutes.toString()} onValueChange={handleMinuteChange}>
+                    <Select value={minutes.toString()} onValueChange={(value) => handleMinuteChange(value)}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Chọn phút" />
                       </SelectTrigger>
