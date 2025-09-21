@@ -123,7 +123,7 @@ export const GuideDeposit: React.FC<GuideDepositProps> = ({
           <b className="text-primary_color">{bankTransferNote}</b>
         </p>
         <p className="my-2">
-          Nếu có vấn đề trong khi thanh toán - thường là không nhập đúng nội dung CK, bạn gọi số{' '}
+          Nếu có vấn đề trong khi thanh toán - bạn gọi số{' '}
           <b className="text-primary_color">{formatPhoneNumber(SMS_SUPPORT_NUMBER)}</b>
         </p>
       </AlertDialogDescription>

@@ -18,12 +18,12 @@ export const TopUpNotes: React.FC<TopUpNotesProps> = ({ bankTransferNote }) => {
         <li>Vui lòng ghi đúng nội dung chuyển khoản để hệ thống tự động cập nhật số dư</li>
         <li style={{ margin: '8px 0' }}>
           <p className="my-2">
-            Nếu có vấn đề trong khi thanh toán - thường là không nhập đúng nội dung CK, bạn gọi hỗ trợ{' '}
+            Nếu có vấn đề trong khi thanh toán, bạn gọi hỗ trợ{' '}
             <b className="text-primary_color">{formatPhoneNumber(SMS_SUPPORT_NUMBER)}</b>
           </p>
         </li>
         <li>
-          Vui lòng gọi hỗ trợ để cập nhật thêm tiền nếu quá 5 phút mà chưa thấy thay đổi số dư tài khoản
+          Vui lòng gọi hỗ trợ để cập nhật thêm tiền nếu quá 2 phút mà chưa thấy thay đổi số dư tài khoản
         </li>
       </ul>
     </div>

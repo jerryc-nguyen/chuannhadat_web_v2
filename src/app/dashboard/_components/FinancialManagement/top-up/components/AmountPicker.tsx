@@ -82,7 +82,7 @@ export const AmountPicker: React.FC = () => {
 
         <div>
           <h3 className="text-lg font-semibold mb-4 text-gray-700">
-            Chọn từ gợi ý
+            Hoặc chọn từ gợi ý:
           </h3>
           <div className="grid grid-cols-3 gap-4 mb-4">
             {DEPOSIT_PRESETS.map((amount) => (

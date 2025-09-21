@@ -21,11 +21,7 @@ const TopUpView = () => {
       <AmountPicker />
 
       <div className="c-top-up__content">
-        <h3 className="my-4 mt-8 text-xl font-bold">Nạp tiền bằng QR - Chuyển khoản ngân hàng</h3>
-
         <TopUpNotes bankTransferNote={bankTransferNote} />
-
-        <TopUpQR bankTransferNote={bankTransferNote} />
 
         <TopUpTable bankTransferNote={bankTransferNote} />
       </div>
