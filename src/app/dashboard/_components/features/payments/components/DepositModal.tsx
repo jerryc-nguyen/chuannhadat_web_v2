@@ -22,8 +22,8 @@ export const DepositModal: React.FC = () => {
   const {
     isOpenDepositModal,
     setOpenDepositModal,
-    statusTransaction,
-    setStatusTransaction,
+    transferedSuccess,
+    setTransferedSuccess,
     selectedAmount,
     handleAmountSelect,
     formattedAmount: depositAmount,
@@ -54,10 +54,10 @@ export const DepositModal: React.FC = () => {
   useCleanupEffect(
     (_helpers) => {
       if (!isOpenDepositModal) {
-        setStatusTransaction(false);
+        setTransferedSuccess(false);
       }
     },
-    [isOpenDepositModal, setStatusTransaction],
+    [isOpenDepositModal, setTransferedSuccess],
   );
 
   return (
@@ -65,9 +65,9 @@ export const DepositModal: React.FC = () => {
       <AlertDialogContent className="max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[80vh]">
         <AlertDialogHeader className="relative z-10 mb-2">
           <AlertDialogTitle>
-            {statusTransaction ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
+            {transferedSuccess ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
           </AlertDialogTitle>
-          {statusTransaction ? (
+          {transferedSuccess ? (
             <TransactionSuccessful formattedAmount={depositAmount} />
           ) : (
             <GuideDeposit
@@ -84,7 +84,7 @@ export const DepositModal: React.FC = () => {
         </AlertDialogFooter>
         <Confetti
           numberOfPieces={100}
-          run={statusTransaction}
+          run={transferedSuccess}
           width={512}
           height={300}
           recycle={true}

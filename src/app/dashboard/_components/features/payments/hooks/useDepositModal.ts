@@ -3,7 +3,7 @@ import { paymentApi } from '@dashboard/features/payments/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   openModalDepositAtom,
-  statusTransactionAtom,
+  transferedSuccessAtom,
   depositAmountAtom,
   transferedAmountAtom,
 } from '@dashboard/features/payments/states';
@@ -15,7 +15,7 @@ const DEFAULT_DEPOSIT_AMOUNT = 20000;
 
 export const useDepositModal = (): UseDepositModalReturn => {
   const [isOpenDepositModal, setOpenDepositModal] = useAtom(openModalDepositAtom);
-  const [statusTransaction, setStatusTransaction] = useAtom(statusTransactionAtom);
+  const [transferedSuccess, setTransferedSuccess] = useAtom(transferedSuccessAtom);
   const [transferedAmount, setTransferedAmount] = useAtom(transferedAmountAtom);
   const [depositAmount, setDepositAmount] = useAtom(depositAmountAtom);
 
@@ -36,8 +36,9 @@ export const useDepositModal = (): UseDepositModalReturn => {
 
   const onCloseModalDeposit = () => {
     setOpenDepositModal(false);
-    setStatusTransaction(false);
+    setTransferedSuccess(false);
     setDepositAmount(undefined);
+    setTransferedAmount(undefined);
   };
 
   const handleAmountSelect = (amount: number) => {
@@ -53,9 +54,7 @@ export const useDepositModal = (): UseDepositModalReturn => {
     mutationFn: paymentApi.checkDeposit,
     onSuccess: async (response: A) => {
       if (response.status) {
-        // Deposit success -> update statusTransaction to true, open modal congratulation and fetch balance
-        // open modal congratulation  with case when user in page top-up
-        setStatusTransaction(true);
+        setTransferedSuccess(true);
         if (response.data?.amount) {
           setTransferedAmount(response.data.amount);
         }
@@ -72,8 +71,8 @@ export const useDepositModal = (): UseDepositModalReturn => {
     onOpenModalDeposit,
     onCloseModalDeposit,
     setOpenDepositModal,
-    statusTransaction,
-    setStatusTransaction,
+    transferedSuccess,
+    setTransferedSuccess,
     checkDepositMutate,
     formattedAmount: formatPriceWithUnit(depositAmount ?? 0),
     selectedAmount,

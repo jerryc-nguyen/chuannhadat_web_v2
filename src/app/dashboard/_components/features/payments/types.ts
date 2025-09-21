@@ -15,8 +15,8 @@ export interface UseDepositModalReturn {
   onOpenModalDeposit: (isResetAmount?: boolean) => void;
   onCloseModalDeposit: () => void;
   setOpenDepositModal: (open: boolean) => void;
-  statusTransaction: boolean;
-  setStatusTransaction: (status: boolean) => void;
+  transferedSuccess: boolean;
+  setTransferedSuccess: (status: boolean) => void;
   checkDepositMutate: (id: number) => void;
   formattedAmount: string | undefined;
   selectedAmount: number | null;
