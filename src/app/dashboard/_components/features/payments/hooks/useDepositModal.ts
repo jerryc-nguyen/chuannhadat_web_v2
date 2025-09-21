@@ -5,15 +5,18 @@ import {
   openModalDepositAtom,
   statusTransactionAtom,
   depositAmountAtom,
+  transferedAmountAtom,
 } from '@dashboard/features/payments/states';
 import { useAtom } from 'jotai';
 import { UseDepositModalReturn } from '../types';
+import { formatPriceWithUnit } from '@common/priceHelpers';
 
 const DEFAULT_DEPOSIT_AMOUNT = 20000;
 
 export const useDepositModal = (): UseDepositModalReturn => {
   const [isOpenDepositModal, setOpenDepositModal] = useAtom(openModalDepositAtom);
   const [statusTransaction, setStatusTransaction] = useAtom(statusTransactionAtom);
+  const [transferedAmount, setTransferedAmount] = useAtom(transferedAmountAtom);
   const [depositAmount, setDepositAmount] = useAtom(depositAmountAtom);
 
   const { fetchBalance } = useBalanceRequest();
@@ -48,11 +51,14 @@ export const useDepositModal = (): UseDepositModalReturn => {
   const { mutate: checkDepositMutate } = useMutation({
     mutationKey: ['check-deposit_qr'],
     mutationFn: paymentApi.checkDeposit,
-    onSuccess: async (data) => {
-      if (data.status) {
+    onSuccess: async (response: A) => {
+      if (response.status) {
         // Deposit success -> update statusTransaction to true, open modal congratulation and fetch balance
         // open modal congratulation  with case when user in page top-up
         setStatusTransaction(true);
+        if (response.data?.amount) {
+          setTransferedAmount(response.data.amount);
+        }
         // Note: API doesn't return amount, keeping existing depositAmount value
         !isOpenDepositModal && setOpenDepositModal(true);
         queryClient.invalidateQueries({ queryKey: ['get-profile-me'] });
@@ -69,9 +75,11 @@ export const useDepositModal = (): UseDepositModalReturn => {
     statusTransaction,
     setStatusTransaction,
     checkDepositMutate,
-    formattedAmount: depositAmount?.toString(),
+    formattedAmount: formatPriceWithUnit(depositAmount ?? 0),
     selectedAmount,
     handleAmountSelect,
-    clearAmount
+    clearAmount,
+    transferedAmount,
+    setTransferedAmount,
   };
 };

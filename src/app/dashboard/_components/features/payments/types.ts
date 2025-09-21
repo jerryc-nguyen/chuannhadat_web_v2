@@ -22,4 +22,6 @@ export interface UseDepositModalReturn {
   selectedAmount: number | null;
   handleAmountSelect: (amount: number) => void;
   clearAmount: () => void;
+  transferedAmount: string | undefined;
+  setTransferedAmount: (amount: string) => void;
 }

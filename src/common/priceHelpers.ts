@@ -9,12 +9,16 @@ export function formatPrice(price: string) {
   return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
+export const formatPriceWithUnit = (price: number) => {
+  return `${price.toLocaleString('vi-VN')} Xu`;
+}
+
 export const removeTrailingZeros = (input: string) => {
   return input.replace(/(\.\d*?[1-9])0+$/g, '$1').replace(/\.0+$/, '');
 };
 
 export function readMoney(value: string) {
-  let result: number = 0.0;
+  let result = 0.0;
   const priceUnit = buildPriceUnit(parseFloat(value));
   if (!value) {
     return '';
