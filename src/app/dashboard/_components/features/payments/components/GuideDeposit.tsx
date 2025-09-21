@@ -34,7 +34,7 @@ export const GuideDeposit: React.FC<GuideDepositProps> = ({
       setRebuildKey(prev => prev + 1);
       setImageError(false);
       setIsImageLoading(true);
-    }, 1000);
+    }, 2000);
   };
 
   const handleImageLoad = () => {

@@ -6,13 +6,11 @@ import { AmountPicker } from './components/AmountPicker';
 import { TopUpNotes } from './components/TopUpNotes';
 import { TopUpTable } from './components/TopUpTable';
 import { useTopUpBreadcrumb } from './hooks/useTopUpBreadcrumb';
-import { useTopUpPolling } from './hooks/useTopUpPolling';
 
 const TopUpView = () => {
   const { bankTransferNote } = useAuth();
 
   // Initialize hooks
-  useTopUpPolling();
   useTopUpBreadcrumb();
 
   return (

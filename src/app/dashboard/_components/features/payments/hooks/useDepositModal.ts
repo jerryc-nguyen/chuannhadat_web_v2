@@ -7,7 +7,6 @@ import {
   depositAmountAtom,
 } from '@dashboard/features/payments/states';
 import { useAtom } from 'jotai';
-import { useLatestCreditId } from './useLatestCreditId';
 import { UseDepositModalReturn } from '../types';
 
 const DEFAULT_DEPOSIT_AMOUNT = 20000;
@@ -19,15 +18,13 @@ export const useDepositModal = (): UseDepositModalReturn => {
 
   const { fetchBalance } = useBalanceRequest();
   const queryClient = useQueryClient();
-  const { latestCreditId, fetchLatestCreditId } = useLatestCreditId();
+
 
   // Derive selectedAmount from global depositAmount
   const selectedAmount = depositAmount ?? null;
 
   const onOpenModalDeposit = (isResetAmount = false) => {
     setOpenDepositModal(true);
-    // Fetch latest credit ID when modal opens
-    fetchLatestCreditId();
     // Set default deposit amount if none selected
     if (isResetAmount || !depositAmount) {
       setDepositAmount(DEFAULT_DEPOSIT_AMOUNT);
@@ -73,9 +70,8 @@ export const useDepositModal = (): UseDepositModalReturn => {
     setStatusTransaction,
     checkDepositMutate,
     formattedAmount: depositAmount?.toString(),
-    latestCreditId,
     selectedAmount,
     handleAmountSelect,
-    clearAmount,
+    clearAmount
   };
 };

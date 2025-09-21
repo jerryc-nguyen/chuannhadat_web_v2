@@ -6,15 +6,15 @@ import { paymentApi } from '../api';
 export const useLatestCreditId = () => {
   const [latestCreditId, setLatestCreditId] = useAtom(latestCreditIdAtom);
 
-  const { mutate: fetchLatestCreditId, isLoading } = useMutation({
+  const { mutateAsync: fetchLatestCreditId, isPending } = useMutation({
     mutationFn: paymentApi.lastCreditId,
-    onSuccess: (data) => {
-      if (data.status && data.data?.last_credit_id) {
-        setLatestCreditId(data.data.last_credit_id);
+    onSuccess: (response) => {
+      if (response.status && response.data) {
+        setLatestCreditId(typeof response.data === 'number' ? response.data : null);
       }
     },
     onError: (error) => {
-      console.error('Error fetching latest credit ID:', error);
+      console.error('❌ Error fetching latest credit ID:', error);
     },
   });
 
@@ -22,6 +22,6 @@ export const useLatestCreditId = () => {
     latestCreditId,
     setLatestCreditId,
     fetchLatestCreditId,
-    isLoading,
+    isLoading: isPending,
   };
 };

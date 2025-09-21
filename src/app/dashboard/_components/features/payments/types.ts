@@ -19,7 +19,6 @@ export interface UseDepositModalReturn {
   setStatusTransaction: (status: boolean) => void;
   checkDepositMutate: (id: number) => void;
   formattedAmount: string | undefined;
-  latestCreditId: number | null;
   selectedAmount: number | null;
   handleAmountSelect: (amount: number) => void;
   clearAmount: () => void;
