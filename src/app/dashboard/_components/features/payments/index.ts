@@ -3,6 +3,7 @@ export { DepositModal } from './components/DepositModal';
 
 // Sub-components
 export { GuideDeposit } from './components/GuideDeposit';
+export { AmountSelection } from './components/AmountSelection';
 export { TransactionSuccessful } from './components/TransactionSuccessful';
 
 // Hooks

@@ -12,22 +12,23 @@ import {
 } from '@components/ui/alert-dialog';
 import { GuideDeposit } from './GuideDeposit';
 import { TransactionSuccessful } from './TransactionSuccessful';
-import { DepositModalProps } from '../types';
 import { useDepositModal } from '../hooks/useDepositModal';
 import { BANK_ACCOUNT_NUMBER_QR } from '@common/constants';
 
-export const DepositModal: React.FC<DepositModalProps> = () => {
+export const DepositModal: React.FC = () => {
+  const hookData = useDepositModal();
+
   const {
     isOpenDepositModal,
     setOpenDepositModal,
     statusTransaction,
     checkDepositMutate,
     setStatusTransaction,
-    formattedAmount,
     latestCreditId,
     selectedAmount,
     handleAmountSelect,
-  } = useDepositModal();
+    formattedAmount: depositAmount,
+  } = hookData;
 
   const { bankTransferNote } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
@@ -77,7 +78,7 @@ export const DepositModal: React.FC<DepositModalProps> = () => {
             {statusTransaction ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
           </AlertDialogTitle>
           {statusTransaction ? (
-            <TransactionSuccessful formattedAmount={formattedAmount} />
+            <TransactionSuccessful formattedAmount={depositAmount} />
           ) : (
             <GuideDeposit
               bankTransferNote={bankTransferNote}

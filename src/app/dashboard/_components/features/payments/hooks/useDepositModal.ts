@@ -2,9 +2,9 @@ import { useBalanceRequest } from '@common/api/balance';
 import { paymentApi } from '@dashboard/features/payments/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  depositAmountAtom,
   openModalDepositAtom,
   statusTransactionAtom,
+  depositAmountAtom,
 } from '@dashboard/features/payments/states';
 import { useAtom } from 'jotai';
 import { useLatestCreditId } from './useLatestCreditId';
@@ -19,8 +19,8 @@ export const useDepositModal = (): UseDepositModalReturn => {
   const queryClient = useQueryClient();
   const { latestCreditId, fetchLatestCreditId } = useLatestCreditId();
 
-  // Derive selectedAmount from depositAmount atom
-  const selectedAmount = depositAmount ? parseInt(depositAmount) : null;
+  // Derive selectedAmount from global depositAmount
+  const selectedAmount = depositAmount ?? null;
 
   const onOpenModalDeposit = () => {
     setOpenDepositModal(true);
@@ -28,7 +28,7 @@ export const useDepositModal = (): UseDepositModalReturn => {
     fetchLatestCreditId();
     // Set default deposit amount if none selected
     if (!depositAmount) {
-      setDepositAmount('20000');
+      setDepositAmount(20000);
     }
   };
 
@@ -39,7 +39,11 @@ export const useDepositModal = (): UseDepositModalReturn => {
   };
 
   const handleAmountSelect = (amount: number) => {
-    setDepositAmount(amount.toString());
+    setDepositAmount(amount);
+  };
+
+  const clearAmount = () => {
+    setDepositAmount(undefined);
   };
 
   const { mutate: checkDepositMutate } = useMutation({
@@ -66,9 +70,10 @@ export const useDepositModal = (): UseDepositModalReturn => {
     statusTransaction,
     setStatusTransaction,
     checkDepositMutate,
-    formattedAmount: depositAmount,
+    formattedAmount: depositAmount?.toString(),
     latestCreditId,
     selectedAmount,
     handleAmountSelect,
+    clearAmount,
   };
 };
