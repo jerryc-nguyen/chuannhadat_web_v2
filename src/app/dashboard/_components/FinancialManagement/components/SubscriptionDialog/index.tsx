@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { Service } from '../../types';
 import { useMemo, useState } from 'react';
 import { RadioGroup } from '@components/ui/Radio';
-import { useDepositModal } from '@components/ui/DepositModal';
+import { useDepositModal } from '@dashboard/features/payments';
 
 interface Props {
   plan: Service;
@@ -31,7 +31,7 @@ const SubscriptionDialog: React.FC<Props> = ({ plan, onClose }) => {
   );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const handlePayment = () => {};
+  const handlePayment = () => { };
 
   return (
     <Dialog open={true} onOpenChange={onClose}>

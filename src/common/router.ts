@@ -73,7 +73,10 @@ export const API_ROUTES = {
     UPDATE_PHONE: 'api/v1/profiles/update_phone',
     UPDATE_EMAIL: 'api/v1/profiles/update_email',
     CONFIRM_EMAIL: 'api/v1/profiles/confirm_email',
-    CHECK_DEPOSIT: 'api/v1/profiles/check_deposit',
+  },
+  PAYMENTS: {
+    CHECK_DEPOSIT: 'api/v1/payments/check_deposit',
+    LAST_CREDIT_ID: 'api/v1/payments/last_credit_id',
   },
   IMAGE_UPLOAD: {
     SIGN_S3: 'api/v1/product_images/sign-s3',

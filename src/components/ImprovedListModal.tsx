@@ -8,7 +8,7 @@ import useBrowserPopstate from '@frontend/features/navigation/popstate-handler/h
 import { BtsModals1, BtsModals2, BtsModals3 } from '@frontend/features/layout/mobile-modals';
 
 // Temporary: Use direct imports to isolate webpack runtime issue
-import DepositModal from './ui/DepositModal';
+import { DepositModal } from '../app/dashboard/_components/features/payments';
 import ModalPostDetail from '@frontend/PostDetail/components/modal-post-detail';
 import { YoutubePlayerModal } from '@frontend/features/media/youtube-player-modal/YoutubePlayerModal';
 

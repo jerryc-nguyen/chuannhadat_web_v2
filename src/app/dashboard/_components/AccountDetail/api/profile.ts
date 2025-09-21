@@ -39,10 +39,4 @@ export const profileApi = {
   updateMyPhone: async (data: { phone: string }): Promise<IResponseData<{ success: boolean }>> => {
     return axiosInstance.post(API_ROUTES.PROFILES.UPDATE_PHONE, data);
   },
-
-  checkDeposit: async (last_credit_id: number): Promise<IResponseData<{ last_credit_id: number }>> => {
-    return axiosInstance.post(API_ROUTES.PROFILES.CHECK_DEPOSIT, {
-      last_credit_id: last_credit_id || undefined,
-    });
-  },
 };

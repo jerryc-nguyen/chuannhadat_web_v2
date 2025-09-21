@@ -8,7 +8,7 @@ import {
   SMS_SUPPORT_NUMBER,
 } from '@common/constants';
 import TableComponent from '@components/table';
-import { useDepositModal } from '@components/ui/DepositModal';
+import { useDepositModal } from '@dashboard/features/payments';
 import '@styles/pages/desktop/finacial-management/top-up.scss';
 import {
   breadcrumbAtom,

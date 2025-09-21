@@ -28,7 +28,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@comp
 import { useBalanceRequest } from '@common/api/balance';
 import { Button } from '@components/ui/button';
 import { CreditCard } from 'lucide-react';
-import { useDepositModal } from '@components/ui/DepositModal';
+import { useDepositModal } from '@dashboard/features/payments';
 type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
