@@ -87,7 +87,7 @@ const SubscriptionDialog: React.FC<Props> = ({ plan, onClose }) => {
                 </div>
                 <Button
                   className="bg-red-600 text-white"
-                  onClick={onOpenModalDeposit}
+                  onClick={() => onOpenModalDeposit()}
                   variant="outline"
                 >
                   Nạp tiền
