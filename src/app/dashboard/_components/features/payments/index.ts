@@ -14,4 +14,4 @@ export { useLatestCreditId } from './hooks/useLatestCreditId';
 export { paymentApi } from './api';
 
 // Types
-export type { DepositModalProps, GuideDepositProps, TransactionSuccessfulProps, UseDepositModalReturn } from './types';
+export type { GuideDepositProps, TransactionSuccessfulProps, UseDepositModalReturn } from './types';

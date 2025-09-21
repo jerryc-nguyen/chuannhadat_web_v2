@@ -4,7 +4,6 @@ import { DepositModal } from '@dashboard/features/payments';
 import '@styles/pages/desktop/finacial-management/top-up.scss';
 import { AmountPicker } from './components/AmountPicker';
 import { TopUpNotes } from './components/TopUpNotes';
-import { TopUpQR } from './components/TopUpQR';
 import { TopUpTable } from './components/TopUpTable';
 import { useTopUpBreadcrumb } from './hooks/useTopUpBreadcrumb';
 import { useTopUpPolling } from './hooks/useTopUpPolling';
