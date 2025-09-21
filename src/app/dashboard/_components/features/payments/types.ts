@@ -12,7 +12,7 @@ export interface TransactionSuccessfulProps {
 
 export interface UseDepositModalReturn {
   isOpenDepositModal: boolean;
-  onOpenModalDeposit: () => void;
+  onOpenModalDeposit: (isResetAmount?: boolean) => void;
   onCloseModalDeposit: () => void;
   setOpenDepositModal: (open: boolean) => void;
   statusTransaction: boolean;

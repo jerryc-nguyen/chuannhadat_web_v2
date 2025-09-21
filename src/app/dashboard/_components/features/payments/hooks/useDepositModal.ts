@@ -10,6 +10,8 @@ import { useAtom } from 'jotai';
 import { useLatestCreditId } from './useLatestCreditId';
 import { UseDepositModalReturn } from '../types';
 
+const DEFAULT_DEPOSIT_AMOUNT = 20000;
+
 export const useDepositModal = (): UseDepositModalReturn => {
   const [isOpenDepositModal, setOpenDepositModal] = useAtom(openModalDepositAtom);
   const [statusTransaction, setStatusTransaction] = useAtom(statusTransactionAtom);
@@ -22,13 +24,13 @@ export const useDepositModal = (): UseDepositModalReturn => {
   // Derive selectedAmount from global depositAmount
   const selectedAmount = depositAmount ?? null;
 
-  const onOpenModalDeposit = () => {
+  const onOpenModalDeposit = (isResetAmount = false) => {
     setOpenDepositModal(true);
     // Fetch latest credit ID when modal opens
     fetchLatestCreditId();
     // Set default deposit amount if none selected
-    if (!depositAmount) {
-      setDepositAmount(20000);
+    if (isResetAmount || !depositAmount) {
+      setDepositAmount(DEFAULT_DEPOSIT_AMOUNT);
     }
   };
 
