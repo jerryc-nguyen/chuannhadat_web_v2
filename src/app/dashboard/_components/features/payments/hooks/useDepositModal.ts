@@ -5,8 +5,10 @@ import {
   depositAmountAtom,
   openModalDepositAtom,
   statusTransactionAtom,
-} from '@dashboard/DashboardLayout/states/depositAtoms';
+} from '@dashboard/features/payments/states';
 import { useAtom } from 'jotai';
+import { useState } from 'react';
+import { useLatestCreditId } from './useLatestCreditId';
 import { UseDepositModalReturn } from '../types';
 
 export const useDepositModal = (): UseDepositModalReturn => {
@@ -16,15 +18,27 @@ export const useDepositModal = (): UseDepositModalReturn => {
 
   const { fetchBalance } = useBalanceRequest();
   const queryClient = useQueryClient();
+  const { latestCreditId, fetchLatestCreditId } = useLatestCreditId();
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(20000);
 
   const onOpenModalDeposit = () => {
     setOpenDepositModal(true);
+    // Fetch latest credit ID when modal opens
+    fetchLatestCreditId();
+    // Set default deposit amount
+    setDepositAmount('20000');
   };
 
   const onCloseModalDeposit = () => {
     setOpenDepositModal(false);
     setStatusTransaction(false);
     setDepositAmount(undefined);
+    setSelectedAmount(null); // Reset selected amount when modal closes
+  };
+
+  const handleAmountSelect = (amount: number) => {
+    setSelectedAmount(amount);
+    setDepositAmount(amount.toString()); // Update the global deposit amount
   };
 
   const { mutate: checkDepositMutate } = useMutation({
@@ -52,5 +66,8 @@ export const useDepositModal = (): UseDepositModalReturn => {
     setStatusTransaction,
     checkDepositMutate,
     formattedAmount: depositAmount,
+    latestCreditId,
+    selectedAmount,
+    handleAmountSelect,
   };
 };

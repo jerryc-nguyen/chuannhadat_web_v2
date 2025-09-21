@@ -3,6 +3,7 @@ import { useAuth } from '@common/auth/AuthContext';
 import {
   BANK_ACCOUNT_NAME,
   BANK_ACCOUNT_NUMBER,
+  BANK_ACCOUNT_NUMBER_QR,
   BANK_CODE,
   BANK_FULL_NAME,
   SMS_SUPPORT_NUMBER,
@@ -20,7 +21,7 @@ import React from 'react';
 import BalanceInfo from '../balance/BalanceInfo';
 
 const TopUpView = () => {
-  const { currentUser, bankTransferNote } = useAuth();
+  const { bankTransferNote } = useAuth();
 
   const defaultData = [
     {
@@ -37,7 +38,7 @@ const TopUpView = () => {
       title: 'Ngân hàng',
       dataIndex: 'bank_code',
       key: 'bank_code',
-      render: (value: string) => {
+      render: (_value: string) => {
         return (
           <span>
             <strong style={{ color: 'red' }}> {BANK_CODE}</strong> - {BANK_FULL_NAME}
@@ -49,7 +50,7 @@ const TopUpView = () => {
       title: 'Chủ tài khoản',
       dataIndex: 'account_owner',
       key: 'account_owner',
-      render: (value: string) => (
+      render: (_value: string) => (
         <span
           style={{
             textTransform: 'uppercase',
@@ -68,13 +69,13 @@ const TopUpView = () => {
       title: 'Chi nhánh',
       dataIndex: 'branch',
       key: 'branch',
-      render: (value: string) => (
+      render: (_value: string) => (
         <span
           style={{
             textTransform: 'uppercase',
           }}
         >
-          {value}
+          {_value}
         </span>
       ),
     },
@@ -82,7 +83,7 @@ const TopUpView = () => {
       title: 'Nội dung chuyển khoản',
       dataIndex: 'content',
       key: 'content',
-      render: (value: string) => (
+      render: (_value: string) => (
         <span
           style={{
             color: 'red',
@@ -94,22 +95,22 @@ const TopUpView = () => {
     },
   ];
 
-  const { isOpenDepositModal, statusTransaction, checkDepositMutate } = useDepositModal();
+  const { isOpenDepositModal, statusTransaction, checkDepositMutate, latestCreditId } = useDepositModal();
 
   React.useEffect(() => {
     let timmerId: NodeJS.Timeout;
     // Call Api check deposit interval when statusTransaction is false and isOpenDepositModal is false
     // Avoid call API 2 times when Modal Desposit is open
-    if (!statusTransaction && !isOpenDepositModal) {
+    if (!statusTransaction && !isOpenDepositModal && latestCreditId) {
       timmerId = setInterval(() => {
-        checkDepositMutate(currentUser?.last_credit_id as number);
+        checkDepositMutate(latestCreditId);
       }, 5000);
     }
     return () => {
       clearInterval(timmerId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusTransaction, isOpenDepositModal, currentUser]);
+  }, [statusTransaction, isOpenDepositModal, latestCreditId]);
   const setBreadCrumb = useSetAtom(breadcrumbAtom);
   React.useEffect(() => {
     const currentBreadCrumn: IBreadcrumbItem[] = [
@@ -159,7 +160,7 @@ const TopUpView = () => {
 
           <img
             alt="Nguyen Van Linh"
-            src={`https://img.vietqr.io/image/TPB-51938398888-compact2.png?addInfo=${bankTransferNote}&accountName=NGUYEN%20VAN%20LINH`}
+            src={`https://img.vietqr.io/image/TPB-${BANK_ACCOUNT_NUMBER_QR}-compact2.png?addInfo=${bankTransferNote}&accountName=NGUYEN%20VAN%20LINH`}
             width="300"
           />
         </div>

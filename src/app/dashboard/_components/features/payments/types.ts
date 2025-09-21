@@ -1,9 +1,11 @@
-export interface DepositModalProps { }
+export type DepositModalProps = Record<string, never>;
 
 export interface GuideDepositProps {
   bankTransferNote: string;
   isCopied: boolean;
   onCopy: () => void;
+  selectedAmount: number | null;
+  onAmountSelect: (amount: number) => void;
 }
 
 export interface TransactionSuccessfulProps {
@@ -19,4 +21,7 @@ export interface UseDepositModalReturn {
   setStatusTransaction: (status: boolean) => void;
   checkDepositMutate: (id: number) => void;
   formattedAmount: string | undefined;
+  latestCreditId: number | null;
+  selectedAmount: number | null;
+  handleAmountSelect: (amount: number) => void;
 }

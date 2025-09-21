@@ -14,6 +14,7 @@ import { GuideDeposit } from './GuideDeposit';
 import { TransactionSuccessful } from './TransactionSuccessful';
 import { DepositModalProps } from '../types';
 import { useDepositModal } from '../hooks/useDepositModal';
+import { BANK_ACCOUNT_NUMBER_QR } from '@common/constants';
 
 export const DepositModal: React.FC<DepositModalProps> = () => {
   const {
@@ -23,9 +24,12 @@ export const DepositModal: React.FC<DepositModalProps> = () => {
     checkDepositMutate,
     setStatusTransaction,
     formattedAmount,
+    latestCreditId,
+    selectedAmount,
+    handleAmountSelect,
   } = useDepositModal();
 
-  const { currentUser, bankTransferNote } = useAuth();
+  const { bankTransferNote } = useAuth();
   const [isCopied, setIsCopied] = React.useState(false);
 
   useCleanupEffect(
@@ -40,15 +44,15 @@ export const DepositModal: React.FC<DepositModalProps> = () => {
   );
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('51938398888'); // BANK_ACCOUNT_NUMBER
+    navigator.clipboard.writeText(BANK_ACCOUNT_NUMBER_QR); // BANK_ACCOUNT_NUMBER
     setIsCopied(true);
   };
 
   useCleanupEffect(
     (helpers) => {
-      if (!statusTransaction && isOpenDepositModal) {
+      if (!statusTransaction && isOpenDepositModal && latestCreditId) {
         helpers.setInterval(() => {
-          checkDepositMutate(currentUser?.last_credit_id as number);
+          checkDepositMutate(latestCreditId);
         }, 3000);
       }
 
@@ -59,7 +63,7 @@ export const DepositModal: React.FC<DepositModalProps> = () => {
     [
       statusTransaction,
       isOpenDepositModal,
-      currentUser?.last_credit_id,
+      latestCreditId,
       checkDepositMutate,
       setStatusTransaction,
     ],
@@ -67,7 +71,7 @@ export const DepositModal: React.FC<DepositModalProps> = () => {
 
   return (
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
-      <AlertDialogContent className="max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[70vh]">
+      <AlertDialogContent className="max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[80vh]">
         <AlertDialogHeader className="relative z-10 mb-2">
           <AlertDialogTitle>
             {statusTransaction ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
@@ -79,6 +83,8 @@ export const DepositModal: React.FC<DepositModalProps> = () => {
               bankTransferNote={bankTransferNote}
               isCopied={isCopied}
               onCopy={handleCopy}
+              selectedAmount={selectedAmount}
+              onAmountSelect={handleAmountSelect}
             />
           )}
         </AlertDialogHeader>

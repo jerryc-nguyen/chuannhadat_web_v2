@@ -30,6 +30,7 @@ export {
   BANK_ACCOUNT_NUMBER,
   BANK_CODE,
   BANK_FULL_NAME,
+  BANK_ACCOUNT_NUMBER_QR,
 } from './bank';
 
 // User session constant
