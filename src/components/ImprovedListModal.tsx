@@ -22,13 +22,6 @@ import { openModalDetail } from '@frontend/PostDetail/states/modalPostDetailAtom
 import { openModalDepositAtom } from '@dashboard/features/payments/states';
 import { youtubePlayerAtom } from '@frontend/features/media/youtube-player-modal/state';
 
-// Optimized loading fallback
-const ModalLoader = () => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-  </div>
-);
-
 /**
  * ImprovedListModal - Enhanced modal manager with smooth close animations
  * 
