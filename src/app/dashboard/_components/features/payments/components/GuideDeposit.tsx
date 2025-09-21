@@ -9,6 +9,7 @@ import {
 import { Copy, CopyCheck } from 'lucide-react';
 import { AlertDialogDescription } from '@components/ui/alert-dialog';
 import { GuideDepositProps } from '../types';
+import { formatPhoneNumber } from '@common/stringHelpers';
 
 const DEPOSIT_PRESETS = [20000, 50000, 100000];
 
@@ -87,7 +88,7 @@ export const GuideDeposit: React.FC<GuideDepositProps> = ({
         </p>
         <p className="my-2">
           Nếu có vấn đề trong khi thanh toán - thường là không nhập đúng nội dung CK, bạn gọi số{' '}
-          <b className="text-primary_color">{SMS_SUPPORT_NUMBER}</b>
+          <b className="text-primary_color">{formatPhoneNumber(SMS_SUPPORT_NUMBER)}</b>
         </p>
       </AlertDialogDescription>
 

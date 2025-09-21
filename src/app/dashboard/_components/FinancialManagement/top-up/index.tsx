@@ -19,6 +19,7 @@ import {
 import { useSetAtom } from 'jotai';
 import React from 'react';
 import BalanceInfo from '../balance/BalanceInfo';
+import { formatPhoneNumber } from '@common/stringHelpers';
 
 const TopUpView = () => {
   const { bankTransferNote } = useAuth();
@@ -145,7 +146,7 @@ const TopUpView = () => {
             <li style={{ margin: '8px 0' }}>
               <p className="my-2">
                 Nếu có vấn đề trong khi thanh toán - thường là không nhập đúng nội dung CK, bạn gọi
-                hỗ trợ <b className="text-primary_color">{SMS_SUPPORT_NUMBER}</b>
+                hỗ trợ <b className="text-primary_color">{formatPhoneNumber(SMS_SUPPORT_NUMBER)}</b>
               </p>
             </li>
             <li>
@@ -160,7 +161,7 @@ const TopUpView = () => {
 
           <img
             alt="Nguyen Van Linh"
-            src={`https://img.vietqr.io/image/TPB-${BANK_ACCOUNT_NUMBER_QR}-compact2.png?addInfo=${bankTransferNote}&accountName=NGUYEN%20VAN%20LINH`}
+            src={`https://img.vietqr.io/image/${BANK_CODE}-${BANK_ACCOUNT_NUMBER_QR}-compact2.png?addInfo=${bankTransferNote}&accountName=${BANK_ACCOUNT_NAME}`}
             width="300"
           />
         </div>
