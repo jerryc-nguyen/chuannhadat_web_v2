@@ -20,6 +20,9 @@ export {
   timeOutDuration,
   CND_TEXT_COLORS,
   ADS_TYPES,
+  DEFAULT_LOGO,
+  LOGO_LONG,
+  DEFAULT_AVATAR,
 } from './app';
 
 // Bank and payment constants

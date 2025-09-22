@@ -4,18 +4,14 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
-
-// Define a proper type for the error object
-interface ErrorWithDigest extends Error {
-  digest?: string;
-  name: string;
-  message: string;
-  stack?: string;
-}
+import { trackError, ErrorWithDigest } from '@common/features/cnd_errors';
 
 export default function GlobalError({ error, reset }: { error: ErrorWithDigest; reset: () => void }) {
   useEffect(() => {
-    // Log error to console for debugging
+    // Send error to tracking service with category
+    trackError(error, 'global_error_boundary');
+
+    // Also log to console for debugging
     console.error('Global application error:', error);
   }, [error]);
 
