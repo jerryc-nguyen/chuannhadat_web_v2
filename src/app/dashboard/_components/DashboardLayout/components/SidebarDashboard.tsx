@@ -28,7 +28,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@comp
 import { useBalanceRequest } from '@common/api/balance';
 import { Button } from '@components/ui/button';
 import { CreditCard } from 'lucide-react';
-import { useDepositModal } from '@components/ui/DepositModal';
+import { useDepositModal } from '@dashboard/features/payments';
 type SidebarDashboardProps = object;
 
 const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
@@ -159,7 +159,7 @@ const SidebarDashboard: React.FC<SidebarDashboardProps> = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <Button onClick={onOpenModalDeposit} className="w-full">
+              <Button onClick={() => onOpenModalDeposit(true)} className="w-full">
                 <CreditCard className="mr-2 h-4 w-4" /> Nạp tiền
               </Button>
             </CardContent>

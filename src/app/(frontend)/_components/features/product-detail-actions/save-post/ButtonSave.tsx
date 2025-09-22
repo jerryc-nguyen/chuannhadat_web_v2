@@ -1,6 +1,6 @@
 import React, { useImperativeHandle } from 'react';
 import { Button } from '@components/ui/button';
-import styles from '@frontend/CategoryPage/components/CardImageCarousel/CardImageCarousel.module.scss';
+import styles from '@frontend/CategoryPage/components/ThumbsCarousel/CardImageCarousel.module.scss';
 import { HeartOutline, HeartFilled, LoadingThreeQuarters } from '@components/icons/CustomIcons';
 import { cn } from '@common/utils';
 import { useButtonSave } from './hooks/useButtonSave';

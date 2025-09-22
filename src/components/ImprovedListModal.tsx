@@ -8,7 +8,7 @@ import useBrowserPopstate from '@frontend/features/navigation/popstate-handler/h
 import { BtsModals1, BtsModals2, BtsModals3 } from '@frontend/features/layout/mobile-modals';
 
 // Temporary: Use direct imports to isolate webpack runtime issue
-import DepositModal from './ui/DepositModal';
+import { DepositModal } from '../app/dashboard/_components/features/payments';
 import ModalPostDetail from '@frontend/PostDetail/components/modal-post-detail';
 import { YoutubePlayerModal } from '@frontend/features/media/youtube-player-modal/YoutubePlayerModal';
 
@@ -19,15 +19,8 @@ import ConfirmEmailModal from './ui/ConfirmEmailModal';
 // State imports
 import { btsModalAtom, btsModal2Atom, btsModal3Atom } from '@frontend/features/layout/mobile-modals/states';
 import { openModalDetail } from '@frontend/PostDetail/states/modalPostDetailAtoms';
-import { openModalDepositAtom } from '@dashboard/DashboardLayout/states/depositAtoms';
+import { openModalDepositAtom } from '@dashboard/features/payments/states';
 import { youtubePlayerAtom } from '@frontend/features/media/youtube-player-modal/state';
-
-// Optimized loading fallback
-const ModalLoader = () => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-  </div>
-);
 
 /**
  * ImprovedListModal - Enhanced modal manager with smooth close animations

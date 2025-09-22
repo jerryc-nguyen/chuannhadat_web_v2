@@ -31,7 +31,6 @@ type AutoRefreshDesktopProps = object;
 
 const AutoRefreshDesktop: React.FC<AutoRefreshDesktopProps> = () => {
   const {
-    contentDialogTimePicker,
     showDialogWarning,
     overviews,
     scheduledTimes,

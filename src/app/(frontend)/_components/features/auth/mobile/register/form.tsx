@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { IFormPropsRegister, IRegisterResponse } from '../types';
 import registerSchema from './resolver';
 import { Button } from '@components/ui/button';
-import { authApi } from '@app/(frontend)/_components/auths/api';
+import { authApi } from '@frontend/auths/api';
 import { useMutation } from '@tanstack/react-query';
 
 import {

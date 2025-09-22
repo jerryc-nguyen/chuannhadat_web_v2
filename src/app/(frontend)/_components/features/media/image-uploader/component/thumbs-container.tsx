@@ -5,7 +5,7 @@ import { IUploadedImage } from '../types';
 import PreviewThumb from './thumb';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { useEffect, useRef } from 'react';
-import { useDepositModal } from '@components/ui/DepositModal';
+import { useDepositModal } from '@dashboard/features/payments';
 import { useBalanceRequest } from '@common/api/balance';
 
 interface IThumbDragAndDropZone {

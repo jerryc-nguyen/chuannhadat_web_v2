@@ -1,4 +1,3 @@
-import { postsApi } from '../api/posts';
 import { useAuth } from '@common/auth/AuthContext';
 import { DEFAULT_THUMB_IMAGE } from '@common/constants';
 import { cn } from '@common/utils';
@@ -10,8 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@compo
 import { YoutubePlayerAction } from '@frontend/features/media/youtube-player-modal';
 import useCleanupEffect from '@common/hooks/useCleanupEffect';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { IProductDetail } from '../../CategoryPage/mobile/searchs/type';
-import { useMutation } from '@tanstack/react-query';
+import { IProductDetail } from '@common/types'
 import ButtonSave, { type ButtonSaveHandle } from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -53,9 +51,6 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
     buttonPrev: data?.images.length <= 1 ? () => null : undefined,
     buttonNext: data?.images.length <= 1 ? () => null : undefined,
   };
-  const { mutate: addViewPost } = useMutation({
-    mutationFn: postsApi.viewProduct,
-  });
   useCleanupEffect(
     (helpers) => {
       if (isCopied) {
@@ -66,14 +61,7 @@ const OverviewPost: React.FC<OverviewPostProps> = ({ data, isInsideModal = false
     },
     [isCopied],
   );
-  React.useEffect(() => {
-    if (data?.uid) {
-      addViewPost({
-        product_uid: data.uid,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.uid]);
+  // View tracking is now handled in useModalPostDetail when modal opens
   const renderClassImages = (length: number) => {
     switch (length) {
       case 1:

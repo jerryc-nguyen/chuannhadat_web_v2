@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { cn } from '@common/utils';
 import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
@@ -48,6 +48,7 @@ export default function ThumbsCarousel({
   const [isInViewport, setIsInViewport] = useState(false); // Start false for SSR, hydrate to true for above-fold
   const [isCarouselInitialized, setIsCarouselInitialized] = useState(false);
   const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [isPreloadingImages, setIsPreloadingImages] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { buildThumbnailUrl } = useResizeImage();
 
@@ -100,19 +101,45 @@ export default function ThumbsCarousel({
     return parts.join(' - ') || 'Property image';
   }, [product]);
 
-  // ✅ Handle user interaction (navigation)
-  const handleCarouselInteraction = useCallback(() => {
+  // ✅ Async image preloading with loading state
+  const preloadImageSafely = useCallback(
+    async (imageUrl: string): Promise<void> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve(); // Still resolve on error to avoid blocking
+        img.src = buildThumbnailUrl({ imageUrl });
+      });
+    },
+    [buildThumbnailUrl],
+  );
+
+  // ✅ Handle user interaction (navigation) with loading state
+  const handleCarouselInteraction = useCallback(async () => {
     if (!hasUserInteracted) {
       setHasUserInteracted(true);
 
-      // ✅ Preload ALL remaining images immediately when user starts sliding
-      // console.log('🔄 Preloading all images after user interaction');
-      product.images?.slice(1).forEach((image: A) => {
-        const img = new Image();
-        img.src = buildThumbnailUrl({ imageUrl: image.url });
-      });
+      // Show loading state
+      setIsPreloadingImages(true);
+
+      try {
+        // ✅ Preload ALL remaining images asynchronously with minimum duration
+        const [_preloadResult] = await Promise.all([
+          Promise.all(
+            product.images?.slice(1).map((image: A) => preloadImageSafely(image.url)) || []
+          ),
+          new Promise(resolve => setTimeout(resolve, 500)) // Minimum 500ms visibility
+        ]);
+
+        console.log('✅ Image preloading completed for product:', product.uid);
+      } catch (error) {
+        console.error('❌ Error during image preloading:', error);
+      } finally {
+        // Hide loading state
+        setIsPreloadingImages(false);
+      }
     }
-  }, [hasUserInteracted, product.images, buildThumbnailUrl]);
+  }, [hasUserInteracted, product.images, product.uid, preloadImageSafely]);
 
   // ✅ Handle case with no images
   if (!firstImage) {
@@ -184,15 +211,24 @@ export default function ThumbsCarousel({
   return (
     <section ref={containerRef} className="relative w-full flex-shrink-0">
       {isCarouselInitialized ? (
-        <EmblaCarouselComponent
-          images={product.images || []}
-          hasUserInteracted={hasUserInteracted}
-          onInteraction={handleCarouselInteraction}
-          onImageClick={handleClickCardImage}
-          getOptimizedAltText={getOptimizedAltText}
-          isEager={isEager}
-          postUid={product.uid}
-        />
+        <div className="relative">
+          <EmblaCarouselComponent
+            images={product.images || []}
+            hasUserInteracted={hasUserInteracted}
+            onInteraction={handleCarouselInteraction}
+            onImageClick={handleClickCardImage}
+            getOptimizedAltText={getOptimizedAltText}
+            isEager={isEager}
+            postUid={product.uid}
+          />
+
+          {/* Loading overlay for image preloading */}
+          {isPreloadingImages && (
+            <div className="absolute inset-0 bg-black/10 flex items-center justify-center rounded-lg z-50">
+              <Loader2 className="h-8 w-8 animate-spin text-white opacity-50" />
+            </div>
+          )}
+        </div>
       ) : (
         // Loading state: Show first image with carousel controls hint
         <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden">

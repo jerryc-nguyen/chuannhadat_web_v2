@@ -3,12 +3,12 @@ import BadRoomIcon from '@assets/icons/bedroom-icon';
 import { YoutubePlayerAction } from '@frontend/features/media/youtube-player-modal';
 import { useIsInVerticalCenterZone } from '@common/hooks/useIsInVerticalCenterZone';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import AuthorInfo from '@frontend/PostDetail/mobile/post-detail/components/AuthorInfo';
+import AuthorInfo from '@frontend/PostDetail/mobile/components/AuthorInfo';
 import CardAuthor from '@frontend/CategoryPage/components/CardAuthor';
 import ThumbsCarousel from '@frontend/CategoryPage/components/ThumbsCarousel/ThumbsCarousel';
 import BusCatType from '@frontend/CategoryPage/components/product-card/BusCatType';
 import { useRef } from 'react';
-import PostDetailMobile from '@frontend/PostDetail/mobile/post-detail/PostDetailMobile';
+import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
 import { IProductData } from './type';
 
 export const ProductDetailTitleBts = ({ product }: { product: A }) => {

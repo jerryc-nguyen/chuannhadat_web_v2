@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { authorAtom } from '@frontend/PostDetail/mobile/post-detail/states';
+import { authorAtom } from '@frontend/PostDetail/mobile/states';
 import { useAtom } from 'jotai';
 
 const PhoneNumber: React.FC = () => {

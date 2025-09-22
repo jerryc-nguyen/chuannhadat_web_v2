@@ -154,7 +154,7 @@ export function DataTableToolbar<TData>({
         </div>
       </div>
 
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+      {table.getFilteredSelectedRowModel().rows.length > 0 && false ? (
         <div className="flex space-x-10">
           <div className="content-center text-sm text-secondary">
             <span>

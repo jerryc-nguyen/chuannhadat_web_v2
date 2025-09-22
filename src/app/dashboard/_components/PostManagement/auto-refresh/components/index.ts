@@ -1,2 +1,4 @@
 import DialogTimePicker from './dialog-time-picker';
-export { DialogTimePicker };
+import DialogTimePickerMobile from './dialog-time-picker-mobile';
+
+export { DialogTimePicker, DialogTimePickerMobile };
