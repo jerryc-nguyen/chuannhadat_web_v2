@@ -3,6 +3,9 @@
  * Contains app-wide configuration, default values, and constants
  */
 
+export const DEFAULT_LOGO = 'https://images.chuannhadat.com/images/logo_mobile@2x.png?f=webp';
+export const LOGO_LONG = 'https://images.chuannhadat.com/images/logo_long@2x.png?f=webp';
+export const DEFAULT_AVATAR = 'https://images.chuannhadat.com/images/avatars/gg_avatar.png?f=webp';
 /**
  * Default page sizes and pagination
  */

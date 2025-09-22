@@ -5,7 +5,7 @@ export const defaultJsonLd = {
   '@type': 'Organization',
   name: 'ChuanNhaDat',
   url: `${getServerSideURL()}`,
-  logo: `${getServerSideURL()}/images/logo_v2_3@2x.png`,
+  logo: 'https://images.chuannhadat.com/images/logo_v2_3@2x.png',
   contactPoint: {
     '@type': 'ContactPoint',
     telephone: '0966662192',

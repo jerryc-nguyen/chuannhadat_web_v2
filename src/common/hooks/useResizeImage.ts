@@ -13,7 +13,7 @@ export const MAX_THUMB_WIDTH = 376; // ✅ Reduced from 480 to match actual disp
 const DEFAULT_RATIO = 16 / 9;
 
 const DEFAULT_IMG =
-  'https://images.chuannhadat.com/images/avatars/gg_avatar.png?crop=true&height=150&width=150';
+  'https://images.chuannhadat.com/images/avatars/gg_avatar.png?f=webp&crop=true&height=150&width=150';
 
 export default function useResizeImage() {
   // Always use MAX_THUMB_WIDTH for SSR consistency
