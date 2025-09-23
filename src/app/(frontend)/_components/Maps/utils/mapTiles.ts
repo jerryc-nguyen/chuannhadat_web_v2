@@ -4,7 +4,12 @@
 // streets-v2, bright
 export const MAP_TILES = {
   STREET_TILES: {
-    url: 'https://api.maptiler.com/maps/dataviz/256/{z}/{x}/{y}.png?key=gpe5BRrqVAZQLV8W877W',
+    url: 'https://cnd-maps.b-cdn.net/maps/dataviz/256/{z}/{x}/{y}.png?key=gpe5BRrqVAZQLV8W877W',
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>',
+    maxZoom: 22,
+  },
+  STREET_TILES_2: {
+    url: 'https://cnd-maps-2.b-cdn.net/atlas/{z}/{x}/{y}.png?apikey=12cada7000a147b6992673e74e877c97',
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>',
     maxZoom: 22,
   },
@@ -25,5 +30,5 @@ export const SATELLITE_ZOOM_THRESHOLD = 13;
 
 // Function to determine which tile to use based on zoom level
 export const getTileTypeForZoom = (zoomLevel: number): MapTileType => {
-  return zoomLevel <= SATELLITE_ZOOM_THRESHOLD ? 'GOOGLE_SATELLITE' : 'STREET_TILES';
+  return zoomLevel <= SATELLITE_ZOOM_THRESHOLD ? 'GOOGLE_SATELLITE' : DEFAULT_TILE;
 };
