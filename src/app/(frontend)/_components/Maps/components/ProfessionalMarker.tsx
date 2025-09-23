@@ -96,7 +96,7 @@ const ProfessionalMarker: React.FC<ProfessionalMarkerProps> = ({
               bank_assistant: 'Ngân hàng'
             }[professional.type];
 
-            const popupContent = `
+            const _popupContent = `
               <div style="min-width: 220px;">
                 <div style="display: flex; align-items: center; margin-bottom: 8px;">
                   ${professional.avatar ? `<img src="${professional.avatar}" alt="${professional.name}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 12px; object-fit: cover;" />` : '<div style="width: 40px; height: 40px; border-radius: 50%; background: #e5e7eb; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px;">👤</div>'}
@@ -114,7 +114,7 @@ const ProfessionalMarker: React.FC<ProfessionalMarkerProps> = ({
               </div>
             `;
 
-            marker.bindPopup(popupContent);
+            // marker.bindPopup(_popupContent); // Disabled marker popup
 
             // Add click handler
             marker.on('click', () => {

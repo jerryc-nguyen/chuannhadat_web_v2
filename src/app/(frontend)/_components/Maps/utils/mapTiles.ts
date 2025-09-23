@@ -5,7 +5,7 @@
 export const MAP_TILES = {
   STREET_TILES: {
     url: 'https://api.maptiler.com/maps/dataviz/256/{z}/{x}/{y}.png?key=gpe5BRrqVAZQLV8W877W',
-    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a>',
     maxZoom: 22,
   },
   GOOGLE_SATELLITE: {

@@ -45,7 +45,7 @@ const ProfessionalInfoPanel: React.FC<ProfessionalInfoPanelProps> = ({
   };
 
   return (
-    <div className="absolute top-0 left-0 bg-white rounded-lg shadow-lg z-[900] flex flex-col" style={{ width: SEARCH_BOX_WIDTH_WITH_PADDING, height: '100vh' }}>
+    <div className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col" style={{ width: SEARCH_BOX_WIDTH_WITH_PADDING, height: '100vh', zIndex: 1000 }}>
       {/* Header - Fixed */}
       <div className="flex items-start justify-between p-6 pb-4 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-start gap-4 flex-1">
