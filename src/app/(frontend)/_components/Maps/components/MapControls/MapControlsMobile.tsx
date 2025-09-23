@@ -11,8 +11,9 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
   onNavigationClick,
   onHomeClick,
   className = '',
+  searchQuery = '',
+  onSearchQueryChange,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [showMenu, setShowMenu] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -45,7 +46,7 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
                 type="text"
                 placeholder="Tìm kiếm địa điểm..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => onSearchQueryChange?.(e.target.value)}
                 className="flex-1 bg-transparent border-none outline-none text-sm"
               />
             </div>

@@ -51,11 +51,16 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         const mapOptions: MapOptions = {
           center,
           zoom,
-          zoomControl: true,
+          zoomControl: false, // Disable default zoom control
           attributionControl: true,
         };
 
         const map = L.map(mapRef.current, mapOptions);
+
+        // Add custom positioned zoom control (bottom-left to avoid overlap with search)
+        L.control.zoom({
+          position: 'bottomright'
+        }).addTo(map);
 
         // Function to switch tile layer based on zoom
         const switchTileLayer = (zoomLevel: number) => {

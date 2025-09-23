@@ -17,6 +17,27 @@ export interface Property {
   address?: string;
 }
 
+export interface Professional {
+  id: string;
+  name: string;
+  type: 'broker' | 'company' | 'bank_assistant';
+  location: LatLng;
+  avatar?: string;
+  company?: string;
+  specialty?: string[];
+  experience?: number; // years of experience
+  rating?: number; // 1-5 stars
+  reviewCount?: number;
+  phone?: string;
+  email?: string;
+  address?: string;
+  description?: string;
+  services?: string[];
+  languages?: string[];
+  certifications?: string[];
+  verified?: boolean;
+}
+
 export interface MapOptions {
   center: LatLng;
   zoom: number;
@@ -28,7 +49,7 @@ export interface SearchResult {
   id: string;
   name: string;
   location: LatLng;
-  type: 'property' | 'location' | 'project';
+  type: 'property' | 'location' | 'project' | 'professional';
 }
 
 export interface LeafletMapProps {
@@ -46,4 +67,6 @@ export interface MapControlsProps {
   onNavigationClick?: () => void;
   onHomeClick?: () => void;
   className?: string;
+  searchQuery?: string;
+  onSearchQueryChange?: (query: string) => void;
 }
