@@ -1,7 +1,7 @@
 'use client';
 import { useState, useCallback } from 'react';
 import DynamicMap from './components/DynamicMap';
-import MapControlsDesktop from './components/MapControlsDesktop';
+import MapControlsDesktop from './components/MapControls/MapControlsDesktop';
 import PropertyMarker from './components/PropertyMarker';
 import { useRouter } from 'next/navigation';
 import { Property } from './types';
@@ -36,7 +36,7 @@ const sampleProperties = [
 
 const MapDesktop: React.FC = () => {
   const router = useRouter();
-  const [map, setMap] = useState<unknown>(null);
+  const [map, setMap] = useState<any>(null);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   const handleMapReady = useCallback((mapInstance: unknown) => {
@@ -54,8 +54,8 @@ const MapDesktop: React.FC = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // @ts-ignore - Leaflet map instance has setView method
-          (map as any).setView([latitude, longitude], 15);
+          // @ts-ignore - Leaflet map setView method
+          (map as { setView: (coords: [number, number], zoom: number) => void }).setView([latitude, longitude], 15);
         },
         (error) => {
           console.error('Error getting location:', error);

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useCallback } from 'react';
 import DynamicMap from './components/DynamicMap';
-import MapControlsMobile from './components/MapControlsMobile';
+import MapControlsMobile from './components/MapControls/MapControlsMobile';
 import PropertyMarker from './components/PropertyMarker';
 import { useRouter } from 'next/navigation';
 import { Property } from './types';
@@ -36,7 +36,7 @@ const sampleProperties = [
 
 const MapMobile: React.FC = () => {
   const router = useRouter();
-  const [map, setMap] = useState<unknown>(null);
+  const [map, setMap] = useState<any>(null);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   const handleMapReady = useCallback((mapInstance: unknown) => {

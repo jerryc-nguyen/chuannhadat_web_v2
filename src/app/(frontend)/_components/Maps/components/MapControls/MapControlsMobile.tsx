@@ -2,7 +2,7 @@
 import { Button } from '@components/ui/button';
 import { Search, MapPin, Navigation, Home, Menu } from 'lucide-react';
 import { useState } from 'react';
-import { MapControlsProps } from '../types';
+import { MapControlsProps } from '../../types';
 
 const MapControlsMobile: React.FC<MapControlsProps> = ({
   onSearch,

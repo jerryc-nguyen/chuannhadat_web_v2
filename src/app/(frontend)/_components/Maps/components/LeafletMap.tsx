@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { MapOptions, LeafletMapProps } from '../types';
-import { MAP_TILES, DEFAULT_TILE, MapTileType, getTileTypeForZoom } from '../utils/mapTiles';
+import { MAP_TILES, MapTileType, getTileTypeForZoom } from '../utils/mapTiles';
 
 const LeafletMap: React.FC<LeafletMapProps> = ({
   center = { lat: 10.8231, lng: 106.6297 }, // Ho Chi Minh City coordinates
@@ -67,7 +67,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           // Remove current tile layer if exists
           if (currentTileLayerRef.current) {
             try {
-              (map as any).removeLayer(currentTileLayerRef.current);
+              // @ts-ignore - Leaflet map removeLayer method
+              map.removeLayer(currentTileLayerRef.current);
             } catch (error) {
               console.warn('Error removing tile layer:', error);
             }
@@ -75,7 +76,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
           // Add new tile layer
           const tileConfig = MAP_TILES[requiredTileType];
-          const layerOptions: any = {
+          const layerOptions: Record<string, unknown> = {
             attribution: tileConfig.attribution,
             maxZoom: tileConfig.maxZoom,
           };
@@ -100,7 +101,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
         // Listen for zoom changes
         map.on('zoomend', () => {
-          const currentZoom = (map as any).getZoom();
+          // @ts-ignore - Leaflet map getZoom method
+          const currentZoom = map.getZoom();
           switchTileLayer(currentZoom);
         });
 
@@ -130,27 +132,28 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       clearTimeout(timeoutId);
       if (mapInstanceRef.current) {
         try {
-          // @ts-ignore - Leaflet map instance has remove method but TypeScript doesn't recognize it
-          (mapInstanceRef.current as any).remove();
+          // @ts-ignore - Leaflet map instance has remove method
+          (mapInstanceRef.current as { remove: () => void }).remove();
         } catch (error) {
           console.warn('Error removing map:', error);
         }
         mapInstanceRef.current = null;
       }
     };
-  }, []); // Remove dependencies to prevent re-initialization
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array to prevent re-initialization
 
   // Handle prop changes separately
   useEffect(() => {
     if (mapInstanceRef.current && typeof window !== 'undefined') {
       try {
-        // @ts-ignore - Leaflet map methods
-        (mapInstanceRef.current as any).setView([center.lat, center.lng], zoom);
+        // @ts-ignore - Leaflet map setView method
+        (mapInstanceRef.current as { setView: (coords: [number, number], zoom: number) => void }).setView([center.lat, center.lng], zoom);
       } catch (error) {
         console.warn('Error updating map view:', error);
       }
     }
-  }, [center, zoom]);
+  }, [center.lat, center.lng, zoom]);
 
   return <div ref={mapRef} className={className} />;
 };
