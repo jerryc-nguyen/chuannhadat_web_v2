@@ -1,6 +1,5 @@
 import { cn } from '@common/utils';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 import { DEFAULT_LOGO } from '@common/constants';
 import useResizeImage from '@common/hooks/useResizeImage';
@@ -12,7 +11,8 @@ type LogoProps = {
 const Logo: React.FC<LogoProps> = ({ isAlwaysShow = false, className }) => {
   const { buildThumbnailUrl } = useResizeImage();
   return (
-    <Link
+    // eslint-disable-next-line @next/next/no-html-link-for-pages
+    <a
       href="/"
       className={cn('header-logo mr-4 flex items-center space-x-2', className)}
       aria-label="Chuẩn Nhà Đất - Về trang chủ"
@@ -34,7 +34,7 @@ const Logo: React.FC<LogoProps> = ({ isAlwaysShow = false, className }) => {
         <span className="text-xl font-semibold text-blue-600">Chuẩn</span>
         <span className="text-xl font-semibold text-pink-600">Nhà đất</span>
       </div>
-    </Link>
+    </a>
   );
 };
 
