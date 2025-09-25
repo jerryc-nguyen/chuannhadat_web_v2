@@ -1,20 +1,31 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { LeafletMap, Professional } from '../types';
+import { useAtom, useSetAtom } from 'jotai';
+import { LeafletMap, Marker } from '../types';
 import { panToMarkerIfBehindPanel } from '../helpers/mapHelpers';
 import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
+import {
+  mapAtom,
+  selectedMarkerAtom,
+  searchQueryAtom,
+  markerClickAtom,
+  clearSelectedMarkerAtom
+} from '../states/mapAtoms';
 
 export const useMapDesktopHook = () => {
   const router = useRouter();
-  const [map, setMap] = useState<LeafletMap | null>(null);
-  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const selectedProfessionalRef = useRef<Professional | null>(null);
+  const [map, setMap] = useAtom(mapAtom);
+  const [selectedMarker] = useAtom(selectedMarkerAtom);
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
+  const handleMarkerClick = useSetAtom(markerClickAtom);
+  const clearSelectedMarker = useSetAtom(clearSelectedMarkerAtom);
+  const selectedMarkerRef = useRef<Marker | null>(null);
 
   // Keep ref in sync with state
   useEffect(() => {
-    selectedProfessionalRef.current = selectedProfessional;
-  }, [selectedProfessional]);
+    selectedMarkerRef.current = selectedMarker;
+  }, [selectedMarker]);
+
 
   const handleMapReady = useCallback(async (mapInstance: unknown) => {
     const leafletMap = mapInstance as LeafletMap;
@@ -25,18 +36,30 @@ export const useMapDesktopHook = () => {
       try {
         leafletMap.on('click', (_e: unknown) => {
           // Close panel if it's currently open (using ref to avoid stale closure)
-          if (selectedProfessionalRef.current) {
-            setSelectedProfessional(null);
+          if (selectedMarkerRef.current) {
+            clearSelectedMarker();
           }
         });
       } catch (error) {
         console.warn('Error adding map click handler:', error);
       }
     }
-  }, []);
+  }, [clearSelectedMarker, setMap]);
 
   // Wire interaction handlers when map is ready
   useMapInteractionDesktopHook(map);
+
+  // Listen for marker clicks from atoms and add panning logic
+  useEffect(() => {
+    if (selectedMarker && map) {
+      // Pan map to center marker if it's behind the panel
+      const location = {
+        lat: selectedMarker.location.lat,
+        lng: selectedMarker.location.lon
+      };
+      panToMarkerIfBehindPanel(map, location);
+    }
+  }, [selectedMarker, map]);
 
   const handleSearch = useCallback((query: string) => {
     console.log('Searching for:', query);
@@ -73,37 +96,21 @@ export const useMapDesktopHook = () => {
     router.push('/');
   }, [router]);
 
-  const handleProfessionalClick = useCallback((professional: Professional) => {
-    setSelectedProfessional(professional);
-
-    // Pan map to center marker if it's behind the panel
-    if (map) {
-      // Convert lon to lng for compatibility with markerHelper
-      const location = {
-        lat: professional.location.lat,
-        lng: professional.location.lon
-      };
-      panToMarkerIfBehindPanel(map, location);
-    }
-
-    // You can navigate to professional detail page or show more info
-  }, [map]);
-
   return {
     // State
     map,
-    selectedProfessional,
+    selectedMarker,
     searchQuery,
 
     // Handlers
     setSearchQuery,
-    setSelectedProfessional,
+    setSelectedMarker: clearSelectedMarker,
     handleMapReady,
     handleSearch,
     handleLocationClick,
     handleLayersClick,
     handleNavigationClick,
     handleHomeClick,
-    handleProfessionalClick,
+    handleMarkerClick,
   };
 };

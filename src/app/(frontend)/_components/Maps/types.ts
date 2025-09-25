@@ -73,6 +73,8 @@ export interface Marker {
   businessTypes?: string[];
   categoryTypes?: string[];
   meta?: MarkerMeta;
+  marker_icon_url?: string;
+  marker_label?: string;
 }
 
 export interface LeafletMapProps {
