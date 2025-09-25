@@ -3,15 +3,20 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
-import { trackError } from '@common/features/cnd_errors';
+import { trackError, handleChunkLoadError, ErrorWithDigest } from '@common/features/cnd_errors';
 import { useEffect } from 'react';
 
 // Error boundaries must be Client Components
 
-export default function GlobalError({ error, reset }: { error: Error; reset: () => void }) {
+export default function GlobalError({ error, reset }: { error: ErrorWithDigest; reset: () => void }) {
   useEffect(() => {
-    // Track page-level errors with specific category
-    trackError(error, 'page_error_boundary');
+    // Handle chunk load errors automatically
+    const wasHandled = handleChunkLoadError(error);
+
+    if (!wasHandled) {
+      // Track page-level errors with specific category
+      trackError(error, 'page_error_boundary');
+    }
   }, [error]);
   return (
     <section

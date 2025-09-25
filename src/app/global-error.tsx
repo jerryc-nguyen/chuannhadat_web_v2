@@ -4,15 +4,20 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
-import { trackError, ErrorWithDigest } from '@common/features/cnd_errors';
+import { trackError, ErrorWithDigest, handleChunkLoadError } from '@common/features/cnd_errors';
 
 export default function GlobalError({ error, reset }: { error: ErrorWithDigest; reset: () => void }) {
   useEffect(() => {
-    // Send error to tracking service with category
-    trackError(error, 'global_error_boundary');
+    // Handle chunk load errors automatically
+    const wasHandled = handleChunkLoadError(error);
 
-    // Also log to console for debugging
-    console.error('Global application error:', error);
+    if (!wasHandled) {
+      // Send error to tracking service with category
+      trackError(error, 'global_error_boundary');
+
+      // Also log to console for debugging
+      console.error('Global application error:', error);
+    }
   }, [error]);
 
   return (

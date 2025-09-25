@@ -6,6 +6,47 @@ export interface ErrorWithDigest extends Error {
   stack?: string;
 }
 
+// Function to check if error is a chunk load error
+export const isChunkLoadError = (error: ErrorWithDigest): boolean => {
+  return error.name === 'ChunkLoadError' ||
+    error.message?.includes('Loading chunk') ||
+    error.message?.includes('ChunkLoadError');
+};
+
+// Function to handle chunk load errors with automatic recovery
+export const handleChunkLoadError = (error: ErrorWithDigest) => {
+  if (isChunkLoadError(error)) {
+    console.warn('Chunk load error detected, attempting recovery...', error);
+
+    // Track the error first
+    trackError(error, 'chunk_load_error').finally(() => {
+      // Add a small delay to avoid immediate retry loops
+      setTimeout(() => {
+        if (typeof window === 'undefined') return;
+
+        // Clear any cached chunks and reload
+        const reloadPage = () => window.location.reload();
+
+        if ('caches' in window) {
+          caches.keys().then(cacheNames => {
+            cacheNames.forEach(cacheName => {
+              if (cacheName.includes('next') || cacheName.includes('chunk')) {
+                caches.delete(cacheName);
+              }
+            });
+          }).finally(reloadPage);
+        } else {
+          reloadPage();
+        }
+      }, 1000); // 1 second delay
+    });
+
+    return true; // Indicates we handled the error
+  }
+  return false; // Not a chunk load error
+};
+
+
 // Function to send error to tracking service
 export const trackError = async (error: ErrorWithDigest, category = 'unknown') => {
   try {
