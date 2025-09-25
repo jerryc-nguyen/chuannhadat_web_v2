@@ -67,7 +67,7 @@ export default function LocationField({
     if (street_id && !streetOption?.value) {
       setStreetOption({ value: street_id, text: '' });
     }
-  }, [city_id, district_id, ward_id, street_id]);
+  }, [city_id, district_id, ward_id, street_id, cityOption?.value, districtOption?.value, wardOption?.value, streetOption?.value]);
 
   // Update local state when props change
   useEffect(() => {
