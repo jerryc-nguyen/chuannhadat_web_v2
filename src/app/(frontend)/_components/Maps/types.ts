@@ -4,6 +4,7 @@ import type { Map as LeafletMap } from 'leaflet';
 export interface LatLng {
   lat: number;
   lon: number;
+  original?: boolean;
 }
 
 export interface Property {
