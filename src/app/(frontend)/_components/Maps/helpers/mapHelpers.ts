@@ -1,5 +1,6 @@
 import { LatLng } from './markerHelper';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
+import { LeafletMap } from '../types';
 
 /**
  * Pans the map to center on a marker if it's behind the info panel
@@ -8,18 +9,25 @@ import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
  * @param animate - Whether to animate the pan (default: true)
  * @param duration - Animation duration in seconds (default: 0.5)
  */
+import type { LatLngExpression } from 'leaflet';
+
+// Type for Leaflet library
+interface LeafletLib {
+  latLng: (lat: number, lng: number) => LatLngExpression;
+}
+
 export const panToMarkerIfBehindPanel = (
-  map: any,
+  map: LeafletMap,
   markerLatLng: LatLng,
   animate = true,
   duration = 0.5
 ): void => {
   try {
-    if (!map || typeof window === 'undefined' || !(window as any).L) {
+    if (!map || typeof window === 'undefined' || !((window as { L?: LeafletLib }).L)) {
       return;
     }
 
-    const L = (window as any).L;
+    const L = (window as { L: LeafletLib }).L;
     const latLng = L.latLng(markerLatLng.lat, markerLatLng.lng);
     const markerPoint = map.latLngToContainerPoint(latLng);
 

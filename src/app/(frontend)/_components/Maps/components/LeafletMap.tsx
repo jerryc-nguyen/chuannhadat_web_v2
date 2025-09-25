@@ -4,7 +4,7 @@ import { MapOptions, LeafletMapProps } from '../types';
 import { MAP_TILES, MapTileType, getTileTypeForZoom } from '../utils/mapTiles';
 
 const LeafletMap: React.FC<LeafletMapProps> = ({
-  center = { lat: 10.8231, lng: 106.6297 }, // Ho Chi Minh City coordinates
+  center = { lat: 10.8231, lon: 106.6297 }, // Ho Chi Minh City coordinates
   zoom = 13,
   className = 'h-full w-full',
   onMapReady,
@@ -55,7 +55,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           attributionControl: true,
         };
 
-        const map = L.map(mapRef.current, mapOptions);
+        const map = L.map(mapRef.current, mapOptions as any);
 
         // Add custom positioned zoom control (bottom-left to avoid overlap with search)
         L.control.zoom({
@@ -111,8 +111,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           switchTileLayer(currentZoom);
         });
 
+        // Interaction handlers moved to useMapDesktopHook
+
         // Add a sample marker
-        L.marker(center)
+        L.marker(center as any)
           .addTo(map)
           .bindPopup('Chuẩn Nhà Đất - Bản đồ bất động sản')
           .openPopup();
@@ -158,7 +160,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         console.warn('Error updating map view:', error);
       }
     }
-  }, [center.lat, center.lng, zoom]);
+  }, [center.lat, center.lon, zoom]);
 
   return <div ref={mapRef} className={className} />;
 };

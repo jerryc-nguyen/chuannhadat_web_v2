@@ -1,6 +1,9 @@
+// Import Leaflet Map type
+import type { Map as LeafletMap } from 'leaflet';
+
 export interface LatLng {
   lat: number;
-  lng: number;
+  lon: number;
 }
 
 export interface Property {
@@ -52,6 +55,25 @@ export interface SearchResult {
   type: 'property' | 'location' | 'project' | 'professional';
 }
 
+
+export interface MarkerMeta {
+  [key: string]: unknown;
+}
+
+export interface Marker {
+  id: number;
+  mappableType: string;
+  mappableId: number;
+  location: LatLng;
+  wardId?: number;
+  streetId?: number;
+  districtId?: number;
+  cityId?: number;
+  businessTypes?: string[];
+  categoryTypes?: string[];
+  meta?: MarkerMeta;
+}
+
 export interface LeafletMapProps {
   center?: LatLng;
   zoom?: number;
@@ -70,3 +92,7 @@ export interface MapControlsProps {
   searchQuery?: string;
   onSearchQueryChange?: (query: string) => void;
 }
+
+
+// Export the Leaflet Map type for use in other files
+export type { LeafletMap };

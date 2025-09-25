@@ -25,6 +25,10 @@ export const DASHBOARD_ROUTES = {
 }
 
 export const API_ROUTES = {
+  MAPS: {
+    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
+    MARKERS: 'api/v2/maps/markers',
+  },
   AUTH: {
     LOGIN_BY_PHONE: 'api/v1/authentications/login_by_phone',
     LOGIN_BY_GOOGLE: 'api/v1/authentications/login_by_google',
@@ -81,9 +85,6 @@ export const API_ROUTES = {
   IMAGE_UPLOAD: {
     SIGN_S3: 'api/v1/product_images/sign-s3',
     TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url',
-  },
-  MAPS: {
-    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
   },
   MANAGE_PRODUCTS: {
     DETAIL: 'api/v1/manage_products',

@@ -1,11 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Professional } from '../types';
+import { LeafletMap, Professional } from '../types';
 import { panToMarkerIfBehindPanel } from '../helpers/mapHelpers';
+import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
 
 export const useMapDesktopHook = () => {
   const router = useRouter();
-  const [map, setMap] = useState<any>(null);
+  const [map, setMap] = useState<LeafletMap | null>(null);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const selectedProfessionalRef = useRef<Professional | null>(null);
@@ -16,13 +17,13 @@ export const useMapDesktopHook = () => {
   }, [selectedProfessional]);
 
   const handleMapReady = useCallback(async (mapInstance: unknown) => {
-    setMap(mapInstance);
+    const leafletMap = mapInstance as LeafletMap;
+    setMap(leafletMap);
 
     // Add map click handler to close panel when clicking on map
-    if (mapInstance) {
+    if (leafletMap) {
       try {
-        // @ts-ignore - Leaflet map instance
-        (mapInstance as any).on('click', (_e: any) => {
+        leafletMap.on('click', (_e: unknown) => {
           // Close panel if it's currently open (using ref to avoid stale closure)
           if (selectedProfessionalRef.current) {
             setSelectedProfessional(null);
@@ -33,6 +34,9 @@ export const useMapDesktopHook = () => {
       }
     }
   }, []);
+
+  // Wire interaction handlers when map is ready
+  useMapInteractionDesktopHook(map);
 
   const handleSearch = useCallback((query: string) => {
     console.log('Searching for:', query);
@@ -45,8 +49,7 @@ export const useMapDesktopHook = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // @ts-ignore - Leaflet map setView method
-          (map as { setView: (coords: [number, number], zoom: number) => void }).setView([latitude, longitude], 15);
+          map.setView([latitude, longitude], 15);
         },
         (error) => {
           console.error('Error getting location:', error);
@@ -74,7 +77,14 @@ export const useMapDesktopHook = () => {
     setSelectedProfessional(professional);
 
     // Pan map to center marker if it's behind the panel
-    panToMarkerIfBehindPanel(map, professional.location);
+    if (map) {
+      // Convert lon to lng for compatibility with markerHelper
+      const location = {
+        lat: professional.location.lat,
+        lng: professional.location.lon
+      };
+      panToMarkerIfBehindPanel(map, location);
+    }
 
     // You can navigate to professional detail page or show more info
   }, [map]);
