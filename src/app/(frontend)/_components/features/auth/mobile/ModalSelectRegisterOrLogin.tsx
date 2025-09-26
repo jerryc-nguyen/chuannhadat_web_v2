@@ -17,11 +17,13 @@ const authOptions = [
 ];
 type ModalSelectRegisterOrLoginProps = {
   onClose: () => void;
+  defaultTab?: 'login' | 'register';
 };
 export default function ModalSelectRegisterOrLogin({
   onClose,
+  defaultTab = 'login',
 }: ModalSelectRegisterOrLoginProps) {
-  const [activeTab, setActiveTab] = useState('login');
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const handleShowModalLoginAndRegister = (value: string) => {
     setActiveTab(value);
   };
