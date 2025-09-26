@@ -1,5 +1,5 @@
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import HistoryViewMobile from '@app/dashboard/_components/FinancialManagement/history/mobile';
+import HistoryViewMobile from '@dashboard/FinancialManagement/history/mobile';
 import HistoryViewDesktop from '@dashboard/FinancialManagement/history';
 // Next Imports
 import type { Metadata } from 'next';

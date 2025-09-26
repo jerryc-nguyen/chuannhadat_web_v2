@@ -4,6 +4,16 @@ import { useAtom } from 'jotai';
 import { IBalanceResponse } from '@dashboard/FinancialManagement/types';
 import { BalanceUtils } from '@common/balance';
 
+// Re-export breadcrumb hooks for easy access
+export {
+  useFinancialManagementBreadcrumb,
+  useBalanceSummaryBreadcrumb,
+  useTopUpBreadcrumb,
+  useTopUpHistoryBreadcrumb,
+  usePricingPlansBreadcrumb,
+  useTransactionHistoryBreadcrumb,
+} from './useBreadcrumb';
+
 const defaultBalanceData: IBalanceResponse = {
   tk_chinh: '0 Xu',
   tk_km: '0 Xu',

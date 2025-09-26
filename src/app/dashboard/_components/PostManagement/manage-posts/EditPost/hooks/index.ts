@@ -12,8 +12,6 @@ import { getPostManagementBreadcrumb } from '../../helpers';
 export const useEditPostForm = (productUid: string) => {
   const { updateRowData } = useManagePostsCache();
 
-  // Setup breadcrumbs
-  useBreadcrumb(getPostManagementBreadcrumb('EDIT_POST'));
 
   // Fetch product data
   const { data: product, isSuccess } = useQuery({
@@ -23,7 +21,11 @@ export const useEditPostForm = (productUid: string) => {
     select: (data) => data.data,
   });
 
+
   const formData = isSuccess ? product : {};
+
+  // Setup breadcrumbs
+  useBreadcrumb(getPostManagementBreadcrumb('EDIT_POST'));
 
   // Form setup
   const form = useForm({

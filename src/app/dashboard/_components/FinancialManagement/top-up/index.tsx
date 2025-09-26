@@ -5,7 +5,7 @@ import '@styles/pages/desktop/finacial-management/top-up.scss';
 import { AmountPicker } from './components/AmountPicker';
 import { TopUpNotes } from './components/TopUpNotes';
 import { TopUpTable } from './components/TopUpTable';
-import { useTopUpBreadcrumb } from './hooks/useTopUpBreadcrumb';
+import { useTopUpBreadcrumb } from '@dashboard/FinancialManagement/hooks';
 
 const TopUpView = () => {
   const { bankTransferNote } = useAuth();
