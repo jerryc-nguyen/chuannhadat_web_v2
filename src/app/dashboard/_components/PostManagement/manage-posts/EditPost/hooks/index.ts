@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSyncQueryToUrl } from '@common/hooks';
 import { useBreadcrumb } from '@common/hooks/useBreadcrumb';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -13,8 +12,7 @@ import { DASHBOARD_ROUTES } from '@common/router';
 export const useEditPostForm = (productUid: string) => {
   const { updateRowData } = useManagePostsCache();
 
-  // Setup breadcrumbs and URL sync
-  useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
+  // Setup breadcrumbs
   useBreadcrumb([
     {
       link: DASHBOARD_ROUTES.posts.index,

@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useSyncQueryToUrl } from '@common/hooks';
 import { toast } from 'sonner';
 import { IPostForm } from '../../../types';
 import ProductApiService from '../../apis/product-api';
@@ -42,8 +41,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
   const { currentUser } = useAuth();
   const alertShownRef = useRef(false);
 
-  // Setup breadcrumbs and URL sync
-  useSyncQueryToUrl({ hide_create_post: true }); // use hide create post button on navbar
+  // Setup breadcrumbs
   useBreadcrumb([
     {
       link: DASHBOARD_ROUTES.posts.new,
