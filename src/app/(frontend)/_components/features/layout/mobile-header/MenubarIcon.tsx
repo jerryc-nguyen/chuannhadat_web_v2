@@ -70,13 +70,16 @@ const MenubarIcon: React.FC<MenubarIconProps> = ({ isLogged }) => {
         </div>
 
         <div className="mb-4 px-6">
-          <Button className="flex w-full items-center gap-x-2">
-            <a href={DASHBOARD_ROUTES.posts.new}>Đăng tin</a>
-          </Button>
-
-          <Button className="mt-2 flex w-full items-center gap-x-2">
-            <a href={DASHBOARD_ROUTES.balance.topup}>Nạp tiền</a>
-          </Button>
+          <a href={DASHBOARD_ROUTES.posts.new}>
+            <Button className="flex w-full items-center gap-x-2">
+              Đăng tin
+            </Button>
+          </a>
+          <a href={DASHBOARD_ROUTES.balance.topup}>
+            <Button className="mt-2 flex w-full items-center gap-x-2">
+              Nạp tiền
+            </Button>
+          </a>
         </div>
 
         <ul>
