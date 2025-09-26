@@ -1,22 +1,10 @@
 import { CND_TEXT_COLORS } from '@common/constants';
 import useBalance from '@dashboard/FinancialManagement/hooks';
-import { IBalanceResponse } from '@dashboard/FinancialManagement/types';
 import FigureCard, { CardIcons } from '@dashboard/DashboardLayout/components/FigureCard';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 
 const BalanceInfo: FC<{ title: string }> = ({ title }) => {
-  const { balanceInfo } = useBalance();
-
-  const [balanceData, setBalanceData] = useState<IBalanceResponse>({
-    tk_chinh: '0 Xu',
-    tk_km: '0 Xu',
-    total: '0 Xu',
-    total_amount: 0,
-  });
-
-  useEffect(() => {
-    balanceInfo && setBalanceData(balanceInfo);
-  }, [balanceInfo]);
+  const { balanceData } = useBalance(); // ✅ Simplified - no more complex state management
 
   return (
     <div className="c-balanceInfo">
