@@ -15,7 +15,7 @@ import PriceOptions from '../PriceOptions';
 import {
   businessTypeOptions,
   categoryTypeOptions,
-} from '@dashboard/PostManagement/manage-posts/constant';
+} from '@app/dashboard/_components/PostManagement/manage-posts/constants';
 import {
   roomsOptionsForCreate,
   areaOptionsForCreate,

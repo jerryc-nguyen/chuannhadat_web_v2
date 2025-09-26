@@ -7,19 +7,13 @@ import { default as ManageProductApis, default as ProductApiService } from '../.
 import { PostFormSchema } from '../../form-schemas';
 import { useManagePostsCache } from '../../ListPosts/hooks/useManagePostsCache';
 import { getQueryClient } from "@common/api/react-query";
-import { DASHBOARD_ROUTES } from '@common/router';
+import { getPostManagementBreadcrumb } from '../../helpers';
 
 export const useEditPostForm = (productUid: string) => {
   const { updateRowData } = useManagePostsCache();
 
   // Setup breadcrumbs
-  useBreadcrumb([
-    {
-      link: DASHBOARD_ROUTES.posts.index,
-      title: 'Chỉnh sửa tin bán & cho thuê',
-      isActive: true,
-    }
-  ]);
+  useBreadcrumb(getPostManagementBreadcrumb('EDIT_POST'));
 
   // Fetch product data
   const { data: product, isSuccess } = useQuery({

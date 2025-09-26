@@ -8,7 +8,8 @@ import { useBreadcrumb } from '@common/hooks/useBreadcrumb';
 import { useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@common/auth/AuthContext';
 import { DASHBOARD_ROUTES } from '@common/router';
-import { businessTypeOptions, categoryTypeOptions } from '../../constant';
+import { businessTypeOptions, categoryTypeOptions } from '../../constants';
+import { getPostManagementBreadcrumb } from '../../helpers';
 
 export type CreateSourceType = 'desktop' | 'mobile_web';
 
@@ -42,13 +43,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
   const alertShownRef = useRef(false);
 
   // Setup breadcrumbs
-  useBreadcrumb([
-    {
-      link: DASHBOARD_ROUTES.posts.new,
-      title: 'Đăng tin mới',
-      isActive: true,
-    },
-  ]);
+  useBreadcrumb(getPostManagementBreadcrumb('NEW_POST'));
 
   // Form setup
   const form = useForm<IPostForm>({
