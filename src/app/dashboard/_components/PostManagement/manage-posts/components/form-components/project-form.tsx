@@ -72,10 +72,10 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                           {selectedOption?.text || 'Tìm nhanh dự án'}
                         </span>
                         <div className="flex items-center gap-1">
-                          {selectedOption && (
+                          {selectedOption?.value && (
                             <ClearButton onClick={clearSelection} />
                           )}
-                          {!selectedOption && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
+                          {!selectedOption?.value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
                         </div>
                       </Button>
                     </PopoverTrigger>
@@ -129,7 +129,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
           </div>
         )}
 
-        {project && (<div className="mt-2">
+        {project?.value && (<div className="mt-2">
           Địa chỉ: <span className="font-bold">{project.data?.address || 'Chưa cập nhật'}</span>
         </div>)}
 

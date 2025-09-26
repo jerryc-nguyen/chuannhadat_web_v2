@@ -15,45 +15,53 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
   // Check if we should show the location form
   const project = useWatch({ control: form.control, name: 'project' });
   const watchedFullAddress = useWatch({ control: form.control, name: 'full_address' });
-  const shouldHideLocation = project && watchedFullAddress;
+  const shouldHideLocation = project?.value && watchedFullAddress;
 
 
-  // Initialize state from form values 
-  const { city_id, district_id, ward_id, street_id } = form.getValues();
-  const [curCity, setCurCity] = useState<OptionForSelect | undefined>({ value: city_id, text: '' });
-  const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>({ value: district_id, text: '' });
-  const [curWard, setCurWard] = useState<OptionForSelect | undefined>({ value: ward_id, text: '' });
-  const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>({ value: street_id, text: '' });
+  // Initialize state from form values - now using complete location objects from server
+  const { city, district, ward, street } = form.getValues();
+  const [curCity, setCurCity] = useState<OptionForSelect | undefined>(
+    city?.value ? city : undefined
+  );
+  const [curDistrict, setCurDistrict] = useState<OptionForSelect | undefined>(
+    district?.value ? district : undefined
+  );
+  const [curWard, setCurWard] = useState<OptionForSelect | undefined>(
+    ward?.value ? ward : undefined
+  );
+  const [curStreet, setCurStreet] = useState<OptionForSelect | undefined>(
+    street?.value ? street : undefined
+  );
   const [fullAddress, setFullAddress] = useState<string>(form.getValues('full_address'));
 
   // Watch form values using react-hook-form's useWatch
-  const watchedCity = useWatch({ control: form.control, name: 'city_id' });
-  const watchedDistrict = useWatch({ control: form.control, name: 'district_id' });
-  const watchedWard = useWatch({ control: form.control, name: 'ward_id' });
-  const watchedStreet = useWatch({ control: form.control, name: 'street_id' });
+  const watchedCity = useWatch({ control: form.control, name: 'city' });
+  const watchedDistrict = useWatch({ control: form.control, name: 'district' });
+  const watchedWard = useWatch({ control: form.control, name: 'ward' });
+  const watchedStreet = useWatch({ control: form.control, name: 'street' });
 
   // Update component state when form values change
   useEffect(() => {
-    if (watchedCity) {
-      setCurCity({ value: watchedCity, text: '' });
+    if (watchedCity?.value) {
+      setCurCity(watchedCity);
     }
   }, [watchedCity]);
 
   useEffect(() => {
-    if (watchedDistrict) {
-      setCurDistrict({ value: watchedDistrict, text: '' });
+    if (watchedDistrict?.value) {
+      setCurDistrict(watchedDistrict);
     }
   }, [watchedDistrict]);
 
   useEffect(() => {
-    if (watchedWard) {
-      setCurWard({ value: watchedWard, text: '' });
+    if (watchedWard?.value) {
+      setCurWard(watchedWard);
     }
   }, [watchedWard]);
 
   useEffect(() => {
-    if (watchedStreet) {
-      setCurStreet({ value: watchedStreet, text: '' });
+    if (watchedStreet?.value) {
+      setCurStreet(watchedStreet);
     }
   }, [watchedStreet]);
 
@@ -61,33 +69,33 @@ const LocationFormV2: React.FC<A> = ({ form }) => {
     if (watchedFullAddress && watchedFullAddress !== fullAddress) {
       setFullAddress(watchedFullAddress);
     }
-  }, [watchedFullAddress]);
+  }, [watchedFullAddress, fullAddress]);
 
   const onSelectCity = (city?: OptionForSelect) => {
     setCurCity(city);
-    // Update form values
-    form.setValue('city_id', city?.value);
+    // Update form values - set both ID and complete object
+    form.setValue('city_id', city?.value || '');
     form.setValue('city', city);
   }
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     setCurDistrict(district);
-    // Update form values
-    form.setValue('district_id', district?.value);
+    // Update form values - set both ID and complete object
+    form.setValue('district_id', district?.value || '');
     form.setValue('district', district);
   }
 
   const onSelectWard = (ward?: OptionForSelect) => {
     setCurWard(ward);
-    // Update form values
-    form.setValue('ward_id', ward?.value);
+    // Update form values - set both ID and complete object
+    form.setValue('ward_id', ward?.value || '');
     form.setValue('ward', ward);
   }
 
   const onSelectStreet = (street?: OptionForSelect) => {
     setCurStreet(street);
-    // Update form values
-    form.setValue('street_id', street?.value);
+    // Update form values - set both ID and complete object
+    form.setValue('street_id', street?.value || '');
     form.setValue('street', street);
   }
 
