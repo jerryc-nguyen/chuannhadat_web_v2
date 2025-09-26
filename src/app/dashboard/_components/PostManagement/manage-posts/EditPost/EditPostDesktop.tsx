@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '@components/ui/button';
 import Link from 'next/link';
-import { FormProvider } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
 import ImageForm from '../components/form-components/image-form';
 import LocationFormV2 from '../components/form-components/location-form-v2';
 import ProductDescriptionForm from '../components/form-components/product-description';
@@ -21,7 +21,7 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
   const { form, onSubmit } = useEditPostForm(productUid);
 
   return (
-    <FormProvider {...form}>
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
@@ -29,12 +29,13 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
             <ProjectForm form={form} />
             <LocationFormV2 form={form} />
             <ProductDescriptionForm form={form} />
-            <ProductInfoForm form={form} />
-            <ImageForm form={form} />
+            <div key="product-info-wrapper">
+              <ProductInfoForm form={form} />
+            </div>
+            <div key="image-form-wrapper">
+              <ImageForm form={form} />
+            </div>
           </div>
-          {/* <div className="grid items-start gap-6 lg:col-span-1 top-2 sticky">
-            <ProductConfigForm />
-          </div> */}
         </div>
         <div className="sticky bottom-2 z-[40] mt-6 flex justify-between rounded-lg border bg-card p-3">
           <Link href={DASHBOARD_ROUTES.posts.index}>
@@ -45,7 +46,7 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
           <Button type="submit">Cập nhật tin</Button>
         </div>
       </form>
-    </FormProvider>
+    </Form>
   );
 };
 
