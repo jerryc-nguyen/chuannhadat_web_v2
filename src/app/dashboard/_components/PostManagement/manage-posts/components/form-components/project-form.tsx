@@ -12,7 +12,7 @@ import { ClearButton } from '@components/ui/clear-button';
 
 import { cn } from '@common/utils';
 
-const ProjectForm: React.FC<any> = ({ form }) => {
+const ProjectForm: React.FC<{ form: any }> = ({ form }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const project = form.watch('project');
 
@@ -28,7 +28,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
           <FormField
             control={form.control}
             name="project_id"
-            render={({ field }) => {
+            render={({ field: _field }) => {
               const selectedOption = form.watch('project') as OptionForSelect | undefined;
 
               const handleSelect = async (option: OptionForSelect) => {
@@ -51,7 +51,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
                 setOpenDropdown(false);
               };
 
-              const clearSelection = (e: React.MouseEvent) => {
+              const clearSelection = (_e: React.MouseEvent) => {
                 form.setValue('project_id', undefined);
                 form.setValue('project', undefined);
               };
@@ -101,7 +101,7 @@ const ProjectForm: React.FC<any> = ({ form }) => {
           <div className="mt-2">
             <b>Dự án con:</b>
             <div className="flex flex-wrap gap-2 mt-1">
-              {project.data.child_projects.map((childProject: any) => {
+              {project.data.child_projects.map((childProject: { id: string; name: string }) => {
                 const isSelected = form.watch('child_project_id') === childProject.id;
                 return (
                   <Button

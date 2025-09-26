@@ -33,8 +33,6 @@ export const useEditPostForm = (productUid: string) => {
 
   const formData = isSuccess ? product : {};
 
-  console.log('product', product);
-
   // Form setup
   const form = useForm({
     // @ts-ignore: ok
