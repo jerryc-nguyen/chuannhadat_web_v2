@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* Hide scrollbar for breadcrumb horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -195,7 +206,7 @@ input[type='number'] {
   }
 }
 
-// 
+//
 .card-in-view-center {
   .slider_button {
     opacity: 1 !important;
@@ -204,7 +215,7 @@ input[type='number'] {
   .card-image {
     @apply scale-125;
   }
-  button:has(>.favorite-icon) {
+  button:has(> .favorite-icon) {
     opacity: 1 !important;
     visibility: visible !important;
   }
