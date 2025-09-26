@@ -9,7 +9,7 @@ import {
 import { DASHBOARD_ROUTES } from '@common/router';
 import { usePathname, useRouter } from 'next/navigation';
 import useBalance from '@dashboard/FinancialManagement/hooks';
-import { Wallet, Gift, ChevronRight } from 'lucide-react';
+import { Wallet, Gift, ChevronRight, Home, FileText, Settings, CreditCard, LayoutDashboard, LogOut } from 'lucide-react';
 
 
 const LoggedUserPanel: React.FC = () => {
@@ -25,21 +25,25 @@ const LoggedUserPanel: React.FC = () => {
       id: 0,
       href: isDashboardPage ? '/' : DASHBOARD_ROUTES.index,
       title: isDashboardPage ? 'Trang chủ' : 'Trang quản lý',
+      icon: isDashboardPage ? Home : LayoutDashboard,
     },
     {
       id: 1,
       href: DASHBOARD_ROUTES.posts.index,
       title: 'Quản lý tin đăng',
+      icon: FileText,
     },
     {
       id: 2,
       href: DASHBOARD_ROUTES.profile.accountSettings,
       title: 'Cài đặt tài khoản',
+      icon: Settings,
     },
     {
       id: 4,
       href: DASHBOARD_ROUTES.balance.topup,
       title: 'Nạp tiền',
+      icon: CreditCard,
     },
   ];
 
@@ -99,25 +103,30 @@ const LoggedUserPanel: React.FC = () => {
       </div>
 
       <ul>
-        {listMenubar.map((menu) => (
-          <li
-            className="border-b px-6 py-2 font-medium hover:bg-slate-100 hover:underline"
-            key={menu.id}
-          >
-            <a href={menu.href} className="block w-full">
-              {menu.title}
-            </a>
-          </li>
-        ))}
+        {listMenubar.map((menu) => {
+          const IconComponent = menu.icon;
+          return (
+            <li key={menu.id}>
+              <a
+                href={menu.href}
+                className="flex items-center gap-x-3 px-6 py-4 font-medium text-gray-700 hover:bg-slate-50 hover:text-primary transition-colors border-b border-gray-100 last:border-b-0"
+              >
+                <IconComponent className="h-5 w-5 text-gray-500" />
+                <span>{menu.title}</span>
+              </a>
+            </li>
+          );
+        })}
       </ul>
 
-      <div className="my-4 px-6">
+      <div className="mt-6 px-6 pb-6">
         <Button
-          className="flex w-full items-center gap-x-2"
+          className="flex w-full items-center justify-center gap-x-2 h-11 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 hover:text-red-700 transition-colors"
           variant="outline"
           onClick={handleLogout}
         >
-          Đăng xuất
+          <LogOut className="h-4 w-4" />
+          <span>Đăng xuất</span>
         </Button>
       </div>
     </section>
