@@ -113,11 +113,11 @@ export default function ProjectField({
           }}
         />
 
-        {project && (<div className="p-4">
+        {project?.value && (<div className="p-4">
           Địa chỉ: <span className="font-bold">{project.data?.address || 'Chưa cập nhật'}</span>
         </div>)}
 
-        {project && project.data?.child_projects && project.data.child_projects.length > 0 && (
+        {project?.value && project.data?.child_projects && project.data.child_projects.length > 0 && (
           <div className="px-4 pb-4">
             <b>Dự án con:</b>
             <div className="flex flex-wrap gap-2 mt-1">
@@ -152,8 +152,6 @@ export default function ProjectField({
           </div>
         )}
       </List>
-
-
 
     </>
   );

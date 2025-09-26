@@ -24,7 +24,7 @@ export const CreateForm: React.FC = () => {
   // Watch for project and full_address values to conditionally show location field
   const project = useWatch({ control: form.control, name: 'project' });
   const fullAddress = useWatch({ control: form.control, name: 'full_address' });
-  const shouldShowLocationField = !project || !fullAddress;
+  const shouldShowLocationField = !project?.value || !fullAddress;
 
   // Location state management
   const [cityOption, setCityOption] = useState<OptionForSelect | undefined>();

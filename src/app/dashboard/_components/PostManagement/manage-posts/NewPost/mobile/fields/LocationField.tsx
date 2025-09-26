@@ -5,10 +5,11 @@ import List from '@components/konsta/List';
 import { CardTitle } from '@components/ui/card';
 import LocationsPicker from '@components/mobile-ui/LocationsPicker';
 import { IPostForm } from '@dashboard/PostManagement/types';
+import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
 
 interface LocationFieldProps {
   form: UseFormReturn<IPostForm>;
-  openModal: (params: any) => void;
+  openModal: (modal: Modal) => void;
   closeModal: () => void;
   cityOption?: OptionForSelect;
   districtOption?: OptionForSelect;
@@ -32,16 +33,33 @@ export default function LocationField({
   streetOption: initialStreetOption,
   onLocationChange
 }: LocationFieldProps) {
-  // Track location state
-  const [cityOption, setCityOption] = useState<OptionForSelect | undefined>(initialCityOption);
-  const [districtOption, setDistrictOption] = useState<OptionForSelect | undefined>(initialDistrictOption);
-  const [wardOption, setWardOption] = useState<OptionForSelect | undefined>(initialWardOption);
-  const [streetOption, setStreetOption] = useState<OptionForSelect | undefined>(initialStreetOption);
+  // Initialize state from form values - using complete location objects from server (like desktop version)
+  const { city, district, ward, street } = form.getValues();
+
+  // Track location state - prioritize complete objects from form, then fallback to props
+  const [cityOption, setCityOption] = useState<OptionForSelect | undefined>(
+    city?.value ? city : initialCityOption
+  );
+  const [districtOption, setDistrictOption] = useState<OptionForSelect | undefined>(
+    district?.value ? district : initialDistrictOption
+  );
+  const [wardOption, setWardOption] = useState<OptionForSelect | undefined>(
+    ward?.value ? ward : initialWardOption
+  );
+  const [streetOption, setStreetOption] = useState<OptionForSelect | undefined>(
+    street?.value ? street : initialStreetOption
+  );
 
   // Create a key for LocationsPicker to force rebuild
   const [locationPickerKey, setLocationPickerKey] = useState(0);
 
-  // Watch for changes in location IDs
+  // Watch for changes in complete location objects (like desktop version)
+  const watchedCity = form.watch('city');
+  const watchedDistrict = form.watch('district');
+  const watchedWard = form.watch('ward');
+  const watchedStreet = form.watch('street');
+
+  // Also watch for changes in location IDs for backward compatibility
   const city_id = form.watch('city_id');
   const district_id = form.watch('district_id');
   const ward_id = form.watch('ward_id');
@@ -69,6 +87,31 @@ export default function LocationField({
     }
   }, [city_id, district_id, ward_id, street_id, cityOption?.value, districtOption?.value, wardOption?.value, streetOption?.value]);
 
+  // Update component state when form values change (like desktop version)
+  useEffect(() => {
+    if (watchedCity?.value) {
+      setCityOption(watchedCity);
+    }
+  }, [watchedCity]);
+
+  useEffect(() => {
+    if (watchedDistrict?.value) {
+      setDistrictOption(watchedDistrict);
+    }
+  }, [watchedDistrict]);
+
+  useEffect(() => {
+    if (watchedWard?.value) {
+      setWardOption(watchedWard);
+    }
+  }, [watchedWard]);
+
+  useEffect(() => {
+    if (watchedStreet?.value) {
+      setStreetOption(watchedStreet);
+    }
+  }, [watchedStreet]);
+
   // Update local state when props change
   useEffect(() => {
     if (initialCityOption) setCityOption(initialCityOption);
@@ -83,7 +126,10 @@ export default function LocationField({
 
   const handleChangeCity = (city: OptionForSelect | undefined) => {
     setCityOption(city);
+    // Update form values - set both ID and complete object (like desktop version)
     form.setValue('city_id', city?.value || '');
+    form.setValue('city', city);
+
     // Clear dependent fields
     setDistrictOption(undefined);
     setWardOption(undefined);
@@ -91,6 +137,9 @@ export default function LocationField({
     form.setValue('district_id', '');
     form.setValue('ward_id', '');
     form.setValue('street_id', '');
+    form.setValue('district', undefined);
+    form.setValue('ward', undefined);
+    form.setValue('street', undefined);
     closeModal();
 
     onLocationChange({
@@ -103,12 +152,17 @@ export default function LocationField({
 
   const handleChangeDistrict = (district: OptionForSelect | undefined) => {
     setDistrictOption(district);
+    // Update form values - set both ID and complete object (like desktop version)
     form.setValue('district_id', district?.value || '');
+    form.setValue('district', district);
+
     // Clear dependent fields
     setWardOption(undefined);
     setStreetOption(undefined);
     form.setValue('ward_id', '');
     form.setValue('street_id', '');
+    form.setValue('ward', undefined);
+    form.setValue('street', undefined);
     closeModal();
 
     onLocationChange({
@@ -120,10 +174,14 @@ export default function LocationField({
 
   const handleChangeWard = (ward: OptionForSelect | undefined) => {
     setWardOption(ward);
+    // Update form values - set both ID and complete object (like desktop version)
     form.setValue('ward_id', ward?.value || '');
+    form.setValue('ward', ward);
+
     // Clear dependent fields
     setStreetOption(undefined);
     form.setValue('street_id', '');
+    form.setValue('street', undefined);
     closeModal();
 
     onLocationChange({
@@ -134,7 +192,9 @@ export default function LocationField({
 
   const handleChangeStreet = (street: OptionForSelect | undefined) => {
     setStreetOption(street);
+    // Update form values - set both ID and complete object (like desktop version)
     form.setValue('street_id', street?.value || '');
+    form.setValue('street', street);
     closeModal();
 
     onLocationChange({
