@@ -15,9 +15,7 @@ const Page = async () => {
   return (
     <>
       {isMobile ? (
-        <div className="c-mobileApp mx-4">
-          <ServicePackageViewMobile />
-        </div>
+        <ServicePackageViewMobile />
       ) : (
         <ServicePackageViewDesktop />
       )}
