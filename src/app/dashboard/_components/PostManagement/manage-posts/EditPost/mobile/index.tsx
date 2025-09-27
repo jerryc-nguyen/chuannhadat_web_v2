@@ -2,11 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@components/ui/button';
-import Link from 'next/link';
 import { FormProvider } from 'react-hook-form';
 import { CreateForm } from '../../NewPost/mobile/CreateForm';
 import { useEditPostForm } from '../hooks';
-import { DASHBOARD_ROUTES } from '@common/router';
 
 interface EditPostMobileProps {
   productUid: string;
