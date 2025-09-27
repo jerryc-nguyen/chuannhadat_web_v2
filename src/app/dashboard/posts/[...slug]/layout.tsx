@@ -13,13 +13,9 @@ export const metadata: Metadata = {
 const NewPostPageLayout: React.FC<NewPostPageLayoutProps> = ({ children }) => {
 
   return (
-    <PageContainer scrollable>
-      <div className="flex-1 space-y-4">
-        <div className="space-y-4">
-          {children}
-        </div>
-      </div>
-    </PageContainer>
+    <div className="flex-1 space-y-4">
+      {children}
+    </div>
   );
 };
 

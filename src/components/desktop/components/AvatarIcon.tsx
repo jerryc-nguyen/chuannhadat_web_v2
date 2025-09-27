@@ -16,7 +16,8 @@ import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSele
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useHideCreateButton } from '@common/hooks/useHideCreateButton';
 import React from 'react';
 import { UserCircle } from 'lucide-react';
 import { DASHBOARD_ROUTES } from '@common/router';
@@ -32,8 +33,7 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
   const isDashboardPage = pathName.includes('dashboard');
   const { currentUser, logout } = useAuth();
   const { openModal, closeModal } = useModals();
-  const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
+  const hideDangtinButton = useHideCreateButton();
   const { buildThumbnailUrl } = useResizeImage();
 
   const showModalLoginAndRegister = () => {

@@ -35,6 +35,10 @@ export interface IPostForm {
   user_agent?: string;
   create_source?: string;
   project?: OptionForSelect;
+  city?: OptionForSelect;
+  district?: OptionForSelect;
+  ward?: OptionForSelect;
+  street?: OptionForSelect;
 }
 
 export interface IManageProductDetail {

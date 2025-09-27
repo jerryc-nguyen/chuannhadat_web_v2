@@ -14,6 +14,7 @@ import {
   type IBreadcrumbItem,
 } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useSetAtom } from 'jotai';
+import { usePricingPlansBreadcrumb } from '@dashboard/FinancialManagement/hooks';
 
 const ServicePackageView = () => {
   const { currentUser } = useAuth();
@@ -30,21 +31,10 @@ const ServicePackageView = () => {
   React.useEffect(() => {
     data && setCurrentServicePackage(data?.data[0]);
   }, [data]);
-  const setBreadCrumb = useSetAtom(breadcrumbAtom);
-  React.useEffect(() => {
-    const currentBreadCrumn: IBreadcrumbItem[] = [
-      {
-        link: '/service-package',
-        title: 'Mua gói dịch vụ',
-        isActive: true,
-      },
-    ];
-    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
-    return () => {
-      setBreadCrumb(defaultBreadcrumb);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  // Setup breadcrumbs
+  usePricingPlansBreadcrumb();
+
   return (
     <div>
       <h3 className="mb-4 text-2xl font-bold">Mua gói dịch vụ</h3>

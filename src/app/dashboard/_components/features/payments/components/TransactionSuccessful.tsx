@@ -1,6 +1,6 @@
 import { CircleCheck } from 'lucide-react';
 import { TransactionSuccessfulProps } from '../types';
-import { useDepositModal } from '@app/dashboard/_components/features/payments/hooks/useDepositModal';
+import { useDepositModal } from '@dashboard/features/payments/hooks/useDepositModal';
 
 export const TransactionSuccessful: React.FC<TransactionSuccessfulProps> = ({
   formattedAmount,

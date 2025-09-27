@@ -16,7 +16,7 @@ import React, { useEffect } from 'react';
 import ProductDescription from './components/ProductDescription';
 import './styles/PostDetailMobile.scss';
 
-export default function PostDetailMobile({ productUid }: { productUid: string }) {
+export default function PostDetailMobile({ productUid, isModal = true }: { productUid: string, isModal?: boolean }) {
   const setPostDetail = useSetAtom(postDetailAtom);
   const setAuthor = useSetAtom(authorAtom);
 
@@ -68,9 +68,13 @@ export default function PostDetailMobile({ productUid }: { productUid: string })
         <FeaturesList data={product} />
       </Section>
       <ProductDescription product={product} />
-      <div className="c-mblAuthorInfo p-4">
-        <AuthorInfo />
-      </div>
+      {!isModal && (
+        <div className="c-mblAuthorInfo">
+          <div className="p-4">
+            <AuthorInfo />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

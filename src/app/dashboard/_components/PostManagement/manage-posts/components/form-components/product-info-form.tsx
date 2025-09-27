@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { BadgeInfo } from 'lucide-react';
 import React from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
-import { directionOptions, furnitureTypeOptions, phapLyTypeOptions } from '../../constant';
+import { directionOptions, furnitureTypeOptions, phapLyTypeOptions } from '../../constants';
 import { CommonSelect } from '../CommonSelect';
 import { isLandProperty, isHouseProperty, isApartmentProperty } from '@common/productHelpers';
 

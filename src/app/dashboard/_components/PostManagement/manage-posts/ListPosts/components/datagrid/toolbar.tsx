@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
 
 import { ProductQuery } from '../../data/schemas';
-import { DataTableViewOptions } from './view-options';
+// import { DataTableViewOptions } from './view-options';
 
 import {
   Select,
@@ -54,7 +54,7 @@ interface DataTableToolbarProps<TData> {
 }
 
 export function DataTableToolbar<TData>({
-  table,
+  table: _table,
   onFilterChipsChanged,
   onClickSearch,
   isMobile,
@@ -154,7 +154,8 @@ export function DataTableToolbar<TData>({
         </div>
       </div>
 
-      {table.getFilteredSelectedRowModel().rows.length > 0 && false ? (
+      {/* Bulk selection UI - currently disabled
+      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
         <div className="flex space-x-10">
           <div className="content-center text-sm text-secondary">
             <span>
@@ -164,15 +165,16 @@ export function DataTableToolbar<TData>({
           </div>
 
           <DataTableViewOptions table={table} />
-          {/* <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
               <span className="bg-primary text-primary-foreground hover:bg-primary/90 space-x-2">
                 <p>Thao tác hàng loạt</p>
               </span>
-            </Button> */}
+            </Button>
         </div>
       ) : (
         <></>
       )}
+      */}
     </div>
   );
 }
@@ -205,9 +207,9 @@ const ButtonPostArticle = ({ isMobile }: { isMobile: boolean }) => {
 
   const ContentButton = ({ className }: { className?: string }) => {
     return (
-      <Link href={DASHBOARD_ROUTES.posts.new} className={className}>
-        <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <span className="space-x-2 bg-primary text-primary-foreground hover:bg-primary/90">
+      <Link href={DASHBOARD_ROUTES.posts.new} className={cn("block", className)}>
+        <Button className={cn("bg-primary text-primary-foreground hover:bg-primary/90", className && "w-full")}>
+          <span className="flex items-center space-x-2">
             <Plus />
             <p>Đăng tin bán & cho thuê</p>
           </span>
@@ -220,10 +222,10 @@ const ButtonPostArticle = ({ isMobile }: { isMobile: boolean }) => {
     return createPortal(
       <div
         className={cn(
-          'sticky bottom-0 z-50 flex w-full items-center justify-center bg-white pb-4 pt-4',
+          'sticky bottom-0 z-50 flex w-full items-center bg-white pb-4 pt-4 px-4',
         )}
       >
-        <ContentButton />
+        <ContentButton className="w-full" />
       </div>,
       document.body,
     );

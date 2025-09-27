@@ -1,4 +1,4 @@
-import { IPayloadCreateSchedule, IPayloadUpdateSchedule } from '@app/dashboard/_components/PostManagement/types';
+import { IPayloadCreateSchedule, IPayloadUpdateSchedule } from '@dashboard/PostManagement/types';
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 

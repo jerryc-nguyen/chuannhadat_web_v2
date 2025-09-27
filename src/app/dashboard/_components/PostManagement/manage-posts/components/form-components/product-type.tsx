@@ -5,7 +5,7 @@ import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/for
 import { BadgeInfo } from 'lucide-react';
 import React, { useMemo } from 'react';
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form';
-import { businessTypeOptions, categoryTypeOptions } from '../../constant';
+import { businessTypeOptions, categoryTypeOptions } from '../../constants';
 import { CommonSelect } from '../CommonSelect';
 import { PriceAutoComplete } from './fields/price-autocomplete';
 import { buildOptionsPrice, maskNumber, readMoney } from '@common/priceHelpers';

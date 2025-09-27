@@ -17,7 +17,7 @@ import {
   directionOptions,
   furnitureTypeOptions,
   phapLyTypeOptions,
-} from '@dashboard/PostManagement/manage-posts/constant';
+} from '@dashboard/PostManagement/manage-posts/constants';
 
 interface PropertyDetailsFieldsProps {
   form: UseFormReturn<IPostForm>;

@@ -2,15 +2,10 @@
 import { cn, genKey } from '@common/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
-import {
-  breadcrumbAtom,
-  defaultBreadcrumb,
-  IBreadcrumbItem,
-} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
-import { useSetAtom } from 'jotai';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { listTabAccountSetting } from '../constants';
+import { useAccountSettingsTabBreadcrumb } from '../hooks';
 
 const AccountSettingsDesktop: React.FC = () => {
   const searchParams = useSearchParams();
@@ -33,21 +28,8 @@ const AccountSettingsDesktop: React.FC = () => {
     router.push(pathname + '?' + createQueryString('tab', tabActive));
   }, [tabActive, createQueryString, pathname, router]);
 
-  const setBreadCrumb = useSetAtom(breadcrumbAtom);
-  React.useEffect(() => {
-    const currentBreadCrumn: IBreadcrumbItem[] = [
-      {
-        link: '/account-settings',
-        title: 'Cài đặt tài khoản',
-        isActive: true,
-      },
-    ];
-    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
-    return () => {
-      setBreadCrumb(defaultBreadcrumb);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Set up breadcrumb based on current tab
+  useAccountSettingsTabBreadcrumb(tabActive);
   return (
     <section>
       <h1 className="mb-4 text-2xl font-bold">Cài đặt tài khoản </h1>

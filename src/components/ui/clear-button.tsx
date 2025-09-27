@@ -19,17 +19,25 @@ export function ClearButton({
     onClick(e);
   };
 
+  const spanClassName = cn(
+    "h-6 w-6 p-0 rounded-full border border-gray-300 hover:border-red-500 hover:bg-red-50 transition-colors flex items-center justify-center cursor-pointer",
+    className
+  );
+
   return (
-    <button
-      type="button"
+    <span
       onClick={handleClick}
-      className={cn(
-        "h-6 w-6 p-0 rounded-full border border-gray-300 hover:border-red-500 hover:bg-red-50 transition-colors flex items-center justify-center",
-        className
-      )}
+      className={spanClassName}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick(e as unknown as MouseEvent);
+        }
+      }}
     >
       <X className={cn("h-4 w-4 text-gray-500 hover:text-red-500", iconClassName)} />
       <span className="sr-only">Clear</span>
-    </button>
+    </span>
   );
 } 

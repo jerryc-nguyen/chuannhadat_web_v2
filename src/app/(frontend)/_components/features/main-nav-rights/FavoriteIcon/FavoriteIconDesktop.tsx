@@ -4,7 +4,7 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { LucideHeart } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { useHideCreateButton } from '@common/hooks/useHideCreateButton';
 import { useFavorites } from './hooks';
 import { FavoriteBadge, FavoriteContent } from './components';
 
@@ -14,8 +14,7 @@ interface FavoriteIconDesktopProps {
 }
 
 const FavoriteIconDesktop: React.FC<FavoriteIconDesktopProps> = ({ isOpen, onOpenChange }) => {
-  const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
+  const hideDangtinButton = useHideCreateButton();
 
   // Get only the data needed for the badge
   const { showBadge, savedSummary } = useFavorites(isOpen);

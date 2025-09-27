@@ -140,36 +140,39 @@ const FilterChip: React.FC<FilterChipProps> = ({ filterChipItem, onChange }) => 
   return (
     <div ref={containerChipsRef}>
       <Popover open={isOpenPopover} onOpenChange={setIsOpenPopover}>
-        <Button
-          className={cn(
-            'w-fit cursor-default gap-x-4 rounded-full border px-4 font-semibold transition-all',
-            isActiveChip(filterChipItem)
-              ? 'bg-black text-white hover:bg-black'
-              : 'bg-white text-black hover:bg-slate-50',
-          )}
-        >
-          <PopoverTrigger asChild>
+        <PopoverTrigger asChild>
+          <Button
+            onClick={() => {
+              showFilterPopover(filterChipItem);
+              setIsOpenPopover(true);
+            }}
+            className={cn(
+              'w-fit cursor-pointer gap-x-4 rounded-full border px-4 font-semibold transition-all',
+              isActiveChip(filterChipItem)
+                ? 'bg-black text-white hover:bg-black'
+                : 'bg-white text-black hover:bg-slate-50',
+            )}
+          >
             <div
-              onClick={() => {
-                showFilterPopover(filterChipItem);
-                setIsOpenPopover(true);
-              }}
               className={cn(
-                'flex cursor-pointer items-center gap-x-1',
+                'flex items-center gap-x-1',
                 isActiveChip(filterChipItem) ? '' : 'text-secondary hover:text-black',
               )}
             >
               {onRenderIconChip(filterChipItem)}
               {selectedFilterText(filterChipItem)}
             </div>
-          </PopoverTrigger>
-          {isActiveChip(filterChipItem) && (
-            <X
-              onClick={() => handleRemoveFilter(filterChipItem)}
-              className="cursor-pointer text-xl"
-            />
-          )}
-        </Button>
+            {isActiveChip(filterChipItem) && (
+              <X
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveFilter(filterChipItem);
+                }}
+                className="cursor-pointer text-xl"
+              />
+            )}
+          </Button>
+        </PopoverTrigger>
 
         <PopoverContent
           container={containerChipsRef.current}

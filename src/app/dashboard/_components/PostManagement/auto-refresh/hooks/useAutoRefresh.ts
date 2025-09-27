@@ -1,7 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { scheduledRefreshApi } from '@dashboard/PostManagement/auto-refresh/apis/index';
 import { useAtom, useSetAtom } from 'jotai';
-import { breadcrumbAtom, IBreadcrumbItem } from '@dashboard/DashboardLayout/states/breadcrumbAtom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { AxiosError } from 'axios';
@@ -11,6 +10,8 @@ import {
   contentDialogTimerPickerAtom,
   defaultTimeRefresh,
 } from '../states/autorefreshAtoms';
+import { getPostManagementBreadcrumb } from '../../manage-posts/helpers';
+import { useBreadcrumb } from '@common/hooks/useBreadcrumb';
 
 export const useAutoRefresh = () => {
   const [timeRefresh, setTimeRefresh] = useAtom(timeRefreshAtom);
@@ -23,6 +24,9 @@ export const useAutoRefresh = () => {
   const [scheduledTimes, setScheduledTimes] = React.useState<Record<string, unknown>[]>();
   const queryClient = useQueryClient();
   const currentIdSheduleRef = React.useRef<number | null>(null);
+
+  // Setup breadcrumbs
+  useBreadcrumb(getPostManagementBreadcrumb('AUTO_REFRESH'));
 
   // Get list schedule time
   const { data, isSuccess, isFetching } = useQuery({
@@ -74,27 +78,6 @@ export const useAutoRefresh = () => {
     [isCreatePending, isUpdatePending],
   );
 
-  // Setup breadcrumbs
-  const setBreadCrumb = useSetAtom(breadcrumbAtom);
-  React.useEffect(() => {
-    const currentBreadCrumn: IBreadcrumbItem[] = [
-      {
-        link: '/manage-post',
-        title: 'Quản lý tin đăng',
-        isActive: true,
-      },
-      {
-        link: '/auto-refresh',
-        title: 'Tự động làm mới',
-        isActive: true,
-      },
-    ];
-    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
-    return () => {
-      setBreadCrumb((state) => state.slice(0, -2));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   React.useEffect(() => {
     if (isSuccess) {

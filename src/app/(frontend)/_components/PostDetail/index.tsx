@@ -32,7 +32,7 @@ export default async function PostDetail({ params }: PostDetailProps) {
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
         <div className="c-mobileApp">
-          <PostDetailMobile productUid={productUid} />
+          <PostDetailMobile productUid={productUid} isModal={false} />
         </div>
       ) : (
         <PostDetailDesktop />
