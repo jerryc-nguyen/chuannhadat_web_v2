@@ -9,10 +9,10 @@ import { IPostForm } from '@dashboard/PostManagement/types';
 // Import modular field components
 import BasicInfoFields from './fields/BasicInfoFields';
 import ProjectField from './fields/ProjectField';
-import LocationField from './fields/LocationField';
 import DescriptionFields from './fields/DescriptionFields';
 import PropertyDetailsFields from './fields/PropertyDetailsFields';
 import MediaFields from './fields/MediaFields';
+import LocationFields from './fields/LocationFields';
 
 /**
  * Mobile form for creating/editing property listings
@@ -77,7 +77,7 @@ export const CreateForm: React.FC = () => {
 
       {/* Location selection - only show if project or full_address is missing */}
       {shouldShowLocationField && (
-        <LocationField
+        <LocationFields
           form={form}
           openModal={openModal}
           closeModal={closeModal}

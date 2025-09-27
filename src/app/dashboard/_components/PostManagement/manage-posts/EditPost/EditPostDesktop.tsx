@@ -5,11 +5,12 @@ import { Button } from '@components/ui/button';
 import Link from 'next/link';
 import { Form } from '@/components/ui/form';
 import ImageForm from '../components/form-components/image-form';
-import LocationFormV2 from '../components/form-components/location-form-v2';
+
 import ProductDescriptionForm from '../components/form-components/product-description';
 import ProductInfoForm from '../components/form-components/product-info-form';
 import ProductTypeForm from '../components/form-components/product-type';
 import ProjectForm from '../components/form-components/project-form';
+import LocationFields from '../components/form-components/LocationFields';
 import { useEditPostForm } from './hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
 
@@ -27,7 +28,7 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
           <div className="grid items-start gap-6 lg:col-span-3">
             <ProductTypeForm form={form} />
             <ProjectForm form={form} />
-            <LocationFormV2 form={form} />
+            <LocationFields form={form} />
             <ProductDescriptionForm form={form} />
             <div key="product-info-wrapper">
               <ProductInfoForm form={form} />
