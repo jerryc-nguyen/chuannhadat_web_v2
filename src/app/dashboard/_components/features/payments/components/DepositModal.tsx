@@ -1,4 +1,5 @@
 import { useAuth } from '@common/auth/AuthContext';
+import { useApp } from '@common/context/AppContext';
 import useCleanupEffect from '@common/hooks/useCleanupEffect';
 import React from 'react';
 import Confetti from 'react-confetti';
@@ -11,13 +12,14 @@ import {
   AlertDialogTitle,
 } from '@components/ui/alert-dialog';
 import { GuideDeposit } from './GuideDeposit';
+import { MobileGuideDeposit } from './MobileGuideDeposit';
 import { TransactionSuccessful } from './TransactionSuccessful';
 import { useDepositModal } from '../hooks/useDepositModal';
 import { useTopUpPolling } from '@dashboard/features/payments/hooks/useTopUpPolling';
-import { BANK_ACCOUNT_NUMBER_QR } from '@common/constants';
 
 export const DepositModal: React.FC = () => {
   const hookData = useDepositModal();
+  const { isMobile } = useApp();
 
   const {
     isOpenDepositModal,
@@ -33,23 +35,6 @@ export const DepositModal: React.FC = () => {
   useTopUpPolling();
 
   const { bankTransferNote } = useAuth();
-  const [isCopied, setIsCopied] = React.useState(false);
-
-  useCleanupEffect(
-    (helpers) => {
-      if (isCopied) {
-        helpers.setTimeout(() => {
-          setIsCopied(false);
-        }, 4000);
-      }
-    },
-    [isCopied],
-  );
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(BANK_ACCOUNT_NUMBER_QR); // BANK_ACCOUNT_NUMBER
-    setIsCopied(true);
-  };
 
   useCleanupEffect(
     (_helpers) => {
@@ -62,31 +47,35 @@ export const DepositModal: React.FC = () => {
 
   return (
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
-      <AlertDialogContent className="max-h-[100vh] overflow-y-auto overflow-x-hidden md:max-h-[80vh]">
+      <AlertDialogContent className={`max-h-[100vh] overflow-y-auto overflow-x-hidden ${isMobile ? 'w-[95vw] max-w-md' : 'md:max-h-[80vh]'}`}>
         <AlertDialogHeader className="relative z-10 mb-2">
-          <AlertDialogTitle>
+          <AlertDialogTitle className={isMobile ? 'text-center text-lg' : ''}>
             {transferedSuccess ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
           </AlertDialogTitle>
           {transferedSuccess ? (
             <TransactionSuccessful formattedAmount={depositAmount} />
+          ) : isMobile ? (
+            <MobileGuideDeposit
+              bankTransferNote={bankTransferNote}
+              selectedAmount={selectedAmount}
+              onAmountSelect={handleAmountSelect}
+            />
           ) : (
             <GuideDeposit
               bankTransferNote={bankTransferNote}
-              isCopied={isCopied}
-              onCopy={handleCopy}
               selectedAmount={selectedAmount}
               onAmountSelect={handleAmountSelect}
             />
           )}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>Đóng</AlertDialogAction>
+          <AlertDialogAction className={isMobile ? 'w-full' : ''}>Đóng</AlertDialogAction>
         </AlertDialogFooter>
         <Confetti
           numberOfPieces={100}
           run={transferedSuccess}
-          width={512}
-          height={300}
+          width={isMobile ? 300 : 512}
+          height={isMobile ? 200 : 300}
           recycle={true}
         />
       </AlertDialogContent>
