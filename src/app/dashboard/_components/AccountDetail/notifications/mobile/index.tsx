@@ -4,6 +4,7 @@ import { usePaginatedNotifications } from '../hooks/usePaginatedNotifications';
 import NotificationHeader from './NotificationHeader';
 import NotificationList from '../NotificationList';
 import { useNotificationsBreadcrumb } from '../../hooks';
+import MobileContainer from '@dashboard/FinancialManagement/components/MobileContainer';
 
 const NotificationsMobile: React.FC = () => {
   const { notifications: notificationsList, makeMarkRead, makeMarkReadAll } = usePaginatedNotifications();
@@ -12,13 +13,15 @@ const NotificationsMobile: React.FC = () => {
   useNotificationsBreadcrumb();
 
   return (
-    <section className="space-y-4 md:space-y-6 px-4 md:px-0">
-      <NotificationHeader
-        notifications={notificationsList}
-        onMarkAllAsRead={makeMarkReadAll}
-      />
-      <NotificationList notifications={notificationsList} onMarkAsRead={makeMarkRead} />
-    </section>
+    <MobileContainer>
+      <div className="space-y-4">
+        <NotificationHeader
+          notifications={notificationsList}
+          onMarkAllAsRead={makeMarkReadAll}
+        />
+        <NotificationList notifications={notificationsList} onMarkAsRead={makeMarkRead} />
+      </div>
+    </MobileContainer>
   );
 };
 
