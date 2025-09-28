@@ -1,6 +1,6 @@
 'use client';
-import { cn, genKey } from '@common/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { Tabs, TabsContent } from '@components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select';
 import { listTabAccountSetting } from '@dashboard/AccountDetail/constants';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -31,26 +31,42 @@ const AccountSettingsMobile: React.FC = () => {
     <MobileContainer>
       <div className="space-y-4">
         <h1 className="text-2xl font-bold">Cài đặt tài khoản</h1>
+
+        {/* Mobile Dropdown Navigation */}
+        <Select value={tabActive} onValueChange={handleChangeTab}>
+          <SelectTrigger className="w-full">
+            <SelectValue>
+              <div className="flex items-center gap-2">
+                {(() => {
+                  const currentTabData = listTabAccountSetting.find(tab => tab.tabValue === tabActive);
+                  return currentTabData ? (
+                    <>
+                      <currentTabData.icon className="h-4 w-4" />
+                      <span>{currentTabData.title}</span>
+                    </>
+                  ) : null;
+                })()}
+              </div>
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {listTabAccountSetting.map((item) => (
+              <SelectItem key={item.tabValue} value={item.tabValue}>
+                <div className="flex items-center gap-2">
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.title}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         <Tabs
           onValueChange={handleChangeTab}
           value={tabActive}
-          className="flex w-full flex-col gap-y-4"
+          className="w-full"
           orientation="horizontal"
         >
-          <TabsList className="flex h-fit flex-row overflow-hidden rounded-lg border bg-white p-0">
-            {listTabAccountSetting.map((item, index) => (
-              <TabsTrigger
-                className={cn(
-                  'm-2 aspect-square rounded-md border p-2 shadow-sm',
-                  tabActive === item.tabValue ? '!bg-blue-50 !text-blue-500' : 'bg-white',
-                )}
-                key={genKey(index)}
-                value={item.tabValue}
-              >
-                <item.icon />
-              </TabsTrigger>
-            ))}
-          </TabsList>
           <div className="flex max-w-screen-lg flex-col justify-between rounded-lg border bg-white p-4 pt-0 dark:bg-slate-900">
             {listTabAccountSetting.map((tab) => (
               <TabsContent key={tab.title} className="p-4" value={tab.tabValue}>

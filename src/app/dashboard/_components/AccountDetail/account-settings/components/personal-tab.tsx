@@ -142,39 +142,40 @@ const PersonalTab: React.FC = () => {
   }, [currentUser]);
   return (
     <section>
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-semibold">Tài khoản của bạn</h3>
-        <p className="text-xs text-slate-400">Mã thành viên: <b className='text-primary'>{currentUser?.id}</b></p>
+      <div className="border-b pb-3 mb-4">
+        <h3 className="text-lg md:text-xl font-semibold">Tài khoản của bạn</h3>
+        <p className="text-xs text-slate-400 mt-1">Mã thành viên: <b className='text-primary'>{currentUser?.id}</b></p>
       </div>
       <Form {...form}>
-        <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
-          <FormItem className="flex flex-col items-center justify-between gap-y-4 xl:flex-row">
-            <div className="flex flex-col items-center gap-x-4 gap-y-2 lg:flex-row">
-              <Avatar className="h-[100px] w-[100px]">
+        <form className="flex flex-col gap-y-4 md:gap-y-5" onSubmit={handleSubmit(onSubmit)}>
+          <FormItem className="flex flex-col items-center justify-between gap-y-3 md:gap-y-4 xl:flex-row">
+            <div className="flex flex-col items-center gap-x-4 gap-y-3 lg:flex-row">
+              <Avatar className="h-[80px] w-[80px] md:h-[100px] md:w-[100px]">
                 <AvatarImage src={currentUser?.avatar_url} alt="avatar" />
                 <AvatarFallback>
                   {getValues('displayName')?.slice(0, 2) || 'No name'}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-center gap-y-1 lg:items-start">
-                <span className="font-semibold">Ảnh đại diện</span>
+                <span className="font-semibold text-sm md:text-base">Ảnh đại diện</span>
                 <span className="text-xs text-slate-300">PNG,JPG dưới 15Mb</span>
               </div>
             </div>
             <FormControl>
-              <div className="flex gap-x-2">
+              <div className="flex flex-col gap-2 md:flex-row md:gap-x-2">
                 <div className="relative">
                   <Button
                     onClick={handleUploadAvatar}
-                    className="cursor-pointer shadow-sm"
+                    className="cursor-pointer shadow-sm w-full md:w-auto"
                     variant={'outline'}
                     disabled={isUpdateAvatarPending}
                     type="button"
+                    size="sm"
                   >
                     {isUpdateAvatarPending ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      <Upload className="mr-1" />
+                      <Upload className="mr-1 h-4 w-4" />
                     )}
                     Tải hình ảnh lên
                   </Button>
@@ -186,23 +187,23 @@ const PersonalTab: React.FC = () => {
                     className="absolute hidden"
                   />
                 </div>
-                <Button type="button" variant={'destructive'}>
+                <Button type="button" variant={'destructive'} size="sm" className="w-full md:w-auto">
                   Xóa ảnh
                 </Button>
               </div>
             </FormControl>
           </FormItem>
           <div className="form-customer_type">
-            <FormLabel aria-required={true} className="text-base">
+            <FormLabel aria-required={true} className="text-sm md:text-base">
               Bạn là
             </FormLabel>
-            <div className="mt-2 flex flex-col justify-between gap-x-4 gap-y-2 lg:flex-row">
+            <div className="mt-3 flex flex-col justify-between gap-x-3 gap-y-3 lg:flex-row">
               {listCustomerType.map((item) => (
                 <FormLabel
                   key={item.id}
                   htmlFor={item.id}
                   className={cn(
-                    'flex flex-1 cursor-pointer justify-between gap-x-2 space-x-3 space-y-0 rounded-lg border-2 bg-white p-3 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-300',
+                    'flex flex-1 cursor-pointer justify-between gap-x-2 space-x-2 space-y-0 rounded-lg border-2 bg-white p-3 md:p-4 shadow-sm hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 dark:bg-slate-300',
                     getValues('customerType') === item.id
                       ? 'border-blue-300 bg-blue-50 text-blue-600'
                       : 'text-slate-900',
@@ -211,12 +212,12 @@ const PersonalTab: React.FC = () => {
                   <Image
                     src={item.icon}
                     alt="broker"
-                    width={60}
-                    className="hidden object-contain xl:block"
+                    width={50}
+                    className="hidden object-contain md:block lg:w-[60px]"
                   />
-                  <div>
-                    <strong className="text-lg">{item.title}</strong>
-                    <p className="text-xs text-slate-400 md:block">{item.content}</p>
+                  <div className="flex-1">
+                    <strong className="text-base md:text-lg">{item.title}</strong>
+                    <p className="text-xs text-slate-400 mt-1">{item.content}</p>
                   </div>
                   <input
                     id={item.id}
@@ -227,7 +228,7 @@ const PersonalTab: React.FC = () => {
                       register('customerType').onChange(event);
                     }}
                     value={item.id}
-                    className="mr-2 h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    className="mt-1 h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                 </FormLabel>
               ))}
@@ -346,7 +347,7 @@ const PersonalTab: React.FC = () => {
               )}
             />
           )}
-          <Button disabled={isUpdateProfilePending} className="w-fit" type="submit">
+          <Button disabled={isUpdateProfilePending} className="w-full md:w-fit mt-2" type="submit">
             {isUpdateProfilePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>
