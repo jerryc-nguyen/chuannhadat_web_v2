@@ -7,7 +7,7 @@ import { AmountPicker } from './components/AmountPicker';
 import { TopUpNotes } from './components/TopUpNotes';
 import { TopUpTable } from './components/TopUpTable';
 import { useTopUpBreadcrumb } from '@dashboard/FinancialManagement/hooks';
-import MobileContainer from '../components/MobileContainer';
+import TopUpMobile from './mobile';
 
 const TopUpView = () => {
   const { bankTransferNote } = useAuth();
@@ -16,25 +16,19 @@ const TopUpView = () => {
   // Initialize hooks
   useTopUpBreadcrumb();
 
-  const content = (
-    <div className={isMobile ? "space-y-4" : "c-top-up__content"}>
-      <AmountPicker />
-      <TopUpNotes bankTransferNote={bankTransferNote} />
-      <TopUpTable bankTransferNote={bankTransferNote} />
-    </div>
-  );
+  if (isMobile) {
+    return <TopUpMobile />;
+  }
 
   return (
     <>
-      {isMobile ? (
-        <MobileContainer>
-          {content}
-        </MobileContainer>
-      ) : (
-        <div className="mx-4">
-          {content}
+      <div className="mx-4">
+        <div className="c-top-up__content">
+          <AmountPicker />
+          <TopUpNotes bankTransferNote={bankTransferNote} />
+          <TopUpTable bankTransferNote={bankTransferNote} />
         </div>
-      )}
+      </div>
       <DepositModal />
     </>
   );
