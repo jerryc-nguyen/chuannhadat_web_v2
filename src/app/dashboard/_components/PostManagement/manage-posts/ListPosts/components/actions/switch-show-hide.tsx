@@ -1,11 +1,12 @@
 'use client';
 
 import { Switch } from '@components/ui/switch';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductApiService from '../../apis/product-api';
 import { ShowOnFrontEndProductInput } from '../../data/schemas';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 import { toast } from 'sonner';
+import { useApp } from '@common/context/AppContext';
 
 export const SwitchButtonToggleShowOnFrontEnd = ({
   productId,
@@ -14,8 +15,14 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   productId: string;
   visible: boolean;
 }) => {
+  const { isMobile } = useApp()
   const [checked, setChecked] = useState<boolean>(visible);
   const { updateFieldDataOnRow } = useManagePostsCache();
+
+  // Sync local state with prop changes
+  useEffect(() => {
+    setChecked(visible);
+  }, [visible]);
 
   const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
     try {
@@ -42,19 +49,37 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 text-sm md:text-base">
-      <span>Ẩn tin</span>
-      <Switch
-        checked={checked}
-        onCheckedChange={(checked) => {
-          setChecked(checked);
-          handleShowOnFrontend({
-            productId: productId,
-            showOnFrontEnd: checked,
-          });
-        }}
-      />
-      <span>Hiện tin</span>
+    <div className="flex items-center justify-center gap-2">
+      {isMobile ? (
+        // Mobile: Compact design with just switch
+        <Switch
+          checked={checked}
+          onCheckedChange={(checked) => {
+            setChecked(checked);
+            handleShowOnFrontend({
+              productId: productId,
+              showOnFrontEnd: checked,
+            });
+          }}
+          className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-400"
+        />
+      ) : (
+        // Desktop: Full labels
+        <>
+          <span className="text-sm whitespace-nowrap">Ẩn tin</span>
+          <Switch
+            checked={checked}
+            onCheckedChange={(checked) => {
+              setChecked(checked);
+              handleShowOnFrontend({
+                productId: productId,
+                showOnFrontEnd: checked,
+              });
+            }}
+          />
+          <span className="text-sm whitespace-nowrap">Hiện tin</span>
+        </>
+      )}
     </div>
   );
 };

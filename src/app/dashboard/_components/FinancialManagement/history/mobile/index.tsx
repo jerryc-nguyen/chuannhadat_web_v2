@@ -8,12 +8,8 @@ import { useBalanceRequest } from '@common/api/balance';
 import { ITransactionResponse } from '@dashboard/FinancialManagement/types';
 import BalanceInfo from '@dashboard/FinancialManagement/balance/mobile/BalanceInfo';
 import TransactionActivity from '@dashboard/FinancialManagement/balance/mobile/TransactionActivity';
-import { useSetAtom } from 'jotai';
-import {
-  breadcrumbAtom,
-  defaultBreadcrumb,
-  type IBreadcrumbItem,
-} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
+import MobileContainer from '../../components/MobileContainer';
+import { useTopUpHistoryBreadcrumb } from '@dashboard/FinancialManagement/hooks';
 
 const HistoryView = () => {
   const { fetchHistoryTransaction } = useBalanceRequest();
@@ -33,30 +29,20 @@ const HistoryView = () => {
     loadTransaction();
   }, [fetchHistoryTransaction]);
 
-  const setBreadCrumb = useSetAtom(breadcrumbAtom);
-  React.useEffect(() => {
-    const currentBreadCrumn: IBreadcrumbItem[] = [
-      {
-        link: '/recharge-history',
-        title: 'Lịch sử nạp tiền',
-        isActive: true,
-      },
-    ];
-    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
-    return () => {
-      setBreadCrumb(defaultBreadcrumb);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Initialize breadcrumb
+  useTopUpHistoryBreadcrumb();
+
   return (
-    <div>
-      <BalanceInfo />
-      <TransactionActivity
-        title="Lịch sử nạp tiền"
-        transactionsData={historyTransactionData}
-        emptyText="Không có lịch sử giao dịch"
-      />
-    </div>
+    <MobileContainer>
+      <div className="space-y-4">
+        <BalanceInfo />
+        <TransactionActivity
+          title="Lịch sử nạp tiền"
+          transactionsData={historyTransactionData}
+          emptyText="Không có lịch sử giao dịch"
+        />
+      </div>
+    </MobileContainer>
   );
 };
 

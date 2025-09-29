@@ -196,6 +196,11 @@ export default function LocationsPicker({
   }
 
 
+  // Load cities when component mounts
+  useEffect(() => {
+    loadCities();
+  }, [loadCities]);
+
   useEffect(() => {
     populateOptions();
   }, [populateOptions]);
@@ -212,7 +217,9 @@ export default function LocationsPicker({
           onClear={() => {
             onSelectCity({ value: '', text: '' })
           }}
-          onClick={() => {
+          onClick={async () => {
+            // Ensure cities are loaded before opening modal
+            await loadCities();
             openModal({
               name: 'city',
               title: 'Thành Phố',

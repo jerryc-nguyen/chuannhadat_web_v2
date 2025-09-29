@@ -6,15 +6,10 @@ import React, { useEffect, useState } from 'react';
 
 import { useBalanceRequest } from '@common/api/balance';
 import TableComponent from '@components/table';
-import {
-  breadcrumbAtom,
-  defaultBreadcrumb,
-  type IBreadcrumbItem,
-} from '@dashboard/DashboardLayout/states/breadcrumbAtom';
-import { useSetAtom } from 'jotai';
 import BalanceInfo from './BalanceInfo';
 import NoteDescriptions from '../history/NoteDescription';
 import { ITransactionResponse } from '../types';
+import { useBalanceSummaryBreadcrumb } from '@dashboard/FinancialManagement/hooks';
 
 const BalanceView = () => {
   const { fetchTransaction } = useBalanceRequest();
@@ -71,21 +66,10 @@ const BalanceView = () => {
       render: (value: string) => <>{format(parseISO(value), 'dd/MM/yyyy HH:mm')}</>,
     },
   ];
-  const setBreadCrumb = useSetAtom(breadcrumbAtom);
-  React.useEffect(() => {
-    const currentBreadCrumn: IBreadcrumbItem[] = [
-      {
-        link: '/balance-information',
-        title: 'Thông tin số dư',
-        isActive: true,
-      },
-    ];
-    setBreadCrumb((state) => [...state, ...currentBreadCrumn]);
-    return () => {
-      setBreadCrumb(defaultBreadcrumb);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  // Initialize breadcrumb
+  useBalanceSummaryBreadcrumb();
+
   return (
     <div>
       <BalanceInfo title="Thông tin số dư" />

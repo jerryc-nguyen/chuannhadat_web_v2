@@ -76,14 +76,14 @@ const ContactInfor: React.FC = () => {
   }
   return (
     <section>
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-semibold">Thông tin liên hệ</h3>
+      <div className="border-b pb-3 mb-4">
+        <h3 className="text-lg md:text-xl font-semibold">Thông tin liên hệ</h3>
       </div>
       <Form {...form}>
-        <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-y-4 md:gap-y-5" onSubmit={handleSubmit(onSubmit)}>
           {currentUser?.email && (
             <FormItem>
-              <FormLabel className="text-base">Email</FormLabel>
+              <FormLabel className="text-sm md:text-base">Email</FormLabel>
               <FormControl>
                 <Input value={currentUser?.email} disabled placeholder="Email đăng ký" />
               </FormControl>
@@ -91,7 +91,7 @@ const ContactInfor: React.FC = () => {
             </FormItem>
           )}
           <FormItem>
-            <FormLabel className="text-base">Số điện thoại</FormLabel>
+            <FormLabel className="text-sm md:text-base">Số điện thoại</FormLabel>
             <FormControl>
               <Input value={currentUser?.phone} disabled placeholder="Số điện thoại sử dụng" />
             </FormControl>
@@ -102,19 +102,19 @@ const ContactInfor: React.FC = () => {
             name="zaloPhone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Zalo</FormLabel>
-                <div className="flex">
+                <FormLabel className="text-sm md:text-base">Zalo</FormLabel>
+                <div className="flex flex-col md:flex-row gap-2 md:gap-0">
                   <Input
                     value="https://zalo.me/"
                     disabled
-                    className="!mt-0 w-1/4 !rounded-r-none border-r-0 text-black dark:text-white"
+                    className="!mt-0 md:w-1/4 md:!rounded-r-none md:border-r-0 text-black dark:text-white"
                   />
                   <FormControl>
                     <Input
                       type="number"
                       min={0}
                       max={12}
-                      className="!mt-0 !rounded-l-none"
+                      className="!mt-0 md:!rounded-l-none"
                       placeholder="Nhập số điện thoại Zalo"
                       {...field}
                     />
@@ -123,19 +123,19 @@ const ContactInfor: React.FC = () => {
               </FormItem>
             )}
           />
-          <div className="mt-2 border-b pb-4">
-            <h3 className="text-xl font-semibold">Trang của bạn</h3>
+          <div className="border-b pb-3 mb-4">
+            <h3 className="text-lg md:text-xl font-semibold">Trang của bạn</h3>
           </div>
           <FormField
             control={control}
             name="facbookUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Facebook URL</FormLabel>
+                <FormLabel className="text-sm md:text-base">Facebook URL</FormLabel>
                 <FormControl>
                   <Input placeholder="Facebook hoặc trang cá nhân" {...field} />
                 </FormControl>
-                <FormDescription className="text-sm">
+                <FormDescription className="text-xs md:text-sm">
                   Ví dụ: https://www.facebook.com/demo
                 </FormDescription>
               </FormItem>
@@ -146,11 +146,11 @@ const ContactInfor: React.FC = () => {
             name="websiteUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Website URL</FormLabel>
+                <FormLabel className="text-sm md:text-base">Website URL</FormLabel>
                 <FormControl>
                   <Input placeholder="Website của bạn" {...field} />
                 </FormControl>
-                <FormDescription className="text-sm">Ví dụ: https://www.domain.com</FormDescription>
+                <FormDescription className="text-xs md:text-sm">Ví dụ: https://www.domain.com</FormDescription>
               </FormItem>
             )}
           />
@@ -159,17 +159,17 @@ const ContactInfor: React.FC = () => {
             name="youtubeChanel"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-base">Kênh Youtube</FormLabel>
+                <FormLabel className="text-sm md:text-base">Kênh Youtube</FormLabel>
                 <FormControl>
                   <Input placeholder="Kênh youtube của bạn" {...field} />
                 </FormControl>
-                <FormDescription className="text-sm">
+                <FormDescription className="text-xs md:text-sm">
                   Ví dụ: https://www.youtube.com/c/demo Ví dụ: https://www.youtube.com/channel/demo
                 </FormDescription>
               </FormItem>
             )}
           />
-          <Button disabled={isUpdateProfilePending} className="w-fit" type="submit">
+          <Button disabled={isUpdateProfilePending} className="w-full md:w-fit mt-2" type="submit">
             {isUpdateProfilePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>

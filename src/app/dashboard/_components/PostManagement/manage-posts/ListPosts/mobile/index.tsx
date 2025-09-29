@@ -98,9 +98,6 @@ const MobileDataTable: React.FC = () => {
     const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' };
     try {
       const response = await searchApi(queryOptions);
-      if (!response.listing_url) {
-        return;
-      }
       setValue('filter_chips', response.listing_url);
     } catch (error) {
       console.log('ERROR', error);

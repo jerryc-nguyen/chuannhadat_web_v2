@@ -92,20 +92,19 @@ const PasswordTab: React.FC = () => {
   }
   return (
     <section>
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-semibold">Thay đổi mật khẩu</h3>
+      <div className="border-b pb-3 mb-4">
+        <h3 className="text-lg md:text-xl font-semibold">Thay đổi mật khẩu</h3>
       </div>
       <Form {...form}>
-        <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-y-4 md:gap-y-5" onSubmit={handleSubmit(onSubmit)}>
           <FormField
             control={control}
             name="currentPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel aria-required className="text-base">
+                <FormLabel aria-required className="text-sm md:text-base">
                   Mật khẩu hiện tại
                 </FormLabel>
-
                 <FormControl>
                   <Input type="password" placeholder="Mật khẩu hiện tại" {...field} />
                 </FormControl>
@@ -118,7 +117,7 @@ const PasswordTab: React.FC = () => {
             name="newPassowrd"
             render={({ field }) => (
               <FormItem>
-                <FormLabel aria-required className="text-base">
+                <FormLabel aria-required className="text-sm md:text-base">
                   Mật khẩu mới
                 </FormLabel>
                 <FormControl>
@@ -133,18 +132,18 @@ const PasswordTab: React.FC = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel aria-required className="text-base">
+                <FormLabel aria-required className="text-sm md:text-base">
                   Xác nhận mật khẩu mới
                 </FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="Xác nhận mật khẩu mới" {...field} />
                 </FormControl>
                 <FormMessage />
-                <FormDescription className="text-sm">Tối thiểu 8 kí tự</FormDescription>
+                <FormDescription className="text-xs md:text-sm">Tối thiểu 8 kí tự</FormDescription>
               </FormItem>
             )}
           />
-          <Button disabled={isUpdateMyPasswordPending} className="w-fit" type="submit">
+          <Button disabled={isUpdateMyPasswordPending} className="w-full md:w-fit mt-2" type="submit">
             {isUpdateMyPasswordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Lưu thay đổi
           </Button>

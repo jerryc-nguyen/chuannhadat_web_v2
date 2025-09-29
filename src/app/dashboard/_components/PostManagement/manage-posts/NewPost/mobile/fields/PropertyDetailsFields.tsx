@@ -17,7 +17,7 @@ import {
   directionOptions,
   furnitureTypeOptions,
   phapLyTypeOptions,
-} from '@dashboard/PostManagement/manage-posts/constant';
+} from '@dashboard/PostManagement/manage-posts/constants';
 
 interface PropertyDetailsFieldsProps {
   form: UseFormReturn<IPostForm>;
@@ -43,7 +43,7 @@ export default function PropertyDetailsFields({
 
   return (
     <>
-      <CardTitle className="text-md flex gap-2 px-4 pb-2">Thông tin chi tiết</CardTitle>
+      <CardTitle className="text-base flex items-center gap-2 px-4 pb-3 pt-4">Thông tin chi tiết</CardTitle>
       <List strongIos outlineIos className="mt-0 rounded-lg">
         <ListItemBtsPicker
           options={phapLyTypeOptions}
@@ -53,7 +53,7 @@ export default function PropertyDetailsFields({
             if (typeof option.value === 'string') form.setValue('phap_ly', option.value);
           }}
           footer={
-            <div className="px-4 pt-4">
+            <div className="px-4 py-4">
               <Button
                 variant="default"
                 className="w-full"
@@ -88,7 +88,7 @@ export default function PropertyDetailsFields({
                   formattedValue={field.value ? `${field.value} m` : ''}
                   footer={
                     <>
-                      <div className="px-4 pt-4">
+                      <div className="px-4 py-4">
                         <Button
                           variant="default"
                           className="w-full"
@@ -101,7 +101,7 @@ export default function PropertyDetailsFields({
                           Xóa
                         </Button>
                       </div>
-                      <div className="flex flex-col gap-4 p-4">
+                      <div className="flex flex-col gap-3 p-4">
                         <Label>Số khác:</Label>
                         <RoundedOptionsNumberInput
                           {...field}
@@ -138,7 +138,7 @@ export default function PropertyDetailsFields({
             formattedValue={form.watch('floors_count') ? `${form.watch('floors_count')} tầng` : ''}
             footer={
               <>
-                <div className="px-4 pt-4">
+                <div className="px-4 py-4">
                   <Button
                     variant="default"
                     className="w-full"
@@ -151,7 +151,7 @@ export default function PropertyDetailsFields({
                     Xóa
                   </Button>
                 </div>
-                <div className="flex flex-col gap-4 p-4">
+                <div className="flex flex-col gap-3 p-4">
                   <Label>Số khác:</Label>
                   <RoundedOptionsNumberInput
                     value={form.watch('floors_count')}
@@ -178,7 +178,7 @@ export default function PropertyDetailsFields({
             if (typeof option.value === 'string') form.setValue('direction', option.value);
           }}
           footer={
-            <div className="px-4 pt-4">
+            <div className="px-4 py-4">
               <Button
                 variant="default"
                 className="w-full"
@@ -205,7 +205,7 @@ export default function PropertyDetailsFields({
             }}
             dividers={false}
             footer={
-              <div className="px-4 pt-4">
+              <div className="px-4 py-4">
                 <Button
                   variant="default"
                   className="w-full"
