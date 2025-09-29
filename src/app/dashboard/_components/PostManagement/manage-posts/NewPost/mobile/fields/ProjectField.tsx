@@ -28,6 +28,7 @@ export default function ProjectField({
 }: ProjectFieldProps) {
   const [curProject, setCurProject] = useState<OptionForSelect | undefined>(form.watch('project'));
   const project = form.watch('project');
+  const selectedChildProjectId = form.watch('child_project_id');
   const handleSelectProject = (option: OptionForSelect) => {
     closeModal();
 
@@ -123,8 +124,7 @@ export default function ProjectField({
             <div className="flex flex-wrap gap-2 mt-1">
               {project.data.child_projects.map((childProject: any) => {
                 const childProjectId = childProject.id ? String(childProject.id) : '';
-                const selectedChildProjectId = form.watch('child_project_id');
-                const isSelected = selectedChildProjectId === childProjectId;
+                const isSelected = String(selectedChildProjectId) === childProjectId;
 
                 return (
                   <Button

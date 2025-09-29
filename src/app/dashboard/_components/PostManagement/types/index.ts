@@ -39,6 +39,7 @@ export interface IPostForm {
   district?: OptionForSelect;
   ward?: OptionForSelect;
   street?: OptionForSelect;
+  child_project?: OptionForSelect;
 }
 
 export interface IManageProductDetail {
