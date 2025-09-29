@@ -1,7 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { Product } from '../../data/schemas/product-schema';
-import { ADS_TYPES } from '@common/constants';
 import { BlockAdsType } from './BlockAdsType';
 
 export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
