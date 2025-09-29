@@ -7,6 +7,8 @@ import { BlockWarnHiddenPost } from '../../components/cells/BlockWarnHiddenPost'
 import { Product } from '../../data/schemas';
 import ProductInfo from '@app/dashboard/_components/PostManagement/manage-posts/ListPosts/mobile/CardItem/ProductInfo';
 import { Actions } from './Actions';
+import { ItemProps } from '@app/dashboard/_components/PostManagement/manage-posts/ListPosts/mobile/CardItem/ItemProps';
+import { MapPin } from 'lucide-react';
 
 interface CardItemProps {
   product: Product;
@@ -31,22 +33,36 @@ export function CardItem({ product }: CardItemProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
         <div className="flex items-center gap-2">
-          {/* <Link
-            className="text-xs font-medium text-blue-600 hover:text-blue-800"
-            href={detail_path}
-          >
-            #{id}
-          </Link> */}
+
           <SwitchButtonToggleShowOnFrontEnd productId={id} visible={visible} />
 
           <BlockWarnHiddenPost visible={visible} isMobile />
         </div>
-        <div className="text-xs text-gray-500">
-          {formatted_published_at}
+
+        <div className="flex items-center gap-4">
+          <a
+            className="font-medium text-blue-600 hover:text-blue-800"
+            href={product?.detail_path}
+          >
+            #{product?.id}
+          </a>
+
+          <div className="text-gray-500">
+            {formatted_published_at}
+          </div>
         </div>
       </div>
 
       <ProductInfo product={product} />
+
+
+      <div className="px-4 pb-1">
+        <ItemProps items={product?.item_props || []} />
+      </div>
+
+      <div className="px-4 pb-1 flex items-center gap-2 text-sm text-gray-500">
+        <MapPin /> {product?.full_address}
+      </div>
 
       <Separator />
 

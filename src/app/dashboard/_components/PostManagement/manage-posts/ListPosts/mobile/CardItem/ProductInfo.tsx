@@ -68,26 +68,20 @@ const ProductInfo: React.FC<RelatedProductCardProps> = ({ product, onOpenDetailM
         {/* Bedroom area */}
         {product?.bedrooms_count && product.bedrooms_count > 0 ? (
           <div className="[grid-area:bedroom]">
-            <span className="text-base font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{product.bedrooms_count} pn</span>
+            <span className="text-base font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{product.bedrooms_count} PN</span>
           </div>
         ) : <div className="[grid-area:bedroom]"></div>}
 
         {/* Bathroom area */}
         {product?.bathrooms_count && product.bathrooms_count > 0 ? (
           <div className="[grid-area:wc]">
-            <span className="text-base font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{product.bathrooms_count} pt</span>
+            <span className="text-base font-bold overflow-hidden text-ellipsis whitespace-nowrap w-full">{product.bathrooms_count} WC</span>
           </div>
         ) : <div className="[grid-area:wc]"></div>}
 
         <p className="text-base text-secondary whitespace-nowrap w-full [grid-area:phap_ly]">{product?.formatted_phap_ly}</p>
       </div>
-      <div className="flex gap-2 mt-4 overflow-x-scroll whitespace-nowrap">
-        {product?.item_props.map((item) => (
-          <span key={item} className="inline-flex items-center px-2 py-1 font-medium bg-gray-100 text-gray-700 rounded-full">
-            {item}
-          </span>
-        ))}
-      </div>
+
     </div>
   );
 };
