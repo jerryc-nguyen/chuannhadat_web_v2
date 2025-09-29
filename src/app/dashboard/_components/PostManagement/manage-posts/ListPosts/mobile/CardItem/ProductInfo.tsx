@@ -21,10 +21,9 @@ const ProductInfo: React.FC<RelatedProductCardProps> = ({ product, onOpenDetailM
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4" onClick={() => handleViewDetailPost(product)}>
       <h3
-        onClick={() => handleViewDetailPost(product)}
-        className="text-dark-gray mb-4 text-lg cursor-pointer text-base font-semibold"
+        className={`text-dark-gray mb-4 text-lg cursor-pointer text-base font-semibold c-ads_color ${product?.ads_type}`}
       >
         {product?.title}
       </h3>
