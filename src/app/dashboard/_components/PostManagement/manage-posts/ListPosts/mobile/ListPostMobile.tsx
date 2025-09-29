@@ -1,6 +1,6 @@
 import { useReactTable } from '@tanstack/react-table';
 import { Product } from '../data/schemas';
-import { MobileItemV2 } from './MobileItemV2';
+import { CardItem } from './CardItem';
 
 type Props<T> = {
   table: T extends object ? ReturnType<typeof useReactTable<T>> : never;
@@ -20,7 +20,7 @@ export const ListPostMobile = <T extends Product>({ table, contentEmpty }: Props
     <>
       {rows.map((row, key) => {
         const product = row.original;
-        return <MobileItemV2 key={key} product={product} />;
+        return <CardItem key={key} product={product} />;
       })}
     </>
   );

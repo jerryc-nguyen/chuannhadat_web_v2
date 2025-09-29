@@ -34,6 +34,7 @@ export const productSchema = z.object({
   expires_after_days: z.string(),
   visible: z.boolean(),
   auto_refresh_product: z.boolean(),
+  formatted_phap_ly: z.string(),
 });
 
 export type Product = z.infer<typeof productSchema>;
