@@ -55,7 +55,6 @@ export function CardItem({ product }: CardItemProps) {
 
       <ProductInfo product={product} />
 
-
       <div className="px-4 pb-1">
         <ItemProps items={product?.item_props || []} />
       </div>

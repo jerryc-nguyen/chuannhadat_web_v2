@@ -1,7 +1,7 @@
 'use client';
 
 import { Switch } from '@components/ui/switch';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductApiService from '../../apis/product-api';
 import { ShowOnFrontEndProductInput } from '../../data/schemas';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
@@ -18,6 +18,11 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   const { isMobile } = useApp()
   const [checked, setChecked] = useState<boolean>(visible);
   const { updateFieldDataOnRow } = useManagePostsCache();
+
+  // Sync local state with prop changes
+  useEffect(() => {
+    setChecked(visible);
+  }, [visible]);
 
   const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
     try {
