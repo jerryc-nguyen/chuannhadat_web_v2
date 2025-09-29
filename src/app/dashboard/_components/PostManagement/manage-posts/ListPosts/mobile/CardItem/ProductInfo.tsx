@@ -3,23 +3,21 @@ import useResizeImage from '@common/hooks/useResizeImage';
 
 import React from 'react';
 import { Image as ImageIcon } from 'lucide-react';
-import { Loader2 } from 'lucide-react';
 import { featureProductImage } from '@common/productHelpers';
 import { Product } from '../../data/schemas';
-import useModalPostDetail from '@app/(frontend)/_components/PostDetail/hooks/useModalPostDetail';
 
 type RelatedProductCardProps = {
   product: Product;
+  onOpenDetailModal?: (product: Product) => void;
 };
 
-const ProductInfo: React.FC<RelatedProductCardProps> = ({ product }) => {
+const ProductInfo: React.FC<RelatedProductCardProps> = ({ product, onOpenDetailModal }) => {
   const DEFAULT_THUMB_IMAGE =
     'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
   const { buildThumbnailUrl } = useResizeImage();
-  const { handleOpenModal, postIdModal, isLoadingDataModal } = useModalPostDetail();
 
   const handleViewDetailPost = (product: Product) => {
-    handleOpenModal(product.uid);
+    onOpenDetailModal?.(product);
   };
 
   return (
@@ -46,7 +44,8 @@ const ProductInfo: React.FC<RelatedProductCardProps> = ({ product }) => {
               className="h-full object-cover border border-gray-200 rounded-md"
               src={buildThumbnailUrl({
                 imageUrl: featureProductImage(product) || DEFAULT_THUMB_IMAGE,
-                width: 232,
+                width: 150,
+                ratio: 1,
               })}
               alt={product?.title}
             />
@@ -82,12 +81,13 @@ const ProductInfo: React.FC<RelatedProductCardProps> = ({ product }) => {
 
         <p className="text-base text-secondary whitespace-nowrap w-full [grid-area:phap_ly]">{product?.formatted_phap_ly}</p>
       </div>
-      {isLoadingDataModal && postIdModal === product.uid && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/70 text-white">
-          <Loader2 className="mr-2 h-8 w-8 animate-spin" />
-          Đang tải
-        </div>
-      )}
+      <div className="flex gap-2 mt-4 overflow-x-scroll whitespace-nowrap">
+        {product?.item_props.map((item) => (
+          <span key={item} className="inline-flex items-center px-2 py-1 font-medium bg-gray-100 text-gray-700 rounded-full">
+            {item}
+          </span>
+        ))}
+      </div>
     </div>
   );
 };

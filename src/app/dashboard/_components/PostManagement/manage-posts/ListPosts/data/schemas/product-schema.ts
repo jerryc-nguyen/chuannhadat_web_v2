@@ -35,6 +35,7 @@ export const productSchema = z.object({
   visible: z.boolean(),
   auto_refresh_product: z.boolean(),
   formatted_phap_ly: z.string(),
+  item_props: z.array(z.string()),
 });
 
 export type Product = z.infer<typeof productSchema>;

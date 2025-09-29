@@ -17,11 +17,11 @@ export const ListPostMobile = <T extends Product>({ table, contentEmpty }: Props
   }
 
   return (
-    <>
+    <div className="px-4">
       {rows.map((row, key) => {
         const product = row.original;
         return <CardItem key={key} product={product} />;
       })}
-    </>
+    </div>
   );
 };

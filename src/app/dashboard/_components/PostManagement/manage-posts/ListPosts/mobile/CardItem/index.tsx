@@ -1,19 +1,12 @@
-import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
-import { SquarePen } from 'lucide-react';
-import Link from 'next/link';
 import {
-  ButtonDelete,
-  ButtonRefresh,
-  ButtonUpVip,
-  CheckboxAutoRefresh,
   SwitchButtonToggleShowOnFrontEnd,
 } from '../../components/actions';
 import { BlockCheckHiddenReason } from '../../components/cells/BlockCheckHiddenReason';
 import { BlockWarnHiddenPost } from '../../components/cells/BlockWarnHiddenPost';
 import { Product } from '../../data/schemas';
-import { DASHBOARD_ROUTES } from '@common/router';
 import ProductInfo from '@app/dashboard/_components/PostManagement/manage-posts/ListPosts/mobile/CardItem/ProductInfo';
+import { Actions } from './Actions';
 
 interface CardItemProps {
   product: Product;
@@ -27,8 +20,7 @@ export function CardItem({ product }: CardItemProps) {
     hide_on_frontend_reason,
     ads_type: adsType,
     auto_refresh_product,
-    formatted_published_at,
-    detail_path,
+    formatted_published_at
   } = product;
 
   return (
@@ -39,12 +31,14 @@ export function CardItem({ product }: CardItemProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
         <div className="flex items-center gap-2">
-          <Link
+          {/* <Link
             className="text-xs font-medium text-blue-600 hover:text-blue-800"
             href={detail_path}
           >
             #{id}
-          </Link>
+          </Link> */}
+          <SwitchButtonToggleShowOnFrontEnd productId={id} visible={visible} />
+
           <BlockWarnHiddenPost visible={visible} isMobile />
         </div>
         <div className="text-xs text-gray-500">
@@ -56,30 +50,12 @@ export function CardItem({ product }: CardItemProps) {
 
       <Separator />
 
-      {/* Actions */}
-      <div className="p-4 pt-3">
-        <div className="flex gap-2 mb-3">
-          <ButtonUpVip productId={id} adsType={adsType} />
-          <ButtonRefresh productId={id} />
-          <Link href={`${DASHBOARD_ROUTES.posts.edit}/${productUid}`}>
-            <Button variant="outline" size="sm" className="h-8 gap-1">
-              <SquarePen size={14} />
-              <span className="text-xs">Sửa</span>
-            </Button>
-          </Link>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <CheckboxAutoRefresh
-            productId={id}
-            auto_refresh_product={auto_refresh_product}
-          />
-          <div className="flex items-center gap-2">
-            <SwitchButtonToggleShowOnFrontEnd productId={id} visible={visible} />
-            <ButtonDelete productId={id} />
-          </div>
-        </div>
-      </div>
+      <Actions
+        productId={id}
+        productUid={productUid}
+        adsType={adsType}
+        autoRefreshProduct={auto_refresh_product}
+      />
     </div>
   );
 }
