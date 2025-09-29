@@ -45,13 +45,17 @@ export const DepositModal: React.FC = () => {
     [isOpenDepositModal, setTransferedSuccess],
   );
 
+  const title = isMobile ? 'QR code - Nạp tiền' : 'QR code - Nạp tiền bằng chuyển khoản';
+
   return (
     <AlertDialog open={isOpenDepositModal} onOpenChange={setOpenDepositModal}>
-      <AlertDialogContent className={`max-h-[100vh] overflow-y-auto overflow-x-hidden ${isMobile ? 'w-[95vw] max-w-md' : 'md:max-h-[80vh]'}`}>
-        <AlertDialogHeader className="relative z-10 mb-2">
+      <AlertDialogContent className={`flex flex-col ${isMobile ? 'w-[95vw] max-w-md max-h-[90vh]' : 'md:max-h-[85vh] max-w-2xl'}`}>
+        <AlertDialogHeader className="flex-shrink-0 relative z-10 mb-2">
           <AlertDialogTitle className={isMobile ? 'text-center text-lg' : ''}>
-            {transferedSuccess ? '' : 'QR code - Nạp tiền bằng chuyển khoản'}
+            {transferedSuccess ? '' : title}
           </AlertDialogTitle>
+        </AlertDialogHeader>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
           {transferedSuccess ? (
             <TransactionSuccessful formattedAmount={depositAmount} />
           ) : isMobile ? (
@@ -67,8 +71,8 @@ export const DepositModal: React.FC = () => {
               onAmountSelect={handleAmountSelect}
             />
           )}
-        </AlertDialogHeader>
-        <AlertDialogFooter>
+        </div>
+        <AlertDialogFooter className="flex-shrink-0">
           <AlertDialogAction className={isMobile ? 'w-full' : ''}>Đóng</AlertDialogAction>
         </AlertDialogFooter>
         <Confetti
