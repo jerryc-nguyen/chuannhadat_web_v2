@@ -52,7 +52,7 @@ export const CheckboxAutoRefresh = ({
         htmlFor="terms"
         className="text-sm font-medium leading-none peer-disabled:opacity-70 cursor-pointer"
       >
-        Làm mới tin tự động
+        Làm mới tự động
       </label>
     </div>
   );

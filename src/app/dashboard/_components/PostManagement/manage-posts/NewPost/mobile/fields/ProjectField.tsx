@@ -28,6 +28,7 @@ export default function ProjectField({
 }: ProjectFieldProps) {
   const [curProject, setCurProject] = useState<OptionForSelect | undefined>(form.watch('project'));
   const project = form.watch('project');
+  const selectedChildProjectId = form.watch('child_project_id');
   const handleSelectProject = (option: OptionForSelect) => {
     closeModal();
 
@@ -113,18 +114,17 @@ export default function ProjectField({
           }}
         />
 
-        {project && (<div className="p-4">
+        {project?.value && (<div className="p-4">
           Địa chỉ: <span className="font-bold">{project.data?.address || 'Chưa cập nhật'}</span>
         </div>)}
 
-        {project && project.data?.child_projects && project.data.child_projects.length > 0 && (
+        {project?.value && project.data?.child_projects && project.data.child_projects.length > 0 && (
           <div className="px-4 pb-4">
             <b>Dự án con:</b>
             <div className="flex flex-wrap gap-2 mt-1">
               {project.data.child_projects.map((childProject: any) => {
                 const childProjectId = childProject.id ? String(childProject.id) : '';
-                const selectedChildProjectId = form.watch('child_project_id');
-                const isSelected = selectedChildProjectId === childProjectId;
+                const isSelected = String(selectedChildProjectId) === childProjectId;
 
                 return (
                   <Button
@@ -152,8 +152,6 @@ export default function ProjectField({
           </div>
         )}
       </List>
-
-
 
     </>
   );

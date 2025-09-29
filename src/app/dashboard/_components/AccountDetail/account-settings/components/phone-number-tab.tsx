@@ -137,41 +137,41 @@ export const PhoneNumberTab: React.FC = () => {
   }
   return (
     <>
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-semibold">Thay đổi số điện thoại</h3>
+      <div className="border-b pb-3 mb-4">
+        <h3 className="text-lg md:text-xl font-semibold">Thay đổi số điện thoại</h3>
       </div>
       {currentUser?.phone && !isConfirmedPhone && (
-        <div className="mt-4 rounded-md border bg-primary_color/10 p-6">
-          <p>
+        <div className="mb-4 rounded-md border bg-primary_color/10 p-4 md:p-6">
+          <p className="text-sm md:text-base">
             Số điện thoại của bạn chưa được xác thực, vui lòng xác thực để sử dụng đầy đủ các tính
             năng
           </p>
           <span
             onClick={() => setOpenPopupVerifyPhone(true)}
-            className="cursor-pointer font-medium text-primary_color underline"
+            className="cursor-pointer font-medium text-primary_color underline text-sm md:text-base mt-2 inline-block"
           >
             Hướng dẫn xác thực
           </span>
         </div>
       )}
       {!currentUser ? (
-        <Skeleton className="mt-4 h-6 w-[350px]" />
+        <Skeleton className="mb-4 h-6 w-full max-w-[350px]" />
       ) : (
         currentUser.phone && (
-          <p className="mt-4">
+          <p className="mb-4 text-sm md:text-base">
             Số điện thoại hiện tại của bạn là <b>{formatPhoneNumber(currentUser?.phone)}</b>
             {!isConfirmedPhone && <i>(chưa được xác thực)</i>}
           </p>
         )
       )}
       <Form {...form}>
-        <form className="mt-4 flex flex-col gap-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-y-4 md:gap-y-5" onSubmit={handleSubmit(onSubmit)}>
           <FormField
             control={control}
             name="newPhoneNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel aria-required={true} className="text-base">
+                <FormLabel aria-required={true} className="text-sm md:text-base">
                   Số điện thoại mới
                 </FormLabel>
                 <FormControl>
@@ -186,7 +186,7 @@ export const PhoneNumberTab: React.FC = () => {
               </FormItem>
             )}
           />
-          <Button disabled={isUpdateMyPhonePending} className="w-fit sm:bottom-0" type="submit">
+          <Button disabled={isUpdateMyPhonePending} className="w-full md:w-fit mt-2" type="submit">
             {isUpdateMyPhonePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Gửi thông tin
           </Button>

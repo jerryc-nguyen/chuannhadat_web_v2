@@ -8,6 +8,7 @@ import { useBalanceRequest } from '@common/api/balance';
 import { ITransactionResponse } from '@dashboard/FinancialManagement/types';
 import BalanceInfo from './BalanceInfo';
 import TransactionActivity from './TransactionActivity';
+import MobileContainer from '../../components/MobileContainer';
 import { useSetAtom } from 'jotai';
 import {
   breadcrumbAtom,
@@ -49,14 +50,16 @@ const BalanceView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div>
-      <BalanceInfo />
-      <TransactionActivity
-        title="Biến động số dư"
-        transactionsData={transactionData}
-        emptyText="Không có biến động số dư"
-      />
-    </div>
+    <MobileContainer>
+      <div className="space-y-4">
+        <BalanceInfo />
+        <TransactionActivity
+          title="Biến động số dư"
+          transactionsData={transactionData}
+          emptyText="Không có biến động số dư"
+        />
+      </div>
+    </MobileContainer>
   );
 };
 

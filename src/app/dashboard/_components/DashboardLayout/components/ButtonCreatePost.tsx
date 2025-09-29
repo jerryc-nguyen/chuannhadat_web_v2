@@ -4,11 +4,11 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { LucidePenSquare } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { DASHBOARD_ROUTES } from '@common/router';
+import { useHideCreateButton } from '@common/hooks/useHideCreateButton';
+
 const ButtonCreatePost = () => {
-  const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
+  const hideDangtinButton = useHideCreateButton();
 
   return (
     <Link

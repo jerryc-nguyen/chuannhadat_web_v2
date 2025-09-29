@@ -5,10 +5,12 @@ import List from '@components/konsta/List';
 import { CardTitle } from '@components/ui/card';
 import LocationsPicker from '@components/mobile-ui/LocationsPicker';
 import { IPostForm } from '@dashboard/PostManagement/types';
+import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
+import { useLocationForm } from '@dashboard/PostManagement/hooks';
 
 interface LocationFieldProps {
   form: UseFormReturn<IPostForm>;
-  openModal: (params: any) => void;
+  openModal: (modal: Modal) => void;
   closeModal: () => void;
   cityOption?: OptionForSelect;
   districtOption?: OptionForSelect;
@@ -22,7 +24,7 @@ interface LocationFieldProps {
   }) => void;
 }
 
-export default function LocationField({
+export default function LocationFields({
   form,
   openModal,
   closeModal,
@@ -32,16 +34,38 @@ export default function LocationField({
   streetOption: initialStreetOption,
   onLocationChange
 }: LocationFieldProps) {
-  // Track location state
-  const [cityOption, setCityOption] = useState<OptionForSelect | undefined>(initialCityOption);
-  const [districtOption, setDistrictOption] = useState<OptionForSelect | undefined>(initialDistrictOption);
-  const [wardOption, setWardOption] = useState<OptionForSelect | undefined>(initialWardOption);
-  const [streetOption, setStreetOption] = useState<OptionForSelect | undefined>(initialStreetOption);
+  // Use the custom hook for location form logic
+  const {
+    curCity,
+    curDistrict,
+    curWard,
+    curStreet,
+    onSelectCity: hookOnSelectCity,
+    onSelectDistrict: hookOnSelectDistrict,
+    onSelectWard: hookOnSelectWard,
+    onSelectStreet: hookOnSelectStreet,
+    onChangedFullAddress,
+    locationKey: _locationKey
+  } = useLocationForm({ form, onLocationChange });
 
-  // Create a key for LocationsPicker to force rebuild
+  // Track location state - prioritize complete objects from hook, then fallback to props
+  const [cityOption, setCityOption] = useState<OptionForSelect | undefined>(
+    curCity || initialCityOption
+  );
+  const [districtOption, setDistrictOption] = useState<OptionForSelect | undefined>(
+    curDistrict || initialDistrictOption
+  );
+  const [wardOption, setWardOption] = useState<OptionForSelect | undefined>(
+    curWard || initialWardOption
+  );
+  const [streetOption, setStreetOption] = useState<OptionForSelect | undefined>(
+    curStreet || initialStreetOption
+  );
+
+  // Create a key for LocationsPicker to force rebuild - use the hook's key
   const [locationPickerKey, setLocationPickerKey] = useState(0);
 
-  // Watch for changes in location IDs
+  // Also watch for changes in location IDs for backward compatibility
   const city_id = form.watch('city_id');
   const district_id = form.watch('district_id');
   const ward_id = form.watch('ward_id');
@@ -69,6 +93,23 @@ export default function LocationField({
     }
   }, [city_id, district_id, ward_id, street_id, cityOption?.value, districtOption?.value, wardOption?.value, streetOption?.value]);
 
+  // Update component state when hook values change
+  useEffect(() => {
+    if (curCity) setCityOption(curCity);
+  }, [curCity]);
+
+  useEffect(() => {
+    if (curDistrict) setDistrictOption(curDistrict);
+  }, [curDistrict]);
+
+  useEffect(() => {
+    if (curWard) setWardOption(curWard);
+  }, [curWard]);
+
+  useEffect(() => {
+    if (curStreet) setStreetOption(curStreet);
+  }, [curStreet]);
+
   // Update local state when props change
   useEffect(() => {
     if (initialCityOption) setCityOption(initialCityOption);
@@ -77,69 +118,35 @@ export default function LocationField({
     if (initialStreetOption) setStreetOption(initialStreetOption);
   }, [initialCityOption, initialDistrictOption, initialWardOption, initialStreetOption]);
 
-  const onChangedFullAddress = (newAddress: string) => {
-    form.setValue('full_address', newAddress);
-  };
-
+  // Mobile-specific handlers that wrap the hook handlers with closeModal
   const handleChangeCity = (city: OptionForSelect | undefined) => {
+    hookOnSelectCity(city);
     setCityOption(city);
-    form.setValue('city_id', city?.value || '');
-    // Clear dependent fields
     setDistrictOption(undefined);
     setWardOption(undefined);
     setStreetOption(undefined);
-    form.setValue('district_id', '');
-    form.setValue('ward_id', '');
-    form.setValue('street_id', '');
     closeModal();
-
-    onLocationChange({
-      city,
-      district: undefined,
-      ward: undefined,
-      street: undefined
-    });
   };
 
   const handleChangeDistrict = (district: OptionForSelect | undefined) => {
+    hookOnSelectDistrict(district);
     setDistrictOption(district);
-    form.setValue('district_id', district?.value || '');
-    // Clear dependent fields
     setWardOption(undefined);
     setStreetOption(undefined);
-    form.setValue('ward_id', '');
-    form.setValue('street_id', '');
     closeModal();
-
-    onLocationChange({
-      district,
-      ward: undefined,
-      street: undefined
-    });
   };
 
   const handleChangeWard = (ward: OptionForSelect | undefined) => {
+    hookOnSelectWard(ward);
     setWardOption(ward);
-    form.setValue('ward_id', ward?.value || '');
-    // Clear dependent fields
     setStreetOption(undefined);
-    form.setValue('street_id', '');
     closeModal();
-
-    onLocationChange({
-      ward,
-      street: undefined
-    });
   };
 
   const handleChangeStreet = (street: OptionForSelect | undefined) => {
+    hookOnSelectStreet(street);
     setStreetOption(street);
-    form.setValue('street_id', street?.value || '');
     closeModal();
-
-    onLocationChange({
-      street
-    });
   };
 
   return (

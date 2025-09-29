@@ -6,12 +6,12 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@components/ui/button';
 import Link from 'next/link';
 import ImageForm from '../components/form-components/image-form';
-import LocationFormV2 from '../components/form-components/location-form-v2';
 import ProductDescriptionForm from '../components/form-components/product-description';
 import ProductTypeForm from '../components/form-components/product-type';
 import ProjectForm from '../components/form-components/project-form';
 import { useNewPostForm } from './hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
+import LocationFields from '../components/form-components/LocationFields';
 
 const NewPostDesktop: React.FC = () => {
   const { form, onSubmit } = useNewPostForm('desktop');
@@ -23,7 +23,7 @@ const NewPostDesktop: React.FC = () => {
           <div className="grid items-start gap-6 lg:col-span-3">
             <ProductTypeForm form={form} />
             <ProjectForm form={form} />
-            <LocationFormV2 form={form} />
+            <LocationFields form={form} />
             <ProductDescriptionForm form={form} />
             <ProductInfoForm form={form} />
             <ImageForm form={form} />

@@ -6,7 +6,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import NotificationsList from '@components/desktop/notification/NotificationsList';
 import { usePaginatedNotifications } from '@dashboard/AccountDetail/notifications/hooks/usePaginatedNotifications';
 import { LucideBell } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useHideCreateButton } from '@common/hooks/useHideCreateButton';
 import React from 'react';
 
 type NotificationIconProps = {
@@ -15,8 +16,7 @@ type NotificationIconProps = {
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({ isLogged }) => {
   const { totalUnread, notifications } = usePaginatedNotifications();
-  const searchParams = useSearchParams();
-  const hideDangtinButton = searchParams?.get('hide_create_post') == 'true';
+  const hideDangtinButton = useHideCreateButton();
   const router = useRouter();
   const [isShowBadge, setIsShowBadge] = React.useState<boolean>(true);
 

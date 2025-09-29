@@ -1,7 +1,5 @@
 export interface GuideDepositProps {
   bankTransferNote: string;
-  isCopied: boolean;
-  onCopy: () => void;
   selectedAmount: number | null;
   onAmountSelect: (amount: number) => void;
 }
