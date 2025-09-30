@@ -1,12 +1,11 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { MoreHorizontal as BsThreeDots } from 'lucide-react';
+import { MoreHorizontal, Facebook, Youtube } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 
@@ -25,30 +24,31 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ profileData }) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="block h-full rounded-md bg-slate-100 p-3">
-        <BsThreeDots />
+      <DropdownMenuTrigger className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200">
+        <MoreHorizontal className="w-5 h-5 text-gray-600" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Liên kết</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-48">
         {profileData?.facebook_url && (
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             <Link
               target="_blank"
               href={profileData.facebook_url}
-              className="text-xs text-secondary hover:text-black"
+              className="flex items-center w-full text-sm text-gray-700 hover:text-gray-900"
             >
-              Link facebook
+              <Facebook className="w-4 h-4 mr-3 text-blue-600" />
+              Facebook
             </Link>
           </DropdownMenuItem>
         )}
         {profileData?.youtube_url && (
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             <Link
               target="_blank"
               href={profileData.youtube_url}
-              className="text-xs text-secondary hover:text-black"
+              className="flex items-center w-full text-sm text-gray-700 hover:text-gray-900"
             >
-              Link youtube
+              <Youtube className="w-4 h-4 mr-3 text-red-600" />
+              YouTube
             </Link>
           </DropdownMenuItem>
         )}

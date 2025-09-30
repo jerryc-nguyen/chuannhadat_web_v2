@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import SocialLinks from './SocialLinks';
+import { MapPin, Briefcase } from 'lucide-react';
+import ButtonPhone from '@components/button-phone';
 
 interface ProfileInformationProps {
   profileData?: {
@@ -12,40 +13,53 @@ interface ProfileInformationProps {
     posts_count?: number;
     facebook_url?: string;
     youtube_url?: string;
+    phone?: string;
   };
 }
 
 const ProfileInformation: React.FC<ProfileInformationProps> = ({ profileData }) => {
   return (
-    <div className="flex flex-col gap-y-2 pl-4">
-      <div className="flex items-center justify-between mt-4">
-        <h2 className="text-2xl font-semibold">{profileData?.full_name}</h2>
-        <SocialLinks profileData={profileData} />
+    <div className="bg-white px-4 pb-6">
+      {/* Name and Social Links */}
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex-1">
+          {profileData?.job_title && (
+            <div className="flex items-center text-gray-600 mb-2">
+              <Briefcase className="w-4 h-4 mr-2" />
+              <span className="text-sm">{profileData.job_title}</span>
+            </div>
+          )}
+          {profileData?.address && (
+            <div className="flex items-center text-gray-600 mb-2">
+              <MapPin className="w-4 h-4 mr-2" />
+              <span className="text-sm">{profileData.address}</span>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="flex flex-wrap gap-x-2 gap-y-2">
-        {profileData?.profile_tags?.map((item) => (
-          <span
-            className="text-nowrap rounded-[6px] bg-primary_color/80 px-[10px] py-1 text-xs font-semibold text-white shadow-md"
-            key={item}
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-      {(profileData?.job_title || profileData?.description) && (
-        <p className="text-muted-foreground">
-          {profileData?.job_title || profileData?.description}
-        </p>
-      )}
-      {profileData?.address && <p className="text-muted-foreground">{profileData?.address}</p>}
 
-      <div className="mb-2 flex items-center gap-x-4">
-        {(profileData?.posts_count || 0) > 0 && (
-          <div className="flex items-center gap-x-2">
-            <span className="text-sm text-secondary">Số bài đăng</span>
-            <b>{profileData?.posts_count}</b>
-          </div>
+      {/* Bio/Description */}
+      {profileData?.description && (
+        <div className="mb-4">
+          <p className="text-gray-700 leading-relaxed">
+            {profileData.description}
+          </p>
+        </div>
+      )}
+
+
+      {/* Action Buttons */}
+      <div className="flex gap-3">
+        {profileData?.phone && (
+          <ButtonPhone
+            isCall={true}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            phoneNumberProfile={profileData.phone}
+          />
         )}
+        <button className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+          Nhắn tin
+        </button>
       </div>
     </div>
   );
