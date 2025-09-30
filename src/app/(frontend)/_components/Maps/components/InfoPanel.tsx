@@ -2,6 +2,7 @@
 
 import InfoCard from '@maps/components/Mappable/User/components/InfoCard';
 import Contacts from '@maps/components/Mappable/User/components/Contacts';
+import PostList from '@maps/components/Mappable/User/components/PostList';
 import { useProfileData } from '@maps/components/Mappable/User/hooks';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
 import { Marker } from '../types';
@@ -51,6 +52,19 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
         <div className="border-t border-gray-200 my-4 mb-2"></div>
 
         <Contacts profileData={profileData} />
+
+        {/* Divider */}
+        <div className="border-t border-gray-200 my-4 mb-2"></div>
+
+        {/* Posts Section */}
+        <div className="px-4 py-2">
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">Tin đã đăng</h2>
+          <PostList
+            profileData={profileData}
+            wardId={marker.wardId}
+          />
+        </div>
+
       </div>
 
     </div>

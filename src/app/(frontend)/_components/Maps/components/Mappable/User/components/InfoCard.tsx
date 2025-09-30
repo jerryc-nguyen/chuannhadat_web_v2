@@ -41,7 +41,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
               className="rounded-full border-3 border-gray-200 bg-gray-100 shadow-md"
             />
             {/* Verified badge */}
-            <div className="absolute bottom-1 right-1 bg-white rounded-full shadow-lg border border-gray-100">
+            <div className="absolute bottom-2 right-2 bg-white rounded-full shadow-lg border border-gray-100">
               <CheckCircle2 className="w-5 h-5 text-blue-500" />
             </div>
           </div>
