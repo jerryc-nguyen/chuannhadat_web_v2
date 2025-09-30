@@ -48,8 +48,16 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     queryFn: () => profilesApi.getProfileSlug(profileSlug),
     select: (data) => data.data,
   });
+
+  // Update imgSrc when profileData becomes available
+  useEffect(() => {
+    if (profileData?.avatar_url) {
+      setImgSrc(profileData.avatar_url);
+    }
+  }, [profileData?.avatar_url]);
+
   const [imgSrc, setImgSrc] = React.useState<StaticImageData | string>(
-    profileData?.avatar_url as string,
+    profileData?.avatar_url || default_avatar,
   );
 
   // Filter out AggProjects when aggregations don't contain projects
@@ -79,7 +87,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
           <Image
             draggable="false"
             alt="avatar-profile"
-            src={cropSquare(imgSrc.toString(), PROFILE_IMAGE_SIZE)}
+            src={cropSquare((imgSrc || default_avatar).toString(), PROFILE_IMAGE_SIZE)}
             onError={() => {
               setImgSrc(default_avatar);
             }}

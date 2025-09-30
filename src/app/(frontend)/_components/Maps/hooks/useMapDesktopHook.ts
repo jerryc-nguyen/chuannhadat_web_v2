@@ -104,7 +104,7 @@ export const useMapDesktopHook = () => {
 
     // Handlers
     setSearchQuery,
-    setSelectedMarker: clearSelectedMarker,
+    clearSelectedMarker,
     handleMapReady,
     handleSearch,
     handleLocationClick,

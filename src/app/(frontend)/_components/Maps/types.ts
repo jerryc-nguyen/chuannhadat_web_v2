@@ -1,45 +1,11 @@
 // Import Leaflet Map type
 import type { Map as LeafletMap } from 'leaflet';
+import { IUser } from '@/common/types';
 
 export interface LatLng {
   lat: number;
   lon: number;
   original?: boolean;
-}
-
-export interface Property {
-  id: string;
-  title: string;
-  price: string;
-  location: LatLng;
-  type: 'sale' | 'rent';
-  image?: string;
-  description?: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  area?: number;
-  address?: string;
-}
-
-export interface Professional {
-  id: string;
-  name: string;
-  type: 'broker' | 'company' | 'bank_assistant';
-  location: LatLng;
-  avatar?: string;
-  company?: string;
-  specialty?: string[];
-  experience?: number; // years of experience
-  rating?: number; // 1-5 stars
-  reviewCount?: number;
-  phone?: string;
-  email?: string;
-  address?: string;
-  description?: string;
-  services?: string[];
-  languages?: string[];
-  certifications?: string[];
-  verified?: boolean;
 }
 
 export interface MapOptions {
@@ -56,15 +22,15 @@ export interface SearchResult {
   type: 'property' | 'location' | 'project' | 'professional';
 }
 
-
 export interface MarkerMeta {
   [key: string]: unknown;
 }
 
 export interface Marker {
   id: number;
-  mappableType: string;
-  mappableId: number;
+  mappable_ype: string;
+  mappable_id: number;
+  mappable_data: IUser;
   location: LatLng;
   wardId?: number;
   streetId?: number;
