@@ -5,20 +5,13 @@ import { CheckCircle2 } from 'lucide-react';
 import default_avatar from '@assets/images/default_avatar.png';
 import useResizeImage from '@common/hooks/useResizeImage';
 import SocialLinks from '@frontend/ProfileDetail/mobile/components/SocialLinks';
+import { IUser } from '@common/types';
 
 interface ProfileImageProps {
   imgSrc: StaticImageData | string;
   setImgSrc: (src: StaticImageData | string) => void;
-  profileData?: {
-    avatar_url?: string;
-    phone?: string;
-    full_name?: string;
-    job_title?: string;
-    posts_count?: number;
-    facebook_url?: string;
-    youtube_url?: string;
-    profile_tags?: string[];
-  }
+  profileData?: IUser,
+  containerClassName?: string,
 }
 
 const PROFILE_IMAGE_SIZE = 120;
@@ -26,12 +19,13 @@ const PROFILE_IMAGE_SIZE = 120;
 const ProfileImage: React.FC<ProfileImageProps> = ({
   imgSrc,
   setImgSrc,
-  profileData
+  profileData,
+  containerClassName = 'pt-6 pb-4 px-4 mb-6'
 }) => {
   const { cropSquare } = useResizeImage();
 
   return (
-    <div className="flex items-start gap-5 pt-6 pb-4 px-4 bg-white mb-6">
+    <div className={`flex items-start gap-5 bg-white ${containerClassName}`}>
       {/* Left Column - Avatar */}
       <div className="relative flex-shrink-0">
         <div className="relative w-fit">

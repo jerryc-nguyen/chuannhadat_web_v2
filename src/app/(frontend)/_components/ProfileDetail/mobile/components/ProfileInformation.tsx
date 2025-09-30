@@ -5,16 +5,19 @@ import { IUser } from '@common/types';
 import Contacts from './Contacts';
 
 interface ProfileInformationProps {
-  profileData?: IUser
+  profileData?: IUser,
+  showDescription?: boolean,
+  showContacts?: boolean,
+  showJobTitle?: boolean,
 }
 
-const ProfileInformation: React.FC<ProfileInformationProps> = ({ profileData }) => {
+const ProfileInformation: React.FC<ProfileInformationProps> = ({ profileData, showDescription = true, showContacts = true, showJobTitle = true }) => {
   return (
     <div className="bg-white px-4 pb-6">
       {/* Name and Social Links */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          {profileData?.job_title && (
+          {showJobTitle && profileData?.job_title && (
             <div className="flex items-center text-gray-600 mb-2">
               <Briefcase className="w-[18px] h-[18px] mr-2 flex-shrink-0" />
               <span>{profileData.job_title}</span>
@@ -37,7 +40,7 @@ const ProfileInformation: React.FC<ProfileInformationProps> = ({ profileData }) 
 
 
       {/* Bio/Description */}
-      {profileData?.description && (
+      {showDescription && profileData?.description && (
         <div className="mb-4">
           <p className="text-gray-700 leading-relaxed">
             {profileData.description}
@@ -46,7 +49,7 @@ const ProfileInformation: React.FC<ProfileInformationProps> = ({ profileData }) 
       )}
 
       {/* Action Buttons */}
-      <Contacts profileData={profileData} />
+      {showContacts && <Contacts profileData={profileData} />}
     </div>
   );
 };
