@@ -57,28 +57,22 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
       <div className="flex-1 min-w-0 pt-2">
         {/* Name and Social Links */}
         <div className="flex items-start justify-between">
-          <h1 className="text-xl font-semibold text-gray-900 truncate pr-2">
+          <h1 className="text-2xl font-semibold text-gray-900 truncate pr-2">
             {profileData?.full_name || 'Tên người dùng'}
           </h1>
           <SocialLinks profileData={profileData} />
         </div>
 
-        {/* Tags */}
         {profileData?.profile_tags && profileData.profile_tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {profileData.profile_tags.slice(0, 3).map((tag, index) => (
+          <div className="flex flex-wrap gap-2 my-3">
+            {profileData.profile_tags.slice(0, 2).map((tag, index) => (
               <span
                 key={index}
-                className="inline-block px-2 py-1 text-xs rounded border border-gray-200"
+                className="text-xs inline-block px-2 py-1 rounded-full border border-gray-200 text-secondary"
               >
                 {tag}
               </span>
             ))}
-            {profileData.profile_tags.length > 3 && (
-              <span className="inline-block px-2 py-1 text-xs text-gray-500 bg-gray-50 rounded border border-gray-200">
-                +{profileData.profile_tags.length - 3}
-              </span>
-            )}
           </div>
         )}
 
@@ -89,6 +83,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
           </span>
           <span className="text-gray-600">tin đăng</span>
         </div>
+
       </div>
     </div>
   );

@@ -25,6 +25,8 @@ export {
   DEFAULT_AVATAR,
 } from './app';
 
+export const ZALO_ICON = 'https://spaces.chuannhadat.com/icons/zalo-logo.svg';
+
 // Bank and payment constants
 export {
   SMS_PHONE_NUMBER,
