@@ -58,10 +58,10 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
         {/* Posts Section */}
         <div className="px-4 py-2">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Tin đã đăng</h2>
+          <h2 className="text-g font-semibold text-gray-900 mb-3">Tin đã đăng</h2>
           <PostList
             profileData={profileData}
-            wardId={marker.wardId}
+            wardId={marker.ward_id}
           />
         </div>
 

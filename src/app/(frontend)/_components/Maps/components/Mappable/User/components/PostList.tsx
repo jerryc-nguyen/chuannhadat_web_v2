@@ -1,55 +1,23 @@
 'use client';
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { searchApi } from '@frontend/features/search/api/searchApi';
 import { IUser } from '@common/types';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
 import PostItem from './PostItem';
+import { useUserPosts } from '../hooks/useUserPosts';
 
 interface PostListProps {
   profileData: IUser;
   wardId?: number;
 }
 
-interface Post {
-  id: number;
-  title: string;
-  price: string;
-  price_per_m2?: string;
-  area?: string;
-  address: string;
-  created_at: string;
-  slug: string;
-  thumbnail_url?: string;
-  photo_count?: number;
-  is_priority?: boolean;
-  property_type?: string;
-  bedroom_count?: string;
-  author?: {
-    name: string;
-    avatar_url?: string;
-    posts_count?: number;
-  };
-  is_partner?: boolean;
-}
-
 const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['user-posts-maps', profileData.slug, wardId],
-    queryFn: () =>
-      searchApi({
-        author_slug: profileData.slug,
-        ward_id: wardId,
-        page: 1,
-        per_page: 5, // Show only 5 posts in the info panel
-        aggs_for: 'profile',
-      }),
-    enabled: !!profileData.slug,
+  const { posts, pagination, isLoading, error } = useUserPosts({
+    authorSlug: profileData.slug,
+    wardId,
+    page: 1,
+    perPage: 5, // Show only 5 posts in the info panel
   });
-
-  const posts = data?.data || [];
-  const pagination = data?.pagination;
 
   if (isLoading) {
     return (
@@ -79,7 +47,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
     );
   }
 
-  const handlePostClick = (post: Post) => {
+  const handlePostClick = (post: any) => {
     // Handle post click - could navigate to post detail page
     console.log('Post clicked:', post);
   };
@@ -87,7 +55,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
   return (
     <div>
       <div className="space-y-3">
-        {posts.map((post: Post) => (
+        {posts.map((post: any) => (
           <PostItem
             key={post.id}
             post={post}

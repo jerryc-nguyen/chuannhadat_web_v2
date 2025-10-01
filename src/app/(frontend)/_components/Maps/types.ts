@@ -32,12 +32,12 @@ export interface Marker {
   mappable_id: number;
   mappable_data: IUser;
   location: LatLng;
-  wardId?: number;
-  streetId?: number;
-  districtId?: number;
-  cityId?: number;
-  businessTypes?: string[];
-  categoryTypes?: string[];
+  ward_id?: number;
+  street_id?: number;
+  district_id?: number;
+  city_id?: number;
+  business_types?: string[];
+  category_types?: string[];
   meta?: MarkerMeta;
   marker_icon_url?: string;
   marker_label?: string;

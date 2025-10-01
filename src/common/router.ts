@@ -28,6 +28,7 @@ export const API_ROUTES = {
   MAPS: {
     GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
     MARKERS: 'api/v2/maps/markers',
+    USER_POSTS: 'api/v2/maps/user_posts',
   },
   AUTH: {
     LOGIN_BY_PHONE: 'api/v1/authentications/login_by_phone',
