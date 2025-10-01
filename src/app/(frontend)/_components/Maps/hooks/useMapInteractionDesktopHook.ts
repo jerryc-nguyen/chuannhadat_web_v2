@@ -28,8 +28,8 @@ const fetchMarkers = async (
     ...bounds,
     page: 1,
     per_page: 100,
-    ...(filters.businessType && { business_type: filters.businessType }),
-    ...(filters.categoryType && { category_type: filters.categoryType }),
+    business_type: filters.businessType || undefined,
+    category_type: filters.categoryType || undefined,
   };
 
   const res = await mapsApi.markersByBounds(requestParams, { signal });
@@ -166,10 +166,13 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   });
 
   // Reusable function to query and update markers
-  const queryAndUpdateMarkers = useCallback(async () => {
+  const queryAndUpdateMarkers = useCallback(async (source = 'unknown') => {
     if (!map || typeof window === 'undefined') return;
 
     try {
+      // Log current filter state
+      console.log(`🔍 [${source}] Current filter state:`, { businessType, categoryType });
+
       // Abort previous request
       if (markersAbortRef.current) {
         markersAbortRef.current.abort();
@@ -179,6 +182,10 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
 
       // Fetch markers with current bounds and filters
       const bounds = getMapBounds(map);
+      console.log(`📍 [${source}] Fetching markers with params:`, {
+        bounds,
+        filters: { businessType, categoryType }
+      });
       const markers = await fetchMarkers(bounds, { businessType, categoryType }, controller.signal);
 
       // Only update if markers changed
@@ -211,21 +218,32 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
       return;
     }
 
-    await queryAndUpdateMarkers();
+    await queryAndUpdateMarkers('MAP_MOVE');
   }, [queryAndUpdateMarkers]);
 
-  // Setup map moveend listener
+  // Setup map event listeners and handle cleanup
   useEffect(() => {
     if (!map) return;
 
     // Load initial markers
     handleMapMoveEnd();
+
+    // Add moveend listener
     map.on('moveend', handleMapMoveEnd);
 
+    // Cleanup function that only runs on unmount
     return () => {
+      // Remove event listener
       map.off('moveend', handleMapMoveEnd);
+    };
+  }, [map, handleMapMoveEnd]); // Update listener when filters change
 
-      // Cleanup on unmount only
+  // Handle cleanup of markers and requests on unmount only
+  useEffect(() => {
+    if (!map) return;
+
+    // Cleanup function that only runs on unmount
+    return () => {
       if (markersAbortRef.current) {
         markersAbortRef.current.abort();
         markersAbortRef.current = null;
@@ -240,8 +258,7 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
         markersLayerRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map]); // Only depend on map to prevent cleanup on filter changes
+  }, [map]); // Only run on mount/unmount
 
   // Re-query markers when filters change
   useEffect(() => {
@@ -253,7 +270,7 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
       return;
     }
 
-    queryAndUpdateMarkers();
+    queryAndUpdateMarkers('FILTER_CHANGE');
   }, [businessType, categoryType, map, queryAndUpdateMarkers]);
 
   return {

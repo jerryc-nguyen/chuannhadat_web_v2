@@ -50,13 +50,9 @@ export const useMapDesktopHook = () => {
   }, [clearSelectedMarker, setMap]);
 
   // Wire interaction handlers when map is ready
-  const { queryAndUpdateMarkers } = useMapInteractionDesktopHook(map);
+  useMapInteractionDesktopHook(map);
 
   const handleFilterChange = useCallback((filters: { businessType?: string; categoryType?: string }) => {
-    console.log('Filter changed:', filters);
-    // Update global filter state
-    // The useEffect in useMapInteractionDesktopHook will automatically
-    // trigger queryAndUpdateMarkers when the filter atoms change
     updateFilters(filters);
   }, [updateFilters]);
 
