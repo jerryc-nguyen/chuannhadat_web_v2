@@ -3,6 +3,7 @@
 import InfoCard from '@maps/components/Mappable/User/components/InfoCard';
 import Contacts from '@maps/components/Mappable/User/components/Contacts';
 import PostList from '@maps/components/Mappable/User/components/PostList';
+import ActivePostFilters from '@maps/components/Mappable/User/components/ActivePostFilters';
 import { useProfileData } from '@maps/components/Mappable/User/hooks';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
 import { Marker } from '../types';
@@ -58,7 +59,10 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
         {/* Posts Section */}
         <div className="px-4 py-2">
-          <h2 className="text-g font-semibold text-gray-900 mb-3">Tin đã đăng</h2>
+          <h2 className="text-g font-semibold text-gray-900 mb-2">Tin đã đăng {marker.location_name && `tại ${marker.location_name}`}</h2>
+
+          <ActivePostFilters />
+
           <PostList
             profileData={profileData}
             wardId={marker.ward_id}

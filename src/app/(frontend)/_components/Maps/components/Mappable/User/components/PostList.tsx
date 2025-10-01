@@ -1,10 +1,12 @@
 'use client';
 import React from 'react';
-import { IUser } from '@common/types';
+import { IUser, IProductList } from '@common/types';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
 import PostItem from './PostItem';
 import { useUserPosts } from '../hooks/useUserPosts';
+import { useAtomValue } from 'jotai';
+import { businessTypeFilterAtom, categoryTypeFilterAtom } from '@maps/states/mapAtoms';
 
 interface PostListProps {
   profileData: IUser;
@@ -12,11 +14,17 @@ interface PostListProps {
 }
 
 const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
+  // Get current filter values from global state
+  const businessType = useAtomValue(businessTypeFilterAtom);
+  const categoryType = useAtomValue(categoryTypeFilterAtom);
+
   const { posts, pagination, isLoading, error } = useUserPosts({
     authorSlug: profileData.slug,
     wardId,
     page: 1,
     perPage: 5, // Show only 5 posts in the info panel
+    businessType,
+    categoryType,
   });
 
   if (isLoading) {
@@ -47,7 +55,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
     );
   }
 
-  const handlePostClick = (post: any) => {
+  const handlePostClick = (post: IProductList) => {
     // Handle post click - could navigate to post detail page
     console.log('Post clicked:', post);
   };
@@ -55,7 +63,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
   return (
     <div>
       <div className="space-y-3">
-        {posts.map((post: any) => (
+        {posts.map((post) => (
           <PostItem
             key={post.id}
             post={post}

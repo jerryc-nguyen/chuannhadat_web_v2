@@ -41,6 +41,7 @@ export interface Marker {
   meta?: MarkerMeta;
   marker_icon_url?: string;
   marker_label?: string;
+  location_name?: string;
 }
 
 export interface LeafletMapProps {
