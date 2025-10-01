@@ -18,6 +18,7 @@ const MapDesktop: React.FC = () => {
     handleLayersClick,
     handleNavigationClick,
     handleHomeClick,
+    handleFilterChange,
   } = useMapDesktopHook();
 
   return (
@@ -39,6 +40,7 @@ const MapDesktop: React.FC = () => {
         onHomeClick={handleHomeClick}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
+        onFilterChange={handleFilterChange}
       />
 
 

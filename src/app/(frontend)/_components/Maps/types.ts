@@ -57,6 +57,7 @@ export interface MapControlsProps {
   onLayersClick?: () => void;
   onNavigationClick?: () => void;
   onHomeClick?: () => void;
+  onFilterChange?: (filters: { businessType?: string; categoryType?: string }) => void;
   className?: string;
   searchQuery?: string;
   onSearchQueryChange?: (query: string) => void;

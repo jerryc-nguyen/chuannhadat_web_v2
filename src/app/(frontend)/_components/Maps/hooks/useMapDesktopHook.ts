@@ -4,6 +4,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
 import { panToMarkerIfBehindPanel } from '../helpers/mapHelpers';
 import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
+import { useMapFilters } from './useMapFilters';
 import {
   mapAtom,
   selectedMarkerAtom,
@@ -21,11 +22,13 @@ export const useMapDesktopHook = () => {
   const clearSelectedMarker = useSetAtom(clearSelectedMarkerAtom);
   const selectedMarkerRef = useRef<Marker | null>(null);
 
+  // Global filter state management
+  const { updateFilters } = useMapFilters();
+
   // Keep ref in sync with state
   useEffect(() => {
     selectedMarkerRef.current = selectedMarker;
   }, [selectedMarker]);
-
 
   const handleMapReady = useCallback(async (mapInstance: unknown) => {
     const leafletMap = mapInstance as LeafletMap;
@@ -47,7 +50,15 @@ export const useMapDesktopHook = () => {
   }, [clearSelectedMarker, setMap]);
 
   // Wire interaction handlers when map is ready
-  useMapInteractionDesktopHook(map);
+  const { queryAndUpdateMarkers } = useMapInteractionDesktopHook(map);
+
+  const handleFilterChange = useCallback((filters: { businessType?: string; categoryType?: string }) => {
+    console.log('Filter changed:', filters);
+    // Update global filter state
+    // The useEffect in useMapInteractionDesktopHook will automatically
+    // trigger queryAndUpdateMarkers when the filter atoms change
+    updateFilters(filters);
+  }, [updateFilters]);
 
   // Listen for marker clicks from atoms and add panning logic
   useEffect(() => {
@@ -112,5 +123,6 @@ export const useMapDesktopHook = () => {
     handleNavigationClick,
     handleHomeClick,
     handleMarkerClick,
+    handleFilterChange,
   };
 };

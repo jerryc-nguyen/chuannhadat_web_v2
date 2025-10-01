@@ -1,8 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { useSetAtom } from 'jotai';
+import { useSetAtom, useAtomValue } from 'jotai';
 import { mapsApi } from '../api';
 import { Marker, LatLng, LeafletMap } from '../types';
-import { markerClickAtom } from '../states/mapAtoms';
+import { markerClickAtom, businessTypeFilterAtom, categoryTypeFilterAtom } from '../states/mapAtoms';
 
 import type { Layer } from 'leaflet';
 import useResizeImage from '@common/hooks/useResizeImage';
@@ -18,54 +18,23 @@ const getMapBounds = (map: LeafletMap) => {
   };
 };
 
-// Helper function to log bounds
-const logBounds = (bounds: { north: number; south: number; east: number; west: number }) => {
-  console.log('North:', bounds.north);
-  console.log('South:', bounds.south);
-  console.log('East:', bounds.east);
-  console.log('West:', bounds.west);
-};
-
-// Helper function to abort previous request
-const abortPreviousRequest = (abortRef: React.MutableRefObject<AbortController | null>) => {
-  if (abortRef.current) {
-    try {
-      abortRef.current.abort();
-    } catch (error) {
-      // Ignore abort errors - they're expected when cancelling requests
-      console.debug('Request abort error (expected):', error);
-    }
-  }
-  const controller = new AbortController();
-  abortRef.current = controller;
-  return controller;
-};
-
 // Helper function to fetch markers from API
 const fetchMarkers = async (
   bounds: { north: number; south: number; east: number; west: number },
+  filters: { businessType?: string | null; categoryType?: string | null },
   signal: AbortSignal
 ): Promise<Marker[]> => {
-  const res = await mapsApi.markersByBounds(
-    { ...bounds, page: 1, per_page: 100 },
-    { signal }
-  );
+  const requestParams = {
+    ...bounds,
+    page: 1,
+    per_page: 100,
+    ...(filters.businessType && { business_type: filters.businessType }),
+    ...(filters.categoryType && { category_type: filters.categoryType }),
+  };
+
+  const res = await mapsApi.markersByBounds(requestParams, { signal });
   const payload = res?.data ? { markers: res?.data?.users } : res?.data;
   return payload?.markers || [];
-};
-
-// Helper function to clear existing markers
-const clearExistingMarkers = (map: LeafletMap, layerRef: React.MutableRefObject<Layer | null>) => {
-  if (layerRef.current) {
-    console.log('🧹 CLEARING MARKERS - This should not happen after marker click!');
-    console.trace('Stack trace for marker clearing:');
-    try {
-      map.removeLayer(layerRef.current);
-    } catch (e) {
-      console.warn('Failed removing previous markers layer:', e);
-    }
-    layerRef.current = null;
-  }
 };
 
 // Helper function to create and add markers to map
@@ -91,7 +60,6 @@ const createAndAddMarkers = async (
           ratio: 1
         });
 
-        // Create a round icon using divIcon with custom HTML and label
         const customIcon = L.divIcon({
           html: `
             <div style="display: flex; flex-direction: column; align-items: center;">
@@ -128,11 +96,9 @@ const createAndAddMarkers = async (
 
         marker = L.marker([lat, lon], { icon: customIcon });
       } else {
-        // Use default marker if no custom icon
         marker = L.marker([lat, lon]);
       }
 
-      // Handle marker click using Jotai atom
       marker.on('click', () => {
         onMarkerClick(item);
       });
@@ -145,17 +111,27 @@ const createAndAddMarkers = async (
   return group;
 };
 
-// Helper function to check if error is cancellation
+// Helper function to check if error is cancellation/abort
 const isCancellationError = (error: unknown) => {
-  return (error as { name?: string })?.name === 'CanceledError' ||
-    (error as { name?: string })?.name === 'AbortError';
+  const errorObj = error as { name?: string; message?: string; status?: null | number; code?: string };
+
+  if (errorObj?.name === 'CanceledError' || errorObj?.name === 'AbortError') return true;
+  if (errorObj?.code === 'ERR_CANCELED' || errorObj?.code === 'ECONNABORTED') return true;
+  if (errorObj?.message?.toLowerCase().includes('cancel')) return true;
+  if (errorObj?.message?.toLowerCase().includes('abort')) return true;
+
+  // Axios wraps aborted requests as "Network error" with status: null
+  if (errorObj?.status === null && errorObj?.message?.includes('Network error')) {
+    return true;
+  }
+
+  return false;
 };
 
 // Helper function to compare marker arrays for equality
 const areMarkersEqual = (prevMarkers: Marker[], newMarkers: Marker[]): boolean => {
   if (prevMarkers.length !== newMarkers.length) return false;
 
-  // Simple comparison by IDs and positions
   for (let i = 0; i < prevMarkers.length; i++) {
     const prev = prevMarkers[i];
     const curr = newMarkers[i];
@@ -175,82 +151,83 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   const markersAbortRef = useRef<AbortController | null>(null);
   const currentMarkersRef = useRef<Marker[]>([]);
   const isPanningRef = useRef(false);
+  const isInitialMount = useRef(true);
   const { buildThumbnailUrl } = useResizeImage();
   const setMarkerClick = useSetAtom(markerClickAtom);
 
+  // Read global filter state
+  const businessType = useAtomValue(businessTypeFilterAtom);
+  const categoryType = useAtomValue(categoryTypeFilterAtom);
 
-  // Stable reference to prevent marker re-creation
+  // Stable reference for marker click handler
   const stableMarkerClick = useRef((marker: Marker) => {
+    isPanningRef.current = true; // Prevent moveend handler during pan
     setMarkerClick(marker);
   });
 
-  // Update the ref when setMarkerClick changes
-  stableMarkerClick.current = (marker: Marker) => {
-    isPanningRef.current = true; // Set flag to prevent moveend handling
-    setMarkerClick(marker);
-  };
-
-  const handleMapMoveEnd = useCallback(async () => {
+  // Reusable function to query and update markers
+  const queryAndUpdateMarkers = useCallback(async () => {
     if (!map || typeof window === 'undefined') return;
 
-    // Skip if we're panning due to marker click
-    if (isPanningRef.current) {
-      isPanningRef.current = false;
-      return;
-    }
-
     try {
-      // Get and log map bounds
+      // Abort previous request
+      if (markersAbortRef.current) {
+        markersAbortRef.current.abort();
+      }
+      const controller = new AbortController();
+      markersAbortRef.current = controller;
+
+      // Fetch markers with current bounds and filters
       const bounds = getMapBounds(map);
-      logBounds(bounds);
+      const markers = await fetchMarkers(bounds, { businessType, categoryType }, controller.signal);
 
-      // Abort previous request and create new one
-      const controller = abortPreviousRequest(markersAbortRef);
-
-      // Fetch markers from API
-      const markers = await fetchMarkers(bounds, controller.signal);
-
-      // Only recreate markers if the data actually changed
+      // Only update if markers changed
       const markersChanged = !areMarkersEqual(currentMarkersRef.current, markers);
 
       if (markersChanged) {
         // Clear existing markers
-        clearExistingMarkers(map, markersLayerRef);
+        if (markersLayerRef.current) {
+          map.removeLayer(markersLayerRef.current);
+        }
 
-        // Create and add new markers
+        // Add new markers
         const group = await createAndAddMarkers(map, markers, buildThumbnailUrl, stableMarkerClick.current);
         markersLayerRef.current = group;
         currentMarkersRef.current = markers;
       }
 
     } catch (error) {
-      if (isCancellationError(error)) return;
-      console.warn('Markers handling error:', error);
+      if (!isCancellationError(error)) {
+        console.warn('Error fetching markers:', error);
+      }
     }
-  }, [map]);
+  }, [map, businessType, categoryType, buildThumbnailUrl]);
 
+  // Handle map moveend event
+  const handleMapMoveEnd = useCallback(async () => {
+    // Skip if panning from marker click
+    if (isPanningRef.current) {
+      isPanningRef.current = false;
+      return;
+    }
 
+    await queryAndUpdateMarkers();
+  }, [queryAndUpdateMarkers]);
+
+  // Setup map moveend listener
   useEffect(() => {
     if (!map) return;
 
-    // Initial render and subscribe to moveend
+    // Load initial markers
     handleMapMoveEnd();
     map.on('moveend', handleMapMoveEnd);
 
     return () => {
-      // Cleanup
-      try {
-        map.off('moveend', handleMapMoveEnd);
-      } catch (error) {
-        console.debug('Error removing map event listener:', error);
-      }
+      map.off('moveend', handleMapMoveEnd);
 
+      // Cleanup on unmount only
       if (markersAbortRef.current) {
-        try {
-          markersAbortRef.current.abort();
-        } catch (error) {
-          console.debug('Error aborting request:', error);
-        }
+        markersAbortRef.current.abort();
         markersAbortRef.current = null;
       }
 
@@ -263,7 +240,25 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
         markersLayerRef.current = null;
       }
     };
-  }, [map, handleMapMoveEnd]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map]); // Only depend on map to prevent cleanup on filter changes
+
+  // Re-query markers when filters change
+  useEffect(() => {
+    if (!map) return;
+
+    // Skip on initial mount
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    queryAndUpdateMarkers();
+  }, [businessType, categoryType, map, queryAndUpdateMarkers]);
+
+  return {
+    queryAndUpdateMarkers,
+  };
 };
 
 export default useMapInteractionDesktopHook;

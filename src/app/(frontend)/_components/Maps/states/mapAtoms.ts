@@ -40,3 +40,38 @@ export const clearSelectedMarkerAtom = atom(
     set(selectedMarkerAtom, null);
   }
 );
+
+// Filter atoms for map markers
+export const businessTypeFilterAtom = atom<string | null>(null);
+export const categoryTypeFilterAtom = atom<string | null>(null);
+
+// Future filter atoms for scalability
+export const priceRangeFilterAtom = atom<{ min: number; max: number } | null>(null);
+export const areaFilterAtom = atom<{ min: number; max: number } | null>(null);
+export const bedroomFilterAtom = atom<number | null>(null);
+export const directionFilterAtom = atom<string | null>(null);
+
+// Combined filters atom for easy access
+export const mapFiltersAtom = atom(
+  (get) => ({
+    businessType: get(businessTypeFilterAtom),
+    categoryType: get(categoryTypeFilterAtom),
+    priceRange: get(priceRangeFilterAtom),
+    area: get(areaFilterAtom),
+    bedroom: get(bedroomFilterAtom),
+    direction: get(directionFilterAtom),
+  })
+);
+
+// Clear all filters atom
+export const clearAllFiltersAtom = atom(
+  null,
+  (get, set) => {
+    set(businessTypeFilterAtom, null);
+    set(categoryTypeFilterAtom, null);
+    set(priceRangeFilterAtom, null);
+    set(areaFilterAtom, null);
+    set(bedroomFilterAtom, null);
+    set(directionFilterAtom, null);
+  }
+);
