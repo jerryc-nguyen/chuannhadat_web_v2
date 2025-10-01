@@ -7,6 +7,12 @@ import PostItem from './PostItem';
 import { useUserPosts } from '../hooks/useUserPosts';
 import { useAtomValue } from 'jotai';
 import { businessTypeFilterAtom, categoryTypeFilterAtom } from '@maps/states/mapAtoms';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
+import useModalPostDetail from '@frontend/PostDetail/hooks/useModalPostDetail';
+import { ProductDetailTitleBts } from '@frontend/CategoryPage/mobile/searchs/ProductCardV2';
+import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
+import AuthorInfo from '@frontend/PostDetail/components/AuthorInfo';
+import { useApp } from '@common/context/AppContext';
 
 interface PostListProps {
   profileData: IUser;
@@ -17,6 +23,9 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
   // Get current filter values from global state
   const businessType = useAtomValue(businessTypeFilterAtom);
   const categoryType = useAtomValue(categoryTypeFilterAtom);
+  const { isMobile } = useApp();
+  const { openModal } = useModals();
+  const { handleOpenModal } = useModalPostDetail();
 
   const { posts, pagination, isLoading, error } = useUserPosts({
     authorSlug: profileData.slug,
@@ -55,9 +64,23 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
     );
   }
 
-  const handlePostClick = (post: IProductList) => {
+  const handlePostClick = (product: IProductList) => {
     // Handle post click - could navigate to post detail page
-    console.log('Post clicked:', post);
+    console.log('Post clicked:', product);
+    if (isMobile) {
+      openModal({
+        name: product.title,
+        title: <ProductDetailTitleBts product={product} />,
+        content: <PostDetailMobile productUid={product.uid} />,
+        maxHeightPercent: 0.95,
+        footer: <AuthorInfo />,
+        headerHeight: 74.59,
+        footerHeight: 74.59,
+        supportPushState: false,
+      });
+    } else {
+      handleOpenModal(product.uid);
+    }
   };
 
   return (

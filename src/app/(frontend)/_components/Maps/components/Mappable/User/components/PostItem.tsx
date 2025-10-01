@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { MapPin, Heart, Camera, Check } from 'lucide-react';
+import { MapPin, Heart, Camera } from 'lucide-react';
 import { IProductList } from '@common/types';
 
 interface PostItemProps {
