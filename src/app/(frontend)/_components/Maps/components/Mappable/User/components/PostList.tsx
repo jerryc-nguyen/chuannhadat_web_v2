@@ -28,7 +28,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
   const { openModal } = useModals();
   const { handleOpenModal } = useModalPostDetail();
 
-  const { posts, pagination, isLoading, error } = useUserPosts({
+  const { posts, pagination, isLoading, error, morePostsUrl } = useUserPosts({
     authorSlug: profileData.slug,
     wardId,
     page: 1,
@@ -36,6 +36,8 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
     businessType,
     categoryType,
   });
+
+  const finalMorePostsUrl = morePostsUrl ? morePostsUrl : `/profile/${profileData.slug}`;
 
   if (isLoading) {
     return (
@@ -100,7 +102,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
       {pagination && pagination.total_count > PER_PAGE && (
         <div className="mt-3">
           <a
-            href={`/profile/${profileData.slug}`}
+            href={finalMorePostsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full px-4 py-2 text-sm text-center text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"

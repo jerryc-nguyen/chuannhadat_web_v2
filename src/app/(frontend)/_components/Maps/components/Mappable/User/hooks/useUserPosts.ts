@@ -24,6 +24,7 @@ interface UseUserPostsReturn {
   pagination: Pagination | null;
   isLoading: boolean;
   error: Error | null;
+  morePostsUrl: string | null;
 }
 
 export const useUserPosts = ({
@@ -50,10 +51,11 @@ export const useUserPosts = ({
 
   const posts = data?.data || [];
   const pagination = data?.pagination;
-
+  const morePostsUrl = data?.listing_url;
   return {
     posts,
     pagination,
+    morePostsUrl,
     isLoading,
     error,
   };

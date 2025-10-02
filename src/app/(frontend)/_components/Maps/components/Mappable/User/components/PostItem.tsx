@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { MapPin, Camera, Clock } from 'lucide-react';
+import { Camera, Clock } from 'lucide-react';
 import { IProductList } from '@common/types';
 import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 
