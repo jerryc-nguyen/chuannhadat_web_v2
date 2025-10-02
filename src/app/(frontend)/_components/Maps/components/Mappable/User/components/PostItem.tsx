@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import { MapPin, Heart, Camera } from 'lucide-react';
+import { MapPin, Camera, Clock } from 'lucide-react';
 import { IProductList } from '@common/types';
+import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 
 interface PostItemProps {
   post: IProductList;
@@ -65,11 +66,11 @@ const PostItem: React.FC<PostItemProps> = ({ post, onClick }) => {
             </div>
 
             {/* Price and Area */}
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-3 mb-2">
               <span className="text-lg font-bold text-red-600">
                 {post.formatted_price}
               </span>
-              {post.formatted_price_per_m2 && (
+              {post.business_type === 'sell' && post.formatted_price_per_m2 && (
                 <span className="text-sm text-gray-900">
                   {post.formatted_price_per_m2}
                 </span>
@@ -83,22 +84,19 @@ const PostItem: React.FC<PostItemProps> = ({ post, onClick }) => {
 
             {/* Location */}
             <div className="flex items-center gap-1 mb-2">
-              <MapPin className="w-3 h-3 text-gray-400" />
+              <Clock className="w-3 h-3 text-gray-400" />
               <span className="text-xs text-gray-600 truncate">
-                {post.short_location_name}
+                {post.formatted_publish_at}
               </span>
             </div>
 
             {/* Favorite Button - Absolute positioned */}
-            <button
-              className="absolute bottom-1 right-2 p-1 bg-white/90 hover:bg-white rounded-full shadow-sm transition-colors duration-200"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Handle favorite action
-              }}
-            >
-              <Heart className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors duration-200" />
-            </button>
+            <div className="absolute bottom-1 right-2 z-[4]">
+              <ButtonSave
+                postUid={post.uid}
+                className="!relative !top-auto !right-auto !bottom-auto !left-auto !opacity-100 !visible !p-1"
+              />
+            </div>
           </div>
 
         </div>

@@ -19,6 +19,7 @@ interface PostListProps {
   wardId?: number;
 }
 
+const PER_PAGE = 8;
 const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
   // Get current filter values from global state
   const businessType = useAtomValue(businessTypeFilterAtom);
@@ -31,7 +32,7 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
     authorSlug: profileData.slug,
     wardId,
     page: 1,
-    perPage: 5, // Show only 5 posts in the info panel
+    perPage: PER_PAGE, // Show only 10 posts in the info panel
     businessType,
     categoryType,
   });
@@ -95,12 +96,17 @@ const PostList: React.FC<PostListProps> = ({ profileData, wardId }) => {
         ))}
       </div>
 
-      {/* Show more indicator if there are more posts */}
-      {pagination && pagination.total_count > posts.length && (
-        <div className="mt-3 text-center">
-          <span className="text-xs text-gray-500">
-            Hiển thị {posts.length} trong {pagination.total_count} tin đăng
-          </span>
+      {/* Show more link if there are more posts than per_page */}
+      {pagination && pagination.total_count > PER_PAGE && (
+        <div className="mt-3">
+          <a
+            href={`/profile/${profileData.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full px-4 py-2 text-sm text-center text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+          >
+            Xem thêm {pagination.total_count - PER_PAGE} tin đăng
+          </a>
         </div>
       )}
     </div>

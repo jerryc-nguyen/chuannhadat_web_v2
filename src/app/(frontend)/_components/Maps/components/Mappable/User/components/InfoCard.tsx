@@ -71,12 +71,16 @@ const InfoCard: React.FC<InfoCardProps> = ({
           )}
 
           {/* Post Count */}
-          <div className="flex items-center">
-            <span className="font-semibold text-gray-900 mr-1">
-              {profileData?.posts_count || 0}
-            </span>
-            <span className="text-gray-600">tin đăng</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <span className="font-semibold text-gray-900 mr-1">
+                {profileData?.posts_count || 0}
+              </span>
+              <span className="text-gray-600">tin đăng</span>
+            </div>
+            <a target="_blank" href={`/profile/${profileData?.slug}`} className="text-blue-800">Xem tất cả >></a>
           </div>
+
 
         </div>
       </div>

@@ -36,6 +36,7 @@ export interface IProductList {
   title: string;
   slug: string;
   detail_path: string;
+  business_type?: string;
 
   // Location info
   short_location_name: string;
