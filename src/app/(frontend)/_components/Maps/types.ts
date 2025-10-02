@@ -28,6 +28,7 @@ export interface MarkerMeta {
 
 export interface Marker {
   id: number;
+  uid: string;
   mappable_ype: string;
   mappable_id: number;
   mappable_data: IUser;

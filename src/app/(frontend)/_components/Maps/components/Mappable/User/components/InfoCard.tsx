@@ -78,7 +78,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
               </span>
               <span className="text-gray-600">tin đăng</span>
             </div>
-            <a target="_blank" href={`/profile/${profileData?.slug}`} className="text-blue-800">Xem tất cả >></a>
+            <a target="_blank" href={`/profile/${profileData?.slug}`} className="text-blue-800">Xem tất cả &gt;&gt;</a>
           </div>
 
 

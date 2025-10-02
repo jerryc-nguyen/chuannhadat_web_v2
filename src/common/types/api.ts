@@ -9,7 +9,7 @@ import { HttpStatusCode } from 'axios';
  * Generic API response wrapper
  */
 export interface IResponseData<T> {
-  code: HttpStatusCode;
+  code?: HttpStatusCode;
   status: boolean | number;
   message?: string;
   data: T;

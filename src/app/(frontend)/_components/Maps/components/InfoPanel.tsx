@@ -3,10 +3,12 @@
 import InfoCard from '@maps/components/Mappable/User/components/InfoCard';
 import Contacts from '@maps/components/Mappable/User/components/Contacts';
 import PostList from '@maps/components/Mappable/User/components/PostList';
+import RelatedLocations from '@maps/components/Mappable/User/components/RelatedLocations';
 import ActivePostFilters from '@maps/components/Mappable/User/components/ActivePostFilters';
 import { useProfileData } from '@maps/components/Mappable/User/hooks';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
 import { Marker } from '../types';
+
 
 interface InfoPanelProps {
   marker: Marker;
@@ -68,6 +70,13 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
             wardId={marker.ward_id}
           />
         </div>
+
+        <div className="border-t border-gray-200 my-4 mb-2"></div>
+
+        <div className="px-4 py-2">
+          <RelatedLocations markerUid={marker.uid} />
+        </div>
+
 
       </div>
 

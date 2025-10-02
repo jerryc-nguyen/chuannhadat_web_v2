@@ -38,8 +38,7 @@ export const useUserPosts = ({
   const { data, isLoading, error } = useQuery({
     queryKey: ['user-posts-maps', authorSlug, wardId, page, perPage, businessType, categoryType],
     queryFn: () =>
-      userPostsApi({
-        author_slug: authorSlug,
+      userPostsApi(authorSlug, {
         ward_id: wardId,
         page,
         per_page: perPage,
