@@ -61,7 +61,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
         {/* Posts Section */}
         <div className="px-4 py-2">
-          <h2 className="text-g font-semibold text-gray-900 mb-2">Tin đã đăng {marker.location_name && `tại ${marker.location_name}`}</h2>
+          <h2 className="text-g font-semibold text-gray-900 mb-4">Tin đã đăng {marker.location_name && `tại ${marker.location_name}`}</h2>
 
           <ActivePostFilters />
 

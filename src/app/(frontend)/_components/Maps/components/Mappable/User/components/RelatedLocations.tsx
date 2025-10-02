@@ -50,7 +50,7 @@ export default function RelatedLocations({ markerUid }: RelatedLocationsProps) {
   }
   return (
     <div className="space-y-3">
-      <h2 className="text-g font-semibold text-gray-900 mb-2">
+      <h2 className="text-g font-semibold text-gray-900 mb-4">
         Các địa điểm khác tại {district_name}
       </h2>
 
