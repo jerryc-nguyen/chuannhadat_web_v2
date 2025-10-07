@@ -6,6 +6,7 @@ import { markerClickAtom, businessTypeFilterAtom, categoryTypeFilterAtom } from 
 
 import type { Layer } from 'leaflet';
 import useResizeImage from '@common/hooks/useResizeImage';
+import { useHighlightSelectedMarker } from './useHighlightSelectedMarker';
 
 // Helper function to get map bounds
 const getMapBounds = (map: LeafletMap) => {
@@ -158,6 +159,9 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   // Read global filter state
   const businessType = useAtomValue(businessTypeFilterAtom);
   const categoryType = useAtomValue(categoryTypeFilterAtom);
+
+  // Use highlight marker hook
+  useHighlightSelectedMarker(map);
 
   // Stable reference for marker click handler
   const stableMarkerClick = useRef((marker: Marker) => {

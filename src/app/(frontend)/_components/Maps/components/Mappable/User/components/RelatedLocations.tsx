@@ -7,9 +7,10 @@ import { Marker } from '@maps/types';
 
 interface RelatedLocationsProps {
   markerUid: string;
+  onItemClicked?: (marker: Marker) => void;
 }
 
-export default function RelatedLocations({ markerUid }: RelatedLocationsProps) {
+export default function RelatedLocations({ markerUid, onItemClicked }: RelatedLocationsProps) {
   const { data, isLoading } = useQuery({
     queryKey: ['related-locations', markerUid],
     queryFn: () => getRelatedLocations(markerUid),
@@ -58,7 +59,8 @@ export default function RelatedLocations({ markerUid }: RelatedLocationsProps) {
         {wards && wards.map((ward: RelatedLocation) => (
           <div
             key={ward.ward_name}
-            className="min-w-[200px] overflow-hidden rounded-lg bg-white shadow-sm transition-transform hover:scale-[1.02]"
+            className="min-w-[200px] overflow-hidden rounded-lg bg-white shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
+            onClick={() => onItemClicked?.(ward.marker)}
           >
             <div className="relative h-32 w-full">
               <Image

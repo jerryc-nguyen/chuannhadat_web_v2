@@ -1,11 +1,15 @@
 import { atom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
+import type { Layer } from 'leaflet';
 
 // Map instance atom
 export const mapAtom = atom<LeafletMap | null>(null);
 
 // Selected marker atom
 export const selectedMarkerAtom = atom<Marker | null>(null);
+
+// Highlight marker layer atom - stores the Leaflet layer for the highlight marker
+export const highlightMarkerLayerAtom = atom<Layer | null>(null);
 
 // Search query atom
 export const searchQueryAtom = atom<string>('');

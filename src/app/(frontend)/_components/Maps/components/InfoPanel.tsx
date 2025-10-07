@@ -8,6 +8,7 @@ import ActivePostFilters from '@maps/components/Mappable/User/components/ActiveP
 import { useProfileData } from '@maps/components/Mappable/User/hooks';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
 import { Marker } from '../types';
+import { useRelatedLocation } from './hooks/useRelatedLocation';
 
 
 interface InfoPanelProps {
@@ -19,6 +20,8 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
   marker,
   onClose: _onClose,
 }) => {
+  const handleRelatedLocationClick = useRelatedLocation();
+
   // Lift the profile data state up to the parent
   const { profileData, imgSrc, setImgSrc, isLoading, error } = useProfileData({
     user: marker.mappable_data
@@ -74,7 +77,10 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
         <div className="border-t border-gray-200 my-4 mb-2"></div>
 
         <div className="px-4 py-2">
-          <RelatedLocations markerUid={marker.uid} />
+          <RelatedLocations
+            markerUid={marker.uid}
+            onItemClicked={handleRelatedLocationClick}
+          />
         </div>
 
 
