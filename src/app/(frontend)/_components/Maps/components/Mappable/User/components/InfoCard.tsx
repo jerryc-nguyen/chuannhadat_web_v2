@@ -6,11 +6,13 @@ import default_avatar from '@assets/images/default_avatar.png';
 import useResizeImage from '@common/hooks/useResizeImage';
 import SocialLinks from '@frontend/ProfileDetail/mobile/components/SocialLinks';
 import { IUser } from '@common/types';
+import { Marker } from '@maps/types';
 
 interface InfoCardProps {
   imgSrc: StaticImageData | string;
   setImgSrc: (src: StaticImageData | string) => void;
   profileData?: IUser,
+  marker?: Marker;
   containerClassName?: string,
 }
 
@@ -20,6 +22,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
   imgSrc,
   setImgSrc,
   profileData,
+  marker
 }) => {
   const { cropSquare } = useResizeImage();
 
@@ -51,7 +54,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
         <div className="flex-1 min-w-0 pt-2">
           {/* Name and Social Links */}
           <div className="flex items-start justify-between">
-            <h1 className="text-2xl font-semibold text-gray-900 truncate pr-2">
+            <h1 className="text-2xl font-semibold text-gray-900 truncate pr-2" data-markerId={marker?.uid}>
               {profileData?.full_name || 'Tên người dùng'}
             </h1>
             <SocialLinks profileData={profileData} />

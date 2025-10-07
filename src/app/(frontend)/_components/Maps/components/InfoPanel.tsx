@@ -52,6 +52,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
           profileData={profileData}
           imgSrc={imgSrc}
           setImgSrc={setImgSrc}
+          marker={marker}
         />
 
         {/* Divider */}
@@ -78,6 +79,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
         <div className="px-4 py-2">
           <RelatedLocations
+            profileData={profileData}
             markerUid={marker.uid}
             onItemClicked={handleRelatedLocationClick}
           />

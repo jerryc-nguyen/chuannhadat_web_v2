@@ -4,16 +4,27 @@ import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { getRelatedLocations, RelatedLocation } from '@maps/api';
 import { Marker } from '@maps/types';
+import { useAtomValue } from 'jotai';
+import { businessTypeFilterAtom, categoryTypeFilterAtom } from '@maps/states/mapAtoms';
+import { IUser } from '@common/types';
 
 interface RelatedLocationsProps {
+  profileData: IUser;
   markerUid: string;
   onItemClicked?: (marker: Marker) => void;
 }
 
-export default function RelatedLocations({ markerUid, onItemClicked }: RelatedLocationsProps) {
+export default function RelatedLocations({ markerUid, onItemClicked, profileData }: RelatedLocationsProps) {
+  // Get current filter values from global state
+  const businessType = useAtomValue(businessTypeFilterAtom);
+  const categoryType = useAtomValue(categoryTypeFilterAtom);
+
   const { data, isLoading } = useQuery({
-    queryKey: ['related-locations', markerUid],
-    queryFn: () => getRelatedLocations(markerUid),
+    queryKey: ['related-locations', markerUid, businessType, categoryType],
+    queryFn: () => getRelatedLocations(markerUid, {
+      businessType: businessType || undefined,
+      categoryType: categoryType || undefined
+    }),
     enabled: !!markerUid,
   });
 
@@ -43,7 +54,6 @@ export default function RelatedLocations({ markerUid, onItemClicked }: RelatedLo
     );
   }
 
-
   const { district_name, wards } = data?.data || {};
 
   if (!district_name || Array.isArray(wards) && wards.length === 0) {
@@ -52,7 +62,7 @@ export default function RelatedLocations({ markerUid, onItemClicked }: RelatedLo
   return (
     <div className="space-y-3">
       <h2 className="text-g font-semibold text-gray-900 mb-4">
-        Các địa điểm khác tại {district_name}
+        Khu vực hoạt động khác của {profileData.full_name}
       </h2>
 
       <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">

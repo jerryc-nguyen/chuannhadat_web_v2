@@ -33,6 +33,7 @@ export const searchQueryWithMarkerAtom = atom(
 export const markerClickAtom = atom(
   null,
   (get, set, marker: Marker) => {
+    console.log('markerClickAtom', marker);
     set(selectedMarkerAtom, marker);
     set(searchQueryWithMarkerAtom, marker);
   }
