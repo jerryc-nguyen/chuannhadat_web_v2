@@ -20,20 +20,37 @@ export const useMapPanning = () => {
     if (!map) return false;
 
     const bounds = map.getBounds();
-    const isInBounds = bounds.contains([location.lat, location.lon]);
+    const leafletResult = bounds.contains([location.lat, location.lon]);
+
+    // Manual bounds check for comparison
+    const north = bounds.getNorth();
+    const south = bounds.getSouth();
+    const east = bounds.getEast();
+    const west = bounds.getWest();
+
+    const manualCheck =
+      location.lat >= south &&
+      location.lat <= north &&
+      location.lon >= west &&
+      location.lon <= east;
+
+    // Debug: Check if there's a discrepancy between Leaflet and manual calculation
+    if (leafletResult !== manualCheck) {
+      console.warn('🚨 Bounds check discrepancy:', {
+        location,
+        leafletResult,
+        manualCheck,
+        bounds: { north, south, east, west }
+      });
+    }
 
     console.log('🗺️ Map bounds check:', {
       location,
-      bounds: {
-        north: bounds.getNorth(),
-        south: bounds.getSouth(),
-        east: bounds.getEast(),
-        west: bounds.getWest()
-      },
-      isInBounds
+      isInBounds: leafletResult,
+      reason: leafletResult ? 'marker in bounds' : 'marker out of bounds'
     });
 
-    return isInBounds;
+    return leafletResult;
   }, [map]);
 
   /**
@@ -84,9 +101,9 @@ export const useMapPanning = () => {
   }, [map, selectedLocation, selectedMarker]);
 
   /**
-   * Calculate the pixel offset needed to center the marker in the visible map area
+   * Calculate where the marker should be positioned in the visible area (not behind panels)
    */
-  const calculatePanelOffset = useCallback(() => {
+  const calculateVisibleAreaCenter = useCallback(() => {
     const windowWidth = window.innerWidth;
 
     // Check which panels are shown
@@ -95,28 +112,35 @@ export const useMapPanning = () => {
     const areBothPanelsShown = isListingPanelShown && isInfoPanelShown;
     const canShowBothPanels = windowWidth >= 1200; // Same logic as in MapDesktop
 
-    let panelWidth = 0;
+    let visibleAreaCenterX = windowWidth / 2; // Default: center of screen
 
     if (areBothPanelsShown && canShowBothPanels) {
-      // Both panels are shown side by side - offset by one full panel width to the right
-      panelWidth = -SEARCH_BOX_WIDTH_WITH_PADDING; // Negative to pan right (away from panels)
+      // Both panels: visible area starts after both panels
+      const availableWidth = windowWidth - (SEARCH_BOX_WIDTH_WITH_PADDING * 2);
+      visibleAreaCenterX = (SEARCH_BOX_WIDTH_WITH_PADDING * 2) + (availableWidth / 2);
     } else if (isListingPanelShown || isInfoPanelShown) {
-      // Only one panel is shown - offset by half panel width to the right
-      panelWidth = -SEARCH_BOX_WIDTH_WITH_PADDING / 2; // Negative to pan right (away from panel)
+      // Single panel: visible area starts after one panel
+      const availableWidth = windowWidth - SEARCH_BOX_WIDTH_WITH_PADDING;
+      visibleAreaCenterX = SEARCH_BOX_WIDTH_WITH_PADDING + (availableWidth / 2);
     }
 
-    console.log('🎯 Panel offset calculation:', {
+    // Calculate offset from screen center to visible area center
+    const screenCenterX = windowWidth / 2;
+    const offsetX = visibleAreaCenterX - screenCenterX;
+
+    console.log('🎯 Visible area calculation:', {
       windowWidth,
       isListingPanelShown,
       isInfoPanelShown,
       areBothPanelsShown,
       canShowBothPanels,
-      panelWidth,
-      offsetX: panelWidth,
-      direction: panelWidth < 0 ? 'right (away from panels)' : 'no offset'
+      screenCenterX,
+      visibleAreaCenterX,
+      offsetX,
+      meaning: `marker should appear ${offsetX}px ${offsetX > 0 ? 'right' : 'left'} of screen center`
     });
 
-    return { x: panelWidth, y: 0 };
+    return { x: offsetX, y: 0 };
   }, [selectedLocation, selectedMarker]);
 
   /**
@@ -197,31 +221,80 @@ export const useMapPanning = () => {
     //   map.panTo([lat, lon], { animate: false });
     // }
 
-    // Check if marker needs panning: must be behind panels AND outside map bounds
-    const isBehindPanels = isMarkerBehindPanels(location);
+    // Check if marker is currently in bounds
     const isInBounds = isMarkerInMapBounds(location);
 
-    if (isBehindPanels || !isInBounds) {
-      // Pan to location first, then apply panel offset
-      if (options?.zoom) {
-        map.setView([lat, lon], options.zoom, { animate: true });
-      } else {
-        map.panTo([lat, lon], { animate: true });
+    if (!isInBounds) {
+      // Marker is out of bounds - calculate optimal position directly
+      console.log('🎯 Marker out of bounds, calculating optimal pan position');
+
+      // Get the visible area center offset
+      const offset = calculateVisibleAreaCenter();
+
+      // Start with the marker location as the target map center
+      let targetMapCenter = { lat, lon };
+
+      if (offset.x !== 0 || offset.y !== 0) {
+        // Convert pixel offset to map coordinate offset
+        // We need to calculate how much to adjust the map center
+        // so that when the marker is displayed, it appears offset by the panel amount
+
+        // Get current map center and convert offset to map coordinates
+        const currentCenter = map.getCenter();
+        const currentCenterPoint = map.latLngToContainerPoint([currentCenter.lat, currentCenter.lng]);
+
+        // Apply the offset to the center point (opposite direction)
+        const adjustedCenterPoint = {
+          x: currentCenterPoint.x - offset.x, // Move map center opposite to where we want marker to appear
+          y: currentCenterPoint.y - offset.y
+        };
+
+        // Convert back to lat/lng to get the offset amount
+        const adjustedCenter = map.containerPointToLatLng([adjustedCenterPoint.x, adjustedCenterPoint.y]);
+
+        // Calculate the coordinate difference
+        const latOffset = adjustedCenter.lat - currentCenter.lat;
+        const lonOffset = adjustedCenter.lng - currentCenter.lng;
+
+        // Apply this offset to our target marker location
+        targetMapCenter = {
+          lat: lat + latOffset,
+          lon: lon + lonOffset
+        };
+
+        console.log('🎯 Calculated optimal map center:', {
+          originalMarker: { lat, lon },
+          panelOffset: offset,
+          coordinateOffset: { latOffset, lonOffset },
+          targetMapCenter,
+          reason: 'Position map so marker appears in visible area'
+        });
       }
 
-      const offset = calculatePanelOffset();
-      if (offset.x !== 0 || offset.y !== 0) {
-        map.panBy([offset.x, offset.y], panOptions);
-        console.log('🎯 Applied smart panning: marker was behind panels and out of bounds', { offset });
+      // Pan to the optimal position in one smooth motion
+      if (options?.zoom) {
+        map.setView([targetMapCenter.lat, targetMapCenter.lon], options.zoom, panOptions);
+      } else {
+        map.panTo([targetMapCenter.lat, targetMapCenter.lon], panOptions);
       }
+
+      console.log('🎯 Applied single smooth pan to optimal position');
     } else {
-      console.log('🎯 No panning needed:', {
-        isBehindPanels,
-        isInBounds,
-        reason: isInBounds ? 'marker already in view' : 'marker visible and in bounds'
-      });
+      // Marker is in bounds - check if it's behind panels
+      const isBehindPanels = isMarkerBehindPanels(location);
+
+      if (isBehindPanels) {
+        // Apply offset to move marker to visible area
+        const offset = calculateVisibleAreaCenter();
+        if (offset.x !== 0 || offset.y !== 0) {
+          map.panBy([-offset.x, -offset.y], panOptions); // Negative because we're moving the map, not the marker
+          console.log('🎯 Applied visible area offset for in-bounds marker:', { offset });
+        }
+      } else {
+        console.log('🎯 Marker is visible and not behind panels, no panning needed');
+      }
     }
-  }, [map, calculatePanelOffset, isMarkerBehindPanels, isMarkerInMapBounds]);
+  }, [map, calculateVisibleAreaCenter, isMarkerBehindPanels, isMarkerInMapBounds]);
 
   /**
    * Pan to current user location
