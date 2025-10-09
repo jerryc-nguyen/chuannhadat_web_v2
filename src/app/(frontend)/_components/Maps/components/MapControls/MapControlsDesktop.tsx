@@ -6,6 +6,7 @@ import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
 import { markerClickAtom, selectLocationAtom } from '../../states/mapAtoms';
+import { useMapPanning } from '../../hooks/useMapPanning';
 import { IUser, CustomerGender } from '@common/types';
 import { TMapSetting } from '../../types';
 import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
@@ -33,6 +34,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
 
   const handleMarkerClick = useSetAtom(markerClickAtom);
   const selectLocation = useSetAtom(selectLocationAtom);
+  const { panToLocation } = useMapPanning();
 
   const handleAutocompleteSelect = (option: OptionForSelect) => {
     // Store the selected location for listing panel
@@ -76,6 +78,9 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
 
       // Trigger marker selection
       handleMarkerClick(marker);
+
+      // Pan map to the selected location
+      panToLocation(markerData.location, { animate: true, duration: 0.5 });
     }
   };
 

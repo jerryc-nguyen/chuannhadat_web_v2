@@ -5,6 +5,7 @@ import { LeafletMap, Marker } from '../types';
 import { panToMarkerIfBehindPanel } from '../helpers/mapHelpers';
 import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
 import { useMapFilters } from './useMapFilters';
+import { useMapPanning } from './useMapPanning';
 import {
   mapAtom,
   selectedMarkerAtom,
@@ -24,6 +25,9 @@ export const useMapDesktopHook = () => {
 
   // Global filter state management
   const { updateFilters } = useMapFilters();
+
+  // Map panning functionality
+  const { panToCurrentLocation } = useMapPanning();
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -75,19 +79,8 @@ export const useMapDesktopHook = () => {
   }, []);
 
   const handleLocationClick = useCallback(() => {
-    if (navigator.geolocation && map) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          map.setView([latitude, longitude], 15);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          alert('Không thể lấy vị trí hiện tại. Vui lòng kiểm tra quyền truy cập vị trí.');
-        }
-      );
-    }
-  }, [map]);
+    panToCurrentLocation({ zoom: 15 });
+  }, [panToCurrentLocation]);
 
   const handleLayersClick = useCallback(() => {
     // Only one tile option available - no layer menu needed
