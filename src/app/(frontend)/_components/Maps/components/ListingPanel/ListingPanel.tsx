@@ -54,18 +54,10 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
     return <ErrorState onClose={onClose} />;
   }
 
-  // Debug: Log the response structure to understand the API format
-  console.log('ListingPanel API response:', response);
-  console.log('Response type:', typeof response);
-  console.log('Response keys:', Object.keys(response || {}));
-
   // Handle the actual API response structure: { pagination: {...}, results: [...] } (direct format)
   const responseData = response as unknown as Record<string, unknown>;
   const markers = (responseData?.results as Marker[]) || [];
   const pagination = responseData?.pagination as IPagination | null;
-
-  console.log('Extracted markers:', markers);
-  console.log('Extracted pagination:', pagination);
 
   return (
     <div

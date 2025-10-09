@@ -5,9 +5,8 @@ import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
-import { markerClickAtom, selectLocationAtom } from '../../states/mapAtoms';
+import { selectLocationAtom } from '../../states/mapAtoms';
 import { useMapPanning } from '../../hooks/useMapPanning';
-import { IUser, CustomerGender } from '@common/types';
 import { TMapSetting } from '../../types';
 import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
 import { useState, useRef } from 'react';
@@ -32,7 +31,6 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
   });
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleMarkerClick = useSetAtom(markerClickAtom);
   const selectLocation = useSetAtom(selectLocationAtom);
   const { panToLocationSmart } = useMapPanning();
 
@@ -43,41 +41,6 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
     // Create a marker object from the autocomplete option
     if (option.data && option.data_type === 'MapSetting') {
       const markerData = option.data as unknown as TMapSetting;
-
-      // Create a minimal user object for autocomplete results
-      const minimalUser: IUser = {
-        id: markerData.mappable_id,
-        full_name: markerData.location_name,
-        address: markerData.formatted_address,
-        avatar_url: '',
-        description: null,
-        job_title: null,
-        phone: '',
-        posts_count: 0,
-        profile_tags: [],
-        // Fill in other required fields with defaults
-        api_token: '',
-        formatted_badges: null,
-        formatted_joined_at: '',
-        gender: CustomerGender.Male,
-        referral_code: '',
-        post_token: '',
-        slug: markerData.uid,
-      };
-
-      const marker = {
-        id: markerData.id,
-        uid: markerData.uid,
-        mappable_ype: markerData.mappable_type,
-        mappable_id: markerData.mappable_id,
-        mappable_data: minimalUser,
-        location: markerData.location,
-        location_name: markerData.location_name,
-        marker_label: markerData.location_name,
-      };
-
-      // Trigger marker selection
-      handleMarkerClick(marker);
 
       // Pan map to the selected location with smart centering
       panToLocationSmart(markerData.location, { animate: true, duration: 0.5 });

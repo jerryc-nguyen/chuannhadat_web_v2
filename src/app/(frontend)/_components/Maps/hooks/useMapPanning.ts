@@ -204,9 +204,9 @@ export const useMapPanning = () => {
     if (isBehindPanels || !isInBounds) {
       // Pan to location first, then apply panel offset
       if (options?.zoom) {
-        map.setView([lat, lon], options.zoom, { animate: false });
+        map.setView([lat, lon], options.zoom, { animate: true });
       } else {
-        map.panTo([lat, lon], { animate: false });
+        map.panTo([lat, lon], { animate: true });
       }
 
       const offset = calculatePanelOffset();

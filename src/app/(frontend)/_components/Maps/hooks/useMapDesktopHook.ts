@@ -67,7 +67,9 @@ export const useMapDesktopHook = () => {
         lat: selectedMarker.location.lat,
         lon: selectedMarker.location.lon
       };
-      panToLocationSmart(location, { animate: true, duration: 0.5 });
+      setTimeout(() => {
+        panToLocationSmart(location, { animate: true, duration: 0.5 });
+      }, 10);
     }
   }, [selectedMarker, panToLocationSmart]);
 
