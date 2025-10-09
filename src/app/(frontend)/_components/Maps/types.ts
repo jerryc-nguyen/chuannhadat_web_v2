@@ -66,5 +66,16 @@ export interface MapControlsProps {
 }
 
 
+// Map setting data structure for autocomplete results
+export interface TMapSetting {
+  id: number;
+  uid: string;
+  mappable_type: string;
+  mappable_id: number;
+  location: LatLng;
+  location_name: string;
+  formatted_address: string;
+}
+
 // Export the Leaflet Map type for use in other files
 export type { LeafletMap };

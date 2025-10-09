@@ -1,0 +1,8 @@
+import axiosInstance from '@common/api/axiosInstance';
+import { AutocompleteSearchResponse } from '../types';
+
+export const autocompleteApi = {
+  search: async (params: { keyword: string }): Promise<AutocompleteSearchResponse> => {
+    return axiosInstance.get('/api/v2/maps/autocompletes', { params });
+  },
+};
