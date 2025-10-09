@@ -5,4 +5,7 @@ export const autocompleteApi = {
   search: async (params: { keyword: string }): Promise<AutocompleteSearchResponse> => {
     return axiosInstance.get('/api/v2/maps/autocompletes', { params });
   },
+  recent: async (params: { limit: number }): Promise<AutocompleteSearchResponse> => {
+    return axiosInstance.get('/api/v2/maps/autocompletes/recent', { params });
+  },
 };

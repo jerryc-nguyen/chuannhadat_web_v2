@@ -6,6 +6,7 @@ import { SEARCH_BOX_WIDTH } from '../../constants';
 import { useAutocompleteSearch } from './hooks/useAutocompleteSearch';
 import { useClickOutside, useTrackAction } from '@common/hooks';
 import { OptionForSelect } from '@common/types';
+import { AutocompleteDropdown } from './components';
 
 interface AutocompleteProps {
   value?: string;
@@ -34,7 +35,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const { trackAction } = useTrackAction();
 
   // Use the search hook
-  const { results, loading, search, clearResults } = useAutocompleteSearch();
+  const { results, loading, resultType, search, loadRecentSearches } = useAutocompleteSearch();
 
   // Sync external value changes
   useEffect(() => {
@@ -55,10 +56,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       }, 300);
       return () => clearTimeout(timeoutId);
     } else {
-      clearResults();
-      setIsOpen(false);
+      // When input is empty, load recent searches instead of clearing
+      loadRecentSearches(5);
     }
-  }, [inputValue, search, clearResults]);
+  }, [inputValue, search, loadRecentSearches]);
 
   // Show dropdown when we have results
   useEffect(() => {
@@ -70,6 +71,11 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     const newValue = e.target.value;
     setInputValue(newValue);
     onChange?.(newValue);
+
+    // If input is cleared, show recent searches
+    if (!newValue.trim()) {
+      loadRecentSearches(5);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -129,6 +135,9 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     // Show dropdown if we have results from previous search
     if (results.length > 0) {
       setIsOpen(true);
+    } else if (!inputValue.trim()) {
+      // If input is empty, load recent searches
+      loadRecentSearches(5);
     }
   };
 
@@ -159,43 +168,13 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       </form>
 
       {/* Dropdown */}
-      {isOpen && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-64 overflow-y-auto z-50">
-          {results.map((option, index) => (
-            <div
-              key={String(option.value || index)}
-              className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors ${index === selectedIndex ? 'bg-blue-50 border-blue-200' : ''
-                }`}
-              onClick={() => handleOptionSelect(option)}
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex-1">
-                  <div className="font-medium text-gray-900">{option.text}</div>
-                  {option.long_text && (
-                    <div className="text-xs text-gray-500 truncate">
-                      {option.long_text}
-                    </div>
-                  )}
-                  {option.data_type && (
-                    <div className="text-xs text-gray-400 capitalize">
-                      {option.data_type.replace(/([A-Z])/g, ' $1').trim()}
-                    </div>
-                  )}
-                  {option.description && (
-                    <div className="text-xs text-gray-400">
-                      {option.description}
-                    </div>
-                  )}
-                </div>
-                {option.count !== undefined && (
-                  <div className="text-xs text-gray-400">
-                    {option.count}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+      {isOpen && (
+        <AutocompleteDropdown
+          options={results}
+          selectedIndex={selectedIndex}
+          resultType={resultType}
+          onSelect={handleOptionSelect}
+        />
       )}
     </div>
   );
