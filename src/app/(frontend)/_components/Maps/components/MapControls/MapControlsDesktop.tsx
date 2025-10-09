@@ -34,7 +34,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
 
   const handleMarkerClick = useSetAtom(markerClickAtom);
   const selectLocation = useSetAtom(selectLocationAtom);
-  const { panToLocation } = useMapPanning();
+  const { panToLocationSmart } = useMapPanning();
 
   const handleAutocompleteSelect = (option: OptionForSelect) => {
     // Store the selected location for listing panel
@@ -79,8 +79,8 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
       // Trigger marker selection
       handleMarkerClick(marker);
 
-      // Pan map to the selected location
-      panToLocation(markerData.location, { animate: true, duration: 0.5 });
+      // Pan map to the selected location with smart centering
+      panToLocationSmart(markerData.location, { animate: true, duration: 0.5 });
     }
   };
 

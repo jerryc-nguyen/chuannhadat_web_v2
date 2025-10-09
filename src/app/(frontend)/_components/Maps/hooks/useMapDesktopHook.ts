@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtom, useSetAtom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
-import { panToMarkerIfBehindPanel } from '../helpers/mapHelpers';
 import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
 import { useMapFilters } from './useMapFilters';
 import { useMapPanning } from './useMapPanning';
@@ -27,7 +26,7 @@ export const useMapDesktopHook = () => {
   const { updateFilters } = useMapFilters();
 
   // Map panning functionality
-  const { panToCurrentLocation } = useMapPanning();
+  const { panToCurrentLocation, panToLocationSmart } = useMapPanning();
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -60,17 +59,17 @@ export const useMapDesktopHook = () => {
     updateFilters(filters);
   }, [updateFilters]);
 
-  // Listen for marker clicks from atoms and add panning logic
+  // Listen for marker clicks from atoms and add smart panning logic
   useEffect(() => {
-    if (selectedMarker && map) {
-      // Pan map to center marker if it's behind the panel
+    if (selectedMarker) {
+      // Use smart panning to center marker in visible map area
       const location = {
         lat: selectedMarker.location.lat,
-        lng: selectedMarker.location.lon
+        lon: selectedMarker.location.lon
       };
-      panToMarkerIfBehindPanel(map, location);
+      panToLocationSmart(location, { animate: true, duration: 0.5 });
     }
-  }, [selectedMarker, map]);
+  }, [selectedMarker, panToLocationSmart]);
 
   const handleSearch = useCallback((query: string) => {
     console.log('Searching for:', query);
