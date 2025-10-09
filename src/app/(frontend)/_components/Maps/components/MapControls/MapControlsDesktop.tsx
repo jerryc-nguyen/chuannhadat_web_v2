@@ -2,7 +2,7 @@
 import { Button } from '@components/ui/button';
 import { MapPin, Navigation, Home, Briefcase, Banknote, ChevronDown } from 'lucide-react';
 import { MapControlsProps } from '../../types';
-import Autocomplete from './Autocomplete';
+import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
 import { markerClickAtom, selectLocationAtom } from '../../states/mapAtoms';

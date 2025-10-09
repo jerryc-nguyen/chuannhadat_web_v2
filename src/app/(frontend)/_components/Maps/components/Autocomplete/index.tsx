@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
-import { SEARCH_BOX_WIDTH } from '../../../constants';
+import { SEARCH_BOX_WIDTH } from '../../constants';
 import { useAutocompleteSearch } from './hooks/useAutocompleteSearch';
 import { useClickOutside } from '@common/hooks';
 import { OptionForSelect } from '@common/types';
