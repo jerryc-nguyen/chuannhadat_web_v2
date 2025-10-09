@@ -12,7 +12,6 @@ import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/s
 import { useState, useRef } from 'react';
 import { useClickOutside } from '@common/hooks/useClickOutside';
 
-
 const MapControlsDesktop: React.FC<MapControlsProps> = ({
   onSearch,
   onLocationClick,

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { LeafletMap, Marker, LatLng } from '../types';
 import { selectedMarkerAtom, highlightMarkerLayerAtom, hoveredMarkerAtom } from '../states/mapAtoms';
@@ -88,7 +88,7 @@ const createHighlightMarker = async (
   }
 };
 
-export const useHighlightSelectedMarker = (map: LeafletMap | null) => {
+export const useHighlightSelectedMarker = (map: LeafletMap | null, isHighlightingRef?: React.MutableRefObject<boolean>) => {
   const selectedMarker = useAtomValue(selectedMarkerAtom);
   const hoveredMarker = useAtomValue(hoveredMarkerAtom);
   const [highlightLayer, setHighlightLayer] = useAtom(highlightMarkerLayerAtom);
@@ -99,27 +99,48 @@ export const useHighlightSelectedMarker = (map: LeafletMap | null) => {
     if (!map) return;
 
     const updateHighlight = async () => {
-      // Remove existing highlight layer
-      if (highlightLayer) {
-        try {
-          map.removeLayer(highlightLayer);
-        } catch (error) {
-          console.debug('Error removing highlight layer:', error);
-        }
-        setHighlightLayer(null);
+      // Set highlighting flag to prevent map event triggers
+      if (isHighlightingRef) {
+        isHighlightingRef.current = true;
+        console.log('🎯 Setting highlighting flag to TRUE');
+      } else {
+        console.log('⚠️ isHighlightingRef not available - flag not set');
       }
 
-      // Determine which marker to highlight (prioritize selected over hovered)
-      const markerToHighlight = selectedMarker || hoveredMarker;
-      const isHovered = !selectedMarker && !!hoveredMarker;
+      try {
+        // Remove existing highlight layer
+        if (highlightLayer) {
+          try {
+            map.removeLayer(highlightLayer);
+          } catch (error) {
+            console.debug('Error removing highlight layer:', error);
+          }
+          setHighlightLayer(null);
+        }
 
-      // Add new highlight if there's a marker to highlight
-      if (markerToHighlight) {
-        try {
-          const newHighlightLayer = await createHighlightMarker(map, markerToHighlight, buildThumbnailUrl, isHovered);
-          setHighlightLayer(newHighlightLayer);
-        } catch (error) {
-          console.warn('Error creating highlight marker:', error);
+        // Determine which marker to highlight (prioritize selected over hovered)
+        const markerToHighlight = selectedMarker || hoveredMarker;
+        const isHovered = !selectedMarker && !!hoveredMarker;
+
+        // Add new highlight if there's a marker to highlight
+        if (markerToHighlight) {
+          try {
+            const newHighlightLayer = await createHighlightMarker(map, markerToHighlight, buildThumbnailUrl, isHovered);
+            setHighlightLayer(newHighlightLayer);
+          } catch (error) {
+            console.warn('Error creating highlight marker:', error);
+          }
+        }
+      } finally {
+        // Reset highlighting flag after operations complete
+        // Use requestAnimationFrame to ensure DOM updates are processed
+        if (isHighlightingRef) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              isHighlightingRef.current = false;
+              console.log('🎯 Reset highlighting flag to FALSE');
+            });
+          });
         }
       }
     };

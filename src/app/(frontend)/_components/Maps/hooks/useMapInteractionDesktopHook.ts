@@ -152,6 +152,7 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   const markersAbortRef = useRef<AbortController | null>(null);
   const currentMarkersRef = useRef<Marker[]>([]);
   const isPanningRef = useRef(false);
+  const isHighlightingRef = useRef(false);
   const isInitialMount = useRef(true);
   const { buildThumbnailUrl } = useResizeImage();
   const setMarkerClick = useSetAtom(markerClickAtom);
@@ -161,7 +162,7 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   const categoryType = useAtomValue(categoryTypeFilterAtom);
 
   // Use highlight marker hook
-  useHighlightSelectedMarker(map);
+  useHighlightSelectedMarker(map, isHighlightingRef);
 
   // Stable reference for marker click handler
   const stableMarkerClick = useRef((marker: Marker) => {
@@ -212,16 +213,31 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
         console.warn('Error fetching markers:', error);
       }
     }
-  }, [map, businessType, categoryType, buildThumbnailUrl]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, businessType, categoryType]); // Removed buildThumbnailUrl - it's always fresh but doesn't need to trigger re-runs
 
   // Handle map moveend event
   const handleMapMoveEnd = useCallback(async () => {
+    console.log('🗺️ Map moveend event triggered', {
+      isPanning: isPanningRef.current,
+      isHighlighting: isHighlightingRef.current
+    });
+
     // Skip if panning from marker click
     if (isPanningRef.current) {
       isPanningRef.current = false;
+      console.log('🎯 Skipping marker fetch - panning in progress');
       return;
     }
 
+    // Skip if highlighting operations are in progress
+    if (isHighlightingRef.current) {
+      isHighlightingRef.current = false;
+      console.log('🎯 Skipping marker fetch during highlight operation');
+      return;
+    }
+
+    console.log('📍 Proceeding with marker fetch');
     await queryAndUpdateMarkers('MAP_MOVE');
   }, [queryAndUpdateMarkers]);
 
@@ -274,11 +290,18 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
       return;
     }
 
+    // Skip if highlighting operations are in progress
+    if (isHighlightingRef.current) {
+      console.log('🎯 Skipping filter change marker fetch during highlight operation');
+      return;
+    }
+
     queryAndUpdateMarkers('FILTER_CHANGE');
   }, [businessType, categoryType, map, queryAndUpdateMarkers]);
 
   return {
     queryAndUpdateMarkers,
+    isHighlightingRef,
   };
 };
 

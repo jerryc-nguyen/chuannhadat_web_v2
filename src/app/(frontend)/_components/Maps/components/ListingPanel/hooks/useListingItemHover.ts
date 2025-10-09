@@ -11,10 +11,12 @@ export const useListingItemHover = () => {
   const setHoveredMarker = useSetAtom(setHoveredMarkerAtom);
 
   const handleMouseEnter = useCallback((marker: Marker) => {
+    console.log('🖱️ Mouse enter on listing item:', marker.uid);
     setHoveredMarker(marker);
   }, [setHoveredMarker]);
 
   const handleMouseLeave = useCallback(() => {
+    console.log('🖱️ Mouse leave from listing item');
     setHoveredMarker(null);
   }, [setHoveredMarker]);
 
