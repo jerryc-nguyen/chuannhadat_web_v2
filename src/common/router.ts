@@ -110,6 +110,7 @@ export const API_ROUTES = {
   },
   TRACKINGS: {
     VIEW_PRODUCT: 'api/v1/trackings/view_product',
+    TRACK_ACTION: 'api/v1/trackings/track_action',
     ERRORS: 'api/v1/trackings/web_errors',
   },
   SEOS: 'api/v1/seos/metadata',

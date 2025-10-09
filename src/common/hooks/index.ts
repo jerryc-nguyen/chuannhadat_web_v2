@@ -7,3 +7,4 @@ export * from './useResizeImage';
 export * from './useViewportSize';
 export * from './useBreadcrumb';
 export * from './useClickOutside';
+export * from './useTrackAction';

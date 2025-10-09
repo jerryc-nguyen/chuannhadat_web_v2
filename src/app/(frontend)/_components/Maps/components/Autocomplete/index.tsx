@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
 import { SEARCH_BOX_WIDTH } from '../../constants';
 import { useAutocompleteSearch } from './hooks/useAutocompleteSearch';
-import { useClickOutside } from '@common/hooks';
+import { useClickOutside, useTrackAction } from '@common/hooks';
 import { OptionForSelect } from '@common/types';
 
 interface AutocompleteProps {
@@ -31,6 +31,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { trackAction } = useTrackAction();
 
   // Use the search hook
   const { results, loading, search, clearResults } = useAutocompleteSearch();
@@ -120,6 +121,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     onSelect?.(option);
     setIsOpen(false);
     setSelectedIndex(-1);
+    trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
     // Don't clear results - keep them for when user focuses again
   };
 
