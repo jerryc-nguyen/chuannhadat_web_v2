@@ -13,7 +13,19 @@ export interface IResponseData<T> {
   status: boolean | number;
   message?: string;
   data: T;
-  pagination?: IPagination;
+}
+
+/**
+ * Generic API response wrapper
+ */
+export interface IResponseListData<T> {
+  code?: HttpStatusCode;
+  status: boolean | number;
+  message?: string;
+  data: {
+    pagination: IPagination;
+    results: T[];
+  }
 }
 
 

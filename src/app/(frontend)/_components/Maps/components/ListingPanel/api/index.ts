@@ -9,16 +9,21 @@ export const locationListingApi = {
    * @returns Promise with location listing response
    */
   getLocationListing: async (
-    locationUid: string,
+    locationUid: string | undefined,
     params?: LocationListingParams
   ): Promise<LocationListingResponse> => {
+    if (!locationUid) {
+      throw new Error('Location UID is required');
+    }
+
     const queryParams = {
       location_uid: locationUid,
       page: params?.page || 1,
       per_page: params?.per_page || 100,
     };
 
-    return axiosInstance.get('/api/v2/maps/location_listing', { params: queryParams });
+    const response = await axiosInstance.get('/api/v2/maps/location_listing', { params: queryParams });
+    return response.data;
   },
 };
 

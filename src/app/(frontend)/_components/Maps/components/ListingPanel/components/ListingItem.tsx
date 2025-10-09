@@ -6,13 +6,22 @@ import { Marker } from '../../../types';
 interface ListingItemProps {
   marker: Marker;
   onClick: (marker: Marker) => void;
+  onMouseEnter?: (marker: Marker) => void;
+  onMouseLeave?: () => void;
 }
 
-const ListingItem: React.FC<ListingItemProps> = ({ marker, onClick }) => {
+const ListingItem: React.FC<ListingItemProps> = ({
+  marker,
+  onClick,
+  onMouseEnter,
+  onMouseLeave
+}) => {
   return (
     <div
       className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
       onClick={() => onClick(marker)}
+      onMouseEnter={() => onMouseEnter?.(marker)}
+      onMouseLeave={() => onMouseLeave?.()}
     >
       <div className="flex gap-3">
         {/* Avatar */}

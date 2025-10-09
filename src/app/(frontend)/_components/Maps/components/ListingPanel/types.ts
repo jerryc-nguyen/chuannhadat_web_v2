@@ -1,4 +1,5 @@
 import { OptionForSelect } from '@common/types';
+import { IPagination } from '@common/types/api';
 import { Marker } from '../../types';
 
 export interface ListingPanelProps {
@@ -7,15 +8,10 @@ export interface ListingPanelProps {
   onMarkerClick?: (marker: Marker) => void;
 }
 
+// API returns direct object with pagination and results (not wrapped in IResponseListData)
 export interface LocationListingResponse {
-  success: boolean;
-  pagination: {
-    total_count: number;
-    total_pages: number;
-    current_page: number;
-    per_page: number;
-  };
-  data: Marker[];
+  pagination: IPagination;
+  results: Marker[];
 }
 
 export interface LocationListingParams {
@@ -24,7 +20,7 @@ export interface LocationListingParams {
 }
 
 export interface UseLocationListingOptions {
-  locationUid: string;
+  locationUid: string | undefined;
   page: number;
   perPage: number;
 }

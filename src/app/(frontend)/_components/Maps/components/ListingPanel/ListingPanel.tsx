@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../../constants';
-import { TMapSetting } from '../../types';
-import { useLocationListing, useListingPanelState } from './hooks';
+import { LISTING_PANEL_WIDTH_WITH_PADDING } from '../../constants';
+import { TMapSetting, Marker } from '../../types';
+import { useLocationListing, useListingPanelState, useListingItemHover } from './hooks';
 import { ListingPanelProps } from './types';
+import { IPagination } from '@common/types/api';
 import {
   ListingItem,
   PanelHeader,
@@ -32,8 +33,11 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
     handleNextPage,
   } = useListingPanelState(onClose, onMarkerClick);
 
+  // Hover interaction handlers
+  const { handleMouseEnter, handleMouseLeave } = useListingItemHover();
+
   // Data fetching
-  const { data, isLoading, error } = useLocationListing({
+  const { data: response, isLoading, error } = useLocationListing({
     locationUid,
     page: currentPage,
     perPage,
@@ -45,35 +49,49 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
   }
 
   // Error state
-  if (error || !data?.success) {
+  if (error || !response) {
+    console.error('ListingPanel error:', error);
     return <ErrorState onClose={onClose} />;
   }
 
-  const { data: markers, pagination } = data;
+  // Debug: Log the response structure to understand the API format
+  console.log('ListingPanel API response:', response);
+  console.log('Response type:', typeof response);
+  console.log('Response keys:', Object.keys(response || {}));
+
+  // Handle the actual API response structure: { pagination: {...}, results: [...] } (direct format)
+  const responseData = response as unknown as Record<string, unknown>;
+  const markers = (responseData?.results as Marker[]) || [];
+  const pagination = responseData?.pagination as IPagination | null;
+
+  console.log('Extracted markers:', markers);
+  console.log('Extracted pagination:', pagination);
 
   return (
     <div
       className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col"
-      style={{ width: SEARCH_BOX_WIDTH_WITH_PADDING, height: '100vh', zIndex: 1000 }}
+      style={{ width: LISTING_PANEL_WIDTH_WITH_PADDING, height: '100vh', zIndex: 1000 }}
     >
       {/* Header */}
       <PanelHeader
-        title={listingOption.text}
-        totalCount={pagination.total_count}
+        title={listingOption.text || 'Listings'}
+        totalCount={pagination?.total_count || 0}
         onClose={onClose}
       />
 
       {/* Listings */}
       <div className="flex-1 overflow-y-auto">
-        {markers.length === 0 ? (
+        {!markers || markers.length === 0 ? (
           <EmptyState />
         ) : (
           <div className="space-y-4 p-4">
-            {markers.map((marker) => (
+            {markers.map((marker: Marker) => (
               <ListingItem
                 key={marker.uid}
                 marker={marker}
                 onClick={handleMarkerClick}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               />
             ))}
           </div>
@@ -81,12 +99,14 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
       </div>
 
       {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={pagination.total_pages}
-        onPreviousPage={handlePreviousPage}
-        onNextPage={() => handleNextPage(pagination.total_pages)}
-      />
+      {pagination && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={pagination.total_pages || 1}
+          onPreviousPage={handlePreviousPage}
+          onNextPage={() => handleNextPage(pagination.total_pages || 1)}
+        />
+      )}
     </div>
   );
 };

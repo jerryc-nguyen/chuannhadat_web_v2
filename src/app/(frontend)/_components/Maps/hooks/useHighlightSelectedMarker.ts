@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 import { LeafletMap, Marker, LatLng } from '../types';
-import { selectedMarkerAtom, highlightMarkerLayerAtom } from '../states/mapAtoms';
+import { selectedMarkerAtom, highlightMarkerLayerAtom, hoveredMarkerAtom } from '../states/mapAtoms';
 import type { Layer } from 'leaflet';
 import useResizeImage from '@common/hooks/useResizeImage';
 
@@ -9,7 +9,8 @@ import useResizeImage from '@common/hooks/useResizeImage';
 const createHighlightMarker = async (
   map: LeafletMap,
   marker: Marker,
-  buildThumbnailUrl: (params: { imageUrl: string; width?: number; ratio?: number }) => string
+  buildThumbnailUrl: (params: { imageUrl: string; width?: number; ratio?: number }) => string,
+  isHovered = false
 ): Promise<Layer> => {
   const L = await import('leaflet');
   const { lat, lon } = marker.location as LatLng;
@@ -21,6 +22,12 @@ const createHighlightMarker = async (
       ratio: 1
     });
 
+    // Different styles for selected vs hovered
+    const borderColor = isHovered ? '#3b82f6' : '#ec4899'; // Blue for hover, Pink for selected
+    const shadowColor = isHovered ? 'rgba(59, 130, 246, 0.4)' : 'rgba(236, 72, 153, 0.4)';
+    const labelColor = isHovered ? '#3b82f6' : '#ec4899';
+    const animation = isHovered ? 'none' : 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite';
+
     const highlightIcon = L.divIcon({
       html: `
         <div style="display: flex; flex-direction: column; align-items: center;">
@@ -31,16 +38,16 @@ const createHighlightMarker = async (
             background-image: url('${iconUrl}');
             background-size: cover;
             background-position: center;
-            border: 3px solid #ec4899;
-            box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.4), 0 4px 8px rgba(0,0,0,0.4);
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            border: 3px solid ${borderColor};
+            box-shadow: 0 0 0 4px ${shadowColor}, 0 4px 8px rgba(0,0,0,0.4);
+            animation: ${animation};
           "></div>
           ${marker.marker_label ? `
             <div style="
               margin-top: 0px;
               padding: 2px 6px;
               background-color: transparent;
-              color:rgb(10, 91, 241);
+              color: ${labelColor};
               font-size: 11px;
               font-weight: 700;
               border-radius: 4px;
@@ -67,10 +74,11 @@ const createHighlightMarker = async (
     return highlightMarker;
   } else {
     // For default markers, create a circle marker with highlight
+    const fillColor = isHovered ? '#3b82f6' : '#ec4899'; // Blue for hover, Pink for selected
     const highlightMarker = L.circleMarker([lat, lon], {
       radius: 10,
-      fillColor: '#ec4899',
-      color: '#ec4899',
+      fillColor: fillColor,
+      color: fillColor,
       weight: 3,
       opacity: 0.8,
       fillOpacity: 0.4
@@ -82,10 +90,11 @@ const createHighlightMarker = async (
 
 export const useHighlightSelectedMarker = (map: LeafletMap | null) => {
   const selectedMarker = useAtomValue(selectedMarkerAtom);
+  const hoveredMarker = useAtomValue(hoveredMarkerAtom);
   const [highlightLayer, setHighlightLayer] = useAtom(highlightMarkerLayerAtom);
   const { buildThumbnailUrl } = useResizeImage();
 
-  // Manage highlight marker when selectedMarker changes
+  // Manage highlight marker when selectedMarker or hoveredMarker changes
   useEffect(() => {
     if (!map) return;
 
@@ -100,10 +109,14 @@ export const useHighlightSelectedMarker = (map: LeafletMap | null) => {
         setHighlightLayer(null);
       }
 
-      // Add new highlight if marker is selected
-      if (selectedMarker) {
+      // Determine which marker to highlight (prioritize selected over hovered)
+      const markerToHighlight = selectedMarker || hoveredMarker;
+      const isHovered = !selectedMarker && !!hoveredMarker;
+
+      // Add new highlight if there's a marker to highlight
+      if (markerToHighlight) {
         try {
-          const newHighlightLayer = await createHighlightMarker(map, selectedMarker, buildThumbnailUrl);
+          const newHighlightLayer = await createHighlightMarker(map, markerToHighlight, buildThumbnailUrl, isHovered);
           setHighlightLayer(newHighlightLayer);
         } catch (error) {
           console.warn('Error creating highlight marker:', error);
@@ -113,7 +126,7 @@ export const useHighlightSelectedMarker = (map: LeafletMap | null) => {
 
     updateHighlight();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMarker, map]); // Only react to selectedMarker, map, and buildThumbnailUrl changes
+  }, [selectedMarker, hoveredMarker, map]); // React to selectedMarker, hoveredMarker, and map changes
 
   // Cleanup highlight layer on unmount
   useEffect(() => {

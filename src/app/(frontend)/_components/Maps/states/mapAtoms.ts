@@ -22,9 +22,6 @@ export const searchQueryWithMarkerAtom = atom(
     if (typeof update === 'string') {
       set(searchQueryAtom, update);
     } else {
-      // If it's a marker, use its label or a default name
-      const markerName = update.marker_label || `Marker ${update.id}`;
-      set(searchQueryAtom, markerName);
       set(selectedMarkerAtom, update);
     }
   }
@@ -99,5 +96,16 @@ export const clearSelectedLocationAtom = atom(
   null,
   (get, set) => {
     set(selectedLocationAtom, null);
+  }
+);
+
+// Hover marker state
+export const hoveredMarkerAtom = atom<Marker | null>(null);
+
+// Set hovered marker atom
+export const setHoveredMarkerAtom = atom(
+  null,
+  (get, set, marker: Marker | null) => {
+    set(hoveredMarkerAtom, marker);
   }
 );

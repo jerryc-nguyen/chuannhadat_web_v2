@@ -139,7 +139,9 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
   return (
     <>
       {/* Google Maps Style Search & Filter - Fixed Top */}
-      <div className={`fixed top-0 left-0 right-0 z-[1000] p-4 ${className}`}>
+      <div
+        className={`fixed top-0 left-0 right-0 z-[1000] p-4 ${className}`}
+      >
         <div className="flex gap-3 items-center">
           {/* Search Bar */}
           <Autocomplete

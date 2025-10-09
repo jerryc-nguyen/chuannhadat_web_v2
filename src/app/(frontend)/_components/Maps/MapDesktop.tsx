@@ -7,7 +7,7 @@ import { useMapDesktopHook } from './hooks/useMapDesktopHook';
 import { useWindowSize } from './hooks/useWindowSize';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedLocationAtom, clearSelectedLocationAtom, markerClickAtom } from './states/mapAtoms';
-import { SEARCH_BOX_WIDTH_WITH_PADDING } from './constants';
+import { LISTING_PANEL_WIDTH_WITH_PADDING } from './constants';
 
 const MapDesktop: React.FC = () => {
   const {
@@ -47,7 +47,7 @@ const MapDesktop: React.FC = () => {
   const canShowBothPanels = windowWidth >= 1200;
 
   const infoPanelPosition = shouldShowBothPanels && canShowBothPanels ? 'left' : 'left';
-  const infoPanelOffset = shouldShowBothPanels && canShowBothPanels ? SEARCH_BOX_WIDTH_WITH_PADDING : 0;
+  const infoPanelOffset = shouldShowBothPanels && canShowBothPanels ? LISTING_PANEL_WIDTH_WITH_PADDING + 10 : 0;
 
   // On smaller screens, if both panels should be shown, prioritize InfoPanel and hide ListingPanel
   const shouldShowListingPanel = selectedLocation && (!selectedMarker || canShowBothPanels);
