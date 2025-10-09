@@ -13,7 +13,12 @@ import {
   SectionDivider,
 } from './components';
 
-const InfoPanel: React.FC<InfoPanelProps> = ({ marker, onClose }) => {
+const InfoPanel: React.FC<InfoPanelProps> = ({
+  marker,
+  onClose,
+  position = 'left',
+  offsetLeft = 0
+}) => {
   const {
     profileData,
     imgSrc,
@@ -25,18 +30,29 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ marker, onClose }) => {
 
   // Loading state
   if (isLoading) {
-    return <LoadingState />;
+    return <LoadingState position={position} offsetLeft={offsetLeft} />;
   }
 
   // Error state
   if (error || !profileData) {
-    return <ErrorState />;
+    return <ErrorState position={position} offsetLeft={offsetLeft} />;
   }
+
+  // Calculate positioning styles
+  const positionStyles = {
+    width: SEARCH_BOX_WIDTH_WITH_PADDING,
+    height: '100vh',
+    zIndex: 1000,
+    ...(position === 'left'
+      ? { left: offsetLeft }
+      : { right: offsetLeft }
+    )
+  };
 
   return (
     <div
-      className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col"
-      style={{ width: SEARCH_BOX_WIDTH_WITH_PADDING, height: '100vh', zIndex: 1000 }}
+      className="absolute top-0 bg-white rounded-lg shadow-lg flex flex-col"
+      style={positionStyles}
     >
       <div className="flex-1 overflow-y-auto px-4 py-4">
         {/* Profile Section */}

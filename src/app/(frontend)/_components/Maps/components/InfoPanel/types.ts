@@ -5,6 +5,8 @@ import { IUser } from '@common/types';
 export interface InfoPanelProps {
   marker: Marker;
   onClose: () => void;
+  position?: 'left' | 'right';
+  offsetLeft?: number;
 }
 
 export interface ProfileDataState {
@@ -18,8 +20,8 @@ export interface ProfileDataState {
 export interface InfoPanelSection {
   id: string;
   title?: string;
-  component: React.ComponentType<any>;
-  props?: Record<string, any>;
+  component: React.ComponentType<Record<string, unknown>>;
+  props?: Record<string, unknown>;
   showDivider?: boolean;
 }
 

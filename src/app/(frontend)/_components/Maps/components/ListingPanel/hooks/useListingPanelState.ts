@@ -3,8 +3,8 @@ import { Marker } from '../../../types';
 
 /**
  * Custom hook for managing listing panel state
- * @param onClose - Callback when panel is closed
- * @param onMarkerClick - Callback when a marker is clicked
+ * @param onClose - Callback when panel is closed (only used for manual close, not auto-close)
+ * @param onMarkerClick - Callback when a marker is clicked (panel stays open)
  * @returns State and handlers for the listing panel
  */
 export const useListingPanelState = (
@@ -16,8 +16,8 @@ export const useListingPanelState = (
 
   const handleMarkerClick = useCallback((marker: Marker) => {
     onMarkerClick?.(marker);
-    onClose?.(); // Close the panel after selecting a marker
-  }, [onMarkerClick, onClose]);
+    // Don't auto-close the panel - let user close it manually with the X button
+  }, [onMarkerClick]);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);

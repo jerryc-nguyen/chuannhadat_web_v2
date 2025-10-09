@@ -4,8 +4,10 @@ import MapControlsDesktop from './components/MapControls/MapControlsDesktop';
 import InfoPanel from './components/InfoPanel';
 import ListingPanel from './components/ListingPanel';
 import { useMapDesktopHook } from './hooks/useMapDesktopHook';
+import { useWindowSize } from './hooks/useWindowSize';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedLocationAtom, clearSelectedLocationAtom, markerClickAtom } from './states/mapAtoms';
+import { SEARCH_BOX_WIDTH_WITH_PADDING } from './constants';
 
 const MapDesktop: React.FC = () => {
   const {
@@ -29,11 +31,26 @@ const MapDesktop: React.FC = () => {
   const clearSelectedLocation = useSetAtom(clearSelectedLocationAtom);
   const handleMarkerClick = useSetAtom(markerClickAtom);
 
+  // Window size for responsive layout
+  const { width: windowWidth } = useWindowSize();
+
   const handleListingMarkerClick = (marker: any) => {
-    // Clear the listing panel and show the marker info panel
-    clearSelectedLocation();
+    // Don't clear the listing panel, show both panels side by side
     handleMarkerClick(marker);
   };
+
+  // Calculate InfoPanel positioning when both panels are shown
+  const shouldShowBothPanels = selectedLocation && selectedMarker;
+
+  // Check if screen is wide enough for dual panels
+  // Need at least 1200px to comfortably show both panels (2 * 512px + some margin)
+  const canShowBothPanels = windowWidth >= 1200;
+
+  const infoPanelPosition = shouldShowBothPanels && canShowBothPanels ? 'left' : 'left';
+  const infoPanelOffset = shouldShowBothPanels && canShowBothPanels ? SEARCH_BOX_WIDTH_WITH_PADDING : 0;
+
+  // On smaller screens, if both panels should be shown, prioritize InfoPanel and hide ListingPanel
+  const shouldShowListingPanel = selectedLocation && (!selectedMarker || canShowBothPanels);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -58,20 +75,22 @@ const MapDesktop: React.FC = () => {
       />
 
 
-      {/* Professional Info Panel (if professional selected) */}
-      {selectedMarker && !selectedLocation && (
-        <InfoPanel
-          marker={selectedMarker}
-          onClose={() => clearSelectedMarker()}
-        />
-      )}
-
       {/* Listing Panel (if location selected from autocomplete) */}
-      {selectedLocation && (
+      {shouldShowListingPanel && (
         <ListingPanel
           listingOption={selectedLocation}
           onClose={() => clearSelectedLocation()}
           onMarkerClick={handleListingMarkerClick}
+        />
+      )}
+
+      {/* Professional Info Panel (if professional selected) */}
+      {selectedMarker && (
+        <InfoPanel
+          marker={selectedMarker}
+          onClose={() => clearSelectedMarker()}
+          position={infoPanelPosition}
+          offsetLeft={infoPanelOffset}
         />
       )}
     </div>
