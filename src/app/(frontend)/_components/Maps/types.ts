@@ -26,6 +26,12 @@ export interface MarkerMeta {
   [key: string]: unknown;
 }
 
+export interface MarkerProfile extends IUser {
+  facebook_url?: string;
+  website_url?: string;
+  youtube_url?: string;
+}
+
 export interface Marker {
   id: number;
   uid: string;
@@ -43,6 +49,7 @@ export interface Marker {
   marker_icon_url?: string;
   marker_label?: string;
   location_name?: string;
+  profile?: MarkerProfile; // Additional profile data from listing API
 }
 
 export interface LeafletMapProps {

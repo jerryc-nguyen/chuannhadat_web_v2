@@ -5,7 +5,7 @@ import { MapControlsProps } from '../../types';
 import Autocomplete from './Autocomplete';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
-import { markerClickAtom } from '../../states/mapAtoms';
+import { markerClickAtom, selectLocationAtom } from '../../states/mapAtoms';
 import { IUser, CustomerGender } from '@common/types';
 import { TMapSetting } from '../../types';
 import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
@@ -32,8 +32,12 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleMarkerClick = useSetAtom(markerClickAtom);
+  const selectLocation = useSetAtom(selectLocationAtom);
 
   const handleAutocompleteSelect = (option: OptionForSelect) => {
+    // Store the selected location for listing panel
+    selectLocation(option);
+
     // Create a marker object from the autocomplete option
     if (option.data && option.data_type === 'MapSetting') {
       const markerData = option.data as unknown as TMapSetting;

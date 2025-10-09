@@ -1,5 +1,6 @@
 import { atom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
+import { OptionForSelect } from '@common/types';
 import type { Layer } from 'leaflet';
 
 // Map instance atom
@@ -78,5 +79,25 @@ export const clearAllFiltersAtom = atom(
     set(areaFilterAtom, null);
     set(bedroomFilterAtom, null);
     set(directionFilterAtom, null);
+  }
+);
+
+// Selected location from autocomplete atom
+export const selectedLocationAtom = atom<OptionForSelect | null>(null);
+
+// Action atom for autocomplete selection
+export const selectLocationAtom = atom(
+  null,
+  (get, set, location: OptionForSelect) => {
+    console.log('selectLocationAtom', location);
+    set(selectedLocationAtom, location);
+  }
+);
+
+// Clear selected location atom
+export const clearSelectedLocationAtom = atom(
+  null,
+  (get, set) => {
+    set(selectedLocationAtom, null);
   }
 );

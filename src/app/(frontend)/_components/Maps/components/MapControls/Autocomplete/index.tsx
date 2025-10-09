@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
 import { SEARCH_BOX_WIDTH } from '../../../constants';
 import { useAutocompleteSearch } from './hooks/useAutocompleteSearch';
+import { useClickOutside } from '@common/hooks';
 import { OptionForSelect } from '@common/types';
 
 interface AutocompleteProps {
@@ -39,19 +40,11 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     setInputValue(value);
   }, [value]);
 
-  // Handle click outside to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setSelectedIndex(-1);
-        clearResults();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [clearResults]);
+  // Handle click outside to close dropdown (but keep results)
+  useClickOutside(containerRef, () => {
+    setIsOpen(false);
+    setSelectedIndex(-1);
+  }, isOpen);
 
   // Debounced search effect
   useEffect(() => {
@@ -108,7 +101,6 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       case 'Escape':
         setIsOpen(false);
         setSelectedIndex(-1);
-        clearResults();
         break;
     }
   };
@@ -128,7 +120,14 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     onSelect?.(option);
     setIsOpen(false);
     setSelectedIndex(-1);
-    clearResults();
+    // Don't clear results - keep them for when user focuses again
+  };
+
+  const handleFocus = () => {
+    // Show dropdown if we have results from previous search
+    if (results.length > 0) {
+      setIsOpen(true);
+    }
   };
 
   return (
@@ -145,6 +144,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
+            onFocus={handleFocus}
             disabled={disabled}
             className="flex-1 px-1 py-3 text-base border-none outline-none bg-transparent text-gray-900 placeholder-gray-400 focus:text-gray-900 focus:placeholder-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           />
