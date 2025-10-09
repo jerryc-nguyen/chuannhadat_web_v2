@@ -61,52 +61,76 @@ const calculateVisibleAreaCenter = () => {
 };
 ```
 
-#### **2. Smart Panning Logic**
+#### **2. Smart Panning Logic (Refactored)**
+
+The main `panToLocationSmart` function has been refactored into smaller, focused helper functions for better maintainability:
 
 ```typescript
+// Main entry point - clean and focused
 const panToLocationSmart = (location, options) => {
+  // Validate inputs
+  if (!validatePanningInputs(location)) return;
+
+  // Prepare options
+  const panOptions = { animate: true, duration: 0.5, ...options };
+
+  // Route to appropriate handler based on bounds check
   const isInBounds = isMarkerInMapBounds(location);
 
   if (!isInBounds) {
-    // OUT OF BOUNDS: Calculate optimal map center position
-    const offset = calculateVisibleAreaCenter();
-
-    if (offset.x !== 0) {
-      // Convert pixel offset to coordinate offset
-      const currentCenter = map.getCenter();
-      const currentCenterPoint = map.latLngToContainerPoint([currentCenter.lat, currentCenter.lng]);
-
-      // Apply offset in opposite direction (move map center opposite to where we want marker)
-      const adjustedCenterPoint = {
-        x: currentCenterPoint.x - offset.x,
-        y: currentCenterPoint.y - offset.y,
-      };
-
-      const adjustedCenter = map.containerPointToLatLng([
-        adjustedCenterPoint.x,
-        adjustedCenterPoint.y,
-      ]);
-      const latOffset = adjustedCenter.lat - currentCenter.lat;
-      const lonOffset = adjustedCenter.lng - currentCenter.lng;
-
-      // Apply coordinate offset to target marker location
-      targetMapCenter = {
-        lat: location.lat + latOffset,
-        lon: location.lon + lonOffset,
-      };
-    }
-
-    // Pan to optimal position in one smooth motion
-    map.panTo([targetMapCenter.lat, targetMapCenter.lon], panOptions);
+    handleOutOfBoundsPanning(location, panOptions);
   } else {
-    // IN BOUNDS: Check if behind panels and apply simple offset
-    const isBehindPanels = isMarkerBehindPanels(location);
-
-    if (isBehindPanels) {
-      const offset = calculateVisibleAreaCenter();
-      map.panBy([-offset.x, -offset.y], panOptions); // Negative: move map opposite direction
-    }
+    handleInBoundsPanning(location, panOptions);
   }
+};
+
+// Helper: Handle out-of-bounds markers
+const handleOutOfBoundsPanning = (location, options) => {
+  const pixelOffset = calculateVisibleAreaCenter();
+  const targetMapCenter = calculateOptimalMapCenter(location, pixelOffset);
+
+  // Pan to optimal position in one smooth motion
+  map.panTo([targetMapCenter.lat, targetMapCenter.lon], options);
+};
+
+// Helper: Handle in-bounds markers
+const handleInBoundsPanning = (location, options) => {
+  const isBehindPanels = isMarkerBehindPanels(location);
+
+  if (isBehindPanels) {
+    const pixelOffset = calculateVisibleAreaCenter();
+    map.panBy([-pixelOffset.x, -pixelOffset.y], options);
+  }
+};
+
+// Helper: Calculate optimal map center for out-of-bounds markers
+const calculateOptimalMapCenter = (location, pixelOffset) => {
+  if (pixelOffset.x === 0 && pixelOffset.y === 0) return location;
+
+  // Convert pixel offset to coordinate offset
+  const currentCenter = map.getCenter();
+  const currentCenterPoint = map.latLngToContainerPoint([currentCenter.lat, currentCenter.lng]);
+
+  const adjustedCenterPoint = {
+    x: currentCenterPoint.x - pixelOffset.x,
+    y: currentCenterPoint.y - pixelOffset.y,
+  };
+
+  const adjustedCenter = map.containerPointToLatLng([adjustedCenterPoint.x, adjustedCenterPoint.y]);
+  const latOffset = adjustedCenter.lat - currentCenter.lat;
+  const lonOffset = adjustedCenter.lng - currentCenter.lng;
+
+  return {
+    lat: location.lat + latOffset,
+    lon: location.lon + lonOffset,
+  };
+};
+
+// Helper: Input validation
+const validatePanningInputs = (location) => {
+  if (!map) return false;
+  const { lat, lon } = location;
+  return typeof lat === 'number' && typeof lon === 'number';
 };
 ```
 
@@ -282,31 +306,83 @@ Screen:   [Panel    |    ● Marker     ]
 
 ### **Key Functions:**
 
-#### **1. `calculateVisibleAreaCenter()`**
+#### **1. Core Helper Functions**
+
+##### **`calculateVisibleAreaCenter()`**
 
 - **Purpose**: Calculate where marker should appear on screen
 - **Returns**: Pixel offset from screen center to visible area center
 - **Logic**: Account for panel widths and responsive breakpoints
 
-#### **2. `isMarkerInMapBounds()`**
+##### **`isMarkerInMapBounds()`**
 
 - **Purpose**: Check if marker is currently visible on map
 - **Returns**: Boolean indicating if marker is within current viewport
 - **Logic**: Use Leaflet's `bounds.contains()` method
 
-#### **3. `isMarkerBehindPanels()`**
+##### **`isMarkerBehindPanels()`**
 
 - **Purpose**: Check if visible marker is behind UI panels
 - **Returns**: Boolean indicating if marker is in panel coverage area
 - **Logic**: Convert marker coordinates to screen pixels and check against panel widths
 
-#### **4. `panToLocationSmart()`**
+#### **2. Refactored Smart Panning Functions**
 
-- **Purpose**: Main panning function with panel awareness
-- **Logic**:
-  - Out of bounds → Calculate optimal map center position
-  - In bounds behind panels → Apply simple offset
-  - In bounds visible → No panning needed
+##### **`panToLocationSmart()` - Main Entry Point**
+
+- **Purpose**: Clean, focused main function that routes to appropriate handlers
+- **Logic**: Validate inputs → Check bounds → Route to specific handler
+- **Benefits**: Single responsibility, easy to understand flow
+
+##### **`validatePanningInputs()`**
+
+- **Purpose**: Centralized input validation
+- **Returns**: Boolean indicating if inputs are valid
+- **Benefits**: Reusable validation logic, early error detection
+
+##### **`handleOutOfBoundsPanning()`**
+
+- **Purpose**: Handle markers that are outside the current map viewport
+- **Logic**: Calculate optimal map center → Pan in one smooth motion
+- **Benefits**: Focused on out-of-bounds case, clear separation of concerns
+
+##### **`handleInBoundsPanning()`**
+
+- **Purpose**: Handle markers that are within viewport but might be behind panels
+- **Logic**: Check if behind panels → Apply offset if needed
+- **Benefits**: Focused on in-bounds case, simple and clear
+
+##### **`calculateOptimalMapCenter()`**
+
+- **Purpose**: Calculate the optimal map center position for out-of-bounds markers
+- **Returns**: Target map center coordinates
+- **Benefits**: Pure function, testable, reusable coordinate calculation logic
+
+#### **3. Refactoring Benefits**
+
+##### **🧹 Code Cleanliness**
+
+- **Single Responsibility**: Each function has one clear purpose
+- **Readability**: Main function is now easy to understand at a glance
+- **Maintainability**: Changes to specific logic are isolated to relevant functions
+
+##### **🔧 Testability**
+
+- **Pure Functions**: `calculateOptimalMapCenter` and `validatePanningInputs` are pure functions
+- **Isolated Logic**: Each helper can be tested independently
+- **Mocking**: Easier to mock specific parts of the panning logic
+
+##### **🚀 Reusability**
+
+- **Modular Design**: Helper functions can be reused in other contexts
+- **Composability**: Functions can be combined in different ways
+- **Extensibility**: Easy to add new panning strategies without touching existing code
+
+##### **🐛 Debugging**
+
+- **Clear Stack Traces**: Function names clearly indicate where issues occur
+- **Focused Logging**: Each function can have its own specific logging
+- **Isolated Testing**: Can test each piece of logic separately
 
 ### **Coordinate System Understanding:**
 
@@ -418,15 +494,76 @@ const isInfoPanelShown = !!selectedMarker;
 
 ### **Debug Logging:**
 
+The `useMapPanning` hook includes a comprehensive debug logging system that can be easily controlled:
+
+#### **Debug Control:**
+
 ```typescript
-console.log('🎯 Visible area calculation:', {
+// Debug flag to control logging output
+const DEBUG_MAP_PANNING = false; // Set to true to enable debug logs
+
+// Debug helper functions
+const debugLog = (message: string, data?: unknown) => {
+  if (DEBUG_MAP_PANNING) {
+    console.log(message, data || '');
+  }
+};
+
+const debugWarn = (message: string, data?: unknown) => {
+  if (DEBUG_MAP_PANNING) {
+    console.warn(message, data || '');
+  }
+};
+```
+
+#### **Usage Examples:**
+
+```typescript
+// Visible area calculation logging
+debugLog('🎯 Visible area calculation:', {
   windowWidth,
   screenCenterX,
   visibleAreaCenterX,
   offsetX,
   meaning: `marker should appear ${offsetX}px ${offsetX > 0 ? 'right' : 'left'} of screen center`,
 });
+
+// Bounds checking
+debugLog('🗺️ Map bounds check:', {
+  location,
+  isInBounds: leafletResult,
+  reason: leafletResult ? 'marker in bounds' : 'marker out of bounds',
+});
+
+// Panel collision detection
+debugLog('🎯 Panel collision check:', {
+  location,
+  windowWidth,
+  markerScreenX: markerPoint.x,
+  panelCoverageWidth,
+  isBehind,
+  result: isBehind ? 'BEHIND PANELS' : 'VISIBLE',
+});
 ```
+
+#### **Debug Categories:**
+
+- **🗺️ Map Operations**: Bounds checking, panning actions
+- **🎯 Panel Logic**: Visible area calculations, collision detection
+- **⚠️ Warnings**: Input validation, error conditions
+
+#### **How to Enable Debug Logs:**
+
+1. **Development**: Set `DEBUG_MAP_PANNING = true` in the file
+2. **Production**: Keep `DEBUG_MAP_PANNING = false` to avoid console pollution
+3. **Conditional**: Can be controlled by environment variables if needed
+
+#### **Benefits:**
+
+- **Zero Performance Impact**: When disabled, no function calls are made
+- **Comprehensive Coverage**: All major operations are logged
+- **Clear Categorization**: Emojis and prefixes make logs easy to filter
+- **Detailed Context**: Each log includes relevant data for debugging
 
 ## 📚 Related Concepts
 

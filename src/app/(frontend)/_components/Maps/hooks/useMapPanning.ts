@@ -4,6 +4,39 @@ import { mapAtom, selectedLocationAtom, selectedMarkerAtom } from '../states/map
 import { LatLng } from '../types';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
 
+// Debug flag to control logging output
+const DEBUG_MAP_PANNING = false; // Set to true to enable debug logs
+
+/**
+ * Debug logger that only logs when DEBUG_MAP_PANNING is true
+ * @param message - The log message
+ * @param data - Optional data to log
+ */
+const debugLog = (message: string, data?: unknown) => {
+  if (DEBUG_MAP_PANNING) {
+    if (data) {
+      console.log(message, data);
+    } else {
+      console.log(message);
+    }
+  }
+};
+
+/**
+ * Debug warning logger that only logs when DEBUG_MAP_PANNING is true
+ * @param message - The warning message
+ * @param data - Optional data to log
+ */
+const debugWarn = (message: string, data?: unknown) => {
+  if (DEBUG_MAP_PANNING) {
+    if (data) {
+      console.warn(message, data);
+    } else {
+      console.warn(message);
+    }
+  }
+};
+
 /**
  * Custom hook for map panning functionality
  * Can be used in both mobile and desktop components
@@ -36,7 +69,7 @@ export const useMapPanning = () => {
 
     // Debug: Check if there's a discrepancy between Leaflet and manual calculation
     if (leafletResult !== manualCheck) {
-      console.warn('🚨 Bounds check discrepancy:', {
+      debugWarn('🚨 Bounds check discrepancy:', {
         location,
         leafletResult,
         manualCheck,
@@ -44,7 +77,7 @@ export const useMapPanning = () => {
       });
     }
 
-    console.log('🗺️ Map bounds check:', {
+    debugLog('🗺️ Map bounds check:', {
       location,
       isInBounds: leafletResult,
       reason: leafletResult ? 'marker in bounds' : 'marker out of bounds'
@@ -84,7 +117,7 @@ export const useMapPanning = () => {
     // Check if marker is in the panel coverage area
     const isBehind = markerPoint.x < panelCoverageWidth;
 
-    console.log('🎯 Panel collision check:', {
+    debugLog('🎯 Panel collision check:', {
       location,
       windowWidth,
       isListingPanelShown,
@@ -128,7 +161,7 @@ export const useMapPanning = () => {
     const screenCenterX = windowWidth / 2;
     const offsetX = visibleAreaCenterX - screenCenterX;
 
-    console.log('🎯 Visible area calculation:', {
+    debugLog('🎯 Visible area calculation:', {
       windowWidth,
       isListingPanelShown,
       isInfoPanelShown,
@@ -157,13 +190,13 @@ export const useMapPanning = () => {
     }
   ) => {
     if (!map) {
-      console.warn('Map not available for panning');
+      debugWarn('Map not available for panning');
       return;
     }
 
     const { lat, lon } = location;
     if (typeof lat !== 'number' || typeof lon !== 'number') {
-      console.warn('Invalid location coordinates for panning:', location);
+      debugWarn('Invalid location coordinates for panning:', location);
       return;
     }
 
@@ -181,7 +214,142 @@ export const useMapPanning = () => {
       map.panTo([lat, lon], panOptions);
     }
 
-    console.log('🗺️ Panning map to location:', { lat, lon, options });
+    debugLog('🗺️ Panning map to location:', { lat, lon, options });
+  }, [map]);
+
+  /**
+   * Calculate optimal map center position for out-of-bounds markers
+   * @param location - The marker location
+   * @param pixelOffset - The pixel offset for visible area centering
+   * @returns The optimal map center coordinates
+   */
+  const calculateOptimalMapCenter = useCallback((location: LatLng, pixelOffset: { x: number; y: number }) => {
+    if (!map) return location;
+
+    const { lat, lon } = location;
+
+    // If no offset needed, return original location
+    if (pixelOffset.x === 0 && pixelOffset.y === 0) {
+      return { lat, lon };
+    }
+
+    // Get current map center and convert to screen coordinates
+    const currentCenter = map.getCenter();
+    const currentCenterPoint = map.latLngToContainerPoint([currentCenter.lat, currentCenter.lng]);
+
+    // Apply offset in opposite direction (move map center opposite to desired marker position)
+    const adjustedCenterPoint = {
+      x: currentCenterPoint.x - pixelOffset.x,
+      y: currentCenterPoint.y - pixelOffset.y
+    };
+
+    // Convert back to coordinates to get the offset amount
+    const adjustedCenter = map.containerPointToLatLng([adjustedCenterPoint.x, adjustedCenterPoint.y]);
+
+    // Calculate coordinate offset
+    const latOffset = adjustedCenter.lat - currentCenter.lat;
+    const lonOffset = adjustedCenter.lng - currentCenter.lng;
+
+    // Apply offset to target marker location
+    const targetMapCenter = {
+      lat: lat + latOffset,
+      lon: lon + lonOffset
+    };
+
+    debugLog('🎯 Calculated optimal map center:', {
+      originalMarker: { lat, lon },
+      pixelOffset,
+      coordinateOffset: { latOffset, lonOffset },
+      targetMapCenter,
+      reason: 'Position map so marker appears in visible area'
+    });
+
+    return targetMapCenter;
+  }, [map]);
+
+  /**
+   * Handle panning for out-of-bounds markers
+   * @param location - The marker location
+   * @param options - Panning options
+   */
+  const handleOutOfBoundsPanning = useCallback((
+    location: LatLng,
+    options: { animate: boolean; duration: number; zoom?: number }
+  ) => {
+    if (!map) return;
+
+    debugLog('🎯 Marker out of bounds, calculating optimal pan position');
+
+    // Get the visible area offset
+    const pixelOffset = calculateVisibleAreaCenter();
+
+    // Calculate optimal map center position
+    const targetMapCenter = calculateOptimalMapCenter(location, pixelOffset);
+
+    // Pan to optimal position in one smooth motion
+    if (options.zoom) {
+      map.setView([targetMapCenter.lat, targetMapCenter.lon], options.zoom, {
+        animate: options.animate,
+        duration: options.duration
+      });
+    } else {
+      map.panTo([targetMapCenter.lat, targetMapCenter.lon], {
+        animate: options.animate,
+        duration: options.duration
+      });
+    }
+
+    debugLog('🎯 Applied single smooth pan to optimal position');
+  }, [map, calculateVisibleAreaCenter, calculateOptimalMapCenter]);
+
+  /**
+   * Handle panning for in-bounds markers that might be behind panels
+   * @param location - The marker location
+   * @param options - Panning options
+   */
+  const handleInBoundsPanning = useCallback((
+    location: LatLng,
+    options: { animate: boolean; duration: number }
+  ) => {
+    if (!map) return;
+
+    const isBehindPanels = isMarkerBehindPanels(location);
+
+    if (isBehindPanels) {
+      // Apply offset to move marker to visible area
+      const pixelOffset = calculateVisibleAreaCenter();
+
+      if (pixelOffset.x !== 0 || pixelOffset.y !== 0) {
+        // Use negative offset because we're moving the map, not the marker
+        map.panBy([-pixelOffset.x, -pixelOffset.y], {
+          animate: options.animate,
+          duration: options.duration
+        });
+        debugLog('🎯 Applied visible area offset for in-bounds marker:', { pixelOffset });
+      }
+    } else {
+      debugLog('🎯 Marker is visible and not behind panels, no panning needed');
+    }
+  }, [map, isMarkerBehindPanels, calculateVisibleAreaCenter]);
+
+  /**
+   * Validate panning inputs
+   * @param location - The location to validate
+   * @returns True if inputs are valid
+   */
+  const validatePanningInputs = useCallback((location: LatLng): boolean => {
+    if (!map) {
+      debugWarn('Map not available for smart panning');
+      return false;
+    }
+
+    const { lat, lon } = location;
+    if (typeof lat !== 'number' || typeof lon !== 'number') {
+      debugWarn('Invalid location coordinates for smart panning:', location);
+      return false;
+    }
+
+    return true;
   }, [map]);
 
   /**
@@ -198,110 +366,41 @@ export const useMapPanning = () => {
       zoom?: number;
     }
   ) => {
-    if (!map) {
-      console.warn('Map not available for smart panning');
+    // Validate inputs
+    if (!validatePanningInputs(location)) {
       return;
     }
 
-    const { lat, lon } = location;
-    if (typeof lat !== 'number' || typeof lon !== 'number') {
-      console.warn('Invalid location coordinates for smart panning:', location);
-      return;
-    }
-
+    // Prepare panning options
     const panOptions = {
       animate: options?.animate !== false,
-      duration: options?.duration || 0.5
+      duration: options?.duration || 0.5,
+      zoom: options?.zoom
     };
-
-    // First, center the map on the target location
-    // if (options?.zoom) {
-    //   map.setView([lat, lon], options.zoom, { animate: false });
-    // } else {
-    //   map.panTo([lat, lon], { animate: false });
-    // }
 
     // Check if marker is currently in bounds
     const isInBounds = isMarkerInMapBounds(location);
 
     if (!isInBounds) {
-      // Marker is out of bounds - calculate optimal position directly
-      console.log('🎯 Marker out of bounds, calculating optimal pan position');
-
-      // Get the visible area center offset
-      const offset = calculateVisibleAreaCenter();
-
-      // Start with the marker location as the target map center
-      let targetMapCenter = { lat, lon };
-
-      if (offset.x !== 0 || offset.y !== 0) {
-        // Convert pixel offset to map coordinate offset
-        // We need to calculate how much to adjust the map center
-        // so that when the marker is displayed, it appears offset by the panel amount
-
-        // Get current map center and convert offset to map coordinates
-        const currentCenter = map.getCenter();
-        const currentCenterPoint = map.latLngToContainerPoint([currentCenter.lat, currentCenter.lng]);
-
-        // Apply the offset to the center point (opposite direction)
-        const adjustedCenterPoint = {
-          x: currentCenterPoint.x - offset.x, // Move map center opposite to where we want marker to appear
-          y: currentCenterPoint.y - offset.y
-        };
-
-        // Convert back to lat/lng to get the offset amount
-        const adjustedCenter = map.containerPointToLatLng([adjustedCenterPoint.x, adjustedCenterPoint.y]);
-
-        // Calculate the coordinate difference
-        const latOffset = adjustedCenter.lat - currentCenter.lat;
-        const lonOffset = adjustedCenter.lng - currentCenter.lng;
-
-        // Apply this offset to our target marker location
-        targetMapCenter = {
-          lat: lat + latOffset,
-          lon: lon + lonOffset
-        };
-
-        console.log('🎯 Calculated optimal map center:', {
-          originalMarker: { lat, lon },
-          panelOffset: offset,
-          coordinateOffset: { latOffset, lonOffset },
-          targetMapCenter,
-          reason: 'Position map so marker appears in visible area'
-        });
-      }
-
-      // Pan to the optimal position in one smooth motion
-      if (options?.zoom) {
-        map.setView([targetMapCenter.lat, targetMapCenter.lon], options.zoom, panOptions);
-      } else {
-        map.panTo([targetMapCenter.lat, targetMapCenter.lon], panOptions);
-      }
-
-      console.log('🎯 Applied single smooth pan to optimal position');
+      // Handle out-of-bounds markers
+      handleOutOfBoundsPanning(location, panOptions);
     } else {
-      // Marker is in bounds - check if it's behind panels
-      const isBehindPanels = isMarkerBehindPanels(location);
-
-      if (isBehindPanels) {
-        // Apply offset to move marker to visible area
-        const offset = calculateVisibleAreaCenter();
-        if (offset.x !== 0 || offset.y !== 0) {
-          map.panBy([-offset.x, -offset.y], panOptions); // Negative because we're moving the map, not the marker
-          console.log('🎯 Applied visible area offset for in-bounds marker:', { offset });
-        }
-      } else {
-        console.log('🎯 Marker is visible and not behind panels, no panning needed');
-      }
+      // Handle in-bounds markers (check if behind panels)
+      handleInBoundsPanning(location, panOptions);
     }
-  }, [map, calculateVisibleAreaCenter, isMarkerBehindPanels, isMarkerInMapBounds]);
+  }, [
+    validatePanningInputs,
+    isMarkerInMapBounds,
+    handleOutOfBoundsPanning,
+    handleInBoundsPanning
+  ]);
 
   /**
    * Pan to current user location
    */
   const panToCurrentLocation = useCallback((options?: { zoom?: number }) => {
     if (!navigator.geolocation) {
-      console.warn('Geolocation not supported');
+      debugWarn('Geolocation not supported');
       return;
     }
 
@@ -314,7 +413,7 @@ export const useMapPanning = () => {
         );
       },
       (error) => {
-        console.error('Error getting current location:', error);
+        debugWarn('Error getting current location:', error);
       }
     );
   }, [panToLocation]);
