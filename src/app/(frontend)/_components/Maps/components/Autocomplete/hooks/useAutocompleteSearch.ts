@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
 import { autocompleteApi } from '../api';
 import { OptionForSelect } from '@common/types';
+import { toSearchString } from '@common/stringHelpers';
 
-export type SearchResultType = 'recent' | 'search' | null;
+export type SearchResultType = 'recent' | 'search' | 'combined' | null;
 
 export const useAutocompleteSearch = () => {
   const [results, setResults] = useState<OptionForSelect[]>([]);
+  const [recentSearches, setRecentSearches] = useState<OptionForSelect[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultType, setResultType] = useState<SearchResultType>(null);
@@ -49,15 +51,22 @@ export const useAutocompleteSearch = () => {
     try {
       const response = await autocompleteApi.recent({ limit });
       if (response.success) {
-        setResults(response.data);
+        const recentData = response.data.map(option => ({
+          ...option,
+          _resultType: 'recent' as const
+        }));
+        setRecentSearches(recentData);
+        setResults(recentData);
         setResultType('recent');
       } else {
+        setRecentSearches([]);
         setResults([]);
         setError('Failed to load recent searches');
         setResultType(null);
       }
     } catch (err) {
       console.error('Recent searches error:', err);
+      setRecentSearches([]);
       setResults([]);
       setError('Failed to load recent searches');
       setResultType(null);
@@ -65,6 +74,94 @@ export const useAutocompleteSearch = () => {
       setLoading(false);
     }
   }, []);
+
+  // Sort results based on search query relevance
+  const sortByRelevance = useCallback((items: OptionForSelect[], query: string): OptionForSelect[] => {
+    const normalizedQuery = toSearchString(query);
+
+    return [...items].sort((a, b) => {
+      const textA = toSearchString(a.text || '');
+      const textB = toSearchString(b.text || '');
+
+      // Exact match gets highest priority
+      const exactMatchA = textA === normalizedQuery;
+      const exactMatchB = textB === normalizedQuery;
+      if (exactMatchA && !exactMatchB) return -1;
+      if (!exactMatchA && exactMatchB) return 1;
+
+      // Starts with query gets next priority
+      const startsWithA = textA.startsWith(normalizedQuery);
+      const startsWithB = textB.startsWith(normalizedQuery);
+      if (startsWithA && !startsWithB) return -1;
+      if (!startsWithA && startsWithB) return 1;
+
+      // Contains query gets lower priority
+      const containsA = textA.includes(normalizedQuery);
+      const containsB = textB.includes(normalizedQuery);
+      if (containsA && !containsB) return -1;
+      if (!containsA && containsB) return 1;
+
+      // If same relevance, maintain original order
+      return 0;
+    });
+  }, []);
+
+  const mergeWithRecentSearches = useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim()) {
+      // If no search query, just show recent searches
+      setResults(recentSearches);
+      setResultType('recent');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const searchResponse = await autocompleteApi.search({ keyword: searchQuery });
+
+      const combinedResults: OptionForSelect[] = [];
+
+      // Get search results with markers
+      const searchResults = searchResponse.success && searchResponse.data.length > 0
+        ? searchResponse.data.map(option => ({
+          ...option,
+          _resultType: 'search' as const
+        }))
+        : [];
+
+      // Filter recent searches to exclude those that appear in search results
+      const filteredRecentSearches = recentSearches
+        .filter(recent => !searchResults.some(search =>
+          search.text === recent.text ||
+          (search.value && recent.value && search.value === recent.value)
+        ))
+        .slice(0, 3); // Limit to 3 recent items
+
+      // Add filtered recent searches first
+      if (filteredRecentSearches.length > 0) {
+        combinedResults.push(...filteredRecentSearches);
+      }
+
+      // Add search results
+      if (searchResults.length > 0) {
+        combinedResults.push(...searchResults);
+      }
+
+      // Sort all results by relevance to search query
+      const sortedResults = sortByRelevance(combinedResults, searchQuery);
+
+      setResults(sortedResults);
+      setResultType('combined'); // Indicate mixed results
+    } catch (err) {
+      console.error('Search error:', err);
+      setResults(recentSearches); // Fall back to recent searches
+      setError('Search failed');
+      setResultType('recent');
+    } finally {
+      setLoading(false);
+    }
+  }, [recentSearches, sortByRelevance]);
 
   const clearResults = useCallback(() => {
     setResults([]);
@@ -74,11 +171,13 @@ export const useAutocompleteSearch = () => {
 
   return {
     results,
+    recentSearches,
     loading,
     error,
     resultType,
     search,
     loadRecentSearches,
+    mergeWithRecentSearches,
     clearResults,
   };
 };

@@ -30,17 +30,25 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const [inputValue, setInputValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [recentLoaded, setRecentLoaded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { trackAction } = useTrackAction();
 
   // Use the search hook
-  const { results, loading, resultType, search, loadRecentSearches } = useAutocompleteSearch();
+  const { results, recentSearches, loading, resultType, loadRecentSearches, mergeWithRecentSearches } = useAutocompleteSearch();
 
   // Sync external value changes
   useEffect(() => {
     setInputValue(value);
   }, [value]);
+
+  // Reset recent loaded flag when input is cleared
+  useEffect(() => {
+    if (!inputValue.trim()) {
+      setRecentLoaded(false);
+    }
+  }, [inputValue]);
 
   // Handle click outside to close dropdown (but keep results)
   useClickOutside(containerRef, () => {
@@ -48,34 +56,27 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     setSelectedIndex(-1);
   }, isOpen);
 
-  // Debounced search effect
+  // Debounced search effect - merge recent searches with search results
   useEffect(() => {
-    if (inputValue.trim()) {
-      const timeoutId = setTimeout(() => {
-        search(inputValue.trim());
-      }, 300);
-      return () => clearTimeout(timeoutId);
-    } else {
-      // When input is empty, load recent searches instead of clearing
-      loadRecentSearches(5);
-    }
-  }, [inputValue, search, loadRecentSearches]);
+    const timeoutId = setTimeout(() => {
+      mergeWithRecentSearches(inputValue);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [inputValue, mergeWithRecentSearches]);
 
-  // Show dropdown when we have results
+  // Show dropdown when we have results or when recent searches are loaded
   useEffect(() => {
-    setIsOpen(results.length > 0);
-    setSelectedIndex(-1);
+    if (results.length > 0) {
+      setIsOpen(true);
+      setSelectedIndex(-1);
+    }
   }, [results]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     onChange?.(newValue);
-
-    // If input is cleared, show recent searches
-    if (!newValue.trim()) {
-      loadRecentSearches(5);
-    }
+    // mergeWithRecentSearches will handle merging recent searches with search results
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -128,6 +129,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     setIsOpen(false);
     setSelectedIndex(-1);
     trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
+    loadRecentSearches(5);
     // Don't clear results - keep them for when user focuses again
   };
 
@@ -136,8 +138,14 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     if (results.length > 0) {
       setIsOpen(true);
     } else if (!inputValue.trim()) {
-      // If input is empty, load recent searches
-      loadRecentSearches(5);
+      // Load recent searches only once on focus
+      if (!recentLoaded) {
+        loadRecentSearches(5);
+        setRecentLoaded(true);
+      } else if (recentSearches.length > 0) {
+        // If recent searches are already loaded, show them
+        setIsOpen(true);
+      }
     }
   };
 
@@ -174,6 +182,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           selectedIndex={selectedIndex}
           resultType={resultType}
           onSelect={handleOptionSelect}
+          getIconType={(option) => ((option as OptionForSelect & { _resultType?: 'recent' | 'search' })._resultType || 'search')}
         />
       )}
     </div>

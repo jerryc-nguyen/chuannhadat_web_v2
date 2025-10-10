@@ -11,6 +11,7 @@ interface AutocompleteDropdownProps {
   resultType: SearchResultType;
   onSelect: (option: OptionForSelect) => void;
   className?: string;
+  getIconType?: (option: OptionForSelect, index: number) => 'recent' | 'search';
 }
 
 const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
@@ -19,6 +20,7 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
   resultType,
   onSelect,
   className = '',
+  getIconType,
 }) => {
   if (options.length === 0) {
     return null;
@@ -36,7 +38,7 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
           <div className="flex items-center gap-2">
             {/* Icon based on result type */}
             <div className="flex-shrink-0">
-              {resultType === 'recent' ? (
+              {(getIconType ? getIconType(option, index) : resultType) === 'recent' ? (
                 <Clock className="h-4 w-4 text-gray-400" />
               ) : (
                 <MapPin className="h-4 w-4 text-gray-400" />
