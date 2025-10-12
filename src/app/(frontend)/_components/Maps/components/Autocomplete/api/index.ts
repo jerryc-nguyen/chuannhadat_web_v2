@@ -8,4 +8,7 @@ export const autocompleteApi = {
   recent: async (params: { limit: number }): Promise<AutocompleteSearchResponse> => {
     return axiosInstance.get('/api/v2/maps/autocompletes/recent', { params });
   },
+  deleteRecent: async (id: number): Promise<AutocompleteSearchResponse> => {
+    return axiosInstance.delete(`/api/v2/maps/autocompletes/recent/${id}`);
+  },
 };

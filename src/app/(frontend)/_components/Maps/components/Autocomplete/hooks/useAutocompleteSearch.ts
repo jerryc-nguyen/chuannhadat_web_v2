@@ -163,6 +163,22 @@ export const useAutocompleteSearch = () => {
     }
   }, [recentSearches, sortByRelevance]);
 
+  const deleteRecentSearch = useCallback(async (option: OptionForSelect) => {
+    // Remove from local recent searches state
+    setRecentSearches(prev => prev.filter(recent =>
+      !(recent.text === option.text && recent.value === option.value)
+    ));
+
+    // Update results if currently showing recent searches
+    if (resultType === 'recent') {
+      setResults(prev => prev.filter(result =>
+        !(result.text === option.text && result.value === option.value)
+      ));
+    }
+
+    await autocompleteApi.deleteRecent(option.data?.id || 0);
+  }, [resultType]);
+
   const clearResults = useCallback(() => {
     setResults([]);
     setError(null);
@@ -178,6 +194,7 @@ export const useAutocompleteSearch = () => {
     search,
     loadRecentSearches,
     mergeWithRecentSearches,
+    deleteRecentSearch,
     clearResults,
   };
 };

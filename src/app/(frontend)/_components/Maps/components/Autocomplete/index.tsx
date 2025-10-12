@@ -36,7 +36,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const { trackAction } = useTrackAction();
 
   // Use the search hook
-  const { results, recentSearches, loading, resultType, loadRecentSearches, mergeWithRecentSearches } = useAutocompleteSearch();
+  const { results, recentSearches, loading, resultType, loadRecentSearches, mergeWithRecentSearches, deleteRecentSearch } = useAutocompleteSearch();
 
   // Sync external value changes
   useEffect(() => {
@@ -182,6 +182,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           selectedIndex={selectedIndex}
           resultType={resultType}
           onSelect={handleOptionSelect}
+          onDelete={deleteRecentSearch}
           getIconType={(option) => ((option as OptionForSelect & { _resultType?: 'recent' | 'search' })._resultType || 'search')}
         />
       )}
