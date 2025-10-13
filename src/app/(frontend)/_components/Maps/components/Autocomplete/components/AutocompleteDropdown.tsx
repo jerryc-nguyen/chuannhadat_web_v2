@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Clock, MapPin, X } from 'lucide-react';
+import { Clock, MapPin, X, UserCircle } from 'lucide-react';
 import { OptionForSelect } from '@common/types';
 import { SearchResultType } from '../hooks/useAutocompleteSearch';
 
@@ -51,22 +51,28 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
             onMouseLeave={() => setHoveredIndex(null)}
           >
             <div className="flex items-center gap-2">
-              {/* Icon based on result type */}
+              {/* Icon based on result type and data_type */}
               <div className="flex-shrink-0">
                 {isRecent ? (
                   <Clock className="h-4 w-4 text-gray-400" />
+                ) : option.data_type === 'MapSetting' ? (
+                  <MapPin className="h-4 w-4 text-gray-400" />
+                ) : option.data_type === 'User' ? (
+                  <UserCircle className="h-4 w-4 text-gray-400" />
                 ) : (
                   <MapPin className="h-4 w-4 text-gray-400" />
                 )}
               </div>
 
-              <div className="flex-1">
-                <div className="font-medium text-gray-900">{option.text}</div>
-                {option.long_text && (
-                  <div className="text-xs text-gray-500 truncate">
-                    {option.long_text}
+              <div className="flex-1 min-w-0">
+                {option.description && (
+                  <div className="text-xs text-gray-500 truncate mb-0.5">
+                    {option.description}
                   </div>
                 )}
+                <div className="font-medium text-gray-900 truncate">
+                  {option.text}
+                </div>
               </div>
 
               {/* Delete icon for recent items - always present but hidden when not hovered */}

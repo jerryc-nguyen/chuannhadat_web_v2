@@ -13,7 +13,7 @@ const PanelHeader: React.FC<PanelHeaderProps> = ({ title, totalCount, onClose })
       <div>
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-gray-500">
-          {totalCount} listings found
+          {totalCount} môi giới
         </p>
       </div>
       <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
