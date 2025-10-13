@@ -6,7 +6,7 @@ import ListingPanel from './components/ListingPanel';
 import { useMapDesktopHook } from './hooks/useMapDesktopHook';
 import { useWindowSize } from './hooks/useWindowSize';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { selectedLocationAtom, clearSelectedLocationAtom, markerClickAtom } from './states/mapAtoms';
+import { selectedAutocompleteItemAtom, clearSelectedAutocompleteItemAtom, markerClickAtom } from './states/mapAtoms';
 import { LISTING_PANEL_WIDTH_WITH_PADDING } from './constants';
 
 const MapDesktop: React.FC = () => {
@@ -27,9 +27,12 @@ const MapDesktop: React.FC = () => {
   } = useMapDesktopHook();
 
   // Listing panel state
-  const selectedLocation = useAtomValue(selectedLocationAtom);
-  const clearSelectedLocation = useSetAtom(clearSelectedLocationAtom);
+  const selectedAutocompleteItem = useAtomValue(selectedAutocompleteItemAtom);
+  const clearSelectedAutocompleteItem = useSetAtom(clearSelectedAutocompleteItemAtom);
   const handleMarkerClick = useSetAtom(markerClickAtom);
+
+  // Extract location data from autocomplete item if it's a MapSetting
+  const selectedLocation = selectedAutocompleteItem?.data_type === 'MapSetting' ? selectedAutocompleteItem : null;
 
   // Window size for responsive layout
   const { width: windowWidth } = useWindowSize();
@@ -79,7 +82,7 @@ const MapDesktop: React.FC = () => {
       {shouldShowListingPanel && (
         <ListingPanel
           listingOption={selectedLocation}
-          onClose={() => clearSelectedLocation()}
+          onClose={() => clearSelectedAutocompleteItem()}
           onMarkerClick={handleListingMarkerClick}
         />
       )}

@@ -79,23 +79,55 @@ export const clearAllFiltersAtom = atom(
   }
 );
 
-// Selected location from autocomplete atom
-export const selectedLocationAtom = atom<OptionForSelect | null>(null);
+// Selected autocomplete item atom - supports multiple types (MapSetting, User, etc.)
+export const selectedAutocompleteItemAtom = atom<OptionForSelect | null>(null);
 
-// Action atom for autocomplete selection
-export const selectLocationAtom = atom(
+// Action atom for autocomplete selection - handles different data types
+export const selectAutocompleteItemAtom = atom(
   null,
-  (get, set, location: OptionForSelect) => {
-    console.log('selectLocationAtom', location);
-    set(selectedLocationAtom, location);
+  (get, set, item: OptionForSelect) => {
+    console.log('selectAutocompleteItemAtom', item);
+    set(selectedAutocompleteItemAtom, item);
+
+    // Handle different data types
+    switch (item.data_type) {
+      case 'MapSetting':
+        // Handle map/location selection
+        console.log('Selected location:', item);
+        break;
+      case 'User':
+        // Handle user selection
+        console.log('Selected user:', item);
+        break;
+      default:
+        // Handle unknown types or fallback to location behavior
+        console.log('Selected item (unknown type):', item);
+        break;
+    }
   }
 );
 
-// Clear selected location atom
-export const clearSelectedLocationAtom = atom(
+// Clear selected autocomplete item atom
+export const clearSelectedAutocompleteItemAtom = atom(
   null,
   (get, set) => {
-    set(selectedLocationAtom, null);
+    set(selectedAutocompleteItemAtom, null);
+  }
+);
+
+// Derived atoms for specific item types
+export const selectedUserAtom = atom(
+  (get) => {
+    const item = get(selectedAutocompleteItemAtom);
+    return item?.data_type === 'User' ? item : null;
+  }
+);
+
+// Derived atom for MapSetting items (locations)
+export const selectedMapSettingAtom = atom(
+  (get) => {
+    const item = get(selectedAutocompleteItemAtom);
+    return item?.data_type === 'MapSetting' ? item : null;
   }
 );
 

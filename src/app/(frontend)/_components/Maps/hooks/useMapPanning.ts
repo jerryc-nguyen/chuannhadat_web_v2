@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useAtomValue } from 'jotai';
-import { mapAtom, selectedLocationAtom, selectedMarkerAtom } from '../states/mapAtoms';
+import { mapAtom, selectedAutocompleteItemAtom, selectedMarkerAtom } from '../states/mapAtoms';
 import { LatLng } from '../types';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
 
@@ -43,8 +43,11 @@ const debugWarn = (message: string, data?: unknown) => {
  */
 export const useMapPanning = () => {
   const map = useAtomValue(mapAtom);
-  const selectedLocation = useAtomValue(selectedLocationAtom);
+  const selectedAutocompleteItem = useAtomValue(selectedAutocompleteItemAtom);
   const selectedMarker = useAtomValue(selectedMarkerAtom);
+
+  // Extract location data from autocomplete item if it's a MapSetting
+  const selectedLocation = selectedAutocompleteItem?.data_type === 'MapSetting' ? selectedAutocompleteItem : null;
 
   /**
    * Check if a marker location is within the current map bounds
