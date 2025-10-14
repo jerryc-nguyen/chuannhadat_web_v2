@@ -1,50 +1,20 @@
 'use client';
-import { useState, useCallback } from 'react';
 import DynamicMap from './components/DynamicMap';
 import MapControlsMobile from './components/MapControls/MapControlsMobile';
-import { useRouter } from 'next/navigation';
+import { useMapMobileHook } from './hooks/useMapMobileHook';
 
 const MapMobile: React.FC = () => {
-  const router = useRouter();
-  const [map, setMap] = useState<any>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleMapReady = useCallback((mapInstance: unknown) => {
-    setMap(mapInstance);
-  }, []);
-
-  const handleSearch = useCallback((query: string) => {
-    console.log('Searching for:', query);
-    // Implement search functionality here
-  }, []);
-
-  const handleLocationClick = useCallback(() => {
-    if (navigator.geolocation && map) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          // @ts-ignore - Leaflet map instance has setView method
-          (map as any).setView([latitude, longitude], 15);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          alert('Không thể lấy vị trí hiện tại. Vui lòng kiểm tra quyền truy cập vị trí.');
-        }
-      );
-    }
-  }, [map]);
-
-  const handleLayersClick = useCallback(() => {
-    console.log('Layers clicked - functionality to be implemented');
-  }, []);
-
-  const handleNavigationClick = useCallback(() => {
-    console.log('Navigation clicked - functionality to be implemented');
-  }, []);
-
-  const handleHomeClick = useCallback(() => {
-    router.push('/');
-  }, [router]);
+  const {
+    searchQuery,
+    setSearchQuery,
+    handleMapReady,
+    handleSearch,
+    handleLocationClick,
+    handleLayersClick,
+    handleNavigationClick,
+    handleHomeClick,
+    handleFilterChange,
+  } = useMapMobileHook();
 
 
   return (
@@ -64,9 +34,11 @@ const MapMobile: React.FC = () => {
         onLayersClick={handleLayersClick}
         onNavigationClick={handleNavigationClick}
         onHomeClick={handleHomeClick}
+        onFilterChange={handleFilterChange}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />
+
 
     </div>
   );

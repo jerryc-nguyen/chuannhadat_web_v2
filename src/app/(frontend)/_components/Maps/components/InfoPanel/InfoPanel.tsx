@@ -41,24 +41,44 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
   // Calculate positioning styles
   const positionStyles = {
-    width: SEARCH_BOX_WIDTH_WITH_PADDING,
-    height: '100vh',
-    zIndex: 1000,
-    ...(position === 'left'
-      ? { left: offsetLeft }
-      : { right: offsetLeft }
-    )
+    ...(position === 'left' && {
+      width: SEARCH_BOX_WIDTH_WITH_PADDING,
+      height: '100vh',
+      left: offsetLeft,
+      zIndex: 1000,
+    }),
+    ...(position === 'right' && {
+      width: SEARCH_BOX_WIDTH_WITH_PADDING,
+      height: '100vh',
+      right: offsetLeft,
+      zIndex: 1000,
+    }),
+    ...(position === 'bottom' && {
+      width: '100%',
+      height: 'auto',
+      maxHeight: '70vh',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1000,
+    })
   };
 
   return (
     <div
-      className="absolute top-0 bg-white rounded-lg shadow-lg flex flex-col"
+      className={`bg-white shadow-lg flex flex-col ${position === 'bottom'
+          ? 'rounded-t-2xl'
+          : 'absolute top-0 rounded-lg'
+        }`}
       style={positionStyles}
     >
       {/* Close button only */}
       <button
         onClick={onClose}
-        className="absolute top-3 right-3 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
+        className={`p-1 hover:bg-gray-100 rounded-full transition-colors z-10 ${position === 'bottom'
+            ? 'absolute top-3 right-3'
+            : 'absolute top-3 right-3'
+          }`}
         aria-label="Đóng"
       >
         <X size={20} className="text-gray-500" />

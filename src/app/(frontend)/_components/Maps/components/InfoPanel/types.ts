@@ -5,7 +5,7 @@ import { IUser } from '@common/types';
 export interface InfoPanelProps {
   marker: Marker;
   onClose: () => void;
-  position?: 'left' | 'right';
+  position?: 'left' | 'right' | 'bottom';
   offsetLeft?: number;
 }
 
