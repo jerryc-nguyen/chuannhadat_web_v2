@@ -41,4 +41,6 @@ export interface IUser {
   unconfirmed_email?: string;
   phone_confirmed?: boolean;
   last_credit_id?: number;
+  local_count?: number;
+  local_location_name?: string;
 }

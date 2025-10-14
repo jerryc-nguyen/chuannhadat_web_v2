@@ -1,6 +1,6 @@
 import { useProfileData } from '@maps/components/Mappable/User/hooks';
 import { useRelatedLocation } from '../../hooks/useRelatedLocation';
-import { UseInfoPanelOptions, ProfileDataState } from '../types';
+import { UseInfoPanelOptions } from '../types';
 
 /**
  * Custom hook for managing InfoPanel data and interactions

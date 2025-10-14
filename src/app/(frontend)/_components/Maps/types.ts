@@ -35,7 +35,7 @@ export interface MarkerProfile extends IUser {
 export interface Marker {
   id: number;
   uid: string;
-  mappable_ype: string;
+  mappable_type: 'User' | string;
   mappable_id: number;
   mappable_data: IUser;
   location: LatLng;

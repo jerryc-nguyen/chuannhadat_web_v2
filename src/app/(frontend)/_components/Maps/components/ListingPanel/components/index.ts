@@ -5,6 +5,10 @@ export { default as LoadingState } from './LoadingState';
 export { default as ErrorState } from './ErrorState';
 export { default as EmptyState } from './EmptyState';
 
+// Export specialized item components
+export { default as LiUser } from './LiUser';
+export { default as LiCommonType } from './LiCommonType';
+
 // Export core component
 export { default as ListingPanelCore } from './ListingPanelCore';
 
