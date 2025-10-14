@@ -18,12 +18,8 @@ export const searchQueryAtom = atom<string>('');
 // Derived atom for search query with marker name
 export const searchQueryWithMarkerAtom = atom(
   (get) => get(searchQueryAtom),
-  (get, set, update: string | Marker) => {
-    if (typeof update === 'string') {
-      set(searchQueryAtom, update);
-    } else {
-      set(selectedMarkerAtom, update);
-    }
+  (get, set, query: string) => {
+    set(searchQueryAtom, query);
   }
 );
 
@@ -33,7 +29,6 @@ export const markerClickAtom = atom(
   (get, set, marker: Marker) => {
     console.log('markerClickAtom', marker);
     set(selectedMarkerAtom, marker);
-    set(searchQueryWithMarkerAtom, marker);
   }
 );
 
@@ -112,6 +107,7 @@ export const clearSelectedAutocompleteItemAtom = atom(
   null,
   (get, set) => {
     set(selectedAutocompleteItemAtom, null);
+    set(searchQueryAtom, '');
   }
 );
 

@@ -21,9 +21,14 @@ const ForUserPanel: React.FC<ForUserProps> = ({
     user_uid: userUid,
   };
 
+  const subtitleBuilder = (totalCount: number) => {
+    return `${totalCount} khu vực hoạt động`;
+  };
+
   return (
     <ListingPanelCore
       title={title}
+      subtitleBuilder={subtitleBuilder}
       apiParams={apiParams}
       onClose={onClose}
       onMarkerClick={onMarkerClick}

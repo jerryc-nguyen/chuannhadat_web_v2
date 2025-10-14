@@ -25,9 +25,14 @@ const ForLocationPanel: React.FC<ForLocationProps> = ({
     user_uid: userUid,
   };
 
+  const subtitleBuilder = (totalCount: number) => {
+    return `${totalCount} môi giới`;
+  };
+
   return (
     <ListingPanelCore
       title={title}
+      subtitleBuilder={subtitleBuilder}
       apiParams={apiParams}
       onClose={onClose}
       onMarkerClick={onMarkerClick}

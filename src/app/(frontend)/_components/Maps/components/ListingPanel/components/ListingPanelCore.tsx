@@ -17,6 +17,7 @@ import {
 
 interface ListingPanelCoreProps {
   title: string;
+  subtitleBuilder: (totalCount: number) => string;
   apiParams: ListingItemsParams;
   onClose: () => void;
   onMarkerClick?: (marker: Marker) => void;
@@ -24,6 +25,7 @@ interface ListingPanelCoreProps {
 
 const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
   title,
+  subtitleBuilder,
   apiParams,
   onClose,
   onMarkerClick,
@@ -71,6 +73,7 @@ const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
       {/* Header */}
       <PanelHeader
         title={title}
+        subtitleBuilder={subtitleBuilder}
         totalCount={pagination?.total_count || 0}
         onClose={onClose}
       />

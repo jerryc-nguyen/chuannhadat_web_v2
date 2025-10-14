@@ -42,6 +42,17 @@ const LiUser: React.FC<LiUserProps> = ({
       onMouseEnter={() => onMouseEnter?.(marker)}
       onMouseLeave={() => onMouseLeave?.()}
     >
+      {/* Header - Location name with pin icon */}
+      {marker.mappable_data.local_location_name && (
+        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
+          <MapPin className="h-4 w-4 text-blue-600 flex-shrink-0" />
+          <h3 className="font-semibold text-gray-900 text-base">
+            {marker.mappable_data.local_location_name}
+          </h3>
+        </div>
+      )}
+
+      {/* Body - User info and metrics */}
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
@@ -64,33 +75,17 @@ const LiUser: React.FC<LiUserProps> = ({
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-gray-900 truncate">
+          <h4 className="font-medium text-gray-900 mb-2">
             {marker.marker_label || marker.mappable_data.full_name}
-          </h3>
+          </h4>
 
-          {marker.mappable_data.local_location_name && (
-            <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
-              <MapPin className="h-3 w-3" />
-              <span className="truncate">{marker.mappable_data.local_location_name}</span>
-            </div>
-          )}
-
-          {/* Posts and locations count on separate line */}
+          {/* Posts and locations count */}
           {(marker.mappable_data.posts_count !== undefined || (marker.mappable_data.local_count !== undefined && marker.mappable_data.local_count > 0)) && (
-            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+            <div className="flex items-center gap-4 text-sm text-gray-600">
               {marker.mappable_data.posts_count !== undefined && (
                 <div className="flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
-                  <span className="font-medium">{marker.mappable_data.posts_count}</span>
-                  <span className="text-gray-400">posts</span>
-                </div>
-              )}
-
-              {marker.mappable_data.local_count !== undefined && marker.mappable_data.local_count > 0 && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3" />
-                  <span className="font-medium">{marker.mappable_data.local_count}</span>
-                  <span className="text-gray-400">locations</span>
+                  <span className="font-medium text-gray-900">{marker.mappable_data.local_count}</span>
+                  <span className="text-gray-500">tin đăng</span>
                 </div>
               )}
             </div>
