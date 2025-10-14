@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import { MapPin, Navigation, Home, Briefcase, Banknote, Filter, X } from 'lucide-react';
+import { MapPin, Navigation, Home } from 'lucide-react';
 import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
@@ -8,8 +8,6 @@ import { useSetAtom } from 'jotai';
 import { selectAutocompleteItemAtom } from '../../states/mapAtoms';
 import { useMapPanning } from '../../hooks/useMapPanning';
 import { TMapSetting } from '../../types';
-import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
-import { useState } from 'react';
 
 const MapControlsMobile: React.FC<MapControlsProps> = ({
   onSearch,
@@ -17,16 +15,10 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
   onLayersClick: _onLayersClick,
   onNavigationClick,
   onHomeClick,
-  onFilterChange,
   className = '',
   searchQuery = '',
   onSearchQueryChange,
 }) => {
-  const [showFilterSheet, setShowFilterSheet] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState({
-    businessType: null as string | null,
-    categoryType: null as string | null,
-  });
 
   const selectAutocompleteItem = useSetAtom(selectAutocompleteItemAtom);
   const { panToLocationSmart } = useMapPanning();
@@ -57,30 +49,6 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
         onSearch(searchQuery.trim());
       }
     }
-  };
-
-  const handleFilterSelect = (filterType: string, value: string) => {
-    const newFilters = {
-      ...selectedFilters,
-      [filterType]: value
-    };
-
-    setSelectedFilters(newFilters);
-
-    // Notify parent of filter change
-    onFilterChange?.({
-      businessType: newFilters.businessType || undefined,
-      categoryType: newFilters.categoryType || undefined,
-    });
-  };
-
-  const handleApplyFilters = () => {
-    setShowFilterSheet(false);
-  };
-
-  const handleClearFilters = () => {
-    setSelectedFilters({ businessType: null, categoryType: null });
-    onFilterChange?.({ businessType: undefined, categoryType: undefined });
   };
 
   return (

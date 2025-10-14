@@ -1,12 +1,14 @@
 'use client';
 import DynamicMap from './components/DynamicMap';
 import MapControlsMobile from './components/MapControls/MapControlsMobile';
+import InfoPanel from './components/InfoPanel/mobile';
 import { useMapMobileHook } from './hooks/useMapMobileHook';
 
 const MapMobile: React.FC = () => {
   const {
     searchQuery,
     setSearchQuery,
+    selectedMarker,
     handleMapReady,
     handleSearch,
     handleLocationClick,
@@ -14,6 +16,7 @@ const MapMobile: React.FC = () => {
     handleNavigationClick,
     handleHomeClick,
     handleFilterChange,
+    handlePanelClose,
   } = useMapMobileHook();
 
 
@@ -39,6 +42,13 @@ const MapMobile: React.FC = () => {
         onSearchQueryChange={setSearchQuery}
       />
 
+      {/* Info Panel Mobile (slidable bottom sheet) */}
+      {selectedMarker && (
+        <InfoPanel
+          marker={selectedMarker}
+          onClose={handlePanelClose}
+        />
+      )}
 
     </div>
   );

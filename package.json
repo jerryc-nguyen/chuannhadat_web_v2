@@ -105,7 +105,7 @@
     "tailwindcss-animate": "^1.0.7",
     "textarea": "^0.3.0",
     "uuid": "^10.0.0",
-    "vaul": "^0.9.1",
+    "vaul": "^1.1.2",
     "yet-another-react-lightbox": "^3.21.5",
     "yup": "^1.4.0",
     "zod": "^3.23.8"
