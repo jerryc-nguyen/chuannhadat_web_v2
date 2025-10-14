@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import { MapPin, Navigation, Home, Briefcase, Banknote, ChevronDown } from 'lucide-react';
+import { MapPin, Navigation, Home, Briefcase, Banknote, Filter, X } from 'lucide-react';
 import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
@@ -9,8 +9,7 @@ import { selectAutocompleteItemAtom } from '../../states/mapAtoms';
 import { useMapPanning } from '../../hooks/useMapPanning';
 import { TMapSetting } from '../../types';
 import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
-import { useState, useRef } from 'react';
-import { useClickOutside } from '@common/hooks/useClickOutside';
+import { useState } from 'react';
 
 const MapControlsMobile: React.FC<MapControlsProps> = ({
   onSearch,
@@ -23,12 +22,11 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
   searchQuery = '',
   onSearchQueryChange,
 }) => {
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [showFilterSheet, setShowFilterSheet] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
     businessType: null as string | null,
     categoryType: null as string | null,
   });
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectAutocompleteItem = useSetAtom(selectAutocompleteItemAtom);
   const { panToLocationSmart } = useMapPanning();
@@ -68,7 +66,6 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
     };
 
     setSelectedFilters(newFilters);
-    setOpenDropdown(null);
 
     // Notify parent of filter change
     onFilterChange?.({
@@ -77,142 +74,65 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
     });
   };
 
-  const toggleDropdown = (dropdownName: string) => {
-    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+  const handleApplyFilters = () => {
+    setShowFilterSheet(false);
   };
 
-  // Close dropdown when clicking outside
-  useClickOutside(dropdownRef, () => setOpenDropdown(null), !!openDropdown);
-
-  const filterCategories = [
-    {
-      icon: Briefcase,
-      label: 'Hình thức',
-      type: 'businessType',
-      options: businessTypesOptions,
-      active: selectedFilters.businessType !== null,
-      selectedValue: selectedFilters.businessType
-    },
-    {
-      icon: Banknote,
-      label: 'Loại nhà đất',
-      type: 'categoryType',
-      options: categoryTypesOptions,
-      active: selectedFilters.categoryType !== null,
-      selectedValue: selectedFilters.categoryType
-    }
-  ];
+  const handleClearFilters = () => {
+    setSelectedFilters({ businessType: null, categoryType: null });
+    onFilterChange?.({ businessType: undefined, categoryType: undefined });
+  };
 
   return (
     <>
-      {/* Google Maps Style Search & Filter - Fixed Top */}
+      {/* Mobile-Optimized Search & Filter Header */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[1000] p-4 ${className}`}
+        className={`fixed top-0 left-0 right-0 z-[1000] ${className}`}
       >
-        <div className="flex gap-3 items-center">
-          {/* Search Bar */}
+        {/* Search Bar - Full Width */}
+        <div className="p-4">
           <Autocomplete
             value={searchQuery}
             onChange={onSearchQueryChange}
             onSelect={handleAutocompleteSelect}
             onSubmit={handleSearchSubmit}
-            placeholder="Tìm kiếm trên Google Maps"
+            placeholder="Tìm kiếm địa điểm..."
           />
-
-          {/* Filter Categories - Mobile Responsive */}
-          <div ref={dropdownRef} className="flex gap-2 flex-wrap relative">
-            {filterCategories.map((category, index) => {
-              const IconComponent = category.icon;
-              const isOpen = openDropdown === category.type;
-
-              return (
-                <div key={index} className="relative">
-                  <Button
-                    variant={category.active ? "default" : "outline"}
-                    size="sm"
-                    className={`
-                    flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-200
-                    ${category.active
-                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400 shadow-sm'
-                      }
-                  `}
-                    onClick={() => toggleDropdown(category.type)}
-                  >
-                    <IconComponent className="h-4 w-4" />
-                    <span className="hidden sm:inline">{category.selectedValue ?
-                      category.options.find(opt => opt.value === category.selectedValue)?.text || category.label
-                      : category.label
-                    }</span>
-                    <span className="sm:hidden">{category.selectedValue ?
-                      category.options.find(opt => opt.value === category.selectedValue)?.text?.charAt(0) || category.label.charAt(0)
-                      : category.label.charAt(0)
-                    }</span>
-                    <ChevronDown className={`h-3 w-3 ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-                  </Button>
-
-                  {/* Dropdown Menu */}
-                  {isOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-[1001] min-w-[200px] max-h-[300px] overflow-y-auto">
-                      <div className="py-1">
-                        {category.options.map((option) => (
-                          <button
-                            key={option.value}
-                            className={`
-                            w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors duration-200
-                            ${category.selectedValue === option.value
-                                ? 'bg-blue-50 text-blue-600 font-medium'
-                                : 'text-gray-700'
-                              }
-                          `}
-                            onClick={() => handleFilterSelect(category.type, String(option.value))}
-                          >
-                            {option.text}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
 
-      {/* Control Buttons - Right Side */}
-      <div className="fixed top-20 right-4 z-[1000] flex flex-col gap-3">
-        {/* Home Button */}
+      {/* Mobile Control Buttons - Bottom Right FAB Style */}
+      <div className="fixed bottom-6 right-4 z-[1000] flex flex-col gap-3">
+        {/* Primary Action: My Location (Most Used) */}
         <Button
-          variant="outline"
+          variant="default"
           size="lg"
-          className="bg-white shadow-md hover:shadow-lg hover:bg-gray-50 p-3 rounded-lg border border-gray-200 transition-all duration-200"
-          onClick={onHomeClick}
-          title="Về trang chủ"
-        >
-          <Home className="h-5 w-5 text-gray-600" />
-        </Button>
-
-        {/* My Location Button */}
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-white shadow-md hover:shadow-lg hover:bg-gray-50 p-3 rounded-lg border border-gray-200 transition-all duration-200"
+          className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl p-4 rounded-full w-14 h-14 transition-all duration-200 min-h-[56px] touch-manipulation"
           onClick={onLocationClick}
           title="Vị trí của tôi"
         >
-          <MapPin className="h-5 w-5 text-gray-600" />
+          <MapPin className="h-6 w-6" />
         </Button>
 
-        {/* Navigation Button */}
+        {/* Secondary Actions */}
         <Button
           variant="outline"
           size="lg"
-          className="bg-white shadow-md hover:shadow-lg hover:bg-gray-50 p-3 rounded-lg border border-gray-200 transition-all duration-200"
+          className="bg-white shadow-lg hover:shadow-xl hover:bg-gray-50 p-3 rounded-full w-12 h-12 transition-all duration-200 min-h-[48px] touch-manipulation"
           onClick={onNavigationClick}
           title="Chỉ đường"
         >
           <Navigation className="h-5 w-5 text-gray-600" />
+        </Button>
+
+        <Button
+          variant="outline"
+          size="lg"
+          className="bg-white shadow-lg hover:shadow-xl hover:bg-gray-50 p-3 rounded-full w-12 h-12 transition-all duration-200 min-h-[48px] touch-manipulation"
+          onClick={onHomeClick}
+          title="Về trang chủ"
+        >
+          <Home className="h-5 w-5 text-gray-600" />
         </Button>
       </div>
     </>

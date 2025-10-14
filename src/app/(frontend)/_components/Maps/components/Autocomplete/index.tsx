@@ -7,6 +7,7 @@ import { useAutocompleteSearch } from './hooks/useAutocompleteSearch';
 import { useClickOutside, useTrackAction } from '@common/hooks';
 import { OptionForSelect } from '@common/types';
 import { AutocompleteDropdown } from './components';
+import { useApp } from '@common/context/AppContext';
 
 interface AutocompleteProps {
   value?: string;
@@ -34,6 +35,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { trackAction } = useTrackAction();
+  const { isMobile } = useApp();
 
   // Use the search hook
   const { results, recentSearches, loading, resultType, loadRecentSearches, mergeWithRecentSearches, deleteRecentSearch } = useAutocompleteSearch();
@@ -152,7 +154,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit}>
-        <div className="flex items-center bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg hover:border-gray-300 focus-within:shadow-lg focus-within:border-blue-300 transition-all duration-200" style={{ width: SEARCH_BOX_WIDTH }}>
+        <div
+          className="flex items-center bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg hover:border-gray-300 focus-within:shadow-lg focus-within:border-blue-300 transition-all duration-200"
+          style={isMobile ? {} : { width: SEARCH_BOX_WIDTH }}
+        >
           <div className="pl-4 pr-2">
             <Search className="h-5 w-5 text-gray-500" />
           </div>
