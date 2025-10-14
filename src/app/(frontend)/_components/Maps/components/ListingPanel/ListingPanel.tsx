@@ -1,104 +1,42 @@
 'use client';
 
 import React from 'react';
-import { LISTING_PANEL_WIDTH_WITH_PADDING } from '../../constants';
-import { TMapSetting, Marker } from '../../types';
-import { useLocationListing, useListingPanelState, useListingItemHover } from './hooks';
-import { ListingPanelProps } from './types';
-import { IPagination } from '@common/types/api';
-import {
-  ListingItem,
-  PanelHeader,
-  Pagination,
-  LoadingState,
-  ErrorState,
-  EmptyState,
-} from './components';
+import { ListingPanelProps, isLocationOption, isUserOption } from './types';
+import { ForLocationPanel } from './components/ForLocation';
+import { ForUserPanel } from './components/ForUser';
 
 const ListingPanel: React.FC<ListingPanelProps> = ({
   listingOption,
   onClose,
   onMarkerClick,
 }) => {
-  // Extract location UID from the option data
-  const locationData = listingOption.data as TMapSetting;
-  const locationUid = locationData?.uid;
-
-  // Panel state management
-  const {
-    currentPage,
-    perPage,
-    handleMarkerClick,
-    handlePreviousPage,
-    handleNextPage,
-  } = useListingPanelState(onClose, onMarkerClick);
-
-  // Hover interaction handlers
-  const { handleMouseEnter, handleMouseLeave } = useListingItemHover();
-
-  // Data fetching
-  const { data: response, isLoading, error } = useLocationListing({
-    locationUid,
-    page: currentPage,
-    perPage,
-  });
-
-  // Loading state
-  if (isLoading) {
-    return <LoadingState onClose={onClose} />;
-  }
-
-  // Error state
-  if (error || !response) {
-    console.error('ListingPanel error:', error);
-    return <ErrorState onClose={onClose} />;
-  }
-
-  // Handle the actual API response structure: { pagination: {...}, results: [...] } (direct format)
-  const responseData = response as unknown as Record<string, unknown>;
-  const markers = (responseData?.results as Marker[]) || [];
-  const pagination = responseData?.pagination as IPagination | null;
-
-  return (
-    <div
-      className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col"
-      style={{ width: LISTING_PANEL_WIDTH_WITH_PADDING, height: '100vh', zIndex: 1000 }}
-    >
-      {/* Header */}
-      <PanelHeader
-        title={listingOption.text || 'Listings'}
-        totalCount={pagination?.total_count || 0}
+  // Route to appropriate component based on data type using type guards
+  if (isLocationOption(listingOption)) {
+    return (
+      <ForLocationPanel
+        listingOption={listingOption}
         onClose={onClose}
+        onMarkerClick={onMarkerClick}
       />
+    );
+  }
 
-      {/* Listings */}
-      <div className="flex-1 overflow-y-auto">
-        {!markers || markers.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="space-y-4 p-4">
-            {markers.map((marker: Marker) => (
-              <ListingItem
-                key={marker.uid}
-                marker={marker}
-                onClick={handleMarkerClick}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+  if (isUserOption(listingOption)) {
+    return (
+      <ForUserPanel
+        listingOption={listingOption}
+        onClose={onClose}
+        onMarkerClick={onMarkerClick}
+      />
+    );
+  }
 
-      {/* Pagination */}
-      {pagination && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={pagination.total_pages || 1}
-          onPreviousPage={handlePreviousPage}
-          onNextPage={() => handleNextPage(pagination.total_pages || 1)}
-        />
-      )}
+  // Fallback for unknown data types
+  console.error('Unknown data_type:', listingOption.data_type);
+  return (
+    <div className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col p-4">
+      <p>Error: Unknown listing type</p>
+      <button onClick={onClose}>Close</button>
     </div>
   );
 };

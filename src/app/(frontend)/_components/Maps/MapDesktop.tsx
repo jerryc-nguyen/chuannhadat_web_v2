@@ -2,7 +2,7 @@
 import DynamicMap from './components/DynamicMap';
 import MapControlsDesktop from './components/MapControls/MapControlsDesktop';
 import InfoPanel from './components/InfoPanel';
-import ListingPanel from './components/ListingPanel';
+import ListingPanel, { ListingOptionForSelect } from './components/ListingPanel';
 import { useMapDesktopHook } from './hooks/useMapDesktopHook';
 import { useWindowSize } from './hooks/useWindowSize';
 import { useAtomValue, useSetAtom } from 'jotai';
@@ -31,9 +31,6 @@ const MapDesktop: React.FC = () => {
   const clearSelectedAutocompleteItem = useSetAtom(clearSelectedAutocompleteItemAtom);
   const handleMarkerClick = useSetAtom(markerClickAtom);
 
-  // Extract location data from autocomplete item if it's a MapSetting
-  const selectedLocation = selectedAutocompleteItem?.data_type === 'MapSetting' ? selectedAutocompleteItem : null;
-
   // Window size for responsive layout
   const { width: windowWidth } = useWindowSize();
 
@@ -43,7 +40,7 @@ const MapDesktop: React.FC = () => {
   };
 
   // Calculate InfoPanel positioning when both panels are shown
-  const shouldShowBothPanels = selectedLocation && selectedMarker;
+  const shouldShowBothPanels = selectedAutocompleteItem && selectedMarker;
 
   // Check if screen is wide enough for dual panels
   // Need at least 1200px to comfortably show both panels (2 * 512px + some margin)
@@ -53,7 +50,7 @@ const MapDesktop: React.FC = () => {
   const infoPanelOffset = shouldShowBothPanels && canShowBothPanels ? LISTING_PANEL_WIDTH_WITH_PADDING + 10 : 0;
 
   // On smaller screens, if both panels should be shown, prioritize InfoPanel and hide ListingPanel
-  const shouldShowListingPanel = selectedLocation && (!selectedMarker || canShowBothPanels);
+  const shouldShowListingPanel = selectedAutocompleteItem && (!selectedMarker || canShowBothPanels);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -81,7 +78,7 @@ const MapDesktop: React.FC = () => {
       {/* Listing Panel (if location selected from autocomplete) */}
       {shouldShowListingPanel && (
         <ListingPanel
-          listingOption={selectedLocation}
+          listingOption={selectedAutocompleteItem as ListingOptionForSelect}
           onClose={() => clearSelectedAutocompleteItem()}
           onMarkerClick={handleListingMarkerClick}
         />
