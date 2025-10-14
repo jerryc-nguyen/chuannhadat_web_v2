@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { MapPin, User, Calendar } from 'lucide-react';
+import { MapPin, User } from 'lucide-react';
 import { Marker } from '../../../types';
 
 interface LiUserProps {
