@@ -66,13 +66,13 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     return () => clearTimeout(timeoutId);
   }, [inputValue, mergeWithRecentSearches]);
 
-  // Show dropdown when we have results or when recent searches are loaded
+  // Show dropdown when recent searches are loaded and input is empty
   useEffect(() => {
-    if (results.length > 0) {
+    if (!inputValue.trim() && recentSearches.length > 0 && resultType === 'recent') {
       setIsOpen(true);
       setSelectedIndex(-1);
     }
-  }, [results]);
+  }, [recentSearches, inputValue, resultType]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
