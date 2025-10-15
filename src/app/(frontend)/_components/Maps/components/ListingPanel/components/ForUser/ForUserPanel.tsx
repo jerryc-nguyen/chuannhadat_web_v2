@@ -3,6 +3,7 @@
 import React from 'react';
 import { ForUserProps } from '../../types';
 import ListingPanelCore from '../ListingPanelCore';
+import { useApp } from '@common/context/AppContext';
 
 const ForUserPanel: React.FC<ForUserProps> = ({
   listingOption,
@@ -25,6 +26,7 @@ const ForUserPanel: React.FC<ForUserProps> = ({
     return `${totalCount} khu vực hoạt động`;
   };
 
+  const { isMobile } = useApp();
   return (
     <ListingPanelCore
       title={title}
@@ -32,7 +34,7 @@ const ForUserPanel: React.FC<ForUserProps> = ({
       apiParams={apiParams}
       onClose={onClose}
       onMarkerClick={onMarkerClick}
-      isMobile={true}
+      isMobile={isMobile}
     />
   );
 };

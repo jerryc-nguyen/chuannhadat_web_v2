@@ -5,6 +5,7 @@ import { ForLocationProps } from '../../types';
 import ListingPanelCore from '../ListingPanelCore';
 import { TMapSetting } from '@maps/types';
 import { IUser } from '@common/types';
+import { useApp } from '@common/context/AppContext';
 
 const ForLocationPanel: React.FC<ForLocationProps> = ({
   listingOption,
@@ -28,6 +29,7 @@ const ForLocationPanel: React.FC<ForLocationProps> = ({
   const subtitleBuilder = (totalCount: number) => {
     return `${totalCount} môi giới`;
   };
+  const { isMobile } = useApp();
 
   return (
     <ListingPanelCore
@@ -36,7 +38,7 @@ const ForLocationPanel: React.FC<ForLocationProps> = ({
       apiParams={apiParams}
       onClose={onClose}
       onMarkerClick={onMarkerClick}
-      isMobile={true}
+      isMobile={isMobile}
     />
   );
 };
