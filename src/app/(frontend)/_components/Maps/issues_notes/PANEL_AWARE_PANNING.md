@@ -494,7 +494,7 @@ const isInfoPanelShown = !!selectedMarker;
 
 ### **Debug Logging:**
 
-The `useMapPanning` hook includes a comprehensive debug logging system that can be easily controlled:
+The `useMapPanningDesktop` hook includes a comprehensive debug logging system that can be easily controlled:
 
 #### **Debug Control:**
 

@@ -4,7 +4,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
 import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
 import { useMapFilters } from './useMapFilters';
-import { useMapPanning } from './useMapPanning';
+import { useMapPanningDesktop } from './useMapPanningDesktop';
 import {
   mapAtom,
   selectedMarkerAtom,
@@ -26,7 +26,7 @@ export const useMapDesktopHook = () => {
   const { updateFilters } = useMapFilters();
 
   // Map panning functionality
-  const { panToCurrentLocation, panToLocationSmart } = useMapPanning();
+  const { panToCurrentLocation, panToLocationSmart } = useMapPanningDesktop();
 
   // Keep ref in sync with state
   useEffect(() => {

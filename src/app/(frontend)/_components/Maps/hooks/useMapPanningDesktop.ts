@@ -38,10 +38,10 @@ const debugWarn = (message: string, data?: unknown) => {
 };
 
 /**
- * Custom hook for map panning functionality
- * Can be used in both mobile and desktop components
+ * Custom hook for map panning functionality on desktop
+ * Handles panel-aware centering for desktop map interactions
  */
-export const useMapPanning = () => {
+export const useMapPanningDesktop = () => {
   const map = useAtomValue(mapAtom);
   const selectedAutocompleteItem = useAtomValue(selectedAutocompleteItemAtom);
   const selectedMarker = useAtomValue(selectedMarkerAtom);

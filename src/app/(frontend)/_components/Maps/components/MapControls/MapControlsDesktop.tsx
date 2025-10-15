@@ -6,7 +6,7 @@ import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
 import { selectAutocompleteItemAtom } from '../../states/mapAtoms';
-import { useMapPanning } from '../../hooks/useMapPanning';
+import { useMapPanningDesktop } from '../../hooks/useMapPanningDesktop';
 import { TMapSetting } from '../../types';
 import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
 import { useState, useRef } from 'react';
@@ -31,7 +31,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectAutocompleteItem = useSetAtom(selectAutocompleteItemAtom);
-  const { panToLocationSmart } = useMapPanning();
+  const { panToLocationSmart } = useMapPanningDesktop();
 
   const handleAutocompleteSelect = (option: OptionForSelect) => {
     // Store the selected autocomplete item for listing panel
