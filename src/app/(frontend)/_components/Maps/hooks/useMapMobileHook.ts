@@ -114,11 +114,10 @@ export const useMapMobileHook = () => {
     handleMarkerClick(marker);
   }, [handleMarkerClick]);
 
-  // Handle panel close (closes both info and listing panels)
-  const handlePanelClose = useCallback(() => {
+  // Handle info panel close (closes only marker info panel)
+  const handleInfoPanelClose = useCallback(() => {
     clearSelectedMarker();
-    clearSelectedAutocompleteItem();
-  }, [clearSelectedMarker, clearSelectedAutocompleteItem]);
+  }, [clearSelectedMarker]);
 
   // Handle marker click from listing panel (opens info panel)
   const handleListingMarkerClick = useCallback((marker: Marker) => {
@@ -151,7 +150,7 @@ export const useMapMobileHook = () => {
     handleMarkerClick: handleMarkerClickMobile,
     handleListingMarkerClick,
     handleFilterChange,
-    handlePanelClose,
+    handleInfoPanelClose,
     handleMarkerHover,
 
     // Marker utilities

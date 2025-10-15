@@ -44,9 +44,8 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       setActiveSnapPoint={setSnap}
       snapToSequentialPoint
       shouldScaleBackground
+      modal={false}
       open={true}
-      onOpenChange={(open: boolean) => !open && onClose()}
-      onClose={onClose}
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
@@ -65,10 +64,10 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
               </Drawer.Title>
               <button
                 onClick={onClose}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0 bg-gray-50 hover:bg-gray-200"
                 aria-label="Đóng"
               >
-                <X size={20} className="text-gray-500" />
+                <X size={24} className="text-gray-700" />
               </button>
             </div>
 

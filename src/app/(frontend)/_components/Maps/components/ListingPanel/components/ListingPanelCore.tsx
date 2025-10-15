@@ -21,6 +21,7 @@ interface ListingPanelCoreProps {
   apiParams: ListingItemsParams;
   onClose: () => void;
   onMarkerClick?: (marker: Marker) => void;
+  isMobile?: boolean;
 }
 
 const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
@@ -29,6 +30,7 @@ const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
   apiParams,
   onClose,
   onMarkerClick,
+  isMobile = false,
 }) => {
   // Panel state management
   const {
@@ -68,7 +70,11 @@ const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
   return (
     <div
       className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col"
-      style={{ width: LISTING_PANEL_WIDTH_WITH_PADDING, height: '100vh', zIndex: 1000 }}
+      style={{
+        ...(isMobile ? {} : { width: LISTING_PANEL_WIDTH_WITH_PADDING }),
+        height: '100vh',
+        zIndex: 1000
+      }}
     >
       {/* Header */}
       <PanelHeader

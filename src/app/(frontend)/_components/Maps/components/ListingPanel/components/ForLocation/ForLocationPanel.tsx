@@ -36,6 +36,7 @@ const ForLocationPanel: React.FC<ForLocationProps> = ({
       apiParams={apiParams}
       onClose={onClose}
       onMarkerClick={onMarkerClick}
+      isMobile={true}
     />
   );
 };

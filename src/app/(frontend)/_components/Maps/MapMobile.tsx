@@ -20,10 +20,9 @@ const MapMobile: React.FC = () => {
     handleNavigationClick,
     handleHomeClick,
     handleFilterChange,
-    handlePanelClose,
+    handleInfoPanelClose,
     handleListingMarkerClick,
   } = useMapMobileHook();
-
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -47,15 +46,15 @@ const MapMobile: React.FC = () => {
         onSearchQueryChange={setSearchQuery}
       />
 
-      {/* Info Panel Mobile (slidable bottom sheet) */}
+      {/* Info Panel - highest priority on mobile */}
       {selectedMarker && (
         <InfoPanel
           marker={selectedMarker}
-          onClose={handlePanelClose}
+          onClose={handleInfoPanelClose}
         />
       )}
 
-      {/* Listing Panel Mobile (slidable bottom sheet) */}
+      {/* Listing Panel - only show when no marker is selected */}
       {selectedAutocompleteItem && (
         <ListingPanel
           listingOption={selectedAutocompleteItem as ListingOptionForSelect}

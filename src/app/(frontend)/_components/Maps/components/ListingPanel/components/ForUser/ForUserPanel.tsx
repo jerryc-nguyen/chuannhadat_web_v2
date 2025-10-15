@@ -32,6 +32,7 @@ const ForUserPanel: React.FC<ForUserProps> = ({
       apiParams={apiParams}
       onClose={onClose}
       onMarkerClick={onMarkerClick}
+      isMobile={true}
     />
   );
 };
