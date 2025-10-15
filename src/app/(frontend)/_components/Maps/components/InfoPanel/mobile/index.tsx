@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { clsx } from 'clsx';
 import { X } from 'lucide-react';
 import { Drawer } from 'vaul';
@@ -12,8 +12,9 @@ import {
   RelatedLocationsSection,
   SectionDivider,
 } from '../components';
+import { useStickyHeader } from '@common/hooks';
 
-const snapPoints = ['148px', '355px', 1];
+const snapPoints = ['300px', 1];
 
 const InfoPanel: React.FC<InfoPanelProps> = ({
   marker,
@@ -29,6 +30,10 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
   } = useInfoPanelData({ marker, onClose });
 
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Use the reusable sticky header hook
+  const isHeaderFixed = useStickyHeader(contentRef, 80);
 
   // Update snap point when content loads
   useEffect(() => {
@@ -51,15 +56,23 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[1200]">
+        <Drawer.Content className="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[1200] vaul-drawer-content">
           <div
-            className={clsx('flex flex-col max-w-md mx-auto w-full p-4 pt-5', {
+            ref={contentRef}
+            className={clsx('flex flex-col max-w-md mx-auto w-full p-4 pt-5 vaul-drawer-content', {
               'overflow-y-auto': snap === 1,
               'overflow-hidden': snap !== 1,
             })}
+            style={{
+              maxHeight: snap === 1 ? '100vh' : 'none',
+              minHeight: snap !== 1 ? '200px' : 'none'
+            }}
           >
+            {/* Header spacer for fixed positioning */}
+            {isHeaderFixed && <div className="h-16" />}
+
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className={`flex items-center justify-between mb-4 ${isHeaderFixed ? 'fixed top-0 left-0 right-0 bg-white border-b border-gray-200 p-4 z-[1300] shadow-sm' : ''}`}>
               <Drawer.Title className="text-lg font-semibold">Thông tin địa điểm</Drawer.Title>
               <button
                 onClick={onClose}

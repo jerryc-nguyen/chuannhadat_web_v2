@@ -8,3 +8,4 @@ export * from './useViewportSize';
 export * from './useBreadcrumb';
 export * from './useClickOutside';
 export * from './useTrackAction';
+export * from './useStickyHeader';
