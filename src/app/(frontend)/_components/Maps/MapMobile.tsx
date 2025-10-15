@@ -2,13 +2,17 @@
 import DynamicMap from './components/DynamicMap';
 import MapControlsMobile from './components/MapControls/MapControlsMobile';
 import InfoPanel from './components/InfoPanel/mobile';
+import ListingPanel from './components/ListingPanel/mobile';
 import { useMapMobileHook } from './hooks/useMapMobileHook';
+import type { ListingOptionForSelect } from './components/ListingPanel/types';
 
 const MapMobile: React.FC = () => {
   const {
     searchQuery,
     setSearchQuery,
     selectedMarker,
+    selectedAutocompleteItem,
+    clearSelectedAutocompleteItem,
     handleMapReady,
     handleSearch,
     handleLocationClick,
@@ -17,6 +21,7 @@ const MapMobile: React.FC = () => {
     handleHomeClick,
     handleFilterChange,
     handlePanelClose,
+    handleListingMarkerClick,
   } = useMapMobileHook();
 
 
@@ -47,6 +52,15 @@ const MapMobile: React.FC = () => {
         <InfoPanel
           marker={selectedMarker}
           onClose={handlePanelClose}
+        />
+      )}
+
+      {/* Listing Panel Mobile (slidable bottom sheet) */}
+      {selectedAutocompleteItem && (
+        <ListingPanel
+          listingOption={selectedAutocompleteItem as ListingOptionForSelect}
+          onClose={clearSelectedAutocompleteItem}
+          onMarkerClick={handleListingMarkerClick}
         />
       )}
 

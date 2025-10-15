@@ -109,15 +109,18 @@ export const useMapMobileHook = () => {
     handleMarkerClick(marker);
   }, [handleMarkerClick]);
 
-  const handleListingMarkerClick = useCallback((marker: Marker) => {
-    // On mobile, clicking from listing should also show info panel
-    handleMarkerClick(marker);
-  }, [handleMarkerClick]);
-
+  // Handle panel close (closes both info and listing panels)
   const handlePanelClose = useCallback(() => {
     clearSelectedMarker();
     clearSelectedAutocompleteItem();
   }, [clearSelectedMarker, clearSelectedAutocompleteItem]);
+
+  // Handle marker click from listing panel (opens info panel)
+  const handleListingMarkerClick = useCallback((marker: Marker) => {
+    handleMarkerClick(marker);
+    // Optionally close listing panel when opening info panel
+    // clearSelectedAutocompleteItem();
+  }, [handleMarkerClick]);
 
   const handleMarkerHover = useCallback((marker: Marker | null) => {
     setHoveredMarker(marker);
