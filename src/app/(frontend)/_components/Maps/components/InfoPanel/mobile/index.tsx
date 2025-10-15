@@ -48,7 +48,6 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       open={true}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content className="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[1200] vaul-drawer-content">
           <div
             className="flex flex-col max-w-md mx-auto w-full vaul-drawer-content"

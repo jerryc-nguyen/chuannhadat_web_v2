@@ -55,7 +55,7 @@ const MapMobile: React.FC = () => {
       )}
 
       {/* Listing Panel - only show when no marker is selected */}
-      {selectedAutocompleteItem && (
+      {!selectedMarker && selectedAutocompleteItem && (
         <ListingPanel
           listingOption={selectedAutocompleteItem as ListingOptionForSelect}
           onClose={clearSelectedAutocompleteItem}
