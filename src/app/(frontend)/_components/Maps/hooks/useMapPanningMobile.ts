@@ -1,0 +1,263 @@
+import { useCallback } from 'react';
+import { useAtomValue } from 'jotai';
+import { mapAtom, selectedMarkerAtom } from '../states/mapAtoms';
+import { LatLng } from '../types';
+
+// Debug flag to control logging output
+const DEBUG_MAP_PANNING_MOBILE = false; // Set to true to enable debug logs
+
+/**
+ * Debug logger that only logs when DEBUG_MAP_PANNING_MOBILE is true
+ * @param message - The log message
+ * @param data - Optional data to log
+ */
+const debugLog = (message: string, data?: unknown) => {
+  if (DEBUG_MAP_PANNING_MOBILE) {
+    if (data) {
+      console.log(`📱 ${message}`, data);
+    } else {
+      console.log(`📱 ${message}`);
+    }
+  }
+};
+
+/**
+ * Debug warning logger that only logs when DEBUG_MAP_PANNING_MOBILE is true
+ * @param message - The warning message
+ * @param data - Optional data to log
+ */
+const debugWarn = (message: string, data?: unknown) => {
+  if (DEBUG_MAP_PANNING_MOBILE) {
+    if (data) {
+      console.warn(`📱 ${message}`, data);
+    } else {
+      console.warn(`📱 ${message}`);
+    }
+  }
+};
+
+/**
+ * Custom hook for map panning functionality on mobile
+ * Simplified panning for mobile devices without panel-aware centering
+ */
+export const useMapPanningMobile = () => {
+  const map = useAtomValue(mapAtom);
+  const selectedMarker = useAtomValue(selectedMarkerAtom);
+
+  /**
+   * Pan the map to a specific location (simple panning for mobile)
+   * @param location - The location to pan to (lat, lon)
+   * @param options - Optional panning configuration
+   */
+  const panToLocation = useCallback((
+    location: LatLng,
+    options?: {
+      animate?: boolean;
+      duration?: number;
+      zoom?: number;
+    }
+  ) => {
+    if (!map) {
+      debugWarn('Map not available for panning');
+      return;
+    }
+
+    const { lat, lon } = location;
+    if (typeof lat !== 'number' || typeof lon !== 'number') {
+      debugWarn('Invalid location coordinates for panning:', location);
+      return;
+    }
+
+    const panOptions = {
+      animate: options?.animate !== false,
+      duration: options?.duration || 0.5
+    };
+
+    // Pan to the location
+    if (options?.zoom) {
+      // Use setView if zoom level is specified
+      map.setView([lat, lon], options.zoom, panOptions);
+    } else {
+      // Use panTo to maintain current zoom level
+      map.panTo([lat, lon], panOptions);
+    }
+
+    debugLog('Mobile: Panning map to location:', { lat, lon, options });
+  }, [map]);
+
+  /**
+   * Check if a marker location is within the current map bounds
+   */
+  const isMarkerInMapBounds = useCallback((location: LatLng) => {
+    if (!map) return false;
+
+    const bounds = map.getBounds();
+    const leafletResult = bounds.contains([location.lat, location.lon]);
+
+    // Manual bounds check for comparison
+    const north = bounds.getNorth();
+    const south = bounds.getSouth();
+    const east = bounds.getEast();
+    const west = bounds.getWest();
+
+    const manualCheck =
+      location.lat >= south &&
+      location.lat <= north &&
+      location.lon >= west &&
+      location.lon <= east;
+
+    // Debug: Check if there's a discrepancy between Leaflet and manual calculation
+    if (leafletResult !== manualCheck) {
+      debugWarn('🚨 Bounds check discrepancy:', {
+        location,
+        leafletResult,
+        manualCheck,
+        bounds: { north, south, east, west }
+      });
+    }
+
+    debugLog('📱 Map bounds check:', {
+      location,
+      isInBounds: leafletResult,
+      reason: leafletResult ? 'marker in bounds' : 'marker out of bounds'
+    });
+
+    return leafletResult;
+  }, [map]);
+
+  /**
+   * Check if a marker at the given location would be behind the bottom sheet
+   */
+  const isMarkerBehindPanels = useCallback((location: LatLng) => {
+    if (!map) return false;
+
+    // On mobile, we only care about the bottom sheet when it's shown
+    const isInfoPanelShown = !!selectedMarker;
+
+    // If no bottom sheet is shown, marker can't be behind panels
+    if (!isInfoPanelShown) {
+      return false;
+    }
+
+    // Convert the location to screen coordinates
+    const markerPoint = map.latLngToContainerPoint([location.lat, location.lon]);
+
+    // Bottom sheet typically takes up about 40% of screen height (adjust as needed)
+    const windowHeight = window.innerHeight;
+    const bottomSheetHeight = windowHeight * 0.4; // 40% of screen height
+    const bottomSheetTop = windowHeight - bottomSheetHeight;
+
+    // Check if marker is in the bottom sheet area
+    const isBehindBottomSheet = markerPoint.y > bottomSheetTop;
+
+    debugLog('📱 Bottom sheet collision check:', {
+      location,
+      windowHeight,
+      bottomSheetHeight,
+      bottomSheetTop,
+      markerScreenY: markerPoint.y,
+      isBehindBottomSheet,
+      result: isBehindBottomSheet ? 'BEHIND BOTTOM SHEET' : 'VISIBLE'
+    });
+
+    return isBehindBottomSheet;
+  }, [map, selectedMarker]);
+
+  /**
+   * Pan the map to a location with smart centering for mobile
+   * Ensures markers are visible above the bottom sheet when it's open
+   * @param location - The location to pan to (lat, lon)
+   * @param options - Optional panning configuration
+   */
+  const panToLocationSmart = useCallback((
+    location: LatLng,
+    options?: {
+      animate?: boolean;
+      duration?: number;
+      zoom?: number;
+    }
+  ) => {
+    if (!map) return;
+
+    const isBehindBottomSheet = isMarkerBehindPanels(location);
+
+    if (isBehindBottomSheet) {
+      // Calculate the pixel offset needed to move marker above bottom sheet
+      const windowHeight = window.innerHeight;
+      const bottomSheetHeight = windowHeight * 0.4; // 40% of screen height
+      const visibleAreaTop = windowHeight - bottomSheetHeight;
+
+      // Target position: center of the visible area above bottom sheet
+      const targetScreenY = visibleAreaTop / 2;
+
+      // Get current marker position on screen
+      const markerPoint = map.latLngToContainerPoint([location.lat, location.lon]);
+
+      // Calculate pan offset: to move marker from current position to target position
+      // If marker is below target (higher y), we need to pan down to move marker up
+      const yOffset = markerPoint.y - targetScreenY; // Positive if marker is below target
+
+      debugLog('📱 Marker behind bottom sheet:', {
+        location,
+        windowHeight,
+        bottomSheetHeight,
+        visibleAreaTop,
+        targetScreenY,
+        markerScreenY: markerPoint.y,
+        yOffset,
+        panBy: [0, yOffset],
+        action: 'pan down to move marker up'
+      });
+
+      // Pan the map down (positive y) to move markers up on screen
+      map.panBy([0, yOffset], {
+        animate: options?.animate !== false,
+        duration: options?.duration || 0.5
+      });
+    } else {
+      // Marker is already visible, just pan normally
+      debugLog('📱 Marker is already visible above bottom sheet');
+      panToLocation(location, options);
+    }
+  }, [map, panToLocation, isMarkerBehindPanels]);
+
+  /**
+   * Pan to current user location
+   */
+  const panToCurrentLocation = useCallback((options?: { zoom?: number }) => {
+    if (!navigator.geolocation) {
+      debugWarn('Geolocation not supported');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        // Use a slightly higher zoom for mobile to focus on immediate area
+        panToLocation(
+          { lat: latitude, lon: longitude },
+          { zoom: options?.zoom || 16, animate: true, duration: 1.0 }
+        );
+      },
+      (error) => {
+        debugWarn('Error getting current location:', error);
+      }
+    );
+  }, [panToLocation]);
+
+  /**
+   * Check if map is available for panning
+   */
+  const isMapReady = useCallback(() => {
+    return !!map;
+  }, [map]);
+
+  return {
+    panToLocation,
+    panToLocationSmart,
+    panToCurrentLocation,
+    isMapReady,
+    isMarkerInMapBounds,
+    isMarkerBehindPanels,
+  };
+};

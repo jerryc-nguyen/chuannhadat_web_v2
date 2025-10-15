@@ -6,7 +6,7 @@ import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
 import { selectAutocompleteItemAtom } from '../../states/mapAtoms';
-import { useMapPanning } from '../../hooks/useMapPanning';
+import { useMapPanningMobile } from '../../hooks/useMapPanningMobile';
 import { TMapSetting } from '../../types';
 
 const MapControlsMobile: React.FC<MapControlsProps> = ({
@@ -21,7 +21,7 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
 }) => {
 
   const selectAutocompleteItem = useSetAtom(selectAutocompleteItemAtom);
-  const { panToLocationSmart } = useMapPanning();
+  const { panToLocationSmart } = useMapPanningMobile();
 
   const handleAutocompleteSelect = (option: OptionForSelect) => {
     // Store the selected autocomplete item for listing panel

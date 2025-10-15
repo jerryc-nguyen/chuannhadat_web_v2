@@ -4,7 +4,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
 import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
 import { useMapFilters } from './useMapFilters';
-import { useMapPanning } from './useMapPanning';
+import { useMapPanningMobile } from './useMapPanningMobile';
 import {
   mapAtom,
   selectedMarkerAtom,
@@ -32,7 +32,12 @@ export const useMapMobileHook = () => {
   const { updateFilters } = useMapFilters();
 
   // Map panning functionality
-  const { panToCurrentLocation, panToLocationSmart } = useMapPanning();
+  const {
+    panToCurrentLocation,
+    panToLocationSmart,
+    isMarkerInMapBounds,
+    isMarkerBehindPanels
+  } = useMapPanningMobile();
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -82,7 +87,7 @@ export const useMapMobileHook = () => {
   }, []);
 
   const handleLocationClick = useCallback(() => {
-    panToCurrentLocation({ zoom: 15 });
+    panToCurrentLocation(); // Uses mobile-optimized zoom level (16)
   }, [panToCurrentLocation]);
 
   const handleLayersClick = useCallback(() => {
@@ -148,5 +153,9 @@ export const useMapMobileHook = () => {
     handleFilterChange,
     handlePanelClose,
     handleMarkerHover,
+
+    // Marker utilities
+    isMarkerInMapBounds,
+    isMarkerBehindPanels,
   };
 };
