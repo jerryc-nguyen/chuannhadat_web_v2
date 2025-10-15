@@ -11,6 +11,7 @@ export { default as LiCommonType } from './LiCommonType';
 
 // Export core component
 export { default as ListingPanelCore } from './ListingPanelCore';
+export { default as ListingPanelBody } from './ListingPanelBody';
 
 // Export specialized panel components
 export { ForLocationPanel } from './ForLocation';

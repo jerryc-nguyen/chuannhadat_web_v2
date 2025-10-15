@@ -7,12 +7,10 @@ import { useLocationListing, useListingPanelState, useListingItemHover } from '.
 import { ListingItemsParams } from '../types';
 import { IPagination } from '@common/types/api';
 import {
-  ListingItem,
   PanelHeader,
-  Pagination,
   LoadingState,
   ErrorState,
-  EmptyState,
+  ListingPanelBody,
 } from './';
 
 interface ListingPanelCoreProps {
@@ -67,11 +65,27 @@ const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
   const markers = (responseData?.results as Marker[]) || [];
   const pagination = responseData?.pagination as IPagination | null;
 
+  // Mobile: return only the body
+  if (isMobile) {
+    return (
+      <ListingPanelBody
+        markers={markers}
+        pagination={pagination}
+        currentPage={currentPage}
+        handleMarkerClick={handleMarkerClick}
+        handleMouseEnter={handleMouseEnter}
+        handleMouseLeave={handleMouseLeave}
+        handlePreviousPage={handlePreviousPage}
+        handleNextPage={handleNextPage}
+      />
+    );
+  }
+
   return (
     <div
       className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col"
       style={{
-        ...(isMobile ? {} : { width: LISTING_PANEL_WIDTH_WITH_PADDING }),
+        width: LISTING_PANEL_WIDTH_WITH_PADDING,
         height: '100vh',
         zIndex: 1000
       }}
@@ -84,34 +98,17 @@ const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
         onClose={onClose}
       />
 
-      {/* Listings */}
-      <div className="flex-1 overflow-y-auto">
-        {!markers || markers.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="space-y-4 p-4">
-            {markers.map((marker: Marker) => (
-              <ListingItem
-                key={marker.uid}
-                marker={marker}
-                onClick={handleMarkerClick}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {pagination && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={pagination.total_pages || 1}
-          onPreviousPage={handlePreviousPage}
-          onNextPage={() => handleNextPage(pagination.total_pages || 1)}
-        />
-      )}
+      {/* Body */}
+      <ListingPanelBody
+        markers={markers}
+        pagination={pagination}
+        currentPage={currentPage}
+        handleMarkerClick={handleMarkerClick}
+        handleMouseEnter={handleMouseEnter}
+        handleMouseLeave={handleMouseLeave}
+        handlePreviousPage={handlePreviousPage}
+        handleNextPage={handleNextPage}
+      />
     </div>
   );
 };
