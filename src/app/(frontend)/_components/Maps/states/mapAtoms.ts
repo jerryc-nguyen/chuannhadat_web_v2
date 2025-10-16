@@ -3,6 +3,14 @@ import { LeafletMap, Marker } from '../types';
 import { OptionForSelect } from '@common/types';
 import type { Layer } from 'leaflet';
 
+// Map bounds type
+export type TMapBounds = {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+};
+
 // Map instance atom
 export const mapAtom = atom<LeafletMap | null>(null);
 
@@ -135,5 +143,16 @@ export const setHoveredMarkerAtom = atom(
   null,
   (get, set, marker: Marker | null) => {
     set(hoveredMarkerAtom, marker);
+  }
+);
+
+// Map bounds state atom - stores current map bounds
+export const mapBoundsAtom = atom<TMapBounds | null>(null);
+
+// Set map bounds atom
+export const setMapBoundsAtom = atom(
+  null,
+  (get, set, bounds: TMapBounds | null) => {
+    set(mapBoundsAtom, bounds);
   }
 );

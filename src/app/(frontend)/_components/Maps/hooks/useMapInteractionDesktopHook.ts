@@ -2,14 +2,14 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { mapsApi } from '../api';
 import { Marker, LatLng, LeafletMap } from '../types';
-import { markerClickAtom, businessTypeFilterAtom, categoryTypeFilterAtom } from '../states/mapAtoms';
+import { markerClickAtom, businessTypeFilterAtom, categoryTypeFilterAtom, setMapBoundsAtom, TMapBounds } from '../states/mapAtoms';
 
 import type { Layer } from 'leaflet';
 import useResizeImage from '@common/hooks/useResizeImage';
 import { useHighlightSelectedMarker } from './useHighlightSelectedMarker';
 
 // Helper function to get map bounds
-const getMapBounds = (map: LeafletMap) => {
+const getMapBounds = (map: LeafletMap): TMapBounds => {
   const bounds = map.getBounds();
   return {
     north: bounds.getNorth(),
@@ -21,7 +21,7 @@ const getMapBounds = (map: LeafletMap) => {
 
 // Helper function to fetch markers from API
 const fetchMarkers = async (
-  bounds: { north: number; south: number; east: number; west: number },
+  bounds: TMapBounds,
   filters: { businessType?: string | null; categoryType?: string | null },
   signal: AbortSignal
 ): Promise<Marker[]> => {
@@ -156,6 +156,7 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   const isInitialMount = useRef(true);
   const { buildThumbnailUrl } = useResizeImage();
   const setMarkerClick = useSetAtom(markerClickAtom);
+  const setMapBounds = useSetAtom(setMapBoundsAtom);
 
   // Read global filter state
   const businessType = useAtomValue(businessTypeFilterAtom);
@@ -237,15 +238,21 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
       return;
     }
 
+    // Update global bounds state
+    if (map) {
+      const bounds = getMapBounds(map);
+      setMapBounds(bounds);
+    }
+
     console.log('📍 Proceeding with marker fetch');
     await queryAndUpdateMarkers('MAP_MOVE');
-  }, [queryAndUpdateMarkers]);
+  }, [queryAndUpdateMarkers, map, setMapBounds]);
 
   // Setup map event listeners and handle cleanup
   useEffect(() => {
     if (!map) return;
 
-    // Load initial markers
+    // Load initial markers and set initial bounds
     handleMapMoveEnd();
 
     // Add moveend listener
