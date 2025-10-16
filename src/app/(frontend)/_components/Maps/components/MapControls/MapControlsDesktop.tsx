@@ -1,8 +1,9 @@
 'use client';
 import { Button } from '@components/ui/button';
-import { MapPin, Navigation, Home, Briefcase, Banknote, ChevronDown } from 'lucide-react';
+import { MapPin, Briefcase, Banknote, ChevronDown } from 'lucide-react';
 import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
+import Logo from '@components/logo';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
 import { selectAutocompleteItemAtom } from '../../states/mapAtoms';
@@ -16,8 +17,6 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
   onSearch,
   onLocationClick,
   onLayersClick: _onLayersClick,
-  onNavigationClick,
-  onHomeClick,
   onFilterChange,
   className = '',
   searchQuery = '',
@@ -110,6 +109,9 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
         className={`fixed top-0 left-0 right-0 z-[1000] p-4 ${className}`}
       >
         <div className="flex gap-3 items-center">
+          {/* Logo */}
+          <Logo className="flex-shrink-0" isAlwaysShow={false} />
+
           {/* Search Bar */}
           <Autocomplete
             value={searchQuery}
@@ -177,18 +179,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
       </div>
 
       {/* Control Buttons - Right Side */}
-      <div className="fixed top-20 right-4 z-[1000] flex flex-col gap-3">
-        {/* Home Button */}
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-white shadow-md hover:shadow-lg hover:bg-gray-50 p-3 rounded-lg border border-gray-200 transition-all duration-200"
-          onClick={onHomeClick}
-          title="Về trang chủ"
-        >
-          <Home className="h-5 w-5 text-gray-600" />
-        </Button>
-
+      <div className="fixed z-[1000] flex flex-col gap-3" style={{ bottom: '100px', right: '10px' }}>
         {/* My Location Button */}
         <Button
           variant="outline"
@@ -198,17 +189,6 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
           title="Vị trí của tôi"
         >
           <MapPin className="h-5 w-5 text-gray-600" />
-        </Button>
-
-        {/* Navigation Button */}
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-white shadow-md hover:shadow-lg hover:bg-gray-50 p-3 rounded-lg border border-gray-200 transition-all duration-200"
-          onClick={onNavigationClick}
-          title="Chỉ đường"
-        >
-          <Navigation className="h-5 w-5 text-gray-600" />
         </Button>
       </div>
     </>

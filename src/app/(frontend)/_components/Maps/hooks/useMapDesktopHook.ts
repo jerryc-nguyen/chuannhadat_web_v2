@@ -12,6 +12,7 @@ import {
   markerClickAtom,
   clearSelectedMarkerAtom
 } from '../states/mapAtoms';
+import { toast } from 'sonner';
 
 export const useMapDesktopHook = () => {
   const router = useRouter();
@@ -80,7 +81,7 @@ export const useMapDesktopHook = () => {
   }, []);
 
   const handleLocationClick = useCallback(() => {
-    panToCurrentLocation({ zoom: 15 });
+    panToCurrentLocation({ zoom: 17 });
   }, [panToCurrentLocation]);
 
   const handleLayersClick = useCallback(() => {

@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai';
 import { mapAtom, selectedAutocompleteItemAtom, selectedMarkerAtom } from '../states/mapAtoms';
 import { LatLng } from '../types';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
+import { toast } from 'sonner';
 
 // Debug flag to control logging output
 const DEBUG_MAP_PANNING = false; // Set to true to enable debug logs
@@ -412,11 +413,13 @@ export const useMapPanningDesktop = () => {
         const { latitude, longitude } = position.coords;
         panToLocation(
           { lat: latitude, lon: longitude },
-          { zoom: options?.zoom || 15 }
+          { zoom: options?.zoom || 22 }
         );
+        toast.success('Đã chuyển đến vị trí của bạn');
       },
       (error) => {
         debugWarn('Error getting current location:', error);
+        toast.error('Không thể lấy vị trí của bạn. Vui lòng cho phép truy cập vị trí của bạn.');
       }
     );
   }, [panToLocation]);
