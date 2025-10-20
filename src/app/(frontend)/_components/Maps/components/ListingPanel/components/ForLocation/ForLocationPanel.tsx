@@ -11,6 +11,7 @@ const ForLocationPanel: React.FC<ForLocationProps> = ({
   listingOption,
   onClose,
   onMarkerClick,
+  onDataReceived,
 }) => {
   // Extract location UID from the option data
   const optionData = listingOption.data;
@@ -24,6 +25,7 @@ const ForLocationPanel: React.FC<ForLocationProps> = ({
   const apiParams = {
     location_uid: locationUid,
     user_uid: userUid,
+    onDataReceived,
   };
 
   const subtitleBuilder = (totalCount: number) => {

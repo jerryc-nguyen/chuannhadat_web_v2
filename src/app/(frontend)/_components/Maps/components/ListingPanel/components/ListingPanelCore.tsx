@@ -83,6 +83,13 @@ const ListingPanelCore: React.FC<ListingPanelCoreProps> = ({
   // Handle error state - show error overlay while keeping old data visible
   const hasError = error && !displayData; // Only show error if we have no data at all
 
+  // For mobile, pass data to parent via callback if provided
+  useEffect(() => {
+    if (isMobile && apiParams.onDataReceived && pagination) {
+      apiParams.onDataReceived(locationTitle || title || '', pagination.total_count || 0);
+    }
+  }, [isMobile, locationTitle, title, pagination, apiParams.onDataReceived]);
+
   // Mobile: return only the body
   if (isMobile) {
     return (

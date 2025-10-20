@@ -3,7 +3,6 @@ import { Button } from '@components/ui/button';
 import { MapPin, Briefcase, Banknote, ChevronDown } from 'lucide-react';
 import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
-import Logo from '@components/logo';
 import { OptionForSelect } from '@common/types';
 import { useSetAtom } from 'jotai';
 import { selectAutocompleteItemAtom } from '../../states/mapAtoms';
@@ -12,6 +11,7 @@ import { TMapSetting } from '../../types';
 import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
 import { useState, useRef } from 'react';
 import { useClickOutside } from '@common/hooks/useClickOutside';
+import MapLogo from '@components/logo/map_logo';
 
 const MapControlsDesktop: React.FC<MapControlsProps> = ({
   onSearch,
@@ -110,7 +110,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
       >
         <div className="flex gap-3 items-center">
           {/* Logo */}
-          <Logo className="flex-shrink-0" isAlwaysShow={false} />
+          <MapLogo url='/' />
 
           {/* Search Bar */}
           <Autocomplete

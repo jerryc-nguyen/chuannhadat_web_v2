@@ -9,6 +9,7 @@ const ForUserPanel: React.FC<ForUserProps> = ({
   listingOption,
   onClose,
   onMarkerClick,
+  onDataReceived,
 }) => {
   // Extract user ID from the option data
   const userData = listingOption.data;
@@ -20,6 +21,7 @@ const ForUserPanel: React.FC<ForUserProps> = ({
   // Prepare API parameters
   const apiParams = {
     user_uid: userUid,
+    onDataReceived,
   };
 
   const subtitleBuilder = (totalCount: number) => {

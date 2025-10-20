@@ -12,7 +12,6 @@ import {
   markerClickAtom,
   clearSelectedMarkerAtom
 } from '../states/mapAtoms';
-import { toast } from 'sonner';
 
 export const useMapDesktopHook = () => {
   const router = useRouter();

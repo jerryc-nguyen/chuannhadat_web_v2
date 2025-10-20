@@ -21,6 +21,7 @@ export interface ListingPanelProps {
 export interface BaseListingProps {
   onClose: () => void;
   onMarkerClick?: (marker: Marker) => void;
+  onDataReceived?: (title: string, totalCount: number) => void;
 }
 
 // Props specific to ForLocation component
@@ -57,4 +58,6 @@ export interface ListingItemsParams {
   location_uid?: string;
   page?: number;
   per_page?: number;
+  onDataReceived?: (title: string, totalCount: number) => void;
+  [key: string]: any;
 }
