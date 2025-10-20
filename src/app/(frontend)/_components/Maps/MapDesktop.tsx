@@ -58,7 +58,7 @@ const MapDesktop: React.FC = () => {
       <DynamicMap
         center={{ lat: 10.8231, lon: 106.6297 }}
         zoom={16}
-        className="h-full w-full"
+        className="h-full w-full z-40"
         onMapReady={handleMapReady}
       />
 

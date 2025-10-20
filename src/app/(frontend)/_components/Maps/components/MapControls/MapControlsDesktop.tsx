@@ -106,7 +106,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
     <>
       {/* Google Maps Style Search & Filter - Fixed Top */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[1000] p-4 ${className}`}
+        className={`fixed top-0 left-0 right-0 z-[40] p-4 ${className}`}
       >
         <div className="flex gap-3 items-center">
           {/* Logo */}
@@ -179,7 +179,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
       </div>
 
       {/* Control Buttons - Right Side */}
-      <div className="fixed z-[1000] flex flex-col gap-3" style={{ bottom: '100px', right: '10px' }}>
+      <div className="fixed z-[40] flex flex-col gap-3" style={{ bottom: '100px', right: '10px' }}>
         {/* My Location Button */}
         <Button
           variant="outline"

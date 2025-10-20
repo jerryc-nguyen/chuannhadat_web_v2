@@ -170,7 +170,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
             onKeyDown={handleKeyDown}
             onFocus={handleFocus}
             disabled={disabled}
-            className="flex-1 px-1 py-3 text-base border-none outline-none bg-transparent text-gray-900 placeholder-gray-400 focus:text-gray-900 focus:placeholder-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-1 py-2 text-base border-none outline-none bg-transparent text-gray-900 placeholder-gray-400 focus:text-gray-900 focus:placeholder-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           {loading && (
             <div className="pr-4">

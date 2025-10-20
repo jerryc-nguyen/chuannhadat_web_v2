@@ -23,7 +23,7 @@ const MapControls: React.FC<MapControlsProps> = ({
   };
 
   return (
-    <div className={`absolute top-4 left-4 z-[1000] ${className}`}>
+    <div className={`absolute top-4 left-4 z-[40] ${className}`}>
       {/* Search Bar */}
       <div className="mb-4">
         <form onSubmit={handleSearchSubmit} className="flex items-center">

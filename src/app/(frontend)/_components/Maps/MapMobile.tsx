@@ -30,7 +30,7 @@ const MapMobile: React.FC = () => {
       <DynamicMap
         center={{ lat: 10.8231, lon: 106.6297 }}
         zoom={13}
-        className="h-full w-full"
+        className="h-full w-full z-40"
         onMapReady={handleMapReady}
       />
 
