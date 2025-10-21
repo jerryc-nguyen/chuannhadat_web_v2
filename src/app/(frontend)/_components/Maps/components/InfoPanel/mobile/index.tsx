@@ -13,7 +13,7 @@ import {
 } from '../components';
 import { Z_INDEX } from '../../../constants';
 
-const snapPoints = ['300px', 1];
+const snapPoints = ['400px', 1];
 
 const InfoPanel: React.FC<InfoPanelProps> = ({
   marker,

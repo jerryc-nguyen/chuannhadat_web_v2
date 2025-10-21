@@ -183,3 +183,14 @@ export const showCurrentLocationMarkerAtom = atom(
     set(currentLocationMarkerAtom, { ...current, isVisible });
   }
 );
+
+// Bottom sheet snap point state - persists across panel switches
+export const bottomSheetSnapPointAtom = atom<number | string | null>('400px');
+
+// Set bottom sheet snap point atom
+export const setBottomSheetSnapPointAtom = atom(
+  null,
+  (get, set, snapPoint: number | string | null) => {
+    set(bottomSheetSnapPointAtom, snapPoint);
+  }
+);

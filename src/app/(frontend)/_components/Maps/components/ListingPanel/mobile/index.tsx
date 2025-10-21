@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { Drawer } from 'vaul';
 import { ListingPanelProps, isLocationOption, isUserOption } from '../types';
 import { ForLocationPanel } from '../components/ForLocation';
 import { ForUserPanel } from '../components/ForUser';
 import { Z_INDEX } from '../../../constants';
+import { useCurrentSnapPoint } from './useCurrentSnapPoint';
 
 const snapPoints = ['400px', 1];
 
@@ -15,13 +16,8 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
   onClose,
   onMarkerClick,
 }) => {
-  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
-
-  // Update snap point when content loads
-  useEffect(() => {
-    // Set initial snap point
-    setSnap(snapPoints[0]);
-  }, []);
+  // Use custom hook for snap point management
+  const { snap, setSnap } = useCurrentSnapPoint('400px');
 
   const [panelTitle, setPanelTitle] = useState<string>('Danh sách môi giới');
   const [totalCount, setTotalCount] = useState<number>(0);
