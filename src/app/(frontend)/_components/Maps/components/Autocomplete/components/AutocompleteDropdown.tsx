@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Clock, MapPin, X, UserCircle } from 'lucide-react';
 import { OptionForSelect } from '@common/types';
 import { SearchResultType } from '../hooks/useAutocompleteSearch';
+import { useApp } from '@common/context/AppContext';
 
 interface AutocompleteDropdownProps {
   options: OptionForSelect[];
@@ -11,6 +12,7 @@ interface AutocompleteDropdownProps {
   resultType: SearchResultType;
   onSelect: (option: OptionForSelect) => void;
   onDelete?: (option: OptionForSelect) => void;
+  onClose?: () => void;
   className?: string;
   getIconType?: (option: OptionForSelect, index: number) => 'recent' | 'search';
 }
@@ -21,9 +23,11 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
   resultType,
   onSelect,
   onDelete,
+  onClose,
   className = '',
   getIconType,
 }) => {
+  const { isMobile } = useApp();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   if (options.length === 0) {
@@ -36,7 +40,36 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
   };
 
   return (
-    <div className={`absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-64 overflow-y-auto z-50 ${className}`}>
+    <div
+      className={`${isMobile ? 'max-h-[60vh]' : 'max-h-64'} absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 overflow-y-auto z-50 ${className}`}
+      style={isMobile ? {
+        scrollbarWidth: 'none', /* Firefox */
+        msOverflowStyle: 'none', /* IE and Edge */
+      } : undefined}
+    >
+      {isMobile && (
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+          }
+        `}</style>
+      )}
+      {isMobile && onClose && (
+        <div className="flex justify-between items-center px-4 py-2.5 border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white sticky top-0 z-10">
+          <div className="flex items-center">
+            <span className="text-gray-500">
+              {options.length} {'kết quả phù hợp'}
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-md bg-gray-100 hover:bg-gray-200 transition-colors"
+            aria-label="Close dropdown"
+          >
+            <X className="h-4 w-4 text-gray-700" />
+          </button>
+        </div>
+      )}
       {options.map((option, index) => {
         const isRecent = (getIconType ? getIconType(option, index) : resultType) === 'recent';
         const isHovered = hoveredIndex === index;
@@ -80,7 +113,7 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
                 <div className="flex-shrink-0 w-7 flex justify-center">
                   <button
                     onClick={(e) => handleDelete(e, option)}
-                    className={`rounded-full transition-all duration-150 ${isHovered
+                    className={`rounded-full transition-all duration-150 ${isHovered || isMobile
                       ? 'opacity-100'
                       : 'opacity-0'
                       }`}

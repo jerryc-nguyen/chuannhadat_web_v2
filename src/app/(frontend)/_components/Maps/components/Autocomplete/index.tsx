@@ -152,7 +152,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
   };
 
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
+    <div ref={containerRef} className={`${isMobile ? 'w-full' : 'relative'}  ${className}`}>
       <form onSubmit={handleSubmit}>
         <div
           className="flex items-center bg-white rounded-full shadow-md border border-gray-200 hover:shadow-lg hover:border-gray-300 focus-within:shadow-lg focus-within:border-blue-300 transition-all duration-200"
@@ -188,6 +188,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           resultType={resultType}
           onSelect={handleOptionSelect}
           onDelete={deleteRecentSearch}
+          onClose={() => setIsOpen(false)}
           getIconType={(option) => ((option as OptionForSelect & { _resultType?: 'recent' | 'search' })._resultType || 'search')}
         />
       )}
