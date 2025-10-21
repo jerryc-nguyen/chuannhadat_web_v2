@@ -6,6 +6,7 @@ import { Drawer } from 'vaul';
 import { ListingPanelProps, isLocationOption, isUserOption } from '../types';
 import { ForLocationPanel } from '../components/ForLocation';
 import { ForUserPanel } from '../components/ForUser';
+import { Z_INDEX } from '../../../constants';
 
 const snapPoints = ['400px', 1];
 
@@ -78,7 +79,7 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
       open={true}
     >
       <Drawer.Portal>
-        <Drawer.Content className="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[20px] shadow-lg bottom-0 left-0 right-0 h-full max-h-[95%] mx-[-1px] z-[1100] vaul-drawer-content overflow-hidden">
+        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[20px] shadow-lg bottom-0 left-0 right-0 h-full max-h-[95%] mx-[-1px] z-[${Z_INDEX.LISTING_PANEL}] vaul-drawer-content overflow-hidden`}>
           <div
             className="flex flex-col max-w-md mx-auto w-full vaul-drawer-content"
             style={{
@@ -92,7 +93,7 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
             </div>
 
             {/* Header - always sticky with flexbox */}
-            <div className="flex items-center justify-between px-5 py-3 pt-0 border-b border-gray-100 flex-shrink-0 sticky top-0 bg-white z-10">
+            <div className={`flex items-center justify-between px-5 py-3 pt-0 border-b border-gray-100 flex-shrink-0 sticky top-0 bg-white z-[${Z_INDEX.STICKY_HEADER}]`}>
               <div className="flex flex-col">
                 <Drawer.Title className="text-lg font-semibold">
                   {panelTitle}
@@ -111,11 +112,11 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
             </div>
 
             {/* Scrollable Content Area - flex-1 takes remaining space */}
-            <div 
-              className="flex-1 overflow-y-auto" 
-              style={{ 
-                width: '100%', 
-                margin: 0, 
+            <div
+              className="flex-1 overflow-y-auto"
+              style={{
+                width: '100%',
+                margin: 0,
                 padding: 0,
                 scrollbarWidth: 'none', /* Firefox */
                 msOverflowStyle: 'none', /* IE and Edge */

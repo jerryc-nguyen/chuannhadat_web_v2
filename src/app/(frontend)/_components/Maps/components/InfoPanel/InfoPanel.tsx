@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { X } from 'lucide-react';
-import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../../constants';
+import { SEARCH_BOX_WIDTH_WITH_PADDING, Z_INDEX } from '../../constants';
 import { InfoPanelProps } from './types';
 import { useInfoPanelData } from './hooks';
 import {
@@ -31,12 +31,12 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
 
   // Loading state
   if (isLoading) {
-    return <LoadingState position={position} offsetLeft={offsetLeft} onClose={onClose} />;
+    return <LoadingState position={position === 'bottom' ? 'left' : position} offsetLeft={offsetLeft} onClose={onClose} />;
   }
 
   // Error state
   if (error || !profileData) {
-    return <ErrorState position={position} offsetLeft={offsetLeft} onClose={onClose} />;
+    return <ErrorState position={position === 'bottom' ? 'left' : position} offsetLeft={offsetLeft} onClose={onClose} />;
   }
 
   // Calculate positioning styles
@@ -45,13 +45,13 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       width: SEARCH_BOX_WIDTH_WITH_PADDING,
       height: '100vh',
       left: offsetLeft,
-      zIndex: 1000,
+      zIndex: Z_INDEX.INFO_PANEL,
     }),
     ...(position === 'right' && {
       width: SEARCH_BOX_WIDTH_WITH_PADDING,
       height: '100vh',
       right: offsetLeft,
-      zIndex: 1000,
+      zIndex: Z_INDEX.INFO_PANEL,
     }),
     ...(position === 'bottom' && {
       width: '100%',
@@ -60,15 +60,15 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       bottom: 0,
       left: 0,
       right: 0,
-      zIndex: 1000,
+      zIndex: Z_INDEX.INFO_PANEL,
     })
   };
 
   return (
     <div
       className={`bg-white shadow-lg flex flex-col ${position === 'bottom'
-          ? 'rounded-t-2xl'
-          : 'absolute top-0 rounded-lg'
+        ? 'rounded-t-2xl'
+        : 'absolute top-0 rounded-lg'
         }`}
       style={positionStyles}
     >
@@ -76,8 +76,8 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       <button
         onClick={onClose}
         className={`p-1 hover:bg-gray-100 rounded-full transition-colors z-10 ${position === 'bottom'
-            ? 'absolute top-3 right-3'
-            : 'absolute top-3 right-3'
+          ? 'absolute top-3 right-3'
+          : 'absolute top-3 right-3'
           }`}
         aria-label="Đóng"
       >

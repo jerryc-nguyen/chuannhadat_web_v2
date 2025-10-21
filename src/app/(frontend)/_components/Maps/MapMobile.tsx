@@ -5,6 +5,7 @@ import InfoPanel from './components/InfoPanel/mobile';
 import ListingPanel from './components/ListingPanel/mobile';
 import { useMapMobileHook } from './hooks/useMapMobileHook';
 import type { ListingOptionForSelect } from './components/ListingPanel/types';
+import { Z_INDEX } from './constants';
 
 const MapMobile: React.FC = () => {
   const {
@@ -30,7 +31,7 @@ const MapMobile: React.FC = () => {
       <DynamicMap
         center={{ lat: 10.8231, lon: 106.6297 }}
         zoom={13}
-        className="h-full w-full z-40"
+        className={`h-full w-full z-[${Z_INDEX.MAP}]`}
         onMapReady={handleMapReady}
       />
 

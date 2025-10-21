@@ -5,6 +5,7 @@ import { Clock, MapPin, X, UserCircle } from 'lucide-react';
 import { OptionForSelect } from '@common/types';
 import { SearchResultType } from '../hooks/useAutocompleteSearch';
 import { useApp } from '@common/context/AppContext';
+import { Z_INDEX } from '../../../constants';
 
 interface AutocompleteDropdownProps {
   options: OptionForSelect[];
@@ -41,7 +42,7 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'max-h-[60vh]' : 'max-h-64'} absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 overflow-y-auto z-50 ${className}`}
+      className={`${isMobile ? 'max-h-[60vh]' : 'max-h-64'} absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 overflow-y-auto z-[${Z_INDEX.DROPDOWN}] ${className}`}
       style={isMobile ? {
         scrollbarWidth: 'none', /* Firefox */
         msOverflowStyle: 'none', /* IE and Edge */
@@ -55,7 +56,7 @@ const AutocompleteDropdown: React.FC<AutocompleteDropdownProps> = ({
         `}</style>
       )}
       {isMobile && onClose && (
-        <div className="flex justify-between items-center px-4 py-2.5 border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white sticky top-0 z-10">
+        <div className={`flex justify-between items-center px-4 py-2.5 border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white sticky top-0 z-[${Z_INDEX.STICKY_HEADER}]`}>
           <div className="flex items-center">
             <span className="text-gray-500">
               {options.length} {'kết quả phù hợp'}

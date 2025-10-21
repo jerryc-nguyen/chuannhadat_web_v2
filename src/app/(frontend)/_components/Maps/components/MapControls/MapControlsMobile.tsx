@@ -10,6 +10,7 @@ import { useMapPanningMobile } from '../../hooks/useMapPanningMobile';
 import { TMapSetting } from '../../types';
 import MapLogo from '@components/logo/map_logo';
 import MenubarIcon from '@app/(frontend)/_components/features/layout/mobile-header/MenubarIcon';
+import { Z_INDEX } from '../../constants';
 
 const MapControlsMobile: React.FC<MapControlsProps> = ({
   onSearch,
@@ -57,7 +58,7 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
     <>
       {/* Mobile-Optimized Search & Filter Header */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[40] ${className}`}
+        className={`fixed top-0 left-0 right-0 z-[${Z_INDEX.MAP_CONTROLS}] ${className}`}
       >
         {/* Search Bar with Logo and MenubarIcon */}
         <div className="p-2 flex items-center gap-1 shadow-sm">
@@ -85,7 +86,7 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
       </div>
 
       {/* Mobile Control Buttons - Bottom Right FAB Style */}
-      <div className="fixed bottom-6 right-4 z-[40] flex flex-col gap-3">
+      <div className={`fixed bottom-6 right-4 z-[${Z_INDEX.MAP_CONTROLS}] flex flex-col gap-3`}>
         {/* Primary Action: My Location (Most Used) */}
         <Button
           variant="default"

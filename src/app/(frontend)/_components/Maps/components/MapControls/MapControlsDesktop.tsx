@@ -12,6 +12,7 @@ import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/s
 import { useState, useRef } from 'react';
 import { useClickOutside } from '@common/hooks/useClickOutside';
 import MapLogo from '@components/logo/map_logo';
+import { Z_INDEX } from '../../constants';
 
 const MapControlsDesktop: React.FC<MapControlsProps> = ({
   onSearch,
@@ -106,7 +107,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
     <>
       {/* Google Maps Style Search & Filter - Fixed Top */}
       <div
-        className={`fixed top-0 left-0 right-0 z-[40] p-4 ${className}`}
+        className={`fixed top-0 left-0 right-0 z-[${Z_INDEX.MAP_CONTROLS}] p-4 ${className}`}
       >
         <div className="flex gap-3 items-center">
           {/* Logo */}
@@ -151,7 +152,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
 
                   {/* Dropdown Menu */}
                   {isOpen && (
-                    <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-[1001] min-w-[200px] max-h-[300px] overflow-y-auto">
+                    <div className={`absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-[${Z_INDEX.DESKTOP_DROPDOWN}] min-w-[200px] max-h-[300px] overflow-y-auto`}>
                       <div className="py-1">
                         {category.options.map((option) => (
                           <button
@@ -179,7 +180,7 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
       </div>
 
       {/* Control Buttons - Right Side */}
-      <div className="fixed z-[40] flex flex-col gap-3" style={{ bottom: '100px', right: '10px' }}>
+      <div className={`fixed z-[${Z_INDEX.MAP_CONTROLS}] flex flex-col gap-3`} style={{ bottom: '100px', right: '10px' }}>
         {/* My Location Button */}
         <Button
           variant="outline"

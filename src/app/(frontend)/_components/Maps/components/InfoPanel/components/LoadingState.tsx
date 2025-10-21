@@ -1,6 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../../../constants';
+import { SEARCH_BOX_WIDTH_WITH_PADDING, Z_INDEX } from '../../../constants';
 
 interface LoadingStateProps {
   position?: 'left' | 'right';
@@ -16,7 +16,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
   const positionStyles = {
     width: SEARCH_BOX_WIDTH_WITH_PADDING,
     height: '100vh',
-    zIndex: 1000,
+    zIndex: Z_INDEX.INFO_PANEL,
     ...(position === 'left'
       ? { left: offsetLeft }
       : { right: offsetLeft }

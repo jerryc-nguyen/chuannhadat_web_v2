@@ -11,6 +11,7 @@ import {
   RelatedLocationsSection,
   SectionDivider,
 } from '../components';
+import { Z_INDEX } from '../../../constants';
 
 const snapPoints = ['300px', 1];
 
@@ -48,7 +49,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       open={true}
     >
       <Drawer.Portal>
-        <Drawer.Content className="fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[1200] vaul-drawer-content">
+        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[${Z_INDEX.INFO_PANEL}] vaul-drawer-content`}>
           <div
             className="flex flex-col max-w-md mx-auto w-full vaul-drawer-content"
             style={{
@@ -57,7 +58,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
             }}
           >
             {/* Header - always sticky with flexbox */}
-            <div className="flex items-center justify-between p-4 pt-5 pb-4 border-b border-gray-100 flex-shrink-0 sticky top-0 bg-white z-10">
+            <div className={`flex items-center justify-between p-4 pt-5 pb-4 border-b border-gray-100 flex-shrink-0 sticky top-0 bg-white z-[${Z_INDEX.STICKY_HEADER}]`}>
               <Drawer.Title className="text-lg font-semibold">
                 Thông tin địa điểm
               </Drawer.Title>
