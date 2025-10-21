@@ -8,7 +8,7 @@ import { useWindowSize } from './hooks/useWindowSize';
 import { useCurrentLocationMarker } from './hooks/useCurrentLocationMarker';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedAutocompleteItemAtom, clearSelectedAutocompleteItemAtom, markerClickAtom } from './states/mapAtoms';
-import { LISTING_PANEL_WIDTH_WITH_PADDING, Z_INDEX } from './constants';
+import { LISTING_PANEL_WIDTH_WITH_PADDING, MAP_ZOOM_DEFAULT, Z_INDEX } from './constants';
 
 const MapDesktop: React.FC = () => {
   const {
@@ -62,7 +62,7 @@ const MapDesktop: React.FC = () => {
       {/* Full-screen map */}
       <DynamicMap
         center={{ lat: 10.8231, lon: 106.6297 }}
-        zoom={16}
+        zoom={MAP_ZOOM_DEFAULT}
         className={`h-full w-full z-[${Z_INDEX.MAP}]`}
         onMapReady={handleMapReady}
       />

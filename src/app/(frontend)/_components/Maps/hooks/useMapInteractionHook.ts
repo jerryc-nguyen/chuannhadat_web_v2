@@ -190,7 +190,8 @@ export const useMapInteractionHook = (map: LeafletMap | null) => {
       const bounds = getMapBounds(map);
       console.log(`📍 [${source}] Fetching markers with params:`, {
         bounds,
-        filters: { businessType, categoryType }
+        filters: { businessType, categoryType },
+        zoom: map.getZoom()
       });
       const markers = await fetchMarkers(bounds, { businessType, categoryType }, controller.signal);
 

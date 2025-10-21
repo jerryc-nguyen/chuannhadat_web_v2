@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { useAtomValue } from 'jotai';
-import { mapAtom, selectedMarkerAtom } from '../states/mapAtoms';
+import { mapAtom } from '../states/mapAtoms';
 import { LatLng } from '../types';
 import { useMapPanning } from './useMapPanning';
 
 // Debug flag to control logging output
-const DEBUG_MAP_PANNING_MOBILE = false; // Set to true to enable debug logs
+const DEBUG_MAP_PANNING_MOBILE = true; // Set to true to enable debug logs
 
 /**
  * Debug logger that only logs when DEBUG_MAP_PANNING_MOBILE is true
@@ -43,7 +43,6 @@ const debugWarn = (message: string, data?: unknown) => {
  */
 export const useMapPanningMobile = () => {
   const map = useAtomValue(mapAtom);
-  const selectedMarker = useAtomValue(selectedMarkerAtom);
 
   // Use shared panning functionality
   const { panToLocation, panToCurrentLocation: sharedPanToCurrentLocation, isMapReady } = useMapPanning();
@@ -89,18 +88,95 @@ export const useMapPanningMobile = () => {
   }, [map]);
 
   /**
+   * Calculate pan offset to position marker at center of top 1/3 of screen
+   * @param location - The marker location to position
+   * @returns Pixel offset to pan the map
+   */
+  const calculateTopThirdCenter = useCallback((location: LatLng) => {
+    if (!map) return { x: 0, y: 0 };
+
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+
+    // Target position: center of top 1/3 of screen
+    const targetX = windowWidth / 2;  // Center horizontally
+    const targetY = windowHeight / 6; // 1/6 from top = center of top 1/3
+
+    // Get marker's current screen position
+    const markerPoint = map.latLngToContainerPoint([location.lat, location.lon]);
+
+    // Calculate pan offset: difference between current position and target position
+    const offsetX = markerPoint.x - targetX; // Positive = marker is right of target
+    const offsetY = markerPoint.y - targetY; // Positive = marker is below target
+
+    debugLog('📱 Top 1/3 center calculation:', {
+      location,
+      windowHeight,
+      windowWidth,
+      targetX,
+      targetY,
+      markerScreenX: markerPoint.x,
+      markerScreenY: markerPoint.y,
+      offsetX,
+      offsetY,
+      meaning: `pan map by (-${offsetX}, -${offsetY}) to move marker to top 1/3 center`
+    });
+
+    return { x: -offsetX, y: -offsetY };
+  }, [map]);
+
+  /**
+   * Pan the map to a location with smart centering for mobile
+   * Ensures markers are visible above the bottom sheet when it's open
+   * @param location - The location to pan to (lat, lon)
+   * @param options - Optional panning configuration
+   */
+  const panToLocationSmart = useCallback((
+    location: LatLng,
+    options?: {
+      animate?: boolean;
+      duration?: number;
+      zoom?: number;
+    }
+  ) => {
+    if (!map) return;
+
+    // Always position marker at center of top 1/3 of screen
+    const pixelOffset = calculateTopThirdCenter(location);
+
+    if (options?.zoom) {
+      map.setView([location.lat, location.lon], options.zoom, {
+        animate: options?.animate !== false,
+        duration: options?.duration || 1
+      });
+    } else {
+      // Always pan to position marker at top 1/3 center
+      // Use negative offset because we're moving the map, not the marker
+      map.panBy([-pixelOffset.x, -pixelOffset.y], {
+        animate: options?.animate !== false,
+        duration: options?.duration || 1
+      });
+    }
+
+    debugLog('📱 Applied top 1/3 center positioning:', {
+      location,
+      pixelOffset,
+      panBy: [-pixelOffset.x, -pixelOffset.y]
+    });
+  }, [map, calculateTopThirdCenter]);
+
+  /**
+   * Pan to current user location
+   */
+  const panToCurrentLocation = useCallback((options?: { zoom?: number }) => {
+    return sharedPanToCurrentLocation({ ...options, platform: 'mobile' });
+  }, [sharedPanToCurrentLocation]);
+
+  /**
    * Check if a marker at the given location would be behind the bottom sheet
    */
   const isMarkerBehindPanels = useCallback((location: LatLng) => {
     if (!map) return false;
-
-    // On mobile, we only care about the bottom sheet when it's shown
-    const isInfoPanelShown = !!selectedMarker;
-
-    // If no bottom sheet is shown, marker can't be behind panels
-    if (!isInfoPanelShown) {
-      return false;
-    }
 
     // Convert the location to screen coordinates
     const markerPoint = map.latLngToContainerPoint([location.lat, location.lon]);
@@ -124,7 +200,7 @@ export const useMapPanningMobile = () => {
     });
 
     return isBehindBottomSheet;
-  }, [map, selectedMarker]);
+  }, [map]);
 
   /**
    * Pan the map to a location with smart centering for mobile
@@ -132,7 +208,7 @@ export const useMapPanningMobile = () => {
    * @param location - The location to pan to (lat, lon)
    * @param options - Optional panning configuration
    */
-  const panToLocationSmart = useCallback((
+  const panToLocationSmartV2 = useCallback((
     location: LatLng,
     options?: {
       animate?: boolean;
@@ -184,12 +260,6 @@ export const useMapPanningMobile = () => {
     }
   }, [map, panToLocation, isMarkerBehindPanels]);
 
-  /**
-   * Pan to current user location
-   */
-  const panToCurrentLocation = useCallback((options?: { zoom?: number }) => {
-    return sharedPanToCurrentLocation({ ...options, platform: 'mobile' });
-  }, [sharedPanToCurrentLocation]);
 
 
   return {
@@ -198,6 +268,7 @@ export const useMapPanningMobile = () => {
     panToCurrentLocation,
     isMapReady,
     isMarkerInMapBounds,
-    isMarkerBehindPanels,
+    panToLocationSmartV2,
+    isMarkerBehindPanels
   };
 };

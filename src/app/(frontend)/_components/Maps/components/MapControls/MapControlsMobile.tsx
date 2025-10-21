@@ -9,7 +9,7 @@ import { useMapPanningMobile } from '../../hooks/useMapPanningMobile';
 import { TMapSetting } from '../../types';
 import MapLogo from '@components/logo/map_logo';
 import MenubarIcon from '@app/(frontend)/_components/features/layout/mobile-header/MenubarIcon';
-import { Z_INDEX } from '../../constants';
+import { MAP_ZOOM_FOCUS_LOCATION, Z_INDEX } from '../../constants';
 
 const MapControlsMobile: React.FC<MapControlsProps> = ({
   onSearch,
@@ -32,7 +32,7 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
       const markerData = option.data as unknown as TMapSetting;
 
       // Pan map to the selected location with smart centering
-      panToLocationSmart(markerData.location, { animate: true, duration: 0.5 });
+      panToLocationSmart(markerData.location, { animate: true, duration: 0.5, zoom: MAP_ZOOM_FOCUS_LOCATION });
     }
   };
 
