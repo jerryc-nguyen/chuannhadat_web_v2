@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useAtomValue } from 'jotai';
-import { mapAtom } from '../states/mapAtoms';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { mapAtom, setCurrentLocationMarkerAtom } from '../states/mapAtoms';
 import { LatLng } from '../types';
 import { toast } from 'sonner';
 
@@ -9,6 +9,7 @@ import { toast } from 'sonner';
  */
 export const useMapPanning = () => {
   const map = useAtomValue(mapAtom);
+  const setCurrentLocationMarker = useSetAtom(setCurrentLocationMarkerAtom);
 
   /**
    * Pan the map to a specific location
@@ -65,14 +66,22 @@ export const useMapPanning = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        const userLocation = { lat: latitude, lon: longitude };
 
         // Different zoom levels for different platforms
         const defaultZoom = platform === 'mobile' ? 16 : 22;
 
         panToLocation(
-          { lat: latitude, lon: longitude },
+          userLocation,
           { zoom: zoom || defaultZoom, animate: true, duration: platform === 'mobile' ? 1.0 : 0.5 }
         );
+
+        // Show current location marker
+        setCurrentLocationMarker({
+          position: userLocation,
+          isVisible: true
+        });
+
         toast.success('Đã chuyển đến vị trí của bạn');
       },
       (error) => {
@@ -80,7 +89,7 @@ export const useMapPanning = () => {
         toast.error('Không thể lấy vị trí của bạn. Vui lòng cho phép truy cập vị trí của bạn.');
       }
     );
-  }, [panToLocation]);
+  }, [panToLocation, setCurrentLocationMarker]);
 
   /**
    * Check if map is available for panning

@@ -5,6 +5,7 @@ import InfoPanel from './components/InfoPanel';
 import ListingPanel, { ListingOptionForSelect } from './components/ListingPanel';
 import { useMapDesktopHook } from './hooks/useMapDesktopHook';
 import { useWindowSize } from './hooks/useWindowSize';
+import { useCurrentLocationMarker } from './hooks/useCurrentLocationMarker';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { selectedAutocompleteItemAtom, clearSelectedAutocompleteItemAtom, markerClickAtom } from './states/mapAtoms';
 import { LISTING_PANEL_WIDTH_WITH_PADDING, Z_INDEX } from './constants';
@@ -24,7 +25,11 @@ const MapDesktop: React.FC = () => {
     handleNavigationClick,
     handleHomeClick,
     handleFilterChange,
+    map,
   } = useMapDesktopHook();
+
+  // Manage current location marker
+  useCurrentLocationMarker(map);
 
   // Listing panel state
   const selectedAutocompleteItem = useAtomValue(selectedAutocompleteItemAtom);

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { LeafletMap, Marker } from '../types';
+import { LeafletMap, Marker, LatLng } from '../types';
 import { OptionForSelect } from '@common/types';
 import type { Layer } from 'leaflet';
 
@@ -154,5 +154,32 @@ export const setMapBoundsAtom = atom(
   null,
   (get, set, bounds: TMapBounds | null) => {
     set(mapBoundsAtom, bounds);
+  }
+);
+
+// Current location marker state
+export const currentLocationMarkerAtom = atom<{
+  position: LatLng | null;
+  isVisible: boolean;
+}>({
+  position: null,
+  isVisible: false,
+});
+
+// Set current location marker
+export const setCurrentLocationMarkerAtom = atom(
+  null,
+  (get, set, update: Partial<{ position: LatLng | null; isVisible: boolean }>) => {
+    const current = get(currentLocationMarkerAtom);
+    set(currentLocationMarkerAtom, { ...current, ...update });
+  }
+);
+
+// Show/hide current location marker
+export const showCurrentLocationMarkerAtom = atom(
+  null,
+  (get, set, isVisible: boolean) => {
+    const current = get(currentLocationMarkerAtom);
+    set(currentLocationMarkerAtom, { ...current, isVisible });
   }
 );

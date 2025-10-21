@@ -19,6 +19,8 @@ const DynamicMap: React.FC<LeafletMapProps> = (props) => {
 
         // @ts-ignore - CSS imports work with bundlers but TypeScript doesn't recognize them
         await import('../leaflet-overrides.css');
+        // @ts-ignore - CSS imports work with bundlers but TypeScript doesn't recognize them
+        await import('../current-location-marker.css');
         setIsLoaded(true);
       } catch (err) {
         console.error('Failed to load Leaflet:', err);

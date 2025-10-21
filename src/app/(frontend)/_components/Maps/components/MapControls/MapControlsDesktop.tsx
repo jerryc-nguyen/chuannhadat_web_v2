@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@components/ui/button';
-import { MapPin, Briefcase, Banknote, ChevronDown } from 'lucide-react';
+import { Crosshair, Briefcase, Banknote, ChevronDown } from 'lucide-react';
 import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
@@ -183,13 +183,11 @@ const MapControlsDesktop: React.FC<MapControlsProps> = ({
       <div className={`fixed z-[${Z_INDEX.MAP_CONTROLS}] flex flex-col gap-3`} style={{ bottom: '100px', right: '10px' }}>
         {/* My Location Button */}
         <Button
-          variant="outline"
-          size="lg"
-          className="bg-white shadow-md hover:shadow-lg hover:bg-gray-50 p-3 rounded-lg border border-gray-200 transition-all duration-200"
+          className="bg-white hover:bg-gray-100 h-[34px] w-[34px] rounded-lg p-1 c-mapBtn"
           onClick={onLocationClick}
           title="Vị trí của tôi"
         >
-          <MapPin className="h-5 w-5 text-gray-600" />
+          <Crosshair className="text-gray-600 h-4 w-4" />
         </Button>
       </div>
     </>

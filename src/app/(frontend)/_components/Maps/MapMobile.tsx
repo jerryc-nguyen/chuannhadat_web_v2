@@ -4,6 +4,7 @@ import MapControlsMobile from './components/MapControls/MapControlsMobile';
 import InfoPanel from './components/InfoPanel/mobile';
 import ListingPanel from './components/ListingPanel/mobile';
 import { useMapMobileHook } from './hooks/useMapMobileHook';
+import { useCurrentLocationMarker } from './hooks/useCurrentLocationMarker';
 import type { ListingOptionForSelect } from './components/ListingPanel/types';
 import { Z_INDEX } from './constants';
 
@@ -23,7 +24,11 @@ const MapMobile: React.FC = () => {
     handleFilterChange,
     handleInfoPanelClose,
     handleListingMarkerClick,
+    map,
   } = useMapMobileHook();
+
+  // Manage current location marker
+  useCurrentLocationMarker(map);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">

@@ -45,3 +45,8 @@
 .leaflet-zoom-box {
   z-index: 10 !important;
 }
+
+.c-mapBtn {
+  border: 2px solid #0003;
+  border-radius: 4px;
+}
