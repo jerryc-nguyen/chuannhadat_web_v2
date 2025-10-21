@@ -147,7 +147,7 @@ const areMarkersEqual = (prevMarkers: Marker[], newMarkers: Marker[]): boolean =
   return true;
 };
 
-export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
+export const useMapInteractionHook = (map: LeafletMap | null) => {
   const markersLayerRef = useRef<Layer | null>(null);
   const markersAbortRef = useRef<AbortController | null>(null);
   const currentMarkersRef = useRef<Marker[]>([]);
@@ -312,4 +312,4 @@ export const useMapInteractionDesktopHook = (map: LeafletMap | null) => {
   };
 };
 
-export default useMapInteractionDesktopHook;
+export default useMapInteractionHook;

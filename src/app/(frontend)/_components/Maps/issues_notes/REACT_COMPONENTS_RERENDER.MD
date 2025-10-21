@@ -11,7 +11,7 @@ When clicking on map markers, all other markers would disappear/blink. This is a
 1. **User clicks marker** → State changes in Jotai atom
 2. **Component re-renders** → All hooks get fresh function references
 3. **useResizeImage hook** → Returns new `buildThumbnailUrl` function reference
-4. **useMapInteractionDesktopHook** → Detects dependency change and re-initializes
+4. **useMapInteractionHook** → Detects dependency change and re-initializes
 5. **Cleanup function runs** → Removes all markers from map
 6. **New markers created** → But timing issues cause them to appear missing
 

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtom, useSetAtom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
-import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
+import useMapInteractionHook from './useMapInteractionHook';
 import { useMapFilters } from './useMapFilters';
 import { useMapPanningDesktop } from './useMapPanningDesktop';
 import {
@@ -53,7 +53,7 @@ export const useMapDesktopHook = () => {
   }, [clearSelectedMarker, setMap]);
 
   // Wire interaction handlers when map is ready
-  useMapInteractionDesktopHook(map);
+  useMapInteractionHook(map);
 
   const handleFilterChange = useCallback((filters: { businessType?: string; categoryType?: string }) => {
     updateFilters(filters);

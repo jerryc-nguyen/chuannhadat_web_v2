@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtom, useSetAtom } from 'jotai';
 import { LeafletMap, Marker } from '../types';
-import useMapInteractionDesktopHook from './useMapInteractionDesktopHook';
+import useMapInteractionHook from './useMapInteractionHook';
 import { useMapFilters } from './useMapFilters';
 import { useMapPanningMobile } from './useMapPanningMobile';
 import {
@@ -64,7 +64,7 @@ export const useMapMobileHook = () => {
   }, [clearSelectedMarker, setMap]);
 
   // Wire interaction handlers when map is ready - This enables marker loading on pan/zoom
-  useMapInteractionDesktopHook(map);
+  useMapInteractionHook(map);
 
   // Listen for marker clicks from atoms and add smart panning logic
   useEffect(() => {

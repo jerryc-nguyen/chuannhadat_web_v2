@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import { mapAtom, selectedAutocompleteItemAtom, selectedMarkerAtom } from '../states/mapAtoms';
 import { LatLng } from '../types';
 import { SEARCH_BOX_WIDTH_WITH_PADDING } from '../constants';
-import { toast } from 'sonner';
+import { useMapPanning } from './useMapPanning';
 
 // Debug flag to control logging output
 const DEBUG_MAP_PANNING = false; // Set to true to enable debug logs
@@ -49,6 +49,9 @@ export const useMapPanningDesktop = () => {
 
   // Extract location data from autocomplete item if it's a MapSetting
   const selectedLocation = selectedAutocompleteItem?.data_type === 'MapSetting' ? selectedAutocompleteItem : null;
+
+  // Use shared panning functionality
+  const { panToLocation, panToCurrentLocation: sharedPanToCurrentLocation, isMapReady } = useMapPanning();
 
   /**
    * Check if a marker location is within the current map bounds
@@ -180,46 +183,6 @@ export const useMapPanningDesktop = () => {
     return { x: offsetX, y: 0 };
   }, [selectedLocation, selectedMarker]);
 
-  /**
-   * Pan the map to a specific location (simple panning without panel awareness)
-   * @param location - The location to pan to (lat, lon)
-   * @param options - Optional panning configuration
-   */
-  const panToLocation = useCallback((
-    location: LatLng,
-    options?: {
-      animate?: boolean;
-      duration?: number;
-      zoom?: number;
-    }
-  ) => {
-    if (!map) {
-      debugWarn('Map not available for panning');
-      return;
-    }
-
-    const { lat, lon } = location;
-    if (typeof lat !== 'number' || typeof lon !== 'number') {
-      debugWarn('Invalid location coordinates for panning:', location);
-      return;
-    }
-
-    const panOptions = {
-      animate: options?.animate !== false,
-      duration: options?.duration || 0.5
-    };
-
-    // Pan to the location
-    if (options?.zoom) {
-      // Use setView if zoom level is specified
-      map.setView([lat, lon], options.zoom, panOptions);
-    } else {
-      // Use panTo to maintain current zoom level
-      map.panTo([lat, lon], panOptions);
-    }
-
-    debugLog('🗺️ Panning map to location:', { lat, lon, options });
-  }, [map]);
 
   /**
    * Calculate optimal map center position for out-of-bounds markers
@@ -403,33 +366,9 @@ export const useMapPanningDesktop = () => {
    * Pan to current user location
    */
   const panToCurrentLocation = useCallback((options?: { zoom?: number }) => {
-    if (!navigator.geolocation) {
-      debugWarn('Geolocation not supported');
-      return;
-    }
+    return sharedPanToCurrentLocation({ ...options, platform: 'desktop' });
+  }, [sharedPanToCurrentLocation]);
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        panToLocation(
-          { lat: latitude, lon: longitude },
-          { zoom: options?.zoom || 22 }
-        );
-        toast.success('Đã chuyển đến vị trí của bạn');
-      },
-      (error) => {
-        debugWarn('Error getting current location:', error);
-        toast.error('Không thể lấy vị trí của bạn. Vui lòng cho phép truy cập vị trí của bạn.');
-      }
-    );
-  }, [panToLocation]);
-
-  /**
-   * Check if map is available for panning
-   */
-  const isMapReady = useCallback(() => {
-    return !!map;
-  }, [map]);
 
   return {
     panToLocation,
