@@ -82,7 +82,9 @@ export const useMapPanning = () => {
           isVisible: true
         });
 
-        toast.success('Đã chuyển đến vị trí của bạn');
+        if (platform === 'desktop') {
+          toast.success('Đã chuyển đến vị trí của bạn');
+        }
       },
       (error) => {
         console.warn('Error getting current location:', error);

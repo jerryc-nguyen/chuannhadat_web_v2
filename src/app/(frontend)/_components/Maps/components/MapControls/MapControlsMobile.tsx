@@ -1,6 +1,5 @@
 'use client';
-import { Button } from '@components/ui/button';
-import { MapPin, Navigation, Home } from 'lucide-react';
+import CurrentLocationBtn from './CurrentLocationBtn';
 import { MapControlsProps } from '../../types';
 import Autocomplete from '../Autocomplete';
 import { OptionForSelect } from '@common/types';
@@ -16,8 +15,6 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
   onSearch,
   onLocationClick,
   onLayersClick: _onLayersClick,
-  onNavigationClick,
-  onHomeClick,
   className = '',
   searchQuery = '',
   onSearchQueryChange,
@@ -86,38 +83,13 @@ const MapControlsMobile: React.FC<MapControlsProps> = ({
       </div>
 
       {/* Mobile Control Buttons - Bottom Right FAB Style */}
-      <div className={`fixed bottom-6 right-4 z-[${Z_INDEX.MAP_CONTROLS}] flex flex-col gap-3`}>
-        {/* Primary Action: My Location (Most Used) */}
-        <Button
-          variant="default"
-          size="lg"
-          className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl p-4 rounded-full w-14 h-14 transition-all duration-200 min-h-[56px] touch-manipulation"
+      <div className={`fixed z-[${Z_INDEX.MAP_CONTROLS}] flex flex-col gap-3`} style={{ bottom: '100px', right: '10px' }}>
+        {/* My Location Button */}
+        <CurrentLocationBtn
           onClick={onLocationClick}
-          title="Vị trí của tôi"
-        >
-          <MapPin className="h-6 w-6" />
-        </Button>
-
-        {/* Secondary Actions */}
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-white shadow-lg hover:shadow-xl hover:bg-gray-50 p-3 rounded-full w-12 h-12 transition-all duration-200 min-h-[48px] touch-manipulation"
-          onClick={onNavigationClick}
-          title="Chỉ đường"
-        >
-          <Navigation className="h-5 w-5 text-gray-600" />
-        </Button>
-
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-white shadow-lg hover:shadow-xl hover:bg-gray-50 p-3 rounded-full w-12 h-12 transition-all duration-200 min-h-[48px] touch-manipulation"
-          onClick={onHomeClick}
-          title="Về trang chủ"
-        >
-          <Home className="h-5 w-5 text-gray-600" />
-        </Button>
+          size="md"
+          variant="desktop"
+        />
       </div>
     </>
   );
