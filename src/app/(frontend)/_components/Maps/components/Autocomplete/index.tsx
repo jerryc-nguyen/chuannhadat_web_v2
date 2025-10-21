@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { SEARCH_BOX_WIDTH } from '../../constants';
 import { useAutocompleteSearch } from './hooks/useAutocompleteSearch';
 import { useClickOutside, useTrackAction } from '@common/hooks';
@@ -151,6 +151,13 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     }
   };
 
+  const handleClear = () => {
+    setInputValue('');
+    onChange?.('');
+    setRecentLoaded(false);
+    inputRef.current?.focus();
+  };
+
   return (
     <div ref={containerRef} className={`${isMobile ? 'w-full' : 'relative'}  ${className}`}>
       <form onSubmit={handleSubmit}>
@@ -171,7 +178,20 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
             onFocus={handleFocus}
             disabled={disabled}
             className="flex-1 px-1 py-2 text-base border-none outline-none bg-transparent text-gray-900 placeholder-gray-400 focus:text-gray-900 focus:placeholder-gray-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={isMobile ? { width: 'calc(100% - 150px)' } : {}}
           />
+          {inputValue.trim() && (
+            <div className="pr-2">
+              <button
+                type="button"
+                onClick={handleClear}
+                className="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                aria-label="Clear search"
+              >
+                <X className="h-4 w-4 text-gray-500" />
+              </button>
+            </div>
+          )}
           {loading && (
             <div className="pr-4">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500"></div>
