@@ -59,7 +59,7 @@ const Contacts: React.FC<ContactsProps> = ({ profileData }) => {
   ];
 
   return (
-    <div className={`py-2 pt-0 ${isMobile ? '' : 'px-4'}`}>
+    <div className={`py-2 pt-0 ${isMobile ? 'mt-0' : 'px-4'}`}>
       <div className="space-y-1">
         {contactItems.map((item, index) => {
           const IconComponent = item.icon;

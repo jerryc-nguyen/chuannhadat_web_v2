@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { Camera, Clock } from 'lucide-react';
 import { IProductList } from '@common/types';
 import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
+import { useApp } from '@common/context/AppContext';
+import PostItemMobile from '@app/(frontend)/_components/Maps/components/Mappable/User/components/mobile/PostItemMobile';
 
 interface PostItemProps {
   post: IProductList;
@@ -11,11 +13,17 @@ interface PostItemProps {
 }
 
 const PostItem: React.FC<PostItemProps> = ({ post, onClick }) => {
+  const { isMobile } = useApp();
+
   const handleClick = () => {
     if (onClick) {
       onClick(post);
     }
   };
+
+  if (isMobile) {
+    return <PostItemMobile post={post} onClick={onClick} />;
+  }
 
   return (
     <div

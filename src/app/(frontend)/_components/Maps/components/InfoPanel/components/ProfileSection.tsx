@@ -5,6 +5,7 @@ import Contacts from '@maps/components/Mappable/User/components/Contacts';
 import { IUser } from '@common/types';
 import { Marker } from '../../../types';
 import SectionDivider from './SectionDivider';
+import { useApp } from '@common/context/AppContext';
 
 interface ProfileSectionProps {
   profileData: IUser;
@@ -19,6 +20,8 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   setImgSrc,
   marker,
 }) => {
+  const { isMobile } = useApp();
+
   return (
     <>
       <InfoCard
@@ -28,7 +31,7 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
         marker={marker}
       />
 
-      <SectionDivider />
+      {!isMobile && <SectionDivider />}
 
       <Contacts profileData={profileData} />
     </>
