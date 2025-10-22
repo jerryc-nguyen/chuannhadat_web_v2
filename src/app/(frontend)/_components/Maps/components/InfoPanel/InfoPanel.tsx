@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { X } from 'lucide-react';
 import { SEARCH_BOX_WIDTH_WITH_PADDING, Z_INDEX } from '../../constants';
 import { InfoPanelProps } from './types';
@@ -28,6 +28,11 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
     error,
     handleRelatedLocationClick,
   } = useInfoPanelData({ marker, onClose });
+
+  useLayoutEffect(() => {
+    document.addEventListener('focusin', e => e.stopImmediatePropagation());
+    document.addEventListener('focusout', e => e.stopImmediatePropagation());
+  }, []);
 
   // Loading state
   if (isLoading) {

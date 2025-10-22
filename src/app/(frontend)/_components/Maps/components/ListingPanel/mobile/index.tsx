@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 import { ListingPanelProps, isLocationOption, isUserOption } from '../types';
 import { ForLocationPanel } from '../components/ForLocation';
@@ -63,6 +63,11 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
       </div>
     );
   };
+
+  useLayoutEffect(() => {
+    document.addEventListener('focusin', e => e.stopImmediatePropagation());
+    document.addEventListener('focusout', e => e.stopImmediatePropagation());
+  }, []);
 
   return (
     <Drawer.Root
