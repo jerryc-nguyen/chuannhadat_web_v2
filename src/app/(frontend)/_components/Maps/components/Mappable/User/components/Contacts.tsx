@@ -4,6 +4,7 @@ import { MapPin, Phone, Calendar, Copy, Check } from 'lucide-react';
 import { IUser } from '@common/types';
 import { formatPhoneNumber } from '@common/stringHelpers';
 import { useState } from 'react';
+import { useApp } from '@common/context/AppContext';
 
 interface ContactsProps {
   profileData: IUser;
@@ -11,6 +12,7 @@ interface ContactsProps {
 
 const Contacts: React.FC<ContactsProps> = ({ profileData }) => {
   const [copied, setCopied] = useState(false);
+  const { isMobile } = useApp();
 
   const handleCopyPhone = async () => {
     if (profileData.phone) {
@@ -57,7 +59,7 @@ const Contacts: React.FC<ContactsProps> = ({ profileData }) => {
   ];
 
   return (
-    <div className="px-4 py-2 pt-0">
+    <div className={`py-2 pt-0 ${isMobile ? '' : 'px-4'}`}>
       <div className="space-y-1">
         {contactItems.map((item, index) => {
           const IconComponent = item.icon;

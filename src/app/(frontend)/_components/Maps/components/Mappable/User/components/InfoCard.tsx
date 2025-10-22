@@ -7,6 +7,8 @@ import useResizeImage from '@common/hooks/useResizeImage';
 import SocialLinks from '@frontend/ProfileDetail/mobile/components/SocialLinks';
 import { IUser } from '@common/types';
 import { Marker } from '@maps/types';
+import { useApp } from '@common/context/AppContext';
+import InfoCardMobile from './mobile/InfoCardMobile';
 
 interface InfoCardProps {
   imgSrc: StaticImageData | string;
@@ -25,10 +27,14 @@ const InfoCard: React.FC<InfoCardProps> = ({
   marker
 }) => {
   const { cropSquare } = useResizeImage();
+  const { isMobile } = useApp();
+
+  if (isMobile) {
+    return <InfoCardMobile imgSrc={imgSrc} setImgSrc={setImgSrc} profileData={profileData} marker={marker} />;
+  }
 
   return (
     <div>
-
       <div className={`flex items-start gap-5 bg-white pt-2 pb-2 px-4 mb-1`}>
         <div className="relative flex-shrink-0">
           <div className="relative w-fit">
