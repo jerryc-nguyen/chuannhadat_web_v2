@@ -60,7 +60,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       open={true}
     >
       <Drawer.Portal>
-        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[${Z_INDEX.INFO_PANEL}] vaul-drawer-content c-infoPanel`}>
+        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[20px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[${Z_INDEX.INFO_PANEL}] vaul-drawer-content c-infoPanel`}>
           <div
             className="flex flex-col max-w-md mx-auto w-full vaul-drawer-content"
             style={{
@@ -68,10 +68,14 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
               minHeight: snap !== 1 ? '200px' : 'auto'
             }}
           >
+            {/* Drag handle - Google Maps style */}
+            <div className="w-full flex justify-center pt-2 pb-2">
+              <div className="w-10 h-1.5 bg-gray-300 rounded-full"></div>
+            </div>
             {/* Header - always sticky with flexbox */}
-            <div className={`flex items-center justify-between p-4 pt-5 pb-4 border-b border-gray-100 flex-shrink-0 sticky top-0 bg-white z-[${Z_INDEX.STICKY_HEADER}]`}>
+            <div className={`flex items-center justify-between px-5 py-3 pt-0 border-b border-gray-100 flex-shrink-0 sticky top-0 bg-white z-[${Z_INDEX.STICKY_HEADER}]`}>
               <Drawer.Title className="text-lg font-semibold">
-                Thông tin địa điểm
+                Thông tin môi giới
               </Drawer.Title>
               <button
                 onClick={onClose}

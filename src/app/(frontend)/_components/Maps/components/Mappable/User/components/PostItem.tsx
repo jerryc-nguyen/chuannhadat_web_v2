@@ -6,6 +6,7 @@ import { IProductList } from '@common/types';
 import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
 import { useApp } from '@common/context/AppContext';
 import PostItemMobile from '@app/(frontend)/_components/Maps/components/Mappable/User/components/mobile/PostItemMobile';
+import useResizeImage from '@common/hooks/useResizeImage';
 
 interface PostItemProps {
   post: IProductList;
@@ -14,6 +15,7 @@ interface PostItemProps {
 
 const PostItem: React.FC<PostItemProps> = ({ post, onClick }) => {
   const { isMobile } = useApp();
+  const { buildThumbnailUrl } = useResizeImage();
 
   const handleClick = () => {
     if (onClick) {
@@ -35,7 +37,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, onClick }) => {
         <div className="relative w-32 h-33 flex-shrink-0">
           {post.featured_image_url ? (
             <Image
-              src={post.featured_image_url}
+              src={buildThumbnailUrl({ imageUrl: post.featured_image_url, width: 150, ratio: 0.8 })}
               alt={post.title}
               fill
               className="object-cover"

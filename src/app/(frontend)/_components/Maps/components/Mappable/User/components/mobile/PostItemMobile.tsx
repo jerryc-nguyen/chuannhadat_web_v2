@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Camera, Clock } from 'lucide-react';
 import { IProductList } from '@common/types';
 import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
+import useResizeImage from '@common/hooks/useResizeImage';
 
 interface PostItemProps {
   post: IProductList;
@@ -11,6 +12,8 @@ interface PostItemProps {
 }
 
 const PostItemMobile: React.FC<PostItemProps> = ({ post, onClick }) => {
+
+  const { buildThumbnailUrl } = useResizeImage();
   const handleClick = () => {
     if (onClick) {
       onClick(post);
@@ -34,7 +37,7 @@ const PostItemMobile: React.FC<PostItemProps> = ({ post, onClick }) => {
           <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-50">
             {post.featured_image_url ? (
               <Image
-                src={post.featured_image_url}
+                src={buildThumbnailUrl({ imageUrl: post.featured_image_url, width: 160 })}
                 alt={post.title}
                 fill
                 className="object-cover"
