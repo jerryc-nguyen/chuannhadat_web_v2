@@ -82,3 +82,9 @@
   height: 100%;
   z-index: 9999;
 }
+
+body.is-infoPanelOpen {
+  .c-listingPanel {
+    display: none;
+  }
+}

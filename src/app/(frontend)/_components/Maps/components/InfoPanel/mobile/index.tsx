@@ -13,7 +13,7 @@ import {
 } from '../components';
 import { Z_INDEX } from '../../../constants';
 
-const snapPoints = ['400px', 1];
+const snapPoints = ['450px', 1];
 
 const InfoPanel: React.FC<InfoPanelProps> = ({
   marker,
@@ -38,6 +38,17 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
     }
   }, [isLoading, error, profileData]);
 
+  // Add/remove body class when InfoPanel mounts/unmounts
+  useEffect(() => {
+    // Add class when component mounts
+    document.body.classList.add('is-infoPanelOpen');
+
+    // Cleanup: remove class when component unmounts
+    return () => {
+      document.body.classList.remove('is-infoPanelOpen');
+    };
+  }, []);
+
   return (
     <Drawer.Root
       snapPoints={snapPoints}
@@ -49,7 +60,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
       open={true}
     >
       <Drawer.Portal>
-        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[${Z_INDEX.INFO_PANEL}] vaul-drawer-content`}>
+        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[10px] bottom-0 left-0 right-0 h-full max-h-[97%] mx-[-1px] z-[${Z_INDEX.INFO_PANEL}] vaul-drawer-content c-infoPanel`}>
           <div
             className="flex flex-col max-w-md mx-auto w-full vaul-drawer-content"
             style={{

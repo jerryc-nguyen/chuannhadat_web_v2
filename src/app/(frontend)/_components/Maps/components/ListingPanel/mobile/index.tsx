@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
 import { Drawer } from 'vaul';
 import { ListingPanelProps, isLocationOption, isUserOption } from '../types';
 import { ForLocationPanel } from '../components/ForLocation';
@@ -9,7 +8,7 @@ import { ForUserPanel } from '../components/ForUser';
 import { Z_INDEX } from '../../../constants';
 import { useCurrentSnapPoint } from './useCurrentSnapPoint';
 
-const snapPoints = ['400px', 1];
+const snapPoints = ['100px', '400px', 1];
 
 const ListingPanel: React.FC<ListingPanelProps> = ({
   listingOption,
@@ -29,8 +28,9 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
   };
 
   const renderPanelContent = () => {
+
     // Route to appropriate component based on data type using type guards
-    if (isLocationOption(listingOption)) {
+    if (isLocationOption(listingOption) || !listingOption) {
       return (
         <ForLocationPanel
           listingOption={listingOption}
@@ -70,12 +70,16 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
       snapToSequentialPoint
-      shouldScaleBackground
+      shouldScaleBackground={false}
       modal={false}
       open={true}
+      dismissible={false}
     >
       <Drawer.Portal>
-        <Drawer.Content className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[20px] shadow-lg bottom-0 left-0 right-0 h-full max-h-[95%] mx-[-1px] z-[${Z_INDEX.LISTING_PANEL}] vaul-drawer-content overflow-hidden`}>
+        <Drawer.Content
+          className={`fixed flex flex-col bg-white border border-gray-200 border-b-none rounded-t-[20px] shadow-lg bottom-0 left-0 right-0 h-full max-h-[95%] mx-[-1px] z-[${Z_INDEX.LISTING_PANEL}] vaul-drawer-content overflow-hidden c-listingPanel`}
+          style={{ pointerEvents: 'auto' }}
+        >
           <div
             className="flex flex-col max-w-md mx-auto w-full vaul-drawer-content"
             style={{
@@ -98,13 +102,6 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
                   <p className="text-sm text-gray-500">{totalCount} môi giới</p>
                 )}
               </div>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0 bg-gray-50 hover:bg-gray-200"
-                aria-label="Đóng"
-              >
-                <X size={24} className="text-gray-700" />
-              </button>
             </div>
 
             {/* Scrollable Content Area - flex-1 takes remaining space */}
@@ -128,7 +125,7 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
           </div>
         </Drawer.Content>
       </Drawer.Portal>
-    </Drawer.Root>
+    </Drawer.Root >
   );
 };
 

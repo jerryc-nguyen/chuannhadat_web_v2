@@ -10,7 +10,6 @@ import { ListingItemsParams, LocationListingResponse } from '../types';
 export const useLocationListing = (params: ListingItemsParams) => {
   return useQuery<LocationListingResponse>({
     queryKey: ['location-listing', params],
-    queryFn: () => getListingItems(params),
-    enabled: !!params.location_uid || !!params.user_uid
+    queryFn: () => getListingItems(params)
   });
 };

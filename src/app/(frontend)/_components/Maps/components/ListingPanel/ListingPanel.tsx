@@ -10,8 +10,10 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
   onClose,
   onMarkerClick,
 }) => {
+  console.log('listingOption', listingOption);
   // Route to appropriate component based on data type using type guards
-  if (isLocationOption(listingOption)) {
+  if (isLocationOption(listingOption) || !isUserOption(listingOption)) {
+    console.log('isLocationOption', listingOption);
     return (
       <ForLocationPanel
         listingOption={listingOption}
@@ -32,7 +34,6 @@ const ListingPanel: React.FC<ListingPanelProps> = ({
   }
 
   // Fallback for unknown data types
-  console.error('Unknown data_type:', listingOption.data_type);
   return (
     <div className="absolute top-0 left-0 bg-white rounded-lg shadow-lg flex flex-col p-4">
       <p>Error: Unknown listing type</p>

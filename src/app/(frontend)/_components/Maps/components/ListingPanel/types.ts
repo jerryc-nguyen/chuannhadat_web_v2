@@ -15,6 +15,7 @@ export interface ListingPanelProps {
   listingOption: ListingOptionForSelect;
   onClose: () => void;
   onMarkerClick?: (marker: Marker) => void;
+  visible?: boolean;
 }
 
 // Base props for both ForLocation and ForUser components
@@ -38,7 +39,7 @@ export interface ForUserProps extends BaseListingProps {
 export const isLocationOption = (
   option: ListingOptionForSelect
 ): option is ListingOptionForSelect & { data_type: 'MapSetting'; data: TMapSetting } => {
-  return option.data_type === 'MapSetting';
+  return option?.data_type === 'MapSetting';
 };
 
 export const isUserOption = (
