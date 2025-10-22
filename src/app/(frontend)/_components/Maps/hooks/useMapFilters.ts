@@ -7,10 +7,12 @@ export const useMapFilters = () => {
   const [categoryType, setCategoryType] = useAtom(categoryTypeFilterAtom);
 
   const updateFilters = (filters: { businessType?: string; categoryType?: string }) => {
-    if (filters.businessType !== undefined) {
+    // Handle businessType: if provided (even as undefined), update it
+    if ('businessType' in filters) {
       setBusinessType(filters.businessType || null);
     }
-    if (filters.categoryType !== undefined) {
+    // Handle categoryType: if provided (even as undefined), update it
+    if ('categoryType' in filters) {
       setCategoryType(filters.categoryType || null);
     }
   };

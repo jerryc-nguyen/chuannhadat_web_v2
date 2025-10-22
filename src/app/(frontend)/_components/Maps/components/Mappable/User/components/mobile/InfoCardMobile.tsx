@@ -91,7 +91,7 @@ const InfoCardMobile: React.FC<InfoCardMobileProps> = ({
 
           {/* Phone Section with Copy */}
           <button className="flex-1 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors touch-manipulation" onClick={handleCopyPhone}>
-            <Phone className="w-4 h-4" />
+            <Phone className="w-5 h-5" />
             <span className="flex-1">{formatPhoneNumber(profileData?.phone || 'Số điện thoại')}</span>
             <span
               className="ml-2 p-1 hover:bg-blue-500 rounded transition-colors"
