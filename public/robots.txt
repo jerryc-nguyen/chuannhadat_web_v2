@@ -41,5 +41,4 @@ Disallow: /*?*
 # Crawl-delay for other bots
 Crawl-delay: 10
 
-# Sitemap
-Sitemap: https://nextjs.chuannhadat.com/sitemap.xml 
+Sitemap: https://chuannhadat.com/sitemaps/chuannhadat.xml
