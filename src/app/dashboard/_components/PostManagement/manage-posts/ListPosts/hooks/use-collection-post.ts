@@ -19,8 +19,7 @@ export const useAdminCollectionPost = () => {
 
   const response = useQuery({
     queryKey: ['toParamsApi', searchParams, reqParams],
-    queryFn: () => toParamsApi(reqParams),
-    placeholderData: keepPreviousData, // don't have 0 rows flash while changing pages/loading next page
+    queryFn: () => toParamsApi(reqParams)
   });
 
   useEffect(() => {

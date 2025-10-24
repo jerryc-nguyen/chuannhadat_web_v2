@@ -103,8 +103,8 @@ export const sellPricesOptions = [
     text: '500-800 triệu',
   },
   {
-    range: { min: 800000000, max: 999000000 },
-    text: '800-999 triệu',
+    range: { min: 800000000, max: 1000000000 },
+    text: '800-1 tỷ',
   },
   {
     range: { min: 1000000000, max: 2000000000 },
@@ -157,20 +157,16 @@ export const areasOptions = [
     text: '< 30 m2',
   },
   {
-    range: { min: 30, max: 50 },
-    text: '30-50 m2',
+    range: { min: 20, max: 40 },
+    text: '20-40 m2',
   },
   {
-    range: { min: 50, max: 60 },
-    text: '50-60 m2',
+    range: { min: 40, max: 60 },
+    text: '40-60 m2',
   },
   {
-    range: { min: 60, max: 70 },
-    text: '60-70 m2',
-  },
-  {
-    range: { min: 70, max: 80 },
-    text: '70-80 m2',
+    range: { min: 60, max: 80 },
+    text: '60-80 m2',
   },
   {
     range: { min: 80, max: 100 },
@@ -184,6 +180,14 @@ export const areasOptions = [
     range: { min: 120, max: 150 },
     text: '120-150 m2',
   },
+  {
+    range: { min: 150, max: 180 },
+    text: '150-180 m2',
+  },
+  {
+    range: { min: 180, max: 200 },
+    text: '180-200 m2',
+  }
 ];
 export const directionsOptions = [
   { value: 'west', text: 'Hướng Tây' },
