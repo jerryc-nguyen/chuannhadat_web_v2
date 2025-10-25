@@ -5,12 +5,17 @@ import type { Params } from '@common/types';
 import { Metadata } from 'next';
 import PostDetail from '@frontend/PostDetail';
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Params; searchParams: Promise<{ [key: string]: string | string[] | undefined }> }): Promise<Metadata> {
   const { slug } = await params;
   const path = `/post/${slug}`;
-  const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS, { params: { path } }))
+
+  // Get search params to check for query strings
+  const searchParamsObj = await searchParams;
+  const hasQueryString = Object.keys(searchParamsObj).length > 0;
+
+  const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.METADATA, { params: { path } }))
     .data as Metadata;
-  return createMetadata(rawMetadata);
+  return createMetadata(rawMetadata, hasQueryString);
 }
 
 export default async function PostDetailPage({ params }: { params: Params }) {

@@ -113,7 +113,11 @@ export const API_ROUTES = {
     TRACK_ACTION: 'api/v1/trackings/track_action',
     ERRORS: 'api/v1/trackings/web_errors',
   },
-  SEOS: 'api/v1/seos/metadata',
+  SEOS: {
+    METADATA: 'api/v1/seos/metadata',
+    CHECK_URL_REDIRECT: 'api/v1/seos/check_url_redirect?path={path}',
+    SEARCH_METADATA: 'api/v1/seos/search_metadata',
+  },
   NEWS: {
     GET_NEWS: 'api/v1/news',
     GET_NEWS_DETAIL: 'api/v1/news/detail',
