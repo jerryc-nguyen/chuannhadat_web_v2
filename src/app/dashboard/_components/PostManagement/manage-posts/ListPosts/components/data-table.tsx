@@ -97,8 +97,7 @@ export function DataTable() {
     const filterParams = buildFilterParams({ withLocal: false, overrideStates: state });
     const queryOptions = { ...filterParams, only_url: true, search_scope: 'manage_posts' };
     try {
-      const response = await searchApi(queryOptions);
-      setValue('filter_chips', response.listing_url);
+      // const response = await searchApi(queryOptions);
     } catch (error) {
       console.log('ERROR', error);
     }
