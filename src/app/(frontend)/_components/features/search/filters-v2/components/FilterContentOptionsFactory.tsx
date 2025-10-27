@@ -5,7 +5,7 @@ import ChipFilter from './ChipFilter';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import LocationFilter from './LocationFilter';
 
-interface FilterComponentFactoryProps {
+interface FilterContentOptionsFactoryProps {
   /** Current filter state */
   filterState: FilterState;
   /** Available filter options */
@@ -53,7 +53,7 @@ interface FilterComponentFactoryProps {
  * - Easy to test and maintain
  * - Pure UI components with clear interfaces
  */
-export default function FilterComponentFactory({
+export default function FilterContentOptionsFactory({
   filterState,
   filterOptions,
   onFilterChange,
@@ -61,7 +61,7 @@ export default function FilterComponentFactory({
   loading = {},
   filterType,
   dynamicOptions,
-}: FilterComponentFactoryProps) {
+}: FilterContentOptionsFactoryProps) {
 
   // Helper to get current value for a field
   const getValue = (fieldName: FilterFieldName) => {

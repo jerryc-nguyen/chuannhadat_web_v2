@@ -1,10 +1,10 @@
 import React from 'react';
 import { FilterFieldName, OptionForSelect } from '@common/types';
 import { FilterState, FilterFieldOptions } from '../../../filter-conditions/types';
-import FilterComponentFactory from '../FilterComponentFactory';
+import FilterContentOptionsFactory from '../FilterContentOptionsFactory';
 
 /**
- * Example component demonstrating type-safe usage of FilterComponentFactory
+ * Example component demonstrating type-safe usage of FilterContentOptionsFactory
  * with FilterFieldName enum values instead of string literals.
  */
 export default function FilterFactoryExample() {
@@ -81,7 +81,7 @@ export default function FilterFactoryExample() {
         {/* Category Type Filter */}
         <div className="border p-4 rounded">
           <h4 className="font-medium mb-2">Category Type</h4>
-          <FilterComponentFactory
+          <FilterContentOptionsFactory
             filterState={filterState}
             filterOptions={filterOptions}
             onFilterChange={handleFilterChange}
@@ -93,7 +93,7 @@ export default function FilterFactoryExample() {
         {/* Bed Filter */}
         <div className="border p-4 rounded">
           <h4 className="font-medium mb-2">Bedrooms</h4>
-          <FilterComponentFactory
+          <FilterContentOptionsFactory
             filterState={filterState}
             filterOptions={filterOptions}
             onFilterChange={handleFilterChange}
@@ -105,7 +105,7 @@ export default function FilterFactoryExample() {
         {/* Business Type Filter */}
         <div className="border p-4 rounded">
           <h4 className="font-medium mb-2">Business Type</h4>
-          <FilterComponentFactory
+          <FilterContentOptionsFactory
             filterState={filterState}
             filterOptions={filterOptions}
             onFilterChange={handleFilterChange}
@@ -116,7 +116,7 @@ export default function FilterFactoryExample() {
 
         {/* 
         This would cause a TypeScript error:
-        <FilterComponentFactory
+        <FilterContentOptionsFactory
           filterType="invalidType" // ❌ TypeScript error
           ...
         />
