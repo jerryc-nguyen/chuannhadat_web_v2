@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { FilterChipOption, FilterFieldName } from '@common/types';
 import { FilterState } from '../../filter-conditions/types';
 import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
+import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
 
 /**
  * Presenter hook that provides common UI text and state checking functions
@@ -79,9 +80,20 @@ export function useFilterStatePresenter(filterState: FilterState) {
     };
   }, [filterState]);
 
+  /**
+   * Builds user-friendly query parameters based on current filter state
+   * Returns an object with Vietnamese parameter names for URL display
+   */
+  const buildFilterParams = useMemo(() => {
+    return (): Record<string, string> => {
+      return buildFriendlyParams(filterState);
+    };
+  }, [filterState]);
+
   return {
     selectedFilterText,
     selectedRoomText,
     isActiveChip,
+    buildFilterParams,
   };
 }

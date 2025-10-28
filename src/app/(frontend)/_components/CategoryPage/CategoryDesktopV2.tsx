@@ -15,6 +15,8 @@ import PostControlsV2 from './components/PostControlsV2';
 import PostList from './components/PostList';
 import { ListTopAuthor } from './components/ListTopAuthor';
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
+import { useFilterStatePresenter } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterStatePresenter';
+import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 
 const CategoryDesktopV2: React.FC = () => {
   useSyncParamsToState();
@@ -23,14 +25,16 @@ const CategoryDesktopV2: React.FC = () => {
   const _pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-
+  
   // Use the new pure UI state manager
   const {
     filterState,
   } = useFilterState();
+  
+  useFilterStatePresenter(filterState);
 
   // Build filter params using the new state manager
-  const buildFilterParams = React.useCallback(() => {
+  const buildAPIFilterParams = React.useCallback(() => {
     const params: Record<string, any> = {};
 
     // Convert filter state to API parameters using the same logic as the original
@@ -52,7 +56,7 @@ const CategoryDesktopV2: React.FC = () => {
     };
   }, [filterState, currentPage]);
 
-  const filterParams = buildFilterParams();
+  const filterParams = buildAPIFilterParams();
   const { products, data } = useQueryPosts(filterParams);
   useLoadMissingAuthors(data);
 
@@ -64,7 +68,8 @@ const CategoryDesktopV2: React.FC = () => {
     // The PostControlsV2 will trigger filter changes through the FilterChip components
     // which will use the new pure UI architecture
     console.log('Filter changed:', newFilterState);
-
+    const newParams = buildFriendlyParams(newFilterState);
+    console.log('New params:', newParams);
   }, []);
 
   const _EmptyPost = () => {

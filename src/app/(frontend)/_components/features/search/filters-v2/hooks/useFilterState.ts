@@ -6,7 +6,7 @@ import {
   filterFieldOptionsAtom,
 } from '../../filter-conditions/states';
 import { FilterState } from '../../filter-conditions/types';
-import { FilterChangeEvent, FilterApplyEvent, FilterClearEvent } from '../types/pure-ui-types';
+import { FilterChangeEvent, FilterClearEvent } from '../types/pure-ui-types';
 
 /**
  * State manager hook that provides a clean interface between pure UI components and global state
@@ -102,16 +102,6 @@ export function useFilterState() {
     }));
   }, [setFilterState]);
 
-  const handleApplyFilters = useCallback((changedFields?: FilterFieldName[]) => {
-    // Emit apply event for parent components
-    const event: FilterApplyEvent = {
-      filterState: filterState,
-      changedFields: changedFields || [],
-    };
-
-    return event;
-  }, [filterState]);
-
   const handleClearFilter = useCallback((fieldName: FilterFieldName) => {
     const previousValue = filterState[fieldName];
 
@@ -202,7 +192,6 @@ export function useFilterState() {
     onFieldChanged: handleFilterChange,
     onLocationChange: handleLocationChange,
     onRoomChange: handleRoomChange,
-    onApplyFilters: handleApplyFilters,
     onClearFilter: handleClearFilter,
     onClearAllFilters: handleClearAllFilters,
 
