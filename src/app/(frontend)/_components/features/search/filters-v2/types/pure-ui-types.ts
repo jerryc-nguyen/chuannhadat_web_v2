@@ -90,18 +90,26 @@ export interface RoomFilterProps {
  * Props for range-based filters (price, area)
  */
 export interface RangeFilterProps {
-  /** Current selected range */
+  /** Current selected value for this filter */
   value?: OptionForSelect;
-  /** Available predefined options */
+  /** Available options for this filter */
   options: OptionForSelect[];
-  /** Minimum value for custom range */
+  /** Minimum value for the range slider */
   min?: number;
-  /** Maximum value for custom range */
+  /** Maximum value for the range slider */
   max?: number;
-  /** Callback when range changes */
+  /** Step value for the range slider */
+  step?: number;
+  /** Callback when range value changes */
   onRangeChange: (value: OptionForSelect | undefined) => void;
-  /** Format function for displaying values */
+  /** Optional function to format slider values for display */
   formatValue?: (value: number) => string;
+  /** Optional function to format range text (for compatibility with old implementation) */
+  formatRangeText?: (min: number, max: number) => string;
+  /** Whether the component is in loading state */
+  isLoading?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
 }
 
 /**

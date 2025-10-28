@@ -5,7 +5,7 @@ import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
-import { FilterState, FilterFieldOptions } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { useFilterState } from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -19,19 +19,17 @@ import {
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
   filterState: FilterState;
-  filterOptions: FilterFieldOptions;
   onFilterChange?: (filterState: Record<string, OptionForSelect>) => void;
 };
 
 const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   filterChipItem,
   filterState: propFilterState,
-  filterOptions: propFilterOptions,
   onFilterChange
 }) => {
   const {
     filterState,
-    filterFieldOptions,
+    filterFieldOptions: _filterFieldOptions,
     onFilterChange: _handleFilterChange,
     onClearFilter,
     isFilterActive,
@@ -43,7 +41,6 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   // Use prop filterState if provided, otherwise use hook filterState
   const currentFilterState = propFilterState || filterState;
-  const _currentFilterOptions = propFilterOptions || filterFieldOptions;
 
   // Build filter params for API call
   const filterParams = React.useMemo(() => {

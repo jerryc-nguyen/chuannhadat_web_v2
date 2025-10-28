@@ -1,6 +1,14 @@
 import { useMemo } from 'react';
 import { OptionForSelect, FilterFieldName } from '@common/types';
 import { ALL_OPTION, SORT_OPTIONS } from '@common/constants';
+import {
+  businessTypesOptions,
+  categoryTypesOptions,
+  roomsOptions,
+  directionsOptions,
+  sellPricesOptions,
+  areasOptions
+} from '@app/(frontend)/_components/features/search/filter-conditions/constants';
 
 /**
  * Hook to manage filter options for v2 filters
@@ -13,46 +21,7 @@ import { ALL_OPTION, SORT_OPTIONS } from '@common/constants';
  * Separated from the fat useFilterState hook to follow single responsibility principle
  */
 
-// Static options based on old flow constants
-const businessTypesOptions: OptionForSelect[] = [
-  { value: 'sell', text: 'Bán' },
-  { value: 'rent', text: 'Cho thuê' },
-];
-
-const categoryTypesOptions: OptionForSelect[] = [
-  { value: "can_ho_chung_cu", text: "Căn hộ chung cư" },
-  { value: "nha_rieng", text: "Nhà riêng" },
-  { value: "nha_mat_pho", text: "Nhà mặt phố" },
-  { value: "dat", text: "Đất" },
-  { value: "biet_thu_lien_ke", text: "Biệt thự liền kề" },
-  { value: "dat_nen_du_an", text: "Đất nền dự án" },
-  { value: "trang_trai_khu_nghi_duong", text: "Trang trại/ Khu nghỉ dưỡng" },
-  { value: "kho_nha_xuong", text: "Kho/ Nhà xưởng" },
-  { value: "nha_tro_phong_tro", text: "Nhà trọ/ Phòng trọ" },
-  { value: "van_phong", text: "Văn phòng" },
-  { value: "cua_hang_kiot", text: "Cửa hàng/ Ki-ốt" },
-  { value: "bat_dong_san_khac", text: "Bất động sản khác" },
-];
-
-const roomsOptions: OptionForSelect[] = [
-  { value: 1, text: '1' },
-  { value: 2, text: '2' },
-  { value: 3, text: '3' },
-  { value: 4, text: '4' },
-  { value: 5, text: '5' },
-  { value: 6, text: '6' },
-];
-
-const directionsOptions: OptionForSelect[] = [
-  { value: 'west', text: 'Hướng Tây' },
-  { value: 'west_south', text: 'Hướng Tây Nam' },
-  { value: 'west_north', text: 'Hướng Tây Bắc' },
-  { value: 'east', text: 'Hướng Đông' },
-  { value: 'east_south', text: 'Hướng Đông Nam' },
-  { value: 'east_north', text: 'Hướng Đông Bắc' },
-  { value: 'south', text: 'Hướng Nam' },
-  { value: 'north', text: 'Hướng Bắc' },
-];
+// Static options are now imported from the constants file
 
 export interface FilterFieldOptions {
   businessTypeOptions: OptionForSelect[];
@@ -61,6 +30,8 @@ export interface FilterFieldOptions {
   bathOptions: OptionForSelect[];
   roomOptions: OptionForSelect[];
   directionOptions: OptionForSelect[];
+  priceOptions: OptionForSelect[];
+  areaOptions: OptionForSelect[];
   sortOptions: OptionForSelect[];
 }
 
@@ -84,6 +55,14 @@ export default function useFilterOptions({ dynamicOptions = {} }: UseFilterOptio
     bathOptions: [ALL_OPTION, ...roomsOptions],
     roomOptions: [ALL_OPTION, ...roomsOptions],
     directionOptions: [ALL_OPTION, ...directionsOptions],
+    priceOptions: [ALL_OPTION, ...sellPricesOptions],
+    areaOptions: [ALL_OPTION, ...areasOptions.map(option => ({
+      ...option,
+      range: option.range ? {
+        min: option.range.min === null ? undefined : option.range.min,
+        max: option.range.max
+      } : undefined
+    }))],
     sortOptions: SORT_OPTIONS,
   }), []);
 
@@ -107,6 +86,12 @@ export default function useFilterOptions({ dynamicOptions = {} }: UseFilterOptio
       
       case FilterFieldName.Direction:
         return filterFieldOptions.directionOptions;
+      
+      case FilterFieldName.Price:
+        return filterFieldOptions.priceOptions;
+      
+      case FilterFieldName.Area:
+        return filterFieldOptions.areaOptions;
       
       case FilterFieldName.Sort:
         return filterFieldOptions.sortOptions;

@@ -4,7 +4,10 @@ import SelectFilter from './SelectFilter';
 import ChipFilter from './ChipFilter';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import LocationFilter from './LocationFilter';
+import RangeFilter from './RangeFilter';
+import RoomFilter from './RoomFilter';
 import useFilterOptions from '../hooks/useFilterOptions';
+import { formatPriceFilterChip, formatRangeText, formatAreaText } from '@common/utils';
 
 interface FilterContentOptionsFactoryProps {
   /** Current filter state */
@@ -163,10 +166,86 @@ export default function FilterContentOptionsFactory({
         />
       );
 
+    case FilterFieldName.Price:
+      return (
+        <RangeFilter
+          value={getValue(FilterFieldName.Price)}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Price)}
+          min={100_000_000} // 100 million VND
+          max={20_000_000_000} // 20 billion VND
+          step={100_000_000} // 100 million VND step
+          onRangeChange={handleChange(FilterFieldName.Price)}
+          formatValue={formatPriceFilterChip}
+          formatRangeText={formatRangeText}
+          isLoading={loading.price}
+        />
+      );
+
+    case FilterFieldName.Area:
+      return (
+        <RangeFilter
+          value={getValue(FilterFieldName.Area)}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Area)}
+          min={0}
+          max={150} // 150 m²
+          step={10} // 10 m² step
+          onRangeChange={handleChange(FilterFieldName.Area)}
+          formatValue={(area: number) => `${area} m²`}
+          formatRangeText={formatAreaText}
+          isLoading={loading.area}
+        />
+      );
+
+    case FilterFieldName.Rooms:
+      return (
+        <RoomFilter
+          bed={getValue(FilterFieldName.Bed)}
+          bath={getValue(FilterFieldName.Bath)}
+          bedOptions={getOptionsForField(FilterFieldName.Bed)}
+          bathOptions={getOptionsForField(FilterFieldName.Bath)}
+          onRoomChange={({ bed, bath }) => {
+            if (bed !== undefined) {
+              onFilterChange(FilterFieldName.Bed, bed);
+            }
+            if (bath !== undefined) {
+              onFilterChange(FilterFieldName.Bath, bath);
+            }
+          }}
+        />
+      );
+
+    case FilterFieldName.Project:
+      return (
+        <SelectFilter
+          value={getValue(FilterFieldName.Project)}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Project)}
+          onValueChange={handleChange(FilterFieldName.Project)}
+          isLoading={loading.project}
+        />
+      );
+
+    case FilterFieldName.ProfileLocations:
+      return (
+        <LocationFilter
+          city={getValue(FilterFieldName.City)}
+          district={getValue(FilterFieldName.District)}
+          ward={getValue(FilterFieldName.Ward)}
+          cityOptions={getOptionsForField(FilterFieldName.City)}
+          districtOptions={getOptionsForField(FilterFieldName.District)}
+          wardOptions={getOptionsForField(FilterFieldName.Ward)}
+          onLocationChange={onLocationChange}
+          loading={{
+            cities: loading.cities,
+            districts: loading.districts,
+            wards: loading.wards,
+          }}
+        />
+      );
+
     default:
       // Log unsupported filter types in development
       if (process.env.NODE_ENV === 'development') {
-        console.warn(`FilterContentOptionsFactory: Unsupported filterType "${filterType}". Supported types: CategoryType, BusCatType, Direction, Sort, AggProjects, Bed, Bath, BusinessType, Locations`);
+        console.warn(`FilterContentOptionsFactory: Unsupported filterType "${filterType}". Supported types: CategoryType, BusCatType, Direction, Sort, AggProjects, Bed, Bath, BusinessType, Locations, Price, Area, Rooms, Project, ProfileLocations`);
       }
       return null;
   }

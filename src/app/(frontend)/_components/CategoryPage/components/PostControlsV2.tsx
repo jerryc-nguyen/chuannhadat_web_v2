@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@common/utils';
 import { FilterChipOption, IPagination, OptionForSelect } from '@common/types';
 import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryDesktop';
-import { FilterState, FilterFieldOptions } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 
 type PostControlsV2Props = {
   chipOptions: FilterChipOption[];
@@ -11,7 +11,6 @@ type PostControlsV2Props = {
   className?: string;
   onFilterChange?: (filterState: Record<string, OptionForSelect>) => void;
   filterState?: FilterState;
-  filterOptions?: FilterFieldOptions;
 };
 
 
@@ -23,7 +22,6 @@ const PostControlsV2: React.FC<PostControlsV2Props> = ({
   className,
   onFilterChange,
   filterState = {} as FilterState,
-  filterOptions = {} as FilterFieldOptions
 }) => {
 
   return (
@@ -43,7 +41,6 @@ const PostControlsV2: React.FC<PostControlsV2Props> = ({
               key={item.id}
               filterChipItem={item}
               filterState={filterState}
-              filterOptions={filterOptions}
               onFilterChange={onFilterChange}
             />
           ))}
