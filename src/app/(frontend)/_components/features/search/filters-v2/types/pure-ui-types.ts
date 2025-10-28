@@ -139,6 +139,7 @@ export type FilterChangeEvent = {
   fieldName: FilterFieldName;
   value: OptionForSelect | undefined;
   previousValue?: OptionForSelect;
+  params?: Record<string, any>;
 };
 
 export type FilterApplyEvent = {

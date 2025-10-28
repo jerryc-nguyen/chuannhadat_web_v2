@@ -6,6 +6,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterChangeEvent } from './types/pure-ui-types';
+import { useFilterOperation } from './hooks/useFilterOperation';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowUp as SortUpIcon,
@@ -14,15 +16,15 @@ import {
   X,
   DollarSign
 } from 'lucide-react';
+import { useFilterStatePresenter } from './hooks/useFilterStatePresenter';
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
   selectedFilterState: FilterState;
   onFiltersChanged?: (filterState: FilterState) => void;
   // Functions from useFilterState hook
-  onFieldChanged: (event: { fieldName: FilterFieldName; value: OptionForSelect | undefined }) => void;
+  onFieldChanged: (event: FilterChangeEvent) => void;
   onClearFilter: (filterFieldName: FilterFieldName) => void;
-  isFilterActive: (filterFieldName: FilterFieldName) => boolean;
   getFilterValue: (filterFieldName: FilterFieldName) => OptionForSelect | undefined;
 };
 
@@ -32,12 +34,11 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   onFiltersChanged,
   onFieldChanged,
   onClearFilter,
-  isFilterActive,
-  getFilterValue,
 }) => {
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
+  const { selectedFilterText, isActiveChip } = useFilterStatePresenter(selectedFilterState);
 
   const containerChipsRef = React.useRef(null);
 
@@ -67,55 +68,21 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
     queryFn: () => searchApi(currentFilterState),
   });
 
-  // Handle local filter changes within the dropdown
-  const handleLocalFilterChange = (fieldName: FilterFieldName, value: OptionForSelect | undefined) => {
-    setLocalFilterState(prev => ({
-      ...prev,
-      [fieldName]: value
-    }));
-  };
-
-  // Handle local location changes within the dropdown
-  const handleLocalLocationChange = (location: {
-    city?: OptionForSelect;
-    district?: OptionForSelect;
-    ward?: OptionForSelect;
-  }) => {
-    setLocalFilterState(prev => ({
-      ...prev,
-      ...location
-    }));
-  };
-
-  const onApplyFilter = (filterChipItem: FilterChipOption) => {
-    setIsOpenPopover(false);
-
-    // Sync local state to global state
-    onFieldChanged({ fieldName: filterChipItem.id as FilterFieldName, value: localFilterState[filterChipItem.id as FilterFieldName] });
-
-    if (typeof onFiltersChanged === 'function') {
-      onFiltersChanged(currentFilterState);
-    }
-  };
-
-  const handleRemoveFilter = (filterOption: FilterChipOption) => {
-    const fieldName = filterOption.id as FilterFieldName;
-    onClearFilter(fieldName);
-
-    if (typeof onFiltersChanged === 'function') {
-      // Convert FilterState to the expected format after clearing
-      const newFilterState = { ...selectedFilterState };
-      delete newFilterState[fieldName];
-
-      const convertedState: Record<string, OptionForSelect> = {};
-      Object.entries(newFilterState).forEach(([key, value]) => {
-        if (value) {
-          convertedState[key] = value;
-        }
-      });
-      onFiltersChanged(convertedState);
-    }
-  };
+  // Use the extracted filter state operations hook
+  const {
+    handleLocalFilterChange,
+    handleLocalLocationChange,
+    onApplyFilter,
+    handleRemoveFilter,
+  } = useFilterOperation({
+    localFilterState,
+    setLocalFilterState,
+    selectedFilterState,
+    onFieldChanged,
+    onClearFilter,
+    onFiltersChanged,
+    setIsOpenPopover,
+  });
 
   const onRenderIconChip = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {
@@ -144,16 +111,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   };
 
   // Check if the current filter chip is active
-  const isChipActive = isFilterActive(filterChipItem.id as FilterFieldName);
-
-  // Get the display text for the filter chip
-  const getFilterDisplayText = () => {
-    const value = getFilterValue(filterChipItem.id as FilterFieldName);
-    if (value && value.text) {
-      return value.text;
-    }
-    return filterChipItem.text;
-  };
+  const isChipActive = isActiveChip(filterChipItem);
 
   return (
     <div ref={containerChipsRef}>
@@ -177,7 +135,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
               )}
             >
               {onRenderIconChip(filterChipItem)}
-              {getFilterDisplayText()}
+              {selectedFilterText(filterChipItem)}
             </div>
             {isChipActive && (
               <X
