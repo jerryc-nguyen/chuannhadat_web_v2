@@ -1,14 +1,12 @@
 'use client';
 import empty_city from '@assets/images/empty-city.png';
-import useQueryPosts from '@frontend/features/search/hooks/useQueryPosts';
 import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import { listFilterDesktop } from './constants';
 import { useFilterState } from '@frontend/features/search/filters-v2/hooks/useFilterState';
 import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChipsUI';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React from 'react';
-import { OptionForSelect } from '@common/types';
+import React, { useMemo } from 'react';
 
 // Import components from the same feature folder
 import PostControlsV2 from './components/PostControlsV2';
@@ -17,6 +15,7 @@ import { ListTopAuthor } from './components/ListTopAuthor';
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 import { useFilterStatePresenter } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterStatePresenter';
 import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
+import useQueryPostsV2 from '@app/(frontend)/_components/features/search/hooks/useQueryPostsV2';
 
 const CategoryDesktopV2: React.FC = () => {
   useSyncParamsToState();
@@ -25,39 +24,25 @@ const CategoryDesktopV2: React.FC = () => {
   const _pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-  
+
   // Use the new pure UI state manager
   const {
     filterState,
   } = useFilterState();
-  
-  useFilterStatePresenter(filterState);
 
-  // Build filter params using the new state manager
-  const buildAPIFilterParams = React.useCallback(() => {
-    const params: Record<string, any> = {};
+  const { friendlyParams } = useFilterStatePresenter(filterState);
 
-    // Convert filter state to API parameters using the same logic as the original
-    Object.entries(filterState).forEach(([key, value]) => {
-      if (value && typeof value === 'object' && 'value' in value) {
-        const option = value as OptionForSelect;
-        if (option.value && option.value !== 'all') {
-          params[key] = option.value;
-        }
-      }
-    });
-
+  const APIFilterParams = useMemo(() => {
     return {
-      ...params,
+      ...friendlyParams,
       with_title: true,
       with_users: true,
       page: currentPage,
       per_page: 9, // ✅ Load 9 products initially for better performance
     };
-  }, [filterState, currentPage]);
+  }, [friendlyParams, currentPage]);
 
-  const filterParams = buildAPIFilterParams();
-  const { products, data } = useQueryPosts(filterParams);
+  const { products, data } = useQueryPostsV2(APIFilterParams);
   useLoadMissingAuthors(data);
 
   // Filter chips based on current filter state using the new pure UI approach
@@ -99,7 +84,7 @@ const CategoryDesktopV2: React.FC = () => {
 
       <PostList
         dataPostList={products}
-        filterParams={filterParams}
+        filterParams={APIFilterParams}
         currentPage={currentPage}
       />
 

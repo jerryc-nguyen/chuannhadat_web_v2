@@ -1,5 +1,20 @@
 import { FilterState } from '../../filter-conditions/types';
 
+export const FRIENDLY_VALUES = {
+  sell: 'mua_ban',
+  rent: 'cho_thue',
+  west: 'huong_tay',
+  west_south: 'huong_tay_nam',
+  west_north: 'huong_tay_bac',
+  east: 'huong_dong',
+  east_south: 'huong_dong_nam',
+  east_north: 'huong_dong_bac',
+  south: 'huong_nam',
+  north: 'huong_bac',
+  full_furniture: 'noi_that_day_du',
+  basic_furniture: 'hoan_thien_co_ban',
+  unfinished_furniture: 'ban_giao_tho',
+}
 /**
  * Helper functions to build user-friendly query parameters from filter state
  * Each function handles a specific filter field and returns the appropriate parameter
@@ -75,7 +90,7 @@ export function buildBathroomParam(filterState: FilterState): string | undefined
 export function buildDirectionParam(filterState: FilterState): string | undefined {
   if (filterState.direction?.value && filterState.direction.value !== 'all') {
     const directionValue = filterState.direction.value as string;
-    return `huong_${directionValue.toLowerCase().replace(/\s+/g, '_')}`;
+    return FRIENDLY_VALUES[directionValue as keyof typeof FRIENDLY_VALUES];
   }
   return undefined;
 }
@@ -85,7 +100,7 @@ export function buildDirectionParam(filterState: FilterState): string | undefine
  */
 export function buildBusinessTypeParam(filterState: FilterState): string | undefined {
   if (filterState.businessType?.value && filterState.businessType.value !== 'all') {
-    return filterState.businessType.value as string;
+    return FRIENDLY_VALUES[filterState.businessType.value as keyof typeof FRIENDLY_VALUES];
   }
   return undefined;
 }

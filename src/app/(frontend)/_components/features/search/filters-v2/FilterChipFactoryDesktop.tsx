@@ -1,5 +1,5 @@
 import React from 'react';
-import { searchApi } from '@frontend/features/search/api/searchApi';
+import { searchApiV2 } from '@frontend/features/search/api/searchApi';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
@@ -38,7 +38,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
-  const { selectedFilterText, isActiveChip } = useFilterStatePresenter(selectedFilterState);
+  const { selectedFilterText, isActiveChip, buildFriendlyParams } = useFilterStatePresenter(selectedFilterState);
 
   const containerChipsRef = React.useRef(null);
 
@@ -63,9 +63,12 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
     return { ...selectedFilterState, ...localFilterState }
   }, [selectedFilterState, localFilterState]);
 
+  const filterParams = buildFriendlyParams(currentFilterState);
+  console.log('filterParams', filterParams);
+
   const { data, isLoading } = useQuery({
-    queryKey: ['FooterBtsButton', currentFilterState],
-    queryFn: () => searchApi(currentFilterState),
+    queryKey: ['FooterBtsButton', filterParams],
+    queryFn: () => searchApiV2(filterParams),
   });
 
   // Use the extracted filter state operations hook

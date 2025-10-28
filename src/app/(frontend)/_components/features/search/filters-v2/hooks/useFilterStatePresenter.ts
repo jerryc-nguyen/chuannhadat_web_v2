@@ -84,7 +84,7 @@ export function useFilterStatePresenter(filterState: FilterState) {
    * Builds user-friendly query parameters based on current filter state
    * Returns an object with Vietnamese parameter names for URL display
    */
-  const buildFilterParams = useMemo(() => {
+  const friendlyParams = useMemo(() => {
     return (): Record<string, string> => {
       return buildFriendlyParams(filterState);
     };
@@ -94,6 +94,7 @@ export function useFilterStatePresenter(filterState: FilterState) {
     selectedFilterText,
     selectedRoomText,
     isActiveChip,
-    buildFilterParams,
+    buildFriendlyParams,
+    friendlyParams,
   };
 }
