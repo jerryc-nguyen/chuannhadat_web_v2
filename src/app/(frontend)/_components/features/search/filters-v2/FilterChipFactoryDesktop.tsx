@@ -6,7 +6,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
-import { useFilterState } from './hooks/useFilterState';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowUp as SortUpIcon,
@@ -18,57 +17,84 @@ import {
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
-  filterState: FilterState;
-  onFilterChange?: (filterState: Record<string, OptionForSelect>) => void;
+  selectedFilterState: FilterState;
+  onFiltersChanged?: (filterState: FilterState) => void;
+  // Functions from useFilterState hook
+  onFieldChanged: (event: { fieldName: FilterFieldName; value: OptionForSelect | undefined }) => void;
+  onClearFilter: (filterFieldName: FilterFieldName) => void;
+  isFilterActive: (filterFieldName: FilterFieldName) => boolean;
+  getFilterValue: (filterFieldName: FilterFieldName) => OptionForSelect | undefined;
 };
 
 const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   filterChipItem,
-  filterState: propFilterState,
-  onFilterChange
+  selectedFilterState,
+  onFiltersChanged,
+  onFieldChanged,
+  onClearFilter,
+  isFilterActive,
+  getFilterValue,
 }) => {
-  const {
-    filterState,
-    filterFieldOptions: _filterFieldOptions,
-    onFilterChange: _handleFilterChange,
-    onClearFilter,
-    isFilterActive,
-    getFilterValue,
-  } = useFilterState();
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
+  const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
+
   const containerChipsRef = React.useRef(null);
 
-  // Use prop filterState if provided, otherwise use hook filterState
-  const currentFilterState = propFilterState || filterState;
+  // Initialize local state from global state when dropdown opens
+  React.useEffect(() => {
+    if (isOpenPopover) {
+      setLocalFilterState({ ...selectedFilterState });
+    }
+  }, [isOpenPopover, selectedFilterState]);
+
+  // Reset local state when dropdown closes without applying
+  const handlePopoverOpenChange = (open: boolean) => {
+    setIsOpenPopover(open);
+    if (!open) {
+      // Reset local state when closing
+      setLocalFilterState({});
+    }
+  };
 
   // Build filter params for API call
-  const filterParams = React.useMemo(() => {
-    const params: Record<string, any> = {};
-    Object.entries(currentFilterState).forEach(([key, value]) => {
-      if (value && value.value !== 'all' && value.value !== undefined) {
-        params[key] = value.value;
-      }
-    });
-    return params;
-  }, [currentFilterState]);
+  const currentFilterState = React.useMemo(() => {
+    return { ...selectedFilterState, ...localFilterState }
+  }, [selectedFilterState, localFilterState]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['FooterBtsButton', filterParams],
-    queryFn: () => searchApi(filterParams),
+    queryKey: ['FooterBtsButton', currentFilterState],
+    queryFn: () => searchApi(currentFilterState),
   });
 
-  const onApplyFilter = () => {
+  // Handle local filter changes within the dropdown
+  const handleLocalFilterChange = (fieldName: FilterFieldName, value: OptionForSelect | undefined) => {
+    setLocalFilterState(prev => ({
+      ...prev,
+      [fieldName]: value
+    }));
+  };
+
+  // Handle local location changes within the dropdown
+  const handleLocalLocationChange = (location: {
+    city?: OptionForSelect;
+    district?: OptionForSelect;
+    ward?: OptionForSelect;
+  }) => {
+    setLocalFilterState(prev => ({
+      ...prev,
+      ...location
+    }));
+  };
+
+  const onApplyFilter = (filterChipItem: FilterChipOption) => {
     setIsOpenPopover(false);
-    if (typeof onFilterChange === 'function') {
-      // Convert FilterState to the expected format
-      const convertedState: Record<string, OptionForSelect> = {};
-      Object.entries(currentFilterState).forEach(([key, value]) => {
-        if (value) {
-          convertedState[key] = value;
-        }
-      });
-      onFilterChange(convertedState);
+
+    // Sync local state to global state
+    onFieldChanged({ fieldName: filterChipItem.id as FilterFieldName, value: localFilterState[filterChipItem.id as FilterFieldName] });
+
+    if (typeof onFiltersChanged === 'function') {
+      onFiltersChanged(currentFilterState);
     }
   };
 
@@ -76,9 +102,9 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
     const fieldName = filterOption.id as FilterFieldName;
     onClearFilter(fieldName);
 
-    if (typeof onFilterChange === 'function') {
+    if (typeof onFiltersChanged === 'function') {
       // Convert FilterState to the expected format after clearing
-      const newFilterState = { ...currentFilterState };
+      const newFilterState = { ...selectedFilterState };
       delete newFilterState[fieldName];
 
       const convertedState: Record<string, OptionForSelect> = {};
@@ -87,7 +113,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
           convertedState[key] = value;
         }
       });
-      onFilterChange(convertedState);
+      onFiltersChanged(convertedState);
     }
   };
 
@@ -131,7 +157,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   return (
     <div ref={containerChipsRef}>
-      <Popover open={isOpenPopover} onOpenChange={setIsOpenPopover}>
+      <Popover open={isOpenPopover} onOpenChange={handlePopoverOpenChange}>
         <PopoverTrigger asChild>
           <Button
             onClick={() => {
@@ -176,20 +202,12 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
           <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
             <FilterContentOptionsFactory
               filterState={currentFilterState}
-              onFilterChange={(_fieldName: FilterFieldName, _value: OptionForSelect | undefined) => {
-                // Handle filter changes within the popover
-              }}
-              onLocationChange={(_location: {
-                city?: OptionForSelect;
-                district?: OptionForSelect;
-                ward?: OptionForSelect;
-              }) => {
-                // Handle location changes within the popover
-              }}
+              onChange={handleLocalFilterChange}
+              onLocationChange={handleLocalLocationChange}
               filterType={filterChipItem.id}
             />
           </section>
-          <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>
+          <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter(filterChipItem)}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
           </Button>

@@ -1,28 +1,34 @@
 import React from 'react';
 import { cn } from '@common/utils';
-import { FilterChipOption, IPagination, OptionForSelect } from '@common/types';
+import { FilterChipOption, IPagination } from '@common/types';
 import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryDesktop';
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 
 type PostControlsV2Props = {
   chipOptions: FilterChipOption[];
   pagination: IPagination;
   isShowListChips?: boolean;
   className?: string;
-  onFilterChange?: (filterState: Record<string, OptionForSelect>) => void;
+  onFiltersChanged?: (filterState: FilterState) => void;
   filterState?: FilterState;
 };
-
-
 
 const PostControlsV2: React.FC<PostControlsV2Props> = ({
   chipOptions = [],
   pagination,
   isShowListChips = true,
   className,
-  onFilterChange,
-  filterState = {} as FilterState,
+  onFiltersChanged
 }) => {
+  // Use the filter state hook to get the required functions
+  const {
+    filterState,
+    onFieldChanged,
+    onClearFilter,
+    isFilterActive,
+    getFilterValue,
+  } = useFilterState();
 
   return (
     <div
@@ -40,8 +46,12 @@ const PostControlsV2: React.FC<PostControlsV2Props> = ({
             <FilterChipFactoryDesktop
               key={item.id}
               filterChipItem={item}
-              filterState={filterState}
-              onFilterChange={onFilterChange}
+              selectedFilterState={filterState}
+              onFiltersChanged={onFiltersChanged}
+              onFieldChanged={onFieldChanged}
+              onClearFilter={onClearFilter}
+              isFilterActive={isFilterActive}
+              getFilterValue={getFilterValue}
             />
           ))}
         </div>

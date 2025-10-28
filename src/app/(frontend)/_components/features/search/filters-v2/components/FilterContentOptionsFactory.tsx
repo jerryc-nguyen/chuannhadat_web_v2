@@ -15,7 +15,7 @@ interface FilterContentOptionsFactoryProps {
   /** Selected options for the builder (optional - will use hook if not provided) */
   filterOptions?: OptionForSelect[];
   /** Callback when any filter changes */
-  onFilterChange: (fieldName: FilterFieldName, value: OptionForSelect | undefined) => void;
+  onChange: (fieldName: FilterFieldName, value: OptionForSelect | undefined) => void;
   /** Callback for location changes */
   onLocationChange: (location: {
     city?: OptionForSelect;
@@ -49,7 +49,7 @@ interface FilterContentOptionsFactoryProps {
 export default function FilterContentOptionsFactory({
   filterState,
   filterOptions: propFilterOptions,
-  onFilterChange,
+  onChange,
   onLocationChange,
   loading = {},
   filterType,
@@ -64,7 +64,7 @@ export default function FilterContentOptionsFactory({
 
   // Helper to handle filter changes
   const handleChange = (fieldName: FilterFieldName) => (value: OptionForSelect | undefined) => {
-    onFilterChange(fieldName, value);
+    onChange(fieldName, value);
   };
 
   switch (filterType) {
@@ -205,10 +205,10 @@ export default function FilterContentOptionsFactory({
           bathOptions={getOptionsForField(FilterFieldName.Bath)}
           onRoomChange={({ bed, bath }) => {
             if (bed !== undefined) {
-              onFilterChange(FilterFieldName.Bed, bed);
+              onChange(FilterFieldName.Bed, bed);
             }
             if (bath !== undefined) {
-              onFilterChange(FilterFieldName.Bath, bath);
+              onChange(FilterFieldName.Bath, bath);
             }
           }}
         />

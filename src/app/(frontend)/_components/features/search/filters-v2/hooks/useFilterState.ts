@@ -155,7 +155,7 @@ export function useFilterState() {
     hasActiveFilters,
 
     // Event handlers for pure UI components
-    onFilterChange: handleFilterChange,
+    onFieldChanged: handleFilterChange,
     onLocationChange: handleLocationChange,
     onRoomChange: handleRoomChange,
     onApplyFilters: handleApplyFilters,

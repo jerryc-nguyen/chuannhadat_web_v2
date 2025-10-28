@@ -71,7 +71,7 @@ export default function FilterV2Example() {
   return (
     <div className="p-6 space-y-6">
       <h2 className="text-2xl font-bold">Filter V2 Architecture Example</h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Business Type Filter */}
         <div className="border p-4 rounded">
@@ -80,7 +80,7 @@ export default function FilterV2Example() {
             <FilterContentOptionsFactory
               filterState={filterState}
               filterOptions={selectedOptions}
-              onFilterChange={handleFilterChange}
+              onChange={handleFilterChange}
               onLocationChange={handleLocationChange}
               filterType={FilterFieldName.BusinessType}
             />
@@ -94,7 +94,7 @@ export default function FilterV2Example() {
             <FilterContentOptionsFactory
               filterState={filterState}
               filterOptions={selectedOptions}
-              onFilterChange={handleFilterChange}
+              onChange={handleFilterChange}
               onLocationChange={handleLocationChange}
               filterType={FilterFieldName.CategoryType}
             />
@@ -108,7 +108,7 @@ export default function FilterV2Example() {
             <FilterContentOptionsFactory
               filterState={filterState}
               filterOptions={selectedOptions}
-              onFilterChange={handleFilterChange}
+              onChange={handleFilterChange}
               onLocationChange={handleLocationChange}
               filterType={FilterFieldName.Bed}
             />
@@ -122,7 +122,7 @@ export default function FilterV2Example() {
             <FilterContentOptionsFactory
               filterState={filterState}
               filterOptions={selectedOptions}
-              onFilterChange={handleFilterChange}
+              onChange={handleFilterChange}
               onLocationChange={handleLocationChange}
               filterType={FilterFieldName.Direction}
             />

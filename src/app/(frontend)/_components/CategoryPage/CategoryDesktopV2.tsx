@@ -8,8 +8,7 @@ import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChips
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { OptionForSelect, FilterFieldName } from '@common/types';
-import { FilterChangeEvent } from '@frontend/features/search/filters-v2/types/pure-ui-types';
+import { OptionForSelect } from '@common/types';
 
 // Import components from the same feature folder
 import PostControlsV2 from './components/PostControlsV2';
@@ -28,10 +27,6 @@ const CategoryDesktopV2: React.FC = () => {
   // Use the new pure UI state manager
   const {
     filterState,
-    filterFieldOptions: _filterFieldOptions,
-    hasActiveFilters: _hasActiveFilters,
-    onFilterChange,
-    onApplyFilters: _onApplyFilters,
   } = useFilterState();
 
   // Build filter params using the new state manager
@@ -70,15 +65,7 @@ const CategoryDesktopV2: React.FC = () => {
     // which will use the new pure UI architecture
     console.log('Filter changed:', newFilterState);
 
-    // Apply the filter changes using the new filters-v2 system
-    Object.entries(newFilterState).forEach(([fieldName, value]) => {
-      const filterEvent: FilterChangeEvent = {
-        fieldName: fieldName as FilterFieldName,
-        value: value as OptionForSelect | undefined
-      };
-      onFilterChange(filterEvent);
-    });
-  }, [onFilterChange]);
+  }, []);
 
   const _EmptyPost = () => {
     return (
@@ -102,7 +89,7 @@ const CategoryDesktopV2: React.FC = () => {
         className="w-[calc(100vw-8px)] -translate-x-5 px-5 md:-translate-x-10 md:px-10"
         chipOptions={filteredChipOptions}
         pagination={data?.pagination}
-        onFilterChange={handleFilterChange}
+        onFiltersChanged={handleFilterChange}
       />
 
       <PostList
