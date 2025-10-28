@@ -30,7 +30,7 @@ const CategoryDesktopV2: React.FC = () => {
     filterState,
   } = useFilterState();
 
-  const { friendlyParams } = useFilterStatePresenter(filterState);
+  const { friendlyParams, syncSelectedParamsToUrl } = useFilterStatePresenter(filterState);
 
   const APIFilterParams = useMemo(() => {
     return {
@@ -48,14 +48,13 @@ const CategoryDesktopV2: React.FC = () => {
   // Filter chips based on current filter state using the new pure UI approach
   const { filteredChipOptions } = useFilterChipsUI(listFilterDesktop);
 
-  // Handle filter changes from PostControlsV2
   const handleFilterChange = React.useCallback((newFilterState: Record<string, any>) => {
-    // The PostControlsV2 will trigger filter changes through the FilterChip components
-    // which will use the new pure UI architecture
     console.log('Filter changed:', newFilterState);
     const newParams = buildFriendlyParams(newFilterState);
     console.log('New params:', newParams);
-  }, []);
+    syncSelectedParamsToUrl(newFilterState);
+
+  }, [syncSelectedParamsToUrl]);
 
   const _EmptyPost = () => {
     return (

@@ -3,6 +3,8 @@ import { FilterChipOption, FilterFieldName } from '@common/types';
 import { FilterState } from '../../filter-conditions/types';
 import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
+import useSearchScope, { SearchScopeEnums } from '@app/(frontend)/_components/features/search/hooks/useSearchScope';
+import { searchApiV2 } from '@app/(frontend)/_components/features/search/api/searchApi';
 
 /**
  * Presenter hook that provides common UI text and state checking functions
@@ -13,6 +15,7 @@ import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
  */
 export function useFilterStatePresenter(filterState: FilterState) {
   const { selectedLocationText } = useFilterLocations();
+  const { searchScope } = useSearchScope();
 
   /**
    * Gets the display text for a filter chip based on current filter state
@@ -85,10 +88,24 @@ export function useFilterStatePresenter(filterState: FilterState) {
    * Returns an object with Vietnamese parameter names for URL display
    */
   const friendlyParams = useMemo(() => {
-    return (): Record<string, string> => {
-      return buildFriendlyParams(filterState);
-    };
+    return buildFriendlyParams(filterState);
   }, [filterState]);
+
+  const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
+    // disable auto sync state to url for manage post page
+    if (searchScope !== SearchScopeEnums.Category) {
+      return;
+    }
+
+    let queryOptions = buildFriendlyParams(filterParams);
+    queryOptions = {
+      ...queryOptions,
+      only_url: 'true',
+    };
+    const response = await searchApiV2(queryOptions);
+    const { listing_url } = response;
+    window.history.pushState({}, '', listing_url);
+  };
 
   return {
     selectedFilterText,
@@ -96,5 +113,6 @@ export function useFilterStatePresenter(filterState: FilterState) {
     isActiveChip,
     buildFriendlyParams,
     friendlyParams,
+    syncSelectedParamsToUrl
   };
 }
