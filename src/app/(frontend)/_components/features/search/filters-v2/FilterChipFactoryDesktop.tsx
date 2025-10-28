@@ -32,7 +32,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   const {
     filterState,
     filterFieldOptions,
-    onFilterChange: handleFilterChange,
+    onFilterChange: _handleFilterChange,
     onClearFilter,
     isFilterActive,
     getFilterValue,
@@ -43,7 +43,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   // Use prop filterState if provided, otherwise use hook filterState
   const currentFilterState = propFilterState || filterState;
-  const currentFilterOptions = propFilterOptions || filterFieldOptions;
+  const _currentFilterOptions = propFilterOptions || filterFieldOptions;
 
   // Build filter params for API call
   const filterParams = React.useMemo(() => {
@@ -179,7 +179,6 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
           <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
             <FilterContentOptionsFactory
               filterState={currentFilterState}
-              filterOptions={currentFilterOptions}
               onFilterChange={(_fieldName: FilterFieldName, _value: OptionForSelect | undefined) => {
                 // Handle filter changes within the popover
               }}
@@ -190,7 +189,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
               }) => {
                 // Handle location changes within the popover
               }}
-              filterType={filterChipItem.id as any}
+              filterType={filterChipItem.id}
             />
           </section>
           <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter()}>

@@ -1,15 +1,16 @@
 import { FilterFieldName, OptionForSelect } from '@common/types';
-import { FilterState, FilterFieldOptions } from '../../filter-conditions/types';
+import { FilterState } from '../../filter-conditions/types';
 import SelectFilter from './SelectFilter';
 import ChipFilter from './ChipFilter';
 import BusinessTypeButtons from './BusinessTypeButtons';
 import LocationFilter from './LocationFilter';
+import useFilterOptions from '../hooks/useFilterOptions';
 
 interface FilterContentOptionsFactoryProps {
   /** Current filter state */
   filterState: FilterState;
-  /** Available filter options */
-  filterOptions: FilterFieldOptions;
+  /** Selected options for the builder (optional - will use hook if not provided) */
+  filterOptions?: OptionForSelect[];
   /** Callback when any filter changes */
   onFilterChange: (fieldName: FilterFieldName, value: OptionForSelect | undefined) => void;
   /** Callback for location changes */
@@ -23,18 +24,7 @@ interface FilterContentOptionsFactoryProps {
     [key: string]: boolean;
   };
   /** Which filter to render */
-  filterType:
-  | FilterFieldName.CategoryType
-  | FilterFieldName.BusCatType
-  | FilterFieldName.Direction
-  | FilterFieldName.Sort
-  | FilterFieldName.AggProjects
-  | FilterFieldName.Bed
-  | FilterFieldName.Bath
-  | FilterFieldName.BusinessType
-  | FilterFieldName.Locations;
-  /** Additional options for dynamic filters */
-  dynamicOptions?: OptionForSelect[];
+  filterType: FilterFieldName;
 }
 
 /**
@@ -55,13 +45,14 @@ interface FilterContentOptionsFactoryProps {
  */
 export default function FilterContentOptionsFactory({
   filterState,
-  filterOptions,
+  filterOptions: propFilterOptions,
   onFilterChange,
   onLocationChange,
   loading = {},
   filterType,
-  dynamicOptions,
 }: FilterContentOptionsFactoryProps) {
+  // Use the hook to get filter options
+  const { getOptionsForField } = useFilterOptions();
 
   // Helper to get current value for a field
   const getValue = (fieldName: FilterFieldName) => {
@@ -78,7 +69,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.CategoryType)}
-          options={filterOptions.categoryTypeOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.CategoryType)}
           onValueChange={handleChange(FilterFieldName.CategoryType)}
           isLoading={loading.categoryType}
         />
@@ -88,7 +79,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.BusCatType)}
-          options={dynamicOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.BusCatType)}
           onValueChange={handleChange(FilterFieldName.BusCatType)}
           isLoading={loading.busCatType}
         />
@@ -98,7 +89,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.Direction)}
-          options={dynamicOptions || filterOptions.directionOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Direction)}
           onValueChange={handleChange(FilterFieldName.Direction)}
           isLoading={loading.direction}
         />
@@ -108,7 +99,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.Sort)}
-          options={dynamicOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Sort)}
           onValueChange={handleChange(FilterFieldName.Sort)}
           isLoading={loading.sort}
         />
@@ -118,7 +109,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.AggProjects) || getValue(FilterFieldName.Project)}
-          options={dynamicOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.AggProjects)}
           onValueChange={handleChange(FilterFieldName.AggProjects)}
           isLoading={loading.aggProjects}
         />
@@ -128,7 +119,7 @@ export default function FilterContentOptionsFactory({
       return (
         <ChipFilter
           value={getValue(FilterFieldName.Bed)}
-          options={filterOptions.roomOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Bed)}
           onValueChange={handleChange(FilterFieldName.Bed)}
           isLoading={loading.bed}
         />
@@ -138,7 +129,7 @@ export default function FilterContentOptionsFactory({
       return (
         <ChipFilter
           value={getValue(FilterFieldName.Bath)}
-          options={filterOptions.roomOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.Bath)}
           onValueChange={handleChange(FilterFieldName.Bath)}
           isLoading={loading.bath}
         />
@@ -148,7 +139,7 @@ export default function FilterContentOptionsFactory({
       return (
         <BusinessTypeButtons
           value={getValue(FilterFieldName.BusinessType)}
-          options={filterOptions.businessTypeOptions || []}
+          options={propFilterOptions || getOptionsForField(FilterFieldName.BusinessType)}
           onValueChange={handleChange(FilterFieldName.BusinessType)}
           isLoading={loading.businessType}
         />
@@ -160,9 +151,9 @@ export default function FilterContentOptionsFactory({
           city={getValue(FilterFieldName.City)}
           district={getValue(FilterFieldName.District)}
           ward={getValue(FilterFieldName.Ward)}
-          cityOptions={dynamicOptions || []}
-          districtOptions={[]}
-          wardOptions={[]}
+          cityOptions={getOptionsForField(FilterFieldName.City)}
+          districtOptions={getOptionsForField(FilterFieldName.District)}
+          wardOptions={getOptionsForField(FilterFieldName.Ward)}
           onLocationChange={onLocationChange}
           loading={{
             cities: loading.cities,
@@ -173,6 +164,10 @@ export default function FilterContentOptionsFactory({
       );
 
     default:
+      // Log unsupported filter types in development
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`FilterContentOptionsFactory: Unsupported filterType "${filterType}". Supported types: CategoryType, BusCatType, Direction, Sort, AggProjects, Bed, Bath, BusinessType, Locations`);
+      }
       return null;
   }
 }
