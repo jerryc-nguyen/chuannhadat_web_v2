@@ -107,7 +107,6 @@ export function useFilterStatePresenter(filterState: FilterState) {
     selectedFilterText,
     selectedRoomText,
     isActiveChip,
-    buildFriendlyParams,
     friendlyParams,
     syncSelectedParamsToUrl
   };

@@ -9,8 +9,6 @@ interface FilterParams {
 }
 
 function useQueryPostsV2(filterParams: FilterParams) {
-  console.log('🔍 useQueryPostsV2 - Called with filterParams:', filterParams);
-
   const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ['useQueryPostsV2', filterParams],

@@ -1,3 +1,4 @@
+import { OptionForSelect } from '@common/types';
 import { FilterState } from '../../filter-conditions/types';
 
 export const FRIENDLY_VALUES = {
@@ -15,6 +16,44 @@ export const FRIENDLY_VALUES = {
   basic_furniture: 'hoan_thien_co_ban',
   unfinished_furniture: 'ban_giao_tho',
 }
+
+export const FRIENDLY_FIELDS: Array<string> = [
+  'businessType',
+  'categoryType',
+  'price',
+  'area',
+  'bed',
+  'bath',
+  'direction'
+];
+
+export const NORMAL_FIELDS: Array<string> = [
+  'city',
+  'district',
+  'ward',
+  'project',
+  'sort',
+  'busCatType',
+  'aggProjects'
+];
+
+export const FILTER_FIELDS_PARAMS_MAP: Record<string, any> = {
+  businessType: 'business_type',
+  categoryType: 'category_type',
+  price: 'price',
+  area: 'area',
+  bed: 'bed',
+  bath: 'bath',
+  direction: 'direction',
+  city: 'city_id',
+  district: 'district_id',
+  ward: 'ward_id',
+  project: 'project_id',
+  sort: 'sort',
+  aggProjects: 'project_id',
+};
+
+
 /**
  * Helper functions to build user-friendly query parameters from filter state
  * Each function handles a specific filter field and returns the appropriate parameter
@@ -47,17 +86,17 @@ export function buildPriceParam(filterState: FilterState): string | undefined {
     return filterState.price.value as string;
   } else if (filterState.price?.range) {
     const { min, max } = filterState.price.range;
-    
+
     // Handle min-only range (from X)
     if (min !== undefined && max === undefined) {
       return `tu-${formatPrice(min)}`;
     }
-    
+
     // Handle max-only range (up to X)
     if (min === undefined && max !== undefined) {
       return `den-${formatPrice(max)}`;
     }
-    
+
     // Handle full range (min to max)
     if (min !== undefined && max !== undefined) {
       return `${formatPrice(min)}-${formatPrice(max)}`;
@@ -79,17 +118,17 @@ export function buildAreaParam(filterState: FilterState): string | undefined {
     return filterState.area.value as string;
   } else if (filterState.area?.range) {
     const { min, max } = filterState.area.range;
-    
+
     // Handle min-only range (from X m2)
     if (min !== undefined && max === undefined) {
       return `tu-${min}m2`;
     }
-    
+
     // Handle max-only range (up to X m2)
     if (min === undefined && max !== undefined) {
       return `den-${max}m2`;
     }
-    
+
     // Handle full range (min to max m2)
     if (min !== undefined && max !== undefined) {
       return `${min}-${max}m2`;
@@ -238,27 +277,26 @@ export function buildFriendlyParams(filterState: FilterState): Record<string, st
     results.loai_bds = categoryTypeParam;
   }
 
-  // Location filters
-  const cityParam = buildCityParam(filterState);
-  if (cityParam) {
-    results.thanh_pho = cityParam;
-  }
+  const normalParams = buildNormalParams(filterState);
+  return { ...results, ...normalParams };
+}
 
-  const districtParam = buildDistrictParam(filterState);
-  if (districtParam) {
-    results.quan_huyen = districtParam;
-  }
+export function buildNormalParams(filterState: FilterState): Record<string, A> {
+  let results: Record<string, string> = {};
+  NORMAL_FIELDS.forEach((fieldName: string) => {
+    const paramName = FILTER_FIELDS_PARAMS_MAP[fieldName];
+    const option = filterState[fieldName] as OptionForSelect;
 
-  const wardParam = buildWardParam(filterState);
-  if (wardParam) {
-    results.phuong_xa = wardParam;
-  }
-
-  // Project filter
-  const projectParam = buildProjectParam(filterState);
-  if (projectParam) {
-    results.du_an = projectParam;
-  }
+    if (!option?.value && !option?.range && !option?.params) {
+      return;
+    } else if (option.value) {
+      results[paramName] = option.value as string;
+    } else if (option.params) {
+      results = { ...results, ...option.params };
+    } else {
+      results[paramName] = [option?.range?.min, option?.range?.max].join(',') as string;
+    }
+  });
 
   return results;
 }

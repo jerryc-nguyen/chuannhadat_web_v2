@@ -182,6 +182,16 @@ export function useFilterState() {
     }
   }, [filterState]);
 
+  const setFilterValues = (filters?: FilterState) => {
+    const allFilterState = {
+      ...filterState,
+      ...filters,
+    };
+
+    setFilterState(allFilterState);
+    return allFilterState;
+  };
+
   return {
     // State
     filterState,
@@ -197,6 +207,7 @@ export function useFilterState() {
 
     // Utility functions
     getFilterValue,
-    isFilterActive
+    isFilterActive,
+    setFilterValues
   };
 }

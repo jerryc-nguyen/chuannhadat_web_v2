@@ -17,6 +17,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { useFilterStatePresenter } from './hooks/useFilterStatePresenter';
+import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -38,7 +39,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
   const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
-  const { selectedFilterText, isActiveChip, buildFriendlyParams } = useFilterStatePresenter(selectedFilterState);
+  const { selectedFilterText, isActiveChip } = useFilterStatePresenter(selectedFilterState);
 
   const containerChipsRef = React.useRef(null);
 
@@ -60,11 +61,16 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   // Build filter params for API call
   const currentFilterState = React.useMemo(() => {
-    return { ...selectedFilterState, ...localFilterState }
+    // Only merge if localFilterState has actual values
+    if (Object.keys(localFilterState).length === 0) {
+      return selectedFilterState;
+    }
+    return { ...selectedFilterState, ...localFilterState };
   }, [selectedFilterState, localFilterState]);
 
-  const filterParams = buildFriendlyParams(currentFilterState);
-  console.log('filterParams', filterParams);
+  const filterParams = React.useMemo(() => {
+    return buildFriendlyParams(currentFilterState);
+  }, [currentFilterState]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],

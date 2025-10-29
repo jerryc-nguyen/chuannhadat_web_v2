@@ -26,7 +26,6 @@ const PostControlsV2: React.FC<PostControlsV2Props> = ({
     filterState,
     onFieldChanged,
     onClearFilter,
-    isFilterActive,
     getFilterValue,
   } = useFilterState();
 
@@ -50,7 +49,6 @@ const PostControlsV2: React.FC<PostControlsV2Props> = ({
               onFiltersChanged={onFiltersChanged}
               onFieldChanged={onFieldChanged}
               onClearFilter={onClearFilter}
-              isFilterActive={isFilterActive}
               getFilterValue={getFilterValue}
             />
           ))}
