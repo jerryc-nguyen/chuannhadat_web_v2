@@ -36,12 +36,29 @@ export function formatPrice(price: number): string {
 
 /**
  * Builds price parameter from filter state
+ * Generates format that matches Ruby parser expectations:
+ * - "tu-{price}" for min-only ranges
+ * - "den-{price}" for max-only ranges  
+ * - "{min}-{max}" for full ranges
+ * - Uses Vietnamese units: ty (billion), tr (million)
  */
 export function buildPriceParam(filterState: FilterState): string | undefined {
   if (filterState.price?.value && filterState.price.value !== 'all') {
     return filterState.price.value as string;
   } else if (filterState.price?.range) {
     const { min, max } = filterState.price.range;
+    
+    // Handle min-only range (from X)
+    if (min !== undefined && max === undefined) {
+      return `tu-${formatPrice(min)}`;
+    }
+    
+    // Handle max-only range (up to X)
+    if (min === undefined && max !== undefined) {
+      return `den-${formatPrice(max)}`;
+    }
+    
+    // Handle full range (min to max)
     if (min !== undefined && max !== undefined) {
       return `${formatPrice(min)}-${formatPrice(max)}`;
     }
@@ -51,12 +68,29 @@ export function buildPriceParam(filterState: FilterState): string | undefined {
 
 /**
  * Builds area parameter from filter state
+ * Generates format that matches Ruby parser expectations:
+ * - "tu-{area}m2" for min-only ranges
+ * - "den-{area}m2" for max-only ranges
+ * - "{min}-{max}m2" for full ranges
+ * - Always includes m2 suffix
  */
 export function buildAreaParam(filterState: FilterState): string | undefined {
   if (filterState.area?.value && filterState.area.value !== 'all') {
     return filterState.area.value as string;
   } else if (filterState.area?.range) {
     const { min, max } = filterState.area.range;
+    
+    // Handle min-only range (from X m2)
+    if (min !== undefined && max === undefined) {
+      return `tu-${min}m2`;
+    }
+    
+    // Handle max-only range (up to X m2)
+    if (min === undefined && max !== undefined) {
+      return `den-${max}m2`;
+    }
+    
+    // Handle full range (min to max m2)
     if (min !== undefined && max !== undefined) {
       return `${min}-${max}m2`;
     }

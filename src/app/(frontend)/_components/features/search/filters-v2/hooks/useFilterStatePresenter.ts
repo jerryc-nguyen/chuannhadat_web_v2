@@ -97,12 +97,8 @@ export function useFilterStatePresenter(filterState: FilterState) {
       return;
     }
 
-    let queryOptions = buildFriendlyParams(filterParams);
-    queryOptions = {
-      ...queryOptions,
-      only_url: 'true',
-    };
-    const response = await searchApiV2(queryOptions);
+    const queryOptions = buildFriendlyParams(filterParams);
+    const response = await searchApiV2({ ...queryOptions, only_url: 'true' });
     const { listing_url } = response;
     window.history.pushState({}, '', listing_url);
   };

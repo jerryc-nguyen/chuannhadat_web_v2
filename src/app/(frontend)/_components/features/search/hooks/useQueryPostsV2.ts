@@ -9,14 +9,24 @@ interface FilterParams {
 }
 
 function useQueryPostsV2(filterParams: FilterParams) {
+  console.log('🔍 useQueryPostsV2 - Called with filterParams:', filterParams);
+
   const { data } = useSuspenseQuery(
     queryOptions({
       queryKey: ['useQueryPostsV2', filterParams],
-      queryFn: () => searchApiV2(filterParams),
+      queryFn: () => {
+        console.log('🔍 useQueryPostsV2 - Executing searchApiV2 with:', filterParams);
+        return searchApiV2(filterParams);
+      },
+      staleTime: 0, // Force immediate refetch when parameters change
+      gcTime: 0, // Don't cache the results
     }),
   );
 
-  const products = useMemo(() => { return data.data }, [data.data])
+  const products = useMemo(() => {
+    console.log('🔍 useQueryPostsV2 - Products memoized:', data.data?.length, data.data);
+    return data.data;
+  }, [data.data])
 
   return { products, data, aggreations: data.aggs };
 }
