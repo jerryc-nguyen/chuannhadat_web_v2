@@ -1,4 +1,4 @@
-import { updateUrlSearchParams } from "@common/utils";
+import { buildUrl } from "@common/urlHelper";
 
 // use param: bts to mark there is an new virtual page / modal was openned 
 // so when user hit back, we can close virtual / modal 
@@ -13,5 +13,5 @@ export const removeBrowserHistoryModalsState = (currentPushedPath?: string) => {
 
 export const updateCurrentUrlSearchParams = (params: Record<string, A>) => {
   const url = window.location.href;
-  return updateUrlSearchParams(url, params);
+  return buildUrl(url, params);
 }
