@@ -31,7 +31,6 @@ export default function CategoryMobile() {
     filterState,
     onFieldChanged,
     onClearFilter,
-    getFilterValue,
   } = useFilterState();
 
   const { friendlyParams } = useFilterStatePresenter(filterState);
@@ -60,7 +59,6 @@ export default function CategoryMobile() {
           selectedFilterState={filterState}
           onFieldChanged={onFieldChanged}
           onClearFilter={onClearFilter}
-          getFilterValue={getFilterValue}
         />
       </div>
 

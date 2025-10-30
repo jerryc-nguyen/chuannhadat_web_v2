@@ -25,8 +25,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   const {
     filterState,
     onFieldChanged,
-    onClearFilter,
-    getFilterValue,
+    onClearFilter
   } = useFilterState();
 
   return (
@@ -49,7 +48,6 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
               onFiltersChanged={onFiltersChanged}
               onFieldChanged={onFieldChanged}
               onClearFilter={onClearFilter}
-              getFilterValue={getFilterValue}
             />
           ))}
         </div>

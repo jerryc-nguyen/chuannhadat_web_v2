@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { FilterChipOption, FilterFieldName, OptionForSelect } from '@common/types';
+import { FilterChipOption, FilterFieldName } from '@common/types';
 import { FilterState } from '@frontend/features/search/filter-conditions/types';
 import { FilterChangeEvent } from '@frontend/features/search/filters-v2/types/pure-ui-types';
 import FilterChipFactoryMobile from '@frontend/features/search/filters-v2/FilterChipFactoryMobile';
@@ -13,7 +13,6 @@ type FilterChipsMobileProps = {
   // Functions from useFilterState hook
   onFieldChanged: (event: FilterChangeEvent) => void;
   onClearFilter: (filterFieldName: FilterFieldName) => void;
-  getFilterValue: (filterFieldName: FilterFieldName) => OptionForSelect | undefined;
 };
 
 export default function FilterChipsMobile({
@@ -21,8 +20,7 @@ export default function FilterChipsMobile({
   selectedFilterState,
   onFiltersChanged,
   onFieldChanged,
-  onClearFilter,
-  getFilterValue
+  onClearFilter
 }: FilterChipsMobileProps) {
   return (
     <HorizontalScroller className="relative my-2 flex gap-2">
@@ -37,7 +35,6 @@ export default function FilterChipsMobile({
             onFiltersChanged={onFiltersChanged}
             onFieldChanged={onFieldChanged}
             onClearFilter={onClearFilter}
-            getFilterValue={getFilterValue}
           />
         </div>
       ))}

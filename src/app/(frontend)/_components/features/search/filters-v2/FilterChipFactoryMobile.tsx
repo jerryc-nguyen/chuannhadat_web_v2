@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@components/ui/button';
-import { FilterChipOption, FilterFieldName, OptionForSelect } from '@common/types';
+import { FilterChipOption, FilterFieldName } from '@common/types';
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
@@ -9,14 +9,14 @@ import { X } from 'lucide-react';
 import { cn } from '@common/utils';
 import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
 import ModalFilterContent from './components/mobile/ModalFilterContent';
+import { useFilterOperation } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterOperation';
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
   selectedFilterState: FilterState;
   onFiltersChanged?: (filterState: FilterState) => void;
   onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void;
-  getFilterValue: (filterFieldName: FilterFieldName) => OptionForSelect | undefined;
+  onClearFilter: (filterFieldName: FilterFieldName) => void
 };
 
 const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
@@ -27,12 +27,11 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
   onClearFilter,
 }) => {
   const { openModal } = useModals();
-
-  // Simple helper functions for the chip display
-  const selectedFilterText = (filterChipItem: FilterChipOption) => {
-    // This is a simplified version - you may need to adjust based on your logic
-    return filterChipItem.text;
-  };
+  const { selectedFilterText } = useFilterOperation({
+    selectedFilterState,
+    onFieldChanged,
+    onClearFilter,
+  });
 
   const isActiveChip = (filterChipItem: FilterChipOption) => {
     // This is a simplified version - you may need to adjust based on your logic

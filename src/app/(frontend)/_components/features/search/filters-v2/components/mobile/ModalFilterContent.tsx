@@ -4,7 +4,11 @@ import { FilterState } from '@app/(frontend)/_components/features/search/filter-
 import { FilterChangeEvent } from '../../types/pure-ui-types';
 import { useFilterOperation } from '../../hooks/useFilterOperation';
 import FilterContentOptionsFactory from '../FilterContentOptionsFactory';
-import FooterBtsButton from './FooterBtsButton';
+import ModalLayoutWithFooter from '@components/mobile-ui/ModalLayoutWithFooter';
+import useModals from '@frontend/features/layout/mobile-modals/hooks';
+import { Button } from '@components/ui/button';
+import { Loader2 } from 'lucide-react';
+
 
 export type ModalFilterContentProps = {
   filterChipItem: FilterChipOption;
@@ -14,13 +18,18 @@ export type ModalFilterContentProps = {
   onClearFilter: (filterFieldName: FilterFieldName) => void;
 };
 
-const ModalFilterContent: React.FC<ModalFilterContentProps> = ({
+export type ModalFilterContentResult = {
+  content: React.ReactNode;
+  footer: React.ReactNode;
+};
+
+export const useModalFilterContent = ({
   filterChipItem,
   selectedFilterState,
   onFiltersChanged,
   onFieldChanged,
   onClearFilter,
-}) => {
+}: ModalFilterContentProps): ModalFilterContentResult => {
 
   // Use the filter operation hook within the modal context
   const {
@@ -44,7 +53,14 @@ const ModalFilterContent: React.FC<ModalFilterContentProps> = ({
     setIsOpenPopover: () => undefined, // Not used in mobile
   });
 
-  return (
+  const { closeModals } = useModals();
+
+  const handleApplyFilter = () => {
+    onApplyFilter(filterChipItem);
+    closeModals();
+  };
+
+  const content = (
     <div className="space-y-4">
       <FilterContentOptionsFactory
         filterState={currentFilterState}
@@ -52,16 +68,30 @@ const ModalFilterContent: React.FC<ModalFilterContentProps> = ({
         onLocationChange={handleLocalLocationChange}
         filterType={filterChipItem.id as FilterFieldName}
       />
-      
-      <div className="mt-4">
-        <FooterBtsButton
-          filterOption={filterChipItem}
-          onApplyFilter={onApplyFilter}
-          previewCount={previewCount}
-          isLoading={isPreviewLoading}
-        />
-      </div>
     </div>
+  );
+
+  const footer = (
+    <>
+      <Button disabled={isPreviewLoading} className="w-full" onClick={handleApplyFilter}>
+        {isPreviewLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isPreviewLoading ? 'Đang tải' : `Xem ${previewCount} kết quả`}
+      </Button>
+    </>
+  );
+
+  return { content, footer };
+};
+
+// Keep the original component for backward compatibility
+const ModalFilterContent: React.FC<ModalFilterContentProps> = (props) => {
+  const { content, footer } = useModalFilterContent(props);
+
+  return (
+    <ModalLayoutWithFooter
+      content={content}
+      footer={footer}
+    />
   );
 };
 

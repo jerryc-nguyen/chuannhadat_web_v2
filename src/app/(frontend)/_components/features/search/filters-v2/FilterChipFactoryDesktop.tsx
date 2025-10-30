@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
-import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
+import { FilterChipOption, FilterFieldName } from '@common/types';
 import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
@@ -21,8 +21,7 @@ export type FilterChipProps = {
   onFiltersChanged?: (filterState: FilterState) => void;
   // Functions from useFilterState hook
   onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void;
-  getFilterValue: (filterFieldName: FilterFieldName) => OptionForSelect | undefined;
+  onClearFilter: (filterFieldName: FilterFieldName) => void
 };
 
 const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
@@ -43,8 +42,8 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
     currentFilterState,
     selectedFilterText,
     isActiveChip,
-    data,
-    isLoading,
+    isPreviewLoading,
+    previewCount,
     handleLocalFilterChange,
     handleLocalLocationChange,
     onApplyFilter,
@@ -154,9 +153,9 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
               filterType={filterChipItem.id}
             />
           </section>
-          <Button disabled={isLoading} className="w-full" onClick={() => onApplyFilter(filterChipItem)}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isLoading ? 'Đang tải' : `Xem ${data?.pagination?.total_count} kết quả`}
+          <Button disabled={isPreviewLoading} className="w-full" onClick={() => onApplyFilter(filterChipItem)}>
+            {isPreviewLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPreviewLoading ? 'Đang tải' : `Xem ${previewCount} kết quả`}
           </Button>
         </PopoverContent>
       </Popover>
