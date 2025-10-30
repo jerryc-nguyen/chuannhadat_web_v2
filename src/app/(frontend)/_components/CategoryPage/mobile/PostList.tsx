@@ -1,10 +1,7 @@
 'use client';
-import { Button } from '@components/ui/button';
-import { useRefCallback } from '@common/hooks/useRefCallback';
-import SortOptions from '../../features/search/filter-conditions/bts/SortOptions';
-import useFilterState from '../../features/search/filter-conditions/hooks/useFilterState';
+import SortOptionsModalContent from './SortOptionsModalContent';
+import { useFilterState } from '@frontend/features/search/filters-v2/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import { FilterFieldName } from '@common/types';
 import { ChevronDown } from 'lucide-react';
 
 import empty_city from '@assets/images/empty-city.png';
@@ -20,29 +17,18 @@ type PostListProps = {
 
 export default function PostList({ dataPostList, filterParams, currentPage }: PostListProps) {
 
-  const { openModal3, closeModals } = useModals();
-  const { selectedSortText, copyFilterStatesToLocal, applySortFilter } = useFilterState();
+  const { openModal3 } = useModals();
+  const { filterState } = useFilterState();
 
   // Use the passed data instead of fetching internally
   const products = dataPostList;
 
-  const onApplySort = useRefCallback(() => {
-    applySortFilter();
-    closeModals();
-  });
 
-  const renderFooterSortButton = () => (
-    <Button className="w-full" onClick={onApplySort}>
-      Áp dụng
-    </Button>
-  );
   const onShowSortOptions = () => {
-    copyFilterStatesToLocal([FilterFieldName.Sort]);
     openModal3({
       name: 'sort_bts',
       title: 'Sắp xếp theo',
-      content: <SortOptions />,
-      footer: renderFooterSortButton(),
+      content: <SortOptionsModalContent />,
     });
   };
 
@@ -64,7 +50,7 @@ export default function PostList({ dataPostList, filterParams, currentPage }: Po
         <div className="text-secondary">Có {products?.length || 0} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
-            {selectedSortText || 'Sắp xếp'}
+            {filterState.sort?.text || 'Sắp xếp'}
           </span>
           <ChevronDown />
         </div>
