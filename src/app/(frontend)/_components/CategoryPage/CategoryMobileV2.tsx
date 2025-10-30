@@ -1,6 +1,6 @@
 'use client';
-import FilterChips from './mobile/searchs/FilterChips';
-import PostList from './mobile/searchs/PostList';
+import FilterChips from './mobile/FilterChips';
+import PostList from './mobile/PostList';
 
 import '@styles/pages/mobile/home.scss';
 

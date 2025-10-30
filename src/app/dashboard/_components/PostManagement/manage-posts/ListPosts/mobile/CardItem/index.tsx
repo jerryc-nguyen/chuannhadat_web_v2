@@ -9,7 +9,7 @@ import ProductInfo from '@app/dashboard/_components/PostManagement/manage-posts/
 import { Actions } from './Actions';
 import { ItemProps } from '@app/dashboard/_components/PostManagement/manage-posts/ListPosts/mobile/CardItem/ItemProps';
 import { MapPin } from 'lucide-react';
-import { ProductDetailTitleBts } from '@frontend/CategoryPage/mobile/searchs/ProductCardV2';
+import { ProductDetailTitleBts } from '@app/(frontend)/_components/CategoryPage/mobile/ProductCardV2';
 import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
 import AuthorInfo from '@frontend/PostDetail/mobile/components/AuthorInfo';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';

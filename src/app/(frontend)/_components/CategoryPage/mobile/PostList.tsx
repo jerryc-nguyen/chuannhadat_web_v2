@@ -1,8 +1,8 @@
 'use client';
 import { Button } from '@components/ui/button';
 import { useRefCallback } from '@common/hooks/useRefCallback';
-import SortOptions from '../../../features/search/filter-conditions/bts/SortOptions';
-import useFilterState from '../../../features/search/filter-conditions/hooks/useFilterState';
+import SortOptions from '../../features/search/filter-conditions/bts/SortOptions';
+import useFilterState from '../../features/search/filter-conditions/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { FilterFieldName } from '@common/types';
 import { ChevronDown } from 'lucide-react';
@@ -10,7 +10,7 @@ import { ChevronDown } from 'lucide-react';
 import empty_city from '@assets/images/empty-city.png';
 import Image from 'next/image';
 import InfiniteProductLoaderMobile from './InfiniteProductLoaderMobile';
-import { IPostProductCard } from '../../states';
+import { IPostProductCard } from '../states';
 
 type PostListProps = {
   dataPostList: IPostProductCard[];

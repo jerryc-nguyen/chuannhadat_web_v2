@@ -4,7 +4,7 @@ import { useIsMobile } from '@common/hooks';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
 import AuthorInfo from '@frontend/PostDetail/mobile/components/AuthorInfo';
-import { ProductDetailTitleBts } from '@frontend/CategoryPage/mobile/searchs/ProductCardV2';
+import { ProductDetailTitleBts } from '@app/(frontend)/_components/CategoryPage/mobile/ProductCardV2';
 import useModalPostDetail from '@frontend/PostDetail/hooks/useModalPostDetail';
 import { Product } from '../../data/schemas';
 import { cn } from '@common/utils';
