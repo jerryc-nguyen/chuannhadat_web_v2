@@ -8,42 +8,23 @@ import { FilterFieldName } from '@common/types';
 import { ChevronDown } from 'lucide-react';
 
 import empty_city from '@assets/images/empty-city.png';
-import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import useQueryPosts from '@frontend/features/search/hooks/useQueryPosts';
-
-import useLoadMissingAuthors from '@frontend/CategoryPage/hooks/useLoadMissingAuthors';
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import InfiniteProductLoaderMobile from './InfiniteProductLoaderMobile';
+import { IPostProductCard } from '../../states';
 
-// TODO: Move to views/home
+type PostListProps = {
+  dataPostList: IPostProductCard[];
+  filterParams: any;
+  currentPage: number;
+};
 
-export default function PostList() {
-  const router = useRouter();
-  const pathname = usePathname() || '';
-  const searchParams = useSearchParams();
-  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
-  const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
+export default function PostList({ dataPostList, filterParams, currentPage }: PostListProps) {
 
   const { openModal3, closeModals } = useModals();
-  const { buildFilterParams, selectedSortText, copyFilterStatesToLocal, applySortFilter } =
-    useFilterState();
+  const { selectedSortText, copyFilterStatesToLocal, applySortFilter } = useFilterState();
 
-  const filterParams = buildFilterParams({
-    withLocal: false,
-  });
-  filterParams.with_users = true;
-  filterParams.page = currentPage;
-  filterParams.per_page = 4; // ✅ Load 4 products initially for mobile
-
-  const { products, data, aggreations } = useQueryPosts(filterParams);
-
-  useLoadMissingAuthors(data);
-
-  if (aggreations) {
-    updateSearchAggs(aggreations);
-    setIsUseAggOptions(true);
-  }
+  // Use the passed data instead of fetching internally
+  const products = dataPostList;
 
   const onApplySort = useRefCallback(() => {
     applySortFilter();
@@ -65,7 +46,7 @@ export default function PostList() {
     });
   };
 
-  const EmptyPost = () => {
+  const _EmptyPost = () => {
     return (
       <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
         <Image className="w-full" src={empty_city} alt="no-notification" />
@@ -80,7 +61,7 @@ export default function PostList() {
   return (
     <div className="c-verticalPostList relative mx-auto w-full">
       <div className="flex items-center justify-between px-4 pb-4 pt-0">
-        <div className="text-secondary">Có {data?.pagination?.total_count} tin đăng</div>
+        <div className="text-secondary">Có {products?.length || 0} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">
             {selectedSortText || 'Sắp xếp'}
@@ -94,6 +75,9 @@ export default function PostList() {
         filterParams={filterParams}
         currentPage={currentPage}
       />
+
+      {/* Show empty state when no products found */}
+      {products && products.length === 0 && <_EmptyPost />}
     </div>
   );
 }

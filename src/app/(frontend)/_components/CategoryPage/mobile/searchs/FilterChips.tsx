@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import { FilterChipOption, FilterFieldName, OptionForSelect } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
-import { FilterChangeEvent } from './types/pure-ui-types';
-import FilterChipFactoryMobile from './FilterChipFactoryMobile';
+import { FilterState } from '@frontend/features/search/filter-conditions/types';
+import { FilterChangeEvent } from '@frontend/features/search/filters-v2/types/pure-ui-types';
+import FilterChipFactoryMobile from '@frontend/features/search/filters-v2/FilterChipFactoryMobile';
 import HorizontalScroller from '@components/mobile-ui/HorizontalScroller';
 
 type FilterChipsMobileProps = {
