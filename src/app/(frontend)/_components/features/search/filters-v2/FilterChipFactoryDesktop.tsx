@@ -1,5 +1,4 @@
 import React from 'react';
-import { searchApiV2 } from '@frontend/features/search/api/searchApi';
 import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
@@ -8,7 +7,6 @@ import FilterContentOptionsFactory from './components/FilterContentOptionsFactor
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
 import { useFilterOperation } from './hooks/useFilterOperation';
-import { useQuery } from '@tanstack/react-query';
 import {
   ArrowUp as SortUpIcon,
   Building,
@@ -16,8 +14,6 @@ import {
   X,
   DollarSign
 } from 'lucide-react';
-import { useFilterStatePresenter } from './hooks/useFilterStatePresenter';
-import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -38,17 +34,35 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 }) => {
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
-  const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
-  const { selectedFilterText, isActiveChip } = useFilterStatePresenter(selectedFilterState);
-
   const containerChipsRef = React.useRef(null);
+
+  // Use the extracted filter state operations hook
+  const {
+    localFilterState: _localFilterState,
+    setLocalFilterState,
+    currentFilterState,
+    selectedFilterText,
+    isActiveChip,
+    data,
+    isLoading,
+    handleLocalFilterChange,
+    handleLocalLocationChange,
+    onApplyFilter,
+    handleRemoveFilter,
+  } = useFilterOperation({
+    selectedFilterState,
+    onFieldChanged,
+    onClearFilter,
+    onFiltersChanged,
+    setIsOpenPopover,
+  });
 
   // Initialize local state from global state when dropdown opens
   React.useEffect(() => {
     if (isOpenPopover) {
       setLocalFilterState({ ...selectedFilterState });
     }
-  }, [isOpenPopover, selectedFilterState]);
+  }, [isOpenPopover, selectedFilterState, setLocalFilterState]);
 
   // Reset local state when dropdown closes without applying
   const handlePopoverOpenChange = (open: boolean) => {
@@ -58,40 +72,6 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
       setLocalFilterState({});
     }
   };
-
-  // Build filter params for API call
-  const currentFilterState = React.useMemo(() => {
-    // Only merge if localFilterState has actual values
-    if (Object.keys(localFilterState).length === 0) {
-      return selectedFilterState;
-    }
-    return { ...selectedFilterState, ...localFilterState };
-  }, [selectedFilterState, localFilterState]);
-
-  const filterParams = React.useMemo(() => {
-    return buildFriendlyParams(currentFilterState);
-  }, [currentFilterState]);
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['FooterBtsButton', filterParams],
-    queryFn: () => searchApiV2(filterParams),
-  });
-
-  // Use the extracted filter state operations hook
-  const {
-    handleLocalFilterChange,
-    handleLocalLocationChange,
-    onApplyFilter,
-    handleRemoveFilter,
-  } = useFilterOperation({
-    localFilterState,
-    setLocalFilterState,
-    selectedFilterState,
-    onFieldChanged,
-    onClearFilter,
-    onFiltersChanged,
-    setIsOpenPopover,
-  });
 
   const onRenderIconChip = (filterOption: FilterChipOption) => {
     switch (filterOption.id) {

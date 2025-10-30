@@ -9,12 +9,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 // Import components from the same feature folder
-import PostControlsV2 from './components/PostControlsV2';
 import PostList from './components/PostList';
 import { ListTopAuthor } from './components/ListTopAuthor';
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 import { useFilterStatePresenter } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterStatePresenter';
 import useQueryPostsV2 from '@app/(frontend)/_components/features/search/hooks/useQueryPostsV2';
+import FilterChipsDesktop from './components/FilterChips';
 
 const CategoryDesktopV2: React.FC = () => {
   useSyncParamsToState();
@@ -73,7 +73,7 @@ const CategoryDesktopV2: React.FC = () => {
       <h1 className="mb-4 text-2xl font-semibold text-primary">{data?.title}</h1>
       <ListTopAuthor />
 
-      <PostControlsV2
+      <FilterChipsDesktop
         className="w-[calc(100vw-8px)] -translate-x-5 px-5 md:-translate-x-10 md:px-10"
         chipOptions={filteredChipOptions}
         pagination={data?.pagination}

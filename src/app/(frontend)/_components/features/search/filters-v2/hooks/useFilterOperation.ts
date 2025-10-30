@@ -2,10 +2,12 @@ import React from 'react';
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { FilterChangeEvent } from '../types/pure-ui-types';
+import { useQuery } from '@tanstack/react-query';
+import { searchApiV2 } from '@frontend/features/search/api/searchApi';
+import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
+import { useFilterStatePresenter } from './useFilterStatePresenter';
 
 export interface UseFilterOperationProps {
-  localFilterState: FilterState;
-  setLocalFilterState: React.Dispatch<React.SetStateAction<FilterState>>;
   selectedFilterState: FilterState;
   onFieldChanged: (event: FilterChangeEvent) => void;
   onClearFilter: (filterFieldName: FilterFieldName) => void;
@@ -14,8 +16,6 @@ export interface UseFilterOperationProps {
 }
 
 export const useFilterOperation = ({
-  localFilterState,
-  setLocalFilterState,
   selectedFilterState,
   onFieldChanged,
   onClearFilter,
@@ -23,13 +23,38 @@ export const useFilterOperation = ({
   setIsOpenPopover,
 }: UseFilterOperationProps) => {
 
+  // Local filter state management
+  const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
+  
+  // Filter state presenter
+  const { selectedFilterText, isActiveChip } = useFilterStatePresenter(selectedFilterState);
+
+  // Build filter params for API call
+  const currentFilterState = React.useMemo(() => {
+    // Only merge if localFilterState has actual values
+    if (Object.keys(localFilterState).length === 0) {
+      return selectedFilterState;
+    }
+    return { ...selectedFilterState, ...localFilterState };
+  }, [selectedFilterState, localFilterState]);
+
+  const filterParams = React.useMemo(() => {
+    return buildFriendlyParams(currentFilterState);
+  }, [currentFilterState]);
+
+  // API query
+  const { data, isLoading } = useQuery({
+    queryKey: ['FooterBtsButton', filterParams],
+    queryFn: () => searchApiV2(filterParams),
+  });
+
   // Handle local filter changes within the dropdown
   const handleLocalFilterChange = React.useCallback((fieldName: FilterFieldName, value: OptionForSelect | undefined) => {
-    setLocalFilterState(prev => ({
+    setLocalFilterState((prev: FilterState) => ({
       ...prev,
       [fieldName]: value
     }));
-  }, [setLocalFilterState]);
+  }, []);
 
   // Handle local location changes within the dropdown
   const handleLocalLocationChange = React.useCallback((location: {
@@ -37,11 +62,11 @@ export const useFilterOperation = ({
     district?: OptionForSelect;
     ward?: OptionForSelect;
   }) => {
-    setLocalFilterState(prev => ({
+    setLocalFilterState((prev: FilterState) => ({
       ...prev,
       ...location
     }));
-  }, [setLocalFilterState]);
+  }, []);
 
   // Apply filter with composite filter logic
   const onApplyFilter = React.useCallback((filterChipItem: FilterChipOption) => {
@@ -142,6 +167,20 @@ export const useFilterOperation = ({
   }, [selectedFilterState, onClearFilter, onFiltersChanged]);
 
   return {
+    // Filter state management
+    localFilterState,
+    setLocalFilterState,
+    currentFilterState,
+    
+    // Filter state presenter
+    selectedFilterText,
+    isActiveChip,
+    
+    // API data
+    data,
+    isLoading,
+    
+    // Filter operations
     handleLocalFilterChange,
     handleLocalLocationChange,
     onApplyFilter,

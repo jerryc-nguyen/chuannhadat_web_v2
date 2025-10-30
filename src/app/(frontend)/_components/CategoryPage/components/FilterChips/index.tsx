@@ -5,7 +5,7 @@ import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/searc
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 
-type PostControlsV2Props = {
+type FilterChipsDesktopProps = {
   chipOptions: FilterChipOption[];
   pagination: IPagination;
   isShowListChips?: boolean;
@@ -14,7 +14,7 @@ type PostControlsV2Props = {
   filterState?: FilterState;
 };
 
-const PostControlsV2: React.FC<PostControlsV2Props> = ({
+const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   chipOptions = [],
   pagination,
   isShowListChips = true,
@@ -57,4 +57,4 @@ const PostControlsV2: React.FC<PostControlsV2Props> = ({
     </div>
   );
 };
-export default PostControlsV2;
+export default FilterChipsDesktop;
