@@ -14,7 +14,6 @@ import PostList from './components/PostList';
 import { ListTopAuthor } from './components/ListTopAuthor';
 import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 import { useFilterStatePresenter } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterStatePresenter';
-import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 import useQueryPostsV2 from '@app/(frontend)/_components/features/search/hooks/useQueryPostsV2';
 
 const CategoryDesktopV2: React.FC = () => {
@@ -30,7 +29,7 @@ const CategoryDesktopV2: React.FC = () => {
     filterState,
   } = useFilterState();
 
-  const { friendlyParams, syncSelectedParamsToUrl } = useFilterStatePresenter(filterState);
+  const { friendlyParams } = useFilterStatePresenter(filterState);
 
   const APIFilterParams = useMemo(() => {
     return {
@@ -48,13 +47,13 @@ const CategoryDesktopV2: React.FC = () => {
   // Filter chips based on current filter state using the new pure UI approach
   const { filteredChipOptions } = useFilterChipsUI(listFilterDesktop);
 
-  const handleFilterChange = React.useCallback((newFilterState: Record<string, any>) => {
-    console.log('Filter changed:', newFilterState);
-    const newParams = buildFriendlyParams(newFilterState);
-    console.log('New params:', newParams);
-    syncSelectedParamsToUrl(newFilterState);
+  // const handleFilterChange = React.useCallback((newFilterState: Record<string, any>) => {
+  //   console.log('Filter changed:', newFilterState);
+  //   const newParams = buildFriendlyParams(newFilterState);
+  //   console.log('New params:', newParams);
+  //   syncSelectedParamsToUrl(newFilterState);
 
-  }, [syncSelectedParamsToUrl]);
+  // }, [syncSelectedParamsToUrl]);
 
   const _EmptyPost = () => {
     return (
@@ -78,7 +77,6 @@ const CategoryDesktopV2: React.FC = () => {
         className="w-[calc(100vw-8px)] -translate-x-5 px-5 md:-translate-x-10 md:px-10"
         chipOptions={filteredChipOptions}
         pagination={data?.pagination}
-        onFiltersChanged={handleFilterChange}
       />
 
       <PostList

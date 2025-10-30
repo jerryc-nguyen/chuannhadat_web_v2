@@ -8,6 +8,13 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import { ONE_BILLION } from './constants';
 
+/**
+ * Check if a value is blank (undefined, null, or empty string).
+ */
+export function isBlank(value: unknown): value is undefined | null | "" {
+  return value === undefined || value === null || value === "";
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

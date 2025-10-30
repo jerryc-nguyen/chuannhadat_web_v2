@@ -3,8 +3,6 @@ import { FilterChipOption, FilterFieldName } from '@common/types';
 import { FilterState } from '../../filter-conditions/types';
 import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
-import useSearchScope, { SearchScopeEnums } from '@app/(frontend)/_components/features/search/hooks/useSearchScope';
-import { searchApiV2 } from '@app/(frontend)/_components/features/search/api/searchApi';
 
 /**
  * Presenter hook that provides common UI text and state checking functions
@@ -15,7 +13,6 @@ import { searchApiV2 } from '@app/(frontend)/_components/features/search/api/sea
  */
 export function useFilterStatePresenter(filterState: FilterState) {
   const { selectedLocationText } = useFilterLocations();
-  const { searchScope } = useSearchScope();
 
   /**
    * Gets the display text for a filter chip based on current filter state
@@ -91,23 +88,12 @@ export function useFilterStatePresenter(filterState: FilterState) {
     return buildFriendlyParams(filterState);
   }, [filterState]);
 
-  const syncSelectedParamsToUrl = async (filterParams: Record<string, A>) => {
-    // disable auto sync state to url for manage post page
-    if (searchScope !== SearchScopeEnums.Category) {
-      return;
-    }
 
-    const queryOptions = buildFriendlyParams(filterParams);
-    const response = await searchApiV2({ ...queryOptions, only_url: 'true' });
-    const { listing_url } = response;
-    window.history.pushState({}, '', listing_url);
-  };
 
   return {
     selectedFilterText,
     selectedRoomText,
     isActiveChip,
-    friendlyParams,
-    syncSelectedParamsToUrl
+    friendlyParams
   };
 }

@@ -7,6 +7,8 @@ import {
 } from '../../filter-conditions/states';
 import { FilterState } from '../../filter-conditions/types';
 import { FilterChangeEvent, FilterClearEvent } from '../types/pure-ui-types';
+import { useSyncFilterParamsToUrl } from './useSyncFilterParamsToUrl';
+import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 
 /**
  * State manager hook that provides a clean interface between pure UI components and global state
@@ -16,6 +18,7 @@ import { FilterChangeEvent, FilterClearEvent } from '../types/pure-ui-types';
 export function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
+  const { syncCategoryParamsToUrl } = useSyncFilterParamsToUrl();
 
   // Memoized derived state
   const hasActiveFilters = useMemo(() => {
@@ -75,6 +78,11 @@ export function useFilterState() {
       ...prev,
       ...updateValues,
     }));
+
+    const newFilterState = { ...filterState, ...updateValues }
+    const queryParams = buildFriendlyParams(newFilterState);
+    syncCategoryParamsToUrl(queryParams);
+    return newFilterState;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterState]);
 
@@ -166,32 +174,6 @@ export function useFilterState() {
     return filterState[fieldName];
   }, [filterState]);
 
-  const isFilterActive = useCallback((fieldName: FilterFieldName) => {
-    const value = filterState[fieldName];
-
-    switch (fieldName) {
-      case FilterFieldName.Locations:
-      case FilterFieldName.ProfileLocations:
-        return !!(filterState.city || filterState.district || filterState.ward);
-      case FilterFieldName.Rooms:
-        return !!(filterState.bed || filterState.bath);
-      case FilterFieldName.AggProjects:
-        return !!(filterState.aggProjects || filterState.project);
-      default:
-        return !!(value && value.value !== 'all' && value.value !== undefined);
-    }
-  }, [filterState]);
-
-  const setFilterValues = (filters?: FilterState) => {
-    const allFilterState = {
-      ...filterState,
-      ...filters,
-    };
-
-    setFilterState(allFilterState);
-    return allFilterState;
-  };
-
   return {
     // State
     filterState,
@@ -206,8 +188,6 @@ export function useFilterState() {
     onClearAllFilters: handleClearAllFilters,
 
     // Utility functions
-    getFilterValue,
-    isFilterActive,
-    setFilterValues
+    getFilterValue
   };
 }
