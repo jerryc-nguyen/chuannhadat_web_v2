@@ -25,7 +25,7 @@ export const useFilterOperation = ({
 
   // Local filter state management
   const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
-  
+
   // Filter state presenter
   const { selectedFilterText, isActiveChip } = useFilterStatePresenter(selectedFilterState);
 
@@ -43,10 +43,13 @@ export const useFilterOperation = ({
   }, [currentFilterState]);
 
   // API query
-  const { data, isLoading } = useQuery({
+  const { data, isLoading: isPreviewLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],
     queryFn: () => searchApiV2(filterParams),
   });
+
+  // Extract preview count from current data
+  const previewCount = data?.pagination?.total_count || 0;
 
   // Handle local filter changes within the dropdown
   const handleLocalFilterChange = React.useCallback((fieldName: FilterFieldName, value: OptionForSelect | undefined) => {
@@ -171,15 +174,18 @@ export const useFilterOperation = ({
     localFilterState,
     setLocalFilterState,
     currentFilterState,
-    
+
     // Filter state presenter
     selectedFilterText,
     isActiveChip,
-    
+
     // API data
     data,
-    isLoading,
-    
+    isPreviewLoading,
+
+    // Preview data
+    previewCount,
+
     // Filter operations
     handleLocalFilterChange,
     handleLocalLocationChange,

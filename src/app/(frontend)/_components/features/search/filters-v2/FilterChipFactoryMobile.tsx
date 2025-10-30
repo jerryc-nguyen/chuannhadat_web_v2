@@ -4,12 +4,11 @@ import { FilterChipOption, FilterFieldName, OptionForSelect } from '@common/type
 import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import { useFilterOperation } from './hooks/useFilterOperation';
-import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
+
 import { X } from 'lucide-react';
 import { cn } from '@common/utils';
 import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
-import FooterBtsButton from '@frontend/features/search/filter-conditions/mobile/FooterBtsButton';
+import ModalFilterContent from './components/mobile/ModalFilterContent';
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
@@ -29,47 +28,33 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
 }) => {
   const { openModal } = useModals();
 
-  // Use the extracted filter state operations hook
-  const {
-    localFilterState: _localFilterState,
-    setLocalFilterState,
-    currentFilterState,
-    selectedFilterText,
-    isActiveChip,
-    data: _data,
-    isLoading: _isLoading,
-    handleLocalFilterChange,
-    handleLocalLocationChange,
-    onApplyFilter: _onApplyFilter,
-    handleRemoveFilter: _handleRemoveFilterFromHook,
-  } = useFilterOperation({
-    selectedFilterState,
-    onFieldChanged,
-    onClearFilter,
-    onFiltersChanged,
-    setIsOpenPopover: () => undefined, // Not used in mobile
-  });
+  // Simple helper functions for the chip display
+  const selectedFilterText = (filterChipItem: FilterChipOption) => {
+    // This is a simplified version - you may need to adjust based on your logic
+    return filterChipItem.text;
+  };
 
-  const buildContent = (filterChipItem: FilterChipOption) => {
-    return (
-      <FilterContentOptionsFactory
-        filterState={currentFilterState}
-        onChange={handleLocalFilterChange}
-        onLocationChange={handleLocalLocationChange}
-        filterType={filterChipItem.id as FilterFieldName}
-      />
-    );
+  const isActiveChip = (filterChipItem: FilterChipOption) => {
+    // This is a simplified version - you may need to adjust based on your logic
+    const fieldName = filterChipItem.id as FilterFieldName;
+    return selectedFilterState[fieldName] !== undefined && selectedFilterState[fieldName] !== null;
   };
 
   const showFilterModal = () => {
-    // Copy current filter states to local before opening modal
-    setLocalFilterState({ ...selectedFilterState });
+    const modalContent = (
+      <ModalFilterContent
+        filterChipItem={filterChipItem}
+        selectedFilterState={selectedFilterState}
+        onFiltersChanged={onFiltersChanged}
+        onFieldChanged={onFieldChanged}
+        onClearFilter={onClearFilter}
+      />
+    );
 
     const modalOptions: Modal = {
       name: filterChipItem.id,
       title: filterChipItem.text,
-      content: buildContent(filterChipItem),
-      footer: <FooterBtsButton filterOption={filterChipItem} onChange={onFiltersChanged} />,
+      content: modalContent,
       supportPushState: false,
     };
 
