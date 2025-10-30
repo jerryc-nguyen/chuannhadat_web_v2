@@ -8,6 +8,8 @@ import RangeFilter from './RangeFilter';
 import RoomFilter from './RoomFilter';
 import useFilterOptions from '../hooks/useFilterOptions';
 import { formatPriceFilterChip, formatRangeText, formatAreaText } from '@common/utils';
+import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
+import useMainContentNavigator from '@app/(frontend)/_components/features/navigation/main-content-navigator/hooks';
 
 interface FilterContentOptionsFactoryProps {
   /** Current filter state */
@@ -56,6 +58,7 @@ export default function FilterContentOptionsFactory({
 }: FilterContentOptionsFactoryProps) {
   // Use the hook to get filter options
   const { getOptionsForField } = useFilterOptions();
+  const { extraParams: mainLocationParams } = useMainContentNavigator();
 
   // Helper to get current value for a field
   const getValue = (fieldName: FilterFieldName) => {
@@ -216,11 +219,10 @@ export default function FilterContentOptionsFactory({
 
     case FilterFieldName.Project:
       return (
-        <SelectFilter
+        <ProjectPicker
           value={getValue(FilterFieldName.Project)}
-          options={propFilterOptions || getOptionsForField(FilterFieldName.Project)}
-          onValueChange={handleChange(FilterFieldName.Project)}
-          isLoading={loading.project}
+          onSelect={handleChange(FilterFieldName.Project)}
+          extraParams={mainLocationParams}
         />
       );
 
