@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { FilterChipOption, FilterFieldName } from '@common/types';
-import { FilterState } from '../../filter-conditions/types';
+import { FilterState } from '../../types';
 import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
 

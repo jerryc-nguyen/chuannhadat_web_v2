@@ -1,6 +1,6 @@
 import React from 'react';
 import { FilterChipOption, FilterFieldName } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from '../../types/pure-ui-types';
 import { useFilterOperation } from '../../hooks/useFilterOperation';
 import FilterContentOptionsFactory from '../FilterContentOptionsFactory';

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { defaultListFilterOptions } from '../constants';
-import { FilterFieldOptions, FilterState } from '../types';
+import { FilterFieldOptions, FilterState } from '../../types';
 
 export const openFilterModalAtom = atom(false);
 export const locationsAtom = atom(false);

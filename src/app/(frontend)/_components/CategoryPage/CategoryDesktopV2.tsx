@@ -4,6 +4,7 @@ import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncPar
 import { listFilterDesktop } from './constants';
 import { useFilterState } from '@frontend/features/search/filters-v2/hooks/useFilterState';
 import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChipsUI';
+import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -28,6 +29,12 @@ const CategoryDesktopV2: React.FC = () => {
   const {
     filterState,
   } = useFilterState();
+
+  // Get aggregation data for filters
+  const {
+    busCatTypeOptions,
+    locationsList
+  } = useSearchAggs();
 
   const { friendlyParams } = useFilterStatePresenter(filterState);
 
@@ -77,6 +84,10 @@ const CategoryDesktopV2: React.FC = () => {
         className="w-[calc(100vw-8px)] -translate-x-5 px-5 md:-translate-x-10 md:px-10"
         chipOptions={filteredChipOptions}
         pagination={data?.pagination}
+        aggregationData={{
+          busCatTypeOptions,
+          locationsList
+        }}
       />
 
       <PostList

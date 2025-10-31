@@ -1,5 +1,5 @@
 import { FilterFieldName, OptionForSelect } from '@common/types';
-import { FilterState } from '../../filter-conditions/types';
+import { FilterState, AggregationData } from '../../types';
 import SelectFilter from './SelectFilter';
 import ChipFilter from './ChipFilter';
 import BusinessTypeButtons from './BusinessTypeButtons';
@@ -10,6 +10,7 @@ import useFilterOptions from '../hooks/useFilterOptions';
 import { formatPriceFilterChip, formatRangeText, formatAreaText } from '@common/utils';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 import useMainContentNavigator from '@app/(frontend)/_components/features/navigation/main-content-navigator/hooks';
+import AggLocationsFilter from '@app/(frontend)/_components/features/search/filters-v2/components/AggLocationsFilter';
 
 interface FilterContentOptionsFactoryProps {
   /** Current filter state */
@@ -30,6 +31,8 @@ interface FilterContentOptionsFactoryProps {
   };
   /** Which filter to render */
   filterType: FilterFieldName;
+  /** Aggregation data from useSearchAggs (for pure UI) */
+  aggregationData?: AggregationData;
 }
 
 /**
@@ -55,9 +58,25 @@ export default function FilterContentOptionsFactory({
   onLocationChange,
   loading = {},
   filterType,
+  aggregationData = {},
 }: FilterContentOptionsFactoryProps) {
   // Use the hook to get filter options
   const { getOptionsForField } = useFilterOptions();
+
+  // Use aggregation data for specific filter types, otherwise use provided options or hook options
+  const getFilterOptions = (): OptionForSelect[] => {
+    switch (filterType) {
+      case FilterFieldName.BusCatType:
+        return aggregationData.busCatTypeOptions || propFilterOptions || getOptionsForField(FilterFieldName.BusCatType);
+      case FilterFieldName.ProfileLocations:
+        // For locations, we'll handle this in the location-specific components
+        return propFilterOptions || getOptionsForField(filterType);
+      default:
+        return propFilterOptions || getOptionsForField(filterType);
+    }
+  };
+
+  const filterOptions = getFilterOptions();
   const { extraParams: mainLocationParams } = useMainContentNavigator();
 
   // Helper to get current value for a field
@@ -85,7 +104,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.BusCatType)}
-          options={propFilterOptions || getOptionsForField(FilterFieldName.BusCatType)}
+          options={filterOptions}
           onValueChange={handleChange(FilterFieldName.BusCatType)}
           isLoading={loading.busCatType}
         />
@@ -115,7 +134,7 @@ export default function FilterContentOptionsFactory({
       return (
         <SelectFilter
           value={getValue(FilterFieldName.AggProjects) || getValue(FilterFieldName.Project)}
-          options={propFilterOptions || getOptionsForField(FilterFieldName.AggProjects)}
+          options={aggregationData.projectsOptions || propFilterOptions || getOptionsForField(FilterFieldName.AggProjects)}
           onValueChange={handleChange(FilterFieldName.AggProjects)}
           isLoading={loading.aggProjects}
         />
@@ -228,13 +247,13 @@ export default function FilterContentOptionsFactory({
 
     case FilterFieldName.ProfileLocations:
       return (
-        <LocationFilter
+        <AggLocationsFilter
           city={getValue(FilterFieldName.City)}
           district={getValue(FilterFieldName.District)}
           ward={getValue(FilterFieldName.Ward)}
           cityOptions={getOptionsForField(FilterFieldName.City)}
-          districtOptions={getOptionsForField(FilterFieldName.District)}
-          wardOptions={getOptionsForField(FilterFieldName.Ward)}
+          districtOptions={aggregationData.locationsList?.districtOptions || getOptionsForField(FilterFieldName.District)}
+          wardOptions={aggregationData.locationsList?.wardOptions || getOptionsForField(FilterFieldName.Ward)}
           onLocationChange={onLocationChange}
           loading={{
             cities: loading.cities,

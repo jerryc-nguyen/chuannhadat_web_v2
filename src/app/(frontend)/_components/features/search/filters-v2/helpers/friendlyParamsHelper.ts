@@ -1,5 +1,5 @@
 import { OptionForSelect } from '@common/types';
-import { FilterState } from '../../filter-conditions/types';
+import { FilterState } from '../../types';
 
 export const FRIENDLY_VALUES = {
   sell: 'mua_ban',

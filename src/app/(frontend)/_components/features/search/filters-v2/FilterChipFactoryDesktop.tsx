@@ -4,7 +4,7 @@ import { Button } from '@components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
 import { FilterChipOption, FilterFieldName } from '@common/types';
 import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
-import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
 import { useFilterOperation } from './hooks/useFilterOperation';
 import {
@@ -21,7 +21,9 @@ export type FilterChipProps = {
   onFiltersChanged?: (filterState: FilterState) => void;
   // Functions from useFilterState hook
   onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void
+  onClearFilter: (filterFieldName: FilterFieldName) => void;
+  // Aggregation data from useSearchAggs (for pure UI)
+  aggregationData?: AggregationData;
 };
 
 const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
@@ -30,6 +32,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   onFiltersChanged,
   onFieldChanged,
   onClearFilter,
+  aggregationData = {},
 }) => {
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
@@ -151,6 +154,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
               onChange={handleLocalFilterChange}
               onLocationChange={handleLocalLocationChange}
               filterType={filterChipItem.id}
+              aggregationData={aggregationData}
             />
           </section>
           <Button disabled={isPreviewLoading} className="w-full" onClick={() => onApplyFilter(filterChipItem)}>

@@ -30,6 +30,22 @@ export interface FilterFieldOptions {
 }
 
 /**
+ * Aggregation data from useSearchAggs hook for dynamic filter options
+ */
+export interface AggregationData {
+  busCatTypeOptions?: OptionForSelect[];
+  locationsList?: {
+    districtOptions: OptionForSelect[];
+    wardOptions: OptionForSelect[];
+  };
+  projectsOptions?: OptionForSelect[];
+  directionsOptions?: OptionForSelect[];
+  priceOptions?: OptionForSelect[];
+  areasOptions?: OptionForSelect[];
+  isUseAggOptions?: boolean;
+}
+
+/**
  * Parameter constants for API query strings
  */
 export const PARAM_BUSINESS_TYPE = 'business_type';

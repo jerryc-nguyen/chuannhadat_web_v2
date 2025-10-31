@@ -5,7 +5,7 @@ import {
   filterStateAtom,
   filterFieldOptionsAtom,
 } from '../../filter-conditions/states';
-import { FilterState } from '../../filter-conditions/types';
+import { FilterState } from '../../types';
 import { FilterChangeEvent, FilterClearEvent } from '../types/pure-ui-types';
 import { useSyncFilterParamsToUrl } from './useSyncFilterParamsToUrl';
 import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';

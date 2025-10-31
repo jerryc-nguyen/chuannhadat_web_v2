@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@components/ui/button';
 import { FilterChipOption, FilterFieldName } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 

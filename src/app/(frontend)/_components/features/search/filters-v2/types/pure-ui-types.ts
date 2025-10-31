@@ -1,5 +1,5 @@
 import { OptionForSelect, FilterFieldName } from '@common/types';
-import { FilterState, FilterFieldOptions } from '../../filter-conditions/types';
+import { FilterState, FilterFieldOptions } from '../../types';
 
 /**
  * Props for pure UI filter components

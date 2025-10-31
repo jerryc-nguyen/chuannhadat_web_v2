@@ -1,6 +1,6 @@
 import React from 'react';
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from '../types/pure-ui-types';
 import { useQuery } from '@tanstack/react-query';
 import { searchApiV2 } from '@frontend/features/search/api/searchApi';

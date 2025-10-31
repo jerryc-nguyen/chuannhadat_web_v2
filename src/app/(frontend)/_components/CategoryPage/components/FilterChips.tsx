@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@common/utils';
 import { FilterChipOption, IPagination } from '@common/types';
 import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryDesktop';
-import { FilterState } from '@app/(frontend)/_components/features/search/filter-conditions/types';
+import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 
 type FilterChipsDesktopProps = {
@@ -12,6 +12,7 @@ type FilterChipsDesktopProps = {
   className?: string;
   onFiltersChanged?: (filterState: FilterState) => void;
   filterState?: FilterState;
+  aggregationData?: AggregationData;
 };
 
 const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
@@ -19,7 +20,8 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   pagination,
   isShowListChips = true,
   className,
-  onFiltersChanged
+  onFiltersChanged,
+  aggregationData
 }) => {
   // Use the filter state hook to get the required functions
   const {
@@ -48,6 +50,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
               onFiltersChanged={onFiltersChanged}
               onFieldChanged={onFieldChanged}
               onClearFilter={onClearFilter}
+              aggregationData={aggregationData}
             />
           ))}
         </div>

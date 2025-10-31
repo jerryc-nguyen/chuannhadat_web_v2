@@ -6,18 +6,17 @@ import styles from './styles/profile-detail.module.scss';
 import { searchApi } from '@frontend/features/search/api/searchApi';
 import { profilesApi } from './api/profiles';
 import NotFound from '@app/not-found';
-import empty_city from '@assets/images/empty-city.png';
 import { filterChipOptionsByAggregations } from '@common/filterHelpers';
 import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
-import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
+import { useFilterState } from '@frontend/features/search/filters-v2/hooks/useFilterState';
+import { useFilterStatePresenter } from '@frontend/features/search/filters-v2/hooks/useFilterStatePresenter';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import PostControls from '@frontend/CategoryPage/components/PostControls';
+import FilterChipsDesktop from '@frontend/CategoryPage/components/FilterChips';
 import PostList from '@frontend/CategoryPage/components/PostList';
 
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
@@ -27,9 +26,14 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
   useSyncParamsToState();
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-  const { updateValues, resetLocations } = useMainContentNavigator();
-
-  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+  const { resetLocations } = useMainContentNavigator();
+  const {
+    updateSearchAggs,
+    setIsUseAggOptions,
+    busCatTypeOptions,
+    locationsList,
+    projectsOptions
+  } = useSearchAggs();
 
   // Reset locations when the component mounts
   useEffect(() => {
@@ -42,20 +46,25 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     select: (data) => data.data,
   });
 
-  const { buildFilterParams, applyAllFilters } = useFilterState();
-  const filterParams = buildFilterParams({ withLocal: false });
+  // Use the new v2 filter state management
+  const { filterState } = useFilterState();
+  const { friendlyParams } = useFilterStatePresenter(filterState);
+
+  const APIFilterParams = useMemo(() => {
+    return {
+      ...friendlyParams,
+      page: currentPage,
+      per_page: 9, // ✅ Load 9 products initially for better performance
+      author_slug: profileSlug,
+      aggs_for: 'profile',
+    };
+  }, [friendlyParams, currentPage, profileSlug]);
+
   const {
     data: { data: products, pagination, aggs: aggreations },
   } = useSuspenseQuery({
-    queryKey: ['profile-post', { filterParams, profileSlug }, currentPage],
-    queryFn: () =>
-      searchApi({
-        ...filterParams,
-        page: currentPage,
-        per_page: 9, // ✅ Load 8 products initially for better performance
-        author_slug: profileSlug,
-        aggs_for: 'profile',
-      }),
+    queryKey: ['profile-post', { filterParams: APIFilterParams, profileSlug }, currentPage],
+    queryFn: () => searchApi(APIFilterParams),
   });
 
   useEffect(() => {
@@ -70,29 +79,6 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
     return filterChipOptionsByAggregations(listFilterProfileDesktop, aggreations);
   }, [aggreations]);
 
-  const onFilterChanged = (filterState: Record<string, A>) => {
-    updateValues({
-      city: filterState.city,
-      district: filterState.district,
-      ward: filterState.ward
-    });
-
-    applyAllFilters(filterState);
-  };
-
-  const EmptyPost = () => {
-    return (
-      <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
-        <Image className="w-full md:w-1/2" src={empty_city} alt="no-notification" />
-        <h3 className="text-lg font-bold">Không tìm thấy nội dung</h3>
-        <p className="mt-2 w-3/4 text-center text-sm text-foreground">
-          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều
-          kiện khác.
-        </p>
-      </section>
-    );
-  };
-
   return (
     <>
       {!profileData ? (
@@ -104,24 +90,24 @@ const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug
             <ProfileInfo profileData={profileData} />
             <div className="relative flex-1">
               <h2 className="text-2xl font-bold">Tin đã đăng</h2>
-              <PostControls
+              <FilterChipsDesktop
                 className="mx-1"
                 chipOptions={filteredChipOptions}
                 pagination={pagination}
-                onFilterChange={onFilterChanged}
+                aggregationData={{
+                  busCatTypeOptions,
+                  locationsList,
+                  projectsOptions
+                }}
               />
               <PostList
                 className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
                 dataPostList={products}
                 isShowAuthor={false}
-                filterParams={{
-                  ...filterParams,
-                  author_slug: profileSlug,
-                  aggs_for: 'profile',
-                }}
+                filterParams={APIFilterParams}
                 currentPage={currentPage}
               />
-              {/* Pagination removed - will be replaced with infinite scroll */}
+
             </div>
           </div>
         </section>
