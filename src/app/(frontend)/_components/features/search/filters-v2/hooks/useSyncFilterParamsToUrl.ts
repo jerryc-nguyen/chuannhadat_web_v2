@@ -11,16 +11,19 @@ import { filterFields } from '../helpers/filterFieldsHelper';
 export function useSyncFilterParamsToUrl() {
   const { searchScope } = useSearchScope();
 
-  const syncCategoryParamsToUrl = useCallback(async (filterParams: Record<string, any>) => {
-    // disable auto sync state to url for manage post page
-    if (searchScope !== SearchScopeEnums.Category) {
-      return;
-    }
-
+  const forCategoryPage = async (filterParams: Record<string, any>) => {
     const response = await buildSeoListingUrl({ ...filterParams });
     const { url, path_included } = response?.data || {};
     const filteredParams = filterFields(filterParams, path_included || [])
     window.history.pushState({}, '', buildUrl(url, filteredParams));
+  }
+  const syncCategoryParamsToUrl = useCallback(async (filterParams: Record<string, any>) => {
+    // disable auto sync state to url for manage post page
+    if (searchScope === SearchScopeEnums.Category) {
+      await forCategoryPage(filterParams);
+    } else {
+      window.history.pushState({}, '', buildUrl(window.location.pathname, filterParams));
+    }
   }, [searchScope]);
 
   return {

@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 import { businessTypeFilterAtom, categoryTypeFilterAtom } from '../states/mapAtoms';
-import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
+import { businessTypesOptions, categoryTypesOptions } from '@app/(frontend)/_components/features/search/filters-v2/constants';
 
 interface FilterLabel {
   value: string;

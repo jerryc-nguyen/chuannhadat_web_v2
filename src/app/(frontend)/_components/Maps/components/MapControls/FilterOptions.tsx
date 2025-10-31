@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { Briefcase, Banknote, ChevronDown, X } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { useClickOutside } from '@common/hooks/useClickOutside';
-import { businessTypesOptions, categoryTypesOptions } from '@frontend/features/search/filter-conditions/constants';
+import { businessTypesOptions, categoryTypesOptions } from '@app/(frontend)/_components/features/search/filters-v2/constants';
 import { Z_INDEX } from '../../constants';
 
 interface FilterOptionsProps {

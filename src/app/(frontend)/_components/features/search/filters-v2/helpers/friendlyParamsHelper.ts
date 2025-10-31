@@ -1,5 +1,6 @@
 import { OptionForSelect } from '@common/types';
 import { FilterState } from '../../types';
+import { categoryTypesOptions } from '../constants';
 
 export const FRIENDLY_VALUES = {
   sell: 'mua_ban',
@@ -15,6 +16,10 @@ export const FRIENDLY_VALUES = {
   full_furniture: 'noi_that_day_du',
   basic_furniture: 'hoan_thien_co_ban',
   unfinished_furniture: 'ban_giao_tho',
+  // Category types from categoryTypesOptions
+  ...Object.fromEntries(
+    categoryTypesOptions.map(option => [option.value, option.value])
+  ),
 }
 
 export const FRIENDLY_FIELDS: Array<string> = [
@@ -172,8 +177,10 @@ export function buildDirectionParam(filterState: FilterState): string | undefine
  * Builds business type parameter from filter state
  */
 export function buildBusinessTypeParam(filterState: FilterState): string | undefined {
-  if (filterState.businessType?.value && filterState.businessType.value !== 'all') {
-    return FRIENDLY_VALUES[filterState.businessType.value as keyof typeof FRIENDLY_VALUES];
+  const businessType = filterState.busCatType?.params?.business_type || filterState.businessType?.value
+
+  if (businessType && businessType !== 'all') {
+    return FRIENDLY_VALUES[businessType as keyof typeof FRIENDLY_VALUES];
   }
   return undefined;
 }
@@ -182,8 +189,10 @@ export function buildBusinessTypeParam(filterState: FilterState): string | undef
  * Builds category type parameter from filter state
  */
 export function buildCategoryTypeParam(filterState: FilterState): string | undefined {
-  if (filterState.categoryType?.value && filterState.categoryType.value !== 'all') {
-    return filterState.categoryType.value as string;
+  const categoryType = filterState.busCatType?.params?.category_type || filterState.categoryType?.value
+
+  if (categoryType && categoryType !== 'all') {
+    return FRIENDLY_VALUES[categoryType as keyof typeof FRIENDLY_VALUES];
   }
   return undefined;
 }

@@ -8,7 +8,7 @@ import {
   directionsOptions,
   sellPricesOptions,
   areasOptions
-} from '@app/(frontend)/_components/features/search/filter-conditions/constants';
+} from '@app/(frontend)/_components/features/search/filters-v2/constants';
 
 /**
  * Hook to manage filter options for v2 filters
@@ -71,48 +71,48 @@ export default function useFilterOptions({ dynamicOptions = {} }: UseFilterOptio
     switch (fieldName) {
       case FilterFieldName.BusinessType:
         return filterFieldOptions.businessTypeOptions;
-      
+
       case FilterFieldName.CategoryType:
         return filterFieldOptions.categoryTypeOptions;
-      
+
       case FilterFieldName.Bed:
         return filterFieldOptions.bedOptions;
-      
+
       case FilterFieldName.Bath:
         return filterFieldOptions.bathOptions;
-      
+
       case FilterFieldName.Rooms:
         return filterFieldOptions.roomOptions;
-      
+
       case FilterFieldName.Direction:
         return filterFieldOptions.directionOptions;
-      
+
       case FilterFieldName.Price:
         return filterFieldOptions.priceOptions;
-      
+
       case FilterFieldName.Area:
         return filterFieldOptions.areaOptions;
-      
+
       case FilterFieldName.Sort:
         return filterFieldOptions.sortOptions;
-      
+
       // Dynamic options
       case FilterFieldName.Project:
       case FilterFieldName.AggProjects:
         return dynamicOptions.projects || [];
-      
+
       case FilterFieldName.City:
         return dynamicOptions.cities || [];
-      
+
       case FilterFieldName.District:
         return dynamicOptions.districts || [];
-      
+
       case FilterFieldName.Ward:
         return dynamicOptions.wards || [];
-      
+
       case FilterFieldName.BusCatType:
         return dynamicOptions.busCatTypes || [];
-      
+
       default:
         return [];
     }
@@ -121,13 +121,13 @@ export default function useFilterOptions({ dynamicOptions = {} }: UseFilterOptio
   return {
     /** All static filter field options */
     filterFieldOptions,
-    
+
     /** Get options for a specific filter field */
     getOptionsForField,
-    
+
     /** Dynamic options passed from parent */
     dynamicOptions,
-    
+
     /** Check if options are available for a field */
     hasOptionsForField: (fieldName: FilterFieldName) => {
       return getOptionsForField(fieldName).length > 0;
