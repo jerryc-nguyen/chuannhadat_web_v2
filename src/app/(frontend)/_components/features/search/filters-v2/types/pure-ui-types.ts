@@ -141,13 +141,3 @@ export type FilterChangeEvent = {
   previousValue?: OptionForSelect;
   params?: Record<string, any>;
 };
-
-export type FilterApplyEvent = {
-  filterState: FilterState;
-  changedFields: FilterFieldName[];
-};
-
-export type FilterClearEvent = {
-  fieldName: FilterFieldName;
-  previousValue?: OptionForSelect;
-};

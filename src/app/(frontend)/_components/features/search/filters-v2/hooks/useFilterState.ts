@@ -4,9 +4,10 @@ import { FilterFieldName, OptionForSelect } from '@common/types';
 import {
   filterStateAtom,
   filterFieldOptionsAtom,
-} from '../../filter-conditions/states';
+  emptyFilterState,
+} from '../../filters-v2/states';
 import { FilterState } from '../../types';
-import { FilterChangeEvent, FilterClearEvent } from '../types/pure-ui-types';
+import { FilterChangeEvent } from '../types/pure-ui-types';
 import { useSyncFilterParamsToUrl } from './useSyncFilterParamsToUrl';
 import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 
@@ -111,8 +112,6 @@ export function useFilterState() {
   }, [setFilterState]);
 
   const handleClearFilter = useCallback((fieldName: FilterFieldName) => {
-    const previousValue = filterState[fieldName];
-
     // Handle special cases for composite filters
     const newFilterState: FilterState = { ...filterState };
 
@@ -139,34 +138,14 @@ export function useFilterState() {
     }
 
     setFilterState(newFilterState);
-
-    // Emit clear event
-    const event: FilterClearEvent = {
-      fieldName,
-      previousValue,
-    };
-
-    return event;
-  }, [filterState, setFilterState]);
+    const queryParams = buildFriendlyParams(newFilterState);
+    syncCategoryParamsToUrl(queryParams);
+    return newFilterState;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterState]);
 
   const handleClearAllFilters = useCallback(() => {
-    const emptyState: FilterState = {
-      businessType: undefined,
-      categoryType: undefined,
-      bed: undefined,
-      bath: undefined,
-      price: { text: 'Tất cả', value: 'all' },
-      area: { text: 'Tất cả', value: 'all' },
-      direction: undefined,
-      city: undefined,
-      district: undefined,
-      ward: undefined,
-      project: undefined,
-      sort: undefined,
-      busCatType: undefined,
-    };
-
-    setFilterState(emptyState);
+    setFilterState(emptyFilterState);
   }, [setFilterState]);
 
   // Helper functions for UI components

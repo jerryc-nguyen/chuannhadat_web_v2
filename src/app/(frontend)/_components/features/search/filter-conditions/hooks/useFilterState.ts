@@ -15,7 +15,7 @@ import {
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
-} from '../states';
+} from '../../filters-v2/states';
 import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterState } from '../../types';
 
 
