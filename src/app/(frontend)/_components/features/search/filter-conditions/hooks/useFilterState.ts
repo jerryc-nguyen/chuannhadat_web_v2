@@ -17,8 +17,6 @@ import {
   localFilterStateAtom,
 } from '../../filters-v2/states';
 import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterState } from '../../types';
-
-
 import { useFilterStatePresenter } from '../../filters-v2/hooks/useFilterStatePresenter';
 
 export default function useFilterState() {

@@ -133,6 +133,11 @@ export function useFilterState() {
         newFilterState.district = undefined;
         newFilterState.ward = undefined;
         break;
+      case FilterFieldName.BusCatType:
+        newFilterState.busCatType = undefined;
+        newFilterState.businessType = undefined;
+        newFilterState.categoryType = undefined;
+        break;
       default:
         (newFilterState as any)[fieldName] = undefined;
     }
@@ -148,7 +153,6 @@ export function useFilterState() {
     setFilterState(emptyFilterState);
   }, [setFilterState]);
 
-  // Helper functions for UI components
   const getFilterValue = useCallback((fieldName: FilterFieldName) => {
     return filterState[fieldName];
   }, [filterState]);

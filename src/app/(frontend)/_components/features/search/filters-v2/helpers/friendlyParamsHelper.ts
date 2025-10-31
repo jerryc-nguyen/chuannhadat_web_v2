@@ -1,5 +1,5 @@
 import { OptionForSelect } from '@common/types';
-import { FilterState } from '../../types';
+import { FILTER_FIELDS_PARAMS_MAP, FilterState } from '../../types';
 import { categoryTypesOptions } from '../constants';
 
 export const FRIENDLY_VALUES = {
@@ -42,22 +42,17 @@ export const NORMAL_FIELDS: Array<string> = [
   'aggProjects'
 ];
 
-export const FILTER_FIELDS_PARAMS_MAP: Record<string, any> = {
-  businessType: 'business_type',
-  categoryType: 'category_type',
-  price: 'price',
-  area: 'area',
-  bed: 'bed',
-  bath: 'bath',
-  direction: 'direction',
-  city: 'city_id',
-  district: 'district_id',
-  ward: 'ward_id',
-  project: 'project_id',
-  sort: 'sort',
-  aggProjects: 'project_id',
-};
-
+export const FRIENDLY_INCLUDED_FIELDS = [
+  'business_type',
+  'category_type',
+  'bedrooms_count',
+  'bathrooms_count',
+  'direction',
+  'min_price',
+  'max_price',
+  'min_area',
+  'max_area'
+]
 
 /**
  * Helper functions to build user-friendly query parameters from filter state
@@ -287,7 +282,8 @@ export function buildFriendlyParams(filterState: FilterState): Record<string, st
   }
 
   const normalParams = buildNormalParams(filterState);
-  return { ...results, ...normalParams };
+
+  return { ...results, ...removeLegacyParamFields(normalParams) };
 }
 
 export function buildNormalParams(filterState: FilterState): Record<string, A> {
@@ -304,6 +300,19 @@ export function buildNormalParams(filterState: FilterState): Record<string, A> {
       results = { ...results, ...option.params };
     } else {
       results[paramName] = [option?.range?.min, option?.range?.max].join(',') as string;
+    }
+  });
+
+  return results;
+}
+
+export function removeLegacyParamFields(params: Record<string, string>): Record<string, string> {
+  const results: Record<string, string> = {};
+
+  // Iterate through all params and exclude legacy fields
+  Object.entries(params).forEach(([key, value]) => {
+    if (!FRIENDLY_INCLUDED_FIELDS.includes(key)) {
+      results[key] = value;
     }
   });
 
