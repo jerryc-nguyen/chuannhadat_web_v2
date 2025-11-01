@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { FilterChipOption, FilterFieldName } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/types';
+import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from '@frontend/features/search/filters-v2/types/pure-ui-types';
 import FilterChipFactoryMobile from '@frontend/features/search/filters-v2/FilterChipFactoryMobile';
 import HorizontalScroller from '@components/mobile-ui/HorizontalScroller';
@@ -13,6 +13,8 @@ type FilterChipsMobileProps = {
   // Functions from useFilterState hook
   onFieldChanged: (event: FilterChangeEvent) => void;
   onClearFilter: (filterFieldName: FilterFieldName) => void;
+  // Aggregation data from useSearchAggs (for pure UI)
+  aggregationData?: AggregationData;
 };
 
 export default function FilterChipsMobile({
@@ -20,7 +22,8 @@ export default function FilterChipsMobile({
   selectedFilterState,
   onFiltersChanged,
   onFieldChanged,
-  onClearFilter
+  onClearFilter,
+  aggregationData
 }: FilterChipsMobileProps) {
   return (
     <HorizontalScroller className="relative my-2 flex gap-2">
@@ -35,6 +38,7 @@ export default function FilterChipsMobile({
             onFiltersChanged={onFiltersChanged}
             onFieldChanged={onFieldChanged}
             onClearFilter={onClearFilter}
+            aggregationData={aggregationData}
           />
         </div>
       ))}

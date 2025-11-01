@@ -1,6 +1,6 @@
 import React from 'react';
 import { FilterChipOption, FilterFieldName } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/types';
+import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from '../../types/pure-ui-types';
 import { useFilterOperation } from '../../hooks/useFilterOperation';
 import FilterContentOptionsFactory from '../FilterContentOptionsFactory';
@@ -16,6 +16,8 @@ export type ModalFilterContentProps = {
   onFiltersChanged?: (filterState: FilterState) => void;
   onFieldChanged: (event: FilterChangeEvent) => void;
   onClearFilter: (filterFieldName: FilterFieldName) => void;
+  // Aggregation data from useSearchAggs (for pure UI)
+  aggregationData?: AggregationData;
 };
 
 export type ModalFilterContentResult = {
@@ -29,6 +31,7 @@ export const useModalFilterContent = ({
   onFiltersChanged,
   onFieldChanged,
   onClearFilter,
+  aggregationData,
 }: ModalFilterContentProps): ModalFilterContentResult => {
 
   // Use the filter operation hook within the modal context
@@ -67,6 +70,7 @@ export const useModalFilterContent = ({
         onChange={handleLocalFilterChange}
         onLocationChange={handleLocalLocationChange}
         filterType={filterChipItem.id as FilterFieldName}
+        aggregationData={aggregationData}
       />
     </div>
   );

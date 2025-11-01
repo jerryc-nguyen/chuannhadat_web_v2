@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@components/ui/button';
 import { FilterChipOption, FilterFieldName } from '@common/types';
-import { FilterState } from '@app/(frontend)/_components/features/search/types';
+import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import { FilterChangeEvent } from './types/pure-ui-types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 
@@ -16,7 +16,9 @@ export type FilterChipProps = {
   selectedFilterState: FilterState;
   onFiltersChanged?: (filterState: FilterState) => void;
   onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void
+  onClearFilter: (filterFieldName: FilterFieldName) => void;
+  // Aggregation data from useSearchAggs (for pure UI)
+  aggregationData?: AggregationData;
 };
 
 const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
@@ -25,19 +27,14 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
   onFiltersChanged,
   onFieldChanged,
   onClearFilter,
+  aggregationData,
 }) => {
   const { openModal } = useModals();
-  const { selectedFilterText } = useFilterOperation({
+  const { selectedFilterText, isActiveChip } = useFilterOperation({
     selectedFilterState,
     onFieldChanged,
     onClearFilter,
   });
-
-  const isActiveChip = (filterChipItem: FilterChipOption) => {
-    // This is a simplified version - you may need to adjust based on your logic
-    const fieldName = filterChipItem.id as FilterFieldName;
-    return selectedFilterState[fieldName] !== undefined && selectedFilterState[fieldName] !== null;
-  };
 
   const showFilterModal = () => {
     const modalContent = (
@@ -47,6 +44,7 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
         onFiltersChanged={onFiltersChanged}
         onFieldChanged={onFieldChanged}
         onClearFilter={onClearFilter}
+        aggregationData={aggregationData}
       />
     );
 
@@ -65,7 +63,7 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
   return (
     <Button
       className={cn(
-        'w-fit cursor-default gap-x-4 rounded-full border font-semibold transition-all',
+        'w-fit cursor-pointer gap-x-4 rounded-full border px-4 font-semibold transition-all',
         isActiveChip(filterChipItem)
           ? 'bg-black text-white hover:bg-black'
           : 'bg-white text-black hover:bg-slate-50',
