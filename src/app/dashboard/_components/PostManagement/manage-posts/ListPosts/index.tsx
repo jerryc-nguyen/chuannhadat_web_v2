@@ -1,4 +1,4 @@
-import ListPostsDesktop from './ListPostsDesktop';
+import ListPostsDesktopV2 from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2';
 import ListPostsMobile from './mobile';
 
 interface ListPostsProps {
@@ -7,5 +7,5 @@ interface ListPostsProps {
 
 export default async function ListPosts({ isMobile }: ListPostsProps) {
 
-  return isMobile ? <ListPostsMobile /> : <ListPostsDesktop />;
+  return isMobile ? <ListPostsMobile /> : <ListPostsDesktopV2 />;
 }
