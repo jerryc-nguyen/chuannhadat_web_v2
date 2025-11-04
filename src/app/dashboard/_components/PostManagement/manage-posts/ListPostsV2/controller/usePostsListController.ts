@@ -16,6 +16,9 @@ export function usePostsListController(params?: {
   // Ensure all required ProductQuery fields exist in defaults
   const defaultFiltersFull: ProductQuery = {
     ...productQueryFromDefaultValues,
+    // Ensure discriminated unions are correctly typed
+    visibility: '' as 'hidden' | 'visible' | '',
+    search_by: '' as 'code' | 'title' | 'note' | 'all' | '',
     filter_chips: '',
     aggs_for: 'manage_posts',
     min_price: '',
@@ -24,9 +27,9 @@ export function usePostsListController(params?: {
     max_area: '',
   };
 
-  return useListController<ProductQuery, Product>({
+  const listCtrl = useListController<ProductQuery, Product>({
+    columns: columns || [],
     defaultFilters: defaultFiltersFull,
-    columns: columns ?? [],
     pageSize,
     fetcher: async ({ filters, pageIndex, pageSize, sorting }) => {
       const sort = sorting?.[0];
@@ -52,4 +55,13 @@ export function usePostsListController(params?: {
       };
     },
   });
+
+  return {
+    ...listCtrl,
+    formMethods: listCtrl.formMethods,
+    table: listCtrl.table,
+    query: listCtrl.query,
+    state: listCtrl.state,
+    actions: listCtrl.actions,
+  };
 }

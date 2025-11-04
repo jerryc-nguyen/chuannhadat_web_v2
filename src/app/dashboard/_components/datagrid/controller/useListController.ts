@@ -24,17 +24,21 @@ export function useListController<TFilter extends object, TRow>(
 ) {
   const { defaultFilters, columns, pageSize = 20, fetcher } = params;
 
-  const formMethods = useForm<TFilter>({ defaultValues: defaultFilters });
-  const filters = formMethods.watch();
+  const formMethods = useForm<TFilter>({ defaultValues: defaultFilters as any });
+  const filters = formMethods.watch(); // Keep watching for UI state
+
+  // Submitted filters for querying
+  const [submittedFilters, setSubmittedFilters] = useState<TFilter>(defaultFilters);
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
   const [sorting, setSorting] = useState<SortItem[]>([]);
 
   const query = useQuery({
-    queryKey: ['datagrid-list', filters, pagination, sorting],
+    // Depend on submittedFilters, not live filters
+    queryKey: ['datagrid-list', submittedFilters, pagination, sorting],
     queryFn: () =>
       fetcher({
-        filters,
+        filters: submittedFilters, // Use submitted filters for fetcher
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
         sorting,
@@ -57,8 +61,18 @@ export function useListController<TFilter extends object, TRow>(
   });
 
   const actions = {
+    // This now just updates the form state, doesn't trigger query
     setFilters: (next: Partial<TFilter>) => formMethods.reset({ ...(filters as any), ...next }),
-    resetFilters: () => formMethods.reset(defaultFilters),
+
+    // New action to apply filters and trigger query
+    submitFilters: () => {
+      setSubmittedFilters(formMethods.getValues());
+    },
+
+    resetFilters: () => {
+      formMethods.reset(defaultFilters);
+      setSubmittedFilters(defaultFilters); // Also reset submitted filters
+    },
     setPagination: (pageIndex: number, pageSizeArg = pageSize) =>
       setPagination({ pageIndex, pageSize: pageSizeArg }),
     setSorting: (next: SortItem[]) => setSorting(next),
@@ -68,7 +82,7 @@ export function useListController<TFilter extends object, TRow>(
     formMethods,
     table,
     query: { data: query.data, isLoading: query.isLoading, error: query.error },
-    state: { filters, pagination, sorting },
+    state: { filters, pagination, sorting }, // 'filters' is still the live form state for the UI
     actions,
   };
 }

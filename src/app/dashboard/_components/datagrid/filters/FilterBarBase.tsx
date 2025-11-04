@@ -1,29 +1,78 @@
-'use client';
+import { memo } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
 
-type Props<TFilter extends object> = {
-  children?: React.ReactNode;
-  onSubmit?: (values: TFilter) => void;
-  className?: string;
-};
+import FilterFieldBuilder from './FilterFieldBuilder';
+import { useFilterBase } from './useFilterBase';
+import { FieldConfigItem } from './types';
+import SearchField, { SelectOption } from './SearchField';
 
-// A simple wrapper that provides a horizontal filter bar layout and optional submit handling.
-export default function FilterBarBase<TFilter extends object>({ children, onSubmit, className }: Props<TFilter>) {
-  const { handleSubmit } = useFormContext<TFilter>();
+export type { FieldConfigItem };
+
+interface FilterBarBaseProps<T extends Record<string, any>> {
+  form: UseFormReturn<T, any, any>;
+  customFields: FieldConfigItem<T>[];
+  onSearch?: () => void;
+  isSearching?: boolean;
+  searchable?: boolean;
+  searchByOptions?: SelectOption[];
+}
+
+function FilterBarBase<T extends Record<string, any>>({
+  form,
+  customFields,
+  onSearch,
+  isSearching,
+  searchable,
+  searchByOptions,
+}: FilterBarBaseProps<T>) {
+  const { locals, onFilterChange, onClear, onChangeSearchBy, onChangeSearchValue } = useFilterBase(
+    customFields,
+    form,
+    searchable,
+  );
 
   return (
-    <form
-      className={className ?? 'mb-3 flex flex-wrap items-end gap-3'}
-      onSubmit={onSubmit ? handleSubmit((vals) => onSubmit(vals)) : undefined}
-    >
-      {children}
-      {onSubmit && (
-        <button type="submit" className="rounded border px-3 py-1 text-sm">
-          Search
-        </button>
-      )}
-    </form>
+    <div className="my-4 flex flex-wrap items-center gap-2 rounded-md bg-gray-100 p-2 dark:bg-gray-800">
+      <div className="grid flex-1 grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <SearchField
+          searchable={searchable}
+          searchBy={{
+            name: 'search_by',
+            options: searchByOptions ?? [],
+            value: (locals as any)?.search_by ?? '',
+          }}
+          searchValue={{
+            name: 'search_value',
+            value: (locals as any)?.search_value ?? '',
+          }}
+          onChangeSearchBy={onChangeSearchBy}
+          onChangeSearchValue={onChangeSearchValue}
+          onPressEnter={onSearch}
+        />
+        {customFields.map(f => (
+          <FilterFieldBuilder
+            key={String(f.name)}
+            value={locals[f.name as string]}
+            fieldConfig={f}
+            onChange={onFilterChange}
+          />
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <Button onClick={onSearch} disabled={isSearching}>
+          {isSearching ? 'Searching...' : 'Search'}
+        </Button>
+        <Button onClick={onClear} variant="outline">
+          Clear
+        </Button>
+      </div>
+    </div>
   );
 }
+const MemoizedFilterBarBase = memo(FilterBarBase) as <T extends Record<string, any>>(
+  props: FilterBarBaseProps<T>,
+) => React.ReactElement;
+
+export default MemoizedFilterBarBase;
