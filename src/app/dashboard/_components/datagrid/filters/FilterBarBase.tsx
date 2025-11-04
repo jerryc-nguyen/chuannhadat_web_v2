@@ -34,8 +34,8 @@ function FilterBarBase<T extends Record<string, any>>({
   );
 
   return (
-    <div className="my-4 flex flex-wrap items-center gap-2 rounded-md bg-gray-100 p-2 dark:bg-gray-800">
-      <div className="flex-1 gap-2">
+    <div className="my-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800/60">
+      <div className="flex flex-wrap items-end gap-4">
         <SearchField
           searchable={searchable}
           searchBy={{
@@ -46,6 +46,7 @@ function FilterBarBase<T extends Record<string, any>>({
           searchValue={{
             name: 'search_value',
             value: (locals as any)?.search_value ?? '',
+            label: 'Tìm kiếm',
           }}
           onChangeSearchBy={onChangeSearchBy}
           onChangeSearchValue={onChangeSearchValue}
@@ -59,14 +60,14 @@ function FilterBarBase<T extends Record<string, any>>({
             onChange={onFilterChange}
           />
         ))}
-      </div>
-      <div className="flex items-center gap-2">
-        <Button onClick={onSearch} disabled={isSearching}>
-          {isSearching ? 'Searching...' : 'Search'}
-        </Button>
-        <Button onClick={onClear} variant="outline">
-          Clear
-        </Button>
+        <div className="ml-auto flex items-center gap-3">
+          <Button onClick={onSearch} disabled={isSearching} className="h-9 px-4">
+            {isSearching ? 'Searching...' : 'Search'}
+          </Button>
+          <Button onClick={onClear} variant="outline" className="h-9 px-4">
+            Clear
+          </Button>
+        </div>
       </div>
     </div>
   );

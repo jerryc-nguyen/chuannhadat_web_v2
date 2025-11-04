@@ -15,7 +15,7 @@ export default function FilterFieldBuilder<T extends Record<string, any>>({
   value,
   onChange,
 }: FilterFieldBuilderProps<T>) {
-  const { type, name } = fieldConfig;
+  const { type, name, label } = fieldConfig;
 
   const handleChange = (v: any) => {
     onChange(name as string, v);
@@ -23,25 +23,31 @@ export default function FilterFieldBuilder<T extends Record<string, any>>({
 
   if (type === 'select') {
     return (
-      <SelectField
-        name={name as string}
-        isMultiple={fieldConfig.mode === 'multiple'}
-        options={fieldConfig.options}
-        value={value}
-        onChange={handleChange}
-      />
+      <div className="flex flex-col gap-1">
+        {label && <label className="text-xs text-gray-600">{label}</label>}
+        <SelectField
+          name={name as string}
+          isMultiple={fieldConfig.mode === 'multiple'}
+          options={fieldConfig.options}
+          value={value}
+          onChange={handleChange}
+        />
+      </div>
     );
   }
 
   if (type === 'text') {
     return (
-      <input
-        type="text"
-        className="h-8 w-full rounded border border-gray-300 p-2"
-        placeholder={fieldConfig.placeholder}
-        value={value}
-        onChange={(e) => handleChange(e.target.value)}
-      />
+      <div className="flex flex-col gap-1">
+        {label && <label className="text-xs text-gray-600">{label}</label>}
+        <input
+          type="text"
+          className="h-8 w-full rounded border border-gray-300 p-2"
+          placeholder={fieldConfig.placeholder}
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+        />
+      </div>
     );
   }
 
