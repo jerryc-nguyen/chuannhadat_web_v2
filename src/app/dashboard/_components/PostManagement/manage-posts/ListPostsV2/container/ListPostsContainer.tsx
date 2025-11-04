@@ -11,7 +11,7 @@ export default function ListPostsContainer(): React.ReactElement {
   return (
     <div className="flex h-full flex-1 flex-col space-y-4 md:pr-3">
       <FormProvider {...ctl.formMethods}>
-        <Desktop />
+        <Desktop table={ctl.table} />
       </FormProvider>
     </div>
   );
