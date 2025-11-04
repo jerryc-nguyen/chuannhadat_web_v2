@@ -35,7 +35,7 @@ function FilterBarBase<T extends Record<string, any>>({
 
   return (
     <div className="my-4 flex flex-wrap items-center gap-2 rounded-md bg-gray-100 p-2 dark:bg-gray-800">
-      <div className="grid flex-1 grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="flex-1 gap-2">
         <SearchField
           searchable={searchable}
           searchBy={{

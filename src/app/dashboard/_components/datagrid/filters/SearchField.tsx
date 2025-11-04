@@ -35,6 +35,7 @@ export default function SearchField({
   if (!searchable) return null;
 
   const EMPTY_KEY = '__EMPTY__';
+  const hasOptions = Array.isArray(searchBy.options) && searchBy.options.length > 0;
   const mappedOptions = (searchBy.options ?? []).map((opt) => ({
     label: opt.label,
     value: opt.value === '' ? EMPTY_KEY : opt.value,
@@ -48,31 +49,34 @@ export default function SearchField({
     }
   };
 
-  return (
-    <>
-      <div className="flex flex-col" key={searchBy.name}>
-        {searchBy.label && <label className="text-xs text-gray-600">{searchBy.label}</label>}
-        <Select
-          value={mappedValue}
-          onValueChange={(val) => onChangeSearchBy(val === EMPTY_KEY ? '' : val)}
-        >
-          <SelectTrigger className="w-[180px] h-8 text-sm">
-            <SelectValue placeholder="Chọn..." />
-          </SelectTrigger>
-          <SelectContent>
-            {mappedOptions.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+  const comboLabel = searchValue.label ?? searchBy.label;
 
-      <div className="flex flex-col" key={searchValue.name}>
-        {searchValue.label && <label className="text-xs text-gray-600">{searchValue.label}</label>}
+  return (
+    <div className="flex flex-col gap-1" key={`${searchBy.name}-${searchValue.name}`}>
+      {comboLabel && (
+        <label className="inline-block text-xs text-gray-600">{comboLabel}</label>
+      )}
+      <div className="flex items-center">
+        {hasOptions && (
+          <Select
+            value={mappedValue}
+            onValueChange={(val) => onChangeSearchBy(val === EMPTY_KEY ? '' : val)}
+          >
+            <SelectTrigger className="h-8 text-sm border rounded-l-md rounded-r-none border-r-0 w-[100px]">
+              <SelectValue placeholder="Chọn..." />
+            </SelectTrigger>
+            <SelectContent>
+              {mappedOptions.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+
         <input
-          className="w-64 rounded border px-2 py-1 text-sm"
+          className={`h-8 px-2 text-sm border ${hasOptions ? 'rounded-r-md rounded-l-none border-l-0' : 'rounded-md'} w-64`}
           placeholder={searchValue.placeholder ?? 'Nhập từ khóa...'}
           name={searchValue.name}
           value={searchValue.value ?? ''}
@@ -80,6 +84,6 @@ export default function SearchField({
           onKeyDown={handleTextKeyDown}
         />
       </div>
-    </>
+    </div>
   );
 }
