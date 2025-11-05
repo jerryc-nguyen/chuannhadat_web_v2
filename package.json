@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node -r ./polyfill-globals.js node_modules/.bin/next dev --turbopack",
+    "dev": "node -r ./polyfill-globals.js node_modules/.bin/next dev -p 3004 --turbopack",
     "dev-no-turbo": "next dev --experimental-https",
     "dev-profile": "next dev --experimental-profiling",
     "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192 --require ./polyfill-globals.js\" NODE_NO_WARNINGS=1 NEXT_TELEMETRY_DISABLED=1 next build",

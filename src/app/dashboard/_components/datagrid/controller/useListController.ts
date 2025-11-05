@@ -1,9 +1,10 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
+import { useSyncQueryToUrl } from '@common/hooks/useSyncQueryToUrl';
 
 export type SortItem = { id: string; desc: boolean };
 
@@ -29,6 +30,23 @@ export function useListController<TFilter extends object, TRow>(
 
   // Submitted filters for querying
   const [submittedFilters, setSubmittedFilters] = useState<TFilter>(defaultFilters);
+
+  // Sync submitted filters to URL
+  useSyncQueryToUrl(submittedFilters as Record<string, any>);
+
+  // Rollback functionality to restore form values from URL parameters
+  useEffect(() => {
+    // Read initial values from URL if they exist
+    const searchParams = new URLSearchParams(window.location.search);
+    const urlParams = Object.fromEntries(searchParams.entries());
+
+    if (Object.keys(urlParams).length > 0) {
+      // Merge URL params with default filters, prioritizing URL values
+      const mergedFilters = { ...defaultFilters, ...urlParams };
+      formMethods.reset(mergedFilters as any);
+      setSubmittedFilters(mergedFilters as TFilter);
+    }
+  }, []);
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
   const [sorting, setSorting] = useState<SortItem[]>([]);
@@ -64,7 +82,6 @@ export function useListController<TFilter extends object, TRow>(
     // This now just updates the form state, doesn't trigger query
     setFilters: (next: Partial<TFilter>) => formMethods.reset({ ...(filters as any), ...next }),
 
-    // New action to apply filters and trigger query
     submitFilters: () => {
       setSubmittedFilters(formMethods.getValues());
     },
