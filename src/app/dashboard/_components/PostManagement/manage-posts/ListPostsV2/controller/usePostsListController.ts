@@ -45,11 +45,13 @@ export function usePostsListController(params?: {
       const res = await ProductApiService.Filter(query as ProductQuery);
       // Axios instance likely returns payload directly
       const payload = res as unknown as {
+        aggs?: Record<string, any>;
         data?: Product[];
         pagination?: { total_count?: number; total_pages?: number };
       };
 
       return {
+        aggs: payload?.aggs ?? {},
         rows: Array.isArray(payload?.data) ? payload.data! : [],
         totalCount: payload?.pagination?.total_count ?? 0,
       };
@@ -63,5 +65,6 @@ export function usePostsListController(params?: {
     query: listCtrl.query,
     state: listCtrl.state,
     actions: listCtrl.actions,
+    aggs: listCtrl.query.data?.aggs ?? {},
   };
 }

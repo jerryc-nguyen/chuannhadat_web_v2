@@ -4,6 +4,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import FilterBarBase, { FieldConfigItem } from '@/app/dashboard/_components/datagrid/filters/FilterBarBase';
 import { ProductQuery } from '../data/schemas/product-query-schema';
+import { usePostsListContext } from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/context/PostsListProvider';
 
 const options = {
   placeholder: 'Trạng thái tin',
@@ -13,8 +14,9 @@ const options = {
   ],
 };
 
-export default function FilterBar({ onSearch }: { onSearch?: () => void }): React.ReactElement {
+export default function FilterBar(): React.ReactElement {
   const form = useFormContext<ProductQuery>();
+  const ctrl = usePostsListContext();
 
   const fields: Array<FieldConfigItem<ProductQuery>> = [
     {
@@ -32,7 +34,7 @@ export default function FilterBar({ onSearch }: { onSearch?: () => void }): Reac
       form={form}
       customFields={fields}
       searchable
-      onSearch={onSearch}
+      onSearch={ctrl.onApplyFilter}
       searchFieldOptions={{
         placeholder: 'Tìm theo mã, tiêu đề...'
       }}

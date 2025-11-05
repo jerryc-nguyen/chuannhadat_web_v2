@@ -17,7 +17,7 @@ export type ListControllerParams<TFilter extends object, TRow> = {
     pageIndex: number;
     pageSize: number;
     sorting: SortItem[];
-  }) => Promise<{ rows: TRow[]; totalCount: number }>;
+  }) => Promise<{ rows: TRow[]; totalCount: number, aggs?: Record<string, any> }>;
 };
 
 export function useListController<TFilter extends object, TRow>(
@@ -98,7 +98,7 @@ export function useListController<TFilter extends object, TRow>(
   return {
     formMethods,
     table,
-    query: { data: query.data, isLoading: query.isLoading, error: query.error },
+    query: query,
     state: { filters, pagination, sorting }, // 'filters' is still the live form state for the UI
     actions,
   };

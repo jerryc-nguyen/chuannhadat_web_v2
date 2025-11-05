@@ -22,26 +22,26 @@ interface UseProfileDetailReturn {
   // Profile data
   profileData: any;
   isProfileLoading: boolean;
-  
+
   // Search and pagination
   currentPage: number;
   searchParams: URLSearchParams | null;
-  
+
   // Filter state
   filterState: any;
   onFieldChanged?: (event: any) => void;
   onClearFilter?: (fieldName: any) => void;
-  
+
   // API and data
   APIFilterParams: any;
   filterParams: any;
   products: any[];
   pagination: any;
   aggreations: any;
-  
+
   // Processed data
   filteredChipOptions: FilterChipOption[];
-  
+
   // Search aggregations
   searchAggs: {
     updateSearchAggs: (aggs: any) => void;
@@ -52,20 +52,20 @@ interface UseProfileDetailReturn {
   };
 }
 
-export const useProfileDetail = ({ 
-  profileSlug, 
-  filterChipsList 
+export const useProfileDetail = ({
+  profileSlug,
+  filterChipsList
 }: UseProfileDetailProps): UseProfileDetailReturn => {
   // Sync params to state
   useSyncParamsToState();
-  
+
   // URL and search params
   const searchParams = useSearchParams();
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-  
+
   // Navigation
   const { resetLocations } = useMainContentNavigator();
-  
+
   // Search aggregations
   const searchAggs = useSearchAggs();
   const {
@@ -82,9 +82,9 @@ export const useProfileDetail = ({
   }, [resetLocations]);
 
   // Profile data fetching
-  const { 
-    data: profileData, 
-    isLoading: isProfileLoading 
+  const {
+    data: profileData,
+    isLoading: isProfileLoading
   } = useQuery({
     queryKey: ['get-detail-profile', profileSlug],
     queryFn: () => profilesApi.getProfileSlug(profileSlug),
@@ -135,26 +135,26 @@ export const useProfileDetail = ({
     // Profile data
     profileData,
     isProfileLoading,
-    
+
     // Search and pagination
     currentPage,
     searchParams,
-    
+
     // Filter state
     filterState,
     onFieldChanged: filterStateHook.onFieldChanged,
     onClearFilter: filterStateHook.onClearFilter,
-    
+
     // API and data
     APIFilterParams,
     filterParams,
     products,
     pagination,
     aggreations,
-    
+
     // Processed data
     filteredChipOptions,
-    
+
     // Search aggregations
     searchAggs: {
       updateSearchAggs,
