@@ -23,6 +23,7 @@ type Props = {
   onChangeSearchBy: (val: string) => void;
   onChangeSearchValue: (val: string) => void;
   onPressEnter?: () => void;
+  showLabel?: boolean;
 };
 
 export default function SearchField({
@@ -32,6 +33,7 @@ export default function SearchField({
   onChangeSearchBy,
   onChangeSearchValue,
   onPressEnter,
+  showLabel = true,
 }: Props) {
   if (!searchable) return null;
 
@@ -54,7 +56,7 @@ export default function SearchField({
 
   return (
     <div className="flex flex-col gap-1" key={`${searchBy.name}-${searchValue.name}`}>
-      {comboLabel && (
+      {showLabel && comboLabel && (
         <label className="inline-block text-xs text-gray-600">{comboLabel}</label>
       )}
       <div className="flex items-center">
