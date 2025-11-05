@@ -5,6 +5,7 @@ export const useFilterBase = <T extends Record<string, any>>(
   customFields: FieldConfigItem<T>[],
   form: UseFormReturn<T, any, undefined>,
   searchable?: boolean,
+  onSearch?: () => void,
 ) => {
   const { watch, setValue } = form;
   const formValues = watch();
@@ -35,6 +36,9 @@ export const useFilterBase = <T extends Record<string, any>>(
       defaultValues.search_value = '';
     }
     form.reset(defaultValues);
+    if (onSearch) {
+      onSearch();
+    }
   };
 
   return { locals: formValues, onFilterChange, onClear, onChangeSearchBy, onChangeSearchValue };

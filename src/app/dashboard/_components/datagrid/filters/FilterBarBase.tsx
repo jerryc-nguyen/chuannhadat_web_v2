@@ -35,6 +35,7 @@ function FilterBarBase<T extends Record<string, any>>({
     customFields,
     form,
     searchable,
+    onSearch,
   );
 
   return (
