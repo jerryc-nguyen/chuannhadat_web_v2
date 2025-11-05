@@ -6,12 +6,6 @@ import FilterBarBase from '@/app/dashboard/_components/datagrid/filters/FilterBa
 import { ProductQuery } from '../data/schemas/product-query-schema';
 
 const options = {
-  searchBy: [
-    { label: 'Tất cả', value: '' },
-    { label: 'Mã', value: 'code' },
-    { label: 'Tiêu đề', value: 'title' },
-    { label: 'Ghi chú', value: 'note' },
-  ],
   visibility: [
     { label: 'Tất cả', value: '' },
     { label: 'Hiển thị', value: 'visible' },
@@ -39,8 +33,10 @@ export default function FilterBar({ onSearch }: { onSearch?: () => void }): Reac
       form={form}
       customFields={fields}
       searchable
-      searchByOptions={options.searchBy}
       onSearch={onSearch}
+      searchFieldOptions={{
+        placeholder: 'Tìm theo mã, tiêu đề...'
+      }}
     />
   );
 }

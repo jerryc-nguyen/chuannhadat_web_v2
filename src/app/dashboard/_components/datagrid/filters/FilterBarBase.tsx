@@ -17,6 +17,7 @@ interface FilterBarBaseProps<T extends Record<string, any>> {
   isSearching?: boolean;
   searchable?: boolean;
   searchByOptions?: SelectOption[];
+  searchFieldOptions?: Record<string, any>
 }
 
 function FilterBarBase<T extends Record<string, any>>({
@@ -26,6 +27,7 @@ function FilterBarBase<T extends Record<string, any>>({
   isSearching,
   searchable,
   searchByOptions,
+  searchFieldOptions
 }: FilterBarBaseProps<T>) {
   const { locals, onFilterChange, onClear, onChangeSearchBy, onChangeSearchValue } = useFilterBase(
     customFields,
@@ -47,6 +49,7 @@ function FilterBarBase<T extends Record<string, any>>({
             name: 'search_value',
             value: (locals as any)?.search_value ?? '',
             label: 'Tìm kiếm',
+            ...searchFieldOptions
           }}
           onChangeSearchBy={onChangeSearchBy}
           onChangeSearchValue={onChangeSearchValue}
@@ -60,12 +63,12 @@ function FilterBarBase<T extends Record<string, any>>({
             onChange={onFilterChange}
           />
         ))}
-        <div className="ml-auto flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <Button onClick={onSearch} disabled={isSearching} className="h-9 px-4">
-            {isSearching ? 'Searching...' : 'Search'}
+            {isSearching ? 'Searching...' : 'Áp dụng'}
           </Button>
           <Button onClick={onClear} variant="outline" className="h-9 px-4">
-            Clear
+            Xóa
           </Button>
         </div>
       </div>

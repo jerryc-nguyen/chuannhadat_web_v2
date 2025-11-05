@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search } from 'lucide-react';
 
 export type SelectOption = { label: string; value: string };
 
@@ -14,10 +15,10 @@ type Props = {
     value: string;
   };
   searchValue: {
-    name: string;
+    name?: string;
     label?: string;
     placeholder?: string;
-    value: string;
+    value?: string;
   };
   onChangeSearchBy: (val: string) => void;
   onChangeSearchValue: (val: string) => void;
@@ -62,7 +63,7 @@ export default function SearchField({
             value={mappedValue}
             onValueChange={(val) => onChangeSearchBy(val === EMPTY_KEY ? '' : val)}
           >
-            <SelectTrigger className="h-8 text-sm border rounded-l-md rounded-r-none border-r-0 w-[100px]">
+            <SelectTrigger className="h-10 text-sm border rounded-l-md rounded-r-none border-r-0 w-[100px]">
               <SelectValue placeholder="Chọn..." />
             </SelectTrigger>
             <SelectContent>
@@ -75,14 +76,28 @@ export default function SearchField({
           </Select>
         )}
 
-        <input
-          className={`h-8 px-2 text-sm border ${hasOptions ? 'rounded-r-md rounded-l-none border-l-0' : 'rounded-md'} w-64`}
-          placeholder={searchValue.placeholder ?? 'Nhập từ khóa...'}
-          name={searchValue.name}
-          value={searchValue.value ?? ''}
-          onChange={(e) => onChangeSearchValue(e.currentTarget.value)}
-          onKeyDown={handleTextKeyDown}
-        />
+        {!hasOptions ? (
+          <div className="relative w-64">
+            <input
+              className="h-10 px-2 pl-9 text-sm border rounded-md w-full"
+              placeholder={searchValue.placeholder ?? 'Nhập từ khóa...'}
+              name={searchValue.name}
+              value={searchValue.value ?? ''}
+              onChange={(e) => onChangeSearchValue(e.currentTarget.value)}
+              onKeyDown={handleTextKeyDown}
+            />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+          </div>
+        ) : (
+          <input
+            className="h-10 px-2 text-sm border rounded-r-md rounded-l-none border-l-0 w-64"
+            placeholder={searchValue.placeholder ?? 'Nhập từ khóa...'}
+            name={searchValue.name}
+            value={searchValue.value ?? ''}
+            onChange={(e) => onChangeSearchValue(e.currentTarget.value)}
+            onKeyDown={handleTextKeyDown}
+          />
+        )}
       </div>
     </div>
   );

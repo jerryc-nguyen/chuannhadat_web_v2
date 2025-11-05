@@ -54,7 +54,7 @@ export default function SelectField({
               value={mappedValue as string}
               onValueChange={(val) => onChange(val === EMPTY_KEY ? '' : val)}
             >
-              <SelectTrigger className="w-[180px] h-8 text-sm">
+              <SelectTrigger className="w-[180px] h-10 text-sm">
                 <SelectValue placeholder="Chọn..." />
               </SelectTrigger>
               <SelectContent>
