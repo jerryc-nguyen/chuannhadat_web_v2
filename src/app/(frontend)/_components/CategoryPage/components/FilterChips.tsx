@@ -7,7 +7,7 @@ import { useFilterState } from '@app/(frontend)/_components/features/search/filt
 
 type FilterChipsDesktopProps = {
   chipOptions: FilterChipOption[];
-  pagination: IPagination;
+  pagination?: IPagination;
   isShowListChips?: boolean;
   className?: string;
   onFiltersChanged?: (filterState: FilterState) => void;
@@ -19,7 +19,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   chipOptions = [],
   pagination,
   isShowListChips = true,
-  className,
+  className = 'bg-white/70 backdrop-blur-sm sticky top-16 ',
   onFiltersChanged,
   aggregationData
 }) => {
@@ -34,12 +34,17 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
     <div
       id="post-control-desktop-v2"
       className={cn(
-        'sticky top-16 z-10 flex flex-col gap-x-3 bg-white/70 backdrop-blur-sm lg:flex-row lg:items-center',
+        'z-10 flex flex-col gap-x-3 lg:flex-row lg:items-center',
         className,
       )}
     >
-      <span className="font-semibold text-black">Có {pagination?.total_count} tin đăng</span>
-      <div className="hidden h-8 w-[2px] bg-[#f0f0f0] lg:block" />
+      {pagination && (
+        <>
+          <span className="font-semibold text-black">Có {pagination?.total_count} tin đăng</span>
+          <div className="hidden h-8 w-[2px] bg-[#f0f0f0] lg:block" />
+        </>
+      )}
+
       {isShowListChips && (
         <div className="relative my-2 flex flex-wrap gap-2">
           {chipOptions.map((item: FilterChipOption) => (

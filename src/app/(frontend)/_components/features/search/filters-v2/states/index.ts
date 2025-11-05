@@ -26,14 +26,8 @@ export const defaultFilterStateAtom = {
   categoryType: undefined,
   bed: undefined,
   bath: undefined,
-  price: {
-    text: 'Tất cả',
-    value: 'all',
-  },
-  area: {
-    text: 'Tất cả',
-    value: 'all',
-  },
+  price: undefined,
+  area: undefined,
   direction: undefined,
   city: undefined,
   district: undefined,

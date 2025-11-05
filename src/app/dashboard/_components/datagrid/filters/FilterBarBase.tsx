@@ -1,8 +1,6 @@
 import { memo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-
 import { Button } from '@/components/ui/button';
-
 import FilterFieldBuilder from './FilterFieldBuilder';
 import { useFilterBase } from './useFilterBase';
 import { FieldConfigItem } from './types';
