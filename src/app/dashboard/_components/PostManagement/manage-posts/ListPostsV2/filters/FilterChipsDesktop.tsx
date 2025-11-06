@@ -16,7 +16,6 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   chipOptions = [],
   className,
   aggregationData,
-  filterState,
   onFiltersChanged
 }) => {
 
@@ -32,7 +31,6 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
           <FilterChipFactoryDesktop
             key={item.id}
             filterChipItem={item}
-            selectedFilterState={filterState || {}}
             onFiltersChanged={onFiltersChanged}
             aggregationData={aggregationData}
           />

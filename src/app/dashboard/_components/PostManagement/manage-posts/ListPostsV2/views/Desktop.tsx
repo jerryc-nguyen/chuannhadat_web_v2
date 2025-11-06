@@ -15,7 +15,7 @@ import { DEFAULT_CHIP_FILTER_PARAMS } from '../constant';
 export default function Desktop(): React.ReactElement {
   const ctl = usePostsListContext();
   const { filterState: initFilterState } = useSyncParamsToState();
-  const [chipFilterState, setChipFilterState] = useState<FilterState>(initFilterState);
+  const [, setChipFilterState] = useState<FilterState>(initFilterState);
   const { aggs } = ctl;
   const {
     updateSearchAggs,
@@ -47,7 +47,6 @@ export default function Desktop(): React.ReactElement {
       <FilterChipsDesktop
         chipOptions={listChipsQuery}
         onFiltersChanged={onFilterChipsChanged}
-        filterState={chipFilterState}
         aggregationData={{
           busCatTypeOptions,
           locationsList,

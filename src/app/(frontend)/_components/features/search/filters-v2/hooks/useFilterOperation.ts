@@ -73,23 +73,23 @@ export const useFilterOperation = ({
     }
 
     const fieldName = filterChipItem.id as FilterFieldName;
-
+    let newFilters: FilterState = {}
     if (fieldName === FilterFieldName.Locations || fieldName === FilterFieldName.ProfileLocations) {
       // For location filters, apply all location-related values
-      updateFilters({
+      newFilters = updateFilters({
         city: localFilterState.city,
         district: localFilterState.district,
         ward: localFilterState.ward,
       });
     } else if (fieldName === FilterFieldName.Rooms) {
       // For room filters, apply all room-related values
-      updateFilters({
+      newFilters = updateFilters({
         bed: localFilterState.bed,
         bath: localFilterState.bath,
       });
     } else if (fieldName === FilterFieldName.BusCatType) {
       // BusCatType clears location data (following old applySingleFilter logic)
-      updateFilters({
+      newFilters = updateFilters({
         busCatType: localFilterState.busCatType,
         city: undefined,
         district: undefined,
@@ -97,7 +97,7 @@ export const useFilterOperation = ({
       });
     } else if (fieldName === FilterFieldName.AggProjects) {
       // AggProjects sets both aggProjects and project, clears location data
-      updateFilters({
+      newFilters = updateFilters({
         aggProjects: localFilterState.aggProjects,
         project: localFilterState.aggProjects,
         city: undefined,
@@ -106,45 +106,38 @@ export const useFilterOperation = ({
       });
     } else {
       // For simple filters, just set the field value
-      updateFilters({
+      newFilters = updateFilters({
         [fieldName]: localFilterState[fieldName]
       });
     }
 
     // Notify parent component of filter changes
     if (typeof onFiltersChanged === 'function') {
-      const currentFilterState = { ...selectedFilterState, ...localFilterState };
-      onFiltersChanged(currentFilterState);
+      onFiltersChanged(newFilters);
     }
-  }, [
-    localFilterState,
-    selectedFilterState,
-    updateFilters,
-    onFiltersChanged,
-    setIsOpenPopover
-  ]);
+  }, [localFilterState, updateFilters, onFiltersChanged, setIsOpenPopover]);
 
   // Handle filter removal
   // will be removed!
   const handleRemoveFilter = React.useCallback((filterOption: FilterChipOption) => {
     const fieldName = filterOption.id as FilterFieldName;
-
+    let newFilters: FilterState = {}
     if (fieldName === FilterFieldName.Locations || fieldName === FilterFieldName.ProfileLocations) {
       // For location filters, apply all location-related values
-      updateFilters({
+      newFilters = updateFilters({
         city: undefined,
         district: undefined,
         ward: undefined,
       });
     } else if (fieldName === FilterFieldName.Rooms) {
       // For room filters, apply all room-related values
-      updateFilters({
+      newFilters = updateFilters({
         bed: undefined,
         bath: undefined,
       });
     } else if (fieldName === FilterFieldName.BusCatType) {
       // BusCatType clears location data (following old applySingleFilter logic)
-      updateFilters({
+      newFilters = updateFilters({
         busCatType: undefined,
         city: undefined,
         district: undefined,
@@ -152,17 +145,22 @@ export const useFilterOperation = ({
       });
     } else if (fieldName === FilterFieldName.AggProjects) {
       // AggProjects sets both aggProjects and project, clears location data
-      updateFilters({
+      newFilters = updateFilters({
         aggProjects: undefined,
         project: undefined,
       });
     } else {
       // For simple filters, just set the field value
-      updateFilters({
+      newFilters = updateFilters({
         [fieldName]: undefined
       });
     }
-  }, [updateFilters]);
+
+    // Notify parent component of filter changes
+    if (typeof onFiltersChanged === 'function') {
+      onFiltersChanged(newFilters);
+    }
+  }, [onFiltersChanged, updateFilters]);
 
   return {
     // Filter state management
