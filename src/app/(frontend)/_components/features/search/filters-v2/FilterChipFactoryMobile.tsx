@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@components/ui/button';
-import { FilterChipOption, FilterFieldName } from '@common/types';
+import { FilterChipOption } from '@common/types';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 
@@ -22,7 +22,7 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
   aggregationData,
 }) => {
   const { openModal } = useModals();
-  const { selectedFilterText, isActiveChip, clearFilter } = useFilterOperation({
+  const { selectedFilterText, isActiveChip, handleRemoveFilter } = useFilterOperation({
     onFiltersChanged
   });
 
@@ -63,7 +63,7 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
         <X
           onClick={(e) => {
             e.stopPropagation();
-            clearFilter(filterChipItem.id as FilterFieldName);
+            handleRemoveFilter(filterChipItem);
           }}
           className="cursor-pointer text-xl"
         />

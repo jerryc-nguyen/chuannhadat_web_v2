@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import DataTableBase from "@/app/dashboard/_components/datagrid/components/DataTableBase";
 import FilterBar from "../filters/FilterBar/mobile";
-import FilterChipsDesktop from "../filters/FilterChipsDesktop";
 import { listChipsQuery } from "../constant/list_chips_query";
 import { usePostsListContext } from "../context/PostsListProvider";
 import useSearchAggs from "@app/(frontend)/_components/features/search/search-aggs/hooks";
@@ -11,6 +10,7 @@ import { buildFriendlyParams } from "@app/(frontend)/_components/features/search
 import { FilterState } from "@app/(frontend)/_components/features/search/types";
 import { useSyncParamsToState } from "@app/(frontend)/_components/features/search/hooks/useSyncParamsToState";
 import { DEFAULT_CHIP_FILTER_PARAMS } from '../constant';
+import FilterChipsMobile from "@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/filters/FilterChipsMobile";
 
 export default function Mobile(): React.ReactElement {
   const ctl = usePostsListContext();
@@ -44,7 +44,7 @@ export default function Mobile(): React.ReactElement {
 
       <FilterBar />
 
-      <FilterChipsDesktop
+      <FilterChipsMobile
         chipOptions={listChipsQuery}
         onFiltersChanged={onFilterChipsChanged}
         aggregationData={{
@@ -52,7 +52,6 @@ export default function Mobile(): React.ReactElement {
           locationsList,
           projectsOptions,
         }}
-        className="bg-none mb-4"
       />
 
       <DataTableBase table={ctl.table} />
