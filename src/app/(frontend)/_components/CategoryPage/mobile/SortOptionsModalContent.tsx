@@ -18,7 +18,7 @@ export type SortOptionsModalContentResult = {
  */
 export const useModalSortContent = (): SortOptionsModalContentResult => {
   const { closeModals } = useModals();
-  const { filterState: selectedFilterState, onFieldChanged, onClearFilter } = useFilterState();
+  const { filterState: selectedFilterState, onFieldChanged } = useFilterState();
 
   // Use v2 filter operation for local state management and preview
   const {
@@ -27,8 +27,7 @@ export const useModalSortContent = (): SortOptionsModalContentResult => {
     handleLocalLocationChange
   } = useFilterOperation({
     selectedFilterState,
-    onFieldChanged,
-    onClearFilter,
+    onFieldChanged
   });
 
   const handleApplySort = () => {

@@ -20,8 +20,7 @@ export type FilterChipProps = {
   selectedFilterState: FilterState;
   onFiltersChanged?: (filterState: FilterState) => void;
   // Functions from useFilterState hook
-  onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void;
+  onFieldChanged?: (event: FilterChangeEvent) => void;
   // Aggregation data from useSearchAggs (for pure UI)
   aggregationData?: AggregationData;
 };
@@ -31,7 +30,6 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   selectedFilterState,
   onFiltersChanged,
   onFieldChanged,
-  onClearFilter,
   aggregationData = {},
 }) => {
 
@@ -53,8 +51,8 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
     handleRemoveFilter,
   } = useFilterOperation({
     selectedFilterState,
-    onFieldChanged,
-    onClearFilter,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onFieldChanged: onFieldChanged || (() => { }),
     onFiltersChanged,
     setIsOpenPopover,
   });

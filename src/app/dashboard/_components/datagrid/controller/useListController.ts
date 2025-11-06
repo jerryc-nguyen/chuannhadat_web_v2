@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
 import { useSyncQueryToUrl } from '@common/hooks/useSyncQueryToUrl';
+import { IDashboardListFetcherReturn } from '@common/types';
 
 export type SortItem = { id: string; desc: boolean };
 
@@ -17,12 +18,30 @@ export type ListControllerParams<TFilter extends object, TRow> = {
     pageIndex: number;
     pageSize: number;
     sorting: SortItem[];
-  }) => Promise<{ rows: TRow[]; totalCount: number, aggs?: Record<string, any> }>;
+  }) => Promise<IDashboardListFetcherReturn<TRow>>;
+};
+
+export type UseListControllerReturn<TFilter extends object, TRow> = {
+  formMethods: ReturnType<typeof useForm<TFilter>>;
+  table: ReturnType<typeof useReactTable<TRow>>;
+  query: IDashboardListFetcherReturn<TRow>;
+  state: {
+    filters: TFilter;
+    pagination: { pageIndex: number; pageSize: number };
+    sorting: SortItem[];
+  };
+  actions: {
+    setFilters: (next: Partial<TFilter>) => void;
+    submitFilters: () => void;
+    resetFilters: () => void;
+    setPagination: (pageIndex: number, pageSizeArg?: number) => void;
+    setSorting: (next: SortItem[]) => void;
+  };
 };
 
 export function useListController<TFilter extends object, TRow>(
   params: ListControllerParams<TFilter, TRow>
-) {
+): UseListControllerReturn<TFilter, TRow> {
   const { defaultFilters, columns, pageSize = 20, fetcher } = params;
 
   const formMethods = useForm<TFilter>({ defaultValues: defaultFilters as any });
@@ -67,7 +86,7 @@ export function useListController<TFilter extends object, TRow>(
   const table = useReactTable<TRow>({
     data: query.data?.rows ?? [],
     columns,
-    pageCount: Math.ceil((query.data?.totalCount ?? 0) / pagination.pageSize),
+    pageCount: Math.ceil((query.data?.pagination?.total_count ?? 0) / pagination.pageSize),
     state: { pagination, sorting },
     manualPagination: true,
     manualSorting: true,
@@ -98,7 +117,7 @@ export function useListController<TFilter extends object, TRow>(
   return {
     formMethods,
     table,
-    query: query,
+    query: query.data ?? ({} as IDashboardListFetcherReturn<TRow>),
     state: { filters, pagination, sorting }, // 'filters' is still the live form state for the UI
     actions,
   };

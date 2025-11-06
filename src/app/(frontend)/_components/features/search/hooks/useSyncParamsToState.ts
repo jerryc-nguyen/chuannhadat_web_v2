@@ -35,6 +35,10 @@ function useSyncParamsToState() {
     [MCNWardAtom, filterState?.ward],
     [MCNContentTypeAtom, currentContentType]
   ]);
+
+  return {
+    filterState,
+  }
 }
 
 export { useSyncParamsToState };

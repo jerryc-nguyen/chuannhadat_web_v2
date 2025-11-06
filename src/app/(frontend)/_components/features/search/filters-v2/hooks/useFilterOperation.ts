@@ -10,7 +10,6 @@ import { useFilterStatePresenter } from './useFilterStatePresenter';
 export interface UseFilterOperationProps {
   selectedFilterState: FilterState;
   onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void;
   onFiltersChanged?: (filterState: FilterState) => void;
   setIsOpenPopover?: (open: boolean) => void;
 }
@@ -18,7 +17,6 @@ export interface UseFilterOperationProps {
 export const useFilterOperation = ({
   selectedFilterState,
   onFieldChanged,
-  onClearFilter,
   onFiltersChanged,
   setIsOpenPopover,
 }: UseFilterOperationProps) => {
@@ -152,22 +150,28 @@ export const useFilterOperation = ({
   // Handle filter removal
   const handleRemoveFilter = React.useCallback((filterOption: FilterChipOption) => {
     const fieldName = filterOption.id as FilterFieldName;
-    onClearFilter(fieldName);
 
     if (typeof onFiltersChanged === 'function') {
       // Convert FilterState to the expected format after clearing
       const newFilterState = { ...selectedFilterState };
-      delete newFilterState[fieldName];
-
-      const convertedState: Record<string, OptionForSelect> = {};
-      Object.entries(newFilterState).forEach(([key, value]) => {
-        if (value) {
-          convertedState[key] = value;
-        }
-      });
-      onFiltersChanged(convertedState);
+      if (fieldName === FilterFieldName.Locations || fieldName === FilterFieldName.ProfileLocations) {
+        delete newFilterState['city'];
+        delete newFilterState['district'];
+        delete newFilterState['ward'];
+      } else if (fieldName === FilterFieldName.Rooms) {
+        delete newFilterState['bed'];
+        delete newFilterState['bath'];
+      } else if (fieldName === FilterFieldName.BusCatType) {
+        delete newFilterState['busCatType'];
+      } else if (fieldName === FilterFieldName.AggProjects) {
+        delete newFilterState['aggProjects'];
+        delete newFilterState['project'];
+      } else {
+        delete newFilterState[fieldName];
+      }
+      onFiltersChanged(newFilterState);
     }
-  }, [selectedFilterState, onClearFilter, onFiltersChanged]);
+  }, [selectedFilterState, onFiltersChanged]);
 
   return {
     // Filter state management
