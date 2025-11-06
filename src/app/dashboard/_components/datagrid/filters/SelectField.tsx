@@ -14,6 +14,8 @@ type SelectFieldProps = {
   value: string | string[];
   onChange: (value: string | string[]) => void;
   isMultiple?: boolean;
+  className?: string;
+  isMobile?: boolean;
 };
 
 export default function SelectField({
@@ -22,7 +24,9 @@ export default function SelectField({
   label,
   options,
   value,
-  onChange
+  onChange,
+  className,
+  isMobile = false
 }: SelectFieldProps) {
   const [internalValue, setInternalValue] = useState(value);
 
@@ -31,9 +35,9 @@ export default function SelectField({
   }, [value]);
 
   return (
-    <div className="flex flex-col" key={name}>
+    <div className={`flex flex-col ${className ?? ''}`} key={name}>
       {label && <label className="text-xs text-gray-600">{label}</label>}
-      <div className="relative">
+      <div className={isMobile ? "relative w-full" : "relative"}>
         <Select
           value={internalValue as string}
           onValueChange={(val) => {
@@ -41,7 +45,7 @@ export default function SelectField({
             onChange(val);
           }}
         >
-          <SelectTrigger className={`w-[180px] h-10 text-sm ${!internalValue ? 'text-gray-500' : ''}`}>
+          <SelectTrigger className={`${isMobile ? "w-full" : "w-[180px]"} h-10 text-sm ${!internalValue ? 'text-gray-500' : ''}`}>
             <SelectValue placeholder={placeholder ?? 'Chọn...'} />
           </SelectTrigger>
           <SelectContent>

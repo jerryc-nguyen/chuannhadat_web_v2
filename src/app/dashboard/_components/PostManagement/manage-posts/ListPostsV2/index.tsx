@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
-import ListPostsContainer from './container/ListPostsContainer';
+import React from "react";
+import { PostsListProvider } from "./context/PostsListProvider";
+import Desktop from "./views/Desktop";
+import Mobile from "./views/Mobile";
 
-export default function ListPostsDesktopV2(): React.ReactElement {
-  return <ListPostsContainer />;
+export default function ListPostsV2({ isMobile = false }): React.ReactElement {
+  return (
+    <PostsListProvider>
+      {isMobile ? <Mobile /> : <Desktop />}
+    </PostsListProvider>
+  );
 }

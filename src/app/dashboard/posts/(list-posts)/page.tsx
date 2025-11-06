@@ -1,5 +1,5 @@
+import ListPostsV2 from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import PostManagement from '@dashboard/PostManagement/manage-posts/ListPosts';
 import { Metadata } from 'next';
 import React from 'react';
 
@@ -13,7 +13,7 @@ const NewPostPage: React.FC = async () => {
   const { isMobile } = await getUserAgentInfo();
 
   return (
-    <PostManagement isMobile={isMobile} />
+    <ListPostsV2 isMobile={isMobile} />
   );
 
 };
