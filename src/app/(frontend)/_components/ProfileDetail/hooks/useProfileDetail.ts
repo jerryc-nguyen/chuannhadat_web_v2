@@ -142,8 +142,6 @@ export const useProfileDetail = ({
 
     // Filter state
     filterState,
-    onFieldChanged: filterStateHook.onFieldChanged,
-    onClearFilter: filterStateHook.onClearFilter,
 
     // API and data
     APIFilterParams,

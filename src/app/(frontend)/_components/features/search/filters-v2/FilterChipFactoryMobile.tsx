@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '@components/ui/button';
 import { FilterChipOption, FilterFieldName } from '@common/types';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
-import { FilterChangeEvent } from './types/pure-ui-types';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 
 import { X } from 'lucide-react';
@@ -13,37 +12,25 @@ import { useFilterOperation } from '@app/(frontend)/_components/features/search/
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
-  selectedFilterState: FilterState;
   onFiltersChanged?: (filterState: FilterState) => void;
-  onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void;
-  // Aggregation data from useSearchAggs (for pure UI)
   aggregationData?: AggregationData;
 };
 
 const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
   filterChipItem,
-  selectedFilterState,
   onFiltersChanged,
-  onFieldChanged,
-  onClearFilter,
   aggregationData,
 }) => {
   const { openModal } = useModals();
-  const { selectedFilterText, isActiveChip } = useFilterOperation({
-    selectedFilterState,
-    onFieldChanged,
-    onClearFilter,
+  const { selectedFilterText, isActiveChip, clearFilter } = useFilterOperation({
+    onFiltersChanged
   });
 
   const showFilterModal = () => {
     const modalContent = (
       <ModalFilterContent
         filterChipItem={filterChipItem}
-        selectedFilterState={selectedFilterState}
         onFiltersChanged={onFiltersChanged}
-        onFieldChanged={onFieldChanged}
-        onClearFilter={onClearFilter}
         aggregationData={aggregationData}
       />
     );
@@ -76,7 +63,7 @@ const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
         <X
           onClick={(e) => {
             e.stopPropagation();
-            onClearFilter(filterChipItem.id as FilterFieldName);
+            clearFilter(filterChipItem.id as FilterFieldName);
           }}
           className="cursor-pointer text-xl"
         />
