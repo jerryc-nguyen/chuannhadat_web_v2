@@ -24,7 +24,7 @@ export default function FeaturedImage({ product }: FeaturedImageProps) {
   const isLoadingCardProduct = useAtomValue(isLoadingModal);
 
   return (
-    <div className="group inline-flex h-full flex-col gap-3 rounded-lg">
+    <div className="group inline-flex w-full flex-col gap-3 rounded-lg">
       <BlockImageProduct images_count={images_count} imageUrl={imageUrl} title={title} />
       <SwitchButtonToggleShowOnFrontEnd productId={productId} visible={visible} />
 

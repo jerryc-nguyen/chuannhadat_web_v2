@@ -41,7 +41,6 @@ export default function Mobile(): React.ReactElement {
 
   return (
     <div className="w-full flex flex-col h-full">
-
       <FilterBar />
 
       <FilterChipsMobile
