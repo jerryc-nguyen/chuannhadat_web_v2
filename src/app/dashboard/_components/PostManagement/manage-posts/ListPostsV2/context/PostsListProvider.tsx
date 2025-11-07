@@ -1,12 +1,15 @@
 import React, { createContext, useContext } from "react";
 import { usePostsListController } from "../controller/usePostsListController";
-import { postsColumns } from "../components/table/columns";
+import { desktopColumns, mobileColumns } from "../components/table/columns";
 import { FormProvider } from "react-hook-form";
 
 const PostsListContext = createContext<any>(null);
 
-export function PostsListProvider({ children }: { children: React.ReactNode }) {
-  const ctl = usePostsListController({ columns: postsColumns });
+type Props = { children: React.ReactNode; isMobile?: boolean };
+
+export function PostsListProvider({ children, isMobile = false }: Props) {
+  const columns = isMobile ? mobileColumns : desktopColumns;
+  const ctl = usePostsListController({ columns });
   return (
     <PostsListContext.Provider value={ctl}>
       <FormProvider {...ctl.formMethods}>

@@ -3,6 +3,7 @@
 This guide defines a reusable, easy‑to‑extend structure for list pages (Posts, Orders, Users, etc.) and separates generic building blocks into a dedicated `datagrid` directory so they can be reused across listings.
 
 ## Goals
+
 - Centralize generic logic (controller, table, filter base) under `datagrid/`.
 - Keep views presentational and pure; move logic into a controller hook.
 - Reuse the same filter + table state across desktop/mobile.
@@ -10,6 +11,7 @@ This guide defines a reusable, easy‑to‑extend structure for list pages (Post
 - Maintain compatibility with current `FormProvider` usage.
 
 ## Current Baseline (Desktop)
+
 The current desktop page uses `FormProvider` and an internal `DataTable`:
 
 ```tsx
@@ -36,6 +38,7 @@ V2 keeps this ergonomics: views still render within `FormProvider`, but the form
 ## Directory Layout
 
 ### Generic (Reusable across entities)
+
 ```
 src/app/dashboard/_components/datagrid/
   controller/
@@ -48,6 +51,7 @@ src/app/dashboard/_components/datagrid/
 ```
 
 ### Posts‑specific (V2)
+
 ```
 src/app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/
   controller/
@@ -67,18 +71,24 @@ src/app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/
 ```
 
 ## Generic Controller Responsibilities (datagrid/controller/useListController.ts)
+
 - Filter state: `react-hook-form` for filters; expose `formMethods` and derived `filters`.
 - Table state: `@tanstack/react-table` with server‑side pagination/sorting; expose `table`.
 - Data fetching: `@tanstack/react-query` with a `fetcher(filters, page, size, sorting)`; return `{ rows, totalCount }`.
 - Actions: `setFilters`, `resetFilters`, `setPagination`, `setSorting`.
 
 ### Generic Controller Interface
+
 ```ts
 export type ListController<TFilter, TRow> = {
   formMethods: UseFormReturn<TFilter>;
   table: ReturnType<typeof useReactTable<TRow>>;
   query: { data?: { rows: TRow[]; totalCount: number }; isLoading: boolean; error?: unknown };
-  state: { filters: TFilter; pagination: { pageIndex: number; pageSize: number }; sorting: { id: string; desc: boolean }[] };
+  state: {
+    filters: TFilter;
+    pagination: { pageIndex: number; pageSize: number };
+    sorting: { id: string; desc: boolean }[];
+  };
   actions: {
     setFilters(next: Partial<TFilter>): void;
     resetFilters(): void;
@@ -89,6 +99,7 @@ export type ListController<TFilter, TRow> = {
 ```
 
 ### Minimal Generic Controller Hook
+
 ```ts
 // datagrid/controller/useListController.ts
 import { useForm } from 'react-hook-form';
@@ -100,7 +111,12 @@ export function useListController<TFilter extends object, TRow>(params: {
   defaultFilters: TFilter;
   columns: any[]; // ColumnDef<TRow>[]
   pageSize?: number;
-  fetcher: (args: { filters: TFilter; pageIndex: number; pageSize: number; sorting: { id: string; desc: boolean }[] }) => Promise<{ rows: TRow[]; totalCount: number }>; 
+  fetcher: (args: {
+    filters: TFilter;
+    pageIndex: number;
+    pageSize: number;
+    sorting: { id: string; desc: boolean }[];
+  }) => Promise<{ rows: TRow[]; totalCount: number }>;
 }) {
   const { defaultFilters, columns, pageSize = 20, fetcher } = params;
   const formMethods = useForm<TFilter>({ defaultValues: defaultFilters });
@@ -110,7 +126,8 @@ export function useListController<TFilter extends object, TRow>(params: {
 
   const query = useQuery({
     queryKey: ['datagrid-list', filters, pagination, sorting],
-    queryFn: () => fetcher({ filters, pageIndex: pagination.pageIndex, pageSize: pagination.pageSize, sorting }),
+    queryFn: () =>
+      fetcher({ filters, pageIndex: pagination.pageIndex, pageSize: pagination.pageSize, sorting }),
     placeholderData: (prev) => prev ?? undefined,
   });
 
@@ -121,8 +138,10 @@ export function useListController<TFilter extends object, TRow>(params: {
     state: { pagination, sorting },
     manualPagination: true,
     manualSorting: true,
-    onPaginationChange: (updater) => setPagination((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
-    onSortingChange: (updater) => setSorting((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
+    onPaginationChange: (updater) =>
+      setPagination((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
+    onSortingChange: (updater) =>
+      setSorting((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -134,7 +153,8 @@ export function useListController<TFilter extends object, TRow>(params: {
     actions: {
       setFilters: (next: Partial<TFilter>) => formMethods.reset({ ...(filters as any), ...next }),
       resetFilters: () => formMethods.reset(defaultFilters),
-      setPagination: (pageIndex: number, pageSizeArg = pageSize) => setPagination({ pageIndex, pageSize: pageSizeArg }),
+      setPagination: (pageIndex: number, pageSizeArg = pageSize) =>
+        setPagination({ pageIndex, pageSize: pageSizeArg }),
       setSorting: (s: { id: string; desc: boolean }[]) => setSorting(s),
     },
   };
@@ -142,22 +162,24 @@ export function useListController<TFilter extends object, TRow>(params: {
 ```
 
 ## Pure, Reusable Components (datagrid)
+
 - `components/DataTableBase.tsx`: generic TanStack Table renderer; no entity logic.
 - `filters/FilterBarBase.tsx` (optional): shared input patterns; entity filter can extend/compose.
 
 ## Posts V2 — Using the Generic Datagrid
+
 ```tsx
 // ListPostsV2/index.tsx
 import { FormProvider } from 'react-hook-form';
 import { useListController } from '@/app/dashboard/_components/datagrid/controller/useListController';
 import DataTableBase from '@/app/dashboard/_components/datagrid/components/DataTableBase';
 import FilterBar from './filters/FilterBar';
-import { postsColumns } from './table/columns';
+import { desktopColumns } from './table/columns';
 
 export default function ListPostsDesktopV2() {
   const ctl = useListController({
     defaultFilters: { search: '', status: 'all' },
-    columns: postsColumns,
+    columns: desktopColumns,
     fetcher: async ({ filters, pageIndex, pageSize, sorting }) => ({ rows: [], totalCount: 0 }),
   });
   return (
@@ -170,30 +192,36 @@ export default function ListPostsDesktopV2() {
 ```
 
 ## Extending to New Entities (e.g., Users)
+
 - Create `UserListV2/` with `table/columns.ts` and `filters/FilterBar.tsx`.
 - Import and use the generic `useListController` from `datagrid/controller`.
 - Provide `defaultFilters`, `columns`, and a `fetcher` returning `{ rows, totalCount }`.
 - Reuse `DataTableBase` and base filter components.
 
 ## Migration From Current Desktop
+
 1. Replace `useListPostsForm` with the generic controller’s `formMethods`.
 2. Keep `FormProvider` wrapping; render your entity `FilterBar` and `DataTableBase`.
 3. Use the controller’s `table` for rows, pagination, and sorting.
 
 ## API Contracts & Types
+
 - `fetcher` returns `{ rows: TRow[]; totalCount: number }`.
 - Sorting items: `{ id: string; desc: boolean }[]` mapped from column ids.
 - Filters: entity‑specific type; define in `data/schemas.ts` or colocate.
 
 ## Performance & UX
+
 - Debounce filter changes if queries are heavy; apply on submit if needed.
 - Use `placeholderData` to keep previous rows during pagination.
 - Memoize column definitions; avoid recreating arrays in render.
 
 ## Testing
+
 - Unit test your `fetcher` and query key composition.
 - Verify table pagination and sorting reflect server responses.
 - Snapshot test views with stubbed controller data.
 
 ---
+
 This separation keeps generic datagrid logic reusable across features while leaving entity folders responsible only for columns, filters, and API wiring.

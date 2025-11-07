@@ -13,19 +13,9 @@ const ProductApiService = {
     data.ward_id && params.append('ward_id', data.ward_id);
     data.street_id && params.append('street_id', data.street_id);
     data.project_id && params.append('project_id', data.project_id);
-    data.price && params.append('price', data.price);
-    data.min_price && params.append('min_price', data.min_price);
-    data.max_price && params.append('max_price', data.max_price);
-    data.area && params.append('area', data.area);
-    data.min_area && params.append('min_area', data.min_area);
-    data.max_area && params.append('max_area', data.max_area);
     data.floors_count && params.append('floors_count', data.floors_count);
-    data.directions && params.append('directions', data.directions);
     data.furnitures && params.append('furnitures', data.furnitures);
-
     data.mat_tien && params.append('mat_tien', data.mat_tien);
-    data.bedrooms_count && params.append('bedrooms_count', data.bedrooms_count);
-    data.bathrooms_count && params.append('bathrooms_count', data.bathrooms_count);
     data.selected_ids && params.append('selected_ids', data.selected_ids);
     data.sort_by && params.append('sort_by', data.sort_by);
     data.sort_direction && params.append('sort_direction', data.sort_direction);
@@ -52,9 +42,9 @@ const ProductApiService = {
 
   UpVip: async (data: UpVipProductInput) => {
     const formData = new FormData();
-    formData.append('product_id', data.product_id);
+    formData.append('product_id', data.product_id.toString());
     formData.append('ads_type', data.ads_type);
-    formData.append('number_of_day', data.number_of_day);
+    formData.append('number_of_day', data.number_of_day.toString());
 
     const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.UP_VIP}`, formData);
 
@@ -63,9 +53,9 @@ const ProductApiService = {
 
   ValidateUpVip: async (data: UpVipProductInput) => {
     const formData = new FormData();
-    formData.append('product_id', data.product_id);
+    formData.append('product_id', data.product_id.toString());
     formData.append('ads_type', data.ads_type);
-    formData.append('number_of_day', data.number_of_day);
+    formData.append('number_of_day', data.number_of_day.toString());
 
     const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.VALIDATE_UP_VIP}`, formData);
 
@@ -76,7 +66,7 @@ const ProductApiService = {
     const formData = new FormData();
     formData.append('show_on_frontend', String(data.showOnFrontEnd));
 
-    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.SHOW_ON_FRONTEND.replace("{product_id}", data.productId)}`, formData);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.SHOW_ON_FRONTEND.replace("{product_id}", data.productId.toString())}`, formData);
 
     return response;
   },
@@ -93,15 +83,15 @@ const ProductApiService = {
     const formData = new FormData();
     formData.append('auto_refresh', String(data.autoRefresh));
 
-    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.SETUP_AUTO_REFRESH.replace("{product_id}", data.productId)}`, formData);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.SETUP_AUTO_REFRESH.replace("{product_id}", data.productId.toString())}`, formData);
 
     return response;
   },
 
   Delete: async (data: {
-    productId: string;
+    productId: number;
   }) => {
-    const response = await axiosInstance.delete(`${API_ROUTES.MANAGE_PRODUCTS.DELETE.replace("{product_id}", data.productId)}`);
+    const response = await axiosInstance.delete(`${API_ROUTES.MANAGE_PRODUCTS.DELETE.replace("{product_id}", data.productId.toString())}`);
 
     return response;
   },

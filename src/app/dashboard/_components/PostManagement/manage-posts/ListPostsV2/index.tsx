@@ -7,7 +7,7 @@ import Mobile from "./views/Mobile";
 
 export default function ListPostsV2({ isMobile = false }): React.ReactElement {
   return (
-    <PostsListProvider>
+    <PostsListProvider isMobile={isMobile}>
       {isMobile ? <Mobile /> : <Desktop />}
     </PostsListProvider>
   );

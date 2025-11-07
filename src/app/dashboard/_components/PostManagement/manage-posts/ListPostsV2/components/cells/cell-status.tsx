@@ -1,9 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
-import { Product } from '../../schemas/ManageProductListSchema';
-import { BlockAdsType } from './BlockAdsType';
 
-export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
+import { BlockAdsType } from './BlockAdsType';
+import { ManageProductList } from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/schemas/ManageProductListSchema';
+
+export const CellStatus: ColumnDef<ManageProductList>['cell'] = ({ row }) => {
   const id = row.original.id;
   // const productUid = row.original.uid;
   const detail_path = row.original.detail_path;
@@ -14,7 +15,7 @@ export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
 
   return (
     <div className="flex min-h-[180px] w-max flex-col gap-1">
-      <span className="text-xs">
+      <span>
         <span className="mb-2 font-medium">Mã tin:</span>
         <Link
           className="ml-2 cursor-pointer text-blue-600 hover:text-blue-900"
@@ -22,19 +23,19 @@ export const CellStatus: ColumnDef<Product>['cell'] = ({ row }) => {
         >
           #{id}
         </Link>
-      </span>
+      </span >
 
-      <div className="flex flex-col gap-1 text-xs">
+      <div className="flex flex-col gap-1">
         <span className="font-medium">Ngày đăng:</span>
         <span className="text-secondary">{formatted_created_at}</span>
       </div>
 
-      <div className="flex flex-col gap-1 text-xs">
+      <div className="flex flex-col gap-1">
         <span className="font-medium">Ngày làm mới:</span>
         <span className="text-secondary">{formatted_published_at}</span>
       </div>
 
       <BlockAdsType ads_type={ads_type} expires_after_days={expires_after_days} />
-    </div>
+    </div >
   );
 };

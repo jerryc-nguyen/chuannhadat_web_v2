@@ -31,7 +31,7 @@ ListPostsContainer
 
 ```tsx
 export function PostsListProvider({ children }: { children: React.ReactNode }) {
-  const ctl = usePostsListController({ columns: postsColumns });
+  const ctl = usePostsListController({ columns: desktopColumns });
   return (
     <PostsListContext.Provider value={ctl}>
       <FormProvider {...ctl.formMethods}>{children}</FormProvider>

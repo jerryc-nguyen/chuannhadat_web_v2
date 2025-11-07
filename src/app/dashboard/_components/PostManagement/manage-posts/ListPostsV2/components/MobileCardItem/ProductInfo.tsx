@@ -4,11 +4,11 @@ import useResizeImage from '@common/hooks/useResizeImage';
 import React from 'react';
 import { Image as ImageIcon } from 'lucide-react';
 import { featureProductImage } from '@common/productHelpers';
-import { ManageProductList } from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/schemas/ManageProductListSchema';
+import { Product } from '../../data/schemas';
 
 type RelatedProductCardProps = {
-  product: ManageProductList;
-  onOpenDetailModal?: (product: ManageProductList) => void;
+  product: Product;
+  onOpenDetailModal?: (product: Product) => void;
 };
 
 const ProductInfo: React.FC<RelatedProductCardProps> = ({ product, onOpenDetailModal }) => {
@@ -16,7 +16,7 @@ const ProductInfo: React.FC<RelatedProductCardProps> = ({ product, onOpenDetailM
     'https://images.chuannhadat.com/images/placeholders/list-item-placeholder.png';
   const { buildThumbnailUrl } = useResizeImage();
 
-  const handleViewDetailPost = (product: ManageProductList) => {
+  const handleViewDetailPost = (product: Product) => {
     onOpenDetailModal?.(product);
   };
 
