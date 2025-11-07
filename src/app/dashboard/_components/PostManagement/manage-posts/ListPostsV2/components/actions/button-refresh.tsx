@@ -4,7 +4,7 @@ import { Button } from '@components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@components/ui/tooltip';
 import { RefreshCw } from 'lucide-react';
 import ProductApiService from '../../apis/product-api';
-import useProductActionSetting from '../../hooks/product-action-setting';
+import useProductActionSetting from '../../hooks/useProductActionSetting';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 import { toast } from 'sonner';
 

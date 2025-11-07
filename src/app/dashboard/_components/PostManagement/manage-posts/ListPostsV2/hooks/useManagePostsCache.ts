@@ -30,7 +30,7 @@ export const useManagePostsCache = () => {
     );
   };
 
-  const updateFieldDataOnRow = (recordId: string, values: TValueUpdate[]) => {
+  const updateFieldDataOnRow = (recordId: number, values: TValueUpdate[]) => {
     getQueryClient().setQueriesData(
       {
         queryKey: ['collection-post'],

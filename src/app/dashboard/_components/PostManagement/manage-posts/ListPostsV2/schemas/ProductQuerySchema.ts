@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const productQuerySchema = z.object({
+export const ProductQuerySchema = z.object({
   business_type: z.string().optional(),
   category_type: z.string().optional(),
   city_id: z.string().optional(),
@@ -11,23 +11,6 @@ export const productQuerySchema = z.object({
   gia: z.string().optional(),
   dien_tich: z.string().optional(),
   floors_count: z.string().optional(),
-  // directions: z.enum([
-  //     'view_west',
-  //     'view_west_south',
-  //     'view_west_north',
-  //     'view_east',
-  //     'view_east_south',
-  //     'view_east_north',
-  //     'view_south',
-  //     'view_north',''
-  // ]), // Restricted values for directions
-
-  // furnitures: z.enum([
-  //     'full_furniture',
-  //     'basic_furniture',
-  //     'unfinished_furniture',''
-  // ]),
-
   huong: z.string().optional(),
   furnitures: z.string().optional(),
 
@@ -48,4 +31,4 @@ export const productQuerySchema = z.object({
   aggs_for: z.string().optional()
 });
 
-export type ProductQuery = z.infer<typeof productQuerySchema>;
+export type ProductQuery = z.infer<typeof ProductQuerySchema>;

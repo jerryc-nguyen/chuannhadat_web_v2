@@ -3,7 +3,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import FilterBarBase, { FieldConfigItem } from '@/app/dashboard/_components/datagrid/filters/mobile/FilterBarBase';
-import { ProductQuery } from '../../../data/schemas/product-query-schema';
+import { ProductQuery } from '../../../schemas/ProductQuerySchema';
 import { usePostsListContext } from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/context/PostsListProvider';
 
 const options = {

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const productSchema = z.object({
-  id: z.string(),
+export const ManageProductListSchema = z.object({
+  id: z.number(),
   code: z.string(),
   uid: z.string(),
   title: z.string(),
@@ -14,6 +14,7 @@ export const productSchema = z.object({
       url: z.string(),
     }),
   ),
+  featured_image_url: z.string(),
   images_count: z.number(),
   short_location_name: z.string(),
   formatted_price: z.string(),
@@ -39,4 +40,4 @@ export const productSchema = z.object({
   full_address: z.string(),
 });
 
-export type Product = z.infer<typeof productSchema>;
+export type ManageProductList = z.infer<typeof ManageProductListSchema>;

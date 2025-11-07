@@ -2,10 +2,10 @@
 
 import { useListController } from '@/app/dashboard/_components/datagrid/controller/useListController';
 import ProductApiService from '../apis/product-api';
-import { ProductQuery } from '../data/schemas/product-query-schema';
-import { productQueryFromDefaultValues } from '../data/type/product-query';
+import { ProductQuery } from '../schemas/ProductQuerySchema';
+import { productQueryFromDefaultValues } from '../types/product-query';
 import { ColumnDef } from '@tanstack/react-table';
-import { Product } from '../data/schemas/product-schema';
+import { Product } from '../schemas/ManageProductListSchema';
 import { IDashboardListFetcherReturn } from '@common/types';
 
 export function usePostsListController(params?: {

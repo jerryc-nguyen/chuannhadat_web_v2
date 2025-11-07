@@ -1,5 +1,5 @@
 import { FilterFieldName } from '@common/types';
-import { ProductQueryFieldName } from '../data/type/product-query';
+import { ProductQueryFieldName } from '../types/product-query';
 import { FilterChipOption } from '@common/types';
 
 export interface QueryChipOption {

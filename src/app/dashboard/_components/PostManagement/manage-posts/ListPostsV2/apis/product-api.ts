@@ -1,7 +1,7 @@
 import { API_ROUTES } from '@common/router';
 import axiosInstance from '@common/api/axiosInstance';
-import { ProductQuery } from '../data/schemas/product-query-schema';
-import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput, UpVipProductInput } from '../data/schemas/product-action-schema';
+import { ProductQuery } from '../schemas/ProductQuerySchema';
+import { SetUpAutoRefreshProductInput, ShowOnFrontEndProductInput, UpVipProductInput } from '../schemas/UpVipProductInputSchema';
 
 const ProductApiService = {
   Filter: async (data: ProductQuery) => {
@@ -82,9 +82,9 @@ const ProductApiService = {
   },
 
   Refresh: async (data: {
-    productId: string;
+    productId: number;
   }) => {
-    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.REFRESH.replace("{product_id}", data.productId)}`);
+    const response = await axiosInstance.postForm(`${API_ROUTES.MANAGE_PRODUCTS.REFRESH.replace("{product_id}", data.productId.toString())}`);
 
     return response;
   },

@@ -2,7 +2,7 @@ import { getQueryClient } from '@common/api/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { get } from 'lodash-es';
 import ProductApiService from '../apis/product-api';
-import { ProductActionSetting } from '../data/type/products-action-settings';
+import { ProductActionSetting } from '../types/products-action-settings';
 
 export default function useProductActionSetting() {
   const { isLoading, data } = useQuery({

@@ -6,7 +6,7 @@ import { Trash2 } from 'lucide-react';
 import ProductApiService from '../../apis/product-api';
 import { toast } from 'sonner';
 
-export const ButtonDelete = ({ productId }: { productId: number }) => {
+export const ButtonDelete = ({ productId }: { productId: string }) => {
   const { openModal, closeModal } = useModals();
 
   const queryClient = useQueryClient();

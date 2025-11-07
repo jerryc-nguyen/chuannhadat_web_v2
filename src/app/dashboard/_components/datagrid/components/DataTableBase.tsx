@@ -22,7 +22,7 @@ const DataTableBase: React.FC<Props> = ({ table, className }) => {
                 {hg.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-3 py-2 text-left text-xs font-semibold text-gray-700"
+                    className="px-3 py-2 text-left text-xs font-semibold text-gray-700 align-top"
                     style={{ width: header.getSize() ? `${header.getSize()}px` : undefined }}
                   >
                     {header.isPlaceholder
@@ -36,8 +36,11 @@ const DataTableBase: React.FC<Props> = ({ table, className }) => {
           <tbody className="divide-y divide-gray-200 bg-white">
             {rowModel.rows.map((row) => (
               <tr key={row.id} className="hover:bg-gray-50">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-3 py-2 text-sm text-gray-900">
+                {row.getVisibleCells().map((cell, idx) => (
+                  <td
+                    key={cell.id}
+                    className={`px-3 py-2 text-sm text-gray-900 align-top ${idx === 0 ? 'w-8' : ''}`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { usePostsListController } from "../controller/usePostsListController";
-import { postsColumns } from "../table/columns";
+import { postsColumns } from "../components/table/columns";
 import { FormProvider } from "react-hook-form";
 
 const PostsListContext = createContext<any>(null);

@@ -98,9 +98,9 @@ const ProductApiService = {
   },
 
   Delete: async (data: {
-    productId: string;
+    productId: number;
   }) => {
-    const response = await axiosInstance.delete(`${API_ROUTES.MANAGE_PRODUCTS.DELETE.replace("{product_id}", data.productId)}`);
+    const response = await axiosInstance.delete(`${API_ROUTES.MANAGE_PRODUCTS.DELETE.replace("{product_id}", data.productId.toString())}`);
 
     return response;
   },

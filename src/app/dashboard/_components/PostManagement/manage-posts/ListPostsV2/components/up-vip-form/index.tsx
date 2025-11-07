@@ -8,10 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   UpVipProductInput,
   UpVipProductInputSchema,
-} from '../../data/schemas/product-action-schema';
+} from '../../schemas/UpVipProductInputSchema';
 import { Button } from '@components/ui/button';
 import { LoadingSpinner } from '@components/icons/CustomIcons';
-import useProductActionSetting from '../../hooks/product-action-setting';
+import useProductActionSetting from '../../hooks/useProductActionSetting';
 import { useBalanceRequest } from '@common/api/balance';
 import { get } from 'lodash-es';
 import { useManagePostsCache } from '../../hooks/useManagePostsCache';
@@ -29,7 +29,7 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
   const [defaultValues] = useState<UpVipProductInput>({
     product_id: productId,
     ads_type: '',
-    number_of_day: '',
+    number_of_day: 3,
   });
 
   const form = useForm({
@@ -94,16 +94,16 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
     }
 
     let discountPercentage = 0;
-    if (parseInt(numberOfDay) === 7) {
+    if (numberOfDay === 7) {
       discountPercentage = 15;
-    } else if (parseInt(numberOfDay) === 15) {
+    } else if (numberOfDay === 15) {
       discountPercentage = 20;
-    } else if (parseInt(numberOfDay) === 30) {
+    } else if (numberOfDay === 30) {
       discountPercentage = 30;
     }
 
     handleValidateUpVip(form.getValues());
-    setTotalAmount(amountPerDay * parseInt(numberOfDay) * ((100 - discountPercentage) / 100));
+    setTotalAmount(amountPerDay * numberOfDay * ((100 - discountPercentage) / 100));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adsType, numberOfDay]);
 
@@ -183,9 +183,9 @@ const UpVipProductForm = ({ productId, closeModal }: IUpVipProductFormProps) => 
                     <Radio
                       key={item.value}
                       label={item.text}
-                      checked={!!(numberOfDay && numberOfDay === item.value.toString())}
+                      checked={!!(numberOfDay && numberOfDay === item.value)}
                       onChange={() => {
-                        form.setValue('number_of_day', item.value.toString());
+                        form.setValue('number_of_day', item.value);
                       }}
                     />
 

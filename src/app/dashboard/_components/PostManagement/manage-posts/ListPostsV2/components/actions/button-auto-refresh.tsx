@@ -2,10 +2,9 @@
 import { Checkbox } from '@components/ui/checkbox';
 import { useState } from 'react';
 import ProductApiService from '../../apis/product-api';
-import {
-  SetUpAutoRefreshProductInput
-} from '../../data/schemas';
+
 import { toast } from 'sonner';
+import { SetUpAutoRefreshProductInput } from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/schemas/UpVipProductInputSchema';
 
 export const CheckboxAutoRefresh = ({
   productId,
