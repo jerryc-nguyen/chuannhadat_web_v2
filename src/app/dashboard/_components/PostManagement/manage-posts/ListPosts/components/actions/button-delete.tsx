@@ -52,7 +52,7 @@ export const ButtonDelete = ({ productId }: { productId: number }) => {
     <Button
       variant="outline"
       size="sm"
-      className="mt-2 h-8 justify-start gap-2"
+      className="my-2h-8 justify-start gap-2"
       onClick={showConfirmDelete}
     >
       <Trash2 size={16} /> <span className="text-sm">Xóa tin</span>

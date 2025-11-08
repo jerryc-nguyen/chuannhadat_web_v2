@@ -45,7 +45,7 @@ export const ButtonRefresh = ({ productId }: { productId: number }) => {
           <Button
             variant="outline"
             size="sm"
-            className="mb-1 h-8 justify-start gap-2"
+            className="mt-4 h-8 justify-start gap-2"
             onClick={handleRefresh}
           >
             <RefreshCw size={16} /> <span className="text-sm">Làm mới tin</span>
