@@ -53,7 +53,7 @@ export default function Mobile(): React.ReactElement {
         }}
       />
 
-      <DataTableBaseMobile table={ctl.table} />
+      <DataTableBaseMobile table={ctl.table} resourceName="bài đăng" />
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default function Desktop(): React.ReactElement {
         className="bg-none mb-4"
       />
 
-      <DataTableBase table={ctl.table} />
+      <DataTableBase table={ctl.table} resourceName="bài đăng" />
     </div>
   );
 }

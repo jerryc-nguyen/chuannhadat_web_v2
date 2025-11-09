@@ -29,6 +29,7 @@ export type UseListControllerReturn<TFilter extends object, TRow> = {
     filters: TFilter;
     pagination: { pageIndex: number; pageSize: number };
     sorting: SortItem[];
+    totalCount: number;
   };
   actions: {
     setFilters: (next: Partial<TFilter>) => void;
@@ -83,10 +84,12 @@ export function useListController<TFilter extends object, TRow>(
     placeholderData: (prev) => prev ?? undefined,
   });
 
+  const totalCount = query.data?.pagination?.total_count ?? 0;
+
   const table = useReactTable<TRow>({
     data: query.data?.rows ?? [],
     columns,
-    pageCount: Math.ceil((query.data?.pagination?.total_count ?? 0) / pagination.pageSize),
+    pageCount: Math.ceil(totalCount / pagination.pageSize),
     state: { pagination, sorting },
     manualPagination: true,
     manualSorting: true,
@@ -95,6 +98,7 @@ export function useListController<TFilter extends object, TRow>(
     onSortingChange: (updater) =>
       setSorting((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
     getCoreRowModel: getCoreRowModel(),
+    meta: { totalCount },
   });
 
   const actions = {
@@ -118,7 +122,7 @@ export function useListController<TFilter extends object, TRow>(
     formMethods,
     table,
     query: query.data ?? ({} as IDashboardListFetcherReturn<TRow>),
-    state: { filters, pagination, sorting }, // 'filters' is still the live form state for the UI
+    state: { filters, pagination, sorting, totalCount }, // 'filters' is still the live form state for the UI
     actions,
   };
 }

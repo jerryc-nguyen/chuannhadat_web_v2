@@ -7,9 +7,10 @@ import Pagination from './Pagination';
 type Props = {
   table: Table<any>;
   className?: string;
+  resourceName?: string;
 };
 
-const DataTableBase: React.FC<Props> = ({ table, className }) => {
+const DataTableBase: React.FC<Props> = ({ table, className, resourceName = 'bản ghi' }) => {
   const headerGroups = table.getHeaderGroups();
   const rowModel = table.getRowModel();
 
@@ -64,7 +65,7 @@ const DataTableBase: React.FC<Props> = ({ table, className }) => {
         </div>
 
         {/* Pagination controls (server-side). Consumers may override or hide. */}
-        <Pagination table={table} position="fixed-fit" />
+        <Pagination table={table} position="fixed-fit" resourceName={resourceName} />
       </div>
     </div>
   );

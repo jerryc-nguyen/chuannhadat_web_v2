@@ -9,24 +9,31 @@ type Props = {
   // Simplified to the current working solution only
   position?: 'fixed-fit';
   showTotal?: boolean;
+  resourceName?: string;
 };
+const DEFAULT_PAGE_SIZE = 10;
 
-const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit', showTotal = true }) => {
+const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit', showTotal = true, resourceName = 'bản ghi' }) => {
   const pageCountRaw = table.getPageCount();
   const pageIndex = table.getState().pagination.pageIndex;
 
   const [pageInput, setPageInput] = React.useState<number>(pageIndex + 1);
+
   React.useEffect(() => {
     setPageInput(pageIndex + 1);
   }, [pageIndex]);
 
   const meta: any = (table.options as any)?.meta ?? {};
   const totalCount: number | undefined = typeof meta.totalCount === 'number' ? meta.totalCount : undefined;
-  const pageSize = table.getState().pagination.pageSize || 10;
+  const pageSize = table.getState().pagination.pageSize || DEFAULT_PAGE_SIZE;
   const pageCount = pageCountRaw || (typeof totalCount === 'number' ? Math.max(1, Math.ceil(totalCount / pageSize)) : 1);
 
+  const hasTotal = typeof totalCount === 'number';
+  const startItem = hasTotal ? Math.min(totalCount as number, pageIndex * pageSize + 1) : pageIndex * pageSize + 1;
+  const endItem = hasTotal ? Math.min(totalCount as number, (pageIndex + 1) * pageSize) : (pageIndex + 1) * pageSize;
+
   const getPageItems = (current: number, total: number): (number | '…')[] => {
-    if (total <= 10) {
+    if (total <= 5) {
       return Array.from({ length: total }, (_, i) => i + 1);
     }
     if (current <= 4) {
@@ -43,10 +50,11 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
     table.setPageIndex(clamped - 1);
   };
 
-  const baseClasses = 'border-t border-gray-200 bg-white px-3 py-2 flex items-center justify-between';
+  const baseClasses = 'border border-gray-200 bg-white px-3 py-2 flex items-center justify-between';
   const wrapperClass = `${className ?? ''} ${baseClasses}`;
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [fixedStyle, setFixedStyle] = React.useState<React.CSSProperties | undefined>(undefined);
+
   const updateFixedStyle = React.useCallback(() => {
     const el = containerRef.current;
     const parent = el?.parentElement;
@@ -54,12 +62,15 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
     const rect = parent.getBoundingClientRect();
     setFixedStyle({ position: 'fixed', bottom: 0, left: rect.left, width: rect.width, zIndex: 20 });
   }, [position]);
+
   React.useEffect(() => {
-    updateFixedStyle();
     const onResize = () => updateFixedStyle();
     const onScroll = () => updateFixedStyle();
+
     window.addEventListener('resize', onResize);
     window.addEventListener('scroll', onScroll, { passive: true });
+
+    setTimeout(() => updateFixedStyle(), 100);
     return () => {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('scroll', onScroll);
@@ -70,13 +81,17 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
   return (
     <div ref={containerRef} className={wrapperClass} style={fixedStyle}>
       <div className="flex items-center gap-3 text-sm text-gray-700">
-        <span>
-          Page {pageIndex + 1} of {pageCount}
-        </span>
-        {showTotal && typeof totalCount === 'number' && (
-          <span className="text-gray-500">Total: {totalCount}</span>
+        {showTotal && hasTotal && (
+          <span className="text-gray-500">
+            {startItem} - {endItem} của {totalCount} {resourceName}
+          </span>
         )}
-      </div>
+        ·
+        <span className="text-gray-500">
+          Trang {pageIndex + 1} / {pageCount}
+        </span>
+
+      </div >
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1 flex-wrap">
           {getPageItems(pageIndex + 1, pageCount).map((item, idx) =>
@@ -85,7 +100,7 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
             ) : (
               <button
                 key={`page-${item}`}
-                className={`rounded border px-2 py-1 text-sm ${item === pageIndex + 1 ? 'bg-gray-900 text-white border-gray-900' : ''}`}
+                className={`w-8 h-8 rounded border px-2 py-1 text-sm ${item === pageIndex + 1 ? 'bg-gray-900 text-white border-gray-900' : ''}`}
                 onClick={() => goToPage(item as number)}
               >
                 {item}
@@ -94,7 +109,7 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
           )}
         </div>
         <label className="flex items-center gap-2 text-sm text-gray-700">
-          <span>Go to page</span>
+          <span>Đi tới trang</span>
           <input
             type="number"
             min={1}
@@ -117,18 +132,18 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Prev
+            Trang trước
           </button>
           <button
             className="rounded border px-2 py-1 text-sm disabled:opacity-50"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Trang sau
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
