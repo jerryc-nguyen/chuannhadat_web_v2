@@ -22,15 +22,23 @@ export const FRIENDLY_VALUES = {
   ),
 }
 
-export const FRIENDLY_FIELDS: Array<string> = [
-  'businessType',
-  'categoryType',
-  'price',
-  'area',
-  'bed',
-  'bath',
-  'direction'
+export const FRIENDLY_FIELD_NAMES: Array<string> = [
+  'hinh_thuc',
+  'loai_bds',
+  'gia',
+  'dien_tich',
+  'phong_ngu',
+  'phong_tam',
+  'huong'
 ];
+
+export const NORMAL_FIELD_NAMES: Array<string> = [
+  'city_id',
+  'district_id',
+  'ward_id',
+  'project_id',
+  'sort',
+]
 
 export const NORMAL_FIELDS: Array<string> = [
   'city',

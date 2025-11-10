@@ -27,12 +27,7 @@ export default function CategoryMobile() {
   const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
 
   // Use the new pure UI state manager
-  const {
-    filterState,
-    onFieldChanged,
-    onClearFilter,
-  } = useFilterState();
-
+  const { filterState } = useFilterState();
   const { friendlyParams } = useFilterStatePresenter(filterState);
 
   const APIFilterParams = useMemo(() => {
@@ -56,9 +51,6 @@ export default function CategoryMobile() {
       <div className="mb-4 mt-4">
         <FilterChips
           chipOptions={filteredChipOptions}
-          selectedFilterState={filterState}
-          onFieldChanged={onFieldChanged}
-          onClearFilter={onClearFilter}
         />
       </div>
 

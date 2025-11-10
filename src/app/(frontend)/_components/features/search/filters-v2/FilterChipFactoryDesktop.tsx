@@ -5,7 +5,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover'
 import { FilterChipOption, FilterFieldName } from '@common/types';
 import FilterContentOptionsFactory from './components/FilterContentOptionsFactory';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
-import { FilterChangeEvent } from './types/pure-ui-types';
 import { useFilterOperation } from './hooks/useFilterOperation';
 import {
   ArrowUp as SortUpIcon,
@@ -17,21 +16,13 @@ import {
 
 export type FilterChipProps = {
   filterChipItem: FilterChipOption;
-  selectedFilterState: FilterState;
   onFiltersChanged?: (filterState: FilterState) => void;
-  // Functions from useFilterState hook
-  onFieldChanged: (event: FilterChangeEvent) => void;
-  onClearFilter: (filterFieldName: FilterFieldName) => void;
-  // Aggregation data from useSearchAggs (for pure UI)
   aggregationData?: AggregationData;
 };
 
 const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   filterChipItem,
-  selectedFilterState,
   onFiltersChanged,
-  onFieldChanged,
-  onClearFilter,
   aggregationData = {},
 }) => {
 
@@ -40,7 +31,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
 
   // Use the extracted filter state operations hook
   const {
-    localFilterState: _localFilterState,
+    selectedFilterState,
     setLocalFilterState,
     currentFilterState,
     selectedFilterText,
@@ -52,9 +43,6 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
     onApplyFilter,
     handleRemoveFilter,
   } = useFilterOperation({
-    selectedFilterState,
-    onFieldChanged,
-    onClearFilter,
     onFiltersChanged,
     setIsOpenPopover,
   });
@@ -148,7 +136,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
           className={cn(`!relative z-20 mt-4 ${contentWidth()}`)}
         >
           <h2 className="text-left text-lg font-semibold">{filterChipItem.text}</h2>
-          <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
+          <section className="content-filter my-3 max-h-[10rem] overflow-y-auto">
             <FilterContentOptionsFactory
               filterState={currentFilterState}
               onChange={handleLocalFilterChange}

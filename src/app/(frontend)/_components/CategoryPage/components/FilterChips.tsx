@@ -3,7 +3,6 @@ import { cn } from '@common/utils';
 import { FilterChipOption, IPagination } from '@common/types';
 import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryDesktop';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
-import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 
 type FilterChipsDesktopProps = {
   chipOptions: FilterChipOption[];
@@ -23,18 +22,12 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   onFiltersChanged,
   aggregationData
 }) => {
-  // Use the filter state hook to get the required functions
-  const {
-    filterState,
-    onFieldChanged,
-    onClearFilter
-  } = useFilterState();
 
   return (
     <div
       id="post-control-desktop-v2"
       className={cn(
-        'sticky top-16 z-10 flex flex-col gap-x-3 bg-white/70 backdrop-blur-sm lg:flex-row lg:items-center',
+        'sticky top-16 z-30 flex flex-col gap-x-3 bg-white/70 backdrop-blur-sm lg:flex-row lg:items-center',
         className,
       )}
     >
@@ -46,10 +39,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
             <FilterChipFactoryDesktop
               key={item.id}
               filterChipItem={item}
-              selectedFilterState={filterState}
               onFiltersChanged={onFiltersChanged}
-              onFieldChanged={onFieldChanged}
-              onClearFilter={onClearFilter}
               aggregationData={aggregationData}
             />
           ))}

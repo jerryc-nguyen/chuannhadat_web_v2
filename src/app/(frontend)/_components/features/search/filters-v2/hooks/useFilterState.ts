@@ -7,7 +7,6 @@ import {
   emptyFilterState,
 } from '../../filters-v2/states';
 import { FilterState } from '../../types';
-import { FilterChangeEvent } from '../types/pure-ui-types';
 import { useSyncFilterParamsToUrl } from './useSyncFilterParamsToUrl';
 import { buildFriendlyParams } from '@app/(frontend)/_components/features/search/filters-v2/helpers/friendlyParamsHelper';
 
@@ -29,52 +28,7 @@ export function useFilterState() {
   }, [filterState]);
 
   // Event handlers for pure UI components
-  const handleFilterChange = useCallback((event: FilterChangeEvent) => {
-    const { fieldName, value, params } = event;
-
-    // Follow the same composite filter logic as the old applySingleFilter
-    let updateValues: Partial<FilterState> = {};
-
-    if (
-      fieldName === FilterFieldName.Locations ||
-      fieldName === FilterFieldName.ProfileLocations
-    ) {
-      // For location filters, apply current location state (matching old applySingleFilter)
-      // This preserves the current city/district/ward values when the filter is applied
-      updateValues = {
-        city: params?.city,
-        district: params?.district,
-        ward: params?.ward,
-      };
-    } else if (fieldName === FilterFieldName.Rooms) {
-      // For room filters, apply current room state (matching old applySingleFilter)
-      // This preserves the current bed/bath values when the filter is applied
-      updateValues = {
-        bed: params?.bed,
-        bath: params?.bath,
-      };
-    } else if (fieldName === FilterFieldName.BusCatType) {
-      // BusCatType clears location data (following old applySingleFilter logic)
-      updateValues = {
-        busCatType: params?.busCatType,
-        city: undefined,
-        district: undefined,
-        ward: undefined,
-      };
-    } else if (fieldName === FilterFieldName.AggProjects) {
-      // AggProjects sets both aggProjects and project, clears location data
-      updateValues = {
-        aggProjects: params?.aggProjects,
-        project: params?.project,
-        city: undefined,
-        district: undefined,
-        ward: undefined,
-      };
-    } else {
-      // For simple filters, just set the field value
-      updateValues = { [fieldName]: value };
-    }
-
+  const updateFilters = useCallback((updateValues: Partial<FilterState>) => {
     setFilterState(prev => ({
       ...prev,
       ...updateValues,
@@ -111,7 +65,7 @@ export function useFilterState() {
     }));
   }, [setFilterState]);
 
-  const handleClearFilter = useCallback((fieldName: FilterFieldName) => {
+  const clearFilter = useCallback((fieldName: FilterFieldName) => {
     // Handle special cases for composite filters
     const newFilterState: FilterState = { ...filterState };
 
@@ -164,10 +118,10 @@ export function useFilterState() {
     hasActiveFilters,
 
     // Event handlers for pure UI components
-    onFieldChanged: handleFilterChange,
+    updateFilters,
     onLocationChange: handleLocationChange,
     onRoomChange: handleRoomChange,
-    onClearFilter: handleClearFilter,
+    clearFilter,
     onClearAllFilters: handleClearAllFilters,
 
     // Utility functions
