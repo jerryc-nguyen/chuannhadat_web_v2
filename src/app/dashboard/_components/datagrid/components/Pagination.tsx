@@ -17,10 +17,10 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
   const pageCountRaw = table.getPageCount();
   const pageIndex = table.getState().pagination.pageIndex;
 
-  const [pageInput, setPageInput] = React.useState<number>(pageIndex + 1);
+  const [pageInput, setPageInput] = React.useState<string>(String(pageIndex + 1));
 
   React.useEffect(() => {
-    setPageInput(pageIndex + 1);
+    setPageInput(String(pageIndex + 1));
   }, [pageIndex]);
 
   const meta: any = (table.options as any)?.meta ?? {};
@@ -48,6 +48,16 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
   const goToPage = (n: number) => {
     const clamped = Math.max(1, Math.min(pageCount, n));
     table.setPageIndex(clamped - 1);
+  };
+
+  const commitPageInput = () => {
+    const parsed = Number.parseInt(pageInput || '', 10);
+    if (Number.isNaN(parsed)) {
+      // If empty or invalid, reset to current page
+      setPageInput(String(pageIndex + 1));
+      return;
+    }
+    goToPage(parsed);
   };
 
   const baseClasses = 'border border-gray-200 bg-white px-3 py-2 flex items-center justify-between';
@@ -115,12 +125,12 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
             min={1}
             max={pageCount}
             value={pageInput}
-            onChange={(e) => setPageInput(Number(e.target.value) || 1)}
-            onBlur={() => goToPage(pageInput)}
+            onChange={(e) => setPageInput(e.target.value)}
+            onBlur={commitPageInput}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                goToPage(pageInput);
+                commitPageInput();
               }
             }}
             className="w-16 rounded border px-2 py-1 text-sm"
