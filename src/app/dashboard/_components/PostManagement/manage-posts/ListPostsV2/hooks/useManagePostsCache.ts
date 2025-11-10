@@ -8,50 +8,53 @@ type TValueUpdate = {
 
 export const useManagePostsCache = () => {
   const updateRowData = (updateRes: A) => {
-    getQueryClient().setQueriesData(
+    const qc = getQueryClient();
+    // Update generic datagrid cache shape only: { rows: [...] }
+    qc.setQueriesData(
       {
-        queryKey: ['collection-post'],
+        queryKey: ['datagrid-list'],
       },
-      (prev: A) => {
+      (prev: any) => {
         const recordId = get(updateRes, 'id', '');
+        if (!prev || !Array.isArray(prev?.rows)) return prev;
         return {
           ...prev,
-          data: prev.data.map((record: A) => {
-            if (record.id === recordId) {
-              return {
-                ...record,
-                ...updateRes,
-              };
-            }
-            return record;
-          }),
+          rows: prev.rows.map((row: any) => (row?.id === recordId ? { ...row, ...updateRes } : row)),
         };
       },
     );
   };
 
   const updateFieldDataOnRow = (recordId: number, values: TValueUpdate[]) => {
-    getQueryClient().setQueriesData(
+    const qc = getQueryClient();
+    // Update generic datagrid cache shape only: { rows: [...] }
+    qc.setQueriesData(
       {
-        queryKey: ['collection-post'],
+        queryKey: ['datagrid-list'],
       },
-      (prev: A) => {
+      (prev: any) => {
+        if (!prev || !Array.isArray(prev?.rows)) return prev;
         return {
           ...prev,
-          data: prev.data.map((record: A) => {
-            if (record.id === recordId) {
-              const clonedRecord = { ...record };
+          rows: prev.rows.map((row: any) => {
+            if (row?.id === recordId) {
+              const clonedRow = { ...row };
               values.forEach((value) => {
-                set(clonedRecord, value.setterKey, value.newValue);
+                set(clonedRow, value.setterKey, value.newValue);
               });
-              return clonedRecord;
+              return clonedRow;
             }
-            return record;
+            return row;
           }),
         };
       },
     );
   };
 
-  return { updateRowData, updateFieldDataOnRow };
+  const refreshDatagridList = () => {
+    const qc = getQueryClient();
+    qc.invalidateQueries({ queryKey: ['datagrid-list'] });
+  };
+
+  return { updateRowData, updateFieldDataOnRow, refreshDatagridList };
 };

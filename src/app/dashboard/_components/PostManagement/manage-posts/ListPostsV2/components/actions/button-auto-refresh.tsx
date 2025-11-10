@@ -2,6 +2,7 @@
 import { Checkbox } from '@components/ui/checkbox';
 import { useState } from 'react';
 import ProductApiService from '../../apis/product-api';
+import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 
 import { toast } from 'sonner';
 import { SetUpAutoRefreshProductInput } from '@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/schemas/UpVipProductInputSchema';
@@ -14,14 +15,16 @@ export const CheckboxAutoRefresh = ({
   auto_refresh_product: boolean;
 }) => {
   const [checked, setChecked] = useState<boolean>(auto_refresh_product);
+  const { refreshDatagridList } = useManagePostsCache();
 
   const handleSetUpAutoRefresh = async (data: SetUpAutoRefreshProductInput) => {
     try {
       const res: A = await ProductApiService.SetUpAutoRefresh(data);
-      console.log('handleSetUpAutoRefresh success response', res);
 
       if (res.status === true && res.message) {
         toast.success(res.message);
+        // Refetch the table data from server to reflect backend changes
+        refreshDatagridList();
       } else {
         toast.error(res.message);
         setChecked(!data.autoRefresh);

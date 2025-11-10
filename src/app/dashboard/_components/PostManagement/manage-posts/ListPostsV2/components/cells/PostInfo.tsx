@@ -26,7 +26,7 @@ export const PostInfo = ({ product }: PostInfoProps) => {
   } = product;
 
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${product.ads_type}`} >
       <div className="mb-2">
         <TitleTriggerOpenProductDetail title={title} product={product} />
         <BlockWarnHiddenPost visible={visible} />
@@ -53,6 +53,6 @@ export const PostInfo = ({ product }: PostInfoProps) => {
         <ButtonUpVip productId={productId} adsType={adsType} />
         <CheckboxAutoRefresh productId={productId} auto_refresh_product={auto_refresh_product} />
       </div>
-    </div>
+    </div >
   );
 };
