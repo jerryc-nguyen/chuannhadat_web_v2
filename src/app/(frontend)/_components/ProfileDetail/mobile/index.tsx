@@ -18,7 +18,7 @@ import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncPar
 import useResizeImage from '@common/hooks/useResizeImage';
 import { listFilterProfileMobile } from '@frontend/CategoryPage/constants';
 import FilterChips from '@frontend/features/search/filter-conditions/mobile/FilterChips';
-import PostList from '@frontend/CategoryPage/mobile/searchs/PostList';
+import PostList from '@app/(frontend)/_components/CategoryPage/mobile/PostList';
 import { useQuery } from '@tanstack/react-query';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';

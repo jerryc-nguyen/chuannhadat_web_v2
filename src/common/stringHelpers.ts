@@ -50,3 +50,36 @@ export const formatPhoneNumber = (phoneNumber?: string) => {
   }
   return phoneNumber.replace(/(\d{4})(\d{3})(\d{3})/, '$1.$2.$3');
 }
+
+export const toSearchString = (text?: string): string => {
+  if (!text || text.trim() === '') {
+    return text || '';
+  }
+
+  return text.toLowerCase()
+    .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, 'a')
+    .replace(/[èéẹẻẽêềếệểễ]/g, 'e')
+    .replace(/[ìíịỉĩ]/g, 'i')
+    .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, 'o')
+    .replace(/[ùúụủũưừứựửữ]/g, 'u')
+    .replace(/[ỳýỵỷỹ]/g, 'y')
+    .replace(/[đ]/g, 'd')
+    .replace(/[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]/g, 'A')
+    .replace(/[ÈÉẸẺẼÊỀẾỆỂỄ]/g, 'E')
+    .replace(/[ÌÍỊỈĨ]/g, 'I')
+    .replace(/[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]/g, 'O')
+    .replace(/[ÙÚỤỦŨƯỪỨỰỬỮ]/g, 'U')
+    .replace(/[ỲÝỴỶỸ]/g, 'Y')
+    .replace(/[Đ]/g, 'D')
+    .replace(/[\u0300]/g, '')
+    .replace(/[\u0301]/g, '')
+    .replace(/[\u0302]/g, '')
+    .replace(/[\u0303]/g, '')
+    .replace(/[\u0306]/g, '')
+    .replace(/[\u0309]/g, '')
+    .replace(/[\u0323]/g, '')
+    .replace(/[\u031B]/g, '')
+    .replace(/_/g, ' ')
+    .replace(/\s+/g, ' ') // squish - replace multiple whitespace with single space
+    .trim();
+}

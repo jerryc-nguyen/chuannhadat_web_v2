@@ -24,6 +24,7 @@
       "@components/*": ["src/components/*"],
       "@frontend/*": ["src/app/(frontend)/_components/*"],
       "@dashboard/*": ["src/app/dashboard/_components/*"],
+      "@maps/*": ["src/app/(frontend)/_components/Maps/*"],
       "@common/*": ["src/common/*"]
     },
     "plugins": [

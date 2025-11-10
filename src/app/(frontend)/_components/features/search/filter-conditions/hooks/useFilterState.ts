@@ -15,10 +15,9 @@ import {
   filterFieldOptionsAtom,
   filterStateAtom,
   localFilterStateAtom,
-} from '../states';
-import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterState } from '../types';
-
-import { useFilterLocations } from '@frontend/features/navigation/mobile-locations/hooks';
+} from '../../filters-v2/states';
+import { FILTER_FIELDS_PARAMS_MAP, FILTER_FIELDS_TO_PARAMS, FilterState } from '../../types';
+import { useFilterStatePresenter } from '../../filters-v2/hooks/useFilterStatePresenter';
 
 export default function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
@@ -26,7 +25,7 @@ export default function useFilterState() {
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
   const pathname = usePathname() || '';
   const { searchScope } = useSearchScope();
-  const { selectedLocationText } = useFilterLocations();
+  const { selectedFilterText, selectedRoomText, isActiveChip } = useFilterStatePresenter(filterState);
 
   const resetDataFilter = () => {
     setFilterState({});
@@ -252,55 +251,7 @@ export default function useFilterState() {
     return filterState.sort?.text as string | undefined;
   }, [filterState.sort?.text]);
 
-  const selectedFilterText = (filterOption: FilterChipOption): string => {
-    const fieldName = filterOption.id;
 
-    if (filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations) {
-      return selectedLocationText ?? 'Khu vực';
-    } else if (filterOption.id == FilterFieldName.AggProjects || filterOption.id == FilterFieldName.Project) {
-      return filterState.project?.text ?? 'Dự án';
-    } else if (filterOption.id == FilterFieldName.Rooms) {
-      const roomText = selectedRoomText();
-      return roomText || 'Số phòng';
-    } else {
-      return (
-        //@ts-ignore: read value
-        filterState[fieldName]?.text ?? filterOption.text
-      );
-    }
-  };
-
-  const selectedRoomText = (): string => {
-    const results = [];
-    if (filterState.bed) {
-      results.push(`${filterState.bed.text} PN`);
-    }
-    if (filterState.bath) {
-      results.push(`${filterState.bath.text} WC`);
-    }
-    return results.join(' / ');
-  };
-
-  const isActiveChip = (filterOption: FilterChipOption): boolean => {
-    const fieldName = filterOption.id;
-
-    if (
-      filterOption.id == FilterFieldName.Locations ||
-      filterOption.id == FilterFieldName.ProfileLocations
-    ) {
-      return !!(filterState.city || filterState.district || filterState.ward);
-    } else if (filterOption.id == FilterFieldName.Rooms) {
-      return !!(filterState.bed || filterState.bath);
-    } else if (filterOption.id == FilterFieldName.AggProjects) {
-      return !!(filterState.aggProjects || filterState.project);
-    } else {
-      return (
-        //@ts-ignore: read value
-        !!filterState[fieldName]?.text
-      );
-    }
-  };
 
   return {
     filterState,

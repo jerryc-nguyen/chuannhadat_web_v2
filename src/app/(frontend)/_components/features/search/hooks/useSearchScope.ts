@@ -1,6 +1,5 @@
 'use client';
 
-import { AuthUtils } from "@common/auth";
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "@frontend/features/navigation/main-content-navigator/constants";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -21,7 +20,7 @@ export default function useSearchScope() {
     }
     else if (pathname.indexOf('/tin-tuc') != -1) {
       return SearchScopeEnums.News
-    } else if (pathname.indexOf('/dashboard/') != -1 && AuthUtils.getCurrentUser()) {
+    } else if (pathname.indexOf('/dashboard/') != -1) {
       return SearchScopeEnums.ManagePosts
     } else {
       return SearchScopeEnums.Category

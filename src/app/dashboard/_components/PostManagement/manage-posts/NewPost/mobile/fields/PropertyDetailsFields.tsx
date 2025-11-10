@@ -12,7 +12,7 @@ import { RoundedOptionsNumberInput } from '@dashboard/PostManagement/manage-post
 import {
   roomsOptionsForCreate,
   facadeOptionsForCreate,
-} from '@frontend/features/search/filter-conditions/constants';
+} from '@app/(frontend)/_components/features/search/filters-v2/constants';
 import {
   directionOptions,
   furnitureTypeOptions,

@@ -8,6 +8,13 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import { ONE_BILLION } from './constants';
 
+/**
+ * Check if a value is blank (undefined, null, or empty string).
+ */
+export function isBlank(value: unknown): value is undefined | null | "" {
+  return value === undefined || value === null || value === "";
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -173,15 +180,6 @@ export const queryParamsToObject = (query: string): Record<string, A> => {
   return result;
 };
 
-export const updateUrlSearchParams = (url: string, params: Record<string, A>) => {
-  const urlObj = new URL(url);
-  const newParams = {
-    ...urlObj.searchParams,
-    ...params,
-  };
-  urlObj.search = queryString.stringify(removeEmpty(newParams));
-  return urlObj.toString();
-};
 export const timeAgo = (date: string) => {
   const now = new Date();
   const past = new Date(date);

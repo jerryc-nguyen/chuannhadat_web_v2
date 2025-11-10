@@ -2,7 +2,7 @@ import default_avatar from '@assets/images/default_avatar.png';
 import { cn } from '@common/utils';
 import { Card } from '@components/ui/card';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { filterStateAtom } from '../../../features/search/filter-conditions/states';
+import { filterStateAtom } from '../../../features/search/filters-v2/states';
 import HorizontalScroller from '@components/mobile-ui/HorizontalScroller';
 import { useTopAuthors } from '../../hooks/useTopAuthors';
 import { useAtom } from 'jotai';

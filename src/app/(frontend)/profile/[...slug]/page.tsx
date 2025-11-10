@@ -7,14 +7,20 @@ import ProfileDetail from '@frontend/ProfileDetail';
 
 type Props = {
   params: Params;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const slug = (await params).slug;
   const path = `/profile/${slug}`;
-  const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS, { params: { path } }))
+
+  // Get search params to check for query strings
+  const searchParamsObj = await searchParams;
+  const hasQueryString = Object.keys(searchParamsObj).length > 0;
+
+  const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.METADATA, { params: { path } }))
     .data as Metadata;
-  return createMetadata(rawMetadata);
+  return createMetadata(rawMetadata, hasQueryString);
 }
 
 export default async function ProfileDetailPage({ params }: Props) {

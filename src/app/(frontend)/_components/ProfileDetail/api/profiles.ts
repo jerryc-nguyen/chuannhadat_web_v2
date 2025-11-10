@@ -1,10 +1,10 @@
 import axiosInstance from '@common/api/axiosInstance';
 import { API_ROUTES } from '@common/router';
 import { concatStrings } from '@common/utils';
-import { Author } from '@common/types/product';
+import { IUser } from '@common/types';
 
 export const profilesApi = {
-  getProfileSlug: async (slug: string): Promise<{ data: Author }> => {
+  getProfileSlug: async (slug: string): Promise<{ data: IUser }> => {
     return axiosInstance.get(concatStrings(API_ROUTES.PROFILES.GET_MY_PROFILE_SLUG, slug), {
       params: {
         slug,

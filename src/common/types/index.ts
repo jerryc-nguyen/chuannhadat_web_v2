@@ -25,6 +25,7 @@ export {
 export type {
   IResponseData,
   IPagination,
+  IDashboardListFetcherReturn
 } from './api';
 
 // Search and filter related types

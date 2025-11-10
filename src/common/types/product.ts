@@ -36,6 +36,7 @@ export interface IProductList {
   title: string;
   slug: string;
   detail_path: string;
+  business_type?: string;
 
   // Location info
   short_location_name: string;
@@ -65,6 +66,7 @@ export interface IProductList {
   bus_cat_type?: string;
   ads_type?: string;
   project?: IProject;
+  visible: boolean;
 }
 
 
