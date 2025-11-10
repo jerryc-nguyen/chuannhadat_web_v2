@@ -5,11 +5,11 @@ import ProductApiService from '../apis/product-api';
 import { ProductQuery } from '../schemas/ProductQuerySchema';
 import { productQueryFromDefaultValues } from '../types/product-query';
 import { ColumnDef } from '@tanstack/react-table';
-import { Product } from '../schemas/ManageProductListSchema';
+import { ManageProductList } from '../schemas/ManageProductListSchema';
 import { IDashboardListFetcherReturn } from '@common/types';
 
 export function usePostsListController(params?: {
-  columns: ColumnDef<Product>[];
+  columns: ColumnDef<ManageProductList>[];
   pageSize?: number;
 }) {
   const { columns, pageSize = productQueryFromDefaultValues.per_page } = params || {};
@@ -22,11 +22,11 @@ export function usePostsListController(params?: {
     aggs_for: 'manage_posts'
   };
 
-  const listCtrl = useListController<ProductQuery, Product>({
+  const listCtrl = useListController<ProductQuery, ManageProductList>({
     columns: columns || [],
     defaultFilters: defaultFilters,
     pageSize,
-    fetcher: async ({ filters, pageIndex, pageSize, sorting }): Promise<IDashboardListFetcherReturn<Product>> => {
+    fetcher: async ({ filters, pageIndex, pageSize, sorting }): Promise<IDashboardListFetcherReturn<ManageProductList>> => {
       const sort = sorting?.[0];
       const query: ProductQuery = {
         ...filters,
@@ -56,6 +56,6 @@ export function usePostsListController(params?: {
     query: listCtrl.query,
     state: listCtrl.state,
     actions: listCtrl.actions,
-    aggs: (listCtrl.query as IDashboardListFetcherReturn<Product>).aggs ?? {},
+    aggs: (listCtrl.query as IDashboardListFetcherReturn<ManageProductList>).aggs ?? {},
   };
 }

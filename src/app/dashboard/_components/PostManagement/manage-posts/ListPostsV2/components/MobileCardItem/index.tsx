@@ -5,9 +5,9 @@ import {
 import { BlockCheckHiddenReason } from '../cells/BlockCheckHiddenReason';
 import { BlockWarnHiddenPost } from '../cells/BlockWarnHiddenPost';
 
-import ProductInfo from '@app/dashboard/_components/PostManagement/manage-posts/ListPosts/mobile/CardItem/ProductInfo';
+import ProductInfo from './ProductInfo';
 import { Actions } from './Actions';
-import { ItemProps } from '@app/dashboard/_components/PostManagement/manage-posts/ListPosts/mobile/CardItem/ItemProps';
+import { ItemProps } from './ItemProps';
 import { MapPin } from 'lucide-react';
 import { ProductDetailTitleBts } from '@app/(frontend)/_components/CategoryPage/mobile/ProductCardV2';
 import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';

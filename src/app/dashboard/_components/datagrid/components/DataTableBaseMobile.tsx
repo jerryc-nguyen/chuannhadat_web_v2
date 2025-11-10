@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { flexRender, Table } from '@tanstack/react-table';
-import Pagination from '@app/dashboard/_components/datagrid/components/Pagination';
+import PaginationMobile from '@app/dashboard/_components/datagrid/components/PaginationMobile';
 
 type Props = {
   table: Table<any>;
@@ -14,7 +14,7 @@ const DataTableBase: React.FC<Props> = ({ table, className, resourceName = 'bả
   const rowModel = table.getRowModel();
 
   return (
-    <div className={className ?? ''}>
+    <div className={`${className ?? ''} pb-14`}>
       {rowModel.rows.map((row) => (
         <div key={row.id}>
           {row.getVisibleCells().map((cell) => (
@@ -34,7 +34,7 @@ const DataTableBase: React.FC<Props> = ({ table, className, resourceName = 'bả
         </div>
       )}
 
-      <Pagination table={table} position="fixed-fit" resourceName={resourceName} />
+      <PaginationMobile table={table} position="fixed-fit" resourceName={resourceName} />
     </div>
   );
 };

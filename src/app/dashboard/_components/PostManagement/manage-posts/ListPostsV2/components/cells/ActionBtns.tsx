@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@components/ui/button';
-import { ButtonDelete, ButtonRefresh } from '../../../ListPosts/components/actions';
+import { ButtonDelete, ButtonRefresh } from '../actions';
 import { DASHBOARD_ROUTES } from '@common/router';
 import { Pencil } from 'lucide-react';
 

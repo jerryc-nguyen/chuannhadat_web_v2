@@ -17,7 +17,6 @@ export const ButtonRefresh = ({ productId }: { productId: number }) => {
       const res: A = await ProductApiService.Refresh({
         productId: productId,
       });
-      console.log('handleRefresh success response', res);
 
       if (res.status === true && res.message) {
         toast.success(res.message);
@@ -52,7 +51,7 @@ export const ButtonRefresh = ({ productId }: { productId: number }) => {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          {productActionSettings && productActionSettings.total_refreshs_count ? (
+          {productActionSettings && productActionSettings.total_refreshs_count >= 0 ? (
             <p>
               Làm mới tin thủ công. Bạn còn lần {productActionSettings.total_refreshs_count} làm mới
             </p>
