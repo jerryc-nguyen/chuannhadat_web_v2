@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { searchApi } from '@frontend/features/search/api/searchApi';
+import { searchApiV2 } from '@frontend/features/search/api/searchApi';
 import { Skeleton } from '@components/ui/skeleton';
 import { Button } from '@components/ui/button';
 import ProductCard from './ProductCard';
@@ -42,7 +42,7 @@ export default function InfiniteProductLoader({
   } = useInfiniteQuery({
     queryKey: ['infinite-products', filterParams, currentPage],
     queryFn: ({ pageParam = currentPage + 1 }) =>
-      searchApi({
+      searchApiV2({
         ...filterParams,
         page: pageParam,
         per_page: 12, // Load 9 more products per batch

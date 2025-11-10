@@ -66,6 +66,7 @@ export interface IProductList {
   bus_cat_type?: string;
   ads_type?: string;
   project?: IProject;
+  visible: boolean;
 }
 
 

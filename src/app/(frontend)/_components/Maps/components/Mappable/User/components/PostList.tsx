@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai';
 import { businessTypeFilterAtom, categoryTypeFilterAtom } from '@maps/states/mapAtoms';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import useModalPostDetail from '@frontend/PostDetail/hooks/useModalPostDetail';
-import { ProductDetailTitleBts } from '@frontend/CategoryPage/mobile/searchs/ProductCardV2';
+import { ProductDetailTitleBts } from '@app/(frontend)/_components/CategoryPage/mobile/ProductCardV2';
 import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
 import AuthorInfo from '@frontend/PostDetail/components/AuthorInfo';
 import { useApp } from '@common/context/AppContext';

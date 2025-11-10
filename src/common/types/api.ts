@@ -5,6 +5,13 @@ import { HttpStatusCode } from 'axios';
  * Used across the application for API communication
  */
 
+// Type for API response
+export type IDashboardListFetcherReturn<T> = {
+  aggs?: Record<string, any>;
+  rows?: T[];
+  pagination?: IPagination;
+};
+
 /**
  * Generic API response wrapper
  */

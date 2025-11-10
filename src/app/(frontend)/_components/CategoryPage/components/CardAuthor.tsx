@@ -4,7 +4,7 @@ import { cn } from '@common/utils';
 import TooltipHost from '@components/tooltip-host';
 import { Skeleton } from '@components/ui/skeleton';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { filterStateAtom } from '../../features/search/filter-conditions/states';
+import { filterStateAtom } from '../../features/search/filters-v2/states';
 import { HoverCardAuthorMobile } from './hover-card-author/HoverCardAuthorMobile';
 import { useAtom } from 'jotai';
 import Image, { StaticImageData } from 'next/image';

@@ -7,6 +7,18 @@ export async function searchApi(params = {}): Promise<A> {
   });
 }
 
+export async function buildSeoListingUrl(params = {}): Promise<A> {
+  return axiosInstance.get('/api/v1/seos/listing_url', {
+    params: removeEmpty(params),
+  });
+}
+
+export async function searchApiV2(params = {}): Promise<A> {
+  return axiosInstance.get('/api/v2/searchs', {
+    params: removeEmpty(params),
+  });
+}
+
 export async function toParamsApi(params = {}): Promise<A> {
   return axiosInstance.get('/api/v1/searchs/to_params', {
     params: removeEmpty(params),

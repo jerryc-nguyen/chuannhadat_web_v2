@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import FilterChips from '@frontend/features/search/filter-conditions/mobile/FilterChips';
-import PostList from '@frontend/CategoryPage/mobile/searchs/PostList';
+import PostList from '@app/(frontend)/_components/CategoryPage/mobile/PostList';
 
 interface ProfileListPostProps {
   filteredChipOptions: any[];
