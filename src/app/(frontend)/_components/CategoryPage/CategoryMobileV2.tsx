@@ -1,9 +1,7 @@
 'use client';
 import FilterChips from './mobile/FilterChips';
 import PostList from './mobile/PostList';
-
 import '@styles/pages/mobile/home.scss';
-
 import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import { listFilterMobile } from './constants';
 import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChipsUI';

@@ -103,7 +103,7 @@ export function useFilterState() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterState]);
 
-  const handleClearAllFilters = useCallback(() => {
+  const clearAllFilters = useCallback(() => {
     setFilterState(emptyFilterState);
   }, [setFilterState]);
 
@@ -122,7 +122,7 @@ export function useFilterState() {
     onLocationChange: handleLocationChange,
     onRoomChange: handleRoomChange,
     clearFilter,
-    onClearAllFilters: handleClearAllFilters,
+    clearAllFilters,
 
     // Utility functions
     getFilterValue

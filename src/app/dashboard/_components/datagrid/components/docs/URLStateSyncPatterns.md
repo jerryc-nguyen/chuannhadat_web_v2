@@ -69,7 +69,8 @@ export function useSyncPaginationQueryToState(options: {
     const perPageNum = perPageRaw !== null ? Number(perPageRaw) : NaN;
 
     const nextPageIndex = Number.isFinite(pageNum) && pageNum > 0 ? pageNum - 1 : 0; // default page = 1
-    const nextPageSize = Number.isFinite(perPageNum) && perPageNum > 0 ? perPageNum : pageSizeDefault;
+    const nextPageSize =
+      Number.isFinite(perPageNum) && perPageNum > 0 ? perPageNum : pageSizeDefault;
 
     setPagination({ pageIndex: nextPageIndex, pageSize: nextPageSize });
     if (setFormValue) {

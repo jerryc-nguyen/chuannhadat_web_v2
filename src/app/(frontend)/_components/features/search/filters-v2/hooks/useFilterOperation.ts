@@ -15,7 +15,7 @@ export interface UseFilterOperationProps {
 export const useFilterOperation = ({
   onFiltersChanged,
   setIsOpenPopover,
-}: UseFilterOperationProps) => {
+}: UseFilterOperationProps = {}) => {
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
   const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});

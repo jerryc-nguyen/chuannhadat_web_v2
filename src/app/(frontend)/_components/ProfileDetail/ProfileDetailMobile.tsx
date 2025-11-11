@@ -20,9 +20,6 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     profileData,
     products,
     pagination,
-    filterState,
-    onFieldChanged,
-    onClearFilter,
     filterParams,
     filteredChipOptions,
     searchAggs
@@ -43,15 +40,6 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     }
   }, [profileData?.avatar_url]);
 
-  // Default handlers for mobile component
-  const handleFieldChanged = onFieldChanged || ((event: any) => {
-    console.warn('onFieldChanged not available:', event);
-  });
-
-  const handleClearFilter = onClearFilter || ((fieldName: any) => {
-    console.warn('onClearFilter not available:', fieldName);
-  });
-
   return (
     <section className={styles.profile_detail_wrapper}>
       {!profileData ? (
@@ -69,9 +57,6 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
               <h2 className="mb-4 px-4 text-lg font-semibold">Tin đã đăng</h2>
               <FilterChipsMobile
                 chipOptions={filteredChipOptions}
-                selectedFilterState={filterState}
-                onFieldChanged={handleFieldChanged}
-                onClearFilter={handleClearFilter}
                 aggregationData={{
                   busCatTypeOptions: searchAggs.busCatTypeOptions,
                   locationsList: searchAggs.locationsList,
