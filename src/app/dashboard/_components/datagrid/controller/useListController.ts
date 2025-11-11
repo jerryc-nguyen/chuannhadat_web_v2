@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
+import { useSyncPaginationQueryToState } from './useSyncPaginationQueryToState';
 import { useQuery } from '@tanstack/react-query';
 import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
 import { useSyncQueryToUrl } from '@common/hooks/useSyncQueryToUrl';
@@ -68,6 +69,14 @@ export function useListController<TFilter extends object, TRow>(
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
   const [sorting, setSorting] = useState<SortItem[]>([]);
+
+  // React to URL query changes via reusable hook: enable direct editing of ?page & ?per_page
+  useSyncPaginationQueryToState({
+    pageSizeDefault: pageSize,
+    pagination,
+    setPagination,
+    setFormValue: formMethods.setValue as any,
+  });
 
   const syncObject: Record<string, any> = {
     ...submittedFilters, page: pagination.pageIndex + 1,
