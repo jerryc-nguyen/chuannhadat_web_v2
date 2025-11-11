@@ -12,6 +12,7 @@ import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 
 // Import from the same feature folder
 import { ListTopAuthor } from './components/ListTopAuthor';
+import EmptyPost from './components/EmptyPost';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -58,6 +59,9 @@ export default function CategoryMobile() {
         filterParams={APIFilterParams}
         currentPage={currentPage}
       />
+
+      {/* Show empty state when no products found */}
+      {products && products.length === 0 && <EmptyPost />}
     </div>
   );
 }
