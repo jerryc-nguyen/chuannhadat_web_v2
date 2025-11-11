@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useReactTable, getCoreRowModel, ColumnDef } from '@tanstack/react-table';
 import { useSyncQueryToUrl } from '@common/hooks/useSyncQueryToUrl';
 import { IDashboardListFetcherReturn } from '@common/types';
+import { EXCLUDE_FIELDS_TO_URL } from '../constants';
 
 export type SortItem = { id: string; desc: boolean };
 
@@ -51,9 +52,6 @@ export function useListController<TFilter extends object, TRow>(
   // Submitted filters for querying
   const [submittedFilters, setSubmittedFilters] = useState<TFilter>(defaultFilters);
 
-  // Sync submitted filters to URL
-  useSyncQueryToUrl(submittedFilters as Record<string, any>);
-
   // Rollback functionality to restore form values from URL parameters
   useEffect(() => {
     // Read initial values from URL if they exist
@@ -70,6 +68,12 @@ export function useListController<TFilter extends object, TRow>(
 
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
   const [sorting, setSorting] = useState<SortItem[]>([]);
+
+  const syncObject: Record<string, any> = {
+    ...submittedFilters, page: pagination.pageIndex + 1,
+    per_page: pagination.pageSize,
+  } as any;
+  useSyncQueryToUrl(syncObject, EXCLUDE_FIELDS_TO_URL);
 
   const query = useQuery({
     // Depend on submittedFilters, not live filters
@@ -94,7 +98,18 @@ export function useListController<TFilter extends object, TRow>(
     manualPagination: true,
     manualSorting: true,
     onPaginationChange: (updater) =>
-      setPagination((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
+
+      setPagination((prev) => {
+        const next = typeof updater === 'function' ? (updater as any)(prev) : updater;
+        // Keep form state in sync with table pagination (API uses 1-based page)
+        try {
+          (formMethods.setValue as any)('page', next.pageIndex + 1);
+          (formMethods.setValue as any)('per_page', next.pageSize);
+        } catch (_) {
+          // no-op: type constraints on generic filters may not include these fields
+        }
+        return next;
+      }),
     onSortingChange: (updater) =>
       setSorting((prev) => (typeof updater === 'function' ? (updater as any)(prev) : updater)),
     getCoreRowModel: getCoreRowModel(),
@@ -113,8 +128,17 @@ export function useListController<TFilter extends object, TRow>(
       formMethods.reset(defaultFilters);
       setSubmittedFilters(defaultFilters); // Also reset submitted filters
     },
-    setPagination: (pageIndex: number, pageSizeArg = pageSize) =>
-      setPagination({ pageIndex, pageSize: pageSizeArg }),
+    setPagination: (pageIndex: number, pageSizeArg = pageSize) => {
+      // Update local pagination state
+      setPagination({ pageIndex, pageSize: pageSizeArg });
+      // Also mirror into form state for URL/query param syncing
+      try {
+        (formMethods.setValue as any)('page', pageIndex + 1);
+        (formMethods.setValue as any)('per_page', pageSizeArg);
+      } catch (_) {
+        // ignore if filter type doesn't declare these fields
+      }
+    },
     setSorting: (next: SortItem[]) => setSorting(next),
   };
 
