@@ -7,6 +7,7 @@ import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChips
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
+import { useCleanFilterStates } from '@frontend/features/search/filters-v2/hooks/useCleanFilterStates';
 
 // Import components from the same feature folder
 import PostList from './components/PostList';
@@ -19,6 +20,7 @@ import FilterChipsDesktop from './components/FilterChips';
 
 const CategoryDesktopV2: React.FC = () => {
   useSyncParamsToState();
+  useCleanFilterStates();
 
   const _router = useRouter();
   const _pathname = usePathname();

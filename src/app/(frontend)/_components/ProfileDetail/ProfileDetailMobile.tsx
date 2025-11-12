@@ -10,12 +10,14 @@ import { useProfileDetail } from './hooks/useProfileDetail';
 import styles from './styles/ProfileDetailMobile.module.scss';
 import default_avatar from '@assets/images/default_avatar.png';
 import { StaticImageData } from 'next/image';
+import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
 };
 
 const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }) => {
+  useCleanFilterStates();
   const {
     profileData,
     products,

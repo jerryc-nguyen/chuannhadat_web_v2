@@ -16,9 +16,11 @@ import EmptyPost from './components/EmptyPost';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
+import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 
 export default function CategoryMobile() {
   useSyncParamsToState();
+  useCleanFilterStates();
 
   const _router = useRouter();
   const _pathname = usePathname();
