@@ -10,6 +10,7 @@ import { useAuth } from '@common/auth/AuthContext';
 import { DASHBOARD_ROUTES } from '@common/router';
 import { businessTypeOptions, categoryTypeOptions } from '../../constants';
 import { getPostManagementBreadcrumb } from '../../helpers';
+import { trackError } from '@common/features/cnd_errors';
 
 export type CreateSourceType = 'desktop' | 'mobile_web';
 
@@ -55,11 +56,11 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
 
   // Submit handler
   const onSubmit = async () => {
-    try {
-      const params = form.getValues();
-      params.user_agent = window.navigator.userAgent;
-      params.create_source = createSource;
+    const params = form.getValues();
+    params.user_agent = window.navigator.userAgent;
+    params.create_source = createSource;
 
+    try {
       const res = await ProductApiService.Create(params);
 
       if (res.status) {
@@ -68,12 +69,23 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
           window.location.href = DASHBOARD_ROUTES.posts.index;
         }, 1500);
       } else {
-        // @ts-ignore: ok
-        toast.error(res.message || 'Đăng tin không thành công');
+        const errorMessage = res.data?.message || (res as any)?.message || 'Đăng tin không thành công - 1';
+
+        trackError(errorMessage, 'create_post', {
+          request_params: params,
+          message: errorMessage,
+          user_id: currentUser?.id
+        });
+        toast.error(errorMessage);
       }
-    } catch (error: unknown) {
+    } catch (error: A) {
       const errorMessage = error instanceof Error ? error.message : 'Đăng tin không thành công';
       toast.error(errorMessage);
+      trackError(error, 'create_post', {
+        request_params: params,
+        message: errorMessage,
+        user_id: currentUser?.id
+      });
       // console.log('error', error);
     }
   };
