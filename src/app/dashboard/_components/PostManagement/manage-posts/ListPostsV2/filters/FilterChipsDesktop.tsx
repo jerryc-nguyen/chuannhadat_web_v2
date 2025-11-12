@@ -3,6 +3,7 @@ import { cn } from '@common/utils';
 import { FilterChipOption } from '@common/types';
 import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryDesktop';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
+import { useFormFilterContext } from '@app/dashboard/_contexts/FormFilterContext';
 
 type FilterChipsDesktopProps = {
   chipOptions: FilterChipOption[];
@@ -18,6 +19,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
   aggregationData,
   onFiltersChanged
 }) => {
+  const { counterFetcher } = useFormFilterContext();
 
   return (
     <div
@@ -33,6 +35,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
             filterChipItem={item}
             onFiltersChanged={onFiltersChanged}
             aggregationData={aggregationData}
+            counterFetcher={counterFetcher}
           />
         ))}
       </div>

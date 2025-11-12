@@ -18,12 +18,14 @@ export type FilterChipProps = {
   filterChipItem: FilterChipOption;
   onFiltersChanged?: (filterState: FilterState) => void;
   aggregationData?: AggregationData;
+  counterFetcher?: (params: Record<string, string>) => Promise<Record<string, A>>;
 };
 
 const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   filterChipItem,
   onFiltersChanged,
   aggregationData = {},
+  counterFetcher,
 }) => {
 
   const [isOpenPopover, setIsOpenPopover] = React.useState<boolean>(false);
@@ -45,6 +47,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
   } = useFilterOperation({
     onFiltersChanged,
     setIsOpenPopover,
+    counterFetcher
   });
 
   // Initialize local state from global state when dropdown opens

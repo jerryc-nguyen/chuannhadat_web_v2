@@ -10,11 +10,13 @@ import { useFilterState } from '@app/(frontend)/_components/features/search/filt
 export interface UseFilterOperationProps {
   onFiltersChanged?: (filterState: FilterState) => void;
   setIsOpenPopover?: (open: boolean) => void;
+  counterFetcher?: (params: Record<string, string>) => Promise<Record<string, A>>;
 }
 
 export const useFilterOperation = ({
   onFiltersChanged,
   setIsOpenPopover,
+  counterFetcher = searchApiV2,
 }: UseFilterOperationProps = {}) => {
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
@@ -39,7 +41,7 @@ export const useFilterOperation = ({
   // API query
   const { data, isLoading: isPreviewLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],
-    queryFn: () => searchApiV2(filterParams),
+    queryFn: () => counterFetcher?.(filterParams),
   });
 
   // Extract preview count from current data
