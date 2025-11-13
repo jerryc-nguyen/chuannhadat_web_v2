@@ -27,6 +27,7 @@ import { CustomerGender, CustomerType } from '@common/types';
 import { IModalUpdateProfile } from '../../types';
 import { cn } from '@common/utils';
 import { toast } from 'sonner';
+import { trackError } from '@common/features/cnd_errors';
 
 const PersonalTab: React.FC = () => {
   const { currentUser } = useAuth();
@@ -38,6 +39,12 @@ const PersonalTab: React.FC = () => {
     mutationFn: profileApi.updateMyProfile,
     onError: (err: AxiosError) => {
       console.error('Error fetching update', err);
+
+      trackError(err, 'update_profile', {
+        user_id: currentUser?.id,
+        error_status: err.response?.status,
+        request_url: err.config?.url,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -51,6 +58,12 @@ const PersonalTab: React.FC = () => {
     mutationFn: profileApi.updateMyAvatar,
     onError: (err: AxiosError) => {
       console.error('Error fetching update', err);
+
+      trackError(err, 'update_avatar', {
+        user_id: currentUser?.id,
+        error_status: err.response?.status,
+        request_url: err.config?.url,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

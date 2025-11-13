@@ -8,10 +8,12 @@ import { PostFormSchema } from '../../form-schemas';
 import { useManagePostsCache } from '../../ListPostsV2/hooks/useManagePostsCache';
 import { getQueryClient } from "@common/api/react-query";
 import { getPostManagementBreadcrumb } from '../../helpers';
+import { trackError } from '@common/features/cnd_errors';
+import { useAuth } from '@common/auth/AuthContext';
 
 export const useEditPostForm = (productUid: string) => {
   const { updateRowData } = useManagePostsCache();
-
+  const { currentUser } = useAuth();
 
   // Fetch product data
   const { data: product, isSuccess } = useQuery({
@@ -41,9 +43,8 @@ export const useEditPostForm = (productUid: string) => {
       toast.error('Tin đăng đã bị xoá');
       return;
     }
-
+    const params = form.getValues();
     try {
-      const params = form.getValues();
       const productData = product as { id: string | number };
       const productId = typeof productData.id === 'string' ? parseInt(productData.id, 10) : productData.id;
       const res = await ProductApiService.Update(productId, params);
@@ -53,13 +54,24 @@ export const useEditPostForm = (productUid: string) => {
         getQueryClient().invalidateQueries({ queryKey: ['get-detail-manage-post', productUid] })
         toast.success('Cập nhật tin thành công');
       } else {
-        // @ts-ignore: ok
-        toast.error(res.message || 'Cập nhật tin không thành công');
+
+        const errorMessage = res.data?.message || (res as any)?.message || 'Cập nhật tin không thành công - 1';
+
+        trackError(errorMessage, 'update_post', {
+          request_params: params,
+          message: errorMessage,
+          user_id: currentUser?.id
+        });
+        toast.error(errorMessage);
       }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Cập nhật tin không thành công';
+    } catch (error: A) {
+      const errorMessage = error instanceof Error ? error.message : 'Cập nhật tin không thành công - 2';
       toast.error(errorMessage);
-      console.log('error', error);
+      trackError(error, 'update_post', {
+        request_params: params,
+        message: errorMessage,
+        user_id: currentUser?.id
+      });
     }
   };
 
