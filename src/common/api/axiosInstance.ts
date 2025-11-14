@@ -1,6 +1,8 @@
-import { getFrontendTokenClient, getTokenClient, removeTokenClient } from '@common/cookies';
+import { getFrontendTokenClient, getTokenClient } from '@common/cookies';
 import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
 import { get, set } from 'lodash-es';
+import { trackError } from '@common/features/cnd_errors';
+import { API_ROUTES } from '@common/router';
 
 // Configuration constants
 const DEFAULT_AXIOS_TIMEOUT = 60 * 1000; // 60 seconds
@@ -9,9 +11,6 @@ const RETRY_DELAY = 1000; // 1 second
 const RETRY_STATUS_CODES = [408, 429, 500, 502, 503, 504]; // Status codes that should trigger a retry
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-// Flag to prevent multiple auth error handlers from triggering at once
-let isHandlingAuthError = false;
 
 // Create a custom axios instance
 const axiosInstance = axios.create({
@@ -64,40 +63,6 @@ interface RetryConfig extends InternalAxiosRequestConfig {
   _retryCount?: number;
 }
 
-// Handle authentication errors by logging out the user
-const handleAuthError = () => {
-  // Prevent multiple handlers from triggering at once
-  if (isHandlingAuthError) return;
-
-  try {
-    isHandlingAuthError = true;
-
-    // Remove authentication tokens
-    removeTokenClient();
-
-    // Store the current path for redirect after login
-    if (typeof window !== 'undefined') {
-      try {
-        sessionStorage.setItem('redirectAfterLogin', window.location.pathname);
-      } catch (e) {
-        console.error('Failed to store redirect path:', e);
-      }
-
-      // Redirect to home page after a short delay
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 500);
-    }
-  } catch (e) {
-    console.error('Error handling auth error:', e);
-  } finally {
-    // Reset flag after a delay to prevent further errors during redirect
-    setTimeout(() => {
-      isHandlingAuthError = false;
-    }, 1000);
-  }
-};
-
 // Response interceptor for handling responses and errors
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -105,6 +70,7 @@ axiosInstance.interceptors.response.use(
     if (process.env.NODE_ENV === 'development') {
       const requestStartedAt = get(response.config, 'meta.requestStartedAt', 0);
       const requestDuration = Date.now() - requestStartedAt;
+      console.log(`API Request to ${response.config.url} took ${requestDuration}ms`);
     }
 
     return response.data;
@@ -130,42 +96,65 @@ axiosInstance.interceptors.response.use(
       return axiosInstance(config);
     }
 
-    // Format error response consistently
-    const errorResponse = {
-      status: get(error, 'response.status', null),
-      message: get(error, 'response.data.message', error.message || 'Unknown error occurred'),
-      errors: get(error, 'response.data.errors', null),
-      url: config?.url,
-      method: config?.method,
-    };
-
-    // Handle specific error cases
+    // Handle side effects for specific error cases
     if (!error.response) {
       // Network error (no response from server)
-      errorResponse.message = 'Network error: Unable to connect to server';
-    } else if (error.response.status === 401) {
-      // Unauthorized - handle token expiration with logout
-      console.warn('Authentication error: Token expired or invalid');
-
-      // Don't handle auth errors for login/register endpoints
-      const isAuthEndpoint =
-        config?.url?.includes('/auth/login') || config?.url?.includes('/auth/register');
-
-      if (!isAuthEndpoint) {
-        handleAuthError();
-      }
+      console.error('Network error: Unable to connect to server', { url: config?.url });
     } else if (error.response.status === 403) {
       // Forbidden - user doesn't have permission
       console.warn('Permission error: User lacks required permission');
-    } else if (error.response.status === 404) {
-      // Resource not found
-      errorResponse.message = `Resource not found: ${config?.url}`;
     } else if (error.response.status >= 500) {
       // Server error
-      console.error('Server error occurred:', errorResponse);
+      const serverMessage = (error.response.data as { message?: string })?.message;
+      console.error('Server error occurred:', {
+        status: error.response.status,
+        url: config?.url,
+        message: serverMessage || error.message,
+      });
     }
 
-    return Promise.reject(errorResponse);
+    // Enhance error message with server message if available (for better user experience)
+    // but keep the original AxiosError structure
+    if (error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+      const serverMessage = (error.response.data as { message: string }).message;
+      if (serverMessage && serverMessage !== error.message) {
+        error.message = serverMessage;
+      }
+    }
+
+    // Track API exceptions to server (fire and forget - don't await to avoid blocking)
+    // Skip tracking if this is an error from the error tracking endpoint itself (avoid infinite loop)
+    if (config?.url && !config.url.includes(API_ROUTES.TRACKINGS.ERRORS)) {
+      const serverMessage = error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data
+        ? (error.response.data as { message: string }).message
+        : null;
+
+      // Try to parse config.data as JSON if it's a string
+      let requestData = config.data || null;
+      if (requestData && typeof requestData === 'string') {
+        try {
+          requestData = JSON.parse(requestData);
+        } catch {
+          // If parsing fails, keep the original string
+          // requestData remains as the original string
+        }
+      }
+
+      trackError(error, 'api_exception', {
+        api_url: config.url || null,
+        api_method: config.method?.toUpperCase() || null,
+        http_status: error.response?.status || null,
+        server_message: serverMessage,
+        response_data: error.response?.data || null,
+        request_data: requestData,
+      }).catch(() => {
+        // Silently ignore tracking errors
+      });
+    }
+
+    // Return the original AxiosError - it already extends Error and contains all necessary information
+    // Consuming code can access: error.response.status, error.response.data, error.message, etc.
+    return Promise.reject(error);
   },
 );
 

@@ -59,10 +59,10 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
     const params = form.getValues();
     params.user_agent = window.navigator.userAgent;
     params.create_source = createSource;
-
+    let serverResponse: A | null = null;
     try {
       const res = await ProductApiService.Create(params);
-
+      serverResponse = res;
       if (res.status) {
         toast.success('Đăng tin thành công');
         setTimeout(() => {
@@ -72,7 +72,8 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
         const errorMessage = res.data?.message || (res as any)?.message || 'Đăng tin không thành công - 1';
 
         trackError(errorMessage, 'create_post', {
-          request_params: params,
+          request_data: params,
+          response_data: serverResponse,
           message: errorMessage,
           user_id: currentUser?.id
         });
@@ -80,9 +81,11 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
       }
     } catch (error: A) {
       const errorMessage = error instanceof Error ? error.message : 'Đăng tin không thành công';
+
       toast.error(errorMessage);
       trackError(error, 'create_post', {
-        request_params: params,
+        ...(serverResponse && { response_data: serverResponse }),
+        request_data: params,
         message: errorMessage,
         user_id: currentUser?.id
       });
