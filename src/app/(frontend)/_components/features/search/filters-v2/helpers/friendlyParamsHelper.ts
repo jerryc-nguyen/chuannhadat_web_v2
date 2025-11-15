@@ -70,13 +70,13 @@ export const FRIENDLY_INCLUDED_FIELDS = [
 /**
  * Formats price value to Vietnamese format (tr = triệu, ty = tỷ)
  */
-export function formatPrice(price: number): string {
+export function formatPrice(price: number, unit: true | false = true): string {
   if (price >= 1_000_000_000) {
     const ty = price / 1_000_000_000;
-    return ty % 1 === 0 ? `${ty}ty` : `${ty.toFixed(1)}ty`;
+    return ty % 1 === 0 ? `${ty}${unit ? 'ty' : ''}` : `${ty.toFixed(1)}${unit ? 'ty' : ''}`;
   } else if (price >= 1_000_000) {
     const tr = price / 1_000_000;
-    return tr % 1 === 0 ? `${tr}tr` : `${tr.toFixed(1)}tr`;
+    return tr % 1 === 0 ? `${tr}${unit ? 'tr' : ''}` : `${tr.toFixed(1)}${unit ? 'tr' : ''}`;
   }
   return `${price}`;
 }
@@ -107,7 +107,7 @@ export function buildPriceParam(filterState: FilterState): string | undefined {
 
     // Handle full range (min to max)
     if (min !== undefined && max !== undefined) {
-      return `${formatPrice(min)}-${formatPrice(max)}`;
+      return `${formatPrice(min, false)}-${formatPrice(max)}`;
     }
   }
   return undefined;

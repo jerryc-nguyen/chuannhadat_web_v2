@@ -4,6 +4,7 @@ import { FilterChipOption } from '@common/types';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
 import FilterChipFactoryMobile from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryMobile';
 import HorizontalScroller from '@components/mobile-ui/HorizontalScroller';
+import { useFormFilterContext } from '@app/dashboard/_contexts/FormFilterContext';
 
 type FilterChipsMobileProps = {
   chipOptions: FilterChipOption[];
@@ -19,6 +20,7 @@ const FilterChipsMobile: React.FC<FilterChipsMobileProps> = ({
   aggregationData,
   onFiltersChanged
 }) => {
+  const { counterFetcher } = useFormFilterContext();
 
   return (
     <div
@@ -34,6 +36,7 @@ const FilterChipsMobile: React.FC<FilterChipsMobileProps> = ({
             filterChipItem={item}
             onFiltersChanged={onFiltersChanged}
             aggregationData={aggregationData}
+            counterFetcher={counterFetcher}
           />
         ))}
       </HorizontalScroller>

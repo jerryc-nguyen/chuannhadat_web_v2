@@ -9,10 +9,13 @@ import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
 import { useProfileDetail } from './hooks/useProfileDetail';
 import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
+import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
 
 export default function ProfileDetailDesktop({ profileSlug }: ProfileDetailDesktopProps) {
+  useCleanFilterStates();
+
   const {
     profileData,
     isProfileLoading,

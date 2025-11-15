@@ -14,16 +14,19 @@ export type FilterChipProps = {
   filterChipItem: FilterChipOption;
   onFiltersChanged?: (filterState: FilterState) => void;
   aggregationData?: AggregationData;
+  counterFetcher?: (params: Record<string, string>) => Promise<Record<string, A>>;
 };
 
 const FilterChipFactoryMobile: React.FC<FilterChipProps> = ({
   filterChipItem,
   onFiltersChanged,
   aggregationData,
+  counterFetcher,
 }) => {
   const { openModal } = useModals();
   const { selectedFilterText, isActiveChip, handleRemoveFilter } = useFilterOperation({
-    onFiltersChanged
+    onFiltersChanged,
+    counterFetcher,
   });
 
   const showFilterModal = () => {

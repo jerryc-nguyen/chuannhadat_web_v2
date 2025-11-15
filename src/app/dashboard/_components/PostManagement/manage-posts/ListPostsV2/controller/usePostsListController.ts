@@ -28,16 +28,16 @@ export function usePostsListController(params?: {
     pageSize,
     fetcher: async ({ filters, pageIndex, pageSize, sorting }): Promise<IDashboardListFetcherReturn<ManageProductList>> => {
       const sort = sorting?.[0];
-      const query: ProductQuery = {
+      const query: Record<string, any> = {
         ...filters,
         page: pageIndex + 1, // API expects 1-based
         per_page: pageSize,
         sort_by: sort?.id ?? filters.sort_by ?? '',
         sort_direction: sort ? (sort.desc ? 'desc' : 'asc') : filters.sort_direction ?? '',
         aggs_for: 'manage_posts',
-      } as ProductQuery;
+      }
 
-      const res = await ProductApiService.Filter(query as ProductQuery);
+      const res = await ProductApiService.Filter(query);
       // Axios instance likely returns payload directly
       const payload = res as Record<string, any>;
       return {
