@@ -10,7 +10,7 @@ import { useAuth } from '@common/auth/AuthContext';
 import { DASHBOARD_ROUTES } from '@common/router';
 import { businessTypeOptions, categoryTypeOptions } from '../../constants';
 import { getPostManagementBreadcrumb } from '../../helpers';
-import { trackError } from '@common/features/cnd_errors';
+import { trackError } from '@common/features/track_errors';
 
 export type CreateSourceType = 'desktop' | 'mobile_web';
 
@@ -74,8 +74,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
         trackError(errorMessage, 'create_post', {
           request_data: params,
           response_data: serverResponse,
-          message: errorMessage,
-          user_id: currentUser?.id
+          message: errorMessage
         });
         toast.error(errorMessage);
       }
@@ -86,8 +85,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
       trackError(error, 'create_post', {
         ...(serverResponse && { response_data: serverResponse }),
         request_data: params,
-        message: errorMessage,
-        user_id: currentUser?.id
+        message: errorMessage
       });
       // console.log('error', error);
     }

@@ -27,7 +27,7 @@ import { CustomerGender, CustomerType } from '@common/types';
 import { IModalUpdateProfile } from '../../types';
 import { cn } from '@common/utils';
 import { toast } from 'sonner';
-import { trackError } from '@common/features/cnd_errors';
+import { trackError } from '@common/features/track_errors';
 
 const PersonalTab: React.FC = () => {
   const { currentUser } = useAuth();
@@ -41,7 +41,6 @@ const PersonalTab: React.FC = () => {
       console.error('Error fetching update', err);
 
       trackError(err, 'update_profile', {
-        user_id: currentUser?.id,
         error_status: err.response?.status,
         request_url: err.config?.url,
       });
@@ -60,7 +59,6 @@ const PersonalTab: React.FC = () => {
       console.error('Error fetching update', err);
 
       trackError(err, 'update_avatar', {
-        user_id: currentUser?.id,
         error_status: err.response?.status,
         request_url: err.config?.url,
       });

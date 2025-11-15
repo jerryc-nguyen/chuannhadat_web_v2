@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from '@common/cookies';
+import { getCookie, getTokenClient } from '@common/cookies';
 import { FRONTEND_TOKEN } from '@common/auth';
 import { API_ROUTES } from '@common/router';
 
@@ -37,13 +37,18 @@ export const trackError = async (
     };
 
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    await axios.post(`${baseUrl}/${API_ROUTES.TRACKINGS.ERRORS}`, payload, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Frontend-Token': getCookie(FRONTEND_TOKEN),
-      },
-      timeout: 5000, // Short timeout to avoid blocking
-    });
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Frontend-Token': getCookie(FRONTEND_TOKEN),
+    } as Record<string, string>;
+
+    const accessToken = getTokenClient();
+    if (accessToken) {
+      headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    await axios.post(`${baseUrl}/${API_ROUTES.TRACKINGS.ERRORS}`, payload, { headers, timeout: 5000 });
   } catch (trackingError) {
     // If tracking fails, still log to console as fallback
     console.error('Failed to track error:', trackingError);

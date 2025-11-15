@@ -1,7 +1,7 @@
 import { getFrontendTokenClient, getTokenClient } from '@common/cookies';
 import axios, { type AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
 import { get, set } from 'lodash-es';
-import { trackError } from '@common/features/cnd_errors';
+import { trackError } from '@common/features/track_errors';
 import { API_ROUTES } from '@common/router';
 
 // Configuration constants

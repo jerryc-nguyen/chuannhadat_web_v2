@@ -3,7 +3,7 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
-import { trackError } from '@common/features/cnd_errors';
+import { trackError } from '@common/features/track_errors';
 import { useEffect } from 'react';
 
 // Error boundaries must be Client Components

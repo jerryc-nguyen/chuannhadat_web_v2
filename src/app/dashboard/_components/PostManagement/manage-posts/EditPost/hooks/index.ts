@@ -8,12 +8,10 @@ import { PostFormSchema } from '../../form-schemas';
 import { useManagePostsCache } from '../../ListPosts/hooks/useManagePostsCache';
 import { getQueryClient } from "@common/api/react-query";
 import { getPostManagementBreadcrumb } from '../../helpers';
-import { trackError } from '@common/features/cnd_errors';
-import { useAuth } from '@common/auth/AuthContext';
+import { trackError } from '@common/features/track_errors';
 
 export const useEditPostForm = (productUid: string) => {
   const { updateRowData } = useManagePostsCache();
-  const { currentUser } = useAuth();
 
   // Fetch product data
   const { data: product, isSuccess } = useQuery({
@@ -61,8 +59,7 @@ export const useEditPostForm = (productUid: string) => {
         trackError(errorMessage, 'update_post', {
           request_data: params,
           response_data: serverResponse,
-          message: errorMessage,
-          user_id: currentUser?.id
+          message: errorMessage
         });
         toast.error(errorMessage);
       }
@@ -72,8 +69,7 @@ export const useEditPostForm = (productUid: string) => {
       trackError(error, 'update_post', {
         ...(serverResponse && { response_data: serverResponse }),
         request_data: params,
-        message: errorMessage,
-        user_id: currentUser?.id
+        message: errorMessage
       });
     }
   };
