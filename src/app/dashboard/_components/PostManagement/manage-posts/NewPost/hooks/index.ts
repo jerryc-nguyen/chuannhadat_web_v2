@@ -55,7 +55,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
   });
 
   // Submit handler
-  const onSubmit = async () => {
+  const onSubmit = async (): Promise<boolean> => {
     const params = form.getValues();
     params.user_agent = window.navigator.userAgent;
     params.create_source = createSource;
@@ -68,6 +68,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
         setTimeout(() => {
           window.location.href = DASHBOARD_ROUTES.posts.index;
         }, 1500);
+        return true;
       } else {
         const errorMessage = res.data?.message || (res as any)?.message || 'Đăng tin không thành công - 1';
 
@@ -77,6 +78,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
           message: errorMessage
         });
         toast.error(errorMessage);
+        return false;
       }
     } catch (error: A) {
       const errorMessage = error instanceof Error ? error.message : 'Đăng tin không thành công';
@@ -88,6 +90,7 @@ export const useNewPostForm = (createSource: CreateSourceType) => {
         message: errorMessage
       });
       // console.log('error', error);
+      return false;
     }
   };
 
