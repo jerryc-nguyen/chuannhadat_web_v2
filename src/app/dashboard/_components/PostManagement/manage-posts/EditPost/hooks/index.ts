@@ -44,11 +44,12 @@ export const useEditPostForm = (productUid: string) => {
       return;
     }
     const params = form.getValues();
+    let serverResponse: A | null = null;
     try {
       const productData = product as { id: string | number };
       const productId = typeof productData.id === 'string' ? parseInt(productData.id, 10) : productData.id;
       const res = await ProductApiService.Update(productId, params);
-
+      serverResponse = res;
       if (res.status) {
         updateRowData(res.data);
         getQueryClient().invalidateQueries({ queryKey: ['get-detail-manage-post', productUid] })
@@ -58,7 +59,8 @@ export const useEditPostForm = (productUid: string) => {
         const errorMessage = res.data?.message || (res as any)?.message || 'Cập nhật tin không thành công - 1';
 
         trackError(errorMessage, 'update_post', {
-          request_params: params,
+          request_data: params,
+          response_data: serverResponse,
           message: errorMessage,
           user_id: currentUser?.id
         });
@@ -68,7 +70,8 @@ export const useEditPostForm = (productUid: string) => {
       const errorMessage = error instanceof Error ? error.message : 'Cập nhật tin không thành công - 2';
       toast.error(errorMessage);
       trackError(error, 'update_post', {
-        request_params: params,
+        ...(serverResponse && { response_data: serverResponse }),
+        request_data: params,
         message: errorMessage,
         user_id: currentUser?.id
       });
