@@ -13,6 +13,7 @@ import ProjectForm from '../components/form-components/project-form';
 import LocationFields from '../components/form-components/LocationFields';
 import { useEditPostForm } from './hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
+import { Loader2 } from 'lucide-react';
 
 interface EditPostDesktopProps {
   productUid: string;
@@ -44,7 +45,12 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
               Trở lại
             </Button>
           </Link>
-          <Button type="submit">Cập nhật tin</Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Cập nhật tin
+          </Button>
         </div>
       </form>
     </Form>

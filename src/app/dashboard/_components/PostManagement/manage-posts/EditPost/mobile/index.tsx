@@ -5,6 +5,9 @@ import { Button } from '@components/ui/button';
 import { FormProvider } from 'react-hook-form';
 import { CreateForm } from '../../NewPost/mobile/CreateForm';
 import { useEditPostForm } from '../hooks';
+import { Loader2 } from 'lucide-react';
+import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
+import { invalidPriority } from '../../constants';
 
 interface EditPostMobileProps {
   productUid: string;
@@ -19,14 +22,23 @@ const EditPostMobile: React.FC<EditPostMobileProps> = ({ productUid }) => {
     setIsVisible(true);
   }, []);
 
+  const scrollToInvalid = useScrollToInvalidField(form, invalidPriority);
+  const handleInvalid = (errors: Record<string, unknown>) => {
+    scrollToInvalid(errors);
+  };
+
+  const onSubmitHandled = async (data: any) => {
+    await onSubmit(data);
+  };
+
   const handleSubmit = () => {
-    form.handleSubmit(onSubmit)();
+    form.handleSubmit(onSubmitHandled, handleInvalid)();
   };
 
   return (
     <>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmitHandled, handleInvalid)}>
           <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
             <div className="grid items-start gap-6 lg:col-span-3">
               <CreateForm />
@@ -52,7 +64,10 @@ const EditPostMobile: React.FC<EditPostMobileProps> = ({ productUid }) => {
             zIndex: 9999
           }}
         >
-          <Button type="button" onClick={handleSubmit} className="w-full">
+          <Button type="button" onClick={handleSubmit} className="w-full" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
             Cập nhật tin
           </Button>
         </div>

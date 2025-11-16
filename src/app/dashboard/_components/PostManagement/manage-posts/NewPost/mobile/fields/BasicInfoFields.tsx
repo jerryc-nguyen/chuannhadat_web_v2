@@ -76,32 +76,35 @@ export default function BasicInfoFields({
           control={form.control}
           name="price_in_vnd"
           render={({ field }) => (
-            <ListItem
-              link
-              title={'Giá'}
-              value={field.value}
-              onClear={() => {
-                field.onChange('');
-              }}
-              onClick={() => {
-                openModal({
-                  name: `ListItemBtsPicker_price`,
-                  title: 'Giá',
-                  content: (
-                    <PriceOptions
-                      value={form.getValues('price_in_vnd')}
-                      onSelect={(option: OptionForSelect) => {
-                        onChangeFieldNumber(field, option.value + '');
-                        closeModal();
-                      }}
-                      businessType={form.getValues('business_type')}
-                    />
-                  ),
-                });
-              }}
-              after={readMoney(form.getValues('price_in_vnd'))}
-              dividers={true}
-            />
+            <FormItem data-field-name="price_in_vnd">
+              <ListItem
+                link
+                title={'Giá (*)'}
+                value={field.value}
+                onClear={() => {
+                  field.onChange('');
+                }}
+                onClick={() => {
+                  openModal({
+                    name: `ListItemBtsPicker_price`,
+                    title: 'Giá',
+                    content: (
+                      <PriceOptions
+                        value={form.getValues('price_in_vnd')}
+                        onSelect={(option: OptionForSelect) => {
+                          onChangeFieldNumber(field, option.value + '');
+                          closeModal();
+                        }}
+                        businessType={form.getValues('business_type')}
+                      />
+                    ),
+                  });
+                }}
+                after={readMoney(form.getValues('price_in_vnd'))}
+                dividers={true}
+              />
+              <FormMessage className='px-4' />
+            </FormItem>
           )}
         />
 
@@ -109,14 +112,14 @@ export default function BasicInfoFields({
           control={form.control}
           name="area"
           render={({ field }) => (
-            <FormItem>
+            <FormItem data-field-name="area">
               <ListItemBtsPicker
                 onSelect={(option: OptionForSelect) => {
                   field.onChange(option.value);
                 }}
                 options={areaOptionsForCreate}
                 value={field.value}
-                modalOptions={{ title: 'Diện tích', maxHeightPercent: 0.7 }}
+                modalOptions={{ title: 'Diện tích (*)', maxHeightPercent: 0.7 }}
                 formattedValue={field.value ? `${field.value} m²` : ''}
                 footer={
                   <div className="flex flex-col gap-4 p-4">
@@ -135,7 +138,7 @@ export default function BasicInfoFields({
                   </div>
                 }
               />
-              <FormMessage />
+              <FormMessage className='px-4' />
             </FormItem>
           )}
         />
@@ -146,7 +149,7 @@ export default function BasicInfoFields({
             control={form.control}
             name="bedrooms_count"
             render={({ field }) => (
-              <FormItem>
+              <FormItem data-field-name="bedrooms_count">
                 <ListItemBtsPicker
                   onSelect={(option: OptionForSelect) => {
                     field.onChange(option.value);
@@ -184,7 +187,7 @@ export default function BasicInfoFields({
             control={form.control}
             name="bathrooms_count"
             render={({ field }) => (
-              <FormItem>
+              <FormItem data-field-name="bathrooms_count">
                 <ListItemBtsPicker
                   onSelect={(option: OptionForSelect) => {
                     field.onChange(option.value);
@@ -218,4 +221,4 @@ export default function BasicInfoFields({
       </List>
     </>
   );
-} 
+}

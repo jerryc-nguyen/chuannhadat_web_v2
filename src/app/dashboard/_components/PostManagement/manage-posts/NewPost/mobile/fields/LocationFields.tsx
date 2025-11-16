@@ -7,6 +7,7 @@ import LocationsPicker from '@components/mobile-ui/LocationsPicker';
 import { IPostForm } from '@dashboard/PostManagement/types';
 import { Modal } from '@frontend/features/layout/mobile-modals/states/types';
 import { useLocationForm } from '@dashboard/PostManagement/hooks';
+import { FormField, FormItem, FormMessage } from '@components/ui/form';
 
 interface LocationFieldProps {
   form: UseFormReturn<IPostForm>;
@@ -152,7 +153,12 @@ export default function LocationFields({
   return (
     <>
       <CardTitle className="text-md flex gap-2 px-4 pb-2">Địa chỉ</CardTitle>
-      <List strongIos outlineIos className="mt-0 rounded-lg">
+      <List strongIos outlineIos className="mt-0 rounded-lg pb-4">
+        {/* Invisible anchors for invalid-submit scrolling */}
+        <div data-field-name="city_id" className="h-0" />
+        <div data-field-name="district_id" className="h-0" />
+        <div data-field-name="ward_id" className="h-0" />
+        <div data-field-name="street_id" className="h-0" />
         <LocationsPicker
           key={locationPickerKey}
           openModal={openModal}
@@ -167,7 +173,27 @@ export default function LocationFields({
           withStreet={true}
           onChangedFullAddress={onChangedFullAddress}
         />
+
+        {/* Inline error messages for required location fields */}
+        <FormField
+          control={form.control}
+          name="city_id"
+          render={() => (
+            <FormItem data-field-name="city_id" className="px-4">
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="district_id"
+          render={() => (
+            <FormItem data-field-name="district_id" className="px-4">
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </List>
     </>
   );
-} 
+}

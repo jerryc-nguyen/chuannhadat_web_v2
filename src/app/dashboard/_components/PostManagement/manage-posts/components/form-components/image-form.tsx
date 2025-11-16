@@ -74,7 +74,7 @@ export function UploadImages({ form }: UploadImagesProps) {
         const uploadedImages = convertToUploadedImages(form.getValues('images'));
 
         return (
-          <FormItem className="grid gap-2">
+          <FormItem className="grid gap-2" data-field-name="image_ids">
             <ImageUploader uploadedImages={uploadedImages} onUploaded={onImagesChanged} />
             <FormMessage />
           </FormItem>

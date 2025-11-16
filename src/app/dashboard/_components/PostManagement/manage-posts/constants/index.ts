@@ -56,3 +56,16 @@ export const furnitureTypeOptions = [
   { value: "basic_furniture", text: "Hoàn thiện cơ bản" },
   { value: "unfinished_furniture", text: "Bàn giao thô" }
 ]
+
+// Priority order for focusing/scrolling to invalid fields in post forms
+export const invalidPriority = [
+  'price_in_vnd',
+  'area',
+  'city_id',
+  'district_id',
+  'ward_id',
+  'street_id',
+  'title',
+  'description',
+  'image_ids',
+]
