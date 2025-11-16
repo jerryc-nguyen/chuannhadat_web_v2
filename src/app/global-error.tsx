@@ -4,7 +4,7 @@ import { cn } from '@common/utils';
 import { Button } from '@components/ui/button';
 import Image from 'next/image';
 import empty_city from '@assets/images/empty-city.png';
-import { trackError, ErrorWithDigest } from '@common/features/cnd_errors';
+import { trackError, ErrorWithDigest } from '@common/features/track_errors';
 
 export default function GlobalError({ error, reset }: { error: ErrorWithDigest; reset: () => void }) {
   useEffect(() => {
