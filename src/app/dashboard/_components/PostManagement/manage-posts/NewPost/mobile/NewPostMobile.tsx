@@ -10,6 +10,7 @@ import { useNewPostForm } from '../hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
 import MobileContainer from '@dashboard/FinancialManagement/components/MobileContainer';
 import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
+import { invalidPriority } from '../../constants';
 
 const NewPostMobile: React.FC = () => {
   const { form, onSubmit } = useNewPostForm('mobile_web');
@@ -21,17 +22,7 @@ const NewPostMobile: React.FC = () => {
     setIsVisible(true);
   }, []);
 
-  const invalidPriority = [
-    'price_in_vnd',
-    'area',
-    'city_id',
-    'district_id',
-    'ward_id',
-    'street_id',
-    'title',
-    'description',
-    'image_ids',
-  ];
+  // Using shared invalid priority list for consistency across new/edit flows
 
   const scrollToInvalid = useScrollToInvalidField(form, invalidPriority);
   const handleInvalid = (errors: Record<string, unknown>) => {
