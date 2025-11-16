@@ -16,6 +16,7 @@ import ModalSelectRegisterOrLogin from '@frontend/features/auth/mobile/ModalSele
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
+import ReloadLink from '@components/ui/ReloadLink';
 import { usePathname, useRouter } from 'next/navigation';
 import { useHideCreateButton } from '@common/hooks/useHideCreateButton';
 import React from 'react';
@@ -103,9 +104,9 @@ const AvatarIcon: React.FC<AvatarIconProps> = ({ isLogged }) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
-              <Link href={DASHBOARD_ROUTES.posts.index} className="w-full">
+              <ReloadLink href={DASHBOARD_ROUTES.posts.index} className="w-full" reload>
                 Quản lý tin đăng
-              </Link>
+              </ReloadLink>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:cursor-pointer">
               <Link href={DASHBOARD_ROUTES.profile.accountSettings} className="w-full">
