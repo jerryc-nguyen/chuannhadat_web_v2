@@ -1,9 +1,7 @@
 'use client';
 import FilterChips from './mobile/FilterChips';
 import PostList from './mobile/PostList';
-
 import '@styles/pages/mobile/home.scss';
-
 import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
 import { listFilterMobile } from './constants';
 import { useFilterChipsUI } from '@frontend/features/search/hooks/useFilterChipsUI';
@@ -14,12 +12,15 @@ import useLoadMissingAuthors from './hooks/useLoadMissingAuthors';
 
 // Import from the same feature folder
 import { ListTopAuthor } from './components/ListTopAuthor';
+import EmptyPost from './components/EmptyPost';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
+import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 
 export default function CategoryMobile() {
   useSyncParamsToState();
+  useCleanFilterStates();
 
   const _router = useRouter();
   const _pathname = usePathname();
@@ -60,6 +61,9 @@ export default function CategoryMobile() {
         filterParams={APIFilterParams}
         currentPage={currentPage}
       />
+
+      {/* Show empty state when no products found */}
+      {products && products.length === 0 && <EmptyPost />}
     </div>
   );
 }

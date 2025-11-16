@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
+import { useFilterState } from '@frontend/features/search/filters-v2/hooks/useFilterState';
 import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
 
 /**
@@ -13,7 +13,7 @@ export default function useRouteChangeHandler(options: {
   resetFiltersOnProfilePage?: boolean;
 } = {}) {
   const { resetFiltersOnProfilePage = true } = options;
-  const { resetDataFilter } = useFilterState();
+  const { clearAllFilters } = useFilterState();
   const { resetLocations } = useMainContentNavigator();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function useRouteChangeHandler(options: {
 
       // Check if navigating to a profile page
       if (resetFiltersOnProfilePage && url.includes('/profile/')) {
-
+        // do nothing!
       }
     };
 
@@ -51,5 +51,5 @@ export default function useRouteChangeHandler(options: {
       window.removeEventListener('popstate', handlePopState);
       window.history.pushState = originalPushState;
     };
-  }, [resetDataFilter, resetFiltersOnProfilePage, resetLocations]);
+  }, [clearAllFilters, resetFiltersOnProfilePage, resetLocations]);
 } 

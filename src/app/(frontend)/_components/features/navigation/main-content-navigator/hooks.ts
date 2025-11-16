@@ -1,4 +1,4 @@
-import { FilterFieldName, OptionForSelect } from "@common/types"
+import { OptionForSelect } from "@common/types"
 import { useAtom } from "jotai";
 import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from "./states";
 import { useCallback, useMemo, useState } from "react";
@@ -31,7 +31,7 @@ export default function useMainContentNavigator() {
   const [ward, setWard] = useState<OptionForSelect | undefined>(globalWard);
   const [contentType, setContentType] = useState<OptionForSelect | undefined>(globalContentType);
 
-  const { onFieldChanged } = useFilterState();
+  const { updateFilters } = useFilterState();
 
 
   // Content options
@@ -144,22 +144,19 @@ export default function useMainContentNavigator() {
   const onSubmitByApplyFilter = useCallback(async () => {
     updateValues({ contentType, city, district, ward });
     try {
-      onFieldChanged({
-        fieldName: FilterFieldName.Locations,
-        value: undefined,
-        params: {
-          city,
-          district,
-          ward
-        }
+      updateFilters({
+        city,
+        district,
+        ward
       });
       queryClient.invalidateQueries({ queryKey: ['useQueryPostsV2'] });
       closeModals();
     } catch (error) {
       console.log('Error applying filters:', error);
     }
-  }, [city, district, ward]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [city, district, ward]);
 
   const onSubmitByRedirect = useCallback(async () => {
     updateValues({ city, district, ward })

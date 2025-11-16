@@ -57,7 +57,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-4">
+          {/* <div className="flex flex-col gap-4">
             <div className={styles.titleH2}>
               <h2>Yêu cầu</h2>
             </div>
@@ -68,7 +68,7 @@ export const SummaryDashboard: React.FC<SummaryDashboardProps> = () => {
                 icon={CardIcons.PhoneOutgoing}
               />
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </section>
