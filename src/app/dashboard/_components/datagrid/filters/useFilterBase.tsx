@@ -6,6 +6,7 @@ export const useFilterBase = <T extends Record<string, any>>(
   form: UseFormReturn<T, any, undefined>,
   searchable?: boolean,
   onSearch?: () => void,
+  onReset?: () => void,
 ) => {
   const { watch, setValue } = form;
   const formValues = watch();
@@ -23,19 +24,13 @@ export const useFilterBase = <T extends Record<string, any>>(
   };
 
   const onClear = () => {
-    const defaultValues: any = {};
-    customFields.forEach(f => {
-      if (f.type === 'select' && f.mode === 'multiple') {
-        defaultValues[f.name as string] = [];
-      } else {
-        defaultValues[f.name as string] = '';
-      }
-    });
-    if (searchable) {
-      defaultValues.search_by = '';
-      defaultValues.search_value = '';
+    // Reset form to its original defaultValues
+    form.reset();
+    // Trigger higher-level reset (e.g., useListController.actions.resetFilters) if provided
+    if (onReset) {
+      onReset();
     }
-    form.reset(defaultValues);
+    // Optionally re-run search to reflect cleared filters
     if (onSearch) {
       onSearch();
     }

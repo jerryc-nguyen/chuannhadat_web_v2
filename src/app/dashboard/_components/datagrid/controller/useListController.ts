@@ -82,6 +82,7 @@ export function useListController<TFilter extends object, TRow>(
     ...submittedFilters, page: pagination.pageIndex + 1,
     per_page: pagination.pageSize,
   } as any;
+
   useSyncQueryToUrl(syncObject, EXCLUDE_FIELDS_TO_URL);
 
   const query = useQuery({

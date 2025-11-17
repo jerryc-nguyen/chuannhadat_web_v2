@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { FormatDistanceToken, vi } from 'date-fns/locale';
-import { merge } from 'lodash-es';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import queryString from 'query-string';
 import { toast } from 'sonner';
@@ -204,11 +203,12 @@ export const timeAgo = (date: string) => {
 };
 
 export const objectToQueryString = (
-  obj: Record<string, A>,
-  currentSearch?: ReadonlyURLSearchParams | null,
+  obj: Record<string, A>
 ) => {
-  const prev = queryString.parse(currentSearch?.toString() ?? '');
-  return queryString.stringify(removeEmpty(merge(prev, obj)));
+  return queryString.stringify(removeEmpty(obj), {
+    skipNull: true,
+    skipEmptyString: true,
+  });
 };
 
 export const searchParamsToObj = (searchParams?: ReadonlyURLSearchParams | null) => {
