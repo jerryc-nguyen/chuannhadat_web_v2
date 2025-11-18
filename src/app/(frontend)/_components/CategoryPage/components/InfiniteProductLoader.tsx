@@ -45,7 +45,7 @@ export default function InfiniteProductLoader({
       searchApi({
         ...filterParams,
         page: pageParam,
-        per_page: 12, // Load 9 more products per batch
+        per_page: 9, // Load 9 more products per batch
         with_users: true, // ✅ Include users data for authors
       }),
     getNextPageParam: (lastPage, allPages) => {
