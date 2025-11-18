@@ -2,7 +2,7 @@ import React from 'react';
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import { FilterState } from '@app/(frontend)/_components/features/search/types';
 import { useQuery } from '@tanstack/react-query';
-import { searchApiV2 } from '@frontend/features/search/api/searchApi';
+import { countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
 import { useFilterStatePresenter } from './useFilterStatePresenter';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
@@ -16,7 +16,7 @@ export interface UseFilterOperationProps {
 export const useFilterOperation = ({
   onFiltersChanged,
   setIsOpenPopover,
-  counterFetcher = searchApiV2,
+  counterFetcher = countSearchResultsApiV2,
 }: UseFilterOperationProps = {}) => {
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
@@ -39,13 +39,10 @@ export const useFilterOperation = ({
   }, [currentFilterState]);
 
   // API query
-  const { data, isLoading: isPreviewLoading } = useQuery({
+  const { data: previewCount, isLoading: isPreviewLoading } = useQuery({
     queryKey: ['FooterBtsButton', filterParams],
     queryFn: () => counterFetcher?.(filterParams),
   });
-
-  // Extract preview count from current data
-  const previewCount = data?.pagination?.total_count || 0;
 
   // Handle local filter changes within the dropdown
   const handleLocalFilterChange = React.useCallback((fieldName: FilterFieldName, value: OptionForSelect | undefined) => {
@@ -176,7 +173,6 @@ export const useFilterOperation = ({
     isActiveChip,
 
     // API data
-    data,
     isPreviewLoading,
 
     // Preview data
