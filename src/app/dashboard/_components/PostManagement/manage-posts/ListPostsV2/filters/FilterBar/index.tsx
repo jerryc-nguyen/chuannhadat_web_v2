@@ -34,6 +34,9 @@ export default function FilterBar(): React.ReactElement {
       form={form}
       customFields={fields}
       searchable
+      onClearFilters={() => {
+        window.location.href = window.location.pathname;
+      }}
       onSearch={ctrl.actions.submitFilters}
       searchFieldOptions={{
         placeholder: 'Tìm theo mã, tiêu đề...'

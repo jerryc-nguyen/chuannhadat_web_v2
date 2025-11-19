@@ -17,6 +17,7 @@ interface FilterBarBaseProps<T extends Record<string, any>> {
   searchByOptions?: SelectOption[];
   searchFieldOptions?: Record<string, any>
   showFieldsLabel?: boolean;
+  onClearFilters?: () => void;
 }
 
 function FilterBarBase<T extends Record<string, any>>({
@@ -28,8 +29,9 @@ function FilterBarBase<T extends Record<string, any>>({
   searchByOptions,
   searchFieldOptions,
   showFieldsLabel = false,
+  onClearFilters,
 }: FilterBarBaseProps<T>) {
-  const { locals, onFilterChange, onClear, onChangeSearchBy, onChangeSearchValue } = useFilterBase(
+  const { locals, onFilterChange, onChangeSearchBy, onChangeSearchValue } = useFilterBase(
     customFields,
     form,
     searchable,
@@ -70,8 +72,8 @@ function FilterBarBase<T extends Record<string, any>>({
           <Button onClick={onSearch} disabled={isSearching} className="h-9 px-4">
             {isSearching ? 'Searching...' : 'Áp dụng'}
           </Button>
-          <Button onClick={onClear} variant="outline" className="h-9 px-4">
-            Xóa tất cả
+          <Button onClick={onClearFilters} variant="outline" className="h-9 px-4">
+            Xóa lọc
           </Button>
         </div>
       </div>
