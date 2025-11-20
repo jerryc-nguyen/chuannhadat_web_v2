@@ -59,7 +59,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
     <Sheet open={isOpenModal} onOpenChange={handleOpenChange}>
       <SheetContent
         side={'left'}
-        className={cn('flex !w-3/4 flex-col bg-gray-100', styles.modal_content_post)}
+        className={cn('flex !w-3/4 flex-col bg-gray-100 z-[1100]', styles.modal_content_post)}
       >
         <SheetHeader>
           <SheetTitle>

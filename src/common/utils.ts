@@ -1,12 +1,18 @@
 import { type ClassValue, clsx } from 'clsx';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { FormatDistanceToken, vi } from 'date-fns/locale';
-import { merge } from 'lodash-es';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import queryString from 'query-string';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import { ONE_BILLION } from './constants';
+
+/**
+ * Check if a value is blank (undefined, null, or empty string).
+ */
+export function isBlank(value: unknown): value is undefined | null | "" {
+  return value === undefined || value === null || value === "";
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -173,15 +179,6 @@ export const queryParamsToObject = (query: string): Record<string, A> => {
   return result;
 };
 
-export const updateUrlSearchParams = (url: string, params: Record<string, A>) => {
-  const urlObj = new URL(url);
-  const newParams = {
-    ...urlObj.searchParams,
-    ...params,
-  };
-  urlObj.search = queryString.stringify(removeEmpty(newParams));
-  return urlObj.toString();
-};
 export const timeAgo = (date: string) => {
   const now = new Date();
   const past = new Date(date);
@@ -206,11 +203,12 @@ export const timeAgo = (date: string) => {
 };
 
 export const objectToQueryString = (
-  obj: Record<string, A>,
-  currentSearch?: ReadonlyURLSearchParams | null,
+  obj: Record<string, A>
 ) => {
-  const prev = queryString.parse(currentSearch?.toString() ?? '');
-  return queryString.stringify(removeEmpty(merge(prev, obj)));
+  return queryString.stringify(removeEmpty(obj), {
+    skipNull: true,
+    skipEmptyString: true,
+  });
 };
 
 export const searchParamsToObj = (searchParams?: ReadonlyURLSearchParams | null) => {

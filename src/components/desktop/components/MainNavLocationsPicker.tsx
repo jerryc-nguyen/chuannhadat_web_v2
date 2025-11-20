@@ -1,22 +1,25 @@
 'use client';
 import { Button } from '@components/ui/button';
-import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import { FilterFieldName } from '@common/types';
 import React from 'react';
 import { ChevronsUpDown, MapPin } from 'lucide-react';
 import MainContentNavigator from '@frontend/features/navigation/main-content-navigator/desktop';
 import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
+import { useFilterOperation } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterOperation';
 
 export default function MainNavLocationsPicker() {
   const { selectedLocationFullText } = useMainContentNavigator();
   const { openModal } = useModals();
-  const { copyFilterStatesToLocal } = useFilterState();
   const [isOpen, setIsOpen] = React.useState(false);
+  const {
+    currentFilterState: filterState,
+    localFilterState,
+    setLocalFilterState
+  } = useFilterOperation()
 
   const showModalPickLocations = () => {
     setIsOpen(true);
-    copyFilterStatesToLocal([FilterFieldName.Locations]);
+    setLocalFilterState({ ...localFilterState, city: filterState.city, district: filterState.district, ward: filterState.ward });
     openModal({
       name: 'ModalPickLocations',
       title: 'Chọn khu vực',

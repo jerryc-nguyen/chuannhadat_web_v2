@@ -7,13 +7,20 @@
 
 import { Metadata } from "next";
 
-export const createMetadata = (rawMetadata: Metadata) => {
-    return {
-      ...rawMetadata,
-      twitter: {
-        title: rawMetadata.title as string,
-        description: rawMetadata.description as string,
-        images: rawMetadata.openGraph?.images,
+export const createMetadata = (rawMetadata: Metadata, hasQueryString?: boolean) => {
+  return {
+    ...rawMetadata,
+    twitter: {
+      title: rawMetadata.title as string,
+      description: rawMetadata.description as string,
+      images: rawMetadata.openGraph?.images,
+    },
+    // Prevent robots indexing if URL contains query strings
+    ...(hasQueryString && {
+      robots: {
+        index: false,
+        follow: false,
       },
-    };
+    }),
   };
+};

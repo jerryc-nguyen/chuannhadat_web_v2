@@ -23,6 +23,7 @@ export interface ILoginResponse {
   avatar_url: string;
   description: string | null;
   formatted_badges: string | null;
+  exp_years?: number;
   formatted_joined_at: string;
   full_name: string;
   gender: CustomerGender;

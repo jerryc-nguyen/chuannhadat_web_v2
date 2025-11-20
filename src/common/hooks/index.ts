@@ -5,5 +5,7 @@ export * from './usePaginatedPost';
 export * from './useRefCallback';
 export * from './useResizeImage';
 export * from './useViewportSize';
-export * from './useResizeImage';
 export * from './useBreadcrumb';
+export * from './useClickOutside';
+export * from './useTrackAction';
+export * from './useStickyHeader';

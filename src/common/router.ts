@@ -25,6 +25,12 @@ export const DASHBOARD_ROUTES = {
 }
 
 export const API_ROUTES = {
+  MAPS: {
+    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
+    MARKERS: 'api/v2/maps/markers',
+    USER_POSTS: 'api/v2/maps/profile/{author_slug}/posts',
+    RELATED_LOCATIONS: 'api/v2/maps/markers/{marker_uid}/related_locations'
+  },
   AUTH: {
     LOGIN_BY_PHONE: 'api/v1/authentications/login_by_phone',
     LOGIN_BY_GOOGLE: 'api/v1/authentications/login_by_google',
@@ -82,9 +88,6 @@ export const API_ROUTES = {
     SIGN_S3: 'api/v1/product_images/sign-s3',
     TRACK_UPLOADED_URL: 'api/v1/product_images/track-uploaded-url',
   },
-  MAPS: {
-    GET_LOCATION_BY_LAT_LNG: 'api/v1/maps/locations_by_ll',
-  },
   MANAGE_PRODUCTS: {
     DETAIL: 'api/v1/manage_products',
     END_POINT: 'api/v1/manage_products',
@@ -107,9 +110,14 @@ export const API_ROUTES = {
   },
   TRACKINGS: {
     VIEW_PRODUCT: 'api/v1/trackings/view_product',
+    TRACK_ACTION: 'api/v1/trackings/track_action',
     ERRORS: 'api/v1/trackings/web_errors',
   },
-  SEOS: 'api/v1/seos/metadata',
+  SEOS: {
+    METADATA: 'api/v1/seos/metadata',
+    CHECK_URL_REDIRECT: 'api/v1/seos/check_url_redirect?path={path}',
+    SEARCH_METADATA: 'api/v1/seos/search_metadata',
+  },
   NEWS: {
     GET_NEWS: 'api/v1/news',
     GET_NEWS_DETAIL: 'api/v1/news/detail',

@@ -53,7 +53,10 @@ export const useButtonSave = ({ postUid }: UseButtonSaveProps): UseButtonSaveRet
     },
   });
 
-  const handleSavePost = () => {
+  const handleSavePost = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation();
+    e?.preventDefault();
+
     setIsLoadingSavePost(true);
     const payload: ISaveProductPayload = {
       product_uid: postUid,

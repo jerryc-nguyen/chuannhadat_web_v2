@@ -1,44 +1,45 @@
-import { FilterFieldName, OptionForSelect } from '@common/types';
-import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
+import { OptionForSelect } from '@common/types';
 import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
 import LocationsList from '@components/desktop/components/LocationsList';
+import { useFilterOperation } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterOperation';
 
 export default function ProfileLocationsV2() {
-  const { setLocalFieldValue, localFilterState, getLocalFieldValue } = useFilterState();
+  const {
+    currentFilterState: filterState,
+    localFilterState,
+    setLocalFilterState
+  } = useFilterOperation()
+
   const { locationsList } = useSearchAggs();
-  const city = getLocalFieldValue(FilterFieldName.City);
-  const district = getLocalFieldValue(FilterFieldName.District);
-  const ward = getLocalFieldValue(FilterFieldName.Ward);
+  const city = filterState.city;
+  const district = filterState.district;
+  const ward = filterState.ward;
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetDistrict = () => {
-    setLocalFieldValue(FilterFieldName.District, undefined);
-    // trick to fix state not sync!!!
-    localFilterState.district = undefined;
+    setLocalFilterState({ ...localFilterState, district: undefined })
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetWard = () => {
-    setLocalFieldValue(FilterFieldName.Ward, undefined);
-    // trick to fix state not sync!!!
-    localFilterState.ward = undefined;
+    setLocalFilterState({ ...localFilterState, ward: undefined })
   };
 
   const onSelectCity = (city?: OptionForSelect) => {
     resetDistrict();
     resetWard();
     const finalOption = city?.value != 'all' ? city : undefined;
-    setLocalFieldValue(FilterFieldName.City, finalOption);
+    setLocalFilterState({ ...localFilterState, city: finalOption });
   };
 
   const onSelectDistrict = (district?: OptionForSelect) => {
     resetWard();
     const finalOption = district?.value != 'all' ? district : undefined;
-    setLocalFieldValue(FilterFieldName.District, finalOption);
+    setLocalFilterState({ ...localFilterState, district: finalOption });
   };
 
   const onSelectWard = (ward?: OptionForSelect) => {
     const finalOption = ward?.value != 'all' ? ward : undefined;
-    setLocalFieldValue(FilterFieldName.Ward, finalOption);
+    setLocalFilterState({ ...localFilterState, ward: finalOption });
   };
 
   return (

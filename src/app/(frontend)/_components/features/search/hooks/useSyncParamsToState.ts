@@ -2,7 +2,7 @@
 
 import { toParamsApi } from '@frontend/features/search/api/searchApi';
 import { ReadonlyURLSearchParams, usePathname, useSearchParams } from 'next/navigation';
-import { filterStateAtom } from '@frontend/features/search/filter-conditions/states';
+import { filterStateAtom } from '@frontend/features/search/filters-v2/states';
 import { useHydrateAtoms } from 'jotai/utils';
 
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
@@ -35,6 +35,10 @@ function useSyncParamsToState() {
     [MCNWardAtom, filterState?.ward],
     [MCNContentTypeAtom, currentContentType]
   ]);
+
+  return {
+    filterState,
+  }
 }
 
 export { useSyncParamsToState };
