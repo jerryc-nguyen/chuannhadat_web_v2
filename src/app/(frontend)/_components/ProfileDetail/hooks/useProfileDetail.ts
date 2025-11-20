@@ -12,6 +12,7 @@ import { useFilterStatePresenter } from '@frontend/features/search/filters-v2/ho
 import { searchApiV2 } from '@app/(frontend)/_components/features/search/api/searchApi';
 import { profilesApi } from '../api/profiles';
 import { FilterChipOption } from '@common/types';
+import useCardAuthors from '@app/(frontend)/_components/CategoryPage/hooks/useCardAuthors';
 
 interface UseProfileDetailProps {
   profileSlug: string;
@@ -65,6 +66,7 @@ export const useProfileDetail = ({
 
   // Navigation
   const { resetLocations } = useMainContentNavigator();
+  const { appendCardAuthors } = useCardAuthors();
 
   // Search aggregations
   const searchAggs = useSearchAggs();
@@ -104,6 +106,7 @@ export const useProfileDetail = ({
       per_page: 9, // ✅ Load 9 products initially for better performance
       author_slug: profileSlug,
       aggs_for: 'profile',
+      with_users: true,
     };
   }, [friendlyParams, currentPage, profileSlug]);
 
@@ -112,7 +115,7 @@ export const useProfileDetail = ({
 
   // Products data fetching
   const {
-    data: { data: products, pagination, aggs: aggreations },
+    data: { data: products, pagination, aggs: aggreations, users },
   } = useSuspenseQuery({
     queryKey: ['profile-post', { filterParams: APIFilterParams, profileSlug }, currentPage],
     queryFn: () => searchApiV2(APIFilterParams),
@@ -124,7 +127,11 @@ export const useProfileDetail = ({
       updateSearchAggs(aggreations);
       setIsUseAggOptions(true);
     }
-  }, [aggreations, setIsUseAggOptions, updateSearchAggs]);
+
+    if (users) {
+      appendCardAuthors(users);
+    }
+  }, [aggreations, appendCardAuthors, setIsUseAggOptions, updateSearchAggs, users]);
 
   // Filter chip options processing
   const filteredChipOptions = useMemo(() => {

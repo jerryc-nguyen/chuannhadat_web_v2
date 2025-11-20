@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { useAtom } from "jotai";
 import { isUseAggOptionsAtom, searchAggsAtom } from "./states";
 import { OptionForSelect } from "@common/types";
@@ -7,9 +7,10 @@ export default function useSearchAggs() {
   const [searchAggs, setSearchAggs] = useAtom(searchAggsAtom);
   const [isUseAggOptions, setIsUseAggOptions] = useAtom(isUseAggOptionsAtom)
 
-  const updateSearchAggs = (agg: Record<string, A>) => {
+  // Memoize to keep stable identity across renders and avoid effect loops
+  const updateSearchAggs = useCallback((agg: Record<string, A>) => {
     setSearchAggs(agg);
-  }
+  }, [setSearchAggs]);
 
   const busCatTypeOptions = useMemo(() => {
     return (searchAggs.bus_cat_types || []).map((option: A) => {

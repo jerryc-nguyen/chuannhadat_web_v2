@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { searchApi } from '@frontend/features/search/api/searchApi';
+import { searchApiV2 } from '@frontend/features/search/api/searchApi';
 import { Skeleton } from '@components/ui/skeleton';
 import ProductCardV2 from './ProductCardV2';
 import useCardAuthors from '@frontend/CategoryPage/hooks/useCardAuthors';
@@ -32,7 +32,7 @@ export default function InfiniteProductLoaderMobile({
   } = useInfiniteQuery({
     queryKey: ['infinite-products-mobile', filterParams, currentPage],
     queryFn: ({ pageParam = currentPage + 1 }) =>
-      searchApi({
+      searchApiV2({
         ...filterParams,
         page: pageParam,
         per_page: 9, // Load 8 more products per batch for mobile
