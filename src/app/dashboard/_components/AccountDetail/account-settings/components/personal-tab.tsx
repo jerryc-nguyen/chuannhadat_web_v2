@@ -100,7 +100,7 @@ const PersonalTab: React.FC = () => {
       customerGender: CustomerGender.Male,
       displayName: '',
       jobTitle: '',
-      experience: '0',
+      experience: '',
       workplace: '',
       aboutMe: '',
     },
@@ -111,11 +111,9 @@ const PersonalTab: React.FC = () => {
   };
   const handleFileChange = (event: EventInput) => {
     const file = event.target.files?.[0];
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('fileName', file.name);
-
     updateMyAvatar(formData);
   };
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -133,6 +131,7 @@ const PersonalTab: React.FC = () => {
           gender: values.customerGender,
           address: values.workplace,
           description: values.aboutMe,
+          job_title: values.jobTitle,
         };
     updateMyProfile(formatDataPayload);
   }
@@ -144,7 +143,7 @@ const PersonalTab: React.FC = () => {
         customerGender: currentUser.gender as CustomerGender,
         displayName: currentUser.full_name,
         workplace: currentUser.address || '',
-        experience: '0',
+        experience: currentUser.exp_years?.toString() || '',
         jobTitle: currentUser.job_title || '',
         aboutMe: currentUser.description || '',
       });

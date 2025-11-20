@@ -20,7 +20,7 @@ interface FilterContentOptionsFactoryProps {
   /** Callback when any filter changes */
   onChange: (fieldName: FilterFieldName, value: OptionForSelect | undefined) => void;
   /** Callback for location changes */
-  onLocationChange: (location: {
+  onLocationChange?: (location: {
     city?: OptionForSelect;
     district?: OptionForSelect;
     ward?: OptionForSelect;

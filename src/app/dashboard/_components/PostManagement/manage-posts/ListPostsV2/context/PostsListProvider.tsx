@@ -16,16 +16,21 @@ export function PostsListProvider({ children, isMobile = false, counterFetcher }
 
   // Default counter fetcher using ProductApiService.Filter, returns the total_count
   const defaultCounterFetcher: CounterFetcher = async (filters: ProductQuery) => {
-    const query: Record<string, any> = {
-      ...filters,
-      page: 1,
-      per_page: 1,
-      aggs_for: 'manage_posts',
-    };
-    const res = await ProductApiService.Filter(query);
-    const payload = res as Record<string, any>;
-    const total = payload?.pagination?.total_count ?? 0;
-    return Number.isFinite(total) ? total : 0;
+    try {
+      const query: Record<string, any> = {
+        ...filters,
+        page: 1,
+        per_page: 1,
+        aggs_for: 'manage_posts',
+      };
+      const res = await ProductApiService.Filter(query);
+      const payload = res as Record<string, any>;
+      const total = payload?.pagination?.total_count ?? 0;
+      return Number.isFinite(total) ? total : 0;
+    } catch (error) {
+      console.log('Manage posts counter error', error);
+      return 0;
+    }
   };
 
   return (

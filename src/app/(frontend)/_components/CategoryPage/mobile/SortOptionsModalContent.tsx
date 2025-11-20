@@ -24,15 +24,12 @@ export const useModalSortContent = (): SortOptionsModalContentResult => {
   const {
     currentFilterState,
     handleLocalFilterChange,
-    handleLocalLocationChange
+    handleLocalLocationChange,
   } = useFilterOperation();
 
   const handleApplySort = () => {
-    // Apply the local sort state to the global filter state
     if (currentFilterState.sort) {
-      updateFilters({
-        sort: currentFilterState.sort,
-      });
+      updateFilters({ sort: currentFilterState.sort });
     }
     closeModals();
   };
