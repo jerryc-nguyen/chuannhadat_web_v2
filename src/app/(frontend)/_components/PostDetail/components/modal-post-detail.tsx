@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@components/ui/she
 import { usePostDetail } from '@common/hooks/usePostDetail';
 import { IProductDetail } from '@common/types'
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@components/desktop/components/breadcrumb';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom, useAtomValue } from 'jotai';
 import React, { useMemo } from 'react';
 import { isLoadingModal, openModalDetail, selectedPostId } from '../states/modalPostDetailAtoms';
 import styles from '../styles/modal-post-detail.module.scss';
@@ -14,6 +14,7 @@ import DescriptionPost from './description-post';
 import FeaturesPost from './features-post';
 import NotePost from './note-post';
 import OverviewPost from './overview-post';
+import { youtubePlayerAtom } from '@frontend/features/media/youtube-player-modal/state';
 
 type ModalPostDetailProps = object;
 
@@ -26,6 +27,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
     postId,
     enabled: !!postId,
   });
+  const { isShow: isYoutubeOpen } = useAtomValue(youtubePlayerAtom);
 
   // const updateBrowserPath = (product: IProductDetail) => {
   //   window.history.pushState({}, '', product.detail_path);
@@ -60,6 +62,12 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
       <SheetContent
         side={'left'}
         className={cn('flex !w-3/4 flex-col bg-gray-100 z-[1100]', styles.modal_content_post)}
+        onInteractOutside={(e) => {
+          if (isYoutubeOpen) e.preventDefault();
+        }}
+        onEscapeKeyDown={(e) => {
+          if (isYoutubeOpen) e.preventDefault();
+        }}
       >
         <SheetHeader>
           <SheetTitle>
