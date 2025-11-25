@@ -41,7 +41,7 @@ export default function CategoryMobile() {
     };
   }, [friendlyParams, currentPage]);
 
-  const { products, data } = useQueryPostsV2(APIFilterParams);
+  const { products, data, totalCount } = useQueryPostsV2(APIFilterParams);
   useLoadMissingAuthors(data);
 
   // Filter chips based on current filter state using the new pure UI approach
@@ -60,6 +60,7 @@ export default function CategoryMobile() {
         dataPostList={products}
         filterParams={APIFilterParams}
         currentPage={currentPage}
+        totalCount={totalCount}
       />
 
       {/* Show empty state when no products found */}

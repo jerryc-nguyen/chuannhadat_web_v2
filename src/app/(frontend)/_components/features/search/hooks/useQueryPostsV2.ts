@@ -22,11 +22,14 @@ function useQueryPostsV2(filterParams: FilterParams) {
   );
 
   const products = useMemo(() => {
-    console.log('🔍 useQueryPostsV2 - Products memoized:', data.data?.length, data.data);
     return data.data;
   }, [data.data])
 
-  return { products, data, aggreations: data.aggs };
+  const totalCount = useMemo(() => {
+    return data.pagination.total_count;
+  }, [data.pagination.total_count]);
+
+  return { products, data, aggreations: data.aggs, totalCount };
 }
 
 export default useQueryPostsV2;

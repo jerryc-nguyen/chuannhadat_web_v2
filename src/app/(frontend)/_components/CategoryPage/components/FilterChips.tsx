@@ -3,6 +3,7 @@ import { cn } from '@common/utils';
 import { FilterChipOption, IPagination } from '@common/types';
 import FilterChipFactoryDesktop from '@app/(frontend)/_components/features/search/filters-v2/FilterChipFactoryDesktop';
 import { FilterState, AggregationData } from '@app/(frontend)/_components/features/search/types';
+import { formatNumber } from '@common/numberHelpers';
 
 type FilterChipsDesktopProps = {
   chipOptions: FilterChipOption[];
@@ -31,7 +32,7 @@ const FilterChipsDesktop: React.FC<FilterChipsDesktopProps> = ({
         className,
       )}
     >
-      <span className="font-semibold text-black">Có {pagination?.total_count} tin đăng</span>
+      <span className="font-semibold text-black">Có {formatNumber(pagination?.total_count || 0)} tin đăng</span>
       <div className="hidden h-8 w-[2px] bg-[#f0f0f0] lg:block" />
       {isShowListChips && (
         <div className="relative my-2 flex flex-wrap gap-2">
