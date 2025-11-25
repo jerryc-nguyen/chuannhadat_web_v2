@@ -25,7 +25,7 @@ const ModalLayoutWithFooter: React.FC<ModalLayoutWithFooterProps> = ({
       <div className={`flex-1 overflow-y-auto z-10 ${contentClassName}`}>
         {content}
       </div>
-      <div className={`sticky bottom-0 bg-white border-t pt-4 mt-4 z-10${footerClassName}`}>
+      <div className={`sticky bottom-0 bg-white border-t p-4 mt-4 z-10${footerClassName}`}>
         {footer}
       </div>
     </div>
