@@ -139,7 +139,7 @@ const FilterChipFactoryDesktop: React.FC<FilterChipProps> = ({
           className={cn(`!relative z-20 mt-4 ${contentWidth()}`)}
         >
           <h2 className="text-left text-lg font-semibold">{filterChipItem.text}</h2>
-          <section className="content-filter my-3 max-h-[10rem] overflow-y-auto">
+          <section className="content-filter my-3 max-h-[20rem] overflow-y-auto">
             <FilterContentOptionsFactory
               filterState={currentFilterState}
               onChange={handleLocalFilterChange}
