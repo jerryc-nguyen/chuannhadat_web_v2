@@ -2,9 +2,9 @@
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
-import { Product } from '../../schemas/ManageProductListSchema';
+import { ManageProductList } from '../../schemas/ManageProductListSchema';
 
-export const CellSelect: ColumnDef<Product>['cell'] = ({ row }) => (
+export const CellSelect: ColumnDef<ManageProductList>['cell'] = ({ row }) => (
   <Checkbox
     checked={row.getIsSelected()}
     onCheckedChange={(value) => row.toggleSelected(!!value)}

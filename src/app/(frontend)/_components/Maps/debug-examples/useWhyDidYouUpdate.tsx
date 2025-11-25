@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
+import useResizeImage from '@common/hooks/useResizeImage';
 
 // Custom hook to debug why components/effects update
 export const useWhyDidYouUpdate = (name: string, props: Record<string, any>) => {
-  const previous = useRef<Record<string, any>>();
+  const previous = useRef<Record<string, any> | null>(null);
 
   useEffect(() => {
     if (previous.current) {
