@@ -16,7 +16,7 @@ export default function LocationFilter({
   loading = {},
 }: LocationFilterProps) {
   const handleCityChange = (selectedCity: OptionForSelect | undefined) => {
-    onLocationChange({
+    onLocationChange?.({
       city: selectedCity,
       district: undefined, // Reset district when city changes
       ward: undefined, // Reset ward when city changes
@@ -24,7 +24,7 @@ export default function LocationFilter({
   };
 
   const handleDistrictChange = (selectedDistrict: OptionForSelect | undefined) => {
-    onLocationChange({
+    onLocationChange?.({
       city,
       district: selectedDistrict,
       ward: undefined, // Reset ward when district changes
@@ -32,7 +32,7 @@ export default function LocationFilter({
   };
 
   const handleWardChange = (selectedWard: OptionForSelect | undefined) => {
-    onLocationChange({
+    onLocationChange?.({
       city,
       district,
       ward: selectedWard,

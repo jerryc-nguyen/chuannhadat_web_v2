@@ -54,7 +54,7 @@ export interface LocationFilterProps {
   /** Available ward options */
   wardOptions: OptionForSelect[];
   /** Callback when location changes */
-  onLocationChange: (location: {
+  onLocationChange?: (location: {
     city?: OptionForSelect;
     district?: OptionForSelect;
     ward?: OptionForSelect;

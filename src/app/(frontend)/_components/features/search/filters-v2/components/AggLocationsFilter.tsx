@@ -8,7 +8,7 @@ interface AggLocationsFilterProps {
   cityOptions: OptionForSelect[];
   districtOptions: OptionForSelect[];
   wardOptions: OptionForSelect[];
-  onLocationChange: (location: {
+  onLocationChange?: (location: {
     city?: OptionForSelect;
     district?: OptionForSelect;
     ward?: OptionForSelect;
@@ -32,7 +32,7 @@ export default function AggLocationsFilter({
 }: AggLocationsFilterProps) {
   const onSelectCity = (selectedCity?: OptionForSelect) => {
     const finalOption = selectedCity?.value !== 'all' ? selectedCity : undefined;
-    onLocationChange({
+    onLocationChange?.({
       city: finalOption,
       district: undefined, // Reset district when city changes
       ward: undefined, // Reset ward when city changes
@@ -41,7 +41,7 @@ export default function AggLocationsFilter({
 
   const onSelectDistrict = (selectedDistrict?: OptionForSelect) => {
     const finalOption = selectedDistrict?.value !== 'all' ? selectedDistrict : undefined;
-    onLocationChange({
+    onLocationChange?.({
       city,
       district: finalOption,
       ward: undefined, // Reset ward when district changes
@@ -50,7 +50,7 @@ export default function AggLocationsFilter({
 
   const onSelectWard = (selectedWard?: OptionForSelect) => {
     const finalOption = selectedWard?.value !== 'all' ? selectedWard : undefined;
-    onLocationChange({
+    onLocationChange?.({
       city,
       district,
       ward: finalOption,

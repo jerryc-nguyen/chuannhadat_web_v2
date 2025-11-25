@@ -179,7 +179,7 @@ export default function FilterContentOptionsFactory({
           cityOptions={getOptionsForField(FilterFieldName.City)}
           districtOptions={getOptionsForField(FilterFieldName.District)}
           wardOptions={getOptionsForField(FilterFieldName.Ward)}
-          onLocationChange={onLocationChange ?? ((location) => {})}
+          onLocationChange={onLocationChange}
           loading={{
             cities: loading.cities,
             districts: loading.districts,
@@ -254,7 +254,7 @@ export default function FilterContentOptionsFactory({
           cityOptions={getOptionsForField(FilterFieldName.City)}
           districtOptions={aggregationData.locationsList?.districtOptions || getOptionsForField(FilterFieldName.District)}
           wardOptions={aggregationData.locationsList?.wardOptions || getOptionsForField(FilterFieldName.Ward)}
-          onLocationChange={onLocationChange ?? ((location) => {})}
+          onLocationChange={onLocationChange}
           loading={{
             cities: loading.cities,
             districts: loading.districts,
