@@ -6,6 +6,7 @@ import { countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
 import { useFilterStatePresenter } from './useFilterStatePresenter';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
+import useSearchScope from '@app/(frontend)/_components/features/search/hooks/useSearchScope';
 
 export interface UseFilterOperationProps {
   onFiltersChanged?: (filterState: FilterState) => void;
@@ -18,6 +19,7 @@ export const useFilterOperation = ({
   setIsOpenPopover,
   counterFetcher = countSearchResultsApiV2,
 }: UseFilterOperationProps = {}) => {
+  const { defaultProfileSearchParams } = useSearchScope();
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
   const [localFilterState, setLocalFilterState] = React.useState<FilterState>({});
@@ -35,8 +37,8 @@ export const useFilterOperation = ({
   }, [selectedFilterState, localFilterState]);
 
   const filterParams = React.useMemo(() => {
-    return buildFriendlyParams(currentFilterState);
-  }, [currentFilterState]);
+    return { ...buildFriendlyParams(currentFilterState), ...defaultProfileSearchParams }
+  }, [currentFilterState, defaultProfileSearchParams]);
 
   // API query
   const { data: previewCount, isLoading: isPreviewLoading } = useQuery({

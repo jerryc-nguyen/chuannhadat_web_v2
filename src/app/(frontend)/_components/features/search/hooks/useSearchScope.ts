@@ -41,9 +41,19 @@ export default function useSearchScope() {
     }
   }, [pathname])
 
+  const defaultProfileSearchParams = useMemo(() => {
+    // Only support exact "/profile/<slug>" pattern (no trailing slash)
+    const match = pathname.match(/^\/profile\/([^/]+)$/);
+    if (match) {
+      return { author_slug: match[1] } as Record<string, string>;
+    }
+    return {} as Record<string, string>;
+  }, [pathname])
+
   return {
     searchScope,
     isProfileAgg,
-    currentContentType
+    currentContentType,
+    defaultProfileSearchParams
   }
 }
