@@ -136,7 +136,7 @@ const AboutChuanNhaDat: React.FC = () => {
         <div className="flex flex-col-reverse justify-between bg-[#f3f5f7] lg:flex-row">
           <div className="flex flex-col gap-y-4 p-6 text-base lg:w-2/3 lg:p-10">
             <p>
-              Chuẩn Nhà Đất được thành lập vào năm 2021, bắt nguồn từ một khát vọng đơn giản nhưng
+              Chuẩn Nhà Đất được thành lập vào năm 2023, bắt nguồn từ một khát vọng đơn giản nhưng
               đầy ý nghĩa: xây dựng một nền tảng bất động sản đáng tin cậy, nơi mọi người đều có thể
               dễ dàng tiếp cận thông tin minh bạch và chính xác, và đặc biệt là chi phí vô cùng rẻ
               so với các nền tảng khác
