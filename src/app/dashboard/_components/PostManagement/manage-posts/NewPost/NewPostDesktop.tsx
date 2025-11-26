@@ -15,10 +15,18 @@ import { DASHBOARD_ROUTES } from '@common/router';
 import LocationFields from '../components/form-components/LocationFields';
 import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
 import { invalidPriority } from '../constants';
+import { useFixedBottomBar } from '@dashboard/hooks/useFixedBottomBar';
 
 const NewPostDesktop: React.FC = () => {
   const { form, onSubmit } = useNewPostForm('desktop');
   const [disableSubmit, setDisableSubmit] = useState(false);
+
+  // Fixed bottom bar via reusable hook
+  const { ref: bottomBarRef, style: fixedStyle } = useFixedBottomBar<HTMLDivElement>(undefined, {
+    bottom: 0,
+    zIndex: 40,
+    alignTo: 'parent',
+  });
 
   const scrollToInvalid = useScrollToInvalidField(form, invalidPriority);
   const handleInvalid = (errors: Record<string, unknown>) => {
@@ -48,11 +56,13 @@ const NewPostDesktop: React.FC = () => {
             <ImageForm form={form} />
           </div>
         </div>
-        <div className="sticky bottom-2 z-[40] mt-6 flex justify-between rounded-lg border bg-card p-3">
+        <div
+          ref={bottomBarRef}
+          className="flex justify-between items-center border bg-card p-4"
+          style={fixedStyle}
+        >
           <Link href={DASHBOARD_ROUTES.posts.index}>
-            <Button type="button" variant="ghost">
-              Trở lại
-            </Button>
+            Trở lại
           </Link>
           <Button
             type="submit"
