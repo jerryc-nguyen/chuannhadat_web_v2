@@ -58,7 +58,7 @@ const NewPostDesktop: React.FC = () => {
         </div>
         <div
           ref={bottomBarRef}
-          className="flex justify-between items-center border bg-card p-4"
+          className="flex justify-between rounded-lg border bg-card p-3 items-center"
           style={fixedStyle}
         >
           <Link href={DASHBOARD_ROUTES.posts.index}>

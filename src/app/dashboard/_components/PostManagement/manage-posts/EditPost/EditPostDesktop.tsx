@@ -16,6 +16,7 @@ import { DASHBOARD_ROUTES } from '@common/router';
 import { Loader2 } from 'lucide-react';
 import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
 import { invalidPriority } from '../constants';
+import { useFixedBottomBar } from '@dashboard/hooks/useFixedBottomBar';
 
 interface EditPostDesktopProps {
   productUid: string;
@@ -28,6 +29,13 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
   const handleInvalid = (errors: Record<string, unknown>) => {
     scrollToInvalid(errors);
   };
+
+  // Fixed bottom bar via reusable hook (align to parent width/left)
+  const { ref: bottomBarRef, style: fixedStyle } = useFixedBottomBar<HTMLDivElement>(undefined, {
+    bottom: 0,
+    zIndex: 40,
+    alignTo: 'parent',
+  });
 
   return (
     <Form {...form}>
@@ -46,11 +54,9 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
             </div>
           </div>
         </div>
-        <div className="sticky bottom-2 z-[40] mt-6 flex justify-between rounded-lg border bg-card p-3">
+        <div ref={bottomBarRef} className="flex justify-between rounded-lg border bg-card p-3 items-center" style={fixedStyle}>
           <Link href={DASHBOARD_ROUTES.posts.index}>
-            <Button type="button" variant="ghost">
-              Trở lại
-            </Button>
+            Trở lại
           </Link>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
