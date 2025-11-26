@@ -70,7 +70,7 @@ const Pagination: React.FC<Props> = ({ table, className, position = 'fixed-fit',
     const parent = el?.parentElement;
     if (!parent) return;
     const rect = parent.getBoundingClientRect();
-    setFixedStyle({ position: 'fixed', bottom: 0, left: rect.left, width: rect.width, zIndex: 20 });
+    setFixedStyle({ position: 'fixed', bottom: 0, left: rect.left, width: rect.width, zIndex: 1 });
   }, [position]);
 
   React.useEffect(() => {
