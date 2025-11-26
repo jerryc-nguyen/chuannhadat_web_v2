@@ -13,10 +13,19 @@ import ProjectForm from '../components/form-components/project-form';
 import { useNewPostForm } from './hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
 import LocationFields from '../components/form-components/LocationFields';
+import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
+import { invalidPriority } from '../constants';
 
 const NewPostDesktop: React.FC = () => {
   const { form, onSubmit } = useNewPostForm('desktop');
   const [disableSubmit, setDisableSubmit] = useState(false);
+
+  const scrollToInvalid = useScrollToInvalidField(form, invalidPriority);
+  const handleInvalid = (errors: Record<string, unknown>) => {
+    // Re-enable submit when validation fails and scroll to the first invalid field
+    setDisableSubmit(false);
+    scrollToInvalid(errors);
+  };
 
   const onSubmitHandled = async () => {
     // Disable immediately after validation passes to prevent double submits
@@ -28,7 +37,7 @@ const NewPostDesktop: React.FC = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmitHandled)}>
+      <form onSubmit={form.handleSubmit(onSubmitHandled, handleInvalid)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
             <ProductTypeForm form={form} />

@@ -14,6 +14,8 @@ import LocationFields from '../components/form-components/LocationFields';
 import { useEditPostForm } from './hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
 import { Loader2 } from 'lucide-react';
+import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
+import { invalidPriority } from '../constants';
 
 interface EditPostDesktopProps {
   productUid: string;
@@ -22,9 +24,14 @@ interface EditPostDesktopProps {
 const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
   const { form, onSubmit } = useEditPostForm(productUid);
 
+  const scrollToInvalid = useScrollToInvalidField(form, invalidPriority);
+  const handleInvalid = (errors: Record<string, unknown>) => {
+    scrollToInvalid(errors);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit, handleInvalid)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
             <ProductTypeForm form={form} />
