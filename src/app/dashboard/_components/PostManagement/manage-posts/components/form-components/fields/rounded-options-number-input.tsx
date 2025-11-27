@@ -45,7 +45,7 @@ export interface RoundedOptionsInputProps
 
 const RoundedOptionsNumberInput = React.forwardRef<HTMLInputElement, RoundedOptionsInputProps>(
   ({ className, rounded, variant, endAdornment, value, onChange, hiddenSelect, ...props }, ref) => {
-    const defaultInputValue = parseInt(value + '') < 6 ? '' : value + '';
+    const defaultInputValue = parseInt(value + '') < 6 || !value ? '' : value + '';
     const [inputValue, setInputValue] = React.useState<string>(defaultInputValue);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
