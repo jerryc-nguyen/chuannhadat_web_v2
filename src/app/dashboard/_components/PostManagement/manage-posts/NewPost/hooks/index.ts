@@ -21,7 +21,7 @@ const defaultValues: IPostForm = {
   title: '',
   area: '',
   phap_ly: '',
-  price_in_vnd: '',
+  price: '',
   city_id: '',
   district_id: '',
   ward_id: undefined,

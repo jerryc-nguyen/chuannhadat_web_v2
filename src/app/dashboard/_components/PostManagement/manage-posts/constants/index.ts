@@ -59,7 +59,7 @@ export const furnitureTypeOptions = [
 
 // Priority order for focusing/scrolling to invalid fields in post forms
 export const invalidPriority = [
-  'price_in_vnd',
+  'price',
   'area',
   'city_id',
   'district_id',
