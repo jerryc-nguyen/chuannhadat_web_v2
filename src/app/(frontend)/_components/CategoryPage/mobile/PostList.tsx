@@ -34,7 +34,7 @@ export default function PostList({ dataPostList, filterParams, currentPage, tota
 
   return (
     <div className="c-verticalPostList relative mx-auto w-full">
-      <div className="flex items-center justify-between px-4 pb-4 pt-0">
+      <div className="flex items-center justify-between px-4 py-4">
         <div className="text-secondary">Có {formatNumber(totalCount || 0)} tin đăng</div>
         <div className="flex items-center" onClick={onShowSortOptions}>
           <span className="mr-2 max-w-32 overflow-hidden text-ellipsis whitespace-nowrap">

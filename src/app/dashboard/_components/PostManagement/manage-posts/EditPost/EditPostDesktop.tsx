@@ -14,6 +14,9 @@ import LocationFields from '../components/form-components/LocationFields';
 import { useEditPostForm } from './hooks';
 import { DASHBOARD_ROUTES } from '@common/router';
 import { Loader2 } from 'lucide-react';
+import { useScrollToInvalidField } from '@dashboard/hooks/scrollToInvalidField';
+import { invalidPriority } from '../constants';
+import { useFixedBottomBar } from '@dashboard/hooks/useFixedBottomBar';
 
 interface EditPostDesktopProps {
   productUid: string;
@@ -22,9 +25,21 @@ interface EditPostDesktopProps {
 const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
   const { form, onSubmit } = useEditPostForm(productUid);
 
+  const scrollToInvalid = useScrollToInvalidField(form, invalidPriority);
+  const handleInvalid = (errors: Record<string, unknown>) => {
+    scrollToInvalid(errors);
+  };
+
+  // Fixed bottom bar via reusable hook (align to parent width/left)
+  const { ref: bottomBarRef, style: fixedStyle } = useFixedBottomBar<HTMLDivElement>(undefined, {
+    bottom: 0,
+    zIndex: 40,
+    alignTo: 'parent',
+  });
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit, handleInvalid)}>
         <div className="items-start gap-6 rounded-lg md:grid lg:grid-cols-3">
           <div className="grid items-start gap-6 lg:col-span-3">
             <ProductTypeForm form={form} />
@@ -39,11 +54,9 @@ const EditPostDesktop: React.FC<EditPostDesktopProps> = ({ productUid }) => {
             </div>
           </div>
         </div>
-        <div className="sticky bottom-2 z-[40] mt-6 flex justify-between rounded-lg border bg-card p-3">
+        <div ref={bottomBarRef} className="flex justify-between rounded-lg border bg-card p-3 items-center" style={fixedStyle}>
           <Link href={DASHBOARD_ROUTES.posts.index}>
-            <Button type="button" variant="ghost">
-              Trở lại
-            </Button>
+            Trở lại
           </Link>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (

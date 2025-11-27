@@ -227,7 +227,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="city_id"
           render={({ field }) => (
-            <FormItem>
+            <FormItem data-field-name="city_id">
               <FormLabel>
                 <span className="text-red-600">*</span> Tỉnh/ Thành phố
               </FormLabel>
@@ -252,7 +252,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="district_id"
           render={({ field }) => (
-            <FormItem>
+            <FormItem data-field-name="district_id">
               <FormLabel>
                 <span className="text-red-600">*</span> Quận/ Huyện
               </FormLabel>
@@ -276,7 +276,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="ward_id"
           render={({ field }) => (
-            <FormItem>
+            <FormItem data-field-name="ward_id">
               <FormLabel>Phường/ Xã</FormLabel>
               <DropdownSelectField
                 options={wardOptions}
@@ -297,7 +297,7 @@ export default function LocationsPickerFormV2({
           control={form.control}
           name="street_id"
           render={({ field }) => (
-            <FormItem>
+            <FormItem data-field-name="street_id">
               <FormLabel>Đường/ Phố</FormLabel>
               <DropdownSelectField
                 options={[...streetOptions]}

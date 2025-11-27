@@ -26,11 +26,9 @@ export const BlockImageProduct = ({
         />
       </AspectRatio.Root>
 
-
-      <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full bg-gradient-to-r from-black/70 to-gray-800/70 px-3 py-1 text-sm font-semibold text-white shadow-lg backdrop-blur-md">
+      <div className="absolute right-2 bottom-2 flex items-center gap-1 rounded-full px-3 py-1 text-white bg-black/30">
         <ImageIcon size={18} />
-        <span className="font-bold text-base">{images_count}</span>
-        <span className="text-xs">hình</span>
+        <span>{images_count}</span>
       </div>
     </div>
   );

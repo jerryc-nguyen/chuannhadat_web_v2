@@ -69,6 +69,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
                 dataPostList={products}
                 filterParams={filterParams}
                 currentPage={pagination?.current_page || 1}
+                totalCount={pagination?.total_count || 0}
               />
             </section>
           </div>

@@ -48,9 +48,9 @@ const ProductInfo: React.FC<RelatedProductCardProps> = ({ product, onOpenDetailM
               })}
               alt={product?.title}
             />
-            <div className="absolute bottom-[10px] right-[10px] h-fit flex gap-x-1 items-center rounded-full bg-black/50 px-2">
-              <ImageIcon size={15} className="text-md text-white" />
-              <span className="text-lg text-white w-fit">{product?.images_count}</span>
+            <div className="absolute bottom-[10px] right-[10px] h-fit flex gap-x-1 items-center rounded-full bg-black/30 px-2 py-0.5">
+              <ImageIcon size={16} className="text-white" />
+              <span className="text-white text-sm">{product?.images_count}</span>
             </div>
           </AspectRatio>
 
