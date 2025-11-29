@@ -1,133 +1,69 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import styles from './styles/profile-detail.module.scss';
-
-import { searchApi } from '@frontend/features/search/api/searchApi';
-import { profilesApi } from './api/profiles';
 import NotFound from '@app/not-found';
-import empty_city from '@assets/images/empty-city.png';
-import { filterChipOptionsByAggregations } from '@common/filterHelpers';
-import useMainContentNavigator from '@frontend/features/navigation/main-content-navigator/hooks';
-import useSearchAggs from '@frontend/features/search/search-aggs/hooks';
-import { useSyncParamsToState } from '@frontend/features/search/hooks/useSyncParamsToState';
-import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
-import useFilterState from '@frontend/features/search/filter-conditions/hooks/useFilterState';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import PostControls from '@frontend/CategoryPage/components/PostControls';
+import FilterChipsDesktop from '@frontend/CategoryPage/components/FilterChips';
 import PostList from '@frontend/CategoryPage/components/PostList';
-
-import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 import ProfileImage from './components/ProfileImage';
 import ProfileInfo from './components/ProfileInfo';
+import { useProfileDetail } from './hooks/useProfileDetail';
+import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
+import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 
 type ProfileDetailDesktopProps = { profileSlug: string };
-const ProfileDetailDesktop: React.FC<ProfileDetailDesktopProps> = ({ profileSlug }) => {
-  useSyncParamsToState();
-  const searchParams = useSearchParams();
-  const currentPage = searchParams?.get('page') ? parseInt(searchParams.get('page') as string) : 1;
-  const { updateValues, resetLocations } = useMainContentNavigator();
 
-  const { updateSearchAggs, setIsUseAggOptions } = useSearchAggs();
+export default function ProfileDetailDesktop({ profileSlug }: ProfileDetailDesktopProps) {
+  useCleanFilterStates();
 
-  // Reset locations when the component mounts
-  useEffect(() => {
-    resetLocations();
-  }, [resetLocations]);
-
-  const { data: profileData } = useQuery({
-    queryKey: ['get-detail-profile', profileSlug],
-    queryFn: () => profilesApi.getProfileSlug(profileSlug),
-    select: (data) => data.data,
-  });
-
-  const { buildFilterParams, applyAllFilters } = useFilterState();
-  const filterParams = buildFilterParams({ withLocal: false });
   const {
-    data: { data: products, pagination, aggs: aggreations },
-  } = useSuspenseQuery({
-    queryKey: ['profile-post', { filterParams, profileSlug }, currentPage],
-    queryFn: () =>
-      searchApi({
-        ...filterParams,
-        page: currentPage,
-        per_page: 9, // ✅ Load 8 products initially for better performance
-        author_slug: profileSlug,
-        aggs_for: 'profile',
-      }),
+    profileData,
+    isProfileLoading,
+    filteredChipOptions,
+    products,
+    pagination,
+    currentPage,
+    searchAggs,
+    APIFilterParams
+  } = useProfileDetail({
+    profileSlug,
+    filterChipsList: listFilterProfileDesktop
   });
 
-  useEffect(() => {
-    if (aggreations) {
-      updateSearchAggs(aggreations);
-      setIsUseAggOptions(true);
-    }
-  }, [aggreations, setIsUseAggOptions, updateSearchAggs]);
+  if (isProfileLoading) {
+    return <div>Loading...</div>;
+  }
 
-  // Filter out AggProjects when aggreations doesn't contain projects or it's empty
-  const filteredChipOptions = useMemo(() => {
-    return filterChipOptionsByAggregations(listFilterProfileDesktop, aggreations);
-  }, [aggreations]);
-
-  const onFilterChanged = (filterState: Record<string, A>) => {
-    updateValues({
-      city: filterState.city,
-      district: filterState.district,
-      ward: filterState.ward
-    });
-
-    applyAllFilters(filterState);
-  };
-
-  const EmptyPost = () => {
-    return (
-      <section className="mb-5 flex min-h-[50vh] flex-col items-center justify-center p-5">
-        <Image className="w-full md:w-1/2" src={empty_city} alt="no-notification" />
-        <h3 className="text-lg font-bold">Không tìm thấy nội dung</h3>
-        <p className="mt-2 w-3/4 text-center text-sm text-foreground">
-          Không tìm thấy bài đăng nào phù hợp với yêu cầu của bạn, hãy thử lại với khu vực, điều
-          kiện khác.
-        </p>
-      </section>
-    );
-  };
+  if (!profileData) {
+    return <NotFound />;
+  }
 
   return (
-    <>
-      {!profileData ? (
-        <NotFound className="h-full" errorMessage="Nội dung không tồn tại hoặc đã bị xóa" />
-      ) : (
-        <section className={styles.profile_detail_wrapper}>
-          <ProfileImage profileData={profileData} />
-          <div className="flex flex-col gap-x-10 gap-y-10 sm:flex-row">
-            <ProfileInfo profileData={profileData} />
-            <div className="relative flex-1">
-              <h2 className="text-2xl font-bold">Tin đã đăng</h2>
-              <PostControls
-                className="mx-1"
-                chipOptions={filteredChipOptions}
-                pagination={pagination}
-                onFilterChange={onFilterChanged}
-              />
-              <PostList
-                className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
-                dataPostList={products}
-                isShowAuthor={false}
-                filterParams={{
-                  ...filterParams,
-                  author_slug: profileSlug,
-                  aggs_for: 'profile',
-                }}
-                currentPage={currentPage}
-              />
-              {/* Pagination removed - will be replaced with infinite scroll */}
-            </div>
-          </div>
-        </section>
-      )}
-    </>
+    <section className={styles.profile_detail_wrapper}>
+      <ProfileImage profileData={profileData} />
+      <div className="flex flex-col gap-x-10 gap-y-10 sm:flex-row">
+        <ProfileInfo profileData={profileData} />
+        <div className="relative flex-1">
+          <h2 className="text-2xl font-bold">Tin đã đăng</h2>
+          <FilterChipsDesktop
+            className="mx-1"
+            chipOptions={filteredChipOptions}
+            pagination={pagination}
+            aggregationData={{
+              busCatTypeOptions: searchAggs.busCatTypeOptions,
+              locationsList: searchAggs.locationsList,
+              projectsOptions: searchAggs.projectsOptions
+            }}
+          />
+          <PostList
+            className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 2xl:!grid-cols-4"
+            dataPostList={products}
+            isShowAuthor={false}
+            filterParams={APIFilterParams}
+            currentPage={currentPage}
+          />
+        </div>
+      </div>
+    </section>
   );
-};
-
-export default ProfileDetailDesktop;
+}

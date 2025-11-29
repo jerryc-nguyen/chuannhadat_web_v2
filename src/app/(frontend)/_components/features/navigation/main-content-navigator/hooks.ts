@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from "./states";
 import { useCallback, useMemo, useState } from "react";
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "./constants";
-import useFilterState from "@frontend/features/search/filter-conditions/hooks/useFilterState";
+import { useFilterState } from "@frontend/features/search/filters-v2/hooks/useFilterState";
 import { useQueryClient } from "@tanstack/react-query";
 import { navigatorApi } from "./apis";
 import useSearchScope, { SearchScopeEnums } from "@frontend/features/search/hooks/useSearchScope";
@@ -22,7 +22,6 @@ export default function useMainContentNavigator() {
   const [globalDistrict, setGlobalDistrict] = useAtom(MCNDistrictAtom);
   const [globalWard, setGlobalWard] = useAtom(MCNWardAtom);
   const queryClient = useQueryClient();
-  const { applyAllFilters } = useFilterState();
   const { searchScope } = useSearchScope();
   const { closeModals } = useModals();
 
@@ -31,6 +30,9 @@ export default function useMainContentNavigator() {
   const [district, setDistrict] = useState<OptionForSelect | undefined>(globalDistrict);
   const [ward, setWard] = useState<OptionForSelect | undefined>(globalWard);
   const [contentType, setContentType] = useState<OptionForSelect | undefined>(globalContentType);
+
+  const { updateFilters } = useFilterState();
+
 
   // Content options
   const contentOptions = useMemo(() => [
@@ -142,18 +144,19 @@ export default function useMainContentNavigator() {
   const onSubmitByApplyFilter = useCallback(async () => {
     updateValues({ contentType, city, district, ward });
     try {
-      applyAllFilters({
+      updateFilters({
         city,
         district,
         ward
       });
-      queryClient.invalidateQueries({ queryKey: ['useQueryPosts'] });
+      queryClient.invalidateQueries({ queryKey: ['useQueryPostsV2'] });
       closeModals();
     } catch (error) {
-      // Handle error silently
+      console.log('Error applying filters:', error);
     }
-  }, [applyAllFilters, city, closeModals, contentType, district, queryClient, updateValues, ward]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [city, district, ward]);
 
   const onSubmitByRedirect = useCallback(async () => {
     updateValues({ city, district, ward })

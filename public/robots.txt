@@ -32,14 +32,9 @@ Allow: /
 
 # Block all other bots
 User-agent: *
-Disallow: /admin/
-Disallow: /api/
-Disallow: /private/
-Disallow: /backend/
-Disallow: /*?*
+Disallow: /dashboard/
 
 # Crawl-delay for other bots
 Crawl-delay: 10
 
-# Sitemap
-Sitemap: https://nextjs.chuannhadat.com/sitemap.xml 
+Sitemap: https://chuannhadat.com/sitemaps/chuannhadat.xml

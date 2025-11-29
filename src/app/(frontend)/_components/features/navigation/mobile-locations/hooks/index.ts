@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { filterStateAtom, localFilterStateAtom } from '@frontend/features/search/filter-conditions/states';
+import { filterStateAtom, localFilterStateAtom } from '@frontend/features/search/filters-v2/states';
 import { useAtom, useAtomValue } from 'jotai';
 import { FilterFieldName } from '@common/types';
 

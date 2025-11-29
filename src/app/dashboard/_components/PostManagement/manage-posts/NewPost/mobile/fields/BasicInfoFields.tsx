@@ -19,7 +19,7 @@ import {
 import {
   roomsOptionsForCreate,
   areaOptionsForCreate,
-} from '@frontend/features/search/filter-conditions/constants';
+} from '@app/(frontend)/_components/features/search/filters-v2/constants';
 
 interface BasicInfoFieldsProps {
   form: UseFormReturn<IPostForm>;
@@ -74,9 +74,9 @@ export default function BasicInfoFields({
 
         <FormField
           control={form.control}
-          name="price_in_vnd"
+          name="price"
           render={({ field }) => (
-            <FormItem data-field-name="price_in_vnd">
+            <FormItem data-field-name="price">
               <ListItem
                 link
                 title={'Giá (*)'}
@@ -90,7 +90,7 @@ export default function BasicInfoFields({
                     title: 'Giá',
                     content: (
                       <PriceOptions
-                        value={form.getValues('price_in_vnd')}
+                        value={form.getValues('price')}
                         onSelect={(option: OptionForSelect) => {
                           onChangeFieldNumber(field, option.value + '');
                           closeModal();
@@ -100,7 +100,7 @@ export default function BasicInfoFields({
                     ),
                   });
                 }}
-                after={readMoney(form.getValues('price_in_vnd'))}
+                after={readMoney(form.getValues('price'))}
                 dividers={true}
               />
               <FormMessage className='px-4' />

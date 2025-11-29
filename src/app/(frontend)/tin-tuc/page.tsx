@@ -6,7 +6,7 @@ import NewsPage from '@frontend/NewsPage';
 
 export async function generateMetadata(): Promise<Metadata> {
   const path = 'tin-tuc';
-  const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS, { params: { path } }))
+  const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.METADATA, { params: { path } }))
     .data as Metadata;
   return createMetadata(rawMetadata);
 }

@@ -31,6 +31,8 @@ const LoggedUserPanel: React.FC = () => {
       id: 1,
       href: DASHBOARD_ROUTES.posts.index,
       title: 'Quản lý tin đăng',
+      // Force full-page reload for manage posts to reset dashboard state fully
+      reload: true as boolean,
       icon: FileText,
     },
     {
@@ -109,6 +111,7 @@ const LoggedUserPanel: React.FC = () => {
             <li key={menu.id}>
               <a
                 href={menu.href}
+                onClick={menu.reload ? (e) => { e.preventDefault(); window.location.assign(menu.href); } : undefined}
                 className="flex items-center gap-x-3 px-6 py-4 font-medium text-gray-700 hover:bg-slate-50 hover:text-primary transition-colors border-b border-gray-100 last:border-b-0"
               >
                 <IconComponent className="h-5 w-5 text-gray-500" />

@@ -1,6 +1,6 @@
 'use client';
 
-import { AuthUtils } from "@common/auth";
+import { useAuth } from "@common/auth/AuthContext";
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "@frontend/features/navigation/main-content-navigator/constants";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -14,14 +14,14 @@ export const enum SearchScopeEnums {
 
 export default function useSearchScope() {
   const pathname = usePathname() || '';
-
+  const { currentUser } = useAuth();
   const searchScope = useMemo(() => {
     if (pathname.indexOf('profile/') != -1) {
       return SearchScopeEnums.Profile
     }
     else if (pathname.indexOf('/tin-tuc') != -1) {
       return SearchScopeEnums.News
-    } else if (pathname.indexOf('/dashboard/') != -1 && AuthUtils.getCurrentUser()) {
+    } else if (pathname.indexOf('/dashboard/') != -1) {
       return SearchScopeEnums.ManagePosts
     } else {
       return SearchScopeEnums.Category
@@ -42,9 +42,21 @@ export default function useSearchScope() {
     }
   }, [pathname])
 
+  const defaultProfileSearchParams = useMemo(() => {
+    // Only support exact "/profile/<slug>" pattern (no trailing slash)
+    const profileMatch = pathname.match(/^\/profile\/([^/]+)$/);
+    if (profileMatch) {
+      return { author_slug: profileMatch[1] } as Record<string, string>;
+    } else if (pathname.indexOf('/dashboard/') != -1 && currentUser?.slug) {
+      return { author_slug: currentUser.slug } as Record<string, string>;
+    }
+    return {} as Record<string, string>;
+  }, [pathname, currentUser])
+
   return {
     searchScope,
     isProfileAgg,
-    currentContentType
+    currentContentType,
+    defaultProfileSearchParams
   }
 }

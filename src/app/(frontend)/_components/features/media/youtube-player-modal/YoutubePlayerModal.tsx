@@ -31,7 +31,7 @@ export const YoutubePlayerModal: React.FC = () => {
   if (!isShow) return null;
   return (
     <div
-      className="pointer-events-auto fixed inset-0 z-[200] flex items-center justify-center bg-black/85"
+      className="pointer-events-auto fixed inset-0 z-[1200] flex items-center justify-center bg-black/85"
       onClick={handleCloseVideoYoutube}
     >
       <div

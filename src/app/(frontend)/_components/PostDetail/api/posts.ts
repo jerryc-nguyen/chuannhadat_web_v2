@@ -1,9 +1,7 @@
 import axiosInstance from '@common/api/axiosInstance';
-import { getCookie } from '@common/cookies';
-import { FRONTEND_TOKEN } from '@common/auth';
 import { API_ROUTES } from '@common/router';
 import { IViewedPostsPayload } from '@frontend/features/product-detail-actions/save-post/types';
-import { IViewedPostsResponse } from '@frontend/PostDetail/type';
+import { IResponseData } from '@common/types/api';
 import { ISavesSummaryResponse } from '@frontend/features/product-detail-actions/save-post/types';
 import { IProductDetail } from '@common/types';
 import { IProductSummary } from '@frontend/PostDetail/type';
@@ -24,28 +22,20 @@ export const postsApi = {
     );
   },
 
-  getViewedPosts: async (payload: IViewedPostsPayload): Promise<IViewedPostsResponse> => {
+  getViewedPosts: async (payload: IViewedPostsPayload): Promise<IResponseData<any[]>> => {
     return axiosInstance.get(API_ROUTES.POSTS.VIEWED_PRODUCTS_V2, {
-      params: payload,
-      headers: {
-        'Frontend-Token': getCookie(FRONTEND_TOKEN),
-      },
+      params: payload
     });
   },
 
-  deleteViewedPosts: async (product_uid: string): Promise<IViewedPostsResponse> => {
-    return axiosInstance.delete(`${API_ROUTES.POSTS.VIEWD_PRODUCTS}/${product_uid}`, {
-      headers: {
-        'Frontend-Token': getCookie(FRONTEND_TOKEN),
-      },
-    });
+  deleteViewedPosts: async (product_uid: string): Promise<IResponseData<any>> => {
+    return axiosInstance.delete(`${API_ROUTES.POSTS.VIEWD_PRODUCTS}/${product_uid}`);
   },
 
   viewProduct: async (payload: { product_uid: string }): Promise<ISavesSummaryResponse> => {
-    return axiosInstance.post(API_ROUTES.TRACKINGS.VIEW_PRODUCT, payload, {
-      headers: {
-        'Frontend-Token': getCookie(FRONTEND_TOKEN),
-      },
-    });
+    return axiosInstance.post(API_ROUTES.TRACKINGS.VIEW_PRODUCT, payload);
+  },
+  trackAction: async (payload: { target_type: string, target_id: string, action: string }): Promise<ISavesSummaryResponse> => {
+    return axiosInstance.post(API_ROUTES.TRACKINGS.TRACK_ACTION, payload);
   },
 };

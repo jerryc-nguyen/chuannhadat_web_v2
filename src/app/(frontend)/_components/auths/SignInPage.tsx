@@ -33,7 +33,7 @@ const SignInPage: React.FC<SignInPageProps> = () => {
               &quot;Chuẩn nhà đất - Cầu nối tin cậy giúp bạn dễ dàng tìm kiếm, đăng tin và biến ước
               mơ an cư lạc nghiệp thành hiện thực!&quot;
             </p>
-            <p className="text-sm text-gray-200">Nhan Nguyen, Lead developer</p>
+            <p className="text-sm text-gray-200">Dai Nguyen, Lead support</p>
           </div>
         </div>
       </section>

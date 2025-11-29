@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { default as ManageProductApis, default as ProductApiService } from '../../apis/product-api';
 import { PostFormSchema } from '../../form-schemas';
-import { useManagePostsCache } from '../../ListPosts/hooks/useManagePostsCache';
+import { useManagePostsCache } from '../../ListPostsV2/hooks/useManagePostsCache';
 import { getQueryClient } from "@common/api/react-query";
 import { getPostManagementBreadcrumb } from '../../helpers';
 import { trackError } from '@common/features/track_errors';

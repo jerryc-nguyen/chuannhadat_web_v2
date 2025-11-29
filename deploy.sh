@@ -13,13 +13,18 @@ else
   echo "Warning: .env.deploy file not found. Using default values."
 fi
 
+# release version notes:
+# v3: 03/09/2025 - optimized frontend load
+# v4: 25/11/2025 - maps + refactor filter chips to local states
+# 
+
 # Configuration (with defaults that can be overridden by .env.deploy)
 VPS_IP="${DEPLOY_VPS_IP:-103.69.84.133}"
 VPS_USER="${DEPLOY_VPS_USER:-root}"
 DEPLOY_PATH="${DEPLOY_PATH:-/var/web}"
 DOCKER_SERVICES=("chuannhadat_next")
 REGISTRY="${DEPLOY_REGISTRY:-registry.gitlab.com/mkt-devops/web-deployments}"
-DEFAULT_TAG="${DEPLOY_TAG:-chuannhadat_next_v3_released}"
+DEFAULT_TAG="${DEPLOY_TAG:-chuannhadat_next_v4_released}"
 DEPLOY_TOKEN_USERNAME="${DEPLOY_TOKEN_USERNAME:-gitlab+deploy-token-123456}"
 DEPLOY_TOKEN="${DEPLOY_TOKEN:-your-token-here}"
 

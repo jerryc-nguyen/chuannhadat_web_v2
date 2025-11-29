@@ -4,7 +4,7 @@ import { cn } from '@common/utils';
 import TooltipHost from '@components/tooltip-host';
 import { Skeleton } from '@components/ui/skeleton';
 import useResizeImage from '@common/hooks/useResizeImage';
-import { filterStateAtom } from '../../features/search/filter-conditions/states';
+import { filterStateAtom } from '../../features/search/filters-v2/states';
 import { HoverCardAuthorMobile } from './hover-card-author/HoverCardAuthorMobile';
 import { useAtom } from 'jotai';
 import Image, { StaticImageData } from 'next/image';
@@ -13,13 +13,13 @@ import React, { useMemo } from 'react';
 import useCardAuthors from '../hooks/useCardAuthors';
 import { useTopAuthors } from '../hooks/useTopAuthors';
 import HoverCardAuthor from './hover-card-author/HoverCardAuthor';
-import useFilterState from '../../features/search/filter-conditions/hooks/useFilterState';
+import { useFilterState } from '../../features/search/filters-v2/hooks/useFilterState';
 
 export default function CardAuthor({ product, isMobile }: { product: A; isMobile?: boolean }) {
   const { getAuthorById } = useCardAuthors();
   const [filterState] = useAtom(filterStateAtom);
   const { topAuthors } = useTopAuthors(filterState);
-  const { resetDataFilter } = useFilterState();
+  const { clearAllFilters } = useFilterState();
   const author = product.author ?? getAuthorById(product.user_id);
 
   const { buildThumbnailUrl } = useResizeImage();
@@ -74,7 +74,7 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
   }, [imgSrc]);
 
   const handleAuthorClick = () => {
-    resetDataFilter();
+    clearAllFilters();
   };
 
   return (
