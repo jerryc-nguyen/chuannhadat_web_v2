@@ -18,7 +18,7 @@ interface IProductTypeForm {
 }
 
 const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
-  const price_in_vnd = form.watch('price_in_vnd');
+  const price = form.watch('price');
   const businessType = form.watch('business_type');
   const categoryType = form.watch('category_type');
 
@@ -90,20 +90,20 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
 
             <FormField
               control={form.control}
-              name="price_in_vnd"
+              name="price"
               render={({ field }) => (
                 <FormItem className='relative'>
                   <FormLabel>
-                    <span className="text-red-600">*</span> {priceLabel} - <span className='text-secondary'>{readMoney(price_in_vnd)} VNĐ</span>
+                    <span className="text-red-600">*</span> {priceLabel} - <span className='text-secondary'>{readMoney(price)} VNĐ</span>
                   </FormLabel>
                   <PriceAutoComplete
-                    selectedValue={price_in_vnd}
+                    selectedValue={price}
                     onSelectedValueChange={(value) => {
                       const { rawValue } = maskNumber(value);
                       onChangeFieldNumber(field, rawValue);
                     }}
                     items={buildOptionsPrice({
-                      searchText: price_in_vnd,
+                      searchText: price,
                       businessType: form.getValues('business_type'),
                     })}
                     emptyMessage="Nhập giá bán"
@@ -117,7 +117,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                           onChangeFieldNumber(field, rawValue);
                         }}
                         maxLength={12}
-                        disabled={form.getValues('price_in_vnd') === 'Thỏa thuận'}
+                        disabled={form.getValues('price') === 'Thỏa thuận'}
                         endAdornment={
                           <span>
                             <b>VNĐ</b>
@@ -128,7 +128,7 @@ const ProductTypeForm: React.FC<IProductTypeForm> = ({ form }) => {
                   />
 
                   <div
-                    className={`flex ${form.formState.errors.price_in_vnd ? 'justify-between' : 'justify-end'}`}
+                    className={`flex ${form.formState.errors.price ? 'justify-between' : 'justify-end'}`}
                   >
                     <FormMessage />
                   </div>

@@ -15,7 +15,7 @@ export interface IPostForm {
   description: string;
   area: string;
   phap_ly?: string;
-  price_in_vnd: string;
+  price: string;
   city_id?: number | string;
   district_id?: number | string;
   ward_id?: number | string;
