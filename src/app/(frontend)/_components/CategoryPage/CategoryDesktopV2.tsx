@@ -10,7 +10,12 @@ import EmptyPost from './components/EmptyPost';
 import FilterChipsDesktop from './components/FilterChips';
 import { useCategoryPageController } from './hooks/useCategoryPageController';
 
-const CategoryDesktopV2: React.FC = () => {
+type Props = {
+  initialFilterState?: Record<string, any>;
+  currentContentType?: any;
+};
+
+const CategoryDesktopV2: React.FC<Props> = ({ initialFilterState, currentContentType }) => {
   const {
     data,
     products,
@@ -19,7 +24,7 @@ const CategoryDesktopV2: React.FC = () => {
     filteredChipOptions,
     aggregationData,
     pagination,
-  } = useCategoryPageController({ perPage: 9, listFilterOptions: listFilterDesktop, includeAgg: true });
+  } = useCategoryPageController({ perPage: 9, listFilterOptions: listFilterDesktop, includeAgg: true, initialFilterState, currentContentType });
 
   return (
     <section className="my-10">

@@ -11,14 +11,19 @@ import EmptyPost from './components/EmptyPost';
 import React from 'react';
 import { useCategoryPageController } from './hooks/useCategoryPageController';
 
-export default function CategoryMobile() {
+type Props = {
+  initialFilterState?: Record<string, any>;
+  currentContentType?: any;
+};
+
+export default function CategoryMobile({ initialFilterState, currentContentType }: Props) {
   const {
     products,
     totalCount,
     currentPage,
     APIFilterParams,
     filteredChipOptions,
-  } = useCategoryPageController({ perPage: 4, listFilterOptions: listFilterMobile, includeAgg: false });
+  } = useCategoryPageController({ perPage: 4, listFilterOptions: listFilterMobile, includeAgg: false, initialFilterState, currentContentType });
 
   return (
     <div className="content-bg-color">
