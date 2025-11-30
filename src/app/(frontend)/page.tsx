@@ -19,8 +19,9 @@ function buildQueryString(searchParams: SearchParams = {}) {
   return usp.toString();
 }
 
-export default async function Page({ searchParams }: { searchParams?: SearchParams }) {
-  const qs = buildQueryString(searchParams);
+export default async function Page({ searchParams }: { searchParams?: Promise<SearchParams> }) {
+  const sp = (await searchParams) ?? {};
+  const qs = buildQueryString(sp);
   const pathWithQuery = qs ? `/?${qs}` : `/`;
 
   const { isMobile } = await getUserAgentInfo();

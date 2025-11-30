@@ -42,11 +42,12 @@ function buildQueryString(searchParams: SearchParams = {}) {
   return usp.toString();
 }
 
-export default async function Page({ params, searchParams }: { params: { slug: string | string[] }, searchParams?: SearchParams }) {
-  const slug = params.slug;
-  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
-  const path = `/category/${slugStr}`;
-  const qs = buildQueryString(searchParams);
+export default async function Page({ params, searchParams }: { params: Promise<{ slug: string | string[] }>, searchParams?: Promise<SearchParams> }) {
+  const awaitedParams = await params;
+  const slug = awaitedParams.slug;
+  const path = Array.isArray(slug) ? slug.join('/') : slug;
+  const sp = (await searchParams) ?? {};
+  const qs = buildQueryString(sp);
   const pathWithQuery = qs ? `${path}?${qs}` : path;
 
   const { isMobile } = await getUserAgentInfo();
