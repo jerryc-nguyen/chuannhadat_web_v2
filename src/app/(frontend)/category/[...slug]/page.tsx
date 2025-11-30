@@ -4,6 +4,7 @@ import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
 import CategoryPage from '@frontend/CategoryPage';
 import { PER_PAGE_MOBILE, PER_PAGE_DESKTOP } from '@frontend/CategoryPage/constants';
+import { buildQueryString } from '@common/urlHelper';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/syncParamsToState.server';
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
@@ -30,18 +31,6 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 }
 
 type SearchParams = Record<string, string | string[] | undefined>;
-
-function buildQueryString(searchParams: SearchParams = {}) {
-  const usp = new URLSearchParams();
-  Object.entries(searchParams).forEach(([key, value]) => {
-    if (Array.isArray(value)) {
-      value.forEach((v) => usp.append(key, String(v)));
-    } else if (value !== undefined) {
-      usp.append(key, String(value));
-    }
-  });
-  return usp.toString();
-}
 
 export default async function Page({ params, searchParams }: { params: Promise<{ slug: string | string[] }>, searchParams?: Promise<SearchParams> }) {
   const awaitedParams = await params;

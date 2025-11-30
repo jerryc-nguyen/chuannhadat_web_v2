@@ -38,3 +38,19 @@ export function buildUrl(
 
   return url.toString();
 }
+
+/**
+ * Build a query string from a search params-like object.
+ * Accepts values as strings, arrays of strings, or undefined.
+ */
+export function buildQueryString(params: Record<string, string | string[] | undefined> = {}): string {
+  const usp = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((v) => usp.append(key, String(v)));
+    } else if (value !== undefined) {
+      usp.append(key, String(value));
+    }
+  });
+  return usp.toString();
+}
