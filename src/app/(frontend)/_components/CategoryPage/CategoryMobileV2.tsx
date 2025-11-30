@@ -2,7 +2,7 @@
 import FilterChips from './mobile/FilterChips';
 import PostList from './mobile/PostList';
 import '@styles/pages/mobile/home.scss';
-import { listFilterMobile } from './constants';
+import { listFilterMobile, PER_PAGE_MOBILE } from './constants';
 
 // Import from the same feature folder
 import { ListTopAuthor } from './components/ListTopAuthor';
@@ -23,7 +23,7 @@ export default function CategoryMobile({ initialFilterState, currentContentType 
     currentPage,
     APIFilterParams,
     filteredChipOptions,
-  } = useCategoryPageController({ perPage: 4, listFilterOptions: listFilterMobile, includeAgg: false, initialFilterState, currentContentType });
+  } = useCategoryPageController({ perPage: PER_PAGE_MOBILE, listFilterOptions: listFilterMobile, includeAgg: false, initialFilterState, currentContentType });
 
   return (
     <div className="content-bg-color">

@@ -3,6 +3,7 @@ import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
 import CategoryPage from '@frontend/CategoryPage';
+import { PER_PAGE_MOBILE, PER_PAGE_DESKTOP } from '@frontend/CategoryPage/constants';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/syncParamsToState.server';
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
@@ -51,7 +52,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const pathWithQuery = qs ? `${path}?${qs}` : path;
 
   const { isMobile } = await getUserAgentInfo();
-  const perPage = isMobile ? 4 : 9;
+  const perPage = isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP;
 
   const initialFilterState = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'category' });
   const friendly = buildFriendlyParams(initialFilterState as any);

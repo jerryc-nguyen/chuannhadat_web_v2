@@ -1,6 +1,6 @@
 'use client';
 
-import { listFilterDesktop } from './constants';
+import { listFilterDesktop, PER_PAGE_DESKTOP } from './constants';
 import React from 'react';
 
 // Import components from the same feature folder
@@ -24,7 +24,7 @@ const CategoryDesktopV2: React.FC<Props> = ({ initialFilterState, currentContent
     filteredChipOptions,
     aggregationData,
     pagination,
-  } = useCategoryPageController({ perPage: 9, listFilterOptions: listFilterDesktop, includeAgg: true, initialFilterState, currentContentType });
+  } = useCategoryPageController({ perPage: PER_PAGE_DESKTOP, listFilterOptions: listFilterDesktop, includeAgg: true, initialFilterState, currentContentType });
 
   return (
     <section className="my-10">
