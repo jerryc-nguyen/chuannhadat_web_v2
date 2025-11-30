@@ -53,7 +53,8 @@ export default function InfiniteProductLoader({
       return nextPageNum <= lastPage.pagination.total_pages ? nextPageNum : undefined;
     },
     initialPageParam: currentPage + 1,
-    enabled: true,
+    // Avoid initial fetch; rely on IntersectionObserver and button to load
+    enabled: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 

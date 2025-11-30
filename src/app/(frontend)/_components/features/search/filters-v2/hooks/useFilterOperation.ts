@@ -12,12 +12,14 @@ export interface UseFilterOperationProps {
   onFiltersChanged?: (filterState: FilterState) => void;
   setIsOpenPopover?: (open: boolean) => void;
   counterFetcher?: (params: Record<string, string>) => Promise<Record<string, A>>;
+  hasCountPreview?: boolean;
 }
 
 export const useFilterOperation = ({
   onFiltersChanged,
   setIsOpenPopover,
   counterFetcher = countSearchResultsApiV2,
+  hasCountPreview = true,
 }: UseFilterOperationProps = {}) => {
   const { defaultProfileSearchParams } = useSearchScope();
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
@@ -42,8 +44,10 @@ export const useFilterOperation = ({
 
   // API query
   const { data: previewCount, isLoading: isPreviewLoading } = useQuery({
-    queryKey: ['FooterBtsButton', filterParams],
-    queryFn: () => counterFetcher?.(filterParams),
+    // Include stable indicators for fetcher presence and preview toggle
+    queryKey: ['FooterBtsButton', filterParams, Boolean(counterFetcher), hasCountPreview],
+    queryFn: () => counterFetcher!(filterParams),
+    enabled: Boolean(counterFetcher) && hasCountPreview,
   });
 
   // Handle local filter changes within the dropdown

@@ -3,11 +3,12 @@ import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
 import CategoryPage from '@frontend/CategoryPage';
+import { PER_PAGE_MOBILE, PER_PAGE_DESKTOP } from '@frontend/CategoryPage/constants';
 import { buildQueryString } from '@common/urlHelper';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/syncParamsToState.server';
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
-import { searchApiV2 } from '@frontend/features/search/api/searchApi';
+import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 
 type Props = {
@@ -41,7 +42,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const pathWithQuery = qs ? `${path}?${qs}` : path;
 
   const { isMobile } = await getUserAgentInfo();
-  const perPage = isMobile ? 4 : 9;
+  const perPage = isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP;
 
   const initialFilterState = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'category' });
   const friendly = buildFriendlyParams(initialFilterState as any);
@@ -57,6 +58,14 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   await queryClient.prefetchQuery({
     queryKey: ['useQueryPostsV2', APIFilterParams],
     queryFn: () => searchApiV2(APIFilterParams),
+  });
+  // Prefetch preview count used by Header/FilterChips to avoid client refetch
+  const counterFilterParams = {
+    ...friendly,
+  };
+  await queryClient.prefetchQuery({
+    queryKey: ['FooterBtsButton', counterFilterParams, true, true],
+    queryFn: () => countSearchResultsApiV2(counterFilterParams),
   });
   const dehydratedState = dehydrate(queryClient);
 
