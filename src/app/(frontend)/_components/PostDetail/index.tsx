@@ -11,20 +11,23 @@ interface PostDetailProps {
 
 export default async function PostDetail({ params }: PostDetailProps) {
   const { slug } = await params;
-  const productUid = slug[0].split('-').slice(-1)[0];
+  const rawSlug = Array.isArray(slug) ? slug[0] : slug;
+  const productUid = typeof rawSlug === 'string' ? rawSlug.split('-').slice(-1)[0] : '';
   const { isMobile } = await getUserAgentInfo();
 
   const queryClient = new QueryClient();
 
   // Prefetch api in server
-  await queryClient.prefetchQuery({
-    queryKey: ['get-detail-post', productUid],
-    queryFn: () => postsApi.getDetailPost(productUid),
-  });
-  await queryClient.prefetchQuery({
-    queryKey: ['get-posts-same-author', productUid],
-    queryFn: () => postsApi.getPostsSameAuthor(productUid),
-  });
+  if (productUid) {
+    await queryClient.prefetchQuery({
+      queryKey: ['get-detail-post', productUid],
+      queryFn: () => postsApi.getDetailPost(productUid),
+    });
+    await queryClient.prefetchQuery({
+      queryKey: ['get-posts-same-author', productUid],
+      queryFn: () => postsApi.getPostsSameAuthor(productUid),
+    });
+  }
 
   const dehydratedState = dehydrate(queryClient);
 
