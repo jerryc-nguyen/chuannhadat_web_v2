@@ -47,6 +47,12 @@ export default function InfiniteProductLoaderMobile({
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
+  // Reset local product state when the initial products or filters change
+  useEffect(() => {
+    setAllProducts(initialProducts);
+    setHasStartedLoading(false);
+  }, [initialProducts, filterParams]);
+
   // Intersection Observer for infinite scroll
   useEffect(() => {
     if (!loadMoreRef.current) return;

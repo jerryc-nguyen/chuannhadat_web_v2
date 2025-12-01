@@ -58,6 +58,15 @@ export default function InfiniteProductLoader({
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
+  // Reset local product state when the initial products or filters change
+  useEffect(() => {
+    setAllProducts(initialProducts);
+    setPagesLoaded(0);
+    setTotalPages(null);
+    setIsAutoLoading(true);
+    setHasStartedLoading(false);
+  }, [initialProducts, filterParams]);
+
   // Auto-load first X pages, then use intersection observer only during auto-loading
   useEffect(() => {
     if (!loadMoreRef.current) return;

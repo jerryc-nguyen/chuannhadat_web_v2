@@ -1,7 +1,7 @@
 import React from 'react';
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import { FilterState } from '@app/(frontend)/_components/features/search/types';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
 import { useFilterStatePresenter } from './useFilterStatePresenter';
@@ -21,6 +21,7 @@ export const useFilterOperation = ({
   counterFetcher = countSearchResultsApiV2,
   hasCountPreview = true,
 }: UseFilterOperationProps = {}) => {
+  const queryClient = useQueryClient();
   const { defaultProfileSearchParams } = useSearchScope();
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
@@ -120,7 +121,11 @@ export const useFilterOperation = ({
     if (typeof onFiltersChanged === 'function') {
       onFiltersChanged(newFilters);
     }
-  }, [localFilterState, updateFilters, onFiltersChanged, setIsOpenPopover]);
+
+    // Proactively invalidate product list queries so search runs with new filters
+    // This ensures `useQueryPostsV2` refetches even if routing does not fully reload
+    queryClient.invalidateQueries({ queryKey: ['useQueryPostsV2'] });
+  }, [localFilterState, updateFilters, onFiltersChanged, setIsOpenPopover, queryClient]);
 
   // Handle filter removal
   // will be removed!
@@ -165,7 +170,10 @@ export const useFilterOperation = ({
     if (typeof onFiltersChanged === 'function') {
       onFiltersChanged(newFilters);
     }
-  }, [onFiltersChanged, updateFilters]);
+
+    // Ensure product list refetches after filter removal
+    queryClient.invalidateQueries({ queryKey: ['useQueryPostsV2'] });
+  }, [onFiltersChanged, updateFilters, queryClient]);
 
   return {
     // Filter state management
