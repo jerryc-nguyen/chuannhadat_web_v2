@@ -7,9 +7,10 @@ import ProfileDetailMobile from './ProfileDetailMobile';
 
 interface ProfileDetailProps {
   params: Params;
+  initialFilterState?: Record<string, any>;
 }
 
-export default async function ProfileDetail({ params }: ProfileDetailProps) {
+export default async function ProfileDetail({ params, initialFilterState }: ProfileDetailProps) {
   const profileSlug = (await params).slug[0];
   const { isMobile } = await getUserAgentInfo();
 
@@ -24,9 +25,9 @@ export default async function ProfileDetail({ params }: ProfileDetailProps) {
   return (
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
-        <ProfileDetailMobile profileSlug={profileSlug} />
+        <ProfileDetailMobile profileSlug={profileSlug} initialFilterState={initialFilterState} />
       ) : (
-        <ProfileDetailDesktop profileSlug={profileSlug} />
+        <ProfileDetailDesktop profileSlug={profileSlug} initialFilterState={initialFilterState} />
       )}
     </HydrationBoundary>
   );
