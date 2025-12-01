@@ -5,6 +5,7 @@ import { searchApiV2 } from '@frontend/features/search/api/searchApi';
 import { Skeleton } from '@components/ui/skeleton';
 import ProductCardV2 from './ProductCardV2';
 import useCardAuthors from '@frontend/CategoryPage/hooks/useCardAuthors';
+import { PER_PAGE_MOBILE } from '@frontend/CategoryPage/constants';
 
 interface InfiniteProductLoaderMobileProps {
   initialProducts: A[];
@@ -35,7 +36,7 @@ export default function InfiniteProductLoaderMobile({
       searchApiV2({
         ...filterParams,
         page: pageParam,
-        per_page: 9, // Load 8 more products per batch for mobile
+        per_page: PER_PAGE_MOBILE, // Use shared mobile page size
         with_users: true, // ✅ Include users data for authors
       }),
     getNextPageParam: (lastPage, allPages) => {
