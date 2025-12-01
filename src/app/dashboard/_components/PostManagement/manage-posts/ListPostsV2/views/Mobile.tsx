@@ -12,9 +12,11 @@ import { DEFAULT_CHIP_FILTER_PARAMS } from '../constant';
 import FilterChipsMobile from "@app/dashboard/_components/PostManagement/manage-posts/ListPostsV2/filters/FilterChipsMobile";
 import DataTableBaseMobile from "@app/dashboard/_components/datagrid/components/DataTableBaseMobile";
 
-export default function Mobile(): React.ReactElement {
+type MobileProps = { initialFilterState?: Record<string, any> };
+
+export default function Mobile({ initialFilterState }: MobileProps): React.ReactElement {
   const ctl = usePostsListContext();
-  const { filterState: initFilterState } = useSyncParamsToState();
+  const { filterState: initFilterState } = useSyncParamsToState(initialFilterState);
   const [, setChipFilterState] = useState<FilterState>(initFilterState);
   const { aggs } = ctl;
   const {
