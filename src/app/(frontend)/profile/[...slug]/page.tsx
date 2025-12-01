@@ -9,6 +9,7 @@ import { resolvePathAndQueryFromProps } from '@common/urlHelper';
 import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/syncParamsToState.server';
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
 import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
+import { QueryKeys } from '@common/QueryKeys';
 
 type Props = {
   params: Params;
@@ -53,14 +54,14 @@ export default async function ProfileDetailPage({ params, searchParams }: Props)
 
   // Prefetch profile posts for initial render
   await queryClient.prefetchQuery({
-    queryKey: ['profile-post', { filterParams: APIFilterParams, profileSlug: slugStr }, 1],
+    queryKey: QueryKeys.profilePosts(APIFilterParams, slugStr, 1),
     queryFn: () => searchApiV2(APIFilterParams),
   });
 
   // Prefetch preview count used by FilterChips (desktop)
   const counterFilterParams = { ...friendly, author_slug: slugStr };
   await queryClient.prefetchQuery({
-    queryKey: ['FooterBtsButton', counterFilterParams, true, true],
+    queryKey: QueryKeys.searchCount(counterFilterParams),
     queryFn: () => countSearchResultsApiV2(counterFilterParams),
   });
 

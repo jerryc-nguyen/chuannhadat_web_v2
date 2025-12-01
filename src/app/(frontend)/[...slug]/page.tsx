@@ -10,6 +10,7 @@ import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/sy
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
 import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
+import { QueryKeys } from '@common/QueryKeys';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -43,7 +44,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['useQueryPostsV2', APIFilterParams],
+    queryKey: QueryKeys.categoryPosts(APIFilterParams),
     queryFn: () => searchApiV2(APIFilterParams),
   });
   // Prefetch preview count used by Header/FilterChips to avoid client refetch
@@ -51,7 +52,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
     ...friendly,
   };
   await queryClient.prefetchQuery({
-    queryKey: ['FooterBtsButton', counterFilterParams, true, true],
+    queryKey: QueryKeys.searchCount(counterFilterParams),
     queryFn: () => countSearchResultsApiV2(counterFilterParams),
   });
   const dehydratedState = dehydrate(queryClient);

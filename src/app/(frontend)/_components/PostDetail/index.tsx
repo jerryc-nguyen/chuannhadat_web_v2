@@ -4,6 +4,7 @@ import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import type { Params } from '@common/types';
 import PostDetailDesktop from './PostDetailDesktop';
 import PostDetailMobile from './PostDetailMobile';
+import { QueryKeys } from '@common/QueryKeys';
 
 interface PostDetailProps {
   params: Params;
@@ -20,11 +21,11 @@ export default async function PostDetail({ params }: PostDetailProps) {
   // Prefetch api in server
   if (productUid) {
     await queryClient.prefetchQuery({
-      queryKey: ['get-detail-post', productUid],
+      queryKey: QueryKeys.postDetail(productUid),
       queryFn: () => postsApi.getDetailPost(productUid),
     });
     await queryClient.prefetchQuery({
-      queryKey: ['get-posts-same-author', productUid],
+      queryKey: QueryKeys.postsSameAuthor(productUid),
       queryFn: () => postsApi.getPostsSameAuthor(productUid),
     });
   }

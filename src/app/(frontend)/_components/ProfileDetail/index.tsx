@@ -4,6 +4,7 @@ import type { Params } from '@common/types';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import ProfileDetailDesktop from './ProfileDetailDesktop';
 import ProfileDetailMobile from './ProfileDetailMobile';
+import { QueryKeys } from '@common/QueryKeys';
 
 interface ProfileDetailProps {
   params: Params;
@@ -16,7 +17,7 @@ export default async function ProfileDetail({ params, initialFilterState }: Prof
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['get-detail-profile', profileSlug],
+    queryKey: QueryKeys.profileDetail(profileSlug),
     queryFn: () => profilesApi.getProfileSlug(profileSlug),
   });
 

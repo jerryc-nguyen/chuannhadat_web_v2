@@ -6,6 +6,7 @@ import { searchApiV2 } from '@frontend/features/search/api/searchApi';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import { buildQueryString } from '@common/urlHelper';
 import { PER_PAGE_DESKTOP, PER_PAGE_MOBILE } from '@frontend/CategoryPage/constants';
+import { QueryKeys } from '@common/QueryKeys';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -29,7 +30,7 @@ export default async function Page({ searchParams }: { searchParams?: Promise<Se
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['useQueryPostsV2', APIFilterParams],
+    queryKey: QueryKeys.categoryPosts(APIFilterParams),
     queryFn: () => searchApiV2(APIFilterParams),
   });
   const dehydratedState = dehydrate(queryClient);

@@ -3,6 +3,7 @@ import type { Params } from '@common/types';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import ManageProductApis from '@dashboard/PostManagement/manage-posts/apis/product-api';
 import EditPost from '@dashboard/PostManagement/manage-posts/EditPost';
+import { QueryKeys } from '@common/QueryKeys';
 
 export default async function PostDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
@@ -12,7 +13,7 @@ export default async function PostDetailPage({ params }: { params: Params }) {
   const queryClient = new QueryClient();
   // Prefetch api in server
   await queryClient.prefetchQuery({
-    queryKey: ['get-detail-manage-post', productUid],
+    queryKey: QueryKeys.managePostDetail(productUid),
     queryFn: () => ManageProductApis.getDetail(productUid),
   });
 
