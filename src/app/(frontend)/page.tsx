@@ -18,8 +18,8 @@ export default async function Page({ searchParams }: { searchParams?: Promise<Se
   const { isMobile } = await getUserAgentInfo();
   const perPage = isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP;
 
-  const initialFilterState = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'category' });
-  const friendly = buildFriendlyParams(initialFilterState as any);
+  const { filterState } = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'category' });
+  const friendly = buildFriendlyParams(filterState as any);
   const APIFilterParams = {
     ...friendly,
     with_title: true,
@@ -37,7 +37,7 @@ export default async function Page({ searchParams }: { searchParams?: Promise<Se
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <CategoryPage pathWithQuery={pathWithQuery} initialFilterState={initialFilterState} />
+      <CategoryPage pathWithQuery={pathWithQuery} initialFilterState={filterState} />
     </HydrationBoundary>
   );
 }

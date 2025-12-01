@@ -17,7 +17,8 @@ export default async function CategoryPage({ isMobile, pathWithQuery, initialFil
   // Derive initial filter state from the URL on the server
   // Fallback to root path if not provided
   const path = pathWithQuery || '/';
-  const serverInitialState = initialFilterState ?? await getInitialFilterStateFromUrl({ pathWithQuery: path, scope: 'category' });
+  const result = await getInitialFilterStateFromUrl({ pathWithQuery: path, scope: 'category' });
+  const serverInitialState = initialFilterState ?? result.filterState;
 
   return userAgent.isMobile
     ? (

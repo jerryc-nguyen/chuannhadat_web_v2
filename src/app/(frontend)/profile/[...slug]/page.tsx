@@ -37,8 +37,8 @@ export default async function ProfileDetailPage({ params, searchParams }: Props)
   const perPage = 9; // keep consistent with useProfileDetail
 
   // Derive initial filter state from URL for profile scope
-  const initialFilterState = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'profile' });
-  const friendly = buildFriendlyParams(initialFilterState as any);
+  const { filterState } = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'profile' });
+  const friendly = buildFriendlyParams(filterState as any);
 
   // Build API filter params for initial search
   const APIFilterParams = {
@@ -69,7 +69,7 @@ export default async function ProfileDetailPage({ params, searchParams }: Props)
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <ProfileDetail params={params} initialFilterState={initialFilterState as any} />
+      <ProfileDetail params={params} initialFilterState={filterState as any} />
     </HydrationBoundary>
   );
 }

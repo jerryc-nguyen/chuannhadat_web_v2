@@ -18,10 +18,10 @@ const NewPostPage: React.FC<{ searchParams?: Promise<SearchParams> }> = async ({
   const pathWithQuery = qs ? `/dashboard/posts?${qs}` : `/dashboard/posts`;
 
   const { isMobile } = await getUserAgentInfo();
-  const initialFilterState = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'manage_posts' });
+  const { filterState } = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'manage_posts' });
 
   return (
-    <ListPostsV2 isMobile={isMobile} initialFilterState={initialFilterState} />
+    <ListPostsV2 isMobile={isMobile} initialFilterState={filterState} />
   );
 };
 
