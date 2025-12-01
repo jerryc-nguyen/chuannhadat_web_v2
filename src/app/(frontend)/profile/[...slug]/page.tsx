@@ -5,7 +5,7 @@ import type { Params } from '@common/types';
 import { Metadata } from 'next';
 import ProfileDetail from '@frontend/ProfileDetail';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { buildQueryString } from '@common/urlHelper';
+import { resolvePathAndQueryFromProps } from '@common/urlHelper';
 import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/syncParamsToState.server';
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
 import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
@@ -16,26 +16,22 @@ type Props = {
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-  const slug = (await params).slug;
-  const path = `/profile/${slug}`;
-
-  // Get search params to check for query strings
-  const searchParamsObj = await searchParams;
-  const hasQueryString = Object.keys(searchParamsObj).length > 0;
-
+  const { path, hasQueryString } = await resolvePathAndQueryFromProps(
+    params as Promise<{ slug: string | string[] }>,
+    searchParams,
+    'profile'
+  );
   const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.METADATA, { params: { path } }))
     .data as Metadata;
   return createMetadata(rawMetadata, hasQueryString);
 }
 
 export default async function ProfileDetailPage({ params, searchParams }: Props) {
-  const awaitedParams = await params;
-  const slug = awaitedParams.slug;
-  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
-  const path = `/profile/${slugStr}`;
-  const sp = (await searchParams) ?? {};
-  const qs = buildQueryString(sp);
-  const pathWithQuery = qs ? `${path}?${qs}` : path;
+  const { pathWithQuery, slugStr } = await resolvePathAndQueryFromProps(
+    params as Promise<{ slug: string | string[] }>,
+    searchParams,
+    'profile'
+  );
 
   const perPage = 9; // keep consistent with useProfileDetail
 

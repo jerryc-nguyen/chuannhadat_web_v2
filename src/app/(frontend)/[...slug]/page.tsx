@@ -4,7 +4,7 @@ import { createMetadata } from '@common/seo';
 import { Metadata } from 'next';
 import CategoryPage from '@frontend/CategoryPage';
 import { PER_PAGE_MOBILE, PER_PAGE_DESKTOP } from '@frontend/CategoryPage/constants';
-import { buildQueryString } from '@common/urlHelper';
+import { resolvePathAndQueryFromProps } from '@common/urlHelper';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/syncParamsToState.server';
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
@@ -17,14 +17,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-  const slug = (await params).slug;
-  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
-  const path = `/${slugStr}`;
-
-  // Get search params to check for query strings
-  const searchParamsObj = await searchParams;
-  const hasQueryString = Object.keys(searchParamsObj).length > 0;
-
+  const { path, hasQueryString } = await resolvePathAndQueryFromProps(params, searchParams);
   const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.SEARCH_METADATA, { params: { path } }))
     .data as Metadata;
   return createMetadata(rawMetadata, hasQueryString);
@@ -33,13 +26,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 type SearchParams = Record<string, string | string[] | undefined>;
 
 export default async function Page({ params, searchParams }: { params: Promise<{ slug: string | string[] }>, searchParams?: Promise<SearchParams> }) {
-  const awaitedParams = await params;
-  const slug = awaitedParams.slug;
-  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
-  const path = `/${slugStr}`;
-  const sp = (await searchParams) ?? {};
-  const qs = buildQueryString(sp);
-  const pathWithQuery = qs ? `${path}?${qs}` : path;
+  const { pathWithQuery } = await resolvePathAndQueryFromProps(params, searchParams);
 
   const { isMobile } = await getUserAgentInfo();
   const perPage = isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP;

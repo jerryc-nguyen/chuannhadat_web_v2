@@ -54,3 +54,50 @@ export function buildQueryString(params: Record<string, string | string[] | unde
   });
   return usp.toString();
 }
+
+/**
+ * Build a path string from a slug value (string or string[]).
+ * Optionally accepts a prefix (e.g., 'profile') to be inserted after root.
+ */
+export function slugToPath(slug: string | string[], prefix = ''): string {
+  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
+  const path = prefix ? `/${prefix}/${slugStr}` : `/${slugStr}`;
+  return path.replace(/\/+/g, '/');
+}
+
+/**
+ * Build a path with query string from search params.
+ */
+export function buildPathWithQuery(
+  path: string,
+  searchParams: Record<string, string | string[] | undefined> = {}
+): string {
+  const qs = buildQueryString(searchParams);
+  return qs ? `${path}?${qs}` : path;
+}
+
+/**
+ * Resolve `path` and `pathWithQuery` from Next.js page props.
+ * Accepts promised `params` and `searchParams` to avoid duplicate awaiting.
+ * Optional `prefix` lets you build paths like `/profile/<slug>`.
+ */
+export async function resolvePathAndQueryFromProps(
+  params: Promise<{ slug: string | string[] }>,
+  searchParams?: Promise<Record<string, string | string[] | undefined>>,
+  prefix = ''
+): Promise<{
+  path: string;
+  pathWithQuery: string;
+  slugStr: string;
+  searchParamsObj: Record<string, string | string[] | undefined>;
+  hasQueryString: boolean;
+}> {
+  const awaitedParams = await params;
+  const slug = awaitedParams.slug;
+  const slugStr = Array.isArray(slug) ? slug.join('/') : slug;
+  const path = slugToPath(slug, prefix);
+  const searchParamsObj = (await searchParams) ?? {};
+  const pathWithQuery = buildPathWithQuery(path, searchParamsObj);
+  const hasQueryString = Object.keys(searchParamsObj).length > 0;
+  return { path, pathWithQuery, slugStr, searchParamsObj, hasQueryString };
+}
