@@ -11,6 +11,7 @@ import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helper
 import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import { QueryKeys } from '@common/QueryKeys';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -27,12 +28,17 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 type SearchParams = Record<string, string | string[] | undefined>;
 
 export default async function Page({ params, searchParams }: { params: Promise<{ slug: string | string[] }>, searchParams?: Promise<SearchParams> }) {
-  const { pathWithQuery } = await resolvePathAndQueryFromProps(params, searchParams);
+  const { pathWithQuery, path: currentRequestPath } = await resolvePathAndQueryFromProps(params, searchParams);
 
   const { isMobile } = await getUserAgentInfo();
   const perPage = isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP;
 
-  const { filterState } = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'category' });
+  const { filterState, parsedPath: validCategoryPath } = await getInitialFilterStateFromUrl({ pathWithQuery, scope: 'category' });
+
+  // If the current request path does not match the valid category path, return 404
+  if (validCategoryPath && currentRequestPath !== validCategoryPath) {
+    notFound();
+  }
   const friendly = buildFriendlyParams(filterState as any);
   const APIFilterParams = {
     ...friendly,
