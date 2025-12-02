@@ -10,6 +10,7 @@ import usePostDetailTracking from './hooks/usePostDetailTracking';
 import React, { useEffect } from 'react';
 import ProductDescription from './components/ProductDescription';
 import './mobile/PostDetailMobile.scss';
+import AuthorInfo from '@app/(frontend)/_components/PostDetail/mobile/components/AuthorInfo';
 
 export default function PostDetailMobile({ productUid, product }: { productUid?: string; product?: IProductDetail; isModal?: boolean }) {
   const setPostDetail = useSetAtom(postDetailAtom);
@@ -49,6 +50,12 @@ export default function PostDetailMobile({ productUid, product }: { productUid?:
         <FeaturesList data={product} />
       </Section>
       <ProductDescription product={product as IProductDetail} />
+
+      <div className="c-mblAuthorInfo">
+        <div className="p-4">
+          <AuthorInfo />
+        </div>
+      </div>
     </div>
   );
 }
