@@ -1,10 +1,11 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { postsApi } from './api/posts';
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
-import type { Params } from '@common/types';
+import type { Params, IProductDetail, IResponseData } from '@common/types';
 import PostDetailDesktop from './PostDetailDesktop';
 import PostDetailMobile from './PostDetailMobile';
 import { QueryKeys } from '@common/QueryKeys';
+import { notFound } from 'next/navigation';
 
 interface PostDetailProps {
   params: Params;
@@ -20,14 +21,33 @@ export default async function PostDetail({ params }: PostDetailProps) {
 
   // Prefetch api in server
   if (productUid) {
-    await queryClient.prefetchQuery({
-      queryKey: QueryKeys.postDetail(productUid),
-      queryFn: () => postsApi.getDetailPost(productUid),
-    });
+    try {
+      await queryClient.prefetchQuery({
+        queryKey: QueryKeys.postDetail(productUid),
+        queryFn: () => postsApi.getDetailPost(productUid),
+      });
+    } catch (e) {
+      notFound();
+    }
+
+    const detailEnvelope = queryClient.getQueryData(QueryKeys.postDetail(productUid)) as
+      | IResponseData<IProductDetail>
+      | undefined;
+
+    const isErrorEnvelope = !!detailEnvelope && (detailEnvelope.status === false || detailEnvelope.code === 404);
+    const product = detailEnvelope?.data;
+
+    if (isErrorEnvelope || !product || product.hide_on_frontend_reason) {
+      notFound();
+    }
+
     await queryClient.prefetchQuery({
       queryKey: QueryKeys.postsSameAuthor(productUid),
       queryFn: () => postsApi.getPostsSameAuthor(productUid),
     });
+  }
+  else {
+    notFound();
   }
 
   const dehydratedState = dehydrate(queryClient);
