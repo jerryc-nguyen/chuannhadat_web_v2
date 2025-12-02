@@ -5,12 +5,16 @@ import Section from '@components/mobile-ui/Section';
 // Removed client fetching; this component now relies on server-provided product
 import { FeaturesList } from './components/features-post';
 import usePostDetailTracking from './hooks/usePostDetailTracking';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import ProductDescription from './components/ProductDescription';
 import './mobile/PostDetailMobile.scss';
 import AuthorInfo from '@app/(frontend)/_components/PostDetail/mobile/components/AuthorInfo';
+import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@components/desktop/components/breadcrumb';
 
 export default function PostDetailMobile({ productUid, product }: { productUid?: string; product?: IProductDetail }) {
+  const breadcrumbsData = useMemo(() => {
+    return ConvertFromBreadcrumbListJSONLd(product?.breadcrumb);
+  }, [product?.breadcrumb]);
 
   // Use the centralized tracking hook
   const { trackPostView } = usePostDetailTracking();
@@ -27,6 +31,9 @@ export default function PostDetailMobile({ productUid, product }: { productUid?:
   if (!product) return null;
   return (
     <div className="flex flex-col gap-4 p-0">
+      <div className="mx-auto mt-5 flex justify-between gap-x-4 px-4">
+        <Breadcrumb breadcrumbs={breadcrumbsData} isLastLink={true} />
+      </div>
       <PhotosCarousel product={product as IProductDetail} />
       <Section title={product?.title}>
         <FeaturesList data={product} />
