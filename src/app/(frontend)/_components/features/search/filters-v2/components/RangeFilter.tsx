@@ -2,8 +2,10 @@ import ListCheckOptions from '@components/mobile-ui/ListCheckOptions';
 import DualRangeSlider from '@components/dual-range-slider';
 import { OptionForSelect } from '@common/types';
 import { RangeFilterProps } from '../types/pure-ui-types';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash-es';
+import { Input } from '@components/ui/input';
+import { formatNumber as formatNumberVi } from '@common/numberHelpers';
 
 /**
  * Reusable RangeFilter component that combines ListCheckOptions with DualRangeSlider
@@ -16,6 +18,9 @@ export default function RangeFilter({
   min = 0,
   max = 100,
   step,
+  minLabel = 'Nhỏ nhất',
+  maxLabel = 'Lớn nhất',
+  formatInputNumber = false,
   formatValue,
   formatRangeText,
   isLoading = false,
@@ -36,6 +41,31 @@ export default function RangeFilter({
     : [value?.range?.min as number, value?.range?.max as number];
 
   const [sliderValues, setSliderValues] = useState(sliderRange);
+  const [minInput, setMinInput] = useState<string>(
+    formatInputNumber ? formatNumberVi(sliderRange[0]) : String(sliderRange[0])
+  );
+  const [maxInput, setMaxInput] = useState<string>(
+    formatInputNumber ? formatNumberVi(sliderRange[1]) : String(sliderRange[1])
+  );
+
+  // Keep local slider/input values in sync when external value changes (e.g., option selection)
+  useEffect(() => {
+    const nextRange = isSliderDisabled ? [min, max] : [value?.range?.min as number, value?.range?.max as number];
+    // Avoid unnecessary state updates
+    if (nextRange[0] !== sliderValues[0] || nextRange[1] !== sliderValues[1]) {
+      setSliderValues(nextRange);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value?.range?.min, value?.range?.max, isSliderDisabled, min, max]);
+
+  // Keep input strings synced with slider values unless user cleared them
+  useEffect(() => {
+    const nextMinStr = formatInputNumber ? formatNumberVi(sliderValues[0]) : String(sliderValues[0]);
+    const nextMaxStr = formatInputNumber ? formatNumberVi(sliderValues[1]) : String(sliderValues[1]);
+    if (minInput !== '') setMinInput(nextMinStr);
+    if (maxInput !== '') setMaxInput(nextMaxStr);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sliderValues[0], sliderValues[1], formatInputNumber]);
 
   // Debounced handler for slider changes
   const debounceChangeValues = useCallback(
@@ -60,20 +90,95 @@ export default function RangeFilter({
     debounceChangeValues(values);
   };
 
+  const clamp = (val: number) => Math.min(Math.max(val, min), max);
+
+  const parseInputValue = (raw: string): number | undefined => {
+    const normalized = raw.replace(/[^\d]/g, '');
+    if (normalized === '') return undefined;
+    const n = Number(normalized);
+    return Number.isNaN(n) ? undefined : n;
+  };
+
+  const handleMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawStr = e.target.value;
+    if (rawStr === '') {
+      setMinInput('');
+      return;
+    }
+    const raw = formatInputNumber ? parseInputValue(rawStr) : Number(rawStr);
+    if (raw === undefined || Number.isNaN(raw)) return;
+    const clamped = clamp(raw as number);
+    const nextMin = Math.min(clamped, sliderValues[1]);
+    const next = [nextMin, sliderValues[1]] as [number, number];
+    setSliderValues(next);
+    setMinInput(formatInputNumber ? formatNumberVi(nextMin) : String(nextMin));
+    debounceChangeValues(next);
+  };
+
+  const handleMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawStr = e.target.value;
+    if (rawStr === '') {
+      setMaxInput('');
+      return;
+    }
+    const raw = formatInputNumber ? parseInputValue(rawStr) : Number(rawStr);
+    if (raw === undefined || Number.isNaN(raw)) return;
+    const clamped = clamp(raw as number);
+    const nextMax = Math.max(clamped, sliderValues[0]);
+    const next = [sliderValues[0], nextMax] as [number, number];
+    setSliderValues(next);
+    setMaxInput(formatInputNumber ? formatNumberVi(nextMax) : String(nextMax));
+    debounceChangeValues(next);
+  };
+
   const handleOptionSelect = (option: OptionForSelect) => {
     onRangeChange(option);
   };
 
   return (
     <div className={`${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
+      {/* Manual min/max inputs */}
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="range-min" className="text-xs text-secondary">{minLabel}</label>
+          <Input
+            id="range-min"
+            type={formatInputNumber ? 'text' : 'number'}
+            value={minInput}
+            onChange={handleMinInputChange}
+            min={min}
+            max={max}
+            step={step}
+            disabled={disabled}
+            aria-label="Minimum"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="range-max" className="text-xs text-secondary">{maxLabel}</label>
+          <Input
+            id="range-max"
+            type={formatInputNumber ? 'text' : 'number'}
+            value={maxInput}
+            onChange={handleMaxInputChange}
+            min={min}
+            max={max}
+            step={step}
+            disabled={disabled}
+            aria-label="Maximum"
+          />
+        </div>
+      </div>
+
+
       {/* Custom range slider */}
-      <div className="mb-4 px-4 mt-4">
+      <div className="mb-4 mt-4">
         <DualRangeSlider
           min={min}
           max={max}
           value={sliderValues}
           onValueChange={handleSliderChange}
-          disabled={isSliderDisabled}
+          disabled={isSliderDisabled || disabled}
           step={step}
         />
       </div>

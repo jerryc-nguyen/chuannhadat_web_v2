@@ -7,7 +7,8 @@ import {
   roomsOptions,
   directionsOptions,
   sellPricesOptions,
-  areasOptions
+  areasOptions,
+  rentPricesOptions,
 } from '@app/(frontend)/_components/features/search/filters-v2/constants';
 
 /**
@@ -56,6 +57,7 @@ export default function useFilterOptions({ dynamicOptions = {} }: UseFilterOptio
     roomOptions: [ALL_OPTION, ...roomsOptions],
     directionOptions: [ALL_OPTION, ...directionsOptions],
     priceOptions: [ALL_OPTION, ...sellPricesOptions],
+    rentPriceOptions: [ALL_OPTION, ...rentPricesOptions],
     areaOptions: [ALL_OPTION, ...areasOptions.map(option => ({
       ...option,
       range: option.range ? {

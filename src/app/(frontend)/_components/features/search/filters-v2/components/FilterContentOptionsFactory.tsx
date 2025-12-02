@@ -11,6 +11,12 @@ import { formatPriceFilterChip, formatRangeText, formatAreaText } from '@common/
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 import useMainContentNavigator from '@app/(frontend)/_components/features/navigation/main-content-navigator/hooks';
 import AggLocationsFilter from '@app/(frontend)/_components/features/search/filters-v2/components/AggLocationsFilter';
+import { useMemo } from 'react';
+import {
+  sellPricesOptions,
+  rentPricesOptions,
+} from '@app/(frontend)/_components/features/search/filters-v2/constants';
+
 
 interface FilterContentOptionsFactoryProps {
   /** Current filter state */
@@ -62,6 +68,28 @@ export default function FilterContentOptionsFactory({
 }: FilterContentOptionsFactoryProps) {
   // Use the hook to get filter options
   const { getOptionsForField } = useFilterOptions();
+
+  const SELL_RANGE_OPTIONS = {
+    min: 1_000_000, // 0 VND
+    max: 20_000_000_000, // 20 billion VND
+    step: 50_000_000, // 50 million VND step
+  }
+
+  const RENT_RANGE_OPTIONS = {
+    min: 1_000_000, // 0 VND
+    max: 100_000_000, // 100 billion VND
+    step: 500000, // 500K VND step
+  }
+
+  const priceRangeOptions = useMemo(() => {
+    return filterState?.businessType?.value === 'sell' ? SELL_RANGE_OPTIONS : RENT_RANGE_OPTIONS
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterState?.businessType?.value]);
+
+  const priceListOptions = useMemo(() => {
+    return filterState?.businessType?.value === 'sell' ? sellPricesOptions : rentPricesOptions
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterState?.businessType?.value]);
 
   // Use aggregation data for specific filter types, otherwise use provided options or hook options
   const getFilterOptions = (): OptionForSelect[] => {
@@ -192,14 +220,15 @@ export default function FilterContentOptionsFactory({
       return (
         <RangeFilter
           value={getValue(FilterFieldName.Price)}
-          options={propFilterOptions || getOptionsForField(FilterFieldName.Price)}
-          min={100_000_000} // 100 million VND
-          max={20_000_000_000} // 20 billion VND
-          step={100_000_000} // 100 million VND step
+          options={propFilterOptions || priceListOptions}
+          {...priceRangeOptions}
           onRangeChange={handleChange(FilterFieldName.Price)}
           formatValue={formatPriceFilterChip}
           formatRangeText={formatRangeText}
           isLoading={loading.price}
+          formatInputNumber={true}
+          minLabel='Nhỏ nhất (đ)'
+          maxLabel='Lớn nhất (đ)'
         />
       );
 
@@ -215,6 +244,8 @@ export default function FilterContentOptionsFactory({
           formatValue={(area: number) => `${area} m²`}
           formatRangeText={formatAreaText}
           isLoading={loading.area}
+          minLabel='Nhỏ nhất (m²)'
+          maxLabel='Lớn nhất (m²)'
         />
       );
 

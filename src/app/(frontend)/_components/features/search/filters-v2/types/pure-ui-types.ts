@@ -100,6 +100,12 @@ export interface RangeFilterProps {
   max?: number;
   /** Step value for the range slider */
   step?: number;
+  /** If true, format input values using numberHelpers.formatNumber */
+  formatInputNumber?: boolean;
+  /** Label text shown above the minimum input */
+  minLabel?: string;
+  /** Label text shown above the maximum input */
+  maxLabel?: string;
   /** Callback when range value changes */
   onRangeChange: (value: OptionForSelect | undefined) => void;
   /** Optional function to format slider values for display */
