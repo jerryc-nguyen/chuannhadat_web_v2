@@ -12,6 +12,7 @@ import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/
 import { getUserAgentInfo } from '@common/getUserAgentInfo';
 import { QueryKeys } from '@common/QueryKeys';
 import { notFound } from 'next/navigation';
+import { trackError } from '@common/features/track_errors';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -19,7 +20,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-  const { path, hasQueryString } = await resolvePathAndQueryFromProps(params, searchParams);
+  // use category prefix to build scoped path for metadata query, not the real path!
+  const { path, hasQueryString } = await resolvePathAndQueryFromProps(params, searchParams, '/category/');
   const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.SEARCH_METADATA, { params: { path } }))
     .data as Metadata;
   return createMetadata(rawMetadata, hasQueryString);
@@ -37,6 +39,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
   // If the current request path does not match the valid category path, return 404
   if (validCategoryPath && currentRequestPath !== validCategoryPath) {
+    const debugInfo = { validCategoryPath, currentRequestPath }
+    trackError('Invalid category path', 'clp_path_miss_match', { debug_info: debugInfo, request_data: debugInfo });
     notFound();
   }
   const friendly = buildFriendlyParams(filterState as any);
