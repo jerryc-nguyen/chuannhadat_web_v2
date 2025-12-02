@@ -1,24 +1,20 @@
 'use client';
 
+import React from 'react';
 import NotFound from '@app/not-found';
 import Spinner from '@components/ui/spinner';
 import { usePostDetail } from '@common/hooks/usePostDetail';
 import AuthorInfo from './components/AuthorInfo';
 import PhotosCarousel from './components/PhotosCarousel';
-import { authorAtom, postDetailAtom } from './states';
 import type { IProductDetail } from '@common/types';
 import Section from '@components/mobile-ui/Section';
 import { isServer } from '@tanstack/react-query';
 import { FeaturesList } from '../components/features-post';
-import { useSetAtom } from 'jotai';
 import usePostDetailTracking from '../hooks/usePostDetailTracking';
-import React, { useEffect } from 'react';
 import ProductDescription from '../components/ProductDescription';
 import './PostDetailMobile.scss';
 
 export default function PostDetailMobile({ productUid }: { productUid: string, isModal?: boolean }) {
-  const setPostDetail = useSetAtom(postDetailAtom);
-  const setAuthor = useSetAtom(authorAtom);
 
   // Use the centralized tracking hook
   const { trackPostView } = usePostDetailTracking();
@@ -34,11 +30,6 @@ export default function PostDetailMobile({ productUid }: { productUid: string, i
     refetchOnWindowFocus: true, // Optional: refetch when window is focused
   });
 
-  useEffect(() => {
-    if (product) {
-      setAuthor(product.author);
-    }
-  }, [product, setAuthor]);
 
   // Track view when component mounts (for mobile direct access)
   React.useEffect(() => {
@@ -46,12 +37,6 @@ export default function PostDetailMobile({ productUid }: { productUid: string, i
       trackPostView(productUid);
     }
   }, [productUid, trackPostView]);
-
-  useEffect(() => {
-    if (product) {
-      setPostDetail(product);
-    }
-  }, [product, setPostDetail]);
 
   if (!isServer && isLoading)
     return (
@@ -71,7 +56,7 @@ export default function PostDetailMobile({ productUid }: { productUid: string, i
 
       <div className="c-mblAuthorInfo">
         <div className="p-4">
-          <AuthorInfo />
+          <AuthorInfo author={product?.author} />
         </div>
       </div>
 
