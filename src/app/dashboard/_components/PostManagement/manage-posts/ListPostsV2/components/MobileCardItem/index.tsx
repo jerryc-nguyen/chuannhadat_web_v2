@@ -10,7 +10,7 @@ import { Actions } from './Actions';
 import { ItemProps } from './ItemProps';
 import { MapPin } from 'lucide-react';
 import { ProductDetailTitleBts } from '@app/(frontend)/_components/CategoryPage/mobile/ProductCardV2';
-import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
+import PostDetailMobile from '@app/(frontend)/_components/PostDetail/mobile/PostDetailModal';
 import AuthorInfo from '@frontend/PostDetail/mobile/components/AuthorInfo';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { BlockAdsType } from './BlockAdsType';

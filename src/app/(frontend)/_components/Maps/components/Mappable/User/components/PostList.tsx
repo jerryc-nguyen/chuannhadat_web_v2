@@ -10,7 +10,7 @@ import { businessTypeFilterAtom, categoryTypeFilterAtom } from '@maps/states/map
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import useModalPostDetail from '@frontend/PostDetail/hooks/useModalPostDetail';
 import { ProductDetailTitleBts } from '@app/(frontend)/_components/CategoryPage/mobile/ProductCardV2';
-import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
+import PostDetailMobile from '@app/(frontend)/_components/PostDetail/mobile/PostDetailModal';
 import AuthorInfo from '@frontend/PostDetail/components/AuthorInfo';
 import { useApp } from '@common/context/AppContext';
 

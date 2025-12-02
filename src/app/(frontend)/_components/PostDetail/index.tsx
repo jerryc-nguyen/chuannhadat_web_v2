@@ -18,6 +18,7 @@ export default async function PostDetail({ params }: PostDetailProps) {
   const { isMobile } = await getUserAgentInfo();
 
   const queryClient = new QueryClient();
+  let product: IProductDetail | undefined;
 
   // Prefetch api in server
   if (productUid) {
@@ -35,7 +36,7 @@ export default async function PostDetail({ params }: PostDetailProps) {
       | undefined;
 
     const isErrorEnvelope = !!detailEnvelope && (detailEnvelope.status === false || detailEnvelope.code === 404);
-    const product = detailEnvelope?.data;
+    product = detailEnvelope?.data;
 
     if (isErrorEnvelope || !product || product.hide_on_frontend_reason) {
       notFound();
@@ -56,10 +57,10 @@ export default async function PostDetail({ params }: PostDetailProps) {
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
         <div className="c-mobileApp">
-          <PostDetailMobile productUid={productUid} isModal={false} />
+          <PostDetailMobile productUid={productUid} product={product} />
         </div>
       ) : (
-        <PostDetailDesktop />
+        <PostDetailDesktop product={product} />
       )}
     </HydrationBoundary>
   );

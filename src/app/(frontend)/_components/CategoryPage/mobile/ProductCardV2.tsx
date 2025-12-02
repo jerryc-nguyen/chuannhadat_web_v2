@@ -8,7 +8,7 @@ import CardAuthor from '@frontend/CategoryPage/components/CardAuthor';
 import ThumbsCarousel from '@frontend/CategoryPage/components/ThumbsCarousel/ThumbsCarousel';
 import BusCatType from '@frontend/CategoryPage/components/product-card/BusCatType';
 import { useRef } from 'react';
-import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
+import PostDetailMobile from '@app/(frontend)/_components/PostDetail/mobile/PostDetailModal';
 import { IProductData } from './type';
 
 export const ProductDetailTitleBts = ({ product }: { product: A }) => {
