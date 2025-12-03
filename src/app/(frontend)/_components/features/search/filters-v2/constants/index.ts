@@ -91,66 +91,66 @@ export const facadeOptionsForCreate = [
 export const sellPricesOptions = [
   {
     range: { min: 800_000_000, max: 1_000_000_000 },
-    text: '800-1 tỷ',
+    text: '800 triệu - 1 tỷ',
   },
   {
     range: { min: 1_000_000_000, max: 2_000_000_000 },
-    text: '1-2 tỷ',
+    text: '1 tỷ - 2 tỷ',
   },
   {
     range: { min: 2000000000, max: 3000000000 },
-    text: '2-3 tỷ',
+    text: '2 tỷ - 3 tỷ',
   },
   {
     range: { min: 3_000_000_000, max: 4_000_000_000 },
-    text: '3-4 tỷ',
+    text: '3 tỷ - 4 tỷ',
   },
   {
     range: { min: 4000000000, max: 5000000000 },
-    text: '4-5 tỷ',
+    text: '4 tỷ - 5 tỷ',
   },
   {
     range: { min: 5_000_000_000, max: 6_000_000_000 },
-    text: '5-6 tỷ',
+    text: '5 tỷ - 6 tỷ',
   },
   {
     range: { min: 6_000_000_000, max: 7_000_000_000 },
-    text: '6-7 tỷ',
+    text: '6 tỷ - 7 tỷ',
   },
   {
     range: { min: 7_000_000_000, max: 8_000_000_000 },
-    text: '7-8 tỷ',
+    text: '7 tỷ - 8 tỷ',
   },
   {
     range: { min: 8_000_000_000, max: 10_000_000_000 },
-    text: '8-10 tỷ',
+    text: '8 tỷ - 10 tỷ',
   }
 ];
 
 export const rentPricesOptions = [
   {
     range: { min: 1_000_000, max: 3_000_000 },
-    text: '1-3 triệu',
+    text: '1 triệu - 3 triệu',
   },
   {
     range: { min: 3_000_000, max: 5_000_000 },
-    text: '3-5 triệu',
+    text: '3 triệu - 5 triệu',
   },
   {
     range: { min: 5_000_000, max: 7_000_000 },
-    text: '5-7 triệu',
+    text: '5 triệu - 7 triệu',
   },
   {
     range: { min: 7_000_000, max: 10_000_000 },
-    text: '7-10 triệu',
+    text: '7 triệu - 10 triệu',
   },
   {
     range: { min: 10_000_000, max: 15_000_000 },
-    text: '10-15 triệu',
+    text: '10 triệu - 15 triệu',
   },
   {
     range: { min: 15_000_000, max: 20_000_000 },
-    text: '15-20 triệu',
+    text: '15 triệu - 20 triệu',
   }
 ];
 

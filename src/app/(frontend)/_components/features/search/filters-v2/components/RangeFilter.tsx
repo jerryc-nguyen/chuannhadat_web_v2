@@ -47,11 +47,11 @@ export default function RangeFilter({
   );
 
   const sliderRange = useMemo(() => {
-    return [value?.range?.min || min, value?.range?.max || max];
-  }, [value?.range?.min, value?.range?.max, min, max]);
+    return [value?.range?.min || 0, value?.range?.max || max];
+  }, [value?.range?.min, value?.range?.max, max]);
 
   const [sliderValues, setSliderValues] = useState(sliderRange);
-  const [minInput, setMinInput] = useState<string>(formatNumberDisplay(sliderRange[0]));
+  const [minInput, setMinInput] = useState<string>('0');
   const [maxInput, setMaxInput] = useState<string>(formatNumberDisplay(sliderRange[1]));
 
   // Prevent feedback loop: mark when changes originate from input blur
@@ -76,8 +76,7 @@ export default function RangeFilter({
   }, [value?.range?.min, value?.range?.max, min, max]);
 
   const debounceChangeValues = useCallback(
-    debounce((localValues: number[]) => {
-      const values = filterRangeValuesBeforeSubmit(localValues);
+    debounce((values: number[]) => {
       const rangeText = formatRangeLabel(values[0], values[1]);
 
       const rangeValue: OptionForSelect = {
@@ -96,7 +95,7 @@ export default function RangeFilter({
     setInputValueByRange(values);
   };
 
-  const filterRangeValuesBeforeSubmit = useCallback(
+  const _filterRangeValuesBeforeSubmit = useCallback(
     (values: number[]) => {
       const newMin = Math.max(values[0], min);
       const newMax = Math.min(values[1], max);
@@ -173,7 +172,7 @@ export default function RangeFilter({
             value={minInput}
             onChange={handleMinInputChange}
             onKeyUp={onKeyUpMinRange}
-            min={min}
+            min={0}
             max={max}
             step={step}
             disabled={disabled}
@@ -188,7 +187,7 @@ export default function RangeFilter({
             value={maxInput}
             onChange={handleMaxInputChange}
             onKeyUp={onKeyUpMaxRange}
-            min={min}
+            min={0}
             max={max}
             step={step}
             disabled={disabled}
