@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Fade from 'embla-carousel-fade';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { cn } from '@common/utils';
 import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
@@ -127,13 +126,13 @@ export default function EmblaCarouselComponent({
   }, [emblaApi, updateScrollState]);
 
   return (
-    <div className="card-content_carousel group relative" role="region" aria-label="Property images carousel">
+    <div className="card-content_carousel group relative h-full" role="region" aria-label="Property images carousel">
       {/* Main carousel */}
-      <div className="overflow-hidden" ref={emblaRef} role="group" aria-live="polite">
-        <div className="flex" role="list">
+      <div className="absolute inset-0 overflow-hidden" ref={emblaRef} role="group" aria-live="polite">
+        <div className="flex h-full" role="list">
           {images.map((image: A, index: number) => (
-            <div key={image.id} className="flex-[0_0_100%]" role="listitem" aria-label={`Image ${index + 1} of ${images.length}`}>
-              <AspectRatio ratio={16 / 9} className="bg-muted md:rounded-md overflow-hidden">
+            <div key={image.id} className="flex-[0_0_100%] h-full" role="listitem" aria-label={`Image ${index + 1} of ${images.length}`}>
+              <div className="relative h-full bg-muted md:rounded-md overflow-hidden">
                 <BlurImage
                   src={buildThumbnailUrl({
                     imageUrl: hasUserInteracted || viewedImages.has(index) || index === 0
@@ -152,7 +151,7 @@ export default function EmblaCarouselComponent({
                     onImageClick?.();
                   }}
                 />
-              </AspectRatio>
+              </div>
             </div>
           ))}
         </div>

@@ -91,7 +91,7 @@ export default function ProductCard({ product, productIndex = 0 }: { product: IP
           {product?.title}{' '}
         </a>
       </div>
-      <div className="flex w-full justify-between px-4 pb-4">
+      <div className="flex w-full justify-between px-4 pb-4 min-h-[64px]">
         <div className="flex flex-col gap-y-1 text-sm">
           <span className="text-base font-bold text-black">{product?.formatted_price}</span>
           <span className="alic text-secondary">{product?.formatted_price_per_m2}</span>
@@ -103,13 +103,13 @@ export default function ProductCard({ product, productIndex = 0 }: { product: IP
         </div>
         <div className="flex flex-col gap-y-1">
           <div className="flex w-fit gap-x-2 rounded-full px-2 text-secondary">
-            <BedRoomIcon />
+            <BedRoomIcon className="h-5 w-5 shrink-0" />
             {product?.bedrooms_count && (
               <span className="text-nowrap font-medium leading-5">{product.bedrooms_count}</span>
             )}
           </div>
           <div className="flex w-fit gap-x-2 rounded-full px-2 text-secondary">
-            <BadRoomIcon />
+            <BadRoomIcon className="h-5 w-5 shrink-0" />
             {product?.bathrooms_count && (
               <span className="text-nowrap font-medium leading-5">{product.bathrooms_count}</span>
             )}

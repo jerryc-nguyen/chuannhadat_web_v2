@@ -209,78 +209,80 @@ export default function ThumbsCarousel({
 
   // ✅ Carousel Mode: Progressive loading
   return (
-    <section ref={containerRef} className="relative w-full flex-shrink-0">
-      {isCarouselInitialized ? (
-        <div className="relative">
-          <EmblaCarouselComponent
-            images={product.images || []}
-            hasUserInteracted={hasUserInteracted}
-            onInteraction={handleCarouselInteraction}
-            onImageClick={handleClickCardImage}
-            getOptimizedAltText={getOptimizedAltText}
-            isEager={isEager}
-            postUid={product.uid}
-          />
-
-          {/* Loading overlay for image preloading */}
-          {isPreloadingImages && (
-            <div className="absolute inset-0 bg-black/10 flex items-center justify-center rounded-lg z-50">
-              <Loader2 className="h-8 w-8 animate-spin text-white opacity-50" />
-            </div>
-          )}
-        </div>
-      ) : (
-        // Loading state: Show first image with carousel controls hint
-        <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden">
-          {firstImage && (
-            <BlurImage
-              src={buildThumbnailUrl({ imageUrl: firstImage.url })}
-              alt={getOptimizedAltText()}
-              fill
-              loading={isEager ? 'eager' : 'lazy'}
-              priority={isEager}
-              fetchPriority={isEager ? 'high' : 'auto'}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="h-full w-full object-cover"
+    <AspectRatio ratio={16 / 9} className="card-content_carousel group bg-muted md:rounded-md overflow-hidden">
+      <section ref={containerRef} className="relative w-full h-full flex-shrink-0">
+        {isCarouselInitialized ? (
+          <div className="relative h-full w-full">
+            <EmblaCarouselComponent
+              images={product.images || []}
+              hasUserInteracted={hasUserInteracted}
+              onInteraction={handleCarouselInteraction}
+              onImageClick={handleClickCardImage}
+              getOptimizedAltText={getOptimizedAltText}
+              isEager={isEager}
+              postUid={product.uid}
             />
-          )}
 
-          {/* Pagination hint */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-            <div className="flex gap-1">
-              {Array.from({ length: Math.min(product.images_count, 5) }).map((_, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    "w-1.5 h-1.5 rounded-full transition-colors",
-                    index === 0 ? "bg-white" : "bg-white/40"
-                  )}
-                />
-              ))}
-              {product.images_count > 5 && (
-                <span className="text-white text-xs ml-1">+{product.images_count - 5}</span>
-              )}
+            {/* Loading overlay for image preloading */}
+            {isPreloadingImages && (
+              <div className="absolute inset-0 bg-black/10 flex items-center justify-center rounded-lg z-50">
+                <Loader2 className="h-8 w-8 animate-spin text-white opacity-50" />
+              </div>
+            )}
+          </div>
+        ) : (
+          // Loading state: Show first image with carousel controls hint (no nested AspectRatio)
+          <div className="relative h-full w-full">
+            {firstImage && (
+              <BlurImage
+                src={buildThumbnailUrl({ imageUrl: firstImage.url })}
+                alt={getOptimizedAltText()}
+                fill
+                loading={isEager ? 'eager' : 'lazy'}
+                priority={isEager}
+                fetchPriority={isEager ? 'high' : 'auto'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="h-full w-full object-cover"
+              />
+            )}
+
+            {/* Pagination hint */}
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
+              <div className="flex gap-1">
+                {Array.from({ length: Math.min(product.images_count, 5) }).map((_, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "w-1.5 h-1.5 rounded-full transition-colors",
+                      index === 0 ? "bg-white" : "bg-white/40"
+                    )}
+                  />
+                ))}
+                {product.images_count > 5 && (
+                  <span className="text-white text-xs ml-1">+{product.images_count - 5}</span>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Navigation hints */}
-          <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity">
-            <button
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white p-1 rounded-full transition-colors"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white p-1 rounded-full transition-colors"
-              aria-label="Next image"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+            {/* Navigation hints */}
+            <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity">
+              <button
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white p-1 rounded-full transition-colors"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white p-1 rounded-full transition-colors"
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
           </div>
-          <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
-        </AspectRatio>
-      )}
-    </section>
+        )}
+      </section>
+    </AspectRatio>
   );
 }
