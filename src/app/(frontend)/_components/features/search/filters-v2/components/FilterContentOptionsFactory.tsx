@@ -7,10 +7,16 @@ import LocationFilter from './LocationFilter';
 import RangeFilter from './RangeFilter';
 import RoomFilter from './RoomFilter';
 import useFilterOptions from '../hooks/useFilterOptions';
-import { formatPriceFilterChip, formatRangeText, formatAreaText } from '@common/utils';
+import { formatPriceToDisplay, formatRangeText, formatAreaRangeText } from '@common/stringHelpers';
 import ProjectPicker from '@components/ajax-pickers/ProjectPicker';
 import useMainContentNavigator from '@app/(frontend)/_components/features/navigation/main-content-navigator/hooks';
 import AggLocationsFilter from '@app/(frontend)/_components/features/search/filters-v2/components/AggLocationsFilter';
+import { useMemo } from 'react';
+import {
+  sellPricesOptions,
+  rentPricesOptions,
+} from '@app/(frontend)/_components/features/search/filters-v2/constants';
+
 
 interface FilterContentOptionsFactoryProps {
   /** Current filter state */
@@ -58,10 +64,36 @@ export default function FilterContentOptionsFactory({
   onLocationChange,
   loading = {},
   filterType,
-  aggregationData = {},
+  aggregationData = {}
 }: FilterContentOptionsFactoryProps) {
   // Use the hook to get filter options
   const { getOptionsForField } = useFilterOptions();
+
+  const SELL_RANGE_OPTIONS = {
+    min: 0, // 0 VND
+    max: 20_000_000_000, // 20 billion VND
+    step: 50_000_000, // 50 million VND step
+  }
+
+  const RENT_RANGE_OPTIONS = {
+    min: 0, // 0 VND
+    max: 100_000_000, // 100 billion VND
+    step: 500000, // 500K VND step
+  }
+
+  const isRent = useMemo(() => {
+    return filterState?.businessType?.value === 'rent' || (window && window.location.href.includes('cho_thue'));
+  }, [filterState?.businessType?.value]);
+
+  const priceRangeOptions = useMemo(() => {
+    return isRent ? RENT_RANGE_OPTIONS : SELL_RANGE_OPTIONS
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRent]);
+
+  const priceListOptions = useMemo(() => {
+    return isRent ? rentPricesOptions : sellPricesOptions
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRent]);
 
   // Use aggregation data for specific filter types, otherwise use provided options or hook options
   const getFilterOptions = (): OptionForSelect[] => {
@@ -192,14 +224,15 @@ export default function FilterContentOptionsFactory({
       return (
         <RangeFilter
           value={getValue(FilterFieldName.Price)}
-          options={propFilterOptions || getOptionsForField(FilterFieldName.Price)}
-          min={100_000_000} // 100 million VND
-          max={20_000_000_000} // 20 billion VND
-          step={100_000_000} // 100 million VND step
+          options={propFilterOptions || priceListOptions}
+          {...priceRangeOptions}
           onRangeChange={handleChange(FilterFieldName.Price)}
-          formatValue={formatPriceFilterChip}
+          formatValue={formatPriceToDisplay}
           formatRangeText={formatRangeText}
           isLoading={loading.price}
+          formatInputNumber={true}
+          minLabel='Nhỏ nhất (đ)'
+          maxLabel='Lớn nhất (đ)'
         />
       );
 
@@ -213,8 +246,10 @@ export default function FilterContentOptionsFactory({
           step={10} // 10 m² step
           onRangeChange={handleChange(FilterFieldName.Area)}
           formatValue={(area: number) => `${area} m²`}
-          formatRangeText={formatAreaText}
+          formatRangeText={formatAreaRangeText}
           isLoading={loading.area}
+          minLabel='Nhỏ nhất (m²)'
+          maxLabel='Lớn nhất (m²)'
         />
       );
 

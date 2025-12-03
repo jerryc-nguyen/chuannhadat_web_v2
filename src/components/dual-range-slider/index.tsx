@@ -9,6 +9,8 @@ interface DualRangeSliderProps extends React.ComponentProps<typeof SliderPrimiti
   showLabel?: boolean;
   formatLabel?: (value: number) => string;
   disabled?: boolean;
+  rangeColor?: string;
+  trackColor?: string;
 }
 
 const DualRangeSlider = React.forwardRef<
@@ -22,6 +24,8 @@ const DualRangeSlider = React.forwardRef<
     heading,
     disabled = false,
     formatLabel,
+    rangeColor,
+    trackColor,
     ...rest
   } = props;
   const initialValue = Array.isArray(props.value) ? props.value : [props.min, props.max];
@@ -44,8 +48,14 @@ const DualRangeSlider = React.forwardRef<
           className={cn('relative flex w-full touch-none select-none items-center', className)}
           {...rest}
         >
-          <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-[#ececf0]">
-            <SliderPrimitive.Range className="absolute h-full bg-primary_color" />
+          <SliderPrimitive.Track
+            className="relative h-2 w-full grow overflow-hidden rounded-full bg-[#ececf0]"
+            style={trackColor ? { backgroundColor: trackColor } : undefined}
+          >
+            <SliderPrimitive.Range
+              className={cn('absolute h-full', !rangeColor && 'bg-primary_color')}
+              style={rangeColor ? { backgroundColor: rangeColor } : undefined}
+            />
           </SliderPrimitive.Track>
           {initialValue.map((value, index) => (
             <React.Fragment key={index}>

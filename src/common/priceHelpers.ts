@@ -127,3 +127,43 @@ export const maskNumber = (value: string) => {
     formattedValue: formattedValue,
   };
 };
+
+
+/**
+ * Formats price value to Vietnamese format (tr = triệu, ty = tỷ)
+ */
+export function formatPriceFriendly(price: number, unit: true | false = true, forDislay = false): string {
+  const unitTy = forDislay ? ' tỷ' : 'ty';
+  const unitTr = forDislay ? ' triệu' : 'tr';
+  const unitK = forDislay ? ' k' : 'k';
+
+  if (price >= 1_000_000_000) {
+    const ty = price / 1_000_000_000;
+    return ty % 1 === 0 ? `${ty}${unit ? unitTy : ''}` : `${ty.toFixed(1)}${unit ? unitTy : ''}`;
+  } else if (price >= 1_000_000) {
+    const tr = price / 1_000_000;
+    return tr % 1 === 0 ? `${tr}${unit ? unitTr : ''}` : `${tr.toFixed(1)}${unit ? unitTr : ''}`;
+  } else if (price >= 1_000) {
+    const tr = price / 1_000;
+    return tr % 1 === 0 ? `${tr}${unit ? unitK : ''}` : `${tr.toFixed(1)}${unit ? unitK : ''}`;
+  } else {
+    return `${price}`;
+  }
+}
+
+// Build human-readable price range using the shared formatPrice logic (tr/ty units)
+export const formatPriceRangeToDisplay = (
+  min?: number,
+  max?: number
+): string | undefined => {
+  const hasMin = typeof min === 'number' && !Number.isNaN(min as number);
+  const hasMax = typeof max === 'number' && !Number.isNaN(max as number);
+  const formattedMin = formatPriceFriendly(min as number, true, true);
+  const formattedMax = formatPriceFriendly(max as number, true, true);
+
+  if (!hasMin && !hasMax) return undefined;
+  if (hasMin && !hasMax) return `> ${formattedMin}`;
+  if (!hasMin && hasMax) return `< ${formattedMax}`;
+
+  return `${formattedMin}-${formattedMax}`;
+};

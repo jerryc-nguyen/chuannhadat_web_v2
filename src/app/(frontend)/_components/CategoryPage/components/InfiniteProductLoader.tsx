@@ -6,6 +6,7 @@ import { Skeleton } from '@components/ui/skeleton';
 import { Button } from '@components/ui/button';
 import ProductCard from './ProductCard';
 import useCardAuthors from '../hooks/useCardAuthors';
+import { PER_PAGE_DESKTOP } from '@frontend/CategoryPage/constants';
 
 const AUTO_LOAD_PAGES = 5;
 
@@ -45,7 +46,7 @@ export default function InfiniteProductLoader({
       searchApiV2({
         ...filterParams,
         page: pageParam,
-        per_page: 9, // Load 9 more products per batch
+        per_page: PER_PAGE_DESKTOP, // Load more products per batch using desktop page size
         with_users: true, // ✅ Include users data for authors
       }),
     getNextPageParam: (lastPage, allPages) => {
@@ -53,17 +54,31 @@ export default function InfiniteProductLoader({
       return nextPageNum <= lastPage.pagination.total_pages ? nextPageNum : undefined;
     },
     initialPageParam: currentPage + 1,
-    enabled: true,
+    // Avoid initial fetch; rely on guarded IntersectionObserver and button to load
+    enabled: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // Auto-load first X pages, then use intersection observer only during auto-loading
+  // Reset local product state when the initial products or filters change
+  useEffect(() => {
+    setAllProducts(initialProducts);
+    setPagesLoaded(0);
+    setTotalPages(null);
+    setIsAutoLoading(true);
+    setHasStartedLoading(false);
+  }, [initialProducts, filterParams]);
+
+  // Auto-load first X pages, using a guarded intersection observer to avoid extra queries
   useEffect(() => {
     if (!loadMoreRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage && isAutoLoading) {
+        // Guard: allow fetch when totalPages unknown, otherwise ensure remaining pages exist
+        const canLoadMore =
+          totalPages === null || pagesLoaded < Math.max(0, totalPages - currentPage);
+
+        if (entry.isIntersecting && !isFetchingNextPage && isAutoLoading && canLoadMore) {
           setHasStartedLoading(true);
           fetchNextPage();
         }
@@ -77,7 +92,7 @@ export default function InfiniteProductLoader({
     }
 
     return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isAutoLoading]);
+  }, [isFetchingNextPage, fetchNextPage, isAutoLoading, totalPages, pagesLoaded, currentPage]);
 
   // Update products and authors when new data arrives
   useEffect(() => {

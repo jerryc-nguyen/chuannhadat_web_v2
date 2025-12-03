@@ -48,6 +48,7 @@ const ModalPostDetail: React.FC<ModalPostDetailProps> = () => {
   const breadcrumbsData = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
   }, [data?.breadcrumb]);
+
   if (isError || (isSuccess && !data))
     return <NotFound errorMessage="The current path of post detail is incorrect" />;
   const handleOpenChange = (isOpen: boolean) => {

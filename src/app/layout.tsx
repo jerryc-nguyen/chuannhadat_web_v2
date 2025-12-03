@@ -148,7 +148,7 @@ export default async function RootLayout({
         id="body-root"
         className={cn(
           vietnam.className,
-          isMobile ? 'isMobile' : '',
+          isMobile ? 'isMobile' : 'isDesktop',
           'bg-white',
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}

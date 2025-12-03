@@ -1,0 +1,26 @@
+.c-btsFilterContentMobile {
+  .cpx-4 {
+    padding: 0 1em;
+  }
+  &.is-businessType {
+    min-height: 100px;
+    padding: 1em;
+  }
+  &.is-project {
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 0.6em;
+  }
+  &.is-rooms {
+    padding-left: 1em;
+    padding-top: 1em;
+  }
+  &.is-price {
+    .is-inputs {
+      padding-top: 1em;
+    }
+  }
+  .is-range-inputs {
+    padding-top: 1em;
+  }
+}

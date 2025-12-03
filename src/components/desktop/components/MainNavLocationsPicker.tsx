@@ -15,7 +15,7 @@ export default function MainNavLocationsPicker() {
     currentFilterState: filterState,
     localFilterState,
     setLocalFilterState
-  } = useFilterOperation()
+  } = useFilterOperation({ hasCountPreview: false })
 
   const showModalPickLocations = () => {
     setIsOpen(true);

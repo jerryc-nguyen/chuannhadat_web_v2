@@ -1,24 +1,28 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FilterChipOption, OptionForSelect, FilterFieldName } from '@common/types';
 import { FilterState } from '@app/(frontend)/_components/features/search/types';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { buildFriendlyParams } from '../helpers/friendlyParamsHelper';
 import { useFilterStatePresenter } from './useFilterStatePresenter';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 import useSearchScope from '@app/(frontend)/_components/features/search/hooks/useSearchScope';
+import { categoryTypesWithoutProjects } from '@frontend/features/search/filters-v2/constants/policies';
 
 export interface UseFilterOperationProps {
   onFiltersChanged?: (filterState: FilterState) => void;
   setIsOpenPopover?: (open: boolean) => void;
   counterFetcher?: (params: Record<string, string>) => Promise<Record<string, A>>;
+  hasCountPreview?: boolean;
 }
 
 export const useFilterOperation = ({
   onFiltersChanged,
   setIsOpenPopover,
   counterFetcher = countSearchResultsApiV2,
+  hasCountPreview = true,
 }: UseFilterOperationProps = {}) => {
+  const queryClient = useQueryClient();
   const { defaultProfileSearchParams } = useSearchScope();
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
@@ -42,8 +46,10 @@ export const useFilterOperation = ({
 
   // API query
   const { data: previewCount, isLoading: isPreviewLoading } = useQuery({
-    queryKey: ['FooterBtsButton', filterParams],
-    queryFn: () => counterFetcher?.(filterParams),
+    // Include stable indicators for fetcher presence and preview toggle
+    queryKey: ['FooterBtsButton', filterParams, Boolean(counterFetcher), hasCountPreview],
+    queryFn: () => counterFetcher!(filterParams),
+    enabled: Boolean(counterFetcher) && hasCountPreview,
   });
 
   // Handle local filter changes within the dropdown
@@ -66,6 +72,23 @@ export const useFilterOperation = ({
     }));
   }, []);
 
+  // Internal post-apply hook to allow adjusting filters centrally
+  const adjustFilters = useCallback((filterChipItem: FilterChipOption): Record<string, any> => {
+    const adjusted: Record<string, any> = {};
+
+    // When applying BusinessType, clear project fields if current category type does not support projects
+
+    if (filterChipItem.id === 'categoryType') {
+      const currentCategoryType = (currentFilterState.categoryType)?.value as string | undefined;
+      if (currentCategoryType && categoryTypesWithoutProjects.includes(currentCategoryType)) {
+        adjusted.project = undefined;
+        adjusted.aggProjects = undefined;
+      }
+    }
+
+    return adjusted;
+  }, [currentFilterState]);
+
   // Apply filter with composite filter logic
   const onApplyFilter = React.useCallback((filterChipItem: FilterChipOption) => {
     // Close popover if setter is provided
@@ -74,49 +97,59 @@ export const useFilterOperation = ({
     }
 
     const fieldName = filterChipItem.id as FilterFieldName;
-    let newFilters: FilterState = {}
+    const adjustedFilters = adjustFilters(filterChipItem);
+    let updatingFields: Record<string, any> = {}
     if (fieldName === FilterFieldName.Locations || fieldName === FilterFieldName.ProfileLocations) {
       // For location filters, apply all location-related values
-      newFilters = updateFilters({
+      updatingFields = {
         city: localFilterState.city,
         district: localFilterState.district,
         ward: localFilterState.ward,
-      });
+      };
     } else if (fieldName === FilterFieldName.Rooms) {
       // For room filters, apply all room-related values
-      newFilters = updateFilters({
+      updatingFields = {
         bed: localFilterState.bed,
         bath: localFilterState.bath,
-      });
+      };
     } else if (fieldName === FilterFieldName.BusCatType) {
       // BusCatType clears location data (following old applySingleFilter logic)
-      newFilters = updateFilters({
+      updatingFields = {
         busCatType: localFilterState.busCatType,
         city: undefined,
         district: undefined,
         ward: undefined,
-      });
+      };
     } else if (fieldName === FilterFieldName.AggProjects) {
       // AggProjects sets both aggProjects and project, clears location data
-      newFilters = updateFilters({
+      updatingFields = {
         aggProjects: localFilterState.aggProjects,
         project: localFilterState.aggProjects,
         city: undefined,
         district: undefined,
         ward: undefined,
-      });
+      };
     } else {
       // For simple filters, just set the field value
-      newFilters = updateFilters({
+      updatingFields = {
         [fieldName]: localFilterState[fieldName]
-      });
+      };
     }
+    // Merge adjusted filters and local filter state
+    const newFilters = updateFilters({
+      ...adjustedFilters,
+      ...updatingFields
+    });
 
     // Notify parent component of filter changes
     if (typeof onFiltersChanged === 'function') {
       onFiltersChanged(newFilters);
     }
-  }, [localFilterState, updateFilters, onFiltersChanged, setIsOpenPopover]);
+
+    // Proactively invalidate product list queries so search runs with new filters
+    // This ensures `useQueryPostsV2` refetches even if routing does not fully reload
+    queryClient.invalidateQueries({ queryKey: ['useQueryPostsV2'] });
+  }, [setIsOpenPopover, adjustFilters, updateFilters, onFiltersChanged, queryClient, localFilterState]);
 
   // Handle filter removal
   // will be removed!
@@ -161,7 +194,10 @@ export const useFilterOperation = ({
     if (typeof onFiltersChanged === 'function') {
       onFiltersChanged(newFilters);
     }
-  }, [onFiltersChanged, updateFilters]);
+
+    // Ensure product list refetches after filter removal
+    queryClient.invalidateQueries({ queryKey: ['useQueryPostsV2'] });
+  }, [onFiltersChanged, updateFilters, queryClient]);
 
   return {
     // Filter state management

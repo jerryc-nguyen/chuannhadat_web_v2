@@ -5,7 +5,7 @@
   right: 0;
   z-index: 100;
   background-color: white;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid hsl(var(--border));
 }
 
 // Mobile lightbox thumbnail highlighting styles
@@ -23,9 +23,9 @@
     overflow: hidden !important;
 
     &:hover {
-      border: 2px solid #ffd700 !important;
+      border: 2px solid hsl(var(--ring)) !important;
       transform: scale(1.05) !important;
-      box-shadow: 0 0 8px rgba(255, 215, 0, 0.5) !important;
+      box-shadow: 0 0 8px hsl(var(--ring) / 0.5) !important;
     }
 
     img {
@@ -38,9 +38,9 @@
 
   // Style the active thumbnail with even higher specificity
   .yarl__thumbnails_container .yarl__thumbnails_thumbnail_active {
-    border: 3px solid #ffd700 !important;
+    border: 3px solid hsl(var(--ring)) !important;
     transform: scale(1.08) !important;
-    box-shadow: 0 0 12px rgba(255, 215, 0, 0.7) !important;
+    box-shadow: 0 0 12px hsl(var(--ring) / 0.7) !important;
     position: relative !important;
     z-index: 10 !important;
 

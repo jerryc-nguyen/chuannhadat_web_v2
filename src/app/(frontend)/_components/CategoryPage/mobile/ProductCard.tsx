@@ -4,7 +4,7 @@ import { Image as IoImage } from 'lucide-react';
 import useResizeImage from '@common/hooks/useResizeImage';
 import { IProductData } from './type';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import PostDetailMobile from '@frontend/PostDetail/PostDetailMobile';
+import PostDetailMobile from '@app/(frontend)/_components/PostDetail/mobile/PostDetailModal';
 import Image from 'next/image';
 import AuthorInfo from '@frontend/PostDetail/mobile/components/AuthorInfo';
 import Link from 'next/link';

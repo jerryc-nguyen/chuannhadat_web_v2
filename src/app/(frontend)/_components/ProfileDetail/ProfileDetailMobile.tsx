@@ -14,9 +14,10 @@ import { useCleanFilterStates } from '@app/(frontend)/_components/features/searc
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
+  initialFilterState?: Record<string, any>;
 };
 
-const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }) => {
+const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug, initialFilterState }) => {
   useCleanFilterStates();
   const {
     profileData,
@@ -27,7 +28,8 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug }
     searchAggs
   } = useProfileDetail({
     profileSlug,
-    filterChipsList: listFilterProfileMobile
+    filterChipsList: listFilterProfileMobile,
+    initialFilterState,
   });
 
   // Mobile-specific image state management

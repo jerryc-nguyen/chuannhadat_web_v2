@@ -17,6 +17,7 @@ import useCardAuthors from '@app/(frontend)/_components/CategoryPage/hooks/useCa
 interface UseProfileDetailProps {
   profileSlug: string;
   filterChipsList: FilterChipOption[];
+  initialFilterState?: Record<string, any>;
 }
 
 interface UseProfileDetailReturn {
@@ -55,10 +56,11 @@ interface UseProfileDetailReturn {
 
 export const useProfileDetail = ({
   profileSlug,
-  filterChipsList
+  filterChipsList,
+  initialFilterState,
 }: UseProfileDetailProps): UseProfileDetailReturn => {
   // Sync params to state
-  useSyncParamsToState();
+  useSyncParamsToState(initialFilterState);
 
   // URL and search params
   const searchParams = useSearchParams();

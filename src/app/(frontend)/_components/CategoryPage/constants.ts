@@ -1,6 +1,10 @@
 import { SORT_CHIP_OPTION, FilterChipOption } from "@common/types";
 import { FilterFieldName } from "@common/types";
 
+// Shared per-page constants for Category pages
+export const PER_PAGE_DESKTOP = 9;
+export const PER_PAGE_MOBILE = 4;
+
 export const listFilterDesktop: Array<FilterChipOption> = [
   {
     id: FilterFieldName.BusinessType,

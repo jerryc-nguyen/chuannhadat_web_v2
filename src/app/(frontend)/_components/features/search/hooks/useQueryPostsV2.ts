@@ -16,8 +16,7 @@ function useQueryPostsV2(filterParams: FilterParams) {
         console.log('🔍 useQueryPostsV2 - Executing searchApiV2 with:', filterParams);
         return searchApiV2(filterParams);
       },
-      staleTime: 0, // Force immediate refetch when parameters change
-      gcTime: 0, // Don't cache the results
+      // Use QueryClient defaults to leverage SSR hydration and avoid immediate refetch
     }),
   );
 

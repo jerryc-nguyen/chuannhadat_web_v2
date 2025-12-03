@@ -1,12 +1,12 @@
 import { Button } from '@components/ui/button';
-import { useAtom } from 'jotai';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { authorAtom } from '../states';
 import { DEFAULT_AVATAR } from '@common/constants';
+import type { Author } from '@common/types';
 
-const AuthorInfo: React.FC = () => {
-  const [author] = useAtom(authorAtom);
+type Props = { author?: Author };
+
+const AuthorInfo: React.FC<Props> = ({ author }) => {
   const [, setIsVisible] = useState(false);
 
   const handlePhoneClick = () => {

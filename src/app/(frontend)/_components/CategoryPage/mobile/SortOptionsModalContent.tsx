@@ -25,7 +25,7 @@ export const useModalSortContent = (): SortOptionsModalContentResult => {
     currentFilterState,
     handleLocalFilterChange,
     handleLocalLocationChange,
-  } = useFilterOperation();
+  } = useFilterOperation({ hasCountPreview: false });
 
   const handleApplySort = () => {
     if (currentFilterState.sort) {
