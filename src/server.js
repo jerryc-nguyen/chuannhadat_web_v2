@@ -32,8 +32,8 @@ const handle = app.getRequestHandler();
 // - Skips assets, API routes, and Next internal paths
 // - TTL-based expiration with simple LRU eviction
 const HTML_CACHE_MAX_ENTRIES = 100;
-const HTML_CACHE_TTL_MS = Number(process.env.BOT_HTML_CACHE_TTL_MS || 3_600_000); // default 1 hour
-const BOT_HTML_CACHE_LOG = String(process.env.BOT_HTML_CACHE_LOG || 'true') === 'true';
+const HTML_CACHE_TTL_MS = 3_600_000; // default 1 hour
+const BOT_HTML_CACHE_LOG = false;
 
 function cacheLog(...args) {
   if (BOT_HTML_CACHE_LOG) {
