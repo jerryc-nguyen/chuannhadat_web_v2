@@ -81,15 +81,19 @@ export default function FilterContentOptionsFactory({
     step: 500000, // 500K VND step
   }
 
-  const priceRangeOptions = useMemo(() => {
-    return filterState?.businessType?.value === 'sell' ? SELL_RANGE_OPTIONS : RENT_RANGE_OPTIONS
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const isRent = useMemo(() => {
+    return filterState?.businessType?.value === 'rent' || (window && window.location.href.includes('cho_thue'));
   }, [filterState?.businessType?.value]);
 
-  const priceListOptions = useMemo(() => {
-    return filterState?.businessType?.value === 'sell' ? sellPricesOptions : rentPricesOptions
+  const priceRangeOptions = useMemo(() => {
+    return isRent ? RENT_RANGE_OPTIONS : SELL_RANGE_OPTIONS
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterState?.businessType?.value]);
+  }, [isRent]);
+
+  const priceListOptions = useMemo(() => {
+    return isRent ? rentPricesOptions : sellPricesOptions
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRent]);
 
   // Use aggregation data for specific filter types, otherwise use provided options or hook options
   const getFilterOptions = (): OptionForSelect[] => {
