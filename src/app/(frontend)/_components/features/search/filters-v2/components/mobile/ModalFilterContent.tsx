@@ -7,6 +7,7 @@ import ModalLayoutWithFooter from '@components/mobile-ui/ModalLayoutWithFooter';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { Button } from '@components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { useApp } from '@common/context/AppContext';
 
 
 export type ModalFilterContentProps = {
@@ -25,7 +26,7 @@ export const useModalFilterContent = ({
   onFiltersChanged,
   aggregationData,
 }: ModalFilterContentProps): ModalFilterContentResult => {
-
+  const { isMobile } = useApp();
   // Use the filter operation hook within the modal context
   const {
     currentFilterState,
@@ -53,6 +54,7 @@ export const useModalFilterContent = ({
         onLocationChange={handleLocalLocationChange}
         filterType={filterChipItem.id as FilterFieldName}
         aggregationData={aggregationData}
+        isMobile={isMobile}
       />
     </div>
   );

@@ -116,6 +116,8 @@ export interface RangeFilterProps {
   isLoading?: boolean;
   /** Whether the component is disabled */
   disabled?: boolean;
+  /** Whether the component is mobile version */
+  isMobile?: boolean;
 }
 
 /**

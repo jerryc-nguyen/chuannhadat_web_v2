@@ -25,6 +25,7 @@ export default function RangeFilter({
   formatRangeText,
   isLoading = false,
   disabled = false,
+  isMobile = false,
 }: RangeFilterProps) {
 
   const [currentValue, setCurrentValue] = useState(value);
@@ -95,15 +96,6 @@ export default function RangeFilter({
     setInputValueByRange(values);
   };
 
-  const _filterRangeValuesBeforeSubmit = useCallback(
-    (values: number[]) => {
-      const newMin = Math.max(values[0], min);
-      const newMax = Math.min(values[1], max);
-      return [newMin, newMax];
-    },
-    [min, max],
-  );
-
   const parseInputValue = (raw: string): number | undefined => {
     const normalized = raw.replace(/[^\d]/g, '');
     if (normalized === '') return undefined;
@@ -163,7 +155,7 @@ export default function RangeFilter({
     <div className={`${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
       {/* Manual min/max inputs */}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className={`grid grid-cols-2 gap-3 ${isMobile ? 'p-4' : ''}`}>
         <div className="flex flex-col gap-1">
           <label htmlFor="range-min" className="text-xs text-secondary">{minLabel}</label>
           <Input
@@ -196,9 +188,7 @@ export default function RangeFilter({
         </div>
       </div>
 
-
-      {/* Custom range slider */}
-      <div className="mb-4 mt-4">
+      <div className={`${isMobile ? 'mb-4 w-full px-4' : 'mb-4 mt-5'}`}>
         <DualRangeSlider
           min={min}
           max={max}
@@ -206,6 +196,8 @@ export default function RangeFilter({
           onValueChange={handleSliderChange}
           disabled={disabled}
           step={step}
+          trackColor={isMobile ? 'rgb(147 147 149)' : undefined}
+
         />
       </div>
 
@@ -217,11 +209,13 @@ export default function RangeFilter({
       />
 
       {/* Loading indicator */}
-      {isLoading && (
-        <div className="flex justify-center p-2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-        </div>
-      )}
-    </div>
+      {
+        isLoading && (
+          <div className="flex justify-center p-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
+          </div>
+        )
+      }
+    </div >
   );
 }
