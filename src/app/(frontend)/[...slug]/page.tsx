@@ -21,7 +21,7 @@ type Props = {
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   // use category prefix to build scoped path for metadata query, not the real path!
-  const { path, hasQueryString } = await resolvePathAndQueryFromProps(params, searchParams, '/category/');
+  const { path, hasQueryString } = await resolvePathAndQueryFromProps(params, searchParams);
   const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.SEARCH_METADATA, { params: { path } }))
     .data as Metadata;
   return createMetadata(rawMetadata, hasQueryString);
