@@ -39,7 +39,6 @@ interface FilterContentOptionsFactoryProps {
   filterType: FilterFieldName;
   /** Aggregation data from useSearchAggs (for pure UI) */
   aggregationData?: AggregationData;
-  isMobile?: boolean;
 }
 
 /**
@@ -65,8 +64,7 @@ export default function FilterContentOptionsFactory({
   onLocationChange,
   loading = {},
   filterType,
-  aggregationData = {},
-  isMobile = false,
+  aggregationData = {}
 }: FilterContentOptionsFactoryProps) {
   // Use the hook to get filter options
   const { getOptionsForField } = useFilterOptions();
@@ -231,7 +229,6 @@ export default function FilterContentOptionsFactory({
           formatInputNumber={true}
           minLabel='Nhỏ nhất (đ)'
           maxLabel='Lớn nhất (đ)'
-          isMobile={isMobile}
         />
       );
 
@@ -249,7 +246,6 @@ export default function FilterContentOptionsFactory({
           isLoading={loading.area}
           minLabel='Nhỏ nhất (m²)'
           maxLabel='Lớn nhất (m²)'
-          isMobile={isMobile}
         />
       );
 

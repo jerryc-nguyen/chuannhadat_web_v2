@@ -24,8 +24,7 @@ export default function RangeFilter({
   formatValue,
   formatRangeText,
   isLoading = false,
-  disabled = false,
-  isMobile = false,
+  disabled = false
 }: RangeFilterProps) {
 
   const [currentValue, setCurrentValue] = useState(value);
@@ -57,7 +56,6 @@ export default function RangeFilter({
 
   // Prevent feedback loop: mark when changes originate from input blur
   const lastChangeByInputRef = useRef(false);
-
 
   // Keep local slider/input values in sync when external value changes (e.g., option selection)
   useEffect(() => {
@@ -153,9 +151,7 @@ export default function RangeFilter({
 
   return (
     <div className={`${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
-      {/* Manual min/max inputs */}
-
-      <div className={`grid grid-cols-2 gap-3 ${isMobile ? 'p-4' : ''}`}>
+      <div className={`grid grid-cols-2 gap-3 cpx-4 is-range-inputs`}>
         <div className="flex flex-col gap-1">
           <label htmlFor="range-min" className="text-xs text-secondary">{minLabel}</label>
           <Input
@@ -188,7 +184,7 @@ export default function RangeFilter({
         </div>
       </div>
 
-      <div className={`${isMobile ? 'mb-4 w-full px-4' : 'mb-4 mt-5'}`}>
+      <div className={'mb-4 mt-5 cpx-4 is-ranges'}>
         <DualRangeSlider
           min={min}
           max={max}
@@ -196,8 +192,7 @@ export default function RangeFilter({
           onValueChange={handleSliderChange}
           disabled={disabled}
           step={step}
-          trackColor={isMobile ? 'rgb(147 147 149)' : undefined}
-
+          trackColor={'hsla(0, 4%, 85%, 1.00)'}
         />
       </div>
 
