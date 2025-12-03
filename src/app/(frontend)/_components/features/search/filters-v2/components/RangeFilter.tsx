@@ -47,11 +47,11 @@ export default function RangeFilter({
   );
 
   const sliderRange = useMemo(() => {
-    return [value?.range?.min || 0, value?.range?.max || max];
-  }, [value?.range?.min, value?.range?.max, max]);
+    return [value?.range?.min ?? min, value?.range?.max ?? max];
+  }, [value?.range?.min, value?.range?.max, min, max]);
 
   const [sliderValues, setSliderValues] = useState(sliderRange);
-  const [minInput, setMinInput] = useState<string>('0');
+  const [minInput, setMinInput] = useState<string>(formatNumberDisplay(sliderRange[0]));
   const [maxInput, setMaxInput] = useState<string>(formatNumberDisplay(sliderRange[1]));
 
   // Prevent feedback loop: mark when changes originate from input blur
@@ -107,8 +107,10 @@ export default function RangeFilter({
     setMinInput(rawStr);
     const parsedMin = parseInputValue(rawStr);
     const parsedMax = parseInputValue(maxInput);
+    const nextMin = parsedMin ?? sliderValues[0];
+    const nextMax = parsedMax ?? sliderValues[1];
     lastChangeByInputRef.current = true;
-    debounceChangeValues([parsedMin as number, parsedMax as number]);
+    debounceChangeValues([nextMin, nextMax]);
   };
 
   const handleMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,8 +119,10 @@ export default function RangeFilter({
     setMaxInput(rawStr);
     const parsedMin = parseInputValue(minInput);
     const parsedMax = parseInputValue(rawStr);
+    const nextMin = parsedMin ?? sliderValues[0];
+    const nextMax = parsedMax ?? sliderValues[1];
     lastChangeByInputRef.current = true;
-    debounceChangeValues([parsedMin as number, parsedMax as number]);
+    debounceChangeValues([nextMin, nextMax]);
   };
 
   const handleOptionSelect = (option: OptionForSelect) => {
@@ -137,13 +141,13 @@ export default function RangeFilter({
     setMaxInput(formatNumberDisplay(values[1]));
   };
 
-  const onKeyUpMinRange = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleMinInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const rawStr = e.currentTarget.value;
     if (rawStr === '') return;
     setMinInput(formatNumberString(rawStr));
   };
 
-  const onKeyUpMaxRange = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleMaxInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const rawStr = e.currentTarget.value;
     if (rawStr === '') return;
     setMaxInput(formatNumberString(rawStr));
@@ -159,7 +163,7 @@ export default function RangeFilter({
             type={formatInputNumber ? 'text' : 'number'}
             value={minInput}
             onChange={handleMinInputChange}
-            onKeyUp={onKeyUpMinRange}
+            onBlur={handleMinInputBlur}
             min={0}
             max={max}
             step={step}
@@ -174,7 +178,7 @@ export default function RangeFilter({
             type={formatInputNumber ? 'text' : 'number'}
             value={maxInput}
             onChange={handleMaxInputChange}
-            onKeyUp={onKeyUpMaxRange}
+            onBlur={handleMaxInputBlur}
             min={0}
             max={max}
             step={step}
