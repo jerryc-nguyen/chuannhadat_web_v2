@@ -38,11 +38,11 @@ export default function RegisterForm({ onClose, setActiveTab }: RegisterFormProp
         const userData = response.data;
         handleSignIn(userData);
         toast.success('Đăng ký tài khoản thàng công');
+        onClose && onClose();
       } else {
         toast.error(response.message ?? 'Lỗi đăng ký');
       }
       removeCookie(REFERRAL_CODE);
-      onClose && onClose();
     },
     onError: () => {
       toast.error('Lỗi server vui lòng đăng nhập lại');
@@ -77,7 +77,7 @@ export default function RegisterForm({ onClose, setActiveTab }: RegisterFormProp
           render={({ field }) => (
             <FormItem>
               <FormLabel aria-required htmlFor="phone" className="mb-2 block text-sm font-medium">
-                Số điện thoại/ Email
+                Số điện thoại
               </FormLabel>
               <FormControl className="relative">
                 <Input
@@ -85,7 +85,7 @@ export default function RegisterForm({ onClose, setActiveTab }: RegisterFormProp
                   id="phone"
                   type="text"
                   className={`mt-1 block w-full rounded-md border py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm`}
-                  placeholder="Nhập số điện thoại/ Email"
+                  placeholder="Nhập số điện thoại"
                 />
               </FormControl>
               <FormMessage />
