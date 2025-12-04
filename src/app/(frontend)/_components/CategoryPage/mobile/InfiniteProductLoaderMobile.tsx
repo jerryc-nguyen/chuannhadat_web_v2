@@ -44,7 +44,7 @@ export default function InfiniteProductLoaderMobile({
       return nextPageNum <= lastPage.pagination.total_pages ? nextPageNum : undefined;
     },
     initialPageParam: currentPage + 1,
-    enabled: false,
+    enabled: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
