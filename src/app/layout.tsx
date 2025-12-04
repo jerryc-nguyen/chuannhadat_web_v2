@@ -142,6 +142,9 @@ export default async function RootLayout({
         <link rel="canonical" href={`${getServerSideURL()}`}></link>
         <meta charSet="utf-8" />
         <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+        {/* Preconnect/DNS Prefetch to speed up image fetches */}
+        <link rel="preconnect" href="https://images.chuannhadat.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="//images.chuannhadat.com" />
       </Head>
       {/* ---------------- */}
       <body

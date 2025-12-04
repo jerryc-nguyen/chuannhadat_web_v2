@@ -55,6 +55,7 @@ export default function ThumbsCarousel({
   const firstImage = product.images?.[0];
   const hasMultipleImages = product.images_count >= 2;
   const isAboveFold = productIndex < 6; // First 6 products
+  const eager = isEager || isAboveFold;
 
   // Debug logging removed - carousel working correctly
 
@@ -163,9 +164,10 @@ export default function ThumbsCarousel({
               src={buildThumbnailUrl({ imageUrl: firstImage.url })}
               alt={getOptimizedAltText()}
               fill
-              loading={isEager ? 'eager' : 'lazy'}
-              priority={isEager}
-              fetchPriority={isEager ? 'high' : 'auto'}
+              loading={eager ? 'eager' : 'lazy'}
+              priority={eager}
+              fetchPriority={eager ? 'high' : 'auto'}
+              disableEffects={eager}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="h-full w-full object-cover transition-all hover:scale-105"
               onClick={(e) => {
@@ -190,9 +192,10 @@ export default function ThumbsCarousel({
               src={buildThumbnailUrl({ imageUrl: firstImage.url })}
               alt={getOptimizedAltText()}
               fill
-              loading={isEager ? 'eager' : 'lazy'}
-              priority={isEager}
-              fetchPriority={isEager ? 'high' : 'auto'}
+              loading={eager ? 'eager' : 'lazy'}
+              priority={eager}
+              fetchPriority={eager ? 'high' : 'auto'}
+              disableEffects={eager}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="h-full w-full object-cover transition-all hover:scale-105"
               onClick={(e) => {
@@ -238,9 +241,10 @@ export default function ThumbsCarousel({
                 src={buildThumbnailUrl({ imageUrl: firstImage.url })}
                 alt={getOptimizedAltText()}
                 fill
-                loading={isEager ? 'eager' : 'lazy'}
-                priority={isEager}
-                fetchPriority={isEager ? 'high' : 'auto'}
+                loading={eager ? 'eager' : 'lazy'}
+                priority={eager}
+                fetchPriority={eager ? 'high' : 'auto'}
+                disableEffects={eager}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="h-full w-full object-cover"
               />
