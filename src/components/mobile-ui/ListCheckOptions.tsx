@@ -17,10 +17,11 @@ const ListCheckOptions = ({
 }): ReactElement => {
   return (
     <>
-      <List strongIos outlineIos margin="my-0">
+      <List strongIos outlineIos margin="my-0" className='pl-0'>
         {options.map((item) => {
           return (
             <ListItem
+              className='c-filter__dropdownListItem'
               key={item.text}
               link
               title={item.text}

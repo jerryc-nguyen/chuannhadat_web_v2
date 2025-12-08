@@ -8,7 +8,7 @@ export const getServerSideURL = () => {
   let url = process.env.NEXT_PUBLIC_WEBSITE_URL;
 
   if (!url) {
-    url = 'http://localhost:3000';
+    url = 'http://localhost:3005';
   }
 
   return url;

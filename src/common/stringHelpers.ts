@@ -1,3 +1,5 @@
+import { formatPriceFriendly } from "@common/priceHelpers";
+
 export const shortenLocationName = (string?: string) => {
   if (!string) {
     return undefined;
@@ -83,3 +85,14 @@ export const toSearchString = (text?: string): string => {
     .replace(/\s+/g, ' ') // squish - replace multiple whitespace with single space
     .trim();
 }
+
+export const formatPriceToDisplay = (price: number) => {
+  return formatPriceFriendly(price, true, true);
+};
+
+export const formatRangeText = (min: number, max: number) => {
+  const minFormatted = formatPriceToDisplay(min);
+  const maxFormatted = formatPriceToDisplay(max);
+  return `${minFormatted} - ${maxFormatted}`;
+};
+export const formatAreaRangeText = (min?: number, max?: number) => `${min ?? 0}-${max ?? 0} m2`;

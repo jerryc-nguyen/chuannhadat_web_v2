@@ -9,7 +9,7 @@ type BusCatTypeProps = {
 
 export default function BusCatType({ busCatType, project, className }: BusCatTypeProps) {
   return (
-    <div className={cn("w-full text-secondary", className)}>
+    <div className={cn("w-full overflow-hidden text-ellipsis whitespace-nowrap text-secondary", className)}>
       {busCatType.replace('căn hộ chung cư', 'căn hộ')}
       {!!project && (
         <>

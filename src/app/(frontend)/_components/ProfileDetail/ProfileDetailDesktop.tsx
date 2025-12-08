@@ -11,9 +11,9 @@ import { useProfileDetail } from './hooks/useProfileDetail';
 import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
 import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 
-type ProfileDetailDesktopProps = { profileSlug: string };
+type ProfileDetailDesktopProps = { profileSlug: string; initialFilterState?: Record<string, any> };
 
-export default function ProfileDetailDesktop({ profileSlug }: ProfileDetailDesktopProps) {
+export default function ProfileDetailDesktop({ profileSlug, initialFilterState }: ProfileDetailDesktopProps) {
   useCleanFilterStates();
 
   const {
@@ -27,7 +27,8 @@ export default function ProfileDetailDesktop({ profileSlug }: ProfileDetailDeskt
     APIFilterParams
   } = useProfileDetail({
     profileSlug,
-    filterChipsList: listFilterProfileDesktop
+    filterChipsList: listFilterProfileDesktop,
+    initialFilterState,
   });
 
   if (isProfileLoading) {

@@ -8,7 +8,6 @@ import useModals from '@frontend/features/layout/mobile-modals/hooks';
 import { Button } from '@components/ui/button';
 import { Loader2 } from 'lucide-react';
 
-
 export type ModalFilterContentProps = {
   filterChipItem: FilterChipOption;
   onFiltersChanged?: (filterState: FilterState) => void;
@@ -25,7 +24,6 @@ export const useModalFilterContent = ({
   onFiltersChanged,
   aggregationData,
 }: ModalFilterContentProps): ModalFilterContentResult => {
-
   // Use the filter operation hook within the modal context
   const {
     currentFilterState,
@@ -45,8 +43,10 @@ export const useModalFilterContent = ({
     closeModals();
   };
 
+  const contentClassName = `space-y-4 c-btsFilterContentMobile is-${filterChipItem.id}`;
+
   const content = (
-    <div className="space-y-4">
+    <div className={contentClassName}>
       <FilterContentOptionsFactory
         filterState={currentFilterState}
         onChange={handleLocalFilterChange}

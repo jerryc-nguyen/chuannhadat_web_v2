@@ -142,13 +142,16 @@ export default async function RootLayout({
         <link rel="canonical" href={`${getServerSideURL()}`}></link>
         <meta charSet="utf-8" />
         <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+        {/* Preconnect/DNS Prefetch to speed up image fetches */}
+        <link rel="preconnect" href="https://images.chuannhadat.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="//images.chuannhadat.com" />
       </Head>
       {/* ---------------- */}
       <body
         id="body-root"
         className={cn(
           vietnam.className,
-          isMobile ? 'isMobile' : '',
+          isMobile ? 'isMobile' : 'isDesktop',
           'bg-white',
           'selection:bg-primary_color/20 selection:text-primary_color',
         )}

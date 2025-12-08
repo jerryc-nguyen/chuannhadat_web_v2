@@ -2,9 +2,7 @@ const oldCats: string[] = [
   "/category/"
 ]
 
-const oldPaths: string[] = ['/tin-ban/', '/tin-cho-thue/']
-
-export const redirectTokens = oldCats.concat(oldPaths)
+export const redirectTokens = oldCats
 
 export const isOldLegacyCats = (path: string) => {
   if (!path) return false;

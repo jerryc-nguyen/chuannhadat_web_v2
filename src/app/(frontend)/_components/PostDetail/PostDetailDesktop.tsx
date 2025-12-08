@@ -1,9 +1,6 @@
 'use client';
-import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 
-import NotFound from '@app/not-found';
-import { usePostDetail } from '@common/hooks/usePostDetail';
 import { IProductDetail } from '@common/types';
 import Breadcrumb, { ConvertFromBreadcrumbListJSONLd } from '@components/desktop/components/breadcrumb';
 import { useSetAtom } from 'jotai';
@@ -14,29 +11,18 @@ import NotePost from './components/note-post';
 import OverviewPost from './components/overview-post';
 import { postDetailAtom } from './states/postDetailAtoms';
 
-type PostDetailDesktopProps = object;
+type PostDetailDesktopProps = { product: IProductDetail };
 
-const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
-  const currentPath = usePathname() || '';
+const PostDetailDesktop: React.FC<PostDetailDesktopProps> = ({ product }) => {
   const setPostDetailData = useSetAtom(postDetailAtom);
-  const productUid = currentPath.split('-').slice(-1)[0];
-  const { data, isLoading, isSuccess, isError } = usePostDetail({
-    postId: productUid,
-    enabled: !!productUid,
-  });
 
   React.useEffect(() => {
-    if (data) {
-      setPostDetailData(data);
-    }
-  }, [data, setPostDetailData]);
+    setPostDetailData(product);
+  }, [product, setPostDetailData]);
 
   const breadcrumbsData = useMemo(() => {
-    return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
-  }, [data?.breadcrumb]);
-
-  if (isError || (isSuccess && !data))
-    return <NotFound errorMessage="Bài viết không tồn tại hoặc đã bị xoá" isCritical={false} />;
+    return ConvertFromBreadcrumbListJSONLd(product?.breadcrumb);
+  }, [product]);
 
   return (
     <>
@@ -45,12 +31,12 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = () => {
       </div>
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">
-          <OverviewPost isLoading={isLoading} data={data as IProductDetail} />
-          <FeaturesPost isLoading={isLoading} data={data as IProductDetail} />
-          <DescriptionPost isLoading={isLoading} data={data as IProductDetail} />
+          <OverviewPost isLoading={false} data={product as IProductDetail} />
+          <FeaturesPost isLoading={false} data={product as IProductDetail} />
+          <DescriptionPost isLoading={false} data={product as IProductDetail} />
           <NotePost />
         </div>
-        <AuthorPost className="!top-16" data={data as IProductDetail} />
+        <AuthorPost className="!top-16" data={product as IProductDetail} />
       </div>
     </>
   );

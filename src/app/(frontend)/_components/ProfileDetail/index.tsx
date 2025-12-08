@@ -4,18 +4,20 @@ import type { Params } from '@common/types';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import ProfileDetailDesktop from './ProfileDetailDesktop';
 import ProfileDetailMobile from './ProfileDetailMobile';
+import { QueryKeys } from '@common/QueryKeys';
 
 interface ProfileDetailProps {
   params: Params;
+  initialFilterState?: Record<string, any>;
 }
 
-export default async function ProfileDetail({ params }: ProfileDetailProps) {
+export default async function ProfileDetail({ params, initialFilterState }: ProfileDetailProps) {
   const profileSlug = (await params).slug[0];
   const { isMobile } = await getUserAgentInfo();
 
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['get-detail-profile', profileSlug],
+    queryKey: QueryKeys.profileDetail(profileSlug),
     queryFn: () => profilesApi.getProfileSlug(profileSlug),
   });
 
@@ -24,9 +26,9 @@ export default async function ProfileDetail({ params }: ProfileDetailProps) {
   return (
     <HydrationBoundary state={dehydratedState}>
       {isMobile ? (
-        <ProfileDetailMobile profileSlug={profileSlug} />
+        <ProfileDetailMobile profileSlug={profileSlug} initialFilterState={initialFilterState} />
       ) : (
-        <ProfileDetailDesktop profileSlug={profileSlug} />
+        <ProfileDetailDesktop profileSlug={profileSlug} initialFilterState={initialFilterState} />
       )}
     </HydrationBoundary>
   );

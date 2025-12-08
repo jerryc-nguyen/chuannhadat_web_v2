@@ -12,9 +12,11 @@ import { FilterState } from "@app/(frontend)/_components/features/search/types";
 import { useSyncParamsToState } from "@app/(frontend)/_components/features/search/hooks/useSyncParamsToState";
 import { DEFAULT_CHIP_FILTER_PARAMS } from '../constant';
 
-export default function Desktop(): React.ReactElement {
+type DesktopProps = { initialFilterState?: Record<string, any> };
+
+export default function Desktop({ initialFilterState }: DesktopProps): React.ReactElement {
   const ctl = usePostsListContext();
-  const { filterState: initFilterState } = useSyncParamsToState();
+  const { filterState: initFilterState } = useSyncParamsToState(initialFilterState);
   const [, setChipFilterState] = useState<FilterState>(initFilterState);
   const { aggs } = ctl;
   const {
