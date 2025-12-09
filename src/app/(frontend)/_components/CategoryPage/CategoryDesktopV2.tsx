@@ -29,7 +29,7 @@ const CategoryDesktopV2: React.FC<Props> = ({ initialFilterState, currentContent
     breadcrumbsLinkItems,
     isHomePage
   } = useCategoryPageController({ perPage: PER_PAGE_DESKTOP, listFilterOptions: listFilterDesktop, includeAgg: true, initialFilterState, currentContentType });
-  console.log('breadcrumbsJsonLD', breadcrumbsJsonLD);
+
   return (
     <section className="my-6">
       {!isHomePage && (<div className="my-4 flex justify-between gap-x-4">

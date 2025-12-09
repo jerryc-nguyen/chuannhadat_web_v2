@@ -55,11 +55,11 @@ export function useCategoryPageController(options: CategoryPageControllerOptions
   const breadcrumbsLinkItems = useMemo(() => {
     return ConvertFromBreadcrumbListJSONLd(data?.breadcrumb);
   }, [data?.breadcrumb]);
+
   const pathname = usePathname();
   const isHomePage = useMemo(() => {
     return pathname === "/";
   }, [pathname]);
-
 
   return {
     currentPage,
