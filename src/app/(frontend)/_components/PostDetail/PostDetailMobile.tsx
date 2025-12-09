@@ -34,6 +34,13 @@ export default function PostDetailMobile({ productUid, product }: { productUid?:
       <div className="mx-auto mt-5 flex justify-between gap-x-4 px-4">
         <Breadcrumb breadcrumbs={breadcrumbsData} isLastLink={true} />
       </div>
+
+      {product?.breadcrumb && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(product?.breadcrumb) }}
+        />
+      )}
       <PhotosCarousel product={product as IProductDetail} />
       <Section title={product?.title}>
         <FeaturesList data={product} />
