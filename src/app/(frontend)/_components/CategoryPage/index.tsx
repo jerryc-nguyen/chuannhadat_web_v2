@@ -22,15 +22,15 @@ export default async function CategoryPage({ isMobile, pathWithQuery, initialFil
 
   return userAgent.isMobile
     ? (
-        <CategoryMobileV2
-          initialFilterState={serverInitialState}
-          currentContentType={POSTS_TYPE_OPTION}
-        />
-      )
+      <CategoryMobileV2
+        initialFilterState={serverInitialState}
+        currentContentType={POSTS_TYPE_OPTION}
+      />
+    )
     : (
-        <CategoryDesktopV2
-          initialFilterState={serverInitialState}
-          currentContentType={POSTS_TYPE_OPTION}
-        />
-      );
+      <CategoryDesktopV2
+        initialFilterState={serverInitialState}
+        currentContentType={POSTS_TYPE_OPTION}
+      />
+    );
 }
