@@ -7,6 +7,7 @@ const CDN_MAPS: Record<string, A> = {
   'chuannhadat-assets.sgp1.digitaloceanspaces.com': 'images.chuannhadat.com',
   'chuannhadat-assets.sgp1.cdn.digitaloceanspaces.com': 'images.chuannhadat.com',
   'chuannhadat-assets-dev.sgp1.digitaloceanspaces.com': 's3-images-dev.b-cdn.net',
+  'chuannhadat-2nd-assets.b-cdn.net/partner_apis': 'resizer.chuannhadat.com/partner-posts'
 };
 
 export const MAX_THUMB_WIDTH = 376; // ✅ Reduced from 480 to match actual display size
