@@ -29,6 +29,13 @@ const PostDetailDesktop: React.FC<PostDetailDesktopProps> = ({ product }) => {
       <div className="mx-auto mt-5 flex justify-between gap-x-4">
         <Breadcrumb breadcrumbs={breadcrumbsData} isLastLink={true} />
       </div>
+
+      {product?.breadcrumb && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(product?.breadcrumb) }}
+        />
+      )}
       <div className="mx-auto flex justify-between gap-x-4 py-5">
         <div className="content-post flex flex-[3] flex-col gap-y-4">
           <OverviewPost isLoading={false} data={product as IProductDetail} />

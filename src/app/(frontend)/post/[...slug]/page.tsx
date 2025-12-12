@@ -66,6 +66,14 @@ export default async function PostDetailPage({ params }: { params: Params }) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
+      {product?.json_lds && Array.isArray(product.json_lds) && product.json_lds.map((json_ld) => (
+        <script
+          key={json_ld['@type']}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(json_ld) }}
+        />
+      ))}
+
       {isMobile ? (
         <div className="c-mobileApp">
           <PostDetailMobile productUid={productUid} product={product} />

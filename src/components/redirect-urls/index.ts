@@ -16,6 +16,7 @@ export const isOldLegacyCats = (path: string) => {
     /-d\d+(?:\/|$)/i,
     /-w\d+(?:\/|$)/i,
     /-st\d+(?:\/|$)/i,
+    /-pj\d+(?:\/|$)/i,
   ];
 
   return patterns.some((re) => re.test(path));

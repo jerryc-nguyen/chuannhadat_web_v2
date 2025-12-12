@@ -136,6 +136,9 @@ export interface IProductDetail {
   author: Author;
   breadcrumb: A;
   user_id?: number; // From ProductViewed
+
+  // JSON-LD schema
+  json_lds: Record<string, any>[];
 }
 
 /**
