@@ -8,6 +8,7 @@ import { cn } from '@common/utils';
 import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
 import ButtonSave from '@frontend/features/product-detail-actions/save-post/ButtonSave';
+import DotNavigation from './DotNavigation';
 
 type EmblaCarouselComponentProps = {
   images: A[];
@@ -200,25 +201,7 @@ export default function EmblaCarouselComponent({
             className="!absolute !top-2 !right-2 !visible !opacity-100"
           />
 
-          {/* Dot navigation */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-            <div className="flex gap-1">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-all",
-                    "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-1 focus:ring-offset-black/20",
-                    index === selectedIndex ? "bg-white" : "bg-white/40 hover:bg-white/60"
-                  )}
-                  onClick={() => scrollTo(index)}
-                  aria-label={`Go to image ${index + 1}`}
-                  aria-current={index === selectedIndex ? "true" : "false"}
-                  tabIndex={0}
-                />
-              ))}
-            </div>
-          </div>
+          <DotNavigation total={images.length} selectedIndex={selectedIndex} onSelect={scrollTo} />
         </>
       )}
     </div>

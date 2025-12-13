@@ -12,7 +12,7 @@ const MediaCount: React.FC<Props> = ({ count = 0, className }) => {
   return (
     <div
       className={cn(
-        'absolute right-2 bottom-2 flex items-center gap-1 rounded-full px-3 py-1 text-white bg-black/30',
+        'absolute right-2 bottom-2 flex items-center gap-1 rounded-full px-3 py-1 text-white bg-black/15',
         className,
       )}
     >
