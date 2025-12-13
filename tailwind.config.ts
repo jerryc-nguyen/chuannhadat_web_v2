@@ -23,6 +23,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        vietnam: ['var(--font-vietnam)']
+      },
       colors: {
         primary_color: '#0057ff',
         secondary_color: '#27115F',
