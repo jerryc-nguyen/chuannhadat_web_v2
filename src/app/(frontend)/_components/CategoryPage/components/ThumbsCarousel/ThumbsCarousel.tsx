@@ -10,6 +10,7 @@ import { cn } from '@common/utils';
 import useResizeImage from '@common/hooks/useResizeImage';
 import BlurImage from '@/components/BlurImage';
 import ButtonSave from '../../../features/product-detail-actions/save-post/ButtonSave';
+import MediaCount from './MediaCount';
 
 // ✅ Dynamic import Embla carousel only when needed  
 const EmblaCarouselComponent = dynamic(
@@ -204,6 +205,7 @@ export default function ThumbsCarousel({
               }}
             />
             <ButtonSave postUid={product.uid} className="!absolute !top-2 !right-2 !visible !opacity-100" />
+            <MediaCount count={product.images_count} />
           </AspectRatio>
         )}
       </section>
@@ -225,7 +227,7 @@ export default function ThumbsCarousel({
               isEager={isEager}
               postUid={product.uid}
             />
-
+            <MediaCount count={product.images_count} />
             {/* Loading overlay for image preloading */}
             {isPreloadingImages && (
               <div className="absolute inset-0 bg-black/10 flex items-center justify-center rounded-lg z-50">

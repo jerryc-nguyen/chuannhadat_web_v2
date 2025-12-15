@@ -19,7 +19,7 @@ export function useSyncFilterParamsToUrl() {
   }
   const syncCategoryParamsToUrl = useCallback(async (filterParams: Record<string, any>) => {
     // disable auto sync state to url for manage post page
-    console.log('searchScope', searchScope)
+
     if (searchScope === SearchScopeEnums.Category) {
       await forCategoryPage(filterParams);
     } else if (searchScope === SearchScopeEnums.Profile) {

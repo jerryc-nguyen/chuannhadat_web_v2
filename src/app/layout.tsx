@@ -5,7 +5,6 @@ import { cn } from '@common/utils';
 import type { Metadata, Viewport } from 'next';
 import { Be_Vietnam_Pro } from 'next/font/google';
 import Head from 'next/head';
-import Script from 'next/script';
 import NextTopLoaderDynamic from '@/components/NextTopLoaderDynamic';
 import './index.scss';
 import ProviderWrapper from './provider-wrapper';
@@ -13,9 +12,10 @@ import { checkIsLoggedInServer } from './action';
 
 const vietnam = Be_Vietnam_Pro({
   subsets: ['vietnamese'],
-  weight: ['400', '600', '700'], // ✅ Reduced from 7 to 3 weights for PageSpeed
-  display: 'swap', // ✅ Critical for PageSpeed - prevents font blocking
-  preload: true, // ✅ Faster font loading
+  weight: ['400', '600', '700'],
+  display: 'swap',
+  preload: true,
+  variable: '--font-vietnam',
 });
 
 // GOOD to know: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#unsupported-metadata
@@ -150,7 +150,8 @@ export default async function RootLayout({
       <body
         id="body-root"
         className={cn(
-          vietnam.className,
+          vietnam.variable,
+          'font-vietnam',
           isMobile ? 'isMobile' : 'isDesktop',
           'bg-white',
           'selection:bg-primary_color/20 selection:text-primary_color',
@@ -160,19 +161,6 @@ export default async function RootLayout({
       >
         <NextTopLoaderDynamic />
         <ProviderWrapper isMobile={isMobile}>{children}</ProviderWrapper>
-        {/* Hotjar script - deferred for PageSpeed */}
-        <Script id="hotjar" strategy="lazyOnload">
-          {`
-            (function(h,o,t,j,a,r){
-                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                h._hjSettings={hjid:6375646,hjsv:6};
-                a=o.getElementsByTagName('head')[0];
-                r=o.createElement('script');r.async=1;
-                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                a.appendChild(r);
-            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-          `}
-        </Script>
       </body>
     </html>
   );
