@@ -136,9 +136,19 @@ export default function CardAuthor({ product, isMobile }: { product: A; isMobile
             {product?.formatted_publish_at}
           </Link>
           ·
-          <span className="overflow-hidden text-ellipsis text-nowrap">
-            {shortenLocationName(product?.short_location_name)}
-          </span>
+          {product?.location_url ? (
+            <Link
+              {...linkTarget}
+              href={product.location_url}
+              className="overflow-hidden text-ellipsis text-nowrap hover:underline"
+            >
+              {shortenLocationName(product?.short_location_name)}
+            </Link>
+          ) : (
+            <span className="overflow-hidden text-ellipsis text-nowrap">
+              {shortenLocationName(product?.short_location_name)}
+            </span>
+          )}
           {formattedAds && (
             <>
               {' '}
