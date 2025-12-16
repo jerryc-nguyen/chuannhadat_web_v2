@@ -26,7 +26,6 @@ export default function Mobile({ initialFilterState }: MobileProps): React.React
     projectsOptions } = useSearchAggs();
 
   const onFilterChipsChanged = (newFilterState: Record<string, any>) => {
-    console.log('newFilterState', newFilterState);
     setChipFilterState(newFilterState);
     const queryParams = buildFriendlyParams(newFilterState);
 
