@@ -2,6 +2,7 @@ import { Button } from '@components/ui/button';
 import { DialogFooter } from '@components/ui/dialog';
 import LocationsPicker from '@components/desktop/components/LocationsPicker';
 import useMainContentNavigator from '../hooks';
+import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
 
 export default function MainContentNavigator() {
   const {
@@ -14,9 +15,15 @@ export default function MainContentNavigator() {
     onSubmit
   } = useMainContentNavigator();
 
+  const handleSelectSearchLocation = (option: OptionForSelect) => {
+    console.log(option);
+  };
   return (
     <div>
-
+      <LocationsAutocomplete
+        value={localCity}
+        onSelect={handleSelectSearchLocation}
+      />
       <LocationsPicker
         city={localCity}
         district={localDistrict}
