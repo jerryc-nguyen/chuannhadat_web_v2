@@ -1,7 +1,8 @@
 import { cn } from '@common/utils';
 import { Command as CommandPrimitive } from 'cmdk';
-import { Check } from 'lucide-react';
-import { useState } from 'react';
+import { Check, Search } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ClearButton } from '@components/ui/clear-button';
 import {
   Command,
   CommandEmpty,
@@ -35,6 +36,7 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
   placeholder,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [currentKeyword, setCurrentKeyword] = useState(keyword || '');
   const onSelectItem = (inputValue: T) => {
     onSelectedValueChange(inputValue);
@@ -49,6 +51,7 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
             <div className="w-full">
               <CommandPrimitive.Input
                 asChild
+                ref={inputRef}
                 onValueChange={onSearch}
                 onKeyDown={(e) => {
                   setOpen(e.key !== 'Escape');
@@ -59,7 +62,19 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
               >
                 <Input
                   value={currentKeyword}
-                  placeholder={placeholder || "Nhập giá bán"}
+                  placeholder={placeholder || "Nhập từ khoá"}
+                  startAdornment={<Search className="h-4 w-4" />}
+                  endAdornment={
+                    currentKeyword ? (
+                      <ClearButton
+                        onClick={() => {
+                          setCurrentKeyword('');
+                          onSearch?.('');
+                          inputRef.current?.focus();
+                        }}
+                      />
+                    ) : undefined
+                  }
                   onChange={(e) => {
                     setCurrentKeyword(e.target.value);
                     onSearch?.(e.target.value);

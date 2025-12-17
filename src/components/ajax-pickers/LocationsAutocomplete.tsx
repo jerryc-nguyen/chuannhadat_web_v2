@@ -8,11 +8,13 @@ interface LocationsAutocompleteProps {
   value?: OptionForSelect;
   onSelect: (option: OptionForSelect) => void;
   extraParams?: Record<string, any>;
+  placeholder?: string;
 }
 
 export default function LocationsAutocomplete({
   value,
-  onSelect
+  onSelect,
+  placeholder,
 }: LocationsAutocompleteProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedKeyword, setDebouncedKeyword] = useState('');
@@ -50,6 +52,7 @@ export default function LocationsAutocomplete({
       emptyMessage={emptyMessage}
       onSearch={onSearchQueryChange}
       isLoading={loading}
+      placeholder={placeholder || 'Tìm kiếm khu vực / dự án'}
     />
   );
 }
