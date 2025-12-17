@@ -31,6 +31,33 @@ interface LocationsPickerProps {
   isLoadingWards?: boolean;
 }
 
+const SelectedValueDisplay = ({
+  label,
+  value,
+  placeholder,
+  isLoading
+}: {
+  label: string;
+  value?: string;
+  placeholder: string;
+  isLoading?: boolean;
+}) => {
+  if (isLoading) return <span>Đang tải...</span>;
+
+  if (value) {
+    return (
+      <div className="flex flex-col items-start text-left">
+        <span className="text-[12px] font-bold">
+          {label}
+        </span>
+        <span className="text-[16px]">{value}</span>
+      </div>
+    );
+  }
+
+  return <span className="text-[16px] font-medium">{placeholder}</span>;
+};
+
 export default function LocationsPicker({
   city,
   district,
@@ -160,16 +187,19 @@ export default function LocationsPicker({
         }}
       >
         <PopoverTrigger asChild>
-
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={openCityDropdown}
             aria-haspopup="listbox"
             aria-label="Chọn thành phố"
-            className="w-full justify-between pr-2"
+            className="h-14 w-full justify-between pr-2"
           >
-            {curCity?.text || 'Chọn Thành Phố'}
+            <SelectedValueDisplay
+              label="Thành phố"
+              value={curCity?.text}
+              placeholder="Chọn Thành Phố"
+            />
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -191,10 +221,15 @@ export default function LocationsPicker({
             aria-expanded={openDistrictDropdown}
             aria-haspopup="listbox"
             aria-label="Chọn quận/huyện"
-            className="mt-2 w-full justify-between pr-2"
+            className="mt-2 h-14 w-full justify-between pr-2"
             disabled={!curCity || isLoadingDistricts}
           >
-            {isLoadingDistricts ? 'Đang tải...' : (curDistrict?.text || 'Chọn Quận / Huyện')}
+            <SelectedValueDisplay
+              label="Quận / Huyện"
+              value={curDistrict?.text}
+              placeholder="Chọn Quận / Huyện"
+              isLoading={isLoadingDistricts}
+            />
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -216,10 +251,15 @@ export default function LocationsPicker({
             aria-expanded={openWardDropdown}
             aria-haspopup="listbox"
             aria-label="Chọn phường/xã"
-            className="mt-2 w-full justify-between pr-2"
+            className="mt-2 h-14 w-full justify-between pr-2"
             disabled={!curDistrict || isLoadingWards}
           >
-            {isLoadingWards ? 'Đang tải...' : (curWard?.text || 'Chọn Phường / Xã')}
+            <SelectedValueDisplay
+              label="Phường / Xã"
+              value={curWard?.text}
+              placeholder="Chọn Phường / Xã"
+              isLoading={isLoadingWards}
+            />
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
