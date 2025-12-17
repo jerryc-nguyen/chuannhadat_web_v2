@@ -221,13 +221,8 @@ export default function LocationsPicker({
               label="Thành phố"
               value={curCity?.text}
               placeholder="Chọn Thành Phố"
+              onClear={curCity?.value ? clearCity : undefined}
             />
-            <div className="flex items-center gap-1">
-              {curCity?.value && (
-                <ClearButton onClick={clearCity} />
-              )}
-              {!curCity?.value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
-            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -286,13 +281,8 @@ export default function LocationsPicker({
               value={curWard?.text}
               placeholder="Chọn Phường / Xã"
               isLoading={isLoadingWards}
+              onClear={curWard?.value ? clearWard : undefined}
             />
-            <div className="flex items-center gap-1">
-              {curWard?.value && (
-                <ClearButton onClick={clearWard} />
-              )}
-              {!curWard?.value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
-            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" align="end" side="right">
