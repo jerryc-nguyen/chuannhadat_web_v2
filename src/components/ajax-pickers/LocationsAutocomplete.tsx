@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { OptionForSelect } from '@common/types';
-import CmdkOptionPicker from '@components/mobile-ui/CmdkOptionPicker';
 import { debounce } from 'lodash-es';
 import { useAutocompleteSearch } from '@frontend/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
 import { CmdkOptionsAutocomplete } from '@components/mobile-ui/CmdkOptionsAutocomplete';

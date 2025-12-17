@@ -32,6 +32,7 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
   isLoading,
   emptyMessage = 'No items.',
   onSearch,
+  placeholder,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const [currentKeyword, setCurrentKeyword] = useState(keyword || '');
@@ -45,30 +46,32 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
       <Popover open={open} onOpenChange={setOpen}>
         <Command shouldFilter={false}>
           <PopoverAnchor asChild>
-            <CommandPrimitive.Input
-              asChild
-              onValueChange={onSearch}
-              onKeyDown={(e) => {
-                setOpen(e.key !== 'Escape');
-              }}
-              onMouseDown={() => {
-                if (currentKeyword) setOpen((open) => !!currentKeyword || !open);
-              }}
-            >
-              <Input
-                value={currentKeyword}
-                placeholder="Nhập giá bán"
-                onChange={(e) => {
-                  setCurrentKeyword(e.target.value);
-                  onSearch?.(e.target.value);
+            <div className="w-full">
+              <CommandPrimitive.Input
+                asChild
+                onValueChange={onSearch}
+                onKeyDown={(e) => {
+                  setOpen(e.key !== 'Escape');
                 }}
-              />
-            </CommandPrimitive.Input>
+                onMouseDown={() => {
+                  if (currentKeyword) setOpen((open) => !!currentKeyword || !open);
+                }}
+              >
+                <Input
+                  value={currentKeyword}
+                  placeholder={placeholder || "Nhập giá bán"}
+                  onChange={(e) => {
+                    setCurrentKeyword(e.target.value);
+                    onSearch?.(e.target.value);
+                  }}
+                />
+              </CommandPrimitive.Input>
+            </div>
           </PopoverAnchor>
 
           {!open && <CommandList aria-hidden="true" className="hidden" />}
           <PopoverContent
-            sideOffset={10}
+            sideOffset={5}
             asChild
             onOpenAutoFocus={(e) => e.preventDefault()}
             onInteractOutside={(e) => {
@@ -76,7 +79,7 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
                 e.preventDefault();
               }
             }}
-            className="w-full p-0 min-w-[300px] left-[-15px]"
+            className="w-[--radix-popover-trigger-width] p-0 left-[-3px]"
             align="start" side="bottom"
           >
             <CommandList>
