@@ -6,6 +6,7 @@ import { OptionForSelect } from '@common/types';
 import OptionPicker from '@components/mobile-ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
+import { ClearButton } from "@components/ui/clear-button";
 
 import { Button } from '@components/ui/button';
 
@@ -35,27 +36,33 @@ const SelectedValueDisplay = ({
   label,
   value,
   placeholder,
-  isLoading
+  isLoading,
+  onClear,
 }: {
   label: string;
   value?: string;
   placeholder: string;
   isLoading?: boolean;
+  onClear?: (e: React.MouseEvent) => void;
 }) => {
-  if (isLoading) return <span>Đang tải...</span>;
-
-  if (value) {
-    return (
-      <div className="flex flex-col items-start text-left">
-        <span className="text-[12px] font-bold">
-          {label}
-        </span>
-        <span className="text-[16px]">{value}</span>
+  return (
+    <>
+      {isLoading ? (
+        <span>Đang tải...</span>
+      ) : value ? (
+        <div className="flex flex-col items-start text-left">
+          <span className="text-[12px] font-bold">{label}</span>
+          <span className="text-[16px]">{value}</span>
+        </div>
+      ) : (
+        <span className="text-[16px] font-medium">{placeholder}</span>
+      )}
+      <div className="flex items-center gap-1">
+        {value && onClear && <ClearButton onClick={onClear} />}
+        {!value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
       </div>
-    );
-  }
-
-  return <span className="text-[16px] font-medium">{placeholder}</span>;
+    </>
+  );
 };
 
 export default function LocationsPicker({
@@ -114,6 +121,21 @@ export default function LocationsPicker({
 
   const resetWard = () => {
     setCurWard(undefined);
+  };
+
+  const clearCity = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectCity(undefined);
+  };
+
+  const clearDistrict = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectDistrict(undefined);
+  };
+
+  const clearWard = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectWard(undefined);
   };
 
   const onSelectCity = (city?: OptionForSelect) => {
@@ -200,7 +222,12 @@ export default function LocationsPicker({
               value={curCity?.text}
               placeholder="Chọn Thành Phố"
             />
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <div className="flex items-center gap-1">
+              {curCity?.value && (
+                <ClearButton onClick={clearCity} />
+              )}
+              {!curCity?.value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -229,8 +256,8 @@ export default function LocationsPicker({
               value={curDistrict?.text}
               placeholder="Chọn Quận / Huyện"
               isLoading={isLoadingDistricts}
+              onClear={curDistrict?.value ? clearDistrict : undefined}
             />
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -260,7 +287,12 @@ export default function LocationsPicker({
               placeholder="Chọn Phường / Xã"
               isLoading={isLoadingWards}
             />
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <div className="flex items-center gap-1">
+              {curWard?.value && (
+                <ClearButton onClick={clearWard} />
+              )}
+              {!curWard?.value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" align="end" side="right">
