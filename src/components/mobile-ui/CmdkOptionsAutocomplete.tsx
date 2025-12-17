@@ -24,6 +24,9 @@ type Props<T extends OptionForSelect> = {
   emptyMessage?: string;
   placeholder?: string;
   onSearch?: (query: string) => void;
+  className?: string;
+  popoverClassName?: string;
+  hideCheckIcon?: boolean;
 };
 
 export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
@@ -34,6 +37,9 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
   emptyMessage = 'No items.',
   onSearch,
   placeholder,
+  className,
+  popoverClassName,
+  hideCheckIcon = true,
 }: Props<T>) {
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -44,9 +50,9 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
   };
 
   return (
-    <div className="flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2">
+    <div className={cn("flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2", className)}>
       <Popover open={open} onOpenChange={setOpen}>
-        <Command shouldFilter={false}>
+        <Command shouldFilter={false} className="c-CmdkOptionAutocomplete">
           <PopoverAnchor asChild>
             <div className="w-full">
               <CommandPrimitive.Input
@@ -87,14 +93,14 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
           {!open && <CommandList aria-hidden="true" className="hidden" />}
           <PopoverContent
             sideOffset={5}
-            asChild
             onOpenAutoFocus={(e) => e.preventDefault()}
             onInteractOutside={(e) => {
               if (e.target instanceof Element && e.target.hasAttribute('cmdk-input')) {
                 e.preventDefault();
               }
             }}
-            className="w-[--radix-popover-trigger-width] p-0 left-[-3px]"
+            className={cn("w-[--radix-popover-trigger-width] p-0 left-[-3px]", popoverClassName)}
+            style={{ zIndex: 99999 }}
             align="start" side="bottom"
           >
             <CommandList>
@@ -114,12 +120,14 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
                       onMouseDown={(e) => e.preventDefault()}
                       onSelect={() => onSelectItem(option as T)}
                     >
-                      <Check
-                        className={cn(
-                          'mr-2 h-4 w-4',
-                          currentKeyword === option.text ? 'opacity-100' : 'opacity-0',
-                        )}
-                      />
+                      {!hideCheckIcon && (
+                        <Check
+                          className={cn(
+                            'mr-2 h-4 w-4',
+                            currentKeyword === option.text ? 'opacity-100' : 'opacity-0',
+                          )}
+                        />
+                      )}
                       {option.text}
 
                       <CommandShortcut>{option.description}</CommandShortcut>

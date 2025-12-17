@@ -7,6 +7,7 @@ import { OptionForSelect } from '@common/types';
 import { useCallback, useEffect } from 'react';
 import useMainContentNavigator from '../hooks';
 import { useLocationPicker } from '@contexts/LocationContext';
+import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
 
 export default function MainContentNavigator({ openModal, closeModal }: { openModal: (modal: Modal) => void, closeModal: () => void }) {
   const {
@@ -46,8 +47,19 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
     return result;
   }, [closeModal, originalOnSelectWard]);
 
+  const handleSelectSearchLocation = (option: OptionForSelect) => {
+    console.log(option);
+  };
+
+
   return (
     <div>
+      <div className='my-4 mx-1'>
+        <LocationsAutocomplete
+          value={localCity}
+          onSelect={handleSelectSearchLocation}
+        />
+      </div>
 
       <LocationsPicker
         city={localCity}
