@@ -1,7 +1,7 @@
 import { cn } from '@common/utils';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Check } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import {
   Command,
   CommandEmpty,
@@ -68,7 +68,7 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
 
           {!open && <CommandList aria-hidden="true" className="hidden" />}
           <PopoverContent
-            sideOffset={15}
+            sideOffset={10}
             asChild
             onOpenAutoFocus={(e) => e.preventDefault()}
             onInteractOutside={(e) => {
@@ -76,8 +76,8 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
                 e.preventDefault();
               }
             }}
-            className="w-[300px] p-0 right-[-20px]"
-            align="center" side="bottom"
+            className="w-full p-0 min-w-[300px] left-[-15px]"
+            align="start" side="bottom"
           >
             <CommandList>
               {isLoading && (

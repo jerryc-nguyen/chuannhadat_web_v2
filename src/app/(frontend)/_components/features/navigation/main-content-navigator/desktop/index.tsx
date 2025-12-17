@@ -18,12 +18,16 @@ export default function MainContentNavigator() {
   const handleSelectSearchLocation = (option: OptionForSelect) => {
     console.log(option);
   };
+
   return (
     <div>
-      <LocationsAutocomplete
-        value={localCity}
-        onSelect={handleSelectSearchLocation}
-      />
+      <div className='mb-4'>
+        <LocationsAutocomplete
+          value={localCity}
+          onSelect={handleSelectSearchLocation}
+        />
+      </div>
+
       <LocationsPicker
         city={localCity}
         district={localDistrict}
