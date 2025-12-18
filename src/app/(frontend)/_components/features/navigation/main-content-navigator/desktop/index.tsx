@@ -13,7 +13,6 @@ export default function MainContentNavigator() {
   const { trackAction } = useTrackAction();
   const { recentSearches, loadRecentSearches } = useAutocompleteSearch();
 
-
   const {
     localCity,
     localDistrict,

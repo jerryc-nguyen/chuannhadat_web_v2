@@ -8,8 +8,16 @@ import { useCallback, useEffect } from 'react';
 import useMainContentNavigator from '../hooks';
 import { useLocationPicker } from '@contexts/LocationContext';
 import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
+import RecentLocations from '@app/(frontend)/_components/features/navigation/main-content-navigator/RecentLocations';
+import { useTrackAction } from '@common/hooks';
+import { useAutocompleteSearch } from '@app/(frontend)/_components/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
 
 export default function MainContentNavigator({ openModal, closeModal }: { openModal: (modal: Modal) => void, closeModal: () => void }) {
+
+  const { trackAction } = useTrackAction();
+  const { recentSearches, loadRecentSearches } = useAutocompleteSearch();
+
+
   const {
     localCity,
     localDistrict,
@@ -48,19 +56,33 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
   }, [closeModal, originalOnSelectWard]);
 
   const handleSelectSearchLocation = (option: OptionForSelect) => {
+    trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
     console.log(option);
   };
 
+  useEffect(() => {
+    loadRecentSearches();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
-      <div className='my-4 mx-1'>
+      <div className='my-4 ml-2'>
         <LocationsAutocomplete
-          value={localCity}
           onSelect={handleSelectSearchLocation}
         />
       </div>
 
+      <div className='ml-2'>
+        <RecentLocations
+          recentSearches={recentSearches}
+          onSelect={handleSelectSearchLocation}
+        />
+      </div>
+
+      <label className="text-sm text-gray-500 block mb-2 pl-3">
+        Hoặc chọn từ danh sách
+      </label>
       <LocationsPicker
         city={localCity}
         district={localDistrict}
