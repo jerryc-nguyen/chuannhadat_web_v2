@@ -5,12 +5,12 @@ import { toSearchString } from '@common/stringHelpers';
 
 export type SearchResultType = 'recent' | 'search' | 'combined' | null;
 
-export const useAutocompleteSearch = () => {
-  const [results, setResults] = useState<OptionForSelect[]>([]);
-  const [recentSearches, setRecentSearches] = useState<OptionForSelect[]>([]);
+export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] = []) => {
+  const [results, setResults] = useState<OptionForSelect[]>(initialRecentSearches);
+  const [recentSearches, setRecentSearches] = useState<OptionForSelect[]>(initialRecentSearches);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [resultType, setResultType] = useState<SearchResultType>(null);
+  const [resultType, setResultType] = useState<SearchResultType>(initialRecentSearches.length > 0 ? 'recent' : null);
 
   const search = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {

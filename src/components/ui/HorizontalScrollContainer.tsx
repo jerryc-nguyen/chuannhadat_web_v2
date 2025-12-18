@@ -12,6 +12,7 @@ interface HorizontalScrollContainerProps {
   activeItemSelector?: string;
   dependencies?: any[];
   gradientClassName?: string;
+  scrollAreaClassName?: string;
 }
 
 export const HorizontalScrollContainer: React.FC<HorizontalScrollContainerProps> = ({
@@ -19,7 +20,8 @@ export const HorizontalScrollContainer: React.FC<HorizontalScrollContainerProps>
   className,
   activeItemSelector,
   dependencies = [],
-  gradientClassName = "from-[#F5F6FA]"
+  gradientClassName = "from-[#F5F6FA]",
+  scrollAreaClassName = "px-4 py-3 mt-4",
 }) => {
   const {
     scrollContainerRef,
@@ -62,7 +64,7 @@ export const HorizontalScrollContainer: React.FC<HorizontalScrollContainerProps>
 
       <div
         ref={scrollContainerRef}
-        className="flex-1 overflow-x-auto scrollbar-hide py-3 px-4"
+        className={cn("flex-1 overflow-x-auto scrollbar-hide", scrollAreaClassName)}
       >
         {children}
       </div>
