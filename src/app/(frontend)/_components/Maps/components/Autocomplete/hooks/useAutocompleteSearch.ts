@@ -198,3 +198,32 @@ export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] =
     clearResults,
   };
 };
+
+export const convertAutocompleteToFilterOption = (option: OptionForSelect): Record<string, OptionForSelect | undefined> => {
+  if (!option.data) return {};
+
+  const result: Record<string, OptionForSelect | undefined> = {
+    city: undefined,
+    district: undefined,
+    ward: undefined,
+    project: undefined,
+  };
+  const { data, text } = option;
+
+  switch (data.mappable_type) {
+    case 'Core::City':
+      result.city = { text: text, value: data.mappable_id };
+      break;
+    case 'Core::District':
+      result.district = { text: text, value: data.mappable_id }
+      break;
+    case 'Core::Ward':
+      result.ward = { text: text, value: data.mappable_id }
+      break;
+    case 'Core::Project':
+      result.project = { text: text, value: data.mappable_id };
+      break;
+  }
+
+  return result;
+};

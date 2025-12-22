@@ -18,7 +18,7 @@ import { buildFriendlyParams } from '@app/(frontend)/_components/features/search
 export function useFilterState() {
   const [filterState, setFilterState] = useAtom(filterStateAtom);
   const filterFieldOptions = useAtomValue(filterFieldOptionsAtom);
-  const { syncCategoryParamsToUrl } = useSyncFilterParamsToUrl();
+  const { syncCategoryParamsToUrl, redirectForCategoryPage } = useSyncFilterParamsToUrl();
 
   // Memoized derived state
   const hasActiveFilters = useMemo(() => {
@@ -38,6 +38,13 @@ export function useFilterState() {
     const queryParams = buildFriendlyParams(newFilterState);
     syncCategoryParamsToUrl(queryParams);
     return newFilterState;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterState]);
+
+  const redirectToUrlWithNewFilters = useCallback((updateValues: Partial<FilterState>) => {
+    const newFilterState = { ...filterState, ...updateValues }
+    const queryParams = buildFriendlyParams(newFilterState);
+    redirectForCategoryPage(queryParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterState]);
 
@@ -125,6 +132,7 @@ export function useFilterState() {
     clearAllFilters,
 
     // Utility functions
-    getFilterValue
+    getFilterValue,
+    redirectToUrlWithNewFilters
   };
 }
