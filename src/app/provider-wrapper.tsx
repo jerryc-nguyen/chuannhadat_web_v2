@@ -7,6 +7,7 @@ import { Provider as JotaiProvider } from 'jotai';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { LocationProvider } from '@contexts/LocationContext';
+import AuthToastChecker from '@components/auth/AuthToastChecker';
 
 // ✅ Dynamically import heavy components to reduce Total Blocking Time
 const RouteChangeHandler = dynamic(
@@ -39,6 +40,7 @@ const ProviderWrapper: React.FC<ProviderWrapperProps> = ({ children, isMobile })
               {children}
               <ListModal />
               <SessionTimeOutPopup />
+              <AuthToastChecker />
               {/* Client-side only component for route change handling */}
               <RouteChangeHandler />
             </AuthProvider>
