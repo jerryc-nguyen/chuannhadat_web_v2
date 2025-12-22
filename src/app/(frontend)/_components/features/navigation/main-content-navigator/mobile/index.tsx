@@ -10,13 +10,14 @@ import { useLocationPicker } from '@contexts/LocationContext';
 import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
 import RecentLocations from '@app/(frontend)/_components/features/navigation/main-content-navigator/RecentLocations';
 import { useTrackAction } from '@common/hooks';
-import { useAutocompleteSearch } from '@app/(frontend)/_components/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
+import { convertAutocompleteToFilterOption, useAutocompleteSearch } from '@app/(frontend)/_components/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
+import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 
 export default function MainContentNavigator({ openModal, closeModal }: { openModal: (modal: Modal) => void, closeModal: () => void }) {
 
   const { trackAction } = useTrackAction();
   const { recentSearches, loadRecentSearches } = useAutocompleteSearch();
-
+  const { redirectToUrlWithNewFilters } = useFilterState();
 
   const {
     localCity,
@@ -57,7 +58,8 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
 
   const handleSelectSearchLocation = (option: OptionForSelect) => {
     trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
-    console.log(option);
+    const filteredLocationState = convertAutocompleteToFilterOption(option);
+    redirectToUrlWithNewFilters(filteredLocationState);
   };
 
   useEffect(() => {
