@@ -8,14 +8,16 @@ interface LocationsAutocompleteProps {
   onSelect: (option: OptionForSelect) => void;
   extraParams?: Record<string, any>;
   placeholder?: string;
+  autocompleteScope?: string;
 }
 
 export default function LocationsAutocomplete({
   onSelect,
   placeholder,
+  autocompleteScope = 'location_navigator'
 }: LocationsAutocompleteProps) {
   const [debouncedKeyword, setDebouncedKeyword] = useState('');
-  const { results, loading, mergeWithRecentSearches } = useAutocompleteSearch();
+  const { results, loading, mergeWithRecentSearches } = useAutocompleteSearch({ scope: autocompleteScope });
 
   // Create a debounced function that updates debouncedKeyword
   const debouncedSetKeyword = useRef(

@@ -12,7 +12,7 @@ import { useFilterState } from '@app/(frontend)/_components/features/search/filt
 
 export default function MainContentNavigator() {
   const { trackAction } = useTrackAction();
-  const { recentSearches, loadRecentSearches } = useAutocompleteSearch();
+  const { recentSearches, loadRecentSearches } = useAutocompleteSearch({ scope: 'main_navigator' });
   const { redirectToUrlWithNewFilters } = useFilterState();
 
   const {
@@ -38,7 +38,7 @@ export default function MainContentNavigator() {
   };
 
   useEffect(() => {
-    loadRecentSearches({ limit: 10, scope: 'category' });
+    loadRecentSearches({ limit: 10, scope: 'location_navigator' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

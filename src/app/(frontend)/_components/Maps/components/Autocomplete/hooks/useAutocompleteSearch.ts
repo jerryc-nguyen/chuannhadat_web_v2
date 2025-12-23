@@ -5,15 +5,21 @@ import { toSearchString } from '@common/stringHelpers';
 
 export type SearchResultType = 'recent' | 'search' | 'combined' | null;
 
-export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] = []) => {
+export type UseAutocompleteSearchProps = {
+  initialRecentSearches?: OptionForSelect[];
+  scope?: string;
+}
+
+export const useAutocompleteSearch = ({ initialRecentSearches = [], scope = 'map' }: UseAutocompleteSearchProps = {}) => {
   const [results, setResults] = useState<OptionForSelect[]>(initialRecentSearches);
   const [recentSearches, setRecentSearches] = useState<OptionForSelect[]>(initialRecentSearches);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultType, setResultType] = useState<SearchResultType>(initialRecentSearches.length > 0 ? 'recent' : null);
 
-  const search = useCallback(async (searchQuery: string) => {
-    if (!searchQuery.trim()) {
+  const search = useCallback(async (params: Record<string, A> = {}) => {
+    const { keyword = '' } = params;
+    if (!keyword.trim()) {
       setResults([]);
       setLoading(false);
       setError(null);
@@ -25,7 +31,7 @@ export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] =
     setError(null);
 
     try {
-      const response = await autocompleteApi.search({ keyword: searchQuery });
+      const response = await autocompleteApi.search({ ...params, scope });
       if (response.success) {
         setResults(response.data);
         setResultType('search');
@@ -48,7 +54,6 @@ export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] =
     setLoading(true);
     setError(null);
     params.limit ||= 10;
-
     try {
       const response = await autocompleteApi.recent(params);
       if (response.success) {
@@ -119,7 +124,7 @@ export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] =
     setError(null);
 
     try {
-      const searchResponse = await autocompleteApi.search({ keyword: searchQuery });
+      const searchResponse = await autocompleteApi.search({ keyword: searchQuery, scope });
 
       const combinedResults: OptionForSelect[] = [];
 
