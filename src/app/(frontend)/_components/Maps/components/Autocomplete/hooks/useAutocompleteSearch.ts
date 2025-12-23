@@ -44,12 +44,13 @@ export const useAutocompleteSearch = (initialRecentSearches: OptionForSelect[] =
     }
   }, []);
 
-  const loadRecentSearches = useCallback(async (limit = 10) => {
+  const loadRecentSearches = useCallback(async (params: Record<string, A> = {}) => {
     setLoading(true);
     setError(null);
+    params.limit ||= 10;
 
     try {
-      const response = await autocompleteApi.recent({ limit });
+      const response = await autocompleteApi.recent(params);
       if (response.success) {
         const recentData = response.data.map(option => ({
           ...option,

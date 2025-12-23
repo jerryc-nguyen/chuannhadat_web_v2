@@ -4,7 +4,7 @@ import LocationsPicker from '@components/desktop/components/LocationsPicker';
 import useMainContentNavigator from '../hooks';
 import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
 import { OptionForSelect } from '@common/types';
-import { useTrackAction } from '@common/hooks';
+import { ITrackActionPayload, useTrackAction } from '@common/hooks';
 import { useAutocompleteSearch, convertAutocompleteToFilterOption } from '@frontend/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
 import { useEffect } from 'react';
 import RecentLocations from '../RecentLocations';
@@ -22,7 +22,8 @@ export default function MainContentNavigator() {
     onSelectCity,
     onSelectDistrict,
     onSelectWard,
-    onSubmit
+    onSubmit,
+    trackingParams
   } = useMainContentNavigator();
 
   const handleSelectSearchLocation = (option: OptionForSelect) => {
@@ -31,8 +32,13 @@ export default function MainContentNavigator() {
     redirectToUrlWithNewFilters(filteredLocationState);
   };
 
+  const handleSubmit = () => {
+    trackAction({ ...trackingParams as ITrackActionPayload, action: 'filter_by_location_picker' });
+    onSubmit();
+  };
+
   useEffect(() => {
-    loadRecentSearches();
+    loadRecentSearches({ limit: 10, scope: 'category' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -67,7 +73,7 @@ export default function MainContentNavigator() {
       </div>
 
       <DialogFooter className='mt-4'>
-        <Button onClick={() => onSubmit()}>Áp dụng</Button>
+        <Button onClick={() => handleSubmit()}>Áp dụng</Button>
       </DialogFooter>
     </div>
   );

@@ -178,6 +178,23 @@ export default function useMainContentNavigator() {
     }
   }, [onSubmitByApplyFilter, onSubmitByRedirect, searchScope]);
 
+  const trackingParams = useMemo(() => {
+    const results: Record<string, A> = {}
+    if (city) {
+      results.target_type = 'Core::City';
+      results.target_id = city.value;
+    }
+    if (district) {
+      results.target_type = 'Core::District';
+      results.target_id = district.value;
+    }
+    if (ward) {
+      results.target_type = 'Core::Ward';
+      results.target_id = ward.value;
+    }
+    return results;
+  }, [city, district, ward]);
+
   return {
     // Global state
     contentType: globalContentType,
@@ -206,6 +223,7 @@ export default function useMainContentNavigator() {
     onSubmit,
 
     // Constants
-    contentOptions
+    contentOptions,
+    trackingParams
   };
 }
