@@ -44,8 +44,8 @@ export default function ProjectPicker({
 
   const { isLoading: isSearching, data: response } = useQuery({
     queryKey: ['filter_projects', params],
-    queryFn: () => autocompleteApi.projects(params),
-    enabled: debouncedKeyword.length > 0 || Object.keys(extraParams).length > 0
+    queryFn: () => autocompleteApi.projects({ ...params, with_recent: true }),
+    enabled: true
   });
 
   const onSearchQueryChange = useCallback((term: string) => {
@@ -56,6 +56,7 @@ export default function ProjectPicker({
 
   return (
     <CmdkOptionPicker
+      showDescription={true}
       searchable={true}
       value={value}
       options={response?.data || []}

@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, Clock, Loader2 } from 'lucide-react';
 
 export default function CmdkOptionPicker({
   options,
@@ -20,7 +20,8 @@ export default function CmdkOptionPicker({
   emptyMessage,
   filterable,
   isAjaxSearching,
-  onSearchQueryChange
+  onSearchQueryChange,
+  showDescription = false,
 }: {
   options: Array<OptionForSelect>;
   value?: OptionForSelect;
@@ -30,7 +31,8 @@ export default function CmdkOptionPicker({
   emptyMessage?: string;
   filterable?: boolean;
   isAjaxSearching?: boolean;
-  onSearchQueryChange?: (term: string) => void
+  onSearchQueryChange?: (term: string) => void;
+  showDescription?: boolean;
 }) {
   const [curValue, setCurValue] = useState(value);
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,13 +90,21 @@ export default function CmdkOptionPicker({
                     onSelect && onSelect(listItem);
                   }}
                 >
-                  <Check
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      curValue?.text === listItem.text ? 'opacity-100' : 'opacity-0',
+                  {curValue?.value === listItem.value ? (
+                    <Check className={cn('mr-2 h-4 w-4 opacity-100')} />
+                  ) : (listItem as any).scope === 'recent' ? (
+                    <Clock className={cn('mr-2 h-4 w-4 opacity-70')} />
+                  ) : (
+                    <Check className={cn('mr-2 h-4 w-4 opacity-0')} />
+                  )}
+                  <div className="flex flex-col">
+                    <span>{listItem.text}</span>
+                    {showDescription && (listItem as any).description && (
+                      <span className="text-xs text-muted-foreground">
+                        {(listItem as any).description}
+                      </span>
                     )}
-                  />
-                  {listItem.text}
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>

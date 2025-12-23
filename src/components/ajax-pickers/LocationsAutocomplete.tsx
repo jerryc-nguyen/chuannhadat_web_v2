@@ -36,7 +36,7 @@ export default function LocationsAutocomplete({
     };
   }, [debouncedKeyword, debouncedSetKeyword, mergeWithRecentSearches]);
 
-  const emptyMessage = debouncedKeyword.length > 0 ? 'Không tìm thấy dự án' : 'Vui lòng nhập từ khoá';
+  const emptyMessage = debouncedKeyword.length > 0 ? 'Không tìm thấy kết quả' : 'Vui lòng nhập từ khoá';
 
   return (
     <CmdkOptionsAutocomplete
