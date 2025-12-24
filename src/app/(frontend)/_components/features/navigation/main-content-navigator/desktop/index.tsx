@@ -9,10 +9,11 @@ import { useAutocompleteSearch, convertAutocompleteToFilterOption } from '@front
 import { useEffect } from 'react';
 import RecentLocations from '../RecentLocations';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
+import { toast } from 'sonner';
 
 export default function MainContentNavigator() {
   const { trackAction } = useTrackAction();
-  const { recentSearches, loadRecentSearches } = useAutocompleteSearch({ scope: 'main_navigator' });
+  const { recentSearches, loadRecentSearches, deleteRecentSearch } = useAutocompleteSearch({ scope: 'main_navigator' });
   const { redirectToUrlWithNewFilters } = useFilterState();
 
   const {
@@ -37,6 +38,17 @@ export default function MainContentNavigator() {
     onSubmit();
   };
 
+  const onDeleteRecentSearch = async (option: OptionForSelect) => {
+    try {
+      const response = await deleteRecentSearch(option);
+      if (response.success) {
+        toast.success('Xóa tìm kiếm gần đây thành công');
+      }
+    } catch (error) {
+      toast.error('Đã có lỗi, thao tác không thành công');
+    }
+  };
+
   useEffect(() => {
     loadRecentSearches({ limit: 10, scope: 'location_navigator' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,6 +68,7 @@ export default function MainContentNavigator() {
       <RecentLocations
         recentSearches={recentSearches}
         onSelect={handleSelectSearchLocation}
+        onDelete={onDeleteRecentSearch}
       />
 
       <div className="space-y-2">

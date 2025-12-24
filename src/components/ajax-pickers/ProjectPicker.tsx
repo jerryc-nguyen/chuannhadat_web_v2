@@ -53,7 +53,7 @@ export default function ProjectPicker({
     setSearchQuery(term);
   }, []);
 
-  const emptyMessage = searchQuery.length > 0 ? 'Không tìm thấy dự án' : 'Vui lòng nhập từ khoá';
+  const emptyMessage = searchQuery.length > 0 ? 'Không tìm thấy dự án' : 'Nhập từ khóa để tìm trong 4500+ dự án trên toàn quốc';
 
   const onDelete = async (option: OptionForSelect) => {
     try {
@@ -74,7 +74,7 @@ export default function ProjectPicker({
       onSelect={onSelect}
       onDelete={onDelete}
       emptyMessage={emptyMessage}
-      searchPlaceHolder={'Tìm dự án'}
+      searchPlaceHolder={'Tìm trong 4500+ dự án toàn quốc'}
       filterable={false}
       isAjaxSearching={isSearching}
       onSearchQueryChange={onSearchQueryChange}

@@ -182,7 +182,7 @@ export const useAutocompleteSearch = ({ initialRecentSearches = [], scope = 'map
       ));
     }
 
-    await autocompleteApi.deleteRecent({ target_type: option.data_type || '', target_id: option.data?.id || 0 });
+    return await autocompleteApi.deleteRecent({ target_type: option.data_type || '', target_id: option.data?.id || 0 });
   }, [resultType]);
 
   const clearResults = useCallback(() => {
