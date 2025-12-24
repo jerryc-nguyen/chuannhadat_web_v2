@@ -1,6 +1,6 @@
 import { cn } from '@common/utils';
 import { Command as CommandPrimitive } from 'cmdk';
-import { Check, Search } from 'lucide-react';
+import { Check, Loader2, Search } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { ClearButton } from '@components/ui/clear-button';
 import {
@@ -12,7 +12,6 @@ import {
   CommandShortcut,
 } from '@components/ui/command';
 import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
-import { Skeleton } from '@components/ui/skeleton';
 import { OptionForSelect } from '@common/types';
 import { Input } from '@components/ui/input';
 
@@ -106,8 +105,8 @@ export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
             <CommandList>
               {isLoading && (
                 <CommandPrimitive.Loading>
-                  <div className="p-1">
-                    <Skeleton className="h-6 w-full" />
+                  <div className="flex items-center justify-center p-4">
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                   </div>
                 </CommandPrimitive.Loading>
               )}

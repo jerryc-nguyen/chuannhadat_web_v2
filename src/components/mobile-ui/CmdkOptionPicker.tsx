@@ -93,7 +93,7 @@ export default function CmdkOptionPicker({
                   {curValue?.value === listItem.value ? (
                     <Check className={cn('mr-2 h-4 w-4 opacity-100')} />
                   ) : (listItem as any).scope === 'recent' ? (
-                    <Clock className={cn('mr-2 h-4 w-4 opacity-70')} />
+                    <Clock className={cn('mr-2 h-4 w-4 opacity-70 text-muted-foreground')} />
                   ) : (
                     <Check className={cn('mr-2 h-4 w-4 opacity-0')} />
                   )}
