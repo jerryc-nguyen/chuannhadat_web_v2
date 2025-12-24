@@ -132,5 +132,6 @@ export const API_ROUTES = {
   },
   AUTOCOMPLETES: {
     PROJECTS: 'api/v1/autocompletes/projects',
+    DELETE_RECENT_PROJECT: 'api/v1/autocompletes/delete_recent_project',
   },
 };

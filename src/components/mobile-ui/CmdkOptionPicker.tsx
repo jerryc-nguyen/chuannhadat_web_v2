@@ -9,23 +9,26 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { Check, Clock, Loader2 } from 'lucide-react';
+import { Check, Clock, Loader2, X } from 'lucide-react';
 
 export default function CmdkOptionPicker({
   options,
   value,
   searchable,
   onSelect,
+  onDelete,
   searchPlaceHolder,
   emptyMessage,
   filterable,
   isAjaxSearching,
   onSearchQueryChange,
   showDescription = false,
+  disableHeight = false,
 }: {
   options: Array<OptionForSelect>;
   value?: OptionForSelect;
   onSelect?: (option: OptionForSelect) => void;
+  onDelete?: (option: OptionForSelect) => void;
   searchable?: boolean;
   searchPlaceHolder?: string;
   emptyMessage?: string;
@@ -33,6 +36,7 @@ export default function CmdkOptionPicker({
   isAjaxSearching?: boolean;
   onSearchQueryChange?: (term: string) => void;
   showDescription?: boolean;
+  disableHeight?: boolean;
 }) {
   const [curValue, setCurValue] = useState(value);
   const [searchQuery, setSearchQuery] = useState('');
@@ -78,7 +82,7 @@ export default function CmdkOptionPicker({
         )}
 
         {!isAjaxSearching && (
-          <CommandList>
+          <CommandList className={cn(disableHeight && 'max-h-none overflow-visible')}>
             <CommandEmpty>{emptyMessage || 'Không tìm thấy kết quả.'}</CommandEmpty>
             <CommandGroup>
               {filteredItems.map((listItem: OptionForSelect) => (
@@ -105,6 +109,18 @@ export default function CmdkOptionPicker({
                       </span>
                     )}
                   </div>
+                  {(listItem as any).scope === 'recent' && onDelete && (
+                    <div
+                      role="button"
+                      className="ml-auto flex h-8 w-8 items-center justify-center rounded-full hover:bg-muted"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(listItem);
+                      }}
+                    >
+                      <X className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  )}
                 </CommandItem>
               ))}
             </CommandGroup>
