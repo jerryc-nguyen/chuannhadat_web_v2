@@ -28,7 +28,7 @@ interface ActionsProps {
 
 export function Actions({ productId, productUid, adsType, autoRefreshProduct }: ActionsProps) {
   const { decreaseTotalRefreshsCount } = useProductActionSetting();
-  const { updateFieldDataOnRow } = useManagePostsCache();
+  const { updateFieldDataOnRow, refreshDatagridList } = useManagePostsCache();
   const { openModal, closeModal } = useModals();
 
   const handleRefresh = async () => {
@@ -36,7 +36,6 @@ export function Actions({ productId, productUid, adsType, autoRefreshProduct }: 
       const res: A = await ProductApiService.Refresh({
         productId: productId,
       });
-      console.log('handleRefresh success response', res);
 
       if (res.status === true && res.message) {
         toast.success(res.message);
@@ -69,11 +68,10 @@ export function Actions({ productId, productUid, adsType, autoRefreshProduct }: 
           <Button onClick={async () => {
             try {
               const res: A = await ProductApiService.Delete({ productId: productId });
-              console.log('handleDelete success response', res);
 
               if (res.status === 200 && res.success === true && res.message) {
                 toast.success(res.message);
-                // Invalidate cache - you might need to handle this differently
+                refreshDatagridList();
                 closeModal();
               } else {
                 toast.error(res.message);

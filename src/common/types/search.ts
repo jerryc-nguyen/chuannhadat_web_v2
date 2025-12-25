@@ -30,6 +30,7 @@ export type OptionForSelect = {
   long_text?: string;
   description?: string;
   data_type?: string;
+  scope?: string;
 };
 
 /**

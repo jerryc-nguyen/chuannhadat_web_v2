@@ -63,13 +63,14 @@ const Guide: React.FC<GuideProps> = ({ account, onCopy }) => {
           </span>
         </p>
 
-        {/* Separator for alternative option */}
-        <div className="relative my-4 mt-10">
-          <hr className="border-gray-300" />
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-gray-500">
-            Cách 2
-          </span>
-        </div>
+        {(account.email) && (
+          <div className="relative my-4 mt-10">
+            <hr className="border-gray-300" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-gray-500">
+              Cách 2
+            </span>
+          </div>
+        )}
 
         {(account.email) && (
           <div>

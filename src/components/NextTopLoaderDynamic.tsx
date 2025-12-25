@@ -9,5 +9,5 @@ const NextTopLoader = dynamic(() => import('nextjs-toploader'), {
 });
 
 export default function NextTopLoaderDynamic() {
-  return <NextTopLoader />;
+  return <NextTopLoader showSpinner={false} />;
 }

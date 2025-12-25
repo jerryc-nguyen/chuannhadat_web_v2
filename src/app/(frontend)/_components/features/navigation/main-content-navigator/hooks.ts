@@ -1,13 +1,16 @@
 import { OptionForSelect } from "@common/types"
 import { useAtom } from "jotai";
 import { MCNCityAtom, MCNContentTypeAtom, MCNDistrictAtom, MCNWardAtom } from "./states";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { NEWS_TYPE_OPTION, POSTS_TYPE_OPTION } from "./constants";
 import { useFilterState } from "@frontend/features/search/filters-v2/hooks/useFilterState";
 import { useQueryClient } from "@tanstack/react-query";
 import { navigatorApi } from "./apis";
 import useSearchScope, { SearchScopeEnums } from "@frontend/features/search/hooks/useSearchScope";
 import useModals from "@frontend/features/layout/mobile-modals/hooks";
+import { ITrackActionPayload, useTrackAction } from '@common/hooks';
+import { useAutocompleteSearch, convertAutocompleteToFilterOption } from '@frontend/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
+import { toast } from 'sonner';
 
 type TSubmitProps = {
   contentType?: OptionForSelect;
@@ -24,6 +27,9 @@ export default function useMainContentNavigator() {
   const queryClient = useQueryClient();
   const { searchScope } = useSearchScope();
   const { closeModals } = useModals();
+  const { trackAction } = useTrackAction();
+  const { recentSearches, loadRecentSearches, deleteRecentSearch } = useAutocompleteSearch({ scope: 'main_navigator' });
+  const { redirectToUrlWithNewFilters } = useFilterState();
 
   // Local state for the component
   const [city, setCity] = useState<OptionForSelect | undefined>(globalCity);
@@ -178,6 +184,50 @@ export default function useMainContentNavigator() {
     }
   }, [onSubmitByApplyFilter, onSubmitByRedirect, searchScope]);
 
+  const trackingParams = useMemo(() => {
+    const results: Record<string, A> = {}
+    if (city) {
+      results.target_type = 'Core::City';
+      results.target_id = city.value;
+    }
+    if (district) {
+      results.target_type = 'Core::District';
+      results.target_id = district.value;
+    }
+    if (ward) {
+      results.target_type = 'Core::Ward';
+      results.target_id = ward.value;
+    }
+    return results;
+  }, [city, district, ward]);
+
+  const handleSelectSearchLocation = useCallback((option: OptionForSelect) => {
+    trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
+    const filteredLocationState = convertAutocompleteToFilterOption(option);
+    redirectToUrlWithNewFilters(filteredLocationState);
+  }, [trackAction, redirectToUrlWithNewFilters]);
+
+  const onDeleteRecentSearch = useCallback(async (option: OptionForSelect) => {
+    try {
+      const response = await deleteRecentSearch(option);
+      if (response.success) {
+        toast.success('Xóa tìm kiếm gần đây thành công');
+      }
+    } catch (error) {
+      toast.error('Đã có lỗi, thao tác không thành công');
+    }
+  }, [deleteRecentSearch]);
+
+  const handleSubmit = useCallback(() => {
+    trackAction({ ...trackingParams as ITrackActionPayload, action: 'filter_by_location_picker' });
+    onSubmit();
+  }, [trackAction, trackingParams, onSubmit]);
+
+  useEffect(() => {
+    loadRecentSearches({ limit: 10, scope: 'location_navigator' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return {
     // Global state
     contentType: globalContentType,
@@ -206,6 +256,11 @@ export default function useMainContentNavigator() {
     onSubmit,
 
     // Constants
-    contentOptions
+    contentOptions,
+    trackingParams,
+    recentSearches,
+    handleSelectSearchLocation,
+    onDeleteRecentSearch,
+    handleSubmit
   };
 }

@@ -8,6 +8,7 @@ import { useFilterStatePresenter } from './useFilterStatePresenter';
 import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
 import useSearchScope from '@app/(frontend)/_components/features/search/hooks/useSearchScope';
 import { categoryTypesWithoutProjects } from '@frontend/features/search/filters-v2/constants/policies';
+import { ITrackActionPayload, useTrackAction } from '@common/hooks';
 
 export interface UseFilterOperationProps {
   onFiltersChanged?: (filterState: FilterState) => void;
@@ -23,6 +24,7 @@ export const useFilterOperation = ({
   hasCountPreview = true,
 }: UseFilterOperationProps = {}) => {
   const queryClient = useQueryClient();
+  const { trackAction } = useTrackAction();
   const { defaultProfileSearchParams } = useSearchScope();
   const { filterState: selectedFilterState, clearFilter, updateFilters } = useFilterState();
   // Local filter state management
@@ -89,6 +91,16 @@ export const useFilterOperation = ({
     return adjusted;
   }, [currentFilterState]);
 
+  const trackSubmitFilter = React.useCallback((filterChipItem: FilterChipOption) => {
+    if (filterChipItem.id === FilterFieldName.Project) {
+      trackAction({
+        action: 'filter_by_location_picker',
+        target_type: 'Core::Project',
+        target_id: localFilterState.project?.value,
+      } as ITrackActionPayload);
+    }
+  }, [localFilterState.project?.value, trackAction]);
+
   // Apply filter with composite filter logic
   const onApplyFilter = React.useCallback((filterChipItem: FilterChipOption) => {
     // Close popover if setter is provided
@@ -96,6 +108,7 @@ export const useFilterOperation = ({
       setIsOpenPopover(false);
     }
 
+    trackSubmitFilter(filterChipItem);
     const fieldName = filterChipItem.id as FilterFieldName;
     const adjustedFilters = adjustFilters(filterChipItem);
     let updatingFields: Record<string, any> = {}

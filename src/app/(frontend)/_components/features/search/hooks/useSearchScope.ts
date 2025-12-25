@@ -9,7 +9,8 @@ export const enum SearchScopeEnums {
   Profile = 'profile',
   ManagePosts = 'manage_posts',
   Category = 'category',
-  News = 'news'
+  News = 'news',
+  Map = 'map'
 }
 
 export default function useSearchScope() {

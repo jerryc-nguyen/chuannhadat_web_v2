@@ -1,24 +1,22 @@
 'use client';
 import { Button } from '@components/ui/button';
 import useModals from '@frontend/features/layout/mobile-modals/hooks';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import ProductApiService from '../../apis/product-api';
 import { toast } from 'sonner';
+import { useManagePostsCache } from '../../hooks/useManagePostsCache';
 
 export const ButtonDelete = ({ productId }: { productId: number }) => {
   const { openModal, closeModal } = useModals();
-
-  const queryClient = useQueryClient();
+  const { refreshDatagridList } = useManagePostsCache();
 
   const deleteMutation = useMutation({
     mutationFn: () => ProductApiService.Delete({ productId }), // Mutation function
     onSuccess: (res: A) => {
-      console.log('handleDelete success response', res);
-
       if (res.status === 200 && res.success === true && res.message) {
         toast.success(res.message);
-        queryClient.invalidateQueries({ queryKey: ['collection-post'] }); // Invalidate cache to refetch product list
+        refreshDatagridList(); // Invalidate cache to refetch product list
         closeModal(); // Close modal on success
       } else {
         toast.error(res.message);

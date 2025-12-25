@@ -9,17 +9,47 @@ import { useManagePostsCache } from '../../ListPostsV2/hooks/useManagePostsCache
 import { getQueryClient } from "@common/api/react-query";
 import { getPostManagementBreadcrumb } from '../../helpers';
 import { trackError } from '@common/features/track_errors';
+import { useRouter } from 'next/navigation';
+import { DASHBOARD_ROUTES } from '@common/router';
+import { useEffect, useRef } from 'react';
+import { useAuth } from '@common/auth/AuthContext';
 
 export const useEditPostForm = (productUid: string) => {
   const { updateRowData } = useManagePostsCache();
+  const router = useRouter();
+  const { currentUser } = useAuth();
+  const hasHandledErrorRef = useRef(false);
 
   // Fetch product data
-  const { data: product, isSuccess } = useQuery({
+  const { data: product, isSuccess, isError, isLoading } = useQuery({
     queryKey: ['get-detail-manage-post', productUid],
     queryFn: () => ManageProductApis.getDetail(productUid),
     refetchOnWindowFocus: true, // Optional: refetch when window is focused
     select: (data) => data.data,
   });
+
+  useEffect(() => {
+    if (hasHandledErrorRef.current) return;
+    const inValidAuthor = currentUser && product && product.user_id && product.user_id != currentUser.id
+    if (!isLoading && (isError || (isSuccess && !product)) || inValidAuthor) {
+      hasHandledErrorRef.current = true;
+      router.push(DASHBOARD_ROUTES.posts.index);
+      setTimeout(() => {
+        toast.error('Tin đăng không tồn tại');
+      }, 1000);
+      const message = 'Edit tin đăng không tồn tại';
+      trackError(message, 'edit_post', {
+        request_data: {
+          inValidAuthor: inValidAuthor,
+          productUid,
+          currentUserId: currentUser?.id,
+          productUserId: product?.user_id,
+        },
+        response_data: {},
+        message
+      });
+    }
+  }, [isLoading, isError, isSuccess, product, router, currentUser]);
 
 
   const formData = isSuccess ? product : {};

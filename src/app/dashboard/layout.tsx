@@ -4,12 +4,22 @@ import { HeaderDashboard, SidebarDashboard } from '@dashboard/DashboardLayout/co
 import React, { Suspense } from 'react';
 import { DynamicSidebarProvider, SidebarLoader } from '@components/ui/dynamic';
 import './index.scss';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { API_TOKEN_CIENT } from '@common/auth';
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = async ({ children }) => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(API_TOKEN_CIENT);
+
+  if (!token) {
+    redirect('/?login_required=true');
+  }
+
   const { isMobile } = await getUserAgentInfo();
   return (
     <Suspense fallback={<SidebarLoader />}>

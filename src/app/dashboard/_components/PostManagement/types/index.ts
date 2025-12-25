@@ -70,5 +70,5 @@ export interface IManageProductDetail {
   formatted_facade_with_label: string;
   price_per_m2: number;
   formatted_kt: string;
-
+  user_id: number;
 }

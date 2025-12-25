@@ -27,7 +27,7 @@ export const SwitchButtonToggleShowOnFrontEnd = ({
   const handleShowOnFrontend = async (data: ShowOnFrontEndProductInput) => {
     try {
       const res: A = await ProductApiService.ShowOnFrontend(data);
-      console.log('handleShowOnFrontend success response', res);
+
       if (res.status === true && res.message) {
         toast.success(res.message);
       } else {

@@ -6,6 +6,7 @@ import { OptionForSelect } from '@common/types';
 import OptionPicker from '@components/mobile-ui/OptionPicker';
 import { ALL_OPTION } from '@common/constants';
 import { PopoverContent, PopoverTrigger, Popover } from '@components/ui/popover';
+import { ClearButton } from "@components/ui/clear-button";
 
 import { Button } from '@components/ui/button';
 
@@ -30,6 +31,39 @@ interface LocationsPickerProps {
   isLoadingDistricts?: boolean;
   isLoadingWards?: boolean;
 }
+
+const SelectedValueDisplay = ({
+  label,
+  value,
+  placeholder,
+  isLoading,
+  onClear,
+}: {
+  label: string;
+  value?: string;
+  placeholder: string;
+  isLoading?: boolean;
+  onClear?: (e: React.MouseEvent) => void;
+}) => {
+  return (
+    <>
+      {isLoading ? (
+        <span>Đang tải...</span>
+      ) : value ? (
+        <div className="flex flex-col items-start text-left">
+          <span className="text-[12px] font-bold">{label}</span>
+          <span className="text-[16px]">{value}</span>
+        </div>
+      ) : (
+        <span className="text-[16px] font-medium">{placeholder}</span>
+      )}
+      <div className="flex items-center gap-1">
+        {value && onClear && <ClearButton onClick={onClear} />}
+        {!value && <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
+      </div>
+    </>
+  );
+};
 
 export default function LocationsPicker({
   city,
@@ -87,6 +121,21 @@ export default function LocationsPicker({
 
   const resetWard = () => {
     setCurWard(undefined);
+  };
+
+  const clearCity = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectCity(undefined);
+  };
+
+  const clearDistrict = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectDistrict(undefined);
+  };
+
+  const clearWard = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelectWard(undefined);
   };
 
   const onSelectCity = (city?: OptionForSelect) => {
@@ -160,17 +209,20 @@ export default function LocationsPicker({
         }}
       >
         <PopoverTrigger asChild>
-
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={openCityDropdown}
             aria-haspopup="listbox"
             aria-label="Chọn thành phố"
-            className="w-full justify-between pr-2"
+            className="h-14 w-full justify-between pr-2"
           >
-            {curCity?.text || 'Chọn Thành Phố'}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <SelectedValueDisplay
+              label="Thành phố"
+              value={curCity?.text}
+              placeholder="Chọn Thành Phố"
+              onClear={curCity?.value ? clearCity : undefined}
+            />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -191,11 +243,16 @@ export default function LocationsPicker({
             aria-expanded={openDistrictDropdown}
             aria-haspopup="listbox"
             aria-label="Chọn quận/huyện"
-            className="mt-2 w-full justify-between pr-2"
+            className="mt-2 h-14 w-full justify-between pr-2"
             disabled={!curCity || isLoadingDistricts}
           >
-            {isLoadingDistricts ? 'Đang tải...' : (curDistrict?.text || 'Chọn Quận / Huyện')}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <SelectedValueDisplay
+              label="Quận / Huyện"
+              value={curDistrict?.text}
+              placeholder="Chọn Quận / Huyện"
+              isLoading={isLoadingDistricts}
+              onClear={curDistrict?.value ? clearDistrict : undefined}
+            />
           </Button>
         </PopoverTrigger>
         <PopoverContent container={containerRef.current} className="p-0" align="end" side="right">
@@ -216,11 +273,16 @@ export default function LocationsPicker({
             aria-expanded={openWardDropdown}
             aria-haspopup="listbox"
             aria-label="Chọn phường/xã"
-            className="mt-2 w-full justify-between pr-2"
+            className="mt-2 h-14 w-full justify-between pr-2"
             disabled={!curDistrict || isLoadingWards}
           >
-            {isLoadingWards ? 'Đang tải...' : (curWard?.text || 'Chọn Phường / Xã')}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <SelectedValueDisplay
+              label="Phường / Xã"
+              value={curWard?.text}
+              placeholder="Chọn Phường / Xã"
+              isLoading={isLoadingWards}
+              onClear={curWard?.value ? clearWard : undefined}
+            />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" align="end" side="right">

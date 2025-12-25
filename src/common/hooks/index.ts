@@ -9,3 +9,4 @@ export * from './useBreadcrumb';
 export * from './useClickOutside';
 export * from './useTrackAction';
 export * from './useStickyHeader';
+export * from './useHorizontalScroll';

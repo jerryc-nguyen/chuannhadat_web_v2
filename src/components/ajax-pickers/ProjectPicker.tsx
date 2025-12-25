@@ -4,6 +4,7 @@ import { OptionForSelect } from '@common/types';
 import { autocompleteApi } from '@frontend/CategoryPage/api/autocomplete';
 import CmdkOptionPicker from '@components/mobile-ui/CmdkOptionPicker';
 import { debounce } from 'lodash-es';
+import { toast } from 'sonner';
 
 interface ProjectPickerProps {
   value?: OptionForSelect;
@@ -42,29 +43,42 @@ export default function ProjectPicker({
     limit: 8
   };
 
-  const { isLoading: isSearching, data: response } = useQuery({
+  const { isLoading: isSearching, data: response, refetch } = useQuery({
     queryKey: ['filter_projects', params],
-    queryFn: () => autocompleteApi.projects(params),
-    enabled: debouncedKeyword.length > 0 || Object.keys(extraParams).length > 0
+    queryFn: () => autocompleteApi.projects({ ...params, with_recent: true }),
+    enabled: true
   });
 
   const onSearchQueryChange = useCallback((term: string) => {
     setSearchQuery(term);
   }, []);
 
-  const emptyMessage = searchQuery.length > 0 ? 'Không tìm thấy dự án' : 'Vui lòng nhập từ khoá';
+  const emptyMessage = searchQuery.length > 0 ? 'Không tìm thấy dự án' : 'Nhập từ khóa để tìm trong 4500+ dự án trên toàn quốc';
+
+  const onDelete = async (option: OptionForSelect) => {
+    try {
+      await autocompleteApi.deleteRecent(option.value as number);
+      toast.success('Đã xóa dự án mới xem gần đây');
+      refetch();
+    } catch (error) {
+      toast.error('Xóa dự án mới xem không thành công');
+    }
+  };
 
   return (
     <CmdkOptionPicker
+      showDescription={true}
       searchable={true}
       value={value}
       options={response?.data || []}
       onSelect={onSelect}
+      onDelete={onDelete}
       emptyMessage={emptyMessage}
-      searchPlaceHolder={'Tìm dự án'}
+      searchPlaceHolder={'Tìm trong 4500+ dự án toàn quốc'}
       filterable={false}
       isAjaxSearching={isSearching}
       onSearchQueryChange={onSearchQueryChange}
+      disableHeight={true}
     />
   );
 }
