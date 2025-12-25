@@ -3,19 +3,9 @@ import { DialogFooter } from '@components/ui/dialog';
 import LocationsPicker from '@components/desktop/components/LocationsPicker';
 import useMainContentNavigator from '../hooks';
 import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
-import { OptionForSelect } from '@common/types';
-import { ITrackActionPayload, useTrackAction } from '@common/hooks';
-import { useAutocompleteSearch, convertAutocompleteToFilterOption } from '@frontend/Maps/components/Autocomplete/hooks/useAutocompleteSearch';
-import { useEffect } from 'react';
 import RecentLocations from '../RecentLocations';
-import { useFilterState } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useFilterState';
-import { toast } from 'sonner';
 
 export default function MainContentNavigator() {
-  const { trackAction } = useTrackAction();
-  const { recentSearches, loadRecentSearches, deleteRecentSearch } = useAutocompleteSearch({ scope: 'main_navigator' });
-  const { redirectToUrlWithNewFilters } = useFilterState();
-
   const {
     localCity,
     localDistrict,
@@ -23,36 +13,11 @@ export default function MainContentNavigator() {
     onSelectCity,
     onSelectDistrict,
     onSelectWard,
-    onSubmit,
-    trackingParams
+    recentSearches,
+    handleSelectSearchLocation,
+    onDeleteRecentSearch,
+    handleSubmit
   } = useMainContentNavigator();
-
-  const handleSelectSearchLocation = (option: OptionForSelect) => {
-    trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
-    const filteredLocationState = convertAutocompleteToFilterOption(option);
-    redirectToUrlWithNewFilters(filteredLocationState);
-  };
-
-  const handleSubmit = () => {
-    trackAction({ ...trackingParams as ITrackActionPayload, action: 'filter_by_location_picker' });
-    onSubmit();
-  };
-
-  const onDeleteRecentSearch = async (option: OptionForSelect) => {
-    try {
-      const response = await deleteRecentSearch(option);
-      if (response.success) {
-        toast.success('Xóa tìm kiếm gần đây thành công');
-      }
-    } catch (error) {
-      toast.error('Đã có lỗi, thao tác không thành công');
-    }
-  };
-
-  useEffect(() => {
-    loadRecentSearches({ limit: 10, scope: 'location_navigator' });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div>

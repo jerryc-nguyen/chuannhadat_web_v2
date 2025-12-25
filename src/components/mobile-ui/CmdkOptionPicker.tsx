@@ -75,7 +75,7 @@ export default function CmdkOptionPicker({
 
         {!!isAjaxSearching && (
           <CommandList>
-            <CommandEmpty>
+            <CommandEmpty className="text-sm text-gray-500 flex items-center p-4 justify-center">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             </CommandEmpty>
           </CommandList>
@@ -83,7 +83,12 @@ export default function CmdkOptionPicker({
 
         {!isAjaxSearching && (
           <CommandList className={cn(disableHeight && 'max-h-none overflow-visible')}>
-            <CommandEmpty>{emptyMessage || 'Không tìm thấy kết quả.'}</CommandEmpty>
+            <CommandEmpty className="text-sm text-gray-500 flex items-center p-4">{emptyMessage || 'Không tìm thấy kết quả.'}</CommandEmpty>
+            {!isAjaxSearching && searchQuery.length == 0 && filteredItems.length > 0 && (
+              <h3 className="text-sm text-gray-500 flex items-center pl-2 py-2">
+                Tìm kiếm gần đây:
+              </h3>
+            )}
             <CommandGroup>
               {filteredItems.map((listItem: OptionForSelect) => (
                 <CommandItem
