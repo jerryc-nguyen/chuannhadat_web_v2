@@ -14,6 +14,8 @@ import { QueryKeys } from '@common/QueryKeys';
 import { notFound } from 'next/navigation';
 import { trackError } from '@common/features/track_errors';
 
+const BLACKLISTED_CATEGORY_PATHS = ['/.well-known/appspecific/'];
+
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -31,7 +33,9 @@ type SearchParams = Record<string, string | string[] | undefined>;
 
 export default async function Page({ params, searchParams }: { params: Promise<{ slug: string | string[] }>, searchParams?: Promise<SearchParams> }) {
   const { pathWithQuery, path: currentRequestPath } = await resolvePathAndQueryFromProps(params, searchParams);
-
+  if (BLACKLISTED_CATEGORY_PATHS.some((p) => currentRequestPath.includes(p))) {
+    return notFound();
+  }
   const { isMobile } = await getUserAgentInfo();
   const perPage = isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP;
 
@@ -41,7 +45,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   if (validCategoryPath && currentRequestPath !== validCategoryPath) {
     const debugInfo = { validCategoryPath, currentRequestPath }
     trackError('Invalid category path', 'clp_path_miss_match', { debug_info: debugInfo, request_data: debugInfo });
-    notFound();
+    return notFound();
   }
   const friendly = buildFriendlyParams(filterState as any);
   const APIFilterParams = {

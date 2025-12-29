@@ -73,7 +73,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose }) => {
           // Silent fail for redirect handling - non-critical
         }
       } else {
-        toast.error('Tài khoản hoặc mật khẩu không chính xác');
+        toast.error(response.message || 'Tài khoản hoặc mật khẩu không chính xác');
       }
     },
     onError: (_error) => {

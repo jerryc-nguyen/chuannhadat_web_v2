@@ -5,15 +5,21 @@ import { toSearchString } from '@common/stringHelpers';
 
 export type SearchResultType = 'recent' | 'search' | 'combined' | null;
 
-export const useAutocompleteSearch = () => {
-  const [results, setResults] = useState<OptionForSelect[]>([]);
-  const [recentSearches, setRecentSearches] = useState<OptionForSelect[]>([]);
+export type UseAutocompleteSearchProps = {
+  initialRecentSearches?: OptionForSelect[];
+  scope?: string;
+}
+
+export const useAutocompleteSearch = ({ initialRecentSearches = [], scope = 'map' }: UseAutocompleteSearchProps = {}) => {
+  const [results, setResults] = useState<OptionForSelect[]>(initialRecentSearches);
+  const [recentSearches, setRecentSearches] = useState<OptionForSelect[]>(initialRecentSearches);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [resultType, setResultType] = useState<SearchResultType>(null);
+  const [resultType, setResultType] = useState<SearchResultType>(initialRecentSearches.length > 0 ? 'recent' : null);
 
-  const search = useCallback(async (searchQuery: string) => {
-    if (!searchQuery.trim()) {
+  const search = useCallback(async (params: Record<string, A> = {}) => {
+    const { keyword = '' } = params;
+    if (!keyword.trim()) {
       setResults([]);
       setLoading(false);
       setError(null);
@@ -25,7 +31,7 @@ export const useAutocompleteSearch = () => {
     setError(null);
 
     try {
-      const response = await autocompleteApi.search({ keyword: searchQuery });
+      const response = await autocompleteApi.search({ ...params, scope });
       if (response.success) {
         setResults(response.data);
         setResultType('search');
@@ -44,12 +50,12 @@ export const useAutocompleteSearch = () => {
     }
   }, []);
 
-  const loadRecentSearches = useCallback(async (limit = 10) => {
+  const loadRecentSearches = useCallback(async (params: Record<string, A> = {}) => {
     setLoading(true);
     setError(null);
-
+    params.limit ||= 10;
     try {
-      const response = await autocompleteApi.recent({ limit });
+      const response = await autocompleteApi.recent(params);
       if (response.success) {
         const recentData = response.data.map(option => ({
           ...option,
@@ -118,7 +124,7 @@ export const useAutocompleteSearch = () => {
     setError(null);
 
     try {
-      const searchResponse = await autocompleteApi.search({ keyword: searchQuery });
+      const searchResponse = await autocompleteApi.search({ keyword: searchQuery, scope });
 
       const combinedResults: OptionForSelect[] = [];
 
@@ -176,7 +182,7 @@ export const useAutocompleteSearch = () => {
       ));
     }
 
-    await autocompleteApi.deleteRecent({ target_type: option.data_type || '', target_id: option.data?.id || 0 });
+    return await autocompleteApi.deleteRecent({ target_type: option.data_type || '', target_id: option.data?.id || 0 });
   }, [resultType]);
 
   const clearResults = useCallback(() => {
@@ -197,4 +203,33 @@ export const useAutocompleteSearch = () => {
     deleteRecentSearch,
     clearResults,
   };
+};
+
+export const convertAutocompleteToFilterOption = (option: OptionForSelect): Record<string, OptionForSelect | undefined> => {
+  if (!option.data) return {};
+
+  const result: Record<string, OptionForSelect | undefined> = {
+    city: undefined,
+    district: undefined,
+    ward: undefined,
+    project: undefined,
+  };
+  const { data, text } = option;
+
+  switch (data.mappable_type) {
+    case 'Core::City':
+      result.city = { text: text, value: data.mappable_id };
+      break;
+    case 'Core::District':
+      result.district = { text: text, value: data.mappable_id }
+      break;
+    case 'Core::Ward':
+      result.ward = { text: text, value: data.mappable_id }
+      break;
+    case 'Core::Project':
+      result.project = { text: text, value: data.mappable_id };
+      break;
+  }
+
+  return result;
 };

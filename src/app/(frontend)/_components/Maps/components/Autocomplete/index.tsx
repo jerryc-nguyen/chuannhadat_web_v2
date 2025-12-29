@@ -131,7 +131,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     setIsOpen(false);
     setSelectedIndex(-1);
     trackAction({ target_type: option.data_type || '', target_id: option.data?.id + '', action: 'view_map_object' });
-    loadRecentSearches(5);
+    loadRecentSearches({ limit: 5 });
     // Don't clear results - keep them for when user focuses again
   };
 
@@ -142,7 +142,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     } else if (!inputValue.trim()) {
       // Load recent searches only once on focus
       if (!recentLoaded) {
-        loadRecentSearches(5);
+        loadRecentSearches({ limit: 5 });
         setRecentLoaded(true);
       } else if (recentSearches.length > 0) {
         // If recent searches are already loaded, show them

@@ -17,6 +17,14 @@ export function useSyncFilterParamsToUrl() {
     const filteredParams = filterFields(filterParams, path_included || [])
     window.history.pushState({}, '', buildUrl(url, filteredParams));
   }
+
+  const redirectForCategoryPage = async (filterParams: Record<string, any>) => {
+    const response = await buildSeoListingUrl({ ...filterParams });
+    const { url, path_included } = response?.data || {};
+    const filteredParams = filterFields(filterParams, path_included || [])
+    window.location.href = buildUrl(url, filteredParams);
+  }
+
   const syncCategoryParamsToUrl = useCallback(async (filterParams: Record<string, any>) => {
     // disable auto sync state to url for manage post page
 
@@ -28,6 +36,7 @@ export function useSyncFilterParamsToUrl() {
   }, [searchScope]);
 
   return {
-    syncCategoryParamsToUrl
+    syncCategoryParamsToUrl,
+    redirectForCategoryPage
   };
 }

@@ -1,10 +1,24 @@
 "use client";
 
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import type { ComponentProps } from 'react';
+// @ts-ignore -- NProgress types are missing in this project configuration
+import NProgress from 'nprogress';
 
 // SSR Safety Check
 const isClient = typeof window !== 'undefined';
+
+// Loading fallback using NProgress (Top Loader)
+const TopLoaderFallback = () => {
+  useEffect(() => {
+    NProgress.start();
+    return () => {
+      NProgress.done();
+    };
+  }, []);
+
+  return null;
+};
 
 // Dynamic imports for Vaul components
 const DrawerRootComponent = lazy(() =>
@@ -39,18 +53,9 @@ const DrawerDescriptionComponent = lazy(() =>
   import('vaul').then(mod => ({ default: mod.Drawer.Description }))
 );
 
-// Loading fallback for drawer interactions
-const DrawerLoader = () => (
-  <div className="fixed inset-0 z-50 bg-black/40 flex items-end justify-center">
-    <div className="bg-white rounded-t-[10px] w-full h-[60vh] flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-    </div>
-  </div>
-);
-
 // Dynamic Drawer Root
 export const DrawerRoot = (props: ComponentProps<typeof DrawerRootComponent>) => (
-  <Suspense fallback={<DrawerLoader />}>
+  <Suspense fallback={<TopLoaderFallback />}>
     <DrawerRootComponent {...props} />
   </Suspense>
 );
@@ -74,7 +79,7 @@ DrawerOverlay.displayName = "DrawerOverlay";
 
 // Dynamic Drawer Content
 export const DrawerContent = (props: ComponentProps<typeof DrawerContentComponent>) => (
-  <Suspense fallback={<DrawerLoader />}>
+  <Suspense fallback={<TopLoaderFallback />}>
     <DrawerContentComponent {...props} />
   </Suspense>
 );

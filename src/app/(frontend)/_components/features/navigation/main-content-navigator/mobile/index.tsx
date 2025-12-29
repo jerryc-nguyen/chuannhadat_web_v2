@@ -7,8 +7,11 @@ import { OptionForSelect } from '@common/types';
 import { useCallback, useEffect } from 'react';
 import useMainContentNavigator from '../hooks';
 import { useLocationPicker } from '@contexts/LocationContext';
+import LocationsAutocomplete from '@components/ajax-pickers/LocationsAutocomplete';
+import RecentLocations from '@app/(frontend)/_components/features/navigation/main-content-navigator/RecentLocations';
 
 export default function MainContentNavigator({ openModal, closeModal }: { openModal: (modal: Modal) => void, closeModal: () => void }) {
+
   const {
     localCity,
     localDistrict,
@@ -16,7 +19,10 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
     onSelectCity: originalOnSelectCity,
     onSelectDistrict: originalOnSelectDistrict,
     onSelectWard: originalOnSelectWard,
-    onSubmit
+    recentSearches,
+    handleSelectSearchLocation,
+    onDeleteRecentSearch,
+    handleSubmit
   } = useMainContentNavigator();
 
   // Preload cities when this modal opens
@@ -48,7 +54,23 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
 
   return (
     <div>
+      <div className='my-4 ml-2'>
+        <LocationsAutocomplete
+          onSelect={handleSelectSearchLocation}
+        />
+      </div>
 
+      <div className='ml-2'>
+        <RecentLocations
+          recentSearches={recentSearches}
+          onSelect={handleSelectSearchLocation}
+          onDelete={onDeleteRecentSearch}
+        />
+      </div>
+
+      <label className="text-sm text-gray-500 block mb-2 pl-3">
+        Hoặc chọn từ danh sách
+      </label>
       <LocationsPicker
         city={localCity}
         district={localDistrict}
@@ -61,7 +83,7 @@ export default function MainContentNavigator({ openModal, closeModal }: { openMo
       />
 
       <DialogFooter className='mt-4'>
-        <Button onClick={() => onSubmit()}>Áp dụng</Button>
+        <Button onClick={() => handleSubmit()}>Áp dụng</Button>
       </DialogFooter>
     </div>
   );

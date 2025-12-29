@@ -1,0 +1,144 @@
+import { cn } from '@common/utils';
+import { Command as CommandPrimitive } from 'cmdk';
+import { Check, Loader2, Search } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { ClearButton } from '@components/ui/clear-button';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from '@components/ui/command';
+import { Popover, PopoverAnchor, PopoverContent } from '@components/ui/popover';
+import { OptionForSelect } from '@common/types';
+import { Input } from '@components/ui/input';
+
+type Props<T extends OptionForSelect> = {
+  keyword?: string;
+  onSelectedValueChange: (value: T) => void;
+  items: OptionForSelect[];
+  isLoading?: boolean;
+  emptyMessage?: string;
+  placeholder?: string;
+  onSearch?: (query: string) => void;
+  className?: string;
+  popoverClassName?: string;
+  hideCheckIcon?: boolean;
+};
+
+export function CmdkOptionsAutocomplete<T extends OptionForSelect>({
+  keyword,
+  onSelectedValueChange,
+  items,
+  isLoading,
+  emptyMessage = 'No items.',
+  onSearch,
+  placeholder,
+  className,
+  popoverClassName,
+  hideCheckIcon = true,
+}: Props<T>) {
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [currentKeyword, setCurrentKeyword] = useState(keyword || '');
+  const onSelectItem = (inputValue: T) => {
+    onSelectedValueChange(inputValue);
+    setOpen(false);
+  };
+
+  return (
+    <div className={cn("flex h-10 w-full rounded-md bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-secondary focus-within:outline-none focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-2", className)}>
+      <Popover open={open} onOpenChange={setOpen}>
+        <Command shouldFilter={false} className="c-CmdkOptionAutocomplete">
+          <PopoverAnchor asChild>
+            <div className="w-full">
+              <CommandPrimitive.Input
+                asChild
+                ref={inputRef}
+                onValueChange={onSearch}
+                onKeyDown={(e) => {
+                  setOpen(e.key !== 'Escape');
+                }}
+                onMouseDown={() => {
+                  if (currentKeyword) setOpen((open) => !!currentKeyword || !open);
+                }}
+              >
+                <Input
+                  value={currentKeyword}
+                  placeholder={placeholder || "Nhập từ khoá"}
+                  startAdornment={<Search className="h-4 w-4" />}
+                  endAdornment={
+                    currentKeyword ? (
+                      <ClearButton
+                        onClick={() => {
+                          setCurrentKeyword('');
+                          onSearch?.('');
+                          inputRef.current?.focus();
+                        }}
+                      />
+                    ) : undefined
+                  }
+                  onChange={(e) => {
+                    setCurrentKeyword(e.target.value);
+                    onSearch?.(e.target.value);
+                  }}
+                />
+              </CommandPrimitive.Input>
+            </div>
+          </PopoverAnchor>
+
+          {!open && <CommandList aria-hidden="true" className="hidden" />}
+          <PopoverContent
+            sideOffset={5}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onInteractOutside={(e) => {
+              if (e.target instanceof Element && e.target.hasAttribute('cmdk-input')) {
+                e.preventDefault();
+              }
+            }}
+            className={cn("w-[--radix-popover-trigger-width] p-0 left-[-3px]", popoverClassName)}
+            style={{ zIndex: 99999 }}
+            align="start" side="bottom"
+          >
+            <CommandList>
+              {isLoading && (
+                <CommandPrimitive.Loading>
+                  <div className="flex items-center justify-center p-4">
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                  </div>
+                </CommandPrimitive.Loading>
+              )}
+              {items.length > 0 && !isLoading ? (
+                <CommandGroup>
+                  {items.map((option) => (
+                    <CommandItem
+                      key={option.text}
+                      value={option.text}
+                      onMouseDown={(e) => e.preventDefault()}
+                      onSelect={() => onSelectItem(option as T)}
+                    >
+                      {!hideCheckIcon && (
+                        <Check
+                          className={cn(
+                            'mr-2 h-4 w-4',
+                            currentKeyword === option.text ? 'opacity-100' : 'opacity-0',
+                          )}
+                        />
+                      )}
+                      {option.text}
+
+                      <CommandShortcut>{option.description}</CommandShortcut>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              ) : null}
+              {!isLoading ? <CommandEmpty>{emptyMessage ?? 'No items.'}</CommandEmpty> : null}
+            </CommandList>
+          </PopoverContent>
+        </Command>
+      </Popover>
+    </div>
+  );
+}
