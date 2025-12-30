@@ -26,6 +26,9 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { path, hasQueryString } = await resolvePathAndQueryFromProps(params, searchParams);
   const rawMetadata = (await axiosInstance.get(API_ROUTES.SEOS.SEARCH_METADATA, { params: { path } }))
     .data as Metadata;
+  if ((rawMetadata?.title || '').toString().includes('404')) {
+    return rawMetadata;
+  }
   return createMetadata(rawMetadata, hasQueryString);
 }
 
