@@ -81,7 +81,6 @@ const AuthorPost: React.FC<AuthorPostProps> = ({ data, className }) => {
 
           <div className="flex flex-col gap-y-2">
             <ButtonPhone phoneNumberProfile={dataAuthor?.phone as string} />
-
           </div>
         </div>
       )}

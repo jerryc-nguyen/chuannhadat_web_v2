@@ -2,7 +2,24 @@ const oldCats: string[] = [
   "/category/"
 ]
 
+export const hardcodeRedirectMapping: Record<string, string> = {
+  'cho-thue-nha-hem-nha-rieng': 'cho-thue-nha-nguyen-can',
+  'cho-thue-nha-mat-tien-nha-mat-pho-kinh-doanh-tot': 'cho-thue-nha-mat-tien-kinh-doanh',
+}
+
 export const redirectTokens = oldCats
+
+export const isHardcodeRedirect = (path: string) => {
+  if (!path) return false;
+  return Object.keys(hardcodeRedirectMapping).some((key) => path.includes(key));
+}
+
+export const newHardcodeRedirectPath = (path: string) => {
+  if (!path) return '';
+  const key = Object.keys(hardcodeRedirectMapping).find((key) => path.includes(key));
+  if (!key) return '';
+  return path.replace(key, hardcodeRedirectMapping[key]);
+}
 
 export const isOldLegacyCats = (path: string) => {
   if (!path) return false;

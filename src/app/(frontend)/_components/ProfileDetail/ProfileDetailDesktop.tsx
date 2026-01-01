@@ -10,6 +10,7 @@ import ProfileInfo from './components/ProfileInfo';
 import { useProfileDetail } from './hooks/useProfileDetail';
 import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
 import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
+import JsonLds from '@frontend/commons/jsonlds';
 
 type ProfileDetailDesktopProps = { profileSlug: string; initialFilterState?: Record<string, any> };
 
@@ -41,6 +42,7 @@ export default function ProfileDetailDesktop({ profileSlug, initialFilterState }
 
   return (
     <section className={styles.profile_detail_wrapper}>
+      <JsonLds jsonLds={profileData.json_lds} />
       <ProfileImage profileData={profileData} />
       <div className="flex flex-col gap-x-10 gap-y-10 sm:flex-row">
         <ProfileInfo profileData={profileData} />

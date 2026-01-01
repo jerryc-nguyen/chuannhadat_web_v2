@@ -5,6 +5,7 @@ import { Copy, CopyCheck } from 'lucide-react';
 import React from 'react';
 import { Phone as FaPhone } from 'lucide-react';
 import { toast } from 'sonner';
+import { formatPhoneNumber } from '@common/stringHelpers';
 
 type ButtonPhoneProps = {
   phoneNumberProfile: string;
@@ -56,7 +57,7 @@ const ButtonPhone: React.FC<ButtonPhoneProps> = ({ phoneNumberProfile, className
     >
       <span className="flex items-center gap-x-2 text-xl">
         <FaPhone />
-        <span id="phone-number">{isMobile ? textButtonPhone : phoneNumber}</span>
+        <span id="phone-number">{isMobile ? textButtonPhone : formatPhoneNumber(phoneNumber)}</span>
       </span>
       {!isMobile && <span>{textButtonPhone === 'Sao chép' ? <Copy /> : <CopyCheck />}</span>}
     </Button>

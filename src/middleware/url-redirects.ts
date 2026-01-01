@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { shouldRedirect } from '@components/redirect-urls';
+import { shouldRedirect, isHardcodeRedirect, newHardcodeRedirectPath } from '@components/redirect-urls';
 
 /**
  * Handle URL redirections from the API
@@ -10,7 +10,12 @@ export async function handleUrlRedirects(req: NextRequest): Promise<NextResponse
 
   // Check if the path needs to redirect
   try {
-    if (shouldRedirect(pathname)) {
+    if (isHardcodeRedirect(pathname)) {
+      const newPath = newHardcodeRedirectPath(pathname);
+      if (newPath) {
+        return NextResponse.redirect(new URL(newPath, req.nextUrl), { status: 301 });
+      }
+    } else if (shouldRedirect(pathname)) {
       const checkForRedirectEndpoint = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/seos/check_url_redirect?path=${pathname}`;
       const redirectUrlResponse = await fetch(checkForRedirectEndpoint);
 

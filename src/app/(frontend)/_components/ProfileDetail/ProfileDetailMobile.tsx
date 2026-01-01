@@ -11,6 +11,7 @@ import styles from './styles/ProfileDetailMobile.module.scss';
 import default_avatar from '@assets/images/default_avatar.png';
 import { StaticImageData } from 'next/image';
 import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
+import JsonLds from '@frontend/commons/jsonlds';
 
 type ProfileDetailMobileProps = {
   profileSlug: string;
@@ -55,6 +56,7 @@ const ProfileDetailMobile: React.FC<ProfileDetailMobileProps> = ({ profileSlug, 
             setImgSrc={setImgSrc}
             profileData={profileData}
           />
+          <JsonLds jsonLds={profileData.json_lds} />
           <div className="-translate-y-[20px]">
             <ProfileInformation profileData={profileData} />
             <section className="mb-6">
