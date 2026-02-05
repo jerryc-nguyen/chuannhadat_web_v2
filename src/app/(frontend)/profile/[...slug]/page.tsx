@@ -3,6 +3,7 @@ import { API_ROUTES } from '@common/router';
 import { createMetadata } from '@common/seo';
 import type { Params } from '@common/types';
 import { Metadata } from 'next';
+import { notFound, permanentRedirect } from 'next/navigation';
 import ProfileDetail from '@frontend/ProfileDetail';
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { resolvePathAndQueryFromProps } from '@common/urlHelper';
@@ -10,6 +11,7 @@ import { getInitialFilterStateFromUrl } from '@frontend/features/search/hooks/sy
 import { buildFriendlyParams } from '@frontend/features/search/filters-v2/helpers/friendlyParamsHelper';
 import { searchApiV2, countSearchResultsApiV2 } from '@frontend/features/search/api/searchApi';
 import { QueryKeys } from '@common/QueryKeys';
+import { profilesApi } from '@frontend/ProfileDetail/api/profiles';
 
 type Props = {
   params: Params;
@@ -64,6 +66,21 @@ export default async function ProfileDetailPage({ params, searchParams }: Props)
     queryKey: QueryKeys.searchCount(counterFilterParams),
     queryFn: () => countSearchResultsApiV2(counterFilterParams),
   });
+
+  // Prefetch profile detail
+  const profileResponse = (await queryClient.fetchQuery({
+    queryKey: QueryKeys.profileDetail(slugStr),
+    queryFn: () => profilesApi.getProfileSlug(slugStr),
+  })) as any;
+
+
+  if (profileResponse?.code === 301 && profileResponse?.location) {
+    permanentRedirect(profileResponse.location);
+  }
+
+  if (profileResponse?.code === 404) {
+    notFound();
+  }
 
   const dehydratedState = dehydrate(queryClient);
 
