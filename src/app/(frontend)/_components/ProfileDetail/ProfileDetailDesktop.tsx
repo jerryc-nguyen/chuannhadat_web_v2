@@ -11,6 +11,8 @@ import { useProfileDetail } from './hooks/useProfileDetail';
 import { listFilterProfileDesktop } from '@frontend/CategoryPage/constants';
 import { useCleanFilterStates } from '@app/(frontend)/_components/features/search/filters-v2/hooks/useCleanFilterStates';
 import JsonLds from '@frontend/commons/jsonlds';
+import { ProductImportDialog, MOCK_PRODUCTS } from './components/products-import';
+import { IProductList } from '@common/types/product';
 
 type ProfileDetailDesktopProps = { profileSlug: string; initialFilterState?: Record<string, any> };
 
@@ -31,6 +33,15 @@ export default function ProfileDetailDesktop({ profileSlug, initialFilterState }
     filterChipsList: listFilterProfileDesktop,
     initialFilterState,
   });
+
+  const handleImport = (products: IProductList[]) => {
+    console.log('Importing products:', products);
+    // Future: API call to import products
+  };
+
+  const handleCancel = () => {
+    console.log('Import cancelled');
+  };
 
   if (isProfileLoading) {
     return <div>Loading...</div>;
@@ -67,6 +78,13 @@ export default function ProfileDetailDesktop({ profileSlug, initialFilterState }
           />
         </div>
       </div>
+
+      {/* Product Import Dialog */}
+      <ProductImportDialog 
+        products={MOCK_PRODUCTS}
+        onImport={handleImport}
+        onCancel={handleCancel}
+      />
     </section>
   );
 }
